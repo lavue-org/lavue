@@ -45,7 +45,7 @@ class ImageWidget(QtGui.QWidget):
 
         self.nparray = None
         self.imageItem = None
-        
+
         self.img_widget = imageDisplayWidget.ImageDisplayWidget(parent=self)
         self.currentroimapper = QtCore.QSignalMapper(self)
         self.roiregionmapper = QtCore.QSignalMapper(self)
@@ -98,10 +98,11 @@ class ImageWidget(QtGui.QWidget):
         self.roiregionmapper.mapped.connect(self.roiRegionChanged)
         self.currentroimapper.mapped.connect(self.currentROIChanged)
         self.img_widget.roi[0].sigHoverEvent.connect(self.currentroimapper.map)
-        self.img_widget.roi[0].sigRegionChanged.connect(self.roiregionmapper.map)
+        self.img_widget.roi[0].sigRegionChanged.connect(
+            self.roiregionmapper.map)
         self.currentroimapper.setMapping(self.img_widget.roi[0], 0)
         self.roiregionmapper.setMapping(self.img_widget.roi[0], 0)
-        
+
         self.roiSpinBox.valueChanged.connect(self.roiNrChanged)
         self.labelROILineEdit.textEdited.connect(self.updateROIButton)
         self.updateROIButton()
@@ -114,7 +115,7 @@ class ImageWidget(QtGui.QWidget):
         if rid != oldrid:
             self.img_widget.currentroi = rid
             self.roiCoordsChanged.emit()
-        
+
     def updateROIButton(self):
         if not str(self.labelROILineEdit.text()).strip():
             self.applyROIButton.setEnabled(False)
@@ -128,7 +129,8 @@ class ImageWidget(QtGui.QWidget):
                     self.img_widget.roicoords[i] = coords[i]
                     self.img_widget.roi[i].setPos([coords[i][0], coords[i][1]])
                     self.img_widget.roi[i].setSize(
-                        [coords[i][2] - coords[i][0], coords[i][3] - coords[i][1]])
+                        [coords[i][2] - coords[i][0],
+                         coords[i][3] - coords[i][1]])
         while rid > len(self.img_widget.roi):
             # print("LEN %s" % len(self.img_widget.roi))
             if coords and len(coords) >= len(self.img_widget.roi):
@@ -148,7 +150,7 @@ class ImageWidget(QtGui.QWidget):
         if rid == 0:
             self.img_widget.currentroi = -1
         elif self.img_widget.currentroi >= rid:
-            self.img_widget.currentroi = 0 
+            self.img_widget.currentroi = 0
         while rid < len(self.img_widget.roi):
             self.currentroimapper.removeMappings(self.img_widget.roi[-1])
             self.roiregionmapper.removeMappings(self.img_widget.roi[-1])

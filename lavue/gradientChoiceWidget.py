@@ -51,9 +51,21 @@ class GradientChoiceWidget(QtGui.QGroupBox):
         #        self.cb.addItem("spectrumclip")
         self.cb.addItem("greyclip")
         self.cb.addItem("grey")
+        self.cb.addItem("cyclic")
+        self.cb.addItem("yellowy")
+        self.cb.addItem("inverted")
         layout.addWidget(self.cb)
         self.setLayout(layout)
         self.cb.activated.connect(self.emitText)
 
     def emitText(self, index):
         self.chosenGradient.emit(self.cb.itemText(index))
+
+    def changeGradient(self, name):
+        text = self.cb.currentText()
+        if text != name:
+            cid = self.cb.findText(name)
+            if cid > -1:
+                self.cb.setCurrentIndex(cid)
+            else:
+                print("Error %s" % name)

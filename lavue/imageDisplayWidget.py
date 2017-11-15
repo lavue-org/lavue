@@ -85,28 +85,28 @@ class ImageDisplayWidget(pg.GraphicsLayoutWidget):
     def addItem(self, item):
         self.image.additem(item)
 
-    def addROI(self, coords = None):
+    def addROI(self, coords=None):
         if not coords or not isinstance(coords, list) or len(coords) != 4:
-            pnt = 10*len(self.roi)
+            pnt = 10 * len(self.roi)
             sz = 50
             coords = [pnt, pnt, pnt + sz, pnt + sz]
             spnt = pg.Point(sz, sz)
         else:
             pnt = pg.Point(coords[0], coords[1])
-            spnt = pg.Point(coords[2] - coords[0], coords[3] - coords[1]) 
+            spnt = pg.Point(coords[2] - coords[0], coords[3] - coords[1])
         self.roi.append(ROI(pnt, spnt))
         self.roi[-1].addScaleHandle([1, 1], [0, 0])
         self.roi[-1].addScaleHandle([0, 0], [1, 1])
         self.viewbox.addItem(self.roi[-1])
-            
+
         self.roicoords.append(coords)
-        
+
     def removeROI(self):
         roi = self.roi.pop()
         roi.hide()
         self.viewbox.removeItem(roi)
         self.roicoords.pop()
-        
+
     def updateImage(self, img=None):
         if(self.autoDisplayLevels):
             self.image.setImage(img, autoLevels=True)
@@ -139,10 +139,11 @@ class ImageDisplayWidget(pg.GraphicsLayoutWidget):
                 self.currentMousePosition.emit(
                     "x=%i, y=%i, intensity=%.2f" % (xdata, ydata, intensity))
             elif self.currentroi > -1:
-                self.currentMousePosition.emit("%s" % self.roicoords[self.currentroi])
+                self.currentMousePosition.emit(
+                    "%s" % self.roicoords[self.currentroi])
             else:
                 self.currentMousePosition.emit("")
-                
+
         except Exception as e:
             print "Warning: ", str(e)
             pass

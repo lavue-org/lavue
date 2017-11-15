@@ -67,7 +67,8 @@ class StatisticsWidget(QtGui.QGroupBox):
 
         self.setLayout(layout)
 
-    def update_stats(self, meanVal, maxVal, varVal, scaling, roiVal=None, lrid=""):
+    def update_stats(self, meanVal, maxVal, varVal, scaling,
+                     roiVal=None, lrid=""):
         if self.scaling is not scaling:
             self.scaling = scaling
         self.scaleLabel.setText(self.scaling)

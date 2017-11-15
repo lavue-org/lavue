@@ -117,8 +117,7 @@ class SardanaUtils():
         self.__pools = self.getProxies(poolNames)
         self.__macroserver = macroserver
 
-    @classmethod
-    def getMacroServerName(cls, door, db=None):
+    def getMacroServerName(self, door, db=None):
         """ provides macro server of given door
 
         :param db: tango database
@@ -235,18 +234,6 @@ class SardanaUtils():
                 break
             time.sleep(0.01)
 
-    def getMacroList(self, door):
-        """ fetches Scan Environment Data
-
-        :param door: door device
-        :type door: :obj:`str`
-        :returns: attribute name
-        :rtype: :obj:`str`
-        """
-        msp = PyTango.DeviceProxy(self.getMacroServer(door))
-        return 
-        
-    
     def runMacro(self, door, command, wait=True):
         """ stores Scan Environment Data
 
@@ -259,7 +246,7 @@ class SardanaUtils():
         """
         doorproxy = self.openProxy(door)
         msp = PyTango.DeviceProxy(self.getMacroServer(door))
-        ml =  msp.MacroList
+        ml = msp.MacroList
         if len(command) == 0 or not command[0] or command[0] not in ml:
             raise Exception("Macro %s not found" % str(command))
         try:
@@ -277,8 +264,6 @@ class SardanaUtils():
             return res, warn
         else:
             None, None
-
-                     
 
     @classmethod
     def toString(cls, obj):

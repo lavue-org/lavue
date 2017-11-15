@@ -46,7 +46,7 @@ pg.graphicsItems.GradientEditorItem.Gradients['reverseGrayscale'] = {
 pg.graphicsItems.GradientEditorItem.Gradients['highContrast'] = {
     'ticks': [(0.0, (0, 0, 0, 255)),
               (1.0, (255, 255, 0, 255)), ], 'mode': 'rgb'}
-#pg.graphicsItems.GradientEditorItem.Gradients['Spectrum'] = {
+# pg.graphicsItems.GradientEditorItem.Gradients['Spectrum'] = {
 #    'ticks': [(0.0, (255, 0, 255, 255)),
 #              (1.0, (255, 0, 0, 255))], 'mode': 'hsv'}
 pg.graphicsItems.GradientEditorItem.Gradients['spectrum'] = {
@@ -62,6 +62,20 @@ pg.graphicsItems.GradientEditorItem.Gradients['highContrast'] = {
               (1.0, (255, 255, 0, 255)), ], 'mode': 'rgb'}
 
 
+class GradientEditorItemWS(GradientEditorItem):
+
+    sigNameChanged = QtCore.Signal(str)
+
+    def __init__(self, *args, **kargs):
+        GradientEditorItem.__init__(self, *args, **kargs)
+
+    def loadPreset(self, name):
+        """
+        Load a predefined gradient.
+
+        """
+        GradientEditorItem.loadPreset(self, name)
+        self.sigNameChanged.emit(name)
 
 
 class GradientItem(GraphicsWidget):
@@ -97,7 +111,7 @@ class GradientItem(GraphicsWidget):
         self.vb.setMinimumWidth(45)
         self.vb.setMouseEnabled(x=False, y=False)
 
-        self.gradient = GradientEditorItem()
+        self.gradient = GradientEditorItemWS()
         # CR: this is  sooooo bad, but there is no function !?
         self.gradient.tickSize = 0
         self.gradient.setOrientation('right')

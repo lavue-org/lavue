@@ -23,7 +23,6 @@
 #     Jan Kotanski <jan.kotanski@desy.de>
 #
 
-import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui, QtCore
 from pyqtgraph import GraphicsView
 from pyqtgraph import GraphicsWidget
@@ -33,6 +32,7 @@ from pyqtgraph.graphicsItems.AxisItem import AxisItem
 # from pyqtgraph.graphicsItems.GridItem import *
 
 import numpy as np
+
 
 class GradientItem(GraphicsWidget):
 

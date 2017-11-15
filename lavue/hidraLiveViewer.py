@@ -247,6 +247,8 @@ class HidraLiveViewer(QtGui.QDialog):
 
         # gradient selector
         self.gradientW.chosenGradient.connect(self.imageW.changeGradient)
+        self.imageW.img_widget.graditem.gradient.sigNameChanged.connect(
+            self.gradientW.changeGradient)
 
         # simple mutable caching object for data exchange with thread
         # [blocked state | image name | image data]
@@ -341,7 +343,7 @@ class HidraLiveViewer(QtGui.QDialog):
                     str(self.doorname), ["nxsadd", "%s" % rlabel])
         else:
             print("Connection error")
-            
+
     def onapplyrois(self):
         if hcs.PYTANGO:
             roicoords = self.imageW.img_widget.roicoords
@@ -357,7 +359,7 @@ class HidraLiveViewer(QtGui.QDialog):
             slabel = re.split(';|,| |\n', rlabel)
             slabel = [lb for lb in slabel if lb]
             rid = 0
-            lascrdlist = None
+            lastcrdlist = None
             toremove = []
             toadd = []
             if "DetectorROIs" not in rois or not isinstance(
@@ -382,7 +384,7 @@ class HidraLiveViewer(QtGui.QDialog):
                 if not lastcrdlist:
                     rois["DetectorROIs"].pop(alias)
                     toremove.append(alias)
-                
+
             # print("rois %s " % rois)
             # print("to remove %s" % toremove)
             # print("to add %s" % toadd)
@@ -392,12 +394,12 @@ class HidraLiveViewer(QtGui.QDialog):
                     res, warn = self.sardana.runMacro(
                         str(self.doorname), ["nxsadd", alias])
                     if warn:
-                        print("Warning: %s" %warn)
+                        print("Warning: %s" % warn)
                 for alias in toremove:
                     res, warn = self.sardana.runMacro(
                         str(self.doorname), ["nxsrm", alias])
                     if warn:
-                        print("Warning: %s" %warn)
+                        print("Warning: %s" % warn)
         else:
             print("Connection error")
 
@@ -414,9 +416,10 @@ class HidraLiveViewer(QtGui.QDialog):
             detrois = {}
             if "DetectorROIs" in rois and isinstance(
                     rois["DetectorROIs"], dict):
-                detrois = rois["DetectorROIs"] 
+                detrois = rois["DetectorROIs"]
                 if slabel:
-                    detrois = dict((k, v) for k, v in detrois.items() if k in slabel)
+                    detrois = dict((k, v)
+                                   for k, v in detrois.items() if k in slabel)
             # print("detrois %s " % detrois)
             coords = []
             aliases = []
@@ -426,7 +429,7 @@ class HidraLiveViewer(QtGui.QDialog):
                         if isinstance(cr, list):
                             coords.append(cr)
                             aliases.append(k)
-            slabel = []               
+            slabel = []
             for i, al in enumerate(aliases):
                 if len(set(aliases[i:])) == 1:
                     slabel.append(aliases[i])
@@ -435,7 +438,7 @@ class HidraLiveViewer(QtGui.QDialog):
                     slabel.append(aliases[i])
             self.imageW.labelROILineEdit.setText(" ".join(slabel))
             self.imageW.updateROIButton()
-            self.imageW.roiNrChanged(len(coords), coords)        
+            self.imageW.roiNrChanged(len(coords), coords)
         else:
             print("Connection error")
 
@@ -587,7 +590,7 @@ class HidraLiveViewer(QtGui.QDialog):
             # simple subtraction
             self.display_image = self.raw_image - self.background_image
         # if self.applyImageMask and self.maskIndices is not None:
-        #     # set all masked (non-zero values) to zero by index
+        # set all masked (non-zero values) to zero by index
         #     self.display_image[self.maskIndices] = 0
 
     def scale(self, scalingType):
