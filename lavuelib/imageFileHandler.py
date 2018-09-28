@@ -29,8 +29,13 @@
 
 import struct
 import numpy as np
+import sys
 
 from . import filewriter
+
+if sys.version_info > (3,):
+    long = int
+
 
 try:
     import fabio
@@ -40,6 +45,7 @@ except ImportError:
     FABIO = False
 try:
     import PIL
+    import PIL.Image
     #: (:obj:`bool`) PIL can be imported
     PILLOW = True
 except ImportError:
@@ -51,13 +57,17 @@ WRITERS = {}
 try:
     from . import pniwriter
     WRITERS["pni"] = pniwriter
-except:
+except Exception:
     pass
 try:
     from . import h5pywriter
     WRITERS["h5py"] = h5pywriter
-    SWMR = h5pywriter.SWMR
-except:
+except Exception:
+    pass
+try:
+    from . import h5cppwriter
+    WRITERS["h5cpp"] = h5cppwriter
+except Exception:
     pass
 
 
@@ -87,7 +97,12 @@ class NexusFieldHandler(object):
         self.__root = None
 
         if not writer:
-            writer = "h5py" if "h5py" in WRITERS.keys() else "pni"
+            if "h5cpp" in WRITERS.keys():
+                writer = "h5cpp"
+            elif "h5py" in WRITERS.keys():
+                writer = "h5py"
+            else:
+                writer = "pni"
         if writer not in WRITERS.keys():
             raise Exception("Writer '%s' cannot be opened" % writer)
         wrmodule = WRITERS[writer.lower()]
@@ -96,13 +111,13 @@ class NexusFieldHandler(object):
                 fl = filewriter.open_file(
                     fname, writer=wrmodule, readonly=True,
                     libver='latest',
-                    swmr=(True if writer == "h5py" else False)
+                    swmr=(True if writer in ["h5py", "h5cpp"] else False)
                 )
-            except:
+            except Exception:
                 try:
                     fl = filewriter.open_file(
                         fname, writer=wrmodule, readonly=True)
-                except:
+                except Exception:
                     raise Exception("File '%s' cannot be opened \n" % (fname))
                 # except Exception as e:
                 #     raise Exception("File '%s' cannot be opened %s\n"
@@ -190,7 +205,7 @@ class NexusFieldHandler(object):
             try:
                 ch = node.open(nm[0])
                 self.__parseimages(ch, nm[1])
-#            except:
+#            except Exception:
 #                pass
             finally:
                 pass
@@ -321,13 +336,13 @@ class ImageFileHandler(object):
                     self.__data = np.array(self.__image)
             except Exception:
                 try:
-                    self.__image = np.fromfile(filename, dtype='uint8')
+                    self.__image = np.fromfile(str(fname), dtype='uint8')
                     if fname.endswith(".cbf"):
                         self.__data = CBFLoader().load(self.__image)
                     else:
                         self.__data = TIFLoader().load(self.__image)
-                except Exception:
-                    pass
+                except Exception as e:
+                    print(str(e))
 
     def getImage(self):
         """  provides the image data
@@ -439,7 +454,7 @@ class CBFLoader(object):
                     flbuffer[idstart:idstop + 1], vals)
             else:
                 image = np.array([0])
-        return image
+        return np.transpose(image)
 
     @classmethod
     def _decompress_cbf_c(cls, stream, vals):
@@ -475,7 +490,7 @@ class CBFLoader(object):
         try:
             idd = np.where(id_relevant < (flbuffer.size - padding))
             id_relevant = id_relevant[idd]
-        except:
+        except Exception:
             pass
 
         for dummy, dummy2 in enumerate(id_relevant):
@@ -512,14 +527,14 @@ class CBFLoader(object):
             # print stream[0:11]
             # print flbuffer[0:11]
 
-        except:
+        except Exception:
             pass
 
         try:
             # print sum(isvalid)    #should be 305548
             idd = np.where(isvalid != 0)
             flbuffer = flbuffer[idd]
-        except:
+        except Exception:
             pass
 
         # print stream[0:11]
@@ -631,11 +646,11 @@ class TIFLoader(object):
 
             # eval (hopefully) tags needed to allow for getting an image
             if field_tag == 256:
-                width = val_or_off
+                width = int(val_or_off)
             if field_tag == 257:
-                length = val_or_off
+                length = int(val_or_off)
             if field_tag == 258:
-                bit_per_sample = val_or_off
+                bit_per_sample = int(val_or_off)
             # compression scheme - return invalid if NOT none,
             # i.e. only uncompressed data is supported (forever!?)
             if field_tag == 259:
@@ -656,16 +671,16 @@ class TIFLoader(object):
             if field_tag == 339:
                 sample_format = val_or_off
 
-            next_idf = np.uint32(
-                struct.unpack_from(
-                    flbuffer_endian + "I",
-                    flbuffer[
-                        ifd_off + 15 + (num_of_ifd + 1) * 12:ifd_off + 19
-                        + (num_of_ifd + 1) * 12])[0])
-            if next_idf != 0:
-                print('another ifd exists ... NOT read')
-
-        if width * length * bit_per_sample / 8 != strip_byte_counts:
+        next_idf = np.uint32(
+            struct.unpack_from(
+                flbuffer_endian + "I",
+                flbuffer[ifd_off + 2 + (ifd_entry + 1) * 12:
+                         ifd_off + 6 + (ifd_entry + 1) * 12]
+            )[0])
+        if next_idf != 0:
+            # print('another ifd exists ... NOT read')
+            pass
+        if width * length * bit_per_sample // 8 != strip_byte_counts:
             return image
 
         if sample_format == 1 and bit_per_sample == 8:
@@ -711,9 +726,9 @@ class TIFLoader(object):
                              + strip_byte_counts + 1]))
 
         try:
-            return image.reshape(width, length, order='F')
-        except:
-            return image
+            return np.transpose(image.reshape(width, length, order='F'))
+        except Exception:
+            return np.transpose(image)
 
 
 if __name__ == "__main__":

@@ -28,6 +28,7 @@
 from PyQt4 import QtCore, QtGui, uic
 import os
 import socket
+import json
 
 _testformclass, _testbaseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -131,6 +132,13 @@ class BaseSourceWidget(QtGui.QWidget):
                 self.widgets.append(wg)
         self.__detached = True
 
+    def configure(self, configuration):
+        """ set configuration for the current image source
+
+        :param configuration: configuration string
+        :type configuration: :obj:`str`
+        """
+
 
 class TestSourceWidget(BaseSourceWidget):
 
@@ -192,11 +200,53 @@ class HTTPSourceWidget(BaseSourceWidget):
         #: (:obj:`str`) datasource class name
         self.datasource = "HTTPSource"
         #: (:obj:`list` <:obj:`str`>) subwidget object names
-        self.widgetnames = ["httpLabel", "httpLineEdit"]
+        self.widgetnames = ["httpLabel", "httpComboBox"]
+
+        #: (:obj:`dict` <:obj:`str`, :obj:`str`>) dictionary with
+        #:                     (label, url) items
+        self.__urls = {}
+        #: (:obj:`list` <:obj:`str`>) user urls
+        self.__userurls = []
 
         self._detachWidgets()
 
-        self._ui.httpLineEdit.textEdited.connect(self.updateButton)
+        #: (:obj:`str`) default tip
+        self.__defaulttip = self._ui.httpComboBox.toolTip()
+
+        self.__connectComboBox()
+
+    def __connectComboBox(self):
+        self._ui.httpComboBox.lineEdit().textEdited.connect(
+            self.updateButton)
+        self._ui.httpComboBox.currentIndexChanged.connect(
+            self.updateButton)
+
+    def __disconnectComboBox(self):
+        self._ui.httpComboBox.lineEdit().textEdited.disconnect(
+            self.updateButton)
+        self._ui.httpComboBox.currentIndexChanged.disconnect(
+            self.updateButton)
+
+    def __updateComboBox(self):
+        """ updates a value of attr combo box
+        """
+        self.__disconnectComboBox()
+        currenturl = str(self._ui.httpComboBox.currentText()).strip()
+        self._ui.httpComboBox.clear()
+        urls = sorted(self.__urls.keys())
+        for mt in urls:
+            self._ui.httpComboBox.addItem(mt)
+            iid = self._ui.httpComboBox.findText(mt)
+            self._ui.httpComboBox.setItemData(
+                iid, str(self.__urls[mt]), QtCore.Qt.ToolTipRole)
+        for mt in self.__userurls:
+            self._ui.httpComboBox.addItem(mt)
+        if currenturl not in urls and currenturl not in self.__userurls:
+            self._ui.httpComboBox.addItem(currenturl)
+        ind = self._ui.httpComboBox.findText(currenturl)
+        self._ui.httpComboBox.setCurrentIndex(ind)
+
+        self.__connectComboBox()
 
     @QtCore.pyqtSlot()
     def updateButton(self):
@@ -204,31 +254,67 @@ class HTTPSourceWidget(BaseSourceWidget):
         """
         if not self.active:
             return
-        url = str(self._ui.httpLineEdit.text()).strip()
-        if not url.startswith("http://") or not url.startswith("https://"):
+        url = str(self._ui.httpComboBox.currentText()).strip()
+        if url in self.__urls.keys():
+            url = str(self.__urls[url]).strip()
+
+        if not url.startswith("http://") and not url.startswith("https://"):
             surl = url.split("/")
             if len(surl) == 2 and surl[0] and surl[1]:
                 url = "http://%s/monitor/api/%s/images/monitor" \
                       % (surl[0], surl[1])
             else:
                 url = None
+        self._ui.httpComboBox.setToolTip(url or self.__defaulttip)
         if not url:
             self.buttonEnabled.emit(False)
         else:
             self.buttonEnabled.emit(True)
             self.configurationChanged.emit(url)
 
+    def updateMetaData(self, httpurls=None, **kargs):
+        """ update source input parameters
+
+        :param httpurls: json dictionary with
+                           (label, http urls) items
+        :type httpurls: :obj:`str`
+        :param kargs:  source widget input parameter dictionary
+        :type kargs: :obj:`dict` < :obj:`str`, :obj:`any`>
+        """
+        if httpurls is not None:
+            self.__urls = json.loads(httpurls)
+            self.__updateComboBox()
+
+    def configure(self, configuration):
+        """ set configuration for the current image source
+
+        :param configuration: configuration string
+        :type configuration: :obj:`str`
+        """
+        iid = self._ui.httpComboBox.findText(configuration)
+        if iid == -1:
+            self._ui.httpComboBox.addItem(configuration)
+            iid = self._ui.httpComboBox.findText(configuration)
+        self._ui.httpComboBox.setCurrentIndex(iid)
+
     def connectWidget(self):
         """ connects widget
         """
         self._connected = True
-        self._ui.httpLineEdit.setReadOnly(True)
+        self._ui.httpComboBox.lineEdit().setReadOnly(True)
+        self._ui.httpComboBox.setEnabled(False)
+        currenturl = str(self._ui.httpComboBox.currentText()).strip()
+        urls = self.__urls.keys()
+        if currenturl not in urls and currenturl not in self.__userurls:
+            self.__userurls.append(currenturl)
+            self.__updateComboBox()
 
     def disconnectWidget(self):
         """ disconnects widget
         """
         self._connected = False
-        self._ui.httpLineEdit.setReadOnly(False)
+        self._ui.httpComboBox.lineEdit().setReadOnly(False)
+        self._ui.httpComboBox.setEnabled(True)
 
 
 class HidraSourceWidget(BaseSourceWidget):
@@ -356,6 +442,18 @@ class HidraSourceWidget(BaseSourceWidget):
         self._connected = False
         self._ui.serverComboBox.setEnabled(True)
 
+    def configure(self, configuration):
+        """ set configuration for the current image source
+
+        :param configuration: configuration string
+        :type configuration: :obj:`str`
+        """
+        iid = self._ui.serverComboBox.findText(configuration)
+        if iid == -1:
+            self._ui.serverComboBox.addItem(configuration)
+            iid = self._ui.serverComboBox.findText(configuration)
+        self._ui.serverComboBox.setCurrentIndex(iid)
+
 
 class TangoAttrSourceWidget(BaseSourceWidget):
 
@@ -378,12 +476,53 @@ class TangoAttrSourceWidget(BaseSourceWidget):
         self.datasource = "TangoAttrSource"
         #: (:obj:`list` <:obj:`str`>) subwidget object names
         self.widgetnames = [
-            "attrLabel", "attrLineEdit"
+            "attrLabel", "attrComboBox"
         ]
+
+        #: (:obj:`dict` <:obj:`str`, :obj:`str`>) dictionary with
+        #:                     (label, tango attribute) items
+        self.__tangoattrs = {}
+        #: (:obj:`list` <:obj:`str`>) user tango attributes
+        self.__userattrs = []
 
         self._detachWidgets()
 
-        self._ui.attrLineEdit.textEdited.connect(self.updateButton)
+        #: (:obj:`str`) default tip
+        self.__defaulttip = self._ui.attrComboBox.toolTip()
+
+        self.__connectComboBox()
+
+    def __connectComboBox(self):
+        self._ui.attrComboBox.lineEdit().textEdited.connect(
+            self.updateButton)
+        self._ui.attrComboBox.currentIndexChanged.connect(
+            self.updateButton)
+
+    def __disconnectComboBox(self):
+        self._ui.attrComboBox.lineEdit().textEdited.disconnect(
+            self.updateButton)
+        self._ui.attrComboBox.currentIndexChanged.disconnect(
+            self.updateButton)
+
+    def __updateComboBox(self):
+        """ updates a value of attr combo box
+        """
+        self.__disconnectComboBox()
+        currentattr = str(self._ui.attrComboBox.currentText()).strip()
+        self._ui.attrComboBox.clear()
+        attrs = sorted(self.__tangoattrs.keys())
+        for mt in attrs:
+            self._ui.attrComboBox.addItem(mt)
+            iid = self._ui.attrComboBox.findText(mt)
+            self._ui.attrComboBox.setItemData(
+                iid, str(self.__tangoattrs[mt]), QtCore.Qt.ToolTipRole)
+        for mt in self.__userattrs:
+            self._ui.attrComboBox.addItem(mt)
+        if currentattr not in attrs and currentattr not in self.__userattrs:
+            self._ui.attrComboBox.addItem(currentattr)
+        ind = self._ui.attrComboBox.findText(currentattr)
+        self._ui.attrComboBox.setCurrentIndex(ind)
+        self.__connectComboBox()
 
     @QtCore.pyqtSlot()
     def updateButton(self):
@@ -391,27 +530,59 @@ class TangoAttrSourceWidget(BaseSourceWidget):
         """
         if not self.active:
             return
-        if not str(self._ui.attrLineEdit.text()).strip():
+        currentattr = str(self._ui.attrComboBox.currentText()).strip()
+        if not currentattr:
             self.buttonEnabled.emit(False)
         else:
             self.buttonEnabled.emit(True)
-            self.configurationChanged.emit(
-                str(self._ui.attrLineEdit.text()).strip())
+            if currentattr in self.__tangoattrs.keys():
+                currentattr = str(self.__tangoattrs[currentattr]).strip()
+            self.configurationChanged.emit(currentattr)
+        self._ui.attrComboBox.setToolTip(currentattr or self.__defaulttip)
+
+    def updateMetaData(self, tangoattrs=None, **kargs):
+        """ update source input parameters
+
+        :param tangoattrs: json dictionary with
+                           (label, tango attribute) items
+        :type tangoattrs: :obj:`str`
+        :param kargs:  source widget input parameter dictionary
+        :type kargs: :obj:`dict` < :obj:`str`, :obj:`any`>
+        """
+        if tangoattrs is not None:
+            self.__tangoattrs = json.loads(tangoattrs)
+            self.__updateComboBox()
+
+    def configure(self, configuration):
+        """ set configuration for the current image source
+
+        :param configuration: configuration string
+        :type configuration: :obj:`str`
+        """
+        iid = self._ui.attrComboBox.findText(configuration)
+        if iid == -1:
+            self._ui.attrComboBox.addItem(configuration)
+            iid = self._ui.attrComboBox.findText(configuration)
+        self._ui.attrComboBox.setCurrentIndex(iid)
 
     def disconnectWidget(self):
         """ disconnects widget
         """
         self._connected = False
-        self._ui.attrLineEdit.setReadOnly(False)
-        if ":" in self._ui.attrLineEdit.text():
-            self._ui.attrLineEdit.setText(u'')
-            self.updateButton()
+        self._ui.attrComboBox.lineEdit().setReadOnly(False)
+        self._ui.attrComboBox.setEnabled(True)
 
     def connectWidget(self):
         """ connects widget
         """
         self._connected = True
-        self._ui.attrLineEdit.setReadOnly(True)
+        self._ui.attrComboBox.lineEdit().setReadOnly(True)
+        self._ui.attrComboBox.setEnabled(False)
+        currentattr = str(self._ui.attrComboBox.currentText()).strip()
+        attrs = self.__tangoattrs.keys()
+        if currentattr not in attrs and currentattr not in self.__userattrs:
+            self.__userattrs.append(currentattr)
+            self.__updateComboBox()
 
 
 class TangoFileSourceWidget(BaseSourceWidget):
@@ -435,18 +606,68 @@ class TangoFileSourceWidget(BaseSourceWidget):
         self.datasource = "TangoFileSource"
         #: (:obj:`list` <:obj:`str`>) subwidget object names
         self.widgetnames = [
-            "fileLabel", "fileLineEdit",
-            "dirLabel", "dirLineEdit"
+            "fileattrLabel", "fileattrComboBox",
+            "dirattrLabel", "dirattrComboBox"
         ]
 
         #: (:obj:`str`) json dictionary with directory
         #:               and file name translation
         self.__dirtrans = '{"/ramdisk/": "/gpfs/"}'
 
+        #: (:obj:`dict` <:obj:`str`, :obj:`str`>) dictionary with
+        #:                     (label, file tango attribute) items
+        self.__tangofileattrs = {}
+        #: (:obj:`list` <:obj:`str`>) user file tango attributes
+        self.__userfileattrs = []
+
+        #: (:obj:`dict` <:obj:`str`, :obj:`str`>) dictionary with
+        #:                     (label, dir tango attribute) items
+        self.__tangodirattrs = {}
+        #: (:obj:`list` <:obj:`str`>) user dir tango attributes
+        self.__userdirattrs = []
+
         self._detachWidgets()
 
-        self._ui.fileLineEdit.textEdited.connect(self.updateButton)
-        self._ui.dirLineEdit.textEdited.connect(self.updateButton)
+        #: (:obj:`str`) default file tip
+        self.__defaultfiletip = self._ui.fileattrComboBox.toolTip()
+
+        #: (:obj:`str`) default dir tip
+        self.__defaultdirtip = self._ui.dirattrComboBox.toolTip()
+
+        self.__connectComboBox(self._ui.fileattrComboBox)
+        self.__connectComboBox(self._ui.dirattrComboBox)
+
+    def __connectComboBox(self, combobox):
+        combobox.lineEdit().textEdited.connect(
+            self.updateButton)
+        combobox.currentIndexChanged.connect(
+            self.updateButton)
+
+    def __disconnectComboBox(self, combobox):
+        combobox.lineEdit().textEdited.disconnect(
+            self.updateButton)
+        combobox.currentIndexChanged.disconnect(
+            self.updateButton)
+
+    def __updateComboBox(self, combobox, atdict, atlist):
+        """ updates a value of attr combo box
+        """
+        self.__disconnectComboBox(combobox)
+        currentattr = str(combobox.currentText()).strip()
+        combobox.clear()
+        attrs = sorted(atdict.keys())
+        for mt in attrs:
+            combobox.addItem(mt)
+            iid = combobox.findText(mt)
+            combobox.setItemData(
+                iid, str(atdict[mt]), QtCore.Qt.ToolTipRole)
+        for mt in atlist:
+            combobox.addItem(mt)
+        if currentattr not in attrs and currentattr not in atlist:
+            combobox.addItem(currentattr)
+        ind = combobox.findText(currentattr)
+        combobox.setCurrentIndex(ind)
+        self.__connectComboBox(combobox)
 
     @QtCore.pyqtSlot()
     def updateButton(self):
@@ -454,25 +675,50 @@ class TangoFileSourceWidget(BaseSourceWidget):
         """
         if not self.active:
             return
-        fattr = str(self._ui.fileLineEdit.text()).strip()
-        if not str(self._ui.fileLineEdit.text()).strip():
+        dattr = str(self._ui.dirattrComboBox.currentText()).strip()
+        fattr = str(self._ui.fileattrComboBox.currentText()).strip()
+        if not fattr:
             self.buttonEnabled.emit(False)
         else:
             self.buttonEnabled.emit(True)
-            dattr = str(self._ui.dirLineEdit.text()).strip()
+            if fattr in self.__tangofileattrs.keys():
+                fattr = str(self.__tangofileattrs[fattr]).strip()
+
+            if dattr in self.__tangodirattrs.keys():
+                dattr = str(self.__tangodirattrs[dattr]).strip()
             dt = self.__dirtrans
             sourcename = "%s,%s,%s" % (fattr, dattr, dt)
             self.configurationChanged.emit(sourcename)
 
-    def updateMetaData(self, dirtrans=None, **kargs):
+        self._ui.fileattrComboBox.setToolTip(fattr or self.__defaultfiletip)
+        self._ui.dirattrComboBox.setToolTip(dattr or self.__defaultdirtip)
+
+    def updateMetaData(self, tangofileattrs=None, tangodirattrs=None,
+                       dirtrans=None, **kargs):
         """ update source input parameters
 
+        :param tangofileattrs: json dictionary with
+                           (label, file tango attribute) items
+        :type tangofileattrs: :obj:`str`
+        :param tangodirattrs: json dictionary with
+                           (label, dir tango attribute) items
+        :type tangodirattrs: :obj:`str`
         :param dirtrans: json dictionary with directory
                          and file name translation
         :type dirtrans: :obj:`str`
         :param kargs:  source widget input parameter dictionary
         :type kargs: :obj:`dict` < :obj:`str`, :obj:`any`>
         """
+        if tangofileattrs is not None:
+            self.__tangofileattrs = json.loads(tangofileattrs)
+            self.__updateComboBox(
+                self._ui.fileattrComboBox, self.__tangofileattrs,
+                self.__userfileattrs)
+        if tangodirattrs is not None:
+            self.__tangodirattrs = json.loads(tangodirattrs)
+            self.__updateComboBox(
+                self._ui.dirattrComboBox, self.__tangodirattrs,
+                self.__userdirattrs)
         if dirtrans is not None:
             self.__dirtrans = dirtrans
 
@@ -480,15 +726,55 @@ class TangoFileSourceWidget(BaseSourceWidget):
         """ connects widget
         """
         self._connected = True
-        self._ui.fileLineEdit.setReadOnly(True)
-        self._ui.dirLineEdit.setReadOnly(True)
+        self._ui.fileattrComboBox.lineEdit().setReadOnly(True)
+        self._ui.fileattrComboBox.setEnabled(False)
+        fattr = str(self._ui.fileattrComboBox.currentText()).strip()
+        attrs = self.__tangofileattrs.keys()
+        if fattr not in attrs and fattr not in self.__userfileattrs:
+            self.__userfileattrs.append(fattr)
+            self.__updateComboBox(
+                self._ui.fileattrComboBox, self.__tangofileattrs,
+                self.__userfileattrs)
+        self._ui.dirattrComboBox.lineEdit().setReadOnly(True)
+        self._ui.dirattrComboBox.setEnabled(False)
+        dattr = str(self._ui.dirattrComboBox.currentText()).strip()
+        attrs = self.__tangodirattrs.keys()
+        if dattr not in attrs and dattr not in self.__userdirattrs:
+            self.__userdirattrs.append(dattr)
+            self.__updateComboBox(
+                self._ui.dirattrComboBox, self.__tangodirattrs,
+                self.__userdirattrs)
 
     def disconnectWidget(self):
         """ disconnects widget
         """
         self._connected = False
-        self._ui.fileLineEdit.setReadOnly(False)
-        self._ui.dirLineEdit.setReadOnly(False)
+        self._ui.fileattrComboBox.lineEdit().setReadOnly(False)
+        self._ui.fileattrComboBox.setEnabled(True)
+        self._ui.dirattrComboBox.lineEdit().setReadOnly(False)
+        self._ui.dirattrComboBox.setEnabled(True)
+
+    def configure(self, configuration):
+        """ set configuration for the current image source
+
+        :param configuration: configuration string
+        :type configuration: :obj:`str`
+        """
+        cnflst = configuration.split(",")
+        filecnf = cnflst[0] if cnflst else ""
+        dircnf = cnflst[1] if len(cnflst) > 1 else ""
+
+        iid = self._ui.fileattrComboBox.findText(filecnf)
+        if iid == -1:
+            self._ui.fileattrComboBox.addItem(filecnf)
+            iid = self._ui.fileattrComboBox.findText(filecnf)
+        self._ui.fileattrComboBox.setCurrentIndex(iid)
+
+        iid = self._ui.dirattrComboBox.findText(dircnf)
+        if iid == -1:
+            self._ui.dirattrComboBox.addItem(dircnf)
+            iid = self._ui.dirattrComboBox.findText(dircnf)
+        self._ui.dirattrComboBox.setCurrentIndex(iid)
 
 
 class NXSFileSourceWidget(BaseSourceWidget):
@@ -575,6 +861,29 @@ class NXSFileSourceWidget(BaseSourceWidget):
         if nxslast is not None:
             self.__nxslast = nxslast
 
+    def configure(self, configuration):
+        """ set configuration for the current image source
+
+        :param configuration: configuration string
+        :type configuration: :obj:`str`
+        """
+        cnflst = configuration.split(",")
+        filecnf = cnflst[0] if cnflst else ""
+        if ":/" in filecnf:
+            filecnf, fieldcnf = filecnf.split(":/", 1)
+        else:
+            fieldcnf = ""
+
+        try:
+            growcnf = int(cnflst[1])
+        except Exception:
+            growcnf = 0
+
+        self._ui.nxsFileLineEdit.setText(filecnf)
+        self._ui.nxsFieldLineEdit.setText(fieldcnf)
+        self._ui.nxsDimSpinBox.setValue(growcnf)
+        self.updateButton()
+
 
 class ZMQSourceWidget(BaseSourceWidget):
 
@@ -597,7 +906,7 @@ class ZMQSourceWidget(BaseSourceWidget):
         self.datasource = "ZMQSource"
         #: (:obj:`list` <:obj:`str`>) subwidget object names
         self.widgetnames = [
-            "pickleLabel", "pickleLineEdit",
+            "pickleLabel", "pickleComboBox",
             "pickleTopicLabel", "pickleTopicComboBox"
         ]
 
@@ -606,13 +915,54 @@ class ZMQSourceWidget(BaseSourceWidget):
         #: (:obj:`bool`) automatic zmq topics enabled
         self.__autozmqtopics = False
 
+        #: (:obj:`dict` <:obj:`str`, :obj:`str`>) dictionary with
+        #:                     (label, server:port) items
+        self.__servers = {}
+        #: (:obj:`list` <:obj:`str`>) user servers
+        self.__userservers = []
+
         #: (:class:`PyQt4.QtCore.QMutex`) zmq datasource mutex
         self.__mutex = QtCore.QMutex()
 
         self._detachWidgets()
-        self._ui.pickleLineEdit.textEdited.connect(self.updateButton)
+
+        #: (:obj:`str`) default tip
+        self.__defaulttip = self._ui.pickleComboBox.toolTip()
+        self.__connectComboBox()
         self._ui.pickleTopicComboBox.currentIndexChanged.connect(
             self._updateZMQComboBox)
+
+    def __connectComboBox(self):
+        self._ui.pickleComboBox.lineEdit().textEdited.connect(
+            self.updateButton)
+        self._ui.pickleComboBox.currentIndexChanged.connect(
+            self.updateButton)
+
+    def __disconnectComboBox(self):
+        self._ui.pickleComboBox.lineEdit().textEdited.disconnect(
+            self.updateButton)
+        self._ui.pickleComboBox.currentIndexChanged.disconnect(
+            self.updateButton)
+
+    def __updateComboBox(self):
+        """ updates a value of attr combo box
+        """
+        self.__disconnectComboBox()
+        server = str(self._ui.pickleComboBox.currentText()).strip()
+        self._ui.pickleComboBox.clear()
+        servers = sorted(self.__servers.keys())
+        for mt in servers:
+            self._ui.pickleComboBox.addItem(mt)
+            iid = self._ui.pickleComboBox.findText(mt)
+            self._ui.pickleComboBox.setItemData(
+                iid, str(self.__servers[mt]), QtCore.Qt.ToolTipRole)
+        for mt in self.__userservers:
+            self._ui.pickleComboBox.addItem(mt)
+        if server not in servers and server not in self.__userservers:
+            self._ui.pickleComboBox.addItem(server)
+        ind = self._ui.pickleComboBox.findText(server)
+        self._ui.pickleComboBox.setCurrentIndex(ind)
+        self.__connectComboBox()
 
     @QtCore.pyqtSlot()
     def updateButton(self, disconnect=True):
@@ -624,18 +974,19 @@ class ZMQSourceWidget(BaseSourceWidget):
             if disconnect:
                 self._ui.pickleTopicComboBox.currentIndexChanged.disconnect(
                     self._updateZMQComboBox)
-            if not str(self._ui.pickleLineEdit.text()).strip() \
-               or ":" not in str(self._ui.pickleLineEdit.text()):
+            hosturl = str(self._ui.pickleComboBox.currentText()).strip()
+            if hosturl in self.__servers.keys():
+                hosturl = str(self.__servers[hosturl]).strip()
+            self._ui.pickleComboBox.setToolTip(hosturl or self.__defaulttip)
+            if not hosturl or ":" not in hosturl:
                 self.buttonEnabled.emit(False)
             else:
                 try:
-                    _, sport = str(self._ui.pickleLineEdit.text())\
-                        .strip().split("/")[0].split(":")
+                    _, sport = hosturl.split("/")[0].split(":")
                     port = int(sport)
                     if port > 65535 or port < 0:
                         raise Exception("Wrong port")
                     self.buttonEnabled.emit(True)
-                    hosturl = str(self._ui.pickleLineEdit.text()).strip()
                     if self._ui.pickleTopicComboBox.currentIndex() >= 0:
                         text = self._ui.pickleTopicComboBox.currentText()
                         if text == "**ALL**":
@@ -647,7 +998,7 @@ class ZMQSourceWidget(BaseSourceWidget):
                             shost.append(str(text))
                         hosturl = "/".join(shost)
                     self.configurationChanged.emit(hosturl)
-                except:
+                except Exception:
                     self.buttonEnabled.emit(False)
             if disconnect:
                 self._ui.pickleTopicComboBox.currentIndexChanged.connect(
@@ -668,7 +1019,8 @@ class ZMQSourceWidget(BaseSourceWidget):
     def updateMetaData(
             self,
             zmqtopics=None, autozmqtopics=None,
-            datasources=None, disconnect=True, **kargs):
+            datasources=None, disconnect=True, zmqservers=None,
+            **kargs):
         """ update source input parameters
 
         :param zmqtopics: zmq source topics
@@ -679,6 +1031,9 @@ class ZMQSourceWidget(BaseSourceWidget):
         :type datasources: :obj:`list` <:obj:`str`> >
         :param disconnect: disconnect on update
         :type disconnect: :obj:`bool`
+        :param zmqservers: json dictionary with
+                           (label, zmq servers) items
+        :type zmqservers: :obj:`str`
         :param kargs:  source widget input parameter dictionary
         :type kargs: :obj:`dict` < :obj:`str`, :obj:`any`>
         """
@@ -689,6 +1044,9 @@ class ZMQSourceWidget(BaseSourceWidget):
                     self._updateZMQComboBox)
         text = None
         updatecombo = False
+        if zmqservers is not None:
+            self.__servers = json.loads(zmqservers)
+            self.__updateComboBox()
         if isinstance(zmqtopics, list):
             with QtCore.QMutexLocker(self.__mutex):
                 text = str(self._ui.pickleTopicComboBox.currentText())
@@ -727,10 +1085,40 @@ class ZMQSourceWidget(BaseSourceWidget):
         """ connects widget
         """
         self._connected = True
-        self._ui.pickleLineEdit.setReadOnly(True)
+        self._ui.pickleComboBox.lineEdit().setReadOnly(True)
+        self._ui.pickleComboBox.setEnabled(False)
+        server = str(self._ui.pickleComboBox.currentText()).strip()
+        servers = self.__servers.keys()
+        if server not in servers and server not in self.__userservers:
+            self.__userservers.append(server)
+            self.__updateComboBox()
 
     def disconnectWidget(self):
         """ disconnects widget
         """
         self._connected = False
-        self._ui.pickleLineEdit.setReadOnly(False)
+        self._ui.pickleComboBox.lineEdit().setReadOnly(False)
+        self._ui.pickleComboBox.setEnabled(True)
+
+    def configure(self, configuration):
+        """ set configuration for the current image source
+
+        :param configuration: configuration string
+        :type configuration: :obj:`str`
+        """
+        cnflst = configuration.split(",")
+        srvcnf = cnflst[0] if cnflst else ""
+        topiccnf = cnflst[1] if len(cnflst) > 1 else ""
+
+        iid = self._ui.pickleComboBox.findText(srvcnf)
+        if iid == -1:
+            self._ui.pickleComboBox.addItem(srvcnf)
+            iid = self._ui.pickleComboBox.findText(srvcnf)
+        self._ui.pickleComboBox.setCurrentIndex(iid)
+
+        if topiccnf:
+            iid = self._ui.pickleTopicComboBox.findText(topiccnf)
+            if iid == -1:
+                self._ui.pickleTopicComboBox.addItem(topiccnf)
+                iid = self._ui.pickleTopicComboBox.findText(topiccnf)
+            self._ui.pickleTopicComboBox.setCurrentIndex(iid)

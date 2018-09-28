@@ -395,6 +395,14 @@ class LevelsGroupBox(QtGui.QGroupBox):
                 self.__ui.channelComboBox.hide()
                 self.__colors = False
 
+    def setGradient(self, name):
+        """ set gradient
+
+        :param cnflevels:  configuration string
+        :type cnflevels: :obj:`str`
+        """
+        self._changeGradient(name)
+
     @QtCore.pyqtSlot(int)
     def _updateGradient(self, index):
         """ updates gradient in the intensity histogram
@@ -436,3 +444,30 @@ class LevelsGroupBox(QtGui.QGroupBox):
         :type image: :class:`pyqtgraph.graphicsItems.ImageItem.ImageItem`
         """
         self.__histogram.setImageItem(image)
+
+    def setLevels(self, cnflevels):
+        """ set levels from configuration string
+
+        :param cnflevels:  configuration string
+        :type cnflevels: :obj:`str`
+        """
+        self.__ui.autoLevelsCheckBox.setChecked(False)
+        self._onAutoLevelsChanged(0)
+        llst = cnflevels.split(",")
+        lmin = None
+        lmax = None
+        try:
+            smin = llst[0]
+            if smin.startswith("m"):
+                smin = "-" + smin[1:]
+            lmin = float(smin)
+        except Exception:
+            pass
+        try:
+            smax = llst[1]
+            if smax.startswith("m"):
+                smax = "-" + smax[1:]
+            lmax = float(smax)
+        except Exception:
+            pass
+        self.updateLevels(lmin, lmax)

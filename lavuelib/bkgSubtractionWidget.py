@@ -47,11 +47,13 @@ class BkgSubtractionWidget(QtGui.QWidget):
     #: (:class:`PyQt4.QtCore.pyqtSignal`) apply state change signal
     applyStateChanged = QtCore.pyqtSignal(int)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, settings=None):
         """ constructor
 
         :param parent: parent object
         :type parent: :class:`PyQt4.QtCore.QObject`
+        :param settings: lavue configuration settings
+        :type settings: :class:`lavuelib.settings.Settings`
         """
         QtGui.QWidget.__init__(self, parent)
 
@@ -61,6 +63,8 @@ class BkgSubtractionWidget(QtGui.QWidget):
 
         #: (:obj:`str`) file name
         self.__fileName = ""
+        #: (:class:`lavuelib.settings.Settings`) settings
+        self.__settings = settings
 
         self.__ui.selectPushButton.clicked.connect(self._showImageSelection)
         self.__ui.selectCurrentPushButton.hide()
@@ -88,12 +92,23 @@ class BkgSubtractionWidget(QtGui.QWidget):
 
         fileName = str(
             fileDialog.getOpenFileName(
-                self, 'Open file', self.__fileName or '.'))
+                self, 'Open file', self.__settings.bkgimagename or '.'))
         if fileName:
-            self.__fileName = fileName
-            self.setDisplayedName(self.__fileName)
-            self.bkgFileSelection.emit(self.__fileName)
+            self.__settings.bkgimagename = fileName
+            self.setDisplayedName(self.__settings.bkgimagename)
+            self.bkgFileSelected.emit(self.__settings.bkgimagename)
             self.__hideImageSelection()
+
+    def setBackground(self, fname):
+        """ sets the image background
+
+        :param fname: file name
+        :type fname: :obj:`str`
+        """
+        self.setDisplayedName(fname)
+        self.bkgFileSelected.emit(fname)
+        self.__ui.applyBkgCheckBox.setChecked(True)
+        self.applyStateChanged.emit(2)
 
     @QtCore.pyqtSlot()
     def _useCurrent(self):

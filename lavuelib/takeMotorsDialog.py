@@ -62,6 +62,10 @@ class TakeMotorsDialog(QtGui.QDialog):
         self.xmotorname = ""
         #: (:obj:`str`) y motor name
         self.ymotorname = ""
+        #: (:obj:`list`<:obj:`str`>) motortips list
+        self.motortips = []
+        #: (:obj:`str`) group title
+        self.title = None
         #: (:class:`PyTango.DeviceProxy`) x motor device
         self.xmotordevice = None
         #: (:class:`PyTango.DeviceProxy`) y motor device
@@ -70,30 +74,44 @@ class TakeMotorsDialog(QtGui.QDialog):
     def createGUI(self):
         """ create GUI
         """
-        self.__ui.xLineEdit.setText(str(self.xmotorname))
-        self.__ui.yLineEdit.setText(str(self.ymotorname))
+        if self.title is not None:
+            self.__ui.groupBox.setTitle(str(self.title))
+
+        self.__updateComboBox(self.__ui.xComboBox, str(self.xmotorname))
+        self.__updateComboBox(self.__ui.yComboBox, str(self.ymotorname))
 
     @QtCore.pyqtSlot()
     def accept(self):
         """ updates class variables with the form content
         """
         try:
-            self.xmotorname = str(self.__ui.xLineEdit.text())
+            self.xmotorname = str(self.__ui.xComboBox.currentText())
             self.xmotordevice = PyTango.DeviceProxy(self.xmotorname)
             for attr in ["state", "position"]:
                 if not hasattr(self.xmotordevice, attr):
                     raise Exception("Missing %s" % attr)
-        except:
-            self.__ui.xLineEdit.setFocus()
+        except Exception:
+            self.__ui.xComboBox.setFocus()
             return
         try:
-            self.ymotorname = str(self.__ui.yLineEdit.text())
+            self.ymotorname = str(self.__ui.yComboBox.currentText())
             self.ymotordevice = PyTango.DeviceProxy(self.ymotorname)
             for attr in ["state", "position"]:
                 if not hasattr(self.ymotordevice, attr):
                     raise Exception("Missing %s" % attr)
-        except:
-            self.__ui.yLineEdit.setFocus()
+        except Exception:
+            self.__ui.yComboBox.setFocus()
             return
 
         QtGui.QDialog.accept(self)
+
+    def __updateComboBox(self, combobox, motorname):
+        """ updates a value of motor combo box
+        """
+        combobox.clear()
+        for mt in sorted(self.motortips):
+            combobox.addItem(mt)
+        if motorname not in self.motortips:
+            combobox.addItem(motorname)
+        ind = combobox.findText(motorname)
+        combobox.setCurrentIndex(ind)

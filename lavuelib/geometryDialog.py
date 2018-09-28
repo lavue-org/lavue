@@ -78,13 +78,13 @@ class GeometryDialog(QtGui.QDialog):
         """
         try:
             self.centerx = float(self.__ui.centerxLineEdit.text())
-        except:
+        except Exception:
             self.__ui.centerxLineEdit.setFocus()
             return
 
         try:
             self.centery = float(self.__ui.centeryLineEdit.text())
-        except:
+        except Exception:
             self.__ui.centeryLineEdit.setFocus()
             return
 
@@ -94,7 +94,7 @@ class GeometryDialog(QtGui.QDialog):
                 raise Exception("Wrong value")
             else:
                 self.energy = energy
-        except:
+        except Exception:
             self.__ui.energyLineEdit.setFocus()
             return
 
@@ -104,7 +104,7 @@ class GeometryDialog(QtGui.QDialog):
                 raise Exception("Wrong value")
             else:
                 self.pixelsizex = pixelsizex
-        except:
+        except Exception:
             self.__ui.pixelsizexLineEdit.setFocus()
             return
 
@@ -114,7 +114,7 @@ class GeometryDialog(QtGui.QDialog):
                 raise Exception("Wrong value")
             else:
                 self.pixelsizey = pixelsizey
-        except:
+        except Exception:
             self.__ui.pixelsizeyLineEdit.setFocus()
             return
 
@@ -124,7 +124,7 @@ class GeometryDialog(QtGui.QDialog):
                 raise Exception("Wrong value")
             else:
                 self.detdistance = detdistance
-        except:
+        except Exception:
             self.__ui.detdistanceLineEdit.setFocus()
             return
 

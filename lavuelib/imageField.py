@@ -73,8 +73,8 @@ class ImageField(QtGui.QDialog):
         self.__ui.imageListWidget.clear()
 
         for name in sorted(self.fields.keys()):
-            item = QtGui.QListWidgetItem(QtCore.QString("%s" % name))
-            item.setData(QtCore.Qt.UserRole, QtCore.QVariant("%s" % name))
+            item = QtGui.QListWidgetItem("%s" % name)
+            item.setData(QtCore.Qt.UserRole, "%s" % name)
             if selected is None:
                 selected = item
             field = self.fields[name]
@@ -92,7 +92,11 @@ class ImageField(QtGui.QDialog):
         """
         item = self.__ui.imageListWidget.currentItem()
         if item is not None:
-            field = str(item.data(QtCore.Qt.UserRole).toString())
+            vfield = item.data(QtCore.Qt.UserRole)
+            if hasattr(vfield, "toString"):
+                field = str(vfield.toString())
+            else:
+                field = str(vfield)
             if field and field in self.fields.keys():
                 self.field = field
         self.growing = int(self.__ui.growingSpinBox.value())

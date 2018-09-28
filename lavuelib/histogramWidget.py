@@ -213,7 +213,7 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         """
         try:
             self.gradient.loadPreset(str(name))
-        except:
+        except Exception:
             self.gradient.loadPreset("highContrast")
 
     def paint(self, p, *args):

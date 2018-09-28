@@ -56,17 +56,17 @@ except ImportError:
 
 try:
     import PIL
+    import PIL.Image
     #: (:obj:`bool`) PIL imported
     PILLOW = True
 except ImportError:
     #: (:obj:`bool`) PIL imported
     PILLOW = False
-
 try:
     import zmq
     #: (:obj:`str`,:obj:`str`) zmq major version, zmq minor version
-    ZMQMAJOR, ZMQMINOR = map(int, zmq.zmq_version().split(".")[:2])
-except:
+    ZMQMAJOR, ZMQMINOR = list(map(int, zmq.zmq_version().split(".")))[:2]
+except Exception:
     #: (:obj:`str`,:obj:`str`) zmq major version, zmq minor version
     ZMQMAJOR, ZMQMINOR = 0, 0
 
@@ -75,10 +75,17 @@ import socket
 import numpy as np
 import random
 import time
-import cPickle
+try:
+    import cPickle
+except Exception:
+    import _pickle as cPickle
+import sys
 
 from io import BytesIO
 from . import imageFileHandler
+
+if sys.version_info > (3,):
+    buffer = memoryview
 
 
 class BaseSource(object):
@@ -136,6 +143,9 @@ class BaseSource(object):
         :rtype: (:obj:`str` , :class:`numpy.ndarray` , :obj:`str`)
         """
         self.__counter += 1
+        # if self.__counter % 20 == 0:
+        #     return str("Test error"), "__ERROR__", ""
+
         return (np.transpose(
             [
                 [random.randint(0, 1000) for _ in range(512)]
@@ -155,7 +165,7 @@ class BaseSource(object):
         """
         try:
             pass
-        except:
+        except Exception:
             pass
 
     def _updaterror(self):
@@ -214,7 +224,7 @@ class FixTestSource(BaseSource):
         """
         try:
             pass
-        except:
+        except Exception:
             pass
 
 
@@ -270,7 +280,7 @@ class NXSFileSource(BaseSource):
                         self.__frame = fid - 1
                 image = self.__handler.getImage(
                     self.__node, self.__frame, self.__gdim)
-            # except:
+            # except Exception:
             except Exception as e:
                 print(str(e))
                 try:
@@ -319,7 +329,7 @@ class NXSFileSource(BaseSource):
                     self._configuration).strip().split(",", 4)
             try:
                 self.__gdim = int(growdim)
-            except:
+            except Exception:
                 self.__gdim = 0
             if nxsopen.lower() == "false":
                 self.__nxsopen = False
@@ -587,6 +597,8 @@ class HTTPSource(BaseSource):
         :type timeout: :obj:`int`
         """
         BaseSource.__init__(self, timeout)
+        #: (:obj:`bool`) use tiff loader
+        self.__tiffloader = True
 
     def getData(self):
         """ provides image name, image data and metadata
@@ -604,16 +616,28 @@ class HTTPSource(BaseSource):
                         # print("[cbf source module]::metadata", name)
                         img = imageFileHandler.CBFLoader().load(
                             np.fromstring(data[:], dtype=np.uint8))
-                        return np.transpose(img), name, ""
+                        return (np.transpose(img),
+                                "%s (%s)" % (name, time.ctime()), "")
                     else:
                         # print("[tif source module]::metadata", name)
-                        if PILLOW:
-                            img = np.array(PIL.Image.open(BytesIO(str(data))))
-                            return np.transpose(img), name, ""
+                        if PILLOW and not self.__tiffloader:
+                            try:
+                                img = np.array(
+                                    PIL.Image.open(BytesIO(str(data))))
+                            except Exception:
+                                img = imageFileHandler.TIFLoader().load(
+                                    np.fromstring(data[:], dtype=np.uint8))
+                                self.__tiffloader = True
+                            return (np.transpose(img),
+                                    "%s (%s)" % (name, time.ctime()), "")
                         else:
                             img = imageFileHandler.TIFLoader().load(
                                 np.fromstring(data[:], dtype=np.uint8))
-                            return np.transpose(img), name, ""
+                            return (np.transpose(img),
+                                    "%s (%s)" % (name, time.ctime()), "")
+                else:
+                    print("HTTP Source: %s" % str(response.content))
+                    pass
             except Exception as e:
                 print(str(e))
                 return str(e), "__ERROR__", ""
@@ -622,13 +646,11 @@ class HTTPSource(BaseSource):
     def connect(self):
         """ connects the source
         """
+        self.__tiffloader = False
         try:
             if self._configuration:
-                response = requests.get(self._configuration)
-                if response.ok:
-                    return True
-            self._updaterror()
-            return False
+                requests.get(self._configuration)
+            return True
         except Exception as e:
             print(str(e))
             self._updaterror()
@@ -698,7 +720,7 @@ class ZMQSource(BaseSource):
         else:
             try:
                 metadata = cPickle.loads(message)
-            except:
+            except Exception:
                 metadata = json.loads(message)
         return metadata
 
@@ -787,7 +809,7 @@ class ZMQSource(BaseSource):
                     metadata.pop("dtype")
                     try:
                         jmetadata = json.dumps(metadata)
-                    except:
+                    except Exception:
                         pass
                 return (np.transpose(array), name, jmetadata)
 
@@ -881,6 +903,8 @@ class HiDRASource(BaseSource):
         self.__query = None
         #: (:class:`PyQt4.QtCore.QMutex`) zmq bind address
         self.__mutex = QtCore.QMutex()
+        #: (:obj:`bool`) use tiff loader
+        self.__tiffloader = False
 
     @QtCore.pyqtSlot(str)
     def setConfiguration(self, configuration):
@@ -890,21 +914,33 @@ class HiDRASource(BaseSource):
         :type configuration: :obj:`str`
         """
         if self._configuration != configuration:
-            self._configuration = configuration
+
             self.__shost, self.__targetname, self.__portnumber \
-                = str(self._configuration).split()
-            self.__target = [
-                self.__targetname, self.__portnumber, 19,
-                [".cbf", ".tif", ".tiff"]]
-            with QtCore.QMutexLocker(self.__mutex):
-                self.__query = hidra.Transfer(
-                    "QUERY_NEXT", self.__shost)
+                = str(configuration).split()
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            result = sock.connect_ex(
+                (self.__targetname, int(self.__portnumber)))
+            if result:
+                self._configuration = configuration
+                self.__target = [
+                    self.__targetname, self.__portnumber, 19,
+                    [".cbf", ".tif", ".tiff"]]
+                with QtCore.QMutexLocker(self.__mutex):
+                    self.__query = hidra.Transfer(
+                        "QUERY_NEXT", self.__shost)
+            else:
+                self.__query = None
             self._initiated = False
 
     def connect(self):
         """ connects the source
         """
+        self.__tiffloader = False
         try:
+            if self.__query is None:
+                raise Exception(
+                    "%s:%s is busy. Please change the port"
+                    % (self.__targetname, self.__portnumber))
             if not self._initiated:
                 with QtCore.QMutexLocker(self.__mutex):
                     self.__query.initiate(self.__target)
@@ -912,7 +948,8 @@ class HiDRASource(BaseSource):
                 with QtCore.QMutexLocker(self.__mutex):
                     self.__query.start()
             return True
-        except:
+        except Exception as e:
+            print(str(e))
             if self.__query is not None:
                 with QtCore.QMutexLocker(self.__mutex):
                     self.__query.stop()
@@ -926,7 +963,7 @@ class HiDRASource(BaseSource):
             if self.__query is not None:
                 with QtCore.QMutexLocker(self.__mutex):
                     self.__query.stop()
-        except:
+        except Exception:
             self._updaterror()
 
     def getData(self):
@@ -940,8 +977,20 @@ class HiDRASource(BaseSource):
         try:
             with QtCore.QMutexLocker(self.__mutex):
                 # [metadata, data] = self.__query.get()
+                t1 = time.time()
                 [metadata, data] = self.__query.get(self._timeout)
-        except:
+            if metadata is None and data is None \
+               and time.time() - t1 < self._timeout/2000.:
+                with QtCore.QMutexLocker(self.__mutex):
+                    self.__query.stop()
+                    self.__query = hidra.Transfer(
+                        "QUERY_NEXT", self.__shost)
+                    self.__query.initiate(self.__target)
+                    self._initiated = True
+                    self.__query.start()
+                    [metadata, data] = self.__query.get(self._timeout)
+        except Exception as e:
+            print(str(e))
             pass  # this needs a bit more care
 
         if metadata is not None and data is not None:
@@ -955,8 +1004,14 @@ class HiDRASource(BaseSource):
             else:
                 # elif data[:2] in ["II\x2A\x00", "MM\x00\x2A"]:
                 print("[tif source module]::metadata", metadata["filename"])
-                if PILLOW:
-                    img = np.array(PIL.Image.open(BytesIO(str(data))))
+                if PILLOW and not self.__tiffloader:
+                    try:
+                        img = np.array(PIL.Image.open(BytesIO(str(data))))
+                    except Exception:
+                        img = imageFileHandler.TIFLoader().load(
+                            np.fromstring(data[:], dtype=np.uint8))
+                        self.__tiffloader = True
+
                     return np.transpose(img), metadata["filename"], ""
                 else:
                     img = imageFileHandler.TIFLoader().load(

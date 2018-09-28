@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QROIProjToolWidget</class>
+ <widget class="QWidget" name="QROIProjToolWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>750</width>
+    <height>158</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="rowsliceLabel">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;row range in the python slice notation,&lt;/p&gt;&lt;p&gt;e.g. 0:100 or 100:200:2&lt;/p&gt;&lt;p&gt;empty means ALL&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Projections - Row slice:</string>
+         </property>
+         <property name="buddy">
+          <cstring>rowsliceLineEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="rowsliceLineEdit">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;row range in the python slice notation,&lt;/p&gt;&lt;p&gt;e.g. 0:100 or 100:200:2&lt;/p&gt;&lt;p&gt;empty means ALL&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="columnsliceLabel">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;column range in the python slice notation,&lt;/p&gt;&lt;p&gt;e.g. 0:100 or 100:200:2&lt;/p&gt;&lt;p&gt;empty means ALL&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Column slice:</string>
+         </property>
+         <property name="buddy">
+          <cstring>columnsliceLineEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="columnsliceLineEdit">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;column range in the python slice notation,&lt;/p&gt;&lt;p&gt;e.g. 0:100 or 100:200:2&lt;/p&gt;&lt;p&gt;empty means ALL&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="funLabel">
+         <property name="text">
+          <string>Mapping:</string>
+         </property>
+         <property name="buddy">
+          <cstring>funComboBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="funComboBox">
+         <item>
+          <property name="text">
+           <string>mean</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>sum</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLabel" name="toolLabel_2">
+         <property name="toolTip">
+          <string>ROI alias or aliases related to sardana experimental channels</string>
+         </property>
+         <property name="text">
+          <string>ROI alias(es): </string>
+         </property>
+         <property name="buddy">
+          <cstring>labelROILineEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="labelROILineEdit">
+         <property name="toolTip">
+          <string>coordinate info display for the mouse pointer</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="roiSpinBox">
+         <property name="toolTip">
+          <string>number of ROIs to add, -1 means remove ROI aliases from sardana</string>
+         </property>
+         <property name="minimum">
+          <number>-1</number>
+         </property>
+         <property name="value">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="applyROIPushButton">
+         <property name="toolTip">
+          <string>add ROI aliases to the Door environment as well as to Active MntGrp</string>
+         </property>
+         <property name="text">
+          <string>Add</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="fetchROIPushButton">
+         <property name="toolTip">
+          <string>fetch ROI aliases from the Door environment</string>
+         </property>
+         <property name="text">
+          <string>Fetch</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QLabel" name="roiinfoLabel">
+         <property name="toolTip">
+          <string>coordinate info display for the mouse pointer</string>
+         </property>
+         <property name="text">
+          <string>[x1, y1, x2, y2], sum: </string>
+         </property>
+         <property name="buddy">
+          <cstring>roiinfoLineEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="roiinfoLineEdit">
+         <property name="toolTip">
+          <string>coordinate info display for the mouse pointer</string>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="toolLabel">
+         <property name="text">
+          <string>Pixel position and intensity: </string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="angleqPushButton">
+         <property name="toolTip">
+          <string>input physical parameter</string>
+         </property>
+         <property name="text">
+          <string>Geometry ...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="angleqComboBox">
+         <property name="toolTip">
+          <string>select the display space</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>angles</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>q-space</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+  <zorder>layoutWidget</zorder>
+  <zorder>layoutWidget_2</zorder>
+  <zorder>layoutWidget_3</zorder>
+  <zorder>toolLabel</zorder>
+  <zorder>roiinfoLabel</zorder>
+  <zorder>roiinfoLineEdit</zorder>
+ </widget>
+ <tabstops>
+  <tabstop>rowsliceLineEdit</tabstop>
+  <tabstop>columnsliceLineEdit</tabstop>
+  <tabstop>funComboBox</tabstop>
+  <tabstop>labelROILineEdit</tabstop>
+  <tabstop>roiSpinBox</tabstop>
+  <tabstop>applyROIPushButton</tabstop>
+  <tabstop>fetchROIPushButton</tabstop>
+  <tabstop>roiinfoLineEdit</tabstop>
+  <tabstop>angleqPushButton</tabstop>
+  <tabstop>angleqComboBox</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

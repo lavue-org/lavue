@@ -82,6 +82,8 @@ class SourceGroupBox(QtGui.QGroupBox):
         #:      :class:`lavuelib.sourceWidget.BaseSourceWidget` >)
         #:           source names
         self.__sourcewidgets = {}
+        # (:obj:`str`) error status
+        self.__errorstatus = ""
 
         #: (:obj:`list` < :obj:`str` > ) datasource class names
         self.__datasources = []
@@ -129,6 +131,14 @@ class SourceGroupBox(QtGui.QGroupBox):
         self.__ui.gridLayout.addWidget(self.__ui.cStatusLabel, sln + 1, 0)
         self.__ui.gridLayout.addWidget(self.__ui.cStatusLineEdit, sln + 1, 1)
         self.__ui.gridLayout.addWidget(self.__ui.pushButton, sln + 2, 1)
+
+    def setSourceComboBox(self, index):
+        """ set source by changing combobox
+
+        :param index: combobox index
+        :type index: :obj:`int`
+        """
+        self.__ui.sourceTypeComboBox.setCurrentIndex(index)
 
     @QtCore.pyqtSlot()
     def _onSourceChanged(self):
@@ -247,7 +257,8 @@ class SourceGroupBox(QtGui.QGroupBox):
     def toggleServerConnection(self):
         """ toggles server connection
         """
-        # if it is connected then it's easy:
+        if self.__errorstatus:
+            self.setErrorStatus()
         if self.__connected:
             self.__ui.cStatusLineEdit.setStyleSheet(
                 "color: yellow;"
@@ -268,6 +279,25 @@ class SourceGroupBox(QtGui.QGroupBox):
 
             self.sourceConnected.emit(
                 self.__ui.sourceTypeComboBox.currentIndex() + 1)
+
+    def setErrorStatus(self, status=""):
+        """ set error status
+
+        :param status: error status
+        :type status: :obj:`str`
+        """
+        if status:
+            self.__ui.cStatusLineEdit.setStyleSheet(
+                "background-color: gray;")
+        elif "emitting" in str(self.__ui.cStatusLineEdit.text()):
+            self.__ui.cStatusLineEdit.setStyleSheet(
+                "color: white;"
+                "background-color: blue;")
+        else:
+            self.__ui.cStatusLineEdit.setStyleSheet(
+                "color: white;"
+                "background-color: green;")
+        self.__errorstatus = status
 
     def connectSuccess(self, port=None):
         """ set connection status on and display connection status
@@ -305,3 +335,19 @@ class SourceGroupBox(QtGui.QGroupBox):
         if self.__currentSource is not None:
             self.__currentSource.disconnectWidget()
         # self.pushButton.setText("Retry connect")
+
+    def configure(self, configuration):
+        """ set configuration for the current image source
+
+        :param configuration: configuration string
+        :type configuration: :obj:`str`
+        """
+
+        if self.__currentSource is not None:
+            self.__currentSource.configure(configuration)
+
+    def start(self):
+        """ starts viewing if pushButton enable
+        """
+        if self.__ui.pushButton.isEnabled():
+            self.toggleServerConnection()

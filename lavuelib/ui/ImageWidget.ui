@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>514</width>
-    <height>136</height>
+    <width>661</width>
+    <height>106</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_4">
+  <layout class="QGridLayout" name="gridLayout_8">
    <property name="margin">
     <number>0</number>
    </property>
@@ -26,35 +26,83 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QWidget" name="twoDWidget" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>100</verstretch>
-        </sizepolicy>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_2" columnstretch="0">
+      <widget class="QWidget" name="upperPlotWidget" native="true">
+       <layout class="QGridLayout" name="gridLayout_6">
         <property name="margin">
          <number>0</number>
         </property>
         <item row="0" column="0">
-         <layout class="QVBoxLayout" name="twoDVerticalLayout"/>
+         <widget class="QSplitter" name="upperPlotSplitter">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <widget class="QWidget" name="twoDWidget" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>100</verstretch>
+            </sizepolicy>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_2" columnstretch="0">
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <layout class="QVBoxLayout" name="twoDVerticalLayout"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="oneDRightWidget" native="true">
+           <layout class="QGridLayout" name="gridLayout_4">
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <layout class="QHBoxLayout" name="oneDRightHorizontalLayout"/>
+            </item>
+           </layout>
+          </widget>
+         </widget>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="oneDWidget" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_3" columnstretch="0">
+      <widget class="QWidget" name="lowerPlotWidget" native="true">
+       <layout class="QGridLayout" name="gridLayout_7">
         <property name="margin">
          <number>0</number>
         </property>
         <item row="0" column="0">
-         <layout class="QVBoxLayout" name="oneDVerticalLayout"/>
+         <widget class="QSplitter" name="lowerPlotSplitter">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <widget class="QWidget" name="oneDBottomWidget" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_3" columnstretch="0">
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <layout class="QVBoxLayout" name="oneDBottomVerticalLayout"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="cornerWidget" native="true">
+           <layout class="QGridLayout" name="gridLayout_5">
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <layout class="QHBoxLayout" name="cornerHorizontalLayout"/>
+            </item>
+           </layout>
+          </widget>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -104,7 +152,7 @@
          <item>
           <widget class="QComboBox" name="toolComboBox">
            <property name="toolTip">
-            <string>select the image tool for the mouse pointer, i.e. Intensity, ROI, LineCut, Angle/Q</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;select the an &lt;/span&gt;&lt;span style=&quot; font-weight:400; text-decoration: underline;&quot;&gt;IMAGE TOOL&lt;/span&gt;&lt;span style=&quot; font-weight:400;&quot;&gt; for the mouse pointer:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Intensity&lt;span style=&quot; font-weight:400;&quot;&gt; - shows intensity of the selected pixels&lt;/span&gt;&lt;/p&gt;&lt;p&gt;ROI &lt;span style=&quot; font-weight:400;&quot;&gt;- selects Regions Of Interest and culculates a sum of their pixel intensities&lt;/span&gt;&lt;/p&gt;&lt;p&gt;LineCut&lt;span style=&quot; font-weight:400;&quot;&gt; - selects Line Cuts and shows their 1d intensity plots&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Angle/Q&lt;span style=&quot; font-weight:400;&quot;&gt; - shows pixel coordinates in q-space or theta-angles&lt;/span&gt;&lt;/p&gt;&lt;p&gt;MoveMotor &lt;span style=&quot; font-weight:400;&quot;&gt;- moves the selected motors to the position pointed by mouse&lt;/span&gt;&lt;/p&gt;&lt;p&gt;MeshScan&lt;span style=&quot; font-weight:400;&quot;&gt; - performs sardana mesh scan on the selected ROI region&lt;/span&gt;&lt;/p&gt;&lt;p&gt;1d-Plot &lt;span style=&quot; font-weight:400;&quot;&gt;- plots 1d-plots of the selected image rows&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Projections &lt;span style=&quot; font-weight:400;&quot;&gt;- plots horizontal and vertical projections of the current image&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Q+ROI+Proj &lt;span style=&quot; font-weight:400;&quot;&gt;- combines &lt;/span&gt;Angle/Q&lt;span style=&quot; font-weight:400;&quot;&gt;,&lt;/span&gt; ROI&lt;span style=&quot; font-weight:400;&quot;&gt; and &lt;/span&gt;Projections&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="styleSheet">
             <string notr="true">font: bold;</string>
@@ -123,7 +171,7 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>0</width>
+           <width>13</width>
            <height>0</height>
           </size>
          </property>

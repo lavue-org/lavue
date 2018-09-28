@@ -32,15 +32,21 @@ import pyqtgraph as _pg
 import re
 import os
 import json
+import types
 
 from . import imageDisplayWidget
 from . import messageBox
 from . import imageSource as isr
 from . import toolWidget
 
+from .external.pyqtgraph_0_10 import (
+    viewbox_updateMatrix, viewbox_invertX,
+    viewbox_xInverted, axisitem_linkedViewChanged,
+    viewbox_linkedViewChanged)
 
-_VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(".") \
-    if _pg.__version__ else ("0", "9", "0")
+
+# _VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(".") \
+#     if _pg.__version__ else ("0", "9", "0")
 
 _formclass, _baseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -55,32 +61,38 @@ class ImageWidget(QtGui.QWidget):
 
     #: (:class:`PyQt4.QtCore.pyqtSignal`) current tool changed signal
     currentToolChanged = QtCore.pyqtSignal(int)
-    #: (:class:`PyQt4.QtCore.pyqtSignal`) cut number changed signal
-    cutNumberChanged = QtCore.pyqtSignal(int)
     #: (:class:`PyQt4.QtCore.pyqtSignal`) roi number changed signal
     roiNumberChanged = QtCore.pyqtSignal(int)
     #: (:class:`PyQt4.QtCore.pyqtSignal`) roi coordinate changed signal
     roiCoordsChanged = QtCore.pyqtSignal()
-    #: (:class:`PyQt4.QtCore.pyqtSignal`) cut coordinate changed signal
-    cutCoordsChanged = QtCore.pyqtSignal()
     #: (:class:`PyQt4.QtCore.pyqtSignal`) roi Line Edit changed signal
     roiLineEditChanged = QtCore.pyqtSignal()
+    #: (:class:`PyQt4.QtCore.pyqtSignal`) roi aliases changed signal
+    roiAliasesChanged = QtCore.pyqtSignal(str)
+    #: (:class:`PyQt4.QtCore.pyqtSignal`) roi value changed signal
+    roiValueChanged = QtCore.pyqtSignal(str, int, str)
+    #: (:class:`PyQt4.QtCore.pyqtSignal`) cut number changed signal
+    cutNumberChanged = QtCore.pyqtSignal(int)
+    #: (:class:`PyQt4.QtCore.pyqtSignal`) cut coordinate changed signal
+    cutCoordsChanged = QtCore.pyqtSignal()
+    #: (:class:`PyQt4.QtCore.pyqtSignal`) image plotted signal
+    imagePlotted = QtCore.pyqtSignal()
+    #: (:class:`PyQt4.QtCore.pyqtSignal`) replot image signal
+    replotImage = QtCore.pyqtSignal(bool)
     #: (:class:`PyQt4.QtCore.pyqtSignal`) sardana enabled signal
     sardanaEnabled = QtCore.pyqtSignal(bool)
     #: (:class:`PyQt4.QtCore.pyqtSignal`) aspect locked toggled signal
     aspectLockedToggled = QtCore.pyqtSignal(bool)
     #: (:class:`PyQt4.QtCore.pyqtSignal`) apply tips changed signal
     applyTipsChanged = QtCore.pyqtSignal(int)
-    #: (:class:`PyQt4.QtCore.pyqtSignal`) roi aliases changed signal
-    roiAliasesChanged = QtCore.pyqtSignal(str)
-    #: (:class:`PyQt4.QtCore.pyqtSignal`) roi value changed signal
-    roiValueChanged = QtCore.pyqtSignal(str, int, str)
     #: (:class:`PyQt4.QtCore.pyqtSignal`) mouse image position changed signal
     mouseImagePositionChanged = QtCore.pyqtSignal()
     #: (:class:`PyQt4.QtCore.pyqtSignal`) mouse double clicked
     mouseImageDoubleClicked = QtCore.pyqtSignal(float, float)
     #: (:class:`PyQt4.QtCore.pyqtSignal`) mouse single clicked
     mouseImageSingleClicked = QtCore.pyqtSignal(float, float)
+    #: (:class:`PyQt4.QtCore.pyqtSignal`) geometry changed
+    geometryChanged = QtCore.pyqtSignal()
 
     def __init__(self, parent=None, tooltypes=None, settings=None):
         """ constructor
@@ -100,15 +112,29 @@ class ImageWidget(QtGui.QWidget):
         #: (:obj:`list` < :obj:`str` > ) tool names
         self.__toolnames = []
         #: (:obj:`dict` < :obj:`str`,
-        #:      :class:`lavuelib.toolWidget.BaseToolWidget` >)
+        #:      :class:`lavuelib.toolWidget.BaseToolWidget` > )
         #:           tool names
         self.__toolwidgets = {}
         #: (:class:`lavuelib.settings.Settings`) settings
         self.__settings = settings
+        #: (:class:`lavuelib.controllerClient.ControllerClient`)
+        #:   tango controller client
+        self.__tangoclient = None
+        #: (obj`list`) collection of last writing rois
+        self.__lastrois = []
+        #: (obj`list`) collection of last writing rois values
+        self.__lastroisvalues = []
         #: (obj`str`) last text
         self.__lasttext = ""
+        #: (obj`str`) roi labels
+        self.roilabels = ""
         #: (:class:`lavuelib.toolWidget.BaseToolWidget`) current tool
         self.__currenttool = None
+
+        #: (:class:`numpy.ndarray`) data to displayed in 2d widget
+        self.__data = None
+        #: (:class:`numpy.ndarray`) raw data to cut plots
+        self.__rawdata = None
 
         #: (:class:`Ui_ImageWidget') ui_imagewidget object from qtdesigner
         self.__ui = _formclass()
@@ -119,13 +145,31 @@ class ImageWidget(QtGui.QWidget):
         self.__displaywidget = imageDisplayWidget.ImageDisplayWidget(
             parent=self)
 
-        #: (:class:`pyqtgraph.PlotWidget`) 1D plot widget
-        self.__cutPlot = _pg.PlotWidget(self)
-        #: (:class:`pyqtgraph.PlotDataItem`) 1D plot
-        self.__cutCurve = self.__cutPlot.plot()
+        #: (:class:`pyqtgraph.PlotWidget`) bottom 1D plot widget
+        self.__bottomplot = _pg.PlotWidget(self)
+        vb = self.__bottomplot.getViewBox()
+        if not hasattr(vb, "invertX"):
+            vb.state["xInverted"] = False
+            vb.invertX = types.MethodType(viewbox_invertX, vb)
+            vb.xInverted = types.MethodType(viewbox_xInverted, vb)
+            vb.updateMatrix = types.MethodType(viewbox_updateMatrix, vb)
+            vb.linkedViewChanged = types.MethodType(
+                viewbox_linkedViewChanged, vb)
+            ba = self.__bottomplot.getAxis("bottom")
+            vb.sigResized.disconnect(ba.linkedViewChanged)
+            vb.sigXRangeChanged.disconnect(ba.linkedViewChanged)
+            ba.linkedViewChanged = types.MethodType(
+                axisitem_linkedViewChanged, ba)
+            vb.sigXRangeChanged.connect(ba.linkedViewChanged)
+            vb.sigResized.connect(ba.linkedViewChanged)
+
+        #: (:class:`pyqtgraph.PlotWidget`) right 1D plot widget
+        self.__rightplot = _pg.PlotWidget(self)
 
         self.__ui.twoDVerticalLayout.addWidget(self.__displaywidget)
-        self.__ui.oneDVerticalLayout.addWidget(self.__cutPlot)
+        self.__ui.oneDBottomVerticalLayout.addWidget(self.__bottomplot)
+
+        self.__ui.oneDRightHorizontalLayout.addWidget(self.__rightplot)
 
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred,
                                        QtGui.QSizePolicy.Preferred)
@@ -134,19 +178,20 @@ class ImageWidget(QtGui.QWidget):
         sizePolicy.setHeightForWidth(
             self.__displaywidget.sizePolicy().hasHeightForWidth())
         self.__displaywidget.setSizePolicy(sizePolicy)
+        self.__ui.upperPlotWidget.setSizePolicy(sizePolicy)
 
-        if _VMAJOR == '0' and int(_VMINOR) < 10 and int(_VPATCH) < 9:
-            self.__cutPlot.setMinimumSize(QtCore.QSize(0, 170))
+        # if _VMAJOR == '0' and int(_VMINOR) < 10 and int(_VPATCH) < 9:
+        #     self.__bottomplot.setMinimumSize(QtCore.QSize(0, 170))
 
         self.__addToolWidgets()
 
-        self.__ui.plotSplitter.setStretchFactor(0, 20)
+        self.__ui.plotSplitter.setStretchFactor(0, 50)
         self.__ui.plotSplitter.setStretchFactor(1, 1)
-        self.__ui.toolSplitter.setStretchFactor(0, 100)
+        self.__ui.toolSplitter.setStretchFactor(0, 2000)
         self.__ui.toolSplitter.setStretchFactor(1, 1)
 
-        self.cutCoordsChanged.connect(self._plotCut)
-        self.__displaywidget.cutCoordsChanged.connect(self._plotCut)
+        self.__displaywidget.cutCoordsChanged.connect(
+            self.emitCutCoordsChanged)
         self.__ui.toolComboBox.currentIndexChanged.connect(
             self.showCurrentTool)
         self.__displaywidget.aspectLockedToggled.connect(
@@ -158,7 +203,203 @@ class ImageWidget(QtGui.QWidget):
         self.__displaywidget.mouseImageSingleClicked.connect(
             self._emitMouseImageSingleClicked)
 
+        self.__connectsplitters()
+
         self.roiLineEditChanged.emit()
+
+    def writeAttribute(self, name, value):
+        """ writes attribute value of device
+
+        :param name: attribute name
+        :type name: :obj:`str`
+        :param value: attribute value
+        :type value: :obj:`any`
+        """
+        if self.__tangoclient:
+            self.__tangoclient.writeAttribute(name, value)
+
+    @QtCore.pyqtSlot()
+    def writeDetectorROIsAttribute(self):
+        """ writes DetectorROIsattribute value of device
+        """
+        if self.__tangoclient:
+            rois = {}
+            slabel = re.split(';|,| |\n', str(self.roilabels))
+            slabel = [lb for lb in slabel if lb]
+            if len(slabel) == 0:
+                slabel = ["__null__"]
+            rid = 0
+            lastcrdlist = None
+            toadd = []
+            lastalias = None
+
+            roicoords = self.__displaywidget.roiCoords()
+            self.__lastrois = list(roicoords)
+            for alias in slabel:
+                if alias not in toadd:
+                    rois[alias] = []
+                lastcrdlist = rois[alias]
+                if rid < len(roicoords):
+                    lastcrdlist.append(roicoords[rid])
+                    rid += 1
+                    if alias not in toadd:
+                        toadd.append(alias)
+                if not lastcrdlist:
+                    if alias in rois.keys():
+                        rois.pop(alias)
+                    toadd.append(alias)
+                lastalias = alias
+            if rid > 0:
+                while rid < len(roicoords):
+                    lastcrdlist.append(roicoords[rid])
+                    rid += 1
+                if not lastcrdlist:
+                    if lastalias in rois.keys():
+                        rois.pop(lastalias)
+                    toadd.append(lastalias)
+            # print("ROIs %s" % json.dumps(rois))
+            self.__tangoclient.writeAttribute("DetectorROIs", json.dumps(rois))
+
+    def writeDetectorROIsValuesAttribute(self, rvalues):
+        """ writes DetectorROIsValuesattribute of device
+
+        :param rvalues: list of roi values
+        :type rvalues: `obj`list < :obj:`float`>
+        """
+        if self.__tangoclient:
+            rois = {}
+            slabel = re.split(';|,| |\n', str(self.roilabels))
+            slabel = [lb for lb in slabel if lb]
+            if len(slabel) == 0:
+                slabel = ["__null__"]
+            rid = 0
+            lastcrdlist = None
+            toadd = []
+            lastalias = None
+
+            self.__lastroisvalues = rvalues
+            for alias in slabel:
+                if alias not in toadd:
+                    rois[alias] = []
+                lastcrdlist = rois[alias]
+                if rid < len(rvalues):
+                    lastcrdlist.append(rvalues[rid])
+                    rid += 1
+                    if alias not in toadd:
+                        toadd.append(alias)
+                if not lastcrdlist:
+                    if alias in rois.keys():
+                        rois.pop(alias)
+                    toadd.append(alias)
+                lastalias = alias
+            if rid > 0:
+                while rid < len(rvalues):
+                    lastcrdlist.append(rvalues[rid])
+                    rid += 1
+                if not lastcrdlist:
+                    if lastalias in rois.keys():
+                        rois.pop(lastalias)
+                    toadd.append(lastalias)
+            # print("ROIs %s" % json.dumps(rois))
+            self.__tangoclient.writeAttribute(
+                "DetectorROIsValues", json.dumps(rois))
+
+    def setTangoClient(self, tangoclient):
+        """ sets tango client
+
+        :param tangoclient: attribute name
+        :type tangoclient:
+             :class:`lavuelib.controllerClient.ControllerClient`
+        """
+        self.__tangoclient = tangoclient
+
+    def __connectsplitters(self):
+        """ connects splitters  signals
+        """
+        self.__ui.lowerPlotSplitter.splitterMoved.connect(
+            self._moveUpperPlotSplitter)
+        self.__ui.upperPlotSplitter.splitterMoved.connect(
+            self._moveLowerPlotSplitter)
+
+    def __disconnectsplitters(self):
+        """ disconnects splitters  signals
+        """
+        self.__ui.lowerPlotSplitter.splitterMoved.disconnect(
+            self._moveUpperPlotSplitter)
+        self.__ui.upperPlotSplitter.splitterMoved.disconnect(
+            self._moveLowerPlotSplitter)
+
+    @QtCore.pyqtSlot(int, int)
+    def _moveLowerPlotSplitter(self, pos, index):
+        """ moves the lower plot splitter
+        """
+        self.__disconnectsplitters()
+        self.__ui.lowerPlotSplitter.moveSplitter(pos, index)
+        self.__connectsplitters()
+
+    @QtCore.pyqtSlot(int, int)
+    def _moveUpperPlotSplitter(self, pos, index):
+        """ moves the upper plot splitter
+        """
+        self.__disconnectsplitters()
+        self.__ui.upperPlotSplitter.moveSplitter(pos, index)
+        self.__connectsplitters()
+
+    def onedbottomplot(self, clear=False):
+        """ creates 1d bottom plot
+
+        :param clear: clear flag
+        :type clear: :obj:`bool`
+        :returns: 1d bottom plot
+        :rtype: :class:`pyqtgraph.PlotDataItem`
+        """
+        return self.__bottomplot.plot(clear=clear)
+
+    def onedrightplot(self, clear=False):
+        """ creates 1d right plot
+
+        :param clear: clear flag
+        :type clear: :obj:`bool`
+        :returns: 1d right plot
+        :rtype: :class:`pyqtgraph.PlotDataItem`
+        """
+        return self.__rightplot.plot()
+
+    def onedbarbottomplot(self):
+        """ creates 1d bottom bar plot
+
+        :returns: 1d bottom bar plot
+        :rtype: :class:`pyqtgraph.BarGraphItem`
+        """
+        bg = _pg.BarGraphItem(x=[0], y0=[0.], y1=[0.], width=[1.], brush='b')
+        self.__bottomplot.addItem(bg)
+        return bg
+
+    def onedbarrightplot(self):
+        """ creates 1d right bar plot
+
+        :returns: 1d right bar plot
+        :rtype: :class:`pyqtgraph.BarGraphItem`
+        """
+        bg = _pg.BarGraphItem(x0=[0.], x1=[0.], y=[0.], height=[1.], brush='b')
+        self.__rightplot.addItem(bg)
+        return bg
+
+    def removebottomplot(self, plot):
+        """ removes bottom plot
+
+        :param plot: right plot item
+        :type plot: :class:`pyqtgraph.PlotItem`
+        """
+        self.__bottomplot.removeItem(plot)
+
+    def removerightplot(self, plot):
+        """ removes right plot
+
+        :param plot: right plot item
+        :type plot: :class:`pyqtgraph.PlotItem`
+        """
+        self.__rightplot.removeItem(plot)
 
     def __addToolWidgets(self):
         """ add tool subwidgets into grid layout
@@ -169,6 +410,14 @@ class ImageWidget(QtGui.QWidget):
             self.__toolnames.append(twg.name)
             self.__ui.toolComboBox.addItem(twg.name)
             self.__ui.toolVerticalLayout.addWidget(twg)
+
+    def settings(self):
+        """ provides settings
+
+        :returns: setting object
+        :rtype: :class:`lavuelib.settings.Settings`
+        """
+        return self.__settings
 
     def __connecttool(self):
         """ connect current tool widget
@@ -216,8 +465,8 @@ class ImageWidget(QtGui.QWidget):
         :type coords: :obj:`list`
                   < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
         """
-        self.applyTipsChanged.emit(rid)
         self.__displaywidget.updateROIs(rid, coords)
+        self.applyTipsChanged.emit(rid)
         self.roiCoordsChanged.emit()
         self.roiNumberChanged.emit(rid)
 
@@ -227,15 +476,24 @@ class ImageWidget(QtGui.QWidget):
 
         :param cid: cut id
         :type cid: :obj:`int`
-        :param coords: cut coordinates
+        :param coords: cut coordinates and width
         :type coords: :obj:`list`
-                  < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
+                  < [float, float, float, float, float] >
         """
         self.__displaywidget.updateCuts(cid, coords)
         self.cutCoordsChanged.emit()
         self.cutNumberChanged.emit(cid)
 
+    def currentTool(self):
+        """ provides the current tool
+
+        :returns: current tool name
+        :rtype: :obj:`str`
+        """
+        return str(self.__ui.toolComboBox.currentText())
+
     @QtCore.pyqtSlot(int)
+    @QtCore.pyqtSlot()
     def showCurrentTool(self):
         """ shows the current tool
         """
@@ -250,11 +508,14 @@ class ImageWidget(QtGui.QWidget):
         self.__currenttool = stwg
         if stwg is not None:
             stwg.show()
-            self.__displaywidget.setSubWidgets(stwg.parameters)
-            self.__updateinfowidgets(stwg.parameters)
+            self.updateinfowidgets(stwg.parameters)
 
         self.__connecttool()
         self.currentToolChanged.emit(text)
+
+    def updateinfowidgets(self, parameters):
+        self.__displaywidget.setSubWidgets(parameters)
+        self.__updateinfowidgets(parameters)
 
     def __updateinfowidgets(self, parameters):
         """ update info widgets
@@ -277,12 +538,71 @@ class ImageWidget(QtGui.QWidget):
             if parameters.infotips is not None:
                 self.__ui.infoLineEdit.setToolTip(parameters.infotips)
             self.__ui.infoLineEdit.show()
-        if parameters.cutplot is True:
-            self.__cutPlot.show()
-            self.__ui.oneDWidget.show()
-        elif parameters.cutplot is False:
-            self.__cutPlot.hide()
-            self.__ui.oneDWidget.hide()
+        if parameters.bottomplot is True:
+            self.__bottomplot.show()
+            self.__ui.oneDBottomWidget.show()
+            self.__ui.lowerPlotWidget.show()
+        elif parameters.bottomplot is False:
+            self.__bottomplot.hide()
+            self.__ui.oneDBottomWidget.hide()
+            self.__ui.lowerPlotWidget.hide()
+        if parameters.rightplot is True:
+            self.__rightplot.show()
+            self.__ui.cornerWidget.show()
+            self.__ui.oneDRightWidget.show()
+            smin, smax = self.__ui.upperPlotSplitter.getRange(1)
+            self._moveUpperPlotSplitter((smax-smin)*4/5., 1)
+            self._moveLowerPlotSplitter((smax-smin)*4/5., 1)
+        elif parameters.rightplot is False:
+            self.__rightplot.hide()
+            self.__ui.cornerWidget.hide()
+            self.__ui.oneDRightWidget.hide()
+
+    def setTransformations(self, transpose, leftrightflip, updownflip):
+        """ sets coordinate transformations
+
+        :param transpose: transpose coordinates flag
+        :type transpose: :obj:`bool`
+        :param leftrightflip: left-right flip coordinates flag
+        :type leftrightflip: :obj:`bool`
+        :param updownflip: up-down flip coordinates flag
+        :type updownflip: :obj:`bool`
+        """
+        oldtrans, oldleftright, oldupdown = \
+            self.__displaywidget.transformations()
+        if oldleftright != leftrightflip:
+            if hasattr(self.__bottomplot.getViewBox(), "invertX"):
+                self.__bottomplot.getViewBox().invertX(leftrightflip)
+            else:
+                """ version 0.9.10 without invertX """
+            # workaround for a bug in old pyqtgraph versions: stretch 0.10
+            self.__bottomplot.getViewBox().sigXRangeChanged.emit(
+                self.__bottomplot.getViewBox(),
+                tuple(self.__bottomplot.getViewBox().state['viewRange'][0]))
+            self.__bottomplot.getViewBox().sigYRangeChanged.emit(
+                self.__bottomplot.getViewBox(),
+                tuple(self.__bottomplot.getViewBox().state['viewRange'][1]))
+
+        if oldupdown != updownflip:
+            self.__rightplot.getViewBox().invertY(updownflip)
+            # workaround for a bug in old pyqtgraph versions: stretch 0.9.10
+            self.__rightplot.getViewBox().sigXRangeChanged.emit(
+                self.__rightplot.getViewBox(),
+                tuple(self.__rightplot.getViewBox().state['viewRange'][0]))
+            self.__rightplot.getViewBox().sigYRangeChanged.emit(
+                self.__rightplot.getViewBox(),
+                tuple(self.__rightplot.getViewBox().state['viewRange'][1]))
+
+        self.__displaywidget.setTransformations(
+            transpose, leftrightflip, updownflip)
+
+    def transformations(self):
+        """ povides coordinates transformations
+
+        :returns: transpose, leftrightflip, updownflip flags
+        :rtype: (:obj:`bool`, :obj:`bool`, :obj:`bool`)
+        """
+        return self.__displaywidget.transformations()
 
     def plot(self, array, rawarray=None):
         """ plots the image
@@ -297,21 +617,15 @@ class ImageWidget(QtGui.QWidget):
         if rawarray is None:
             rawarray = array
 
-        self.__displaywidget.updateImage(array, rawarray)
-        if self.__displaywidget.isCutsEnabled():
-            self._plotCut()
-
-    @QtCore.pyqtSlot()
-    def _plotCut(self):
-        """ plots the current 1d Cut
-        """
-        dt = self.__displaywidget.cutData()
-        if dt is not None:
-            self.__cutCurve.setData(y=dt)
-            self.__cutPlot.setVisible(True)
-            self.__cutCurve.setVisible(True)
-        else:
-            self.__cutCurve.setVisible(False)
+        self.__data = array
+        self.__rawdata = rawarray
+        if self.__currenttool:
+            barrays = self.__currenttool.beforeplot(array, rawarray)
+        self.__displaywidget.updateImage(
+            barrays[0] if barrays is not None else array,
+            barrays[1] if barrays is not None else rawarray)
+        if self.__currenttool:
+            self.__currenttool.afterplot()
 
     @QtCore.pyqtSlot(int)
     def setAutoLevels(self, autolevels):
@@ -356,15 +670,50 @@ class ImageWidget(QtGui.QWidget):
         :param text: text to display
         :type text: :obj:`str`
         """
+        currentroi = None
+        sroiVal = ""
         if text is not None:
             self.__lasttext = text
         else:
             text = self.__lasttext
-        roiVal, currentroi = self.__displaywidget.calcROIsum()
+        if self.__displaywidget.isROIsEnabled():
+            if self.__settings.showallrois:
+                currentroi = self.currentROI()
+                roiVals = self.__displaywidget.calcROIsums()
+                if roiVals is not None:
+                    sroiVal = " / ".join(
+                        [(("%g" % roiv) if roiv is not None else "?")
+                         for roiv in roiVals])
+                if self.__settings.sendrois:
+                    if self.__lastroisvalues != roiVals:
+                        self.writeDetectorROIsValuesAttribute(roiVals)
+            else:
+                roiVal, currentroi = self.__displaywidget.calcROIsum()
+                if roiVal is not None:
+                    sroiVal = "%.4f" % roiVal
+                if self.__settings.sendrois:
+                    if self.__lastroisvalues != [roiVal]:
+                        self.writeDetectorROIsValuesAttribute([roiVal])
         if currentroi is not None:
-            self.roiValueChanged.emit(text, currentroi, roiVal)
+            self.roiValueChanged.emit(text, currentroi, sroiVal)
         else:
             self.__ui.infoLineEdit.setText(text)
+
+    def calcROIsum(self):
+        """ calculates the current roi sum
+
+        :returns: sum roi value, roi id
+        :rtype: (:obj:`str`, :obj:`int`)
+        """
+        return self.__displaywidget.calcROIsum()
+
+    def calcROIsums(self):
+        """ calculates all roi sums
+
+        :returns: sum roi value, roi id
+        :rtype: `obj`list < `obj`<float> >
+        """
+        return self.__displaywidget.calcROIsums()
 
     @QtCore.pyqtSlot(str)
     def updateDisplayedText(self, text):
@@ -401,6 +750,12 @@ class ImageWidget(QtGui.QWidget):
         """
         return self.__displaywidget.image()
 
+    @QtCore.pyqtSlot()
+    def emitCutCoordsChanged(self):
+        """emits cutCoordsChanged
+        """
+        self.cutCoordsChanged.emit()
+
     @QtCore.pyqtSlot(bool)
     def emitAspectLockedToggled(self, status):
         """emits aspectLockedToggled
@@ -414,6 +769,9 @@ class ImageWidget(QtGui.QWidget):
     def _emitMouseImagePositionChanged(self):
         """emits mouseImagePositionChanged
         """
+        if self.__displaywidget.isROIsEnabled():
+            if self.__lastrois != self.__displaywidget.roiCoords():
+                self.writeDetectorROIsAttribute()
         self.mouseImagePositionChanged.emit()
 
     @QtCore.pyqtSlot(float, float)
@@ -438,21 +796,40 @@ class ImageWidget(QtGui.QWidget):
         """
         self.mouseImageSingleClicked.emit(x, y)
 
+    def emitReplotImage(self, autorange=True):
+        """emits replotImage
+        """
+        self.replotImage.emit(autorange)
+
     def setAspectLocked(self, status):
         """sets aspectLocked
 
         :param status: state to set
         :type status: :obj:`bool`
+        :returns: old state
+        :rtype: :obj:`bool`
         """
-        self.__displaywidget.setAspectLocked(status)
+        return self.__displaywidget.setAspectLocked(status)
 
     def setStatsWOScaling(self, status):
         """ sets statistics without scaling flag
 
         :param status: statistics without scaling flag
         :type status: :obj:`bool`
+        :returns: change status
+        :rtype: :obj:`bool`
         """
         return self.__displaywidget.setStatsWOScaling(status)
+
+    def setROIsColors(self, colors):
+        """ sets statistics without scaling flag
+
+        :param colors: json list of roi colors
+        :type colors: :obj:`str`
+        :returns: change status
+        :rtype: :obj:`bool`
+        """
+        return self.__displaywidget.setROIsColors(colors)
 
     def setScalingType(self, scalingtype):
         """ sets intensity scaling types
@@ -502,6 +879,28 @@ class ImageWidget(QtGui.QWidget):
                 dp = None
         return dp
 
+    def getElementNames(self, listattr, typefilter=None):
+        """ provides experimental Channels
+
+        :param listattr: pool attribute with list
+        :type listattr: :obj:`str`
+        :param typefilter: pool attribute with list
+        :type typefilter: :obj:`list` <:obj:`str`>
+        :returns: names from given pool listattr
+        :rtype: :obj:`list` <:obj:`str`>
+        """
+        elements = None
+        if isr.PYTANGO and self.__sardana:
+            if not self.__settings.doorname:
+                self.__settings.doorname = self.__sardana.getDeviceName("Door")
+            try:
+                elements = self.__sardana.getElementNames(
+                    self.__settings.doorname,
+                    listattr, typefilter)
+            except Exception as e:
+                print(str(e))
+        return elements
+
     def runMacro(self, command):
         """ runs macro
 
@@ -517,7 +916,7 @@ class ImageWidget(QtGui.QWidget):
                 _, warn = self.__sardana.runMacro(
                     str(self.__settings.doorname), command, wait=False)
                 if warn:
-                    print("Warning: %s" % warn)
+                    print("Warning: %s" % str(warn))
                     msg = str(warn)
                     messageBox.MessageBox.warning(
                         self, "lavue: Errors in running macro: %s" % command,
@@ -534,6 +933,29 @@ class ImageWidget(QtGui.QWidget):
             return True
         return False
 
+    def showDoorError(self):
+        """ show door error
+        """
+        if isr.PYTANGO:
+            if not self.__settings.doorname:
+                self.__settings.doorname = self.__sardana.getDeviceName("Door")
+            try:
+                warn = self.__sardana.getError(str(self.__settings.doorname))
+                if warn:
+                    print("Warning: %s" % str(warn))
+                    msg = str(warn)
+                    messageBox.MessageBox.warning(
+                        self, "lavue: Errors in running macro ",
+                        msg, str(warn))
+            except Exception:
+                import traceback
+                value = traceback.format_exc()
+                text = messageBox.MessageBox.getText(
+                    "lavue: Errors in running macro")
+                messageBox.MessageBox.warning(
+                    self, "lavue: Errors in running macro",
+                    text, str(value))
+
     @QtCore.pyqtSlot(str, int)
     def applyROIs(self, rlabel, roispin):
         """ saves ROIs in sardana and add them to the measurement group
@@ -543,7 +965,6 @@ class ImageWidget(QtGui.QWidget):
         :param roispin: the current number of rois
         :type roispin: :obj:`int`
         """
-
         if isr.PYTANGO:
             if not self.__settings.doorname:
                 self.__settings.doorname = self.__sardana.getDeviceName("Door")
@@ -611,13 +1032,13 @@ class ImageWidget(QtGui.QWidget):
                             str(self.__settings.doorname), ["nxsadd", alias])
                         if warn:
                             warns.extend(list(warn))
-                            print("Warning: %s" % warn)
+                            print("Warning: %s" % str(warn))
                     for alias in toremove:
                         _, warn = self.__sardana.runMacro(
                             str(self.__settings.doorname), ["nxsrm", alias])
                         if warn:
                             warns.extend(list(warn))
-                            print("Warning: %s" % warn)
+                            print("Warning: %s" % str(warn))
                     if warns:
                         msg = "\n".join(set(warns))
                         messageBox.MessageBox.warning(
@@ -683,7 +1104,6 @@ class ImageWidget(QtGui.QWidget):
                 else:
                     slabel.append(al)
             self.roiAliasesChanged.emit(" ".join(slabel))
-            self.roiLineEditChanged.emit()
 
             self.updateROIs(len(coords), coords)
         else:
@@ -693,7 +1113,7 @@ class ImageWidget(QtGui.QWidget):
         """ provides intensity for current mouse position
 
         :returns: x position, y position, pixel intensity
-        :rtype: (`obj`:float:, `obj`:float:, `obj`:float:)
+        :rtype: (float, float, float)
         """
         return self.__displaywidget.currentIntensity()
 
@@ -701,9 +1121,17 @@ class ImageWidget(QtGui.QWidget):
         """ provides scaling label
 
         :returns:  scaling label
-        :rtype: `obj`:str:
+        :rtype: str
         """
         return self.__displaywidget.scalingLabel()
+
+    def scaling(self):
+        """ provides scaling type
+
+        :returns:  scaling type
+        :rtype: str
+        """
+        return self.__displaywidget.scaling()
 
     def scaledxy(self, x, y):
         """ provides scaled x,y positions
@@ -762,3 +1190,176 @@ class ImageWidget(QtGui.QWidget):
         """ changes the current roi region
         """
         return self.__displaywidget.changeROIRegion()
+
+    def cutData(self, cid=None):
+        """ provides the current cut data
+
+        :param cid: cut id
+        :type cid: :obj:`int`
+        :returns: current cut data
+        :rtype: :class:`numpy.ndarray`
+        """
+        return self.__displaywidget.cutData(cid)
+
+    def rawData(self):
+        """ provides the raw data
+
+        :returns: current raw data
+        :rtype: :class:`numpy.ndarray`
+        """
+        return self.__rawdata
+
+    def currentData(self):
+        """ provides the data
+
+        :returns: current data
+        :rtype: :class:`numpy.ndarray`
+        """
+        return self.__data
+
+    def autoRange(self):
+        """ sets auto range
+        """
+        self.__displaywidget.autoRange()
+
+    @QtCore.pyqtSlot(float, float)
+    def updateCenter(self, xdata, ydata):
+        """ updates the image center
+
+        :param xdata: x pixel position
+        :type xdata: :obj:`float`
+        :param ydata: y-pixel position
+        :type ydata: :obj:`float`
+        """
+        self.__displaywidget.updateCenter(xdata, ydata)
+
+    @QtCore.pyqtSlot(float, float)
+    def updatePositionMark(self, xdata, ydata):
+        """ updates the position mark
+
+        :param xdata: x pixel position
+        :type xdata: :obj:`float`
+        :param ydata: y-pixel position
+        :type ydata: :obj:`float`
+        """
+        self.__displaywidget.updatePositionMark(xdata, ydata)
+
+    def setDoubleClickLock(self, status=True):
+        """ sets double click lock
+
+        :param status: status flag
+        :type status: :obj:`bool`
+        """
+        self.__displaywidget.setDoubleClickLock(status)
+
+    def setTool(self, tool):
+        """ sets tool from string
+
+        :param tool: tool name
+        :type tool: :obj:`str`
+        """
+        tools = [k.lower() for k in self.__toolnames]
+        ltool = tool.lower()
+        if ltool in tools:
+            tid = tools.index(ltool)
+            self.__ui.toolComboBox.setCurrentIndex(tid)
+            self.showCurrentTool()
+
+    @QtCore.pyqtSlot(float)
+    def updateEnergy(self, energy):
+        """ updates the beam energy
+
+        :param energy: beam energy
+        :type energy: :obj:`float`
+        """
+        if self.__settings.energy != energy:
+            self.__settings.energy = energy
+            self.mouseImagePositionChanged.emit()
+            self.geometryChanged.emit()
+
+    @QtCore.pyqtSlot(float)
+    def updateDetectorDistance(self, distance):
+        """ updates the detector distance
+
+        :param distance: detector distance
+        :type distance: :obj:`float`
+        """
+        if self.__settings.detdistance != distance:
+            self.__settings.detdistance = distance
+            self.mouseImagePositionChanged.emit()
+            self.geometryChanged.emit()
+
+    @QtCore.pyqtSlot(float)
+    def updateBeamCenterX(self, x):
+        """ updates the beam center x
+
+        :param x: beam center x
+        :type x: :obj:`float`
+        """
+        if self.__settings.centerx != x:
+            self.__settings.centerx = x
+            self.updateCenter(
+                self.__settings.centerx, self.__settings.centery)
+            self.mouseImagePositionChanged.emit()
+            self.geometryChanged.emit()
+
+    @QtCore.pyqtSlot(float)
+    def updateBeamCenterY(self, y):
+        """ updates the beam center y
+
+        :param y: beam center y
+        :type y: :obj:`float`
+        """
+        if self.__settings.centery != y:
+            self.__settings.centery = y
+            self.updateCenter(
+                self.__settings.centerx, self.__settings.centery)
+            self.mouseImagePositionChanged.emit()
+            self.geometryChanged.emit()
+
+    @QtCore.pyqtSlot(str)
+    def updateDetectorROIs(self, rois):
+        """ updates the detector ROIs
+
+        :param distance: json dictionary with detector ROIs
+        :type distance: :obj:`str`
+        """
+
+        detrois = json.loads(str(rois))
+        coords = []
+        aliases = []
+        for k, v in detrois.items():
+            if isinstance(v, list):
+                for cr in v:
+                    if isinstance(cr, list):
+                        coords.append(cr)
+                        aliases.append(k)
+        slabel = []
+        for i, al in enumerate(aliases):
+            if len(set(aliases[i:])) == 1:
+                slabel.append(al)
+                break
+            else:
+                slabel.append(al)
+
+        if len(slabel) == 1 and slabel[0] == "__null__":
+            slabel = []
+        # print(slabel)
+        if self.roilabels != " ".join(slabel):
+            self.roilabels = " ".join(slabel)
+            self.roiAliasesChanged.emit(self.roilabels)
+
+        oldcoords = self.__displaywidget.roiCoords()
+        # print("UPDATE %s" % str(coords))
+        if oldcoords != coords:
+            self.updateROIs(len(coords), coords)
+
+    def setPolarScale(self, position=None, scale=None):
+        """ get axes parameters
+
+        :param position: start position of axes
+        :type position: [:obj:`float`, :obj:`float`]
+        :param scale: scale axes
+        :type scale: [:obj:`float`, :obj:`float`]
+        """
+        return self.__displaywidget.setPolarScale(position, scale)

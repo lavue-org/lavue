@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 # Copyright (C) 2017  DESY, Notkestr. 85, D-22607 Hamburg
 #
@@ -27,10 +27,11 @@
 
 
 import lavuelib
-from lavuelib import liveViewer
+import lavuelib.liveViewer
 import sys
 import os
 import argparse
+from argparse import RawTextHelpFormatter
 
 import lavuelib.qrc as qrc
 
@@ -52,7 +53,8 @@ if __name__ == "__main__":
         os.path.join(qrc.__path__[0], "resources.rcc"))
 
     parser = argparse.ArgumentParser(
-        description='2d detector live image viewer')
+        description='2d detector live image viewer',
+        formatter_class=RawTextHelpFormatter)
     parser.add_argument(
         "-v", "--version",
         action="store_true",
@@ -63,13 +65,82 @@ if __name__ == "__main__":
         "-m", "--mode", dest="mode",
         help="interface mode, i.e. user, expert")
     parser.add_argument(
-        "-t", "--style", dest="style",
+        "-y", "--style", dest="style",
         help="Qt style")
     parser.add_argument(
-        "-y", "--stylesheet", dest="stylesheet",
+        "-e", "--stylesheet", dest="stylesheet",
         help="Qt stylesheet")
-    #    parser.add_argument(
-    #        "-l", "--log", dest="log",
+    parser.add_argument(
+        "-f", "--image-file", dest="imagefile",
+        help="image file name to show")
+    parser.add_argument(
+        "-s", "--source", dest="source",
+        help="image source, i.e. hidra, http, tangoattr,\n"
+        "    tangofile, zmq, nxsfile, test")
+
+    parser.add_argument(
+        "-c", "--configuration", dest="configuration",
+        help="configuration strings for the image source separated by comma"
+        ", e.g.\n"
+        "  hidra -> '-c haspilatus300k.desy.de'\n"
+        "  http -> '-c haso228eiger/1.5.0'\n"
+        "  tangoattr -> '-c sys/tg_test/1/double_image_ro'\n"
+        "  tangofile -> '-c p00/plt/1/LastImageTaken,p00/plt/1/"
+        "LastImagePath'\n"
+        "  zmq -> '-c haso228:5535,topic'\n"
+        "  nxsfile -> '-c /tmp/myfile.nxs://entry/data/pilatus'\n"
+    )
+    parser.add_argument(
+        "-b", "--bkg-file", dest="bkgfile",
+        help="background file-name to load"
+    )
+    parser.add_argument(
+        "-k", "--mask-file", dest="maskfile",
+        help="mask file-name to load"
+    )
+    parser.add_argument(
+        "-p", "--mask-high-value", dest="maskhighvalue",
+        help="highest pixel value to show"
+    )
+    parser.add_argument(
+        "-t", "--transformation", dest="transformation",
+        help="image transformation, i.e.\n"
+        "  flip-up-down, flip-left-right, transpose,\n"
+        "  rot90, rot180, rot270, rot180+transpose"
+    )
+    parser.add_argument(
+        "-i", "--scaling", dest="scaling",
+        help="intensity scaling, i.e. sqrt, linear, log"
+    )
+    parser.add_argument(
+        "-l", "--levels", dest="levels",
+        help="intensity display levels e.g. -l m20,20\n"
+        "  where 'm' is '-'"
+    )
+    parser.add_argument(
+        "-g", "--gradient", dest="gradient",
+        help="color gradient, i.e. grey, highcontrast, thermal, flame,\n"
+        "  bipolar, spectrum, spectrumclip, greyclip, reversegrey, cyclic,\n"
+        "  yellowy, inverted"
+    )
+    parser.add_argument(
+        "-x", "--start", action="store_true", default=False,
+        dest="start",
+        help="connect the image source")
+    parser.add_argument(
+        "-u", "--tool", dest="tool",
+        help="utility tool, i.e. intensity, roi, movemotors, meshscan,\n"
+        "  linecut, projections, 1d-plot, angle/q, q+roi+proj"
+    )
+    parser.add_argument(
+        "-a", "--tango-device", dest="tangodevice",
+        help="tango device to communicated with clients during the run")
+    parser.add_argument(
+        "-d", "--door", dest="doordevice",
+        help="door device to communicated with sardana during the run")
+
+    # parser.add_argument(
+    #       "-o", "--log", dest="log",
     #        help="logging level, i.e. debug, info, warning, error, critical")
 
     options = parser.parse_args()
@@ -77,10 +148,6 @@ if __name__ == "__main__":
     if options.version:
         print(lavuelib.__version__)
         sys.exit(0)
-    if options.mode:
-        umode = options.mode
-    else:
-        umode = None
 
     # level = LogActions.levels.get(options.log, logging.INFO)
     # handler = LogHandler()
@@ -98,8 +165,8 @@ if __name__ == "__main__":
     app.setOrganizationName("DESY")
     app.setOrganizationDomain("desy.de")
     app.setApplicationName("LaVue")
+    dialog = lavuelib.liveViewer.LiveViewer(options=options)
 
-    dialog = lavuelib.liveViewer.LiveViewer(umode=umode)
     dialog.show()
 
     status = app.exec_()
