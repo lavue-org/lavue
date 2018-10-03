@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>282</width>
+    <width>271</width>
     <height>160</height>
    </rect>
   </property>
@@ -26,6 +26,12 @@
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
            <widget class="QLabel" name="xLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="toolTip">
              <string>Tango device or alias of x-motor</string>
             </property>
@@ -33,19 +39,18 @@
              <string>X:</string>
             </property>
             <property name="buddy">
-             <cstring>xLineEdit</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="xLineEdit">
-            <property name="toolTip">
-             <string>Tango device or alias of x-motor</string>
+             <cstring>xComboBox</cstring>
             </property>
            </widget>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="yLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="toolTip">
              <string>Tango device or alias of y-motor</string>
             </property>
@@ -53,14 +58,39 @@
              <string>Y:</string>
             </property>
             <property name="buddy">
-             <cstring>yLineEdit</cstring>
+             <cstring>yComboBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="xComboBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tango device or alias of x-motor&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="yLineEdit">
+           <widget class="QComboBox" name="yComboBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="toolTip">
-             <string>Tango device or alias of y-motor</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tango device or alias of y-motor&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -97,8 +127,9 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>xLineEdit</tabstop>
-  <tabstop>yLineEdit</tabstop>
+  <tabstop>xComboBox</tabstop>
+  <tabstop>yComboBox</tabstop>
+  <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
  <connections>

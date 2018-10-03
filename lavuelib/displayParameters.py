@@ -64,10 +64,14 @@ class CrossLinesParameters(object):
         """ constructor
         """
 
-        #: (:obj:`bool`) cross lines enabled flag
-        self.enabled = False
         #: (:obj:`bool`) locker enabled flag
         self.locker = False
+        #: (:obj:`bool`) center enabled flag
+        self.center = False
+        #: (:obj:`bool`) position mark enabled flag
+        self.positionmark = False
+        #: (:obj:`bool`) lock for double click
+        self.doubleclicklock = False
 
 
 class ROIsParameters(object):
@@ -84,6 +88,8 @@ class ROIsParameters(object):
         #: (:obj:`list` < [int, int, int, int] > )
         #: x1,y1,x2,y2 rois coordinates
         self.coords = [[10, 10, 60, 60]]
+        #: (:obj:`list` < (int, int, int) > ) list with roi colors
+        self.colors = []
 
 
 class CutsParameters(object):
@@ -98,8 +104,8 @@ class CutsParameters(object):
         #: (:obj:`int`) current cut id
         self.current = 0
         #: (:obj:`list` < [int, int, int, int] > )
-        #: x1,y1,x2,y2 rois coordinates
-        self.coords = [[10, 10, 60, 10]]
+        #: x1,y1,x2,y2, width rois coordinates
+        self.coords = [[10, 10, 60, 10, 0.00001]]
 
 
 class IntensityParameters(object):
@@ -113,5 +119,20 @@ class IntensityParameters(object):
         self.dobkgsubtraction = False
         #: (:obj:`bool`) calculate statistics without scaling
         self.statswoscaling = False
-        #: (:obj:`bool`) intensity scaling
+        #: (:obj:`str`) intensity scaling
         self.scaling = "sqrt"
+
+
+class TransformationParameters(object):
+    """ transformation parameters
+    """
+
+    def __init__(self):
+        """ constructor
+        """
+        #: (:obj:`bool`) transpose coordinates flag
+        self.transpose = False
+        #: (:obj:`bool`) left-right flip coordinates flag
+        self.leftrightflip = False
+        #: (:obj:`bool`)  up-down flip coordinates flag
+        self.updownflip = False

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Copyright (C) 2017  DESY, Christoph Rosemann, Notkestr. 85, D-22607 Hamburg
 #
 # lavue is an image viewing program for photon science imaging detectors.
@@ -32,12 +33,13 @@ from setuptools import setup
 from setuptools.command.build_py import build_py
 from distutils.command.clean import clean
 from distutils.util import get_platform
-#from distutils.core import setup
-#from distutils.command.build import build
-#from distutils.command.clean import clean
+# from distutils.core import setup
+# from distutils.command.build import build
+# from distutils.command.clean import clean
 import shutil
 
 from sphinx.setup_command import BuildDoc
+
 
 def read(fname):
     """ read the file
@@ -65,10 +67,16 @@ version = ".".join(release.split(".")[:2])
 UIDIR = os.path.join(NAME, "ui")
 #: (:obj:`str`) .qrc file directory
 QRCDIR = os.path.join(NAME, "qrc")
+#: (:obj:`str`) .qrc file directory
+EXTERNAL = os.path.join(NAME, "external")
 #: (:obj:`list` < :obj:`str` >) executable scripts
-SCRIPTS = ['lavuemonitor', 'lavuezmqstreamfromtango']
+SCRIPTS = ['lavuemonitor', 'lavuezmqstreamfromtango',
+           'LavueController']
 #: (:obj:`list` < :obj:`str` >) executable GUI scripts
 GUISCRIPTS = ['lavue']
+
+needs_pytest = set(['test']).intersection(sys.argv)
+pytest_runner = ['pytest-runner'] if needs_pytest else []
 
 
 class toolBuild(build_py):
@@ -193,12 +201,14 @@ SETUPDATA = dict(
         # 'Programming Language :: Python :: 3.5',
     ],
     keywords='live viewer photon science detector',
-    packages=[NAME, QRCDIR],
+    packages=[NAME, QRCDIR, EXTERNAL],
     package_data=package_data,
     # package_dir={'lauvelib': 'lavuelib'},
     # include_package_data=True, # do not include image an qrc files
     scripts=(get_scripts(GUISCRIPTS) + SCRIPTS),
     zip_safe=False,
+    setup_requires=pytest_runner,
+    tests_require=['pytest'],
     cmdclass={
         "build_py": toolBuild,
         "clean": toolClean,

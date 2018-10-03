@@ -44,11 +44,13 @@ class MaskWidget(QtGui.QWidget):
     #: (:class:`PyQt4.QtCore.pyqtSignal`) apply state change signal
     applyStateChanged = QtCore.pyqtSignal(int)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, settings=None):
         """ constructor
 
         :param parent: parent object
         :type parent: :class:`PyQt4.QtCore.QObject`
+        :param settings: lavue configuration settings
+        :type settings: :class:`lavuelib.settings.Settings`
         """
         QtGui.QWidget.__init__(self, parent)
 
@@ -58,8 +60,8 @@ class MaskWidget(QtGui.QWidget):
 
         #: (:obj:`str`) file name
         self.__fileName = ""
-        #: (:obj:`str`) last file name
-        self.__lastFileName = ""
+        #: (:class:`lavuelib.settings.Settings`) settings
+        self.__settings = settings
 
         self.__ui.applyMaskCheckBox.clicked.connect(
             self._emitApplyStateChanged)
@@ -74,6 +76,17 @@ class MaskWidget(QtGui.QWidget):
         """
         self.applyStateChanged.emit(state)
 
+    def setMask(self, fname):
+        """ sets the image mask
+
+        :param fname: file name
+        :type fname: :obj:`str`
+        """
+        self.setDisplayedName(fname)
+        self.maskFileSelected.emit(fname)
+        self.__ui.applyMaskCheckBox.setChecked(True)
+        self.applyStateChanged.emit(2)
+
     @QtCore.pyqtSlot()
     def _showFileDialog(self):
         """ shows file dialog and select the file name
@@ -82,10 +95,10 @@ class MaskWidget(QtGui.QWidget):
         fileName = str(
             fileDialog.getOpenFileName(
                 self, 'Open mask file',
-                self.__lastFileName or '/ramdisk/'))
+                self.__settings.maskimagename or '/ramdisk/'))
         if fileName:
             self.__fileName = fileName
-            self.__lastFileName = fileName
+            self.__settings.maskimagename = fileName
             self.setDisplayedName(self.__fileName)
             self.maskFileSelected.emit(self.__fileName)
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #   This file is part of nexdatas - Tango Server for NeXus data writer
 #
-#    Copyright (C) 2012-2018 DESY, Jan Kotanski <jkotan@mail.desy.de>
+#    Copyright (C) 2012-2017 DESY, Jan Kotanski <jkotan@mail.desy.de>
 #
 #    nexdatas is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 
 """ Provides pni file writer """
 
+import sys
 import pni.io.nx.h5 as nx
 
 from . import filewriter
@@ -305,13 +306,13 @@ class PNIGroup(filewriter.FTGroup):
             """ constructor
 
             :param group: group object
-            :type manager: :obj:`H5PYGroup`
+            :type manager: :obj:`PNIGroup`
             """
 
             self.__group = group
             self.__names = [kid.name for kid in self.__group.h5object]
 
-        def next(self):
+        def __next__(self):
             """ the next attribute
 
             :returns: attribute object
@@ -322,11 +323,13 @@ class PNIGroup(filewriter.FTGroup):
             else:
                 raise StopIteration()
 
+        next = __next__
+
         def __iter__(self):
             """ attribute iterator
 
             :returns: attribute iterator
-            :rtype: :class:`H5PYAttrIter`
+            :rtype: :class:`PNIAttrIter`
             """
             return self
 
@@ -334,7 +337,7 @@ class PNIGroup(filewriter.FTGroup):
         """ attribute iterator
 
         :returns: attribute iterator
-        :rtype: :class:`H5PYAttrIter`
+        :rtype: :class:`PNIAttrIter`
         """
         return self.PNIGroupIter(self)
 
@@ -424,6 +427,11 @@ class PNIField(filewriter.FTField):
         :param o: pni object
         :type o: :obj:`any`
         """
+        try:
+            if isinstance(o, bytes) and sys.version_info > (3,):
+                o = o.decode("utf8")
+        except Exception:
+            pass
         self._h5object.write(o)
 
     def __setitem__(self, t, o):
@@ -434,6 +442,11 @@ class PNIField(filewriter.FTField):
         :param o: pni object
         :type o: :obj:`any`
         """
+        try:
+            if isinstance(o, bytes) and sys.version_info > (3,):
+                o = o.decode("utf8")
+        except Exception:
+            pass
         self._h5object.__setitem__(t, o)
 
     def __getitem__(self, t):
@@ -539,7 +552,7 @@ class PNILink(filewriter.FTLink):
         try:
             lk = [e for e in lks if e.name == self.name][0]
             self._h5object = lk
-        except:
+        except Exception:
             self._h5object = None
         filewriter.FTLink.reopen(self)
 

@@ -93,3 +93,17 @@ class ScalingGroupBox(QtGui.QGroupBox):
             self.show()
         else:
             self.hide()
+
+    def setScaling(self, scaling):
+        """ sets scaling from string
+
+        :param scaling: scaling name, i.e. linear, log or sqrt
+        :type scaling:
+        """
+        if scaling == "linear":
+            self.__ui.linRadioButton.setChecked(True)
+        elif scaling == "log":
+            self.__ui.logRadioButton.setChecked(True)
+        else:
+            self.__ui.sqrtRadioButton.setChecked(True)
+        self._onScalingChanged()

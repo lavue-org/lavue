@@ -25,5 +25,6 @@
 
 """ Live Viewer widgets """
 
-#: (:obj:`str`) the live viewer version
-__version__ = "1.8.1"
+from .release import __version__
+
+__all__ = ["__version__"]

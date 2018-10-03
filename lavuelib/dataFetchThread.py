@@ -28,8 +28,6 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import time
-
 from PyQt4 import QtCore
 
 
@@ -109,8 +107,7 @@ class DataFetchThread(QtCore.QThread):
         """
         self.__loop = True
         while self.__loop:
-            if time:
-                time.sleep(GLOBALREFRESHRATE)
+            self.msleep(int(1000*GLOBALREFRESHRATE))
             if self.__isConnected and self.__ready:
                 try:
                     with QtCore.QMutexLocker(self.__mutex):

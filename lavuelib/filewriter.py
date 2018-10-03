@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #   This file is part of nexdatas - Tango Server for NeXus data writer
 #
-#    Copyright (C) 2012-2018 DESY, Jan Kotanski <jkotan@mail.desy.de>
+#    Copyright (C) 2012-2017 DESY, Jan Kotanski <jkotan@mail.desy.de>
 #
 #    nexdatas is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,7 +27,8 @@ import threading
 import numpy
 
 
-#: (:mod:`pniwriter` or :mod:`h5pywriter`) default writer module
+#: (:mod:`PNIWriter` or :mod:`H5PYWriter`or :mod:`H5CppWriter`)
+#    default writer module
 writer = None
 
 #: (:class:`threading.Lock`) writer module
@@ -163,7 +164,7 @@ def setwriter(wr):
     """ sets writer
 
     :param wr: writer module
-    :type wr: :mod:`PNIWriter` or :mod:`H5PYWriter`
+    :type wr: :mod:`PNIWriter` or :mod:`H5PYWriter` or :mod:`H5CppWriter`
     """
     global writer
     with writerlock:
@@ -283,11 +284,13 @@ class FTFile(FTObject):
         :type filename: :obj:`str`
         :param writer: writer module
         :type writer: :mod:`PNIWriter` or :mod:`H5PYWriter`
+                        or :mod:`H5CppWriter`
         """
         FTObject.__init__(self, h5object, None)
         #: (:obj:`str`) file name
         self.name = filename
-        #: (:mod:`PNIWriter` or :mod:`H5PYWriter`) writer module
+        #: (:mod:`PNIWriter` or :mod:`H5PYWriter` or :mod:`H5CppWriter`)
+        # writer module
         self.writer = None
 
     def root(self):

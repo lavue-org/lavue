@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>314</width>
-    <height>50</height>
+    <width>323</width>
+    <height>92</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,62 +15,76 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QLabel" name="label">
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;basic image transformation, i.e. flip, transpose&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="text">
-        <string>Transformation:</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;basic image transformation, i.e. flips, transpose. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Transformation:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;basic image transformation, i.e. flips, transpose.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>none</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>flip (up-down)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>flip (left-right)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>transpose</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>rot90 (clockwise)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>rot180</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>rot270 (clockwise)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>rot180 + transpose</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox">
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;basic image transformation, i.e. flip, transpose&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <widget class="QLabel" name="keepcoordsLabel">
+       <property name="styleSheet">
+        <string notr="true">color: red;</string>
        </property>
-       <item>
-        <property name="text">
-         <string>none</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>flip (up-down)</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>flip (left-right)</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>transpose</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>rot90 (clockwise)</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>rot180</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>rot270 (clockwise)</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>rot180 + transpose</string>
-        </property>
-       </item>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
       </widget>
      </item>
     </layout>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ProjectionToolWidget</class>
+ <widget class="QWidget" name="ProjectionToolWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>632</width>
+    <height>30</height>
+   </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>49</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="rowsliceLabel">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;row range in the python slice notation,&lt;/p&gt;&lt;p&gt;e.g. 0:100 or 100:200:2&lt;/p&gt;&lt;p&gt;empty means ALL&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>Row slice:</string>
+       </property>
+       <property name="buddy">
+        <cstring>rowsliceLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="rowsliceLineEdit">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;row range in the python slice notation,&lt;/p&gt;&lt;p&gt;e.g. 0:100 or 100:200:2&lt;/p&gt;&lt;p&gt;empty means ALL&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="columnsliceLabel">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;column range in the python slice notation,&lt;/p&gt;&lt;p&gt;e.g. 0:100 or 100:200:2&lt;/p&gt;&lt;p&gt;empty means ALL&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>Column slice:</string>
+       </property>
+       <property name="buddy">
+        <cstring>columnsliceLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="columnsliceLineEdit">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;column range in the python slice notation,&lt;/p&gt;&lt;p&gt;e.g. 0:100 or 100:200:2&lt;/p&gt;&lt;p&gt;empty means ALL&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="funLabel">
+       <property name="text">
+        <string>Mapping:</string>
+       </property>
+       <property name="buddy">
+        <cstring>funComboBox</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="funComboBox">
+       <item>
+        <property name="text">
+         <string>mean</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>sum</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>rowsliceLineEdit</tabstop>
+  <tabstop>columnsliceLineEdit</tabstop>
+  <tabstop>funComboBox</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

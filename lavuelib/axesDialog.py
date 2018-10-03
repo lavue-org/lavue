@@ -87,11 +87,11 @@ class AxesDialog(QtGui.QDialog):
         """
         try:
             self.xposition = float(self.__ui.xpositionLineEdit.text())
-        except:
+        except Exception:
             self.xposition = None
         try:
             self.yposition = float(self.__ui.ypositionLineEdit.text())
-        except:
+        except Exception:
             self.yposition = None
 
         try:
@@ -100,7 +100,7 @@ class AxesDialog(QtGui.QDialog):
                 self.xscale = None
             else:
                 self.xscale = xscale
-        except:
+        except Exception:
             self.xscale = None
         try:
             yscale = float(self.__ui.yscaleLineEdit.text())
@@ -108,7 +108,7 @@ class AxesDialog(QtGui.QDialog):
                 self.yscale = None
             else:
                 self.yscale = yscale
-        except:
+        except Exception:
             self.yscale = None
 
         self.xtext = str(self.__ui.xtextLineEdit.text()) or ""

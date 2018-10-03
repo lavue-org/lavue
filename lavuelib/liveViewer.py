@@ -35,6 +35,7 @@ import numpy as np
 import pyqtgraph as _pg
 import os
 import zmq
+import sys
 
 from PyQt4 import QtCore, QtGui, uic
 
@@ -49,6 +50,12 @@ from . import statisticsGroupBox
 from . import imageWidget
 from . import imageField
 from . import configDialog
+from . import release
+try:
+    from . import controllerClient
+    TANGOCLIENT = True
+except Exception:
+    TANGOCLIENT = False
 
 from . import imageFileHandler
 from . import sardanaUtils
@@ -56,6 +63,12 @@ from . import dataFetchThread
 from . import settings
 
 from .hidraServerList import HIDRASERVERLIST
+
+
+if sys.version_info > (3,):
+    basestring = str
+    unicode = str
+
 
 #: ( (:obj:`str`,:obj:`str`,:obj:`str`) )
 #:         pg major version, pg minor verion, pg patch version
@@ -71,9 +84,18 @@ class LiveViewer(QtGui.QMainWindow):
 
     '''The master class for the dialog, contains all other
     widget and handles communication.'''
+
+    #: (:class:`PyQt4.QtCore.pyqtSignal`) state updated signal
     _stateUpdated = QtCore.pyqtSignal(bool)
 
-    def __init__(self, umode=None, parent=None):
+    def __init__(self, options, parent=None):
+        """ constructor
+
+        :param options: commandline options
+        :type options: :class:`argparse.Namespace`
+        :param parent: parent object
+        :type parent: :class:`PyQt4.QtCore.QObject`
+        """
         QtGui.QDialog.__init__(self, parent)
         # self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
 
@@ -100,8 +122,11 @@ class LiveViewer(QtGui.QMainWindow):
         if isr.PYTANGO:
             self.__tooltypes.append("MotorsToolWidget")
             self.__tooltypes.append("MeshToolWidget")
+        self.__tooltypes.append("OneDToolWidget")
+        self.__tooltypes.append("ProjectionToolWidget")
+        self.__tooltypes.append("QROIProjToolWidget")
 
-        if umode and umode.lower() in ["expert"]:
+        if options.mode and options.mode.lower() in ["expert"]:
             #: (:obj:`str`) execution mode: expert or user
             self.__umode = "expert"
         else:
@@ -127,6 +152,10 @@ class LiveViewer(QtGui.QMainWindow):
         #: (:class:`lavuelib.settings.Settings`) settings
         self.__settings = settings.Settings()
 
+        #: (:class:`lavuelib.controllerClient.ControllerClient`)
+        #:   tango controller client
+        self.__tangoclient = None
+
         #: (:obj:`int`) stacking dimension
         self.__growing = None
         #: (:obj:`int`) current frame id
@@ -143,7 +172,8 @@ class LiveViewer(QtGui.QMainWindow):
 
         #: (:class:`lavuelib.preparationGroupBox.PreparationGroupBox`)
         #: preparation groupbox
-        self.__prepwg = preparationGroupBox.PreparationGroupBox(parent=self)
+        self.__prepwg = preparationGroupBox.PreparationGroupBox(
+            parent=self, settings=self.__settings)
         #: (:class:`lavuelib.scalingGroupBox.ScalingGroupBox`) scaling groupbox
         self.__scalingwg = scalingGroupBox.ScalingGroupBox(parent=self)
         #: (:class:`lavuelib.levelsGroupBox.LevelsGroupBox`) level groupbox
@@ -160,9 +190,12 @@ class LiveViewer(QtGui.QMainWindow):
 
         #: (:class:`lavuelib.maskWidget.MaskWidget`) mask widget
         self.__maskwg = self.__prepwg.maskWidget
+        #: (:class:`lavuelib.highValueMaskWidget.HighValueMaskWidget`)
+        #               high value mask widget
+        self.__highvaluemaskwg = self.__prepwg.highValueMaskWidget
         #: (:class:`lavuelib.bkgSubtractionWidget.BkgSubtractionWidget`)
         #:    background subtraction widget
-        self.__bkgSubwg = self.__prepwg.bkgSubWidget
+        self.__bkgsubwg = self.__prepwg.bkgSubWidget
         #: (:class:`lavuelib.transformationsWidget.TransformationsWidget`)
         #:    transformations widget
         self.__trafowg = self.__prepwg.trafoWidget
@@ -190,6 +223,8 @@ class LiveViewer(QtGui.QMainWindow):
 
         #: (:class:`numpy.ndarray`) mask image
         self.__maskimage = None
+        #: (:obj:`float`) file name
+        self.__maskvalue = None
         #: (:class:`numpy.ndarray`) mask image indices
         self.__maskindices = None
         #: (:obj:`bool`) apply mask
@@ -206,7 +241,8 @@ class LiveViewer(QtGui.QMainWindow):
         self.__ui.setupUi(self)
 
         # # LAYOUT DEFINITIONS
-        self.setWindowTitle("laVue: Live Image Viewer")
+        self.setWindowTitle(
+            "laVue: Live Image Viewer (v%s)" % str(release.__version__))
         self.__ui.confVerticalLayout.addWidget(self.__sourcewg)
         self.__ui.confVerticalLayout.addWidget(self.__prepwg)
         self.__ui.confVerticalLayout.addWidget(self.__scalingwg)
@@ -254,6 +290,7 @@ class LiveViewer(QtGui.QMainWindow):
         self.__levelswg.channelChanged.connect(self._plot)
         self.__imagewg.aspectLockedToggled.connect(self._setAspectLocked)
 
+        self.__imagewg.replotImage.connect(self._replot)
         # simple mutable caching object for data exchange with thread
         #: (:class:`lavuelib.dataFetchTread.ExchangeList`)
         #:    exchange list
@@ -269,13 +306,16 @@ class LiveViewer(QtGui.QMainWindow):
         self.__sourcewg.sourceStateChanged.connect(self._updateSource)
         self.__sourcewg.sourceChanged.connect(self._onSourceChanged)
 
-        self.__bkgSubwg.bkgFileSelected.connect(self._prepareBkgSubtraction)
-        self.__bkgSubwg.useCurrentImageAsBkg.connect(
+        self.__bkgsubwg.bkgFileSelected.connect(self._prepareBkgSubtraction)
+        self.__bkgsubwg.useCurrentImageAsBkg.connect(
             self._setCurrentImageAsBkg)
-        self.__bkgSubwg.applyStateChanged.connect(self._checkBkgSubtraction)
+        self.__bkgsubwg.applyStateChanged.connect(self._checkBkgSubtraction)
 
         self.__maskwg.maskFileSelected.connect(self._prepareMasking)
         self.__maskwg.applyStateChanged.connect(self._checkMasking)
+
+        self.__highvaluemaskwg.maskHighValueChanged.connect(
+            self._checkHighMasking)
 
         # signals from transformation widget
         self.__trafowg.transformationChanged.connect(
@@ -285,7 +325,7 @@ class LiveViewer(QtGui.QMainWindow):
 
         self.__sourcewg.configurationChanged.connect(
             self._setSourceConfiguration)
-        self.__ui.frameSpinBox.valueChanged.connect(self._loadfile)
+        self.__ui.frameSpinBox.valueChanged.connect(self._reloadfile)
         self.__sourcewg.updateLayout()
         self.__sourcewg.emitSourceChanged()
         self.__imagewg.showCurrentTool()
@@ -293,7 +333,103 @@ class LiveViewer(QtGui.QMainWindow):
         self.__loadSettings()
 
         self.__updateframeview()
+
+        start = self.__applyoptions(options)
         self._plot()
+        if start:
+            self.__sourcewg.start()
+
+        if options.tool:
+            QtCore.QTimer.singleShot(10, self.__imagewg.showCurrentTool)
+
+    def __applyoptions(self, options):
+        """ apply options
+
+        :param options: commandline options
+        :type options: :class:`argparse.Namespace`
+        :returns: start flag
+        :rtype: :obj:`bool`
+        """
+        if options.doordevice:
+            self.__settings.doorname = options.doordevice
+
+        # load image file
+        if options.imagefile:
+            oldname = self.__settings.imagename
+            oldpath = self.__fieldpath
+            oldgrowing = self.__growing
+            try:
+                self.__settings.imagename = options.imagefile
+                if ":/" in self.__settings.imagename:
+                    self.__settings.imagename, self.__fieldpath =  \
+                        self.__settings.imagename.split(":/", 1)
+                else:
+                    self.__fieldpath = None
+                self.__growing = 0
+                self._loadfile(fid=0)
+            except Exception:
+                self.__settings.imagename = oldname
+                self.__fieldpath = oldpath
+                self.__growing = oldgrowing
+
+        # set image source
+        if options.source:
+            msid = None
+            for sid, src in enumerate(self.__sourcetypes):
+                if src.endswith("SourceWidget"):
+                    src = src[:-12]
+                    if options.source == src.lower():
+                        msid = sid
+                        break
+            if msid is not None:
+                self.__sourcewg.setSourceComboBox(msid)
+
+        if options.configuration:
+            self.__sourcewg.configure(options.configuration)
+
+        if options.bkgfile:
+            self.__bkgsubwg.setBackground(options.bkgfile)
+
+        if options.maskfile:
+            self.__maskwg.setMask(options.maskfile)
+
+        if options.maskhighvalue:
+            self.__highvaluemaskwg.setMask(options.maskhighvalue)
+
+        if options.transformation:
+            self.__trafowg.setTransformation(options.transformation)
+
+        if options.scaling:
+            self.__scalingwg.setScaling(options.scaling)
+
+        if options.levels:
+            self.__levelswg.setLevels(options.levels)
+
+        if options.gradient:
+            self.__levelswg.setGradient(options.gradient)
+
+        if options.tool:
+            self.__imagewg.setTool(options.tool)
+
+        if TANGOCLIENT and options.tangodevice:
+            self.__tangoclient = controllerClient.ControllerClient(
+                options.tangodevice)
+            self.__tangoclient.energyChanged.connect(
+                self.__imagewg.updateEnergy)
+            self.__tangoclient.detectorDistanceChanged.connect(
+                self.__imagewg.updateDetectorDistance)
+            self.__tangoclient.beamCenterXChanged.connect(
+                self.__imagewg.updateBeamCenterX)
+            self.__tangoclient.beamCenterYChanged.connect(
+                self.__imagewg.updateBeamCenterY)
+            self.__tangoclient.detectorROIsChanged.connect(
+                self.__imagewg.updateDetectorROIs)
+            self.__imagewg.setTangoClient(self.__tangoclient)
+            self.__tangoclient.subscribe()
+        else:
+            self.__tangoclient = None
+
+        return options.start is True
 
     @QtCore.pyqtSlot(int)
     def _replotFrame(self, fid):
@@ -332,9 +468,8 @@ class LiveViewer(QtGui.QMainWindow):
         """ loads settings from QSettings object
         """
         settings = QtCore.QSettings()
-        self.restoreGeometry(
-            settings.value("Layout/Geometry").toByteArray())
-
+        self.restoreGeometry(settings.value(
+            "Layout/Geometry", type=QtCore.QByteArray))
         status = self.__settings.load(settings)
 
         for topic, value in status:
@@ -344,17 +479,24 @@ class LiveViewer(QtGui.QMainWindow):
         self.__setSardana(self.__settings.sardana)
         self.__imagewg.setAspectLocked(self.__settings.aspectlocked)
         self.__imagewg.setAutoDownSample(self.__settings.autodownsample)
+        self._assessTransformation(self.__trafoname)
         self.__datasource.setTimeOut(self.__settings.timeout)
         dataFetchThread.GLOBALREFRESHRATE = self.__settings.refreshrate
         self.__imagewg.setStatsWOScaling(self.__settings.statswoscaling)
+        self.__imagewg.setROIsColors(self.__settings.roiscolors)
 
         if self.__settings.detservers:
-            serverdict = {"pool" : list(self.__settings.detservers)}
+            serverdict = {"pool": list(self.__settings.detservers)}
         else:
             serverdict = HIDRASERVERLIST
         self.__sourcewg.updateMetaData(
             zmqtopics=self.__settings.zmqtopics,
             dirtrans=self.__settings.dirtrans,
+            tangoattrs=self.__settings.tangoattrs,
+            tangofileattrs=self.__settings.tangofileattrs,
+            tangodirattrs=self.__settings.tangodirattrs,
+            zmqservers=self.__settings.zmqservers,
+            httpurls=self.__settings.httpurls,
             autozmqtopics=self.__settings.autozmqtopics,
             nxslast=self.__settings.nxslast,
             nxsopen=self.__settings.nxsopen,
@@ -369,7 +511,9 @@ class LiveViewer(QtGui.QMainWindow):
         self.__prepwg.changeView(
             self.__settings.showmask,
             self.__settings.showsub,
-            self.__settings.showtrans)
+            self.__settings.showtrans,
+            self.__settings.showhighvaluemask
+        )
         self.__scalingwg.changeView(self.__settings.showscale)
         self.__levelswg.changeView()
 
@@ -379,7 +523,7 @@ class LiveViewer(QtGui.QMainWindow):
         settings = QtCore.QSettings()
         settings.setValue(
             "Layout/Geometry",
-            QtCore.QVariant(self.saveGeometry()))
+            QtCore.QByteArray(self.saveGeometry()))
 
         self.__settings.refreshrate = dataFetchThread.GLOBALREFRESHRATE
         self.__settings.sardana = True if self.__sardana is not None else False
@@ -404,15 +548,21 @@ class LiveViewer(QtGui.QMainWindow):
 
     def closeEvent(self, event):
         """ stores the setting before finishing the application
+
+        :param event: close event
+        :type event:  :class:`PyQt4.QtCore.QEvent`:
         """
+        if self.__tangoclient:
+            self.__tangoclient.unsubscribe()
         self.__storeSettings()
         self.__settings.secstream = False
         try:
             self.__dataFetcher.newDataNameFetched.disconnect(self._getNewData)
-        except:
+        except Exception:
             pass
         # except Exception as e:
         #     print (str(e))
+
         if self.__sourcewg.isConnected():
             self.__sourcewg.toggleServerConnection()
         self._disconnectSource()
@@ -425,8 +575,23 @@ class LiveViewer(QtGui.QMainWindow):
     @QtCore.pyqtSlot(int)
     @QtCore.pyqtSlot()
     def _loadfile(self, fid=None):
-        """ loads the image file
-        """
+        """ reloads the image file
+
+        :param fid: frame id
+        :type fid: :obj:`int`
+         """
+        self._reloadfile(fid, showmessage=True)
+
+    @QtCore.pyqtSlot(int)
+    @QtCore.pyqtSlot()
+    def _reloadfile(self, fid=None, showmessage=False):
+        """ reloads the image file
+
+        :param fid: frame id
+        :type fid: :obj:`int`
+        :param showmessage: no image message
+        :type showmessage: :obj:`bool`
+         """
         newimage = None
         if fid is None:
             fileDialog = QtGui.QFileDialog()
@@ -460,7 +625,7 @@ class LiveViewer(QtGui.QMainWindow):
                         self.__frame, self.__growing, refresh=False)
 
                     self.__ui.frameSpinBox.valueChanged.disconnect(
-                        self._loadfile)
+                        self._reloadfile)
                     while newimage is None and self.__frame > 0:
                         self.__frame -= 1
                         self.__updateframeview(True)
@@ -468,8 +633,18 @@ class LiveViewer(QtGui.QMainWindow):
                             currentfield["node"],
                             self.__frame, self.__growing, refresh=False)
                     self.__ui.frameSpinBox.valueChanged.connect(
-                        self._loadfile)
+                        self._reloadfile)
                 else:
+                    if showmessage:
+                        text = messageBox.MessageBox.getText(
+                            "lavue: Image %s cannot be loaded"
+                            % self.__settings.imagename)
+                        messageBox.MessageBox.warning(
+                            self,
+                            "lavue: File %s cannot be loaded"
+                            % self.__settings.imagename,
+                            "File %s without images"
+                            % self.__settings.imagename)
                     return
                 if imagename:
                     imagename = "%s:/%s" % (
@@ -486,6 +661,7 @@ class LiveViewer(QtGui.QMainWindow):
                 self.__imagename = imagename
                 self.__rawimage = np.transpose(newimage)
                 self._plot()
+                self.__imagewg.autoRange()
             else:
                 text = messageBox.MessageBox.getText(
                     "lavue: File %s cannot be loaded"
@@ -514,22 +690,35 @@ class LiveViewer(QtGui.QMainWindow):
         cnfdlg.showlevels = self.__settings.showlevels
         cnfdlg.showhisto = self.__settings.showhisto
         cnfdlg.showmask = self.__settings.showmask
+        cnfdlg.showhighvaluemask = self.__settings.showhighvaluemask
         cnfdlg.showstats = self.__settings.showstats
         cnfdlg.secautoport = self.__settings.secautoport
         cnfdlg.secport = self.__settings.secport
         cnfdlg.hidraport = self.__settings.hidraport
         cnfdlg.secstream = self.__settings.secstream
+        cnfdlg.zeromask = self.__settings.zeromask
         cnfdlg.refreshrate = dataFetchThread.GLOBALREFRESHRATE
         cnfdlg.timeout = self.__settings.timeout
         cnfdlg.aspectlocked = self.__settings.aspectlocked
         cnfdlg.autodownsample = self.__settings.autodownsample
+        cnfdlg.keepcoords = self.__settings.keepcoords
         cnfdlg.statswoscaling = self.__settings.statswoscaling
         cnfdlg.zmqtopics = self.__settings.zmqtopics
         cnfdlg.detservers = self.__settings.detservers
         cnfdlg.autozmqtopics = self.__settings.autozmqtopics
+        cnfdlg.interruptonerror = self.__settings.interruptonerror
         cnfdlg.dirtrans = self.__settings.dirtrans
+        cnfdlg.tangoattrs = self.__settings.tangoattrs
+        cnfdlg.tangofileattrs = self.__settings.tangofileattrs
+        cnfdlg.tangodirattrs = self.__settings.tangodirattrs
+        cnfdlg.httpurls = self.__settings.httpurls
+        cnfdlg.zmqservers = self.__settings.zmqservers
         cnfdlg.nxslast = self.__settings.nxslast
         cnfdlg.nxsopen = self.__settings.nxsopen
+        cnfdlg.sendrois = self.__settings.sendrois
+        cnfdlg.showallrois = self.__settings.showallrois
+        cnfdlg.storegeometry = self.__settings.storegeometry
+        cnfdlg.roiscolors = self.__settings.roiscolors
         cnfdlg.createGUI()
         if cnfdlg.exec_():
             self.__updateConfig(cnfdlg)
@@ -552,6 +741,10 @@ class LiveViewer(QtGui.QMainWindow):
         if self.__settings.showmask != dialog.showmask:
             self.__settings.showmask = dialog.showmask
             self.__prepwg.changeView(dialog.showmask)
+        if self.__settings.showhighvaluemask != dialog.showhighvaluemask:
+            self.__settings.showhighvaluemask = dialog.showhighvaluemask
+            self.__prepwg.changeView(
+                showhighvaluemask=dialog.showhighvaluemask)
 
         if self.__settings.showscale != dialog.showscale:
             self.__scalingwg.changeView(dialog.showscale)
@@ -577,18 +770,19 @@ class LiveViewer(QtGui.QMainWindow):
                 try:
                     self.__settings.secsocket.unbind(
                         self.__settings.secsockopt)
-                except:
+                except Exception:
                     pass
                 if self.__sourcewg.isConnected():
                     self.__sourcewg.connectSuccess(None)
             if dialog.secstream:
                 if dialog.secautoport:
-                    self.__settings.secsockopt = "tcp://*:*"
+                    self.__settings.secsockopt = b"tcp://*:*"
                     self.__settings.secsocket.bind(self.__settings.secsockopt)
-                    dialog.secport = self.__settings.secsocket.getsockopt(
-                        zmq.LAST_ENDPOINT).split(":")[-1]
+                    dialog.secport = unicode(
+                        self.__settings.secsocket.getsockopt(
+                            zmq.LAST_ENDPOINT)).split(":")[-1]
                 else:
-                    self.__settings.secsockopt = "tcp://*:%s" % dialog.secport
+                    self.__settings.secsockopt = b"tcp://*:%s" % dialog.secport
                     self.__settings.secsocket.bind(self.__settings.secsockopt)
                 if self.__sourcewg.isConnected():
                     self.__sourcewg.connectSuccess(dialog.secport)
@@ -600,13 +794,37 @@ class LiveViewer(QtGui.QMainWindow):
         self.__imagewg.setAspectLocked(self.__settings.aspectlocked)
         self.__settings.autodownsample = dialog.autodownsample
         self.__imagewg.setAutoDownSample(self.__settings.autodownsample)
+        replot = False
+        remasking = False
+        if self.__settings.keepcoords != dialog.keepcoords:
+            self.__settings.keepcoords = dialog.keepcoords
+            self._assessTransformation(self.__trafoname)
+            replot = True
+
         self.__settings.secstream = dialog.secstream
+        self.__settings.storegeometry = dialog.storegeometry
+        self.__settings.interruptonerror = dialog.interruptonerror
         setsrc = False
         if self.__settings.hidraport != dialog.hidraport:
             self.__settings.hidraport = dialog.hidraport
             setsrc = True
         if self.__settings.dirtrans != dialog.dirtrans:
             self.__settings.dirtrans = dialog.dirtrans
+            setsrc = True
+        if self.__settings.tangoattrs != dialog.tangoattrs:
+            self.__settings.tangoattrs = dialog.tangoattrs
+            setsrc = True
+        if self.__settings.tangofileattrs != dialog.tangofileattrs:
+            self.__settings.tangofileattrs = dialog.tangofileattrs
+            setsrc = True
+        if self.__settings.tangodirattrs != dialog.tangodirattrs:
+            self.__settings.tangodirattrs = dialog.tangodirattrs
+            setsrc = True
+        if self.__settings.httpurls != dialog.httpurls:
+            self.__settings.httpurls = dialog.httpurls
+            setsrc = True
+        if self.__settings.zmqservers != dialog.zmqservers:
+            self.__settings.zmqservers = dialog.zmqservers
             setsrc = True
         if self.__settings.zmqtopics != dialog.zmqtopics:
             self.__settings.zmqtopics = dialog.zmqtopics
@@ -623,14 +841,23 @@ class LiveViewer(QtGui.QMainWindow):
         if self.__settings.nxslast != dialog.nxslast:
             self.__settings.nxslast = dialog.nxslast
             setsrc = True
+        if self.__settings.sendrois != dialog.sendrois:
+            self.__settings.sendrois = dialog.sendrois
+        if self.__settings.showallrois != dialog.showallrois:
+            self.__settings.showallrois = dialog.showallrois
         if setsrc:
             if self.__settings.detservers:
-                serverdict = {"pool" : list(self.__settings.detservers)}
+                serverdict = {"pool": list(self.__settings.detservers)}
             else:
                 serverdict = HIDRASERVERLIST
             self.__sourcewg.updateMetaData(
                 zmqtopics=self.__settings.zmqtopics,
                 dirtrans=self.__settings.dirtrans,
+                tangoattrs=self.__settings.tangoattrs,
+                tangofileattrs=self.__settings.tangofileattrs,
+                tangodirattrs=self.__settings.tangodirattrs,
+                zmqservers=self.__settings.zmqservers,
+                httpurls=self.__settings.httpurls,
                 autozmqtopics=self.__settings.autozmqtopics,
                 nxslast=self.__settings.nxslast,
                 nxsopen=self.__settings.nxsopen,
@@ -640,7 +867,23 @@ class LiveViewer(QtGui.QMainWindow):
             self.__sourcewg.updateLayout()
 
         self.__settings.statswoscaling = dialog.statswoscaling
-        if self.__imagewg.setStatsWOScaling(self.__settings.statswoscaling):
+        replot = replot or \
+            self.__imagewg.setStatsWOScaling(
+                self.__settings.statswoscaling)
+
+        if self.__settings.zeromask != dialog.zeromask:
+            self.__settings.zeromask = dialog.zeromask
+            remasking = True
+            replot = True
+
+        if self.__settings.roiscolors != dialog.roiscolors:
+            self.__settings.roiscolors = dialog.roiscolors
+            self.__imagewg.setROIsColors(self.__settings.roiscolors)
+
+        if remasking:
+            self.__remasking()
+
+        if replot:
             self._plot()
 
     @QtCore.pyqtSlot(str)
@@ -648,7 +891,9 @@ class LiveViewer(QtGui.QMainWindow):
         """ sets the source configuration
         """
         self.__sourceconfiguration = sourceConfiguration
-        self.__datasource.setConfiguration(self.__sourceconfiguration)
+        if self.__sourcewg.currentDataSource() == \
+           str(type(self.__datasource).__name__):
+            self.__datasource.setConfiguration(self.__sourceconfiguration)
 
     def __setSardana(self, status):
         """ sets the sardana utils
@@ -669,7 +914,7 @@ class LiveViewer(QtGui.QMainWindow):
 
     @QtCore.pyqtSlot(int)
     def _updateSource(self, status):
-        """ update tyhe current source
+        """ update the current source
 
         :param status: current source status id
         :type status: :obj:`int`
@@ -682,6 +927,15 @@ class LiveViewer(QtGui.QMainWindow):
             self.__sourcewg.updateMetaData(**self.__datasource.getMetaData())
         self._stateUpdated.emit(bool(status))
 
+    @QtCore.pyqtSlot(bool)
+    def _replot(self, autorange):
+        """ The main command of the live viewer class:
+        draw a numpy array with the given name and autoRange.
+        """
+        self._plot()
+        if autorange:
+            self.__imagewg.autoRange()
+
     @QtCore.pyqtSlot()
     def _plot(self):
         """ The main command of the live viewer class:
@@ -691,7 +945,7 @@ class LiveViewer(QtGui.QMainWindow):
         self.__prepareImage()
 
         # perform transformation
-        self.__transform()
+        crdtranspose, crdleftrightflip, crdupdownflip = self.__transform()
 
         # use the internal raw image to create a display image with chosen
         # scaling
@@ -702,6 +956,8 @@ class LiveViewer(QtGui.QMainWindow):
         # calls internally the plot function of the plot widget
         if self.__imagename is not None and self.__scaledimage is not None:
             self.__ui.fileNameLineEdit.setText(self.__imagename)
+        self.__imagewg.setTransformations(
+            crdtranspose, crdleftrightflip, crdupdownflip)
         self.__imagewg.plot(
             self.__scaledimage,
             self.__displayimage
@@ -865,8 +1121,12 @@ class LiveViewer(QtGui.QMainWindow):
                 messageBox.MessageBox.warning(
                     self, "lavue: Error in reading data",
                     "Viewing will be interrupted", str(errortext))
+            else:
+                self.__sourcewg.setErrorStatus(name)
             self.__dataFetcher.ready()
             return
+        self.__sourcewg.setErrorStatus("")
+
         if name is None:
             self.__dataFetcher.ready()
             return
@@ -874,7 +1134,7 @@ class LiveViewer(QtGui.QMainWindow):
         if str(self.__metadata) != str(metadata) and str(metadata).strip():
             imagename, self.__metadata = name, metadata
             if str(imagename).strip() and \
-               not isinstance(rawimage, (str, unicode)):
+               not isinstance(rawimage, basestring):
                 self.__imagename = imagename
                 self.__rawimage = rawimage
             try:
@@ -894,10 +1154,11 @@ class LiveViewer(QtGui.QMainWindow):
             if self.__imagename is None or str(self.__imagename) != str(name):
                 self.__imagename, self.__metadata \
                     = name, metadata
-                if not isinstance(rawimage, (str, unicode)):
+                if not isinstance(rawimage, basestring):
                     self.__rawimage = rawimage
         self.__updateframeview()
         self._plot()
+        QtCore.QCoreApplication.processEvents()
         self.__dataFetcher.ready()
 
     def __updateframeview(self, status=False):
@@ -927,7 +1188,7 @@ class LiveViewer(QtGui.QMainWindow):
                             self.__levelswg.colorChannel() - 1]
                     else:
                         self.__rawgreyimage = np.mean(self.__rawimage, 0)
-                except:
+                except Exception:
                     import traceback
                     value = traceback.format_exc()
                     text = messageBox.MessageBox.getText(
@@ -942,8 +1203,16 @@ class LiveViewer(QtGui.QMainWindow):
                         text, str(value))
                     self.__levelswg.setChannel(0)
                     self.__rawgreyimage = np.sum(self.__rawimage, 0)
-        else:
-            self.__rawgreyimage = self.__rawimage
+        elif len(self.__rawimage.shape) == 2:
+            if self.__applymask:
+                self.__rawgreyimage = np.array(self.__rawimage)
+            else:
+                self.__rawgreyimage = self.__rawimage
+            self.__levelswg.setNumberOfChannels(0)
+
+        elif len(self.__rawimage.shape) == 1:
+            self.__rawgreyimage = np.array(
+                self.__rawimage).reshape((self.__rawimage.shape[0], 1))
             self.__levelswg.setNumberOfChannels(0)
 
         self.__displayimage = self.__rawgreyimage
@@ -953,7 +1222,7 @@ class LiveViewer(QtGui.QMainWindow):
             try:
                 self.__displayimage = \
                     self.__rawgreyimage - self.__backgroundimage
-            except:
+            except Exception:
                 self._checkBkgSubtraction(False)
                 self.__backgroundimage = None
                 self.__dobkgsubtraction = False
@@ -971,6 +1240,7 @@ class LiveViewer(QtGui.QMainWindow):
            self.__maskindices is not None:
             # set all masked (non-zero values) to zero by index
             try:
+                self.__displayimage = np.array(self.__displayimage)
                 self.__displayimage[self.__maskindices] = 0
             except IndexError:
                 self.__maskwg.noImage()
@@ -985,32 +1255,84 @@ class LiveViewer(QtGui.QMainWindow):
                     "to the current image",
                     text, str(value))
 
+        if self.__settings.showhighvaluemask and \
+           self.__maskvalue is not None:
+            try:
+                self.__displayimage = np.array(self.__displayimage)
+                self.__displayimage[self.__displayimage > self.__maskvalue] = 0
+            except IndexError:
+                # self.__highvaluemaskwg.noValue()
+                import traceback
+                value = traceback.format_exc()
+                text = messageBox.MessageBox.getText(
+                    "lavue: Cannot apply high value mask to the current image")
+                messageBox.MessageBox.warning(
+                    self, "lavue: Cannot apply high value mask"
+                    " to the current image",
+                    text, str(value))
+
     def __transform(self):
         """ does the image transformation on the given numpy array.
-        """
-        if self.__displayimage is None or self.__trafoname is "none":
-            return
 
+        :returns: crdtranspose, crdleftrightflip, crdupdownflip flags
+        :rtype: (:obj:`bool`, :obj:`bool`, :obj:`bool`)
+        """
+        crdupdownflip = False
+        crdleftrightflip = False
+        crdtranspose = False
+        if self.__trafoname is "none":
+            pass
         elif self.__trafoname == "flip (up-down)":
-            self.__displayimage = np.fliplr(self.__displayimage)
+            if self.__settings.keepcoords:
+                crdupdownflip = True
+            elif self.__displayimage is not None:
+                    self.__displayimage = np.fliplr(self.__displayimage)
         elif self.__trafoname == "flip (left-right)":
-            self.__displayimage = np.flipud(self.__displayimage)
+            if self.__settings.keepcoords:
+                crdleftrightflip = True
+            elif self.__displayimage is not None:
+                    self.__displayimage = np.flipud(self.__displayimage)
         elif self.__trafoname == "transpose":
-            self.__displayimage = np.transpose(self.__displayimage)
+            if self.__displayimage is not None:
+                self.__displayimage = np.transpose(self.__displayimage)
+            if self.__settings.keepcoords:
+                crdtranspose = True
         elif self.__trafoname == "rot90 (clockwise)":
-            # self.__displayimage = np.rot90(self.__displayimage, 3)
-            self.__displayimage = np.transpose(
-                np.flipud(self.__displayimage))
+            if self.__settings.keepcoords:
+                crdtranspose = True
+                crdupdownflip = True
+                if self.__displayimage is not None:
+                    self.__displayimage = np.transpose(self.__displayimage)
+            elif self.__displayimage is not None:
+                self.__displayimage = np.transpose(
+                    np.flipud(self.__displayimage))
         elif self.__trafoname == "rot180":
-            self.__displayimage = np.flipud(
-                np.fliplr(self.__displayimage))
+            if self.__settings.keepcoords:
+                crdupdownflip = True
+                crdleftrightflip = True
+            elif self.__displayimage is not None:
+                self.__displayimage = np.flipud(
+                    np.fliplr(self.__displayimage))
         elif self.__trafoname == "rot270 (clockwise)":
-            # self.__displayimage = np.rot90(self.__displayimage, 1)
-            self.__displayimage = np.transpose(
-                np.fliplr(self.__displayimage))
+            if self.__settings.keepcoords:
+                crdtranspose = True
+                crdleftrightflip = True
+                if self.__displayimage is not None:
+                    self.__displayimage = np.transpose(self.__displayimage)
+            elif self.__displayimage is not None:
+                self.__displayimage = np.transpose(
+                    np.fliplr(self.__displayimage))
         elif self.__trafoname == "rot180 + transpose":
-            self.__displayimage = np.transpose(
-                np.fliplr(np.flipud(self.__displayimage)))
+            if self.__settings.keepcoords:
+                crdtranspose = True
+                crdupdownflip = True
+                crdleftrightflip = True
+                if self.__displayimage is not None:
+                    self.__displayimage = np.transpose(self.__displayimage)
+            elif self.__displayimage is not None:
+                self.__displayimage = np.transpose(
+                    np.fliplr(np.flipud(self.__displayimage)))
+        return crdtranspose, crdleftrightflip, crdupdownflip
 
     def __scale(self, scalingtype):
         """ sets scaletype on the image
@@ -1063,6 +1385,16 @@ class LiveViewer(QtGui.QMainWindow):
         minval = np.amin(self.__scaledimage) if flag[3] else 0.0
         return (maxval, meanval, varval, minval, maxrawval,  maxsval)
 
+    @QtCore.pyqtSlot(str)
+    def _checkHighMasking(self, value):
+        """ reads the mask image, select non-zero elements and store the indices
+        """
+        try:
+            self.__maskvalue = float(value)
+        except Exception:
+            self.__maskvalue = None
+        self._plot()
+
     @QtCore.pyqtSlot(int)
     def _checkMasking(self, state):
         """ replots the image with mask if mask exists
@@ -1076,14 +1408,53 @@ class LiveViewer(QtGui.QMainWindow):
     def _prepareMasking(self, imagename):
         """ reads the mask image, select non-zero elements and store the indices
         """
+        imagename = str(imagename)
         if imagename:
-            self.__maskimage = np.transpose(
-                imageFileHandler.ImageFileHandler(
-                    str(imagename)).getImage())
-            self.__maskindices = (self.__maskimage != 0)
+            if imagename.endswith(".nxs") or imagename.endswith(".h5") \
+               or imagename.endswith(".nx") or imagename.endswith(".ndf"):
+                fieldpath = None
+                growing = 0
+                frame = 0
+                handler = imageFileHandler.NexusFieldHandler(
+                    str(imagename))
+                fields = handler.findImageFields()
+                if fields:
+                    imgfield = imageField.ImageField(self)
+                    imgfield.fields = fields
+                    imgfield.frame = 0
+                    imgfield.createGUI()
+                    if imgfield.exec_():
+                        fieldpath = imgfield.field
+                        growing = imgfield.growing
+                        frame = imgfield.frame
+                    else:
+                        return
+                    currentfield = fields[fieldpath]
+                    self.__maskimage = np.transpose(handler.getImage(
+                        currentfield["node"],
+                        frame, growing, refresh=False))
+                else:
+                    return
+            else:
+                self.__maskimage = np.transpose(
+                    imageFileHandler.ImageFileHandler(
+                        str(imagename)).getImage())
+            if self.__settings.zeromask:
+                self.__maskindices = (self.__maskimage == 0)
+            else:
+                self.__maskindices = (self.__maskimage != 0)
         else:
             self.__maskimage = None
         # self.__maskindices = np.nonzero(self.__maskimage != 0)
+
+    def __remasking(self):
+        """ recalculates the mask
+        """
+        if self.__maskimage is not None:
+            if self.__settings.zeromask:
+                self.__maskindices = (self.__maskimage == 0)
+            else:
+                self.__maskindices = (self.__maskimage != 0)
 
     @QtCore.pyqtSlot(int)
     def _checkBkgSubtraction(self, state):
@@ -1091,9 +1462,9 @@ class LiveViewer(QtGui.QMainWindow):
         """
         self.__dobkgsubtraction = state
         if self.__dobkgsubtraction and self.__backgroundimage is None:
-            self.__bkgSubwg.setDisplayedName("")
+            self.__bkgsubwg.setDisplayedName("")
         else:
-            self.__bkgSubwg.checkBkgSubtraction(state)
+            self.__bkgsubwg.checkBkgSubtraction(state)
         self.__imagewg.setDoBkgSubtraction(state)
         self._plot()
 
@@ -1101,9 +1472,40 @@ class LiveViewer(QtGui.QMainWindow):
     def _prepareBkgSubtraction(self, imagename):
         """ reads the background image
         """
-        self.__backgroundimage = np.transpose(
-            imageFileHandler.ImageFileHandler(
-                str(imagename)).getImage())
+        imagename = str(imagename)
+        if imagename:
+            if imagename.endswith(".nxs") or imagename.endswith(".h5") \
+               or imagename.endswith(".nx") or imagename.endswith(".ndf"):
+                fieldpath = None
+                growing = 0
+                frame = 0
+                handler = imageFileHandler.NexusFieldHandler(
+                    str(imagename))
+                fields = handler.findImageFields()
+                if fields:
+                    imgfield = imageField.ImageField(self)
+                    imgfield.fields = fields
+                    imgfield.frame = 0
+                    imgfield.createGUI()
+                    if imgfield.exec_():
+                        fieldpath = imgfield.field
+                        growing = imgfield.growing
+                        frame = imgfield.frame
+                    else:
+                        return
+                    currentfield = fields[fieldpath]
+                    self.__backgroundimage = np.transpose(
+                        handler.getImage(
+                            currentfield["node"],
+                            frame, growing, refresh=False))
+                else:
+                    return
+            else:
+                self.__backgroundimage = np.transpose(
+                    imageFileHandler.ImageFileHandler(
+                        str(imagename)).getImage())
+        else:
+            self.__backgroundimage = None
 
     @QtCore.pyqtSlot()
     def _setCurrentImageAsBkg(self):
@@ -1111,13 +1513,21 @@ class LiveViewer(QtGui.QMainWindow):
         """
         if self.__rawgreyimage is not None:
             self.__backgroundimage = self.__rawgreyimage
-            self.__bkgSubwg.setDisplayedName(str(self.__imagename))
+            self.__bkgsubwg.setDisplayedName(str(self.__imagename))
         else:
-            self.__bkgSubwg.setDisplayedName("")
+            self.__bkgsubwg.setDisplayedName("")
 
     @QtCore.pyqtSlot(str)
     def _assessTransformation(self, trafoname):
         """ assesses the transformation and replot it
         """
         self.__trafoname = trafoname
+        if trafoname in [
+                "transpose", "rot90 (clockwise)",
+                "rot270 (clockwise)", "rot180 + transpose"]:
+            self.__trafowg.setKeepCoordsLabel(
+                self.__settings.keepcoords, True)
+        else:
+            self.__trafowg.setKeepCoordsLabel(
+                self.__settings.keepcoords, False)
         self._plot()
