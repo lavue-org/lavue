@@ -298,7 +298,7 @@ class LavueController(Device):
             for alias in self.requested_scalar_aliases:
                 if alias not in self.current_scalar_aliases:
                     myAttr = PyTango.Attr(
-                        ("%sSum" % alias) if alias != "__Null__" else "Sum",
+                        str("%sSum" % alias) if alias != "__Null__" else "Sum",
                         PyTango.DevDouble, PyTango.READ)
                     self.add_attribute(
                         myAttr, LavueController.read_ScalarDynamicAttr,
