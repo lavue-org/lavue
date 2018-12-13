@@ -286,13 +286,13 @@ class LavueController(Device):
                 if alias not in self.requested_scalar_aliases:
                     aalias = ("%sSum" % alias) \
                              if alias != "__Null__" else "Sum"
-                    if aalias not in self.ROIAttributesNames:
+                    if aalias not in (self.ROIAttributesNames or []):
                         self.remove_attribute(str(aalias))
             for alias in self.current_spectrum_aliases:
                 if alias not in self.requested_spectrum_aliases:
                     aalias = ("%sSums" % alias) \
                              if alias != "__Null__" else "Sums"
-                    if aalias not in self.ROIAttributesNames:
+                    if aalias not in (self.ROIAttributesNames or []):
                         self.remove_attribute(str(aalias))
 
             for alias in self.requested_scalar_aliases:
@@ -314,7 +314,7 @@ class LavueController(Device):
                         myAttr, LavueController.read_SpectrumDynamicAttr,
                         None, None)
 
-            for alias in self.ROIAttributesNames:
+            for alias in (self.ROIAttributesNames or []):
                 if alias.endswith("Sum"):
                     salias = alias[:-3]
                     if not salias:
@@ -350,7 +350,7 @@ class LavueController(Device):
                 if alias not in self.requested_rois_aliases:
                     aalias = "%sROI" % alias \
                              if alias != "__Null__" else "ROI"
-                    if aalias not in self.ROIAttributesNames:
+                    if aalias not in (self.ROIAttributesNames or []):
                         self.remove_attribute(str(aalias))
 
             for alias in self.requested_rois_aliases:
@@ -363,7 +363,7 @@ class LavueController(Device):
                     self.add_attribute(
                         myAttr, LavueController.read_ROIsDynamicAttr,
                         None, None)
-            for alias in self.ROIAttributesNames:
+            for alias in (self.ROIAttributesNames or []):
                 if alias.endswith("ROI"):
                     salias = alias[:-3]
                     if not salias:
