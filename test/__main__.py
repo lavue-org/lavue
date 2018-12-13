@@ -82,7 +82,7 @@ if PNI_AVAILABLE:
 if H5PY_AVAILABLE:
     import H5PYWriter_test
     import FileWriterH5PY_test
-if H5PY_AVAILABLE:
+if H5CPP_AVAILABLE:
     import H5CppWriter_test
     import FileWriterH5Cpp_test
 if PNI_AVAILABLE and H5PY_AVAILABLE:
