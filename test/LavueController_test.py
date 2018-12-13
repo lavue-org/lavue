@@ -148,7 +148,7 @@ class LavueControllerTest(unittest.TestCase):
     def test_BeamCenterX(self):
         """Test for BeamCenterX"""
         print("Run: %s.%s() " % (
-            self.__class__.__name__, sys._getframe().f_code.co_name))        
+            self.__class__.__name__, sys._getframe().f_code.co_name))
         testvalues = [12.3, 123.2, -3.43, 0., 23423.]
         for wvl in testvalues:
             self.proxy.BeamCenterX = wvl
@@ -191,7 +191,7 @@ class LavueControllerTest(unittest.TestCase):
                [61, 91, 83, 146, 332, 93, 382, 141,
                 116, 69, 279, 94]]],
              [["Pilatus2ROI",
-               [ 91, 155, 157, 199]]]],
+               [91, 155, 157, 199]]]],
             ['{"lambda": [[61, 91, 83, 146]]}',
              [["LambdaROI",
                [61, 91, 83, 146]]]],
@@ -212,7 +212,6 @@ class LavueControllerTest(unittest.TestCase):
             for at, vl in wvl[1]:
                 rvl = self.proxy.read_attribute(at).value
                 self.assertTrue(np.array_equal(np.array(vl), rvl))
-            
 
     def test_DetectorROIsValues(self):
         """Test for DetectorROIsValues"""
