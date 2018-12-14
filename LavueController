@@ -165,6 +165,9 @@ class LavueController(Device):
         self.requested_spectrum_aliases = []
         self.requested_rois_aliases = []
 
+        if not hasattr(self, "ROIAttributesNames"):
+            self.ROIAttributesNames = []
+        
         if not self.DynamicROIsValues and \
            hasattr(self, "current_scalar_aliases"):
             for alias in self.current_scalar_aliases:
@@ -315,18 +318,18 @@ class LavueController(Device):
         if self.current_scalar_aliases != self.requested_scalar_aliases or \
            self.current_spectrum_aliases != \
                 self.requested_spectrum_aliases or \
-                (self.ROIAttributesNames or []):
+                self.ROIAttributesNames:
             for alias in self.current_scalar_aliases:
                 if alias not in self.requested_scalar_aliases:
                     aalias = ("%sSum" % alias) \
                              if alias != "__Null__" else "Sum"
-                    if aalias not in (self.ROIAttributesNames or []):
+                    if aalias not in self.ROIAttributesNames:
                         self.remove_attribute(str(aalias))
             for alias in self.current_spectrum_aliases:
                 if alias not in self.requested_spectrum_aliases:
                     aalias = ("%sSums" % alias) \
                              if alias != "__Null__" else "Sums"
-                    if aalias not in (self.ROIAttributesNames or []):
+                    if aalias not in self.ROIAttributesNames:
                         self.remove_attribute(str(aalias))
 
             for alias in self.requested_scalar_aliases:
@@ -348,7 +351,7 @@ class LavueController(Device):
                         myAttr, LavueController.read_SpectrumDynamicAttr,
                         None, None)
 
-            for alias in (self.ROIAttributesNames or []):
+            for alias in self.ROIAttributesNames:
                 if alias.endswith("Sum"):
                     salias = alias[:-3]
                     if not salias:
@@ -379,12 +382,12 @@ class LavueController(Device):
         """ initialize rois dynamic attributes
         """
         if self.current_rois_aliases != \
-           self.requested_rois_aliases or (self.ROIAttributesNames or []):
+           self.requested_rois_aliases or self.ROIAttributesNames:
             for alias in self.current_rois_aliases:
                 if alias not in self.requested_rois_aliases:
                     aalias = "%sROI" % alias \
                              if alias != "__Null__" else "ROI"
-                    if aalias not in (self.ROIAttributesNames or []):
+                    if aalias not in self.ROIAttributesNames:
                         self.remove_attribute(str(aalias))
 
             for alias in self.requested_rois_aliases:
@@ -397,7 +400,7 @@ class LavueController(Device):
                     self.add_attribute(
                         myAttr, LavueController.read_ROIsDynamicAttr,
                         None, None)
-            for alias in (self.ROIAttributesNames or []):
+            for alias in self.ROIAttributesNames:
                 if alias.endswith("ROI"):
                     salias = alias[:-3]
                     if not salias:
