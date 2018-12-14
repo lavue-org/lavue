@@ -197,7 +197,6 @@ class LavueController(Device):
         self.current_scalar_aliases = []
         self.current_spectrum_aliases = []
         self.current_rois_aliases = []
-
         self.initialize_dynamic_attributes()
 
     def always_executed_hook(self):
@@ -316,7 +315,7 @@ class LavueController(Device):
         if self.current_scalar_aliases != self.requested_scalar_aliases or \
            self.current_spectrum_aliases != \
                 self.requested_spectrum_aliases or \
-                self.ROIAttributesNames:
+                (self.ROIAttributesNames or []):
             for alias in self.current_scalar_aliases:
                 if alias not in self.requested_scalar_aliases:
                     aalias = ("%sSum" % alias) \
@@ -380,7 +379,7 @@ class LavueController(Device):
         """ initialize rois dynamic attributes
         """
         if self.current_rois_aliases != \
-           self.requested_rois_aliases or self.ROIAttributesNames:
+           self.requested_rois_aliases or (self.ROIAttributesNames or []):
             for alias in self.current_rois_aliases:
                 if alias not in self.requested_rois_aliases:
                     aalias = "%sROI" % alias \
