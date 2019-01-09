@@ -514,9 +514,8 @@ class LiveViewer(QtGui.QDialog):
         if self.parent() is not None:
             self.parent().restoreGeometry(settings.value(
                 "Layout/Geometry", type=QtCore.QByteArray))
-        else:
-            self.restoreGeometry(settings.value(
-                "Layout/Geometry", type=QtCore.QByteArray))
+        self.restoreGeometry(settings.value(
+            "Layout/DialogGeometry", type=QtCore.QByteArray))
         status = self.__settings.load(settings)
 
         for topic, value in status:
@@ -572,10 +571,9 @@ class LiveViewer(QtGui.QDialog):
             settings.setValue(
                 "Layout/Geometry",
                 QtCore.QByteArray(self.parent().parent().saveGeometry()))
-        else:
-            settings.setValue(
-                "Layout/Geometry",
-                QtCore.QByteArray(self.saveGeometry()))
+        settings.setValue(
+            "Layout/DialogGeometry",
+            QtCore.QByteArray(self.saveGeometry()))
 
         self.__settings.refreshrate = dataFetchThread.GLOBALREFRESHRATE
         self.__settings.sardana = True if self.__sardana is not None else False

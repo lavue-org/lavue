@@ -62,7 +62,7 @@ class ImageWidget(QtGui.QWidget):
     """
 
     #: (:class:`PyQt4.QtCore.pyqtSignal`) current tool changed signal
-    currentToolChanged = QtCore.pyqtSignal(int)
+    currentToolChanged = QtCore.pyqtSignal(str)
     #: (:class:`PyQt4.QtCore.pyqtSignal`) roi number changed signal
     roiNumberChanged = QtCore.pyqtSignal(int)
     #: (:class:`PyQt4.QtCore.pyqtSignal`) roi coordinate changed signal
