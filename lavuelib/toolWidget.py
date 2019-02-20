@@ -312,11 +312,11 @@ class MotorsToolWidget(ToolWidget):
         if not self.__moving:
             x, y = self._mainwidget.scaledxy(float(xdata), float(ydata))
             if x is not None:
-                    self.__xfinal = x
-                    self.__yfinal = y
+                self.__xfinal = x
+                self.__yfinal = y
             else:
-                    self.__xfinal = float(xdata)
-                    self.__yfinal = float(ydata)
+                self.__xfinal = float(xdata)
+                self.__yfinal = float(ydata)
 
             self.__ui.xLineEdit.setText(str(self.__xfinal))
             self.__ui.yLineEdit.setText(str(self.__yfinal))

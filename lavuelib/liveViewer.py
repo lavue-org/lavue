@@ -1379,18 +1379,18 @@ class LiveViewer(QtGui.QDialog):
         crdupdownflip = False
         crdleftrightflip = False
         crdtranspose = False
-        if self.__trafoname is "none":
+        if self.__trafoname == "none":
             pass
         elif self.__trafoname == "flip (up-down)":
             if self.__settings.keepcoords:
                 crdupdownflip = True
             elif self.__displayimage is not None:
-                    self.__displayimage = np.fliplr(self.__displayimage)
+                self.__displayimage = np.fliplr(self.__displayimage)
         elif self.__trafoname == "flip (left-right)":
             if self.__settings.keepcoords:
                 crdleftrightflip = True
             elif self.__displayimage is not None:
-                    self.__displayimage = np.flipud(self.__displayimage)
+                self.__displayimage = np.flipud(self.__displayimage)
         elif self.__trafoname == "transpose":
             if self.__displayimage is not None:
                 self.__displayimage = np.transpose(self.__displayimage)
