@@ -302,8 +302,6 @@ class LiveViewer(QtGui.QDialog):
         if self.__umode in ["user"]:
             self.__ui.cnfPushButton.hide()
         self.__imagewg.roiCoordsChanged.connect(self._calcUpdateStatsSec)
-        self.__imagewg.currentToolChanged.connect(
-            self._onToolChanged)
         # connecting signals from source widget:
         self.__sourcewg.sourceConnected.connect(self._connectSource)
 #        self.__sourcewg.sourceConnected.connect(self._startPlotting)
@@ -583,18 +581,6 @@ class LiveViewer(QtGui.QDialog):
     def _setAspectLocked(self, status):
         self.__settings.aspectlocked = status
         self.__imagewg.setAspectLocked(self.__settings.aspectlocked)
-
-    @QtCore.pyqtSlot(str)
-    def _onToolChanged(self, text):
-        if text == "ROI":
-            self.__trafoname = "None"
-            self.__trafowg.setEnabled(False)
-        elif text == "LineCut":
-            self.__trafowg.setEnabled(True)
-        elif text == "Angle/Q":
-            self.__trafowg.setEnabled(True)
-        else:
-            self.__trafowg.setEnabled(True)
 
     def closeEvent(self, event):
         """ stores the setting before finishing the application
