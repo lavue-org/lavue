@@ -558,7 +558,8 @@ class TangoAttrSource(BaseSource):
                 else:
                     dec = self.__decoders[avalue[0]]
                     dec.load(avalue)
-                    return (np.transpose(dec.decode()),
+                    # no need to transpose
+                    return (dec.decode(),
                             '%s  (%s)' % (
                                 self._configuration, str(attr.time)), "")
             else:
