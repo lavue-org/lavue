@@ -558,6 +558,9 @@ class TangoAttrSource(BaseSource):
                 else:
                     dec = self.__decoders[avalue[0]]
                     dec.load(avalue)
+                    shape = dec.shape()
+                    if shape is None or shape[0] <= 0 or shape[1] <= 0:
+                        return None, None, None
                     # no need to transpose
                     return (dec.decode(),
                             '%s  (%s)' % (
