@@ -102,6 +102,15 @@ class MainWindow(QtGui.QMainWindow):
         self.setWindowTitle(
             "laVue: Live Image Viewer (v%s)" % str(release.__version__))
 
+    def closeEvent(self, event):
+        """ stores the setting before finishing the application
+
+        :param event: close event
+        :type event:  :class:`pyqtgraph.QtCore.QEvent`:
+        """
+        self.__lavue.closeEvent(event)
+        QtGui.QMainWindow.closeEvent(self, event)
+
 
 class LiveViewer(QtGui.QDialog):
 
@@ -606,7 +615,8 @@ class LiveViewer(QtGui.QDialog):
         self.__dataFetcher.wait()
         self.__settings.seccontext.destroy()
         QtGui.QApplication.closeAllWindows()
-        event.accept()
+        if event is not None:
+            event.accept()
 
     @QtCore.pyqtSlot(int)
     @QtCore.pyqtSlot()
@@ -1630,3 +1640,14 @@ class LiveViewer(QtGui.QDialog):
             self.__trafowg.setKeepCoordsLabel(
                 self.__settings.keepcoords, False)
         self._plot()
+
+    def keyPressEvent(self,  event):
+        """ skips escape key action
+
+        :param event: close event
+        :type event:  :class:`pyqtgraph.QtCore.QEvent`:
+        """
+        if event.key() != QtCore.Qt.Key_Escape:
+            QtGui.QDialog.keyPressEvent(self, event)
+        # else:
+        #     self.closeEvent(None)
