@@ -98,10 +98,17 @@ class LavueControllerTest(unittest.TestCase):
 
         found = False
         cnt = 0
+        dvname = self.new_device_info_controller.name
         while not found and cnt < 1000:
             try:
                 sys.stdout.write(".")
-                dp = PyTango.DeviceProxy(self.new_device_info_controller.name)
+                sys.stdout.flush()
+                exl = db.get_device_exported(dvname)
+                if dvname not in exl.value_string:
+                    time.sleep(0.01)
+                    cnt += 1
+                    continue
+                dp = PyTango.DeviceProxy(dvname)
                 time.sleep(0.1)
                 if dp.state() == PyTango.DevState.ON:
                     found = True

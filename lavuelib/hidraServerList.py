@@ -37,6 +37,6 @@ HIDRASERVERLIST = {
     "pool": [
         'haspilatus300k.desy.de',
         'haspilatus1m.desy.de',
-        'haso233det.desy.de'
+        'haspilatus100k.desy.de'
     ]
 }
