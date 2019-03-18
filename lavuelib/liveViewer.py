@@ -650,10 +650,14 @@ class LiveViewer(QtGui.QDialog):
         if imagename:
             if imagename.endswith(".nxs") or imagename.endswith(".h5") \
                or imagename.endswith(".nx") or imagename.endswith(".ndf"):
-                self.__settings.imagename = imagename
-                handler = imageFileHandler.NexusFieldHandler(
-                    str(self.__settings.imagename))
-                fields = handler.findImageFields()
+                try:
+                    self.__settings.imagename = imagename
+                    handler = imageFileHandler.NexusFieldHandler(
+                        str(self.__settings.imagename))
+                    fields = handler.findImageFields()
+                except Exception as e:
+                    print(str(e))
+                    fields = None
                 if fields:
                     if fid is None or self.__fieldpath is None:
                         imgfield = imageField.ImageField(self)
@@ -700,9 +704,12 @@ class LiveViewer(QtGui.QDialog):
             else:
                 self.__fieldpath = None
                 self.__settings.imagename = imagename
-                newimage = imageFileHandler.ImageFileHandler(
-                    str(self.__settings.imagename)).getImage()
-                self.__updateframeview()
+                try:
+                    newimage = imageFileHandler.ImageFileHandler(
+                        str(self.__settings.imagename)).getImage()
+                    self.__updateframeview()
+                except Exception as e:
+                    print(str(e))
             if newimage is not None:
                 self.__imagename = imagename
                 self.__rawimage = np.transpose(newimage)
