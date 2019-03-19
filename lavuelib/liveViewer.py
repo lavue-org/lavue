@@ -1251,8 +1251,9 @@ class LiveViewer(QtGui.QDialog):
             imagename, self.__metadata = name, metadata
             if str(imagename).strip() and \
                not isinstance(rawimage, basestring):
-                self.__imagename = imagename
-                self.__rawimage = rawimage
+                if not hasattr(rawimage, "size") or rawimage.size != 0:
+                    self.__imagename = imagename
+                    self.__rawimage = rawimage
             try:
                 mdata = json.loads(str(metadata))
                 if isinstance(mdata, dict):
@@ -1271,7 +1272,8 @@ class LiveViewer(QtGui.QDialog):
                 self.__imagename, self.__metadata \
                     = name, metadata
                 if not isinstance(rawimage, basestring):
-                    self.__rawimage = rawimage
+                    if not hasattr(rawimage, "size") or rawimage.size != 0:
+                        self.__rawimage = rawimage
         self.__updateframeview()
         self._plot()
         QtCore.QCoreApplication.processEvents()

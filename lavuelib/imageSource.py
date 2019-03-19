@@ -281,8 +281,7 @@ class NXSFileSource(BaseSource):
                 image = self.__handler.getImage(
                     self.__node, self.__frame, self.__gdim)
             # except Exception:
-            except Exception as e:
-                print(str(e))
+            except Exception:
                 try:
                     self.__handler = imageFileHandler.NexusFieldHandler(
                         str(self.__nxsfile))
@@ -294,8 +293,7 @@ class NXSFileSource(BaseSource):
                             self.__frame = fid - 1
                     image = self.__handler.getImage(
                         self.__node, self.__frame, self.__gdim)
-                except Exception as e:
-                    print(str(e))
+                except Exception:
                     pass
             if not self.__nxsopen:
                 self.__handler = None
@@ -303,6 +301,9 @@ class NXSFileSource(BaseSource):
                     self.__node.close()
                 self.__node = None
             if image is not None:
+                if hasattr(image, "size"):
+                    if image.size == 0:
+                        return None, None, None
                 filename = "%s/%s:%s" % (
                     self.__nxsfile, self.__nxsfield, self.__frame)
                 self.__frame += 1
@@ -391,6 +392,9 @@ class TangoFileSource(BaseSource):
             image = imageFileHandler.ImageFileHandler(
                 str(filename)).getImage()
             if image is not None:
+                if hasattr(image, "size"):
+                    if image.size == 0:
+                        return None, None, None
                 return (np.transpose(image), '%s' % (filename), "")
         except Exception as e:
             print(str(e))
@@ -567,13 +571,15 @@ class TangoAttrSource(BaseSource):
                                 self._configuration, str(attr.time)), "")
             else:
                 if attr.value is not None:
+                    if hasattr(attr.value, "size"):
+                        if attr.value.size == 0:
+                            return None, None, None
                     return (np.transpose(attr.value),
                             '%s  (%s)' % (
                                 self._configuration, str(attr.time)), "")
         except Exception as e:
             print(str(e))
             return str(e), "__ERROR__", ""
-            pass  # this needs a bit more care
         return None, None, None
 
     def connect(self):
@@ -623,6 +629,8 @@ class HTTPSource(BaseSource):
                             np.fromstring(data[:], dtype=np.uint8))
                         if img is None:
                             return None, None, None
+                        if hasattr(img, "size") and img.size == 0:
+                            return None, None, None
                         return (np.transpose(img),
                                 "%s (%s)" % (name, time.ctime()), "")
                     else:
@@ -637,12 +645,16 @@ class HTTPSource(BaseSource):
                                 self.__tiffloader = True
                             if img is None:
                                 return None, None, None
+                            if hasattr(img, "size") and img.size == 0:
+                                return None, None, None
                             return (np.transpose(img),
                                     "%s (%s)" % (name, time.ctime()), "")
                         else:
                             img = imageFileHandler.TIFLoader().load(
                                 np.fromstring(data[:], dtype=np.uint8))
                             if img is None:
+                                return None, None, None
+                            if hasattr(img, "size") and img.size == 0:
                                 return None, None, None
                             return (np.transpose(img),
                                     "%s (%s)" % (name, time.ctime()), "")
@@ -822,6 +834,8 @@ class ZMQSource(BaseSource):
                         jmetadata = json.dumps(metadata)
                     except Exception:
                         pass
+                if hasattr(array, "size") and array.size == 0:
+                    return ("", "", jmetadata)
                 return (np.transpose(array), name, jmetadata)
 
         except zmq.Again as e:
@@ -1011,6 +1025,8 @@ class HiDRASource(BaseSource):
                 print("[cbf source module]::metadata", metadata["filename"])
                 img = imageFileHandler.CBFLoader().load(
                     np.fromstring(data[:], dtype=np.uint8))
+                if hasattr(img, "size") and img.size == 0:
+                    return None, None, None
                 return np.transpose(img), metadata["filename"], ""
             else:
                 # elif data[:2] in ["II\x2A\x00", "MM\x00\x2A"]:
@@ -1022,11 +1038,15 @@ class HiDRASource(BaseSource):
                         img = imageFileHandler.TIFLoader().load(
                             np.fromstring(data[:], dtype=np.uint8))
                         self.__tiffloader = True
+                    if hasattr(img, "size") and img.size == 0:
+                        return None, None, None
                     if img is not None:
                         return np.transpose(img), metadata["filename"], ""
                 else:
                     img = imageFileHandler.TIFLoader().load(
                         np.fromstring(data[:], dtype=np.uint8))
+                    if hasattr(img, "size") and img.size == 0:
+                        return None, None, None
                     if img is not None:
                         return np.transpose(img), metadata["filename"], ""
             # else:
