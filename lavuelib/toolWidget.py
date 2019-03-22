@@ -959,7 +959,11 @@ class ROIToolWidget(ToolWidget):
     def _emitApplyROIPressed(self):
         """ emits applyROIPressed signal"""
 
-        text = str(self.__ui.labelROILineEdit.text())
+        text = str(self.__ui.labelROILineEdit.text()).strip()
+        if not text:
+            self.__ui.labelROILineEdit.setText("rois")
+            self._updateApplyButton()
+            text = str(self.__ui.labelROILineEdit.text()).strip()
         roispin = int(self.__ui.roiSpinBox.value())
         self.applyROIPressed.emit(text, roispin)
 
@@ -976,11 +980,11 @@ class ROIToolWidget(ToolWidget):
         stext = str(self.__ui.labelROILineEdit.text())
         self._mainwidget.roilabels = stext
         currentlength = len(stext)
-        if not stext.strip():
-            self.__ui.applyROIPushButton.setEnabled(False)
-            self.__updateCompleter()
-        else:
-            self.__ui.applyROIPushButton.setEnabled(True)
+        # if not stext.strip():
+        #     self.__ui.applyROIPushButton.setEnabled(False)
+        self.__updateCompleter()
+        # else:
+        #     self.__ui.applyROIPushButton.setEnabled(True)
         if stext.endswith(" ") or currentlength < self.__textlength:
             self.__updateCompleter()
         self.__textlength = currentlength

@@ -1058,7 +1058,10 @@ class LiveViewer(QtGui.QDialog):
         self.__prepareImage()
 
         # perform transformation
-        crdtranspose, crdleftrightflip, crdupdownflip = self.__transform()
+        # (crdtranspose, crdleftrightflip, crdupdownflip,
+        # orgtranspose, orgleftrightflip, orgupdownflip)
+        allcrds = self.__transform()
+        self.__imagewg.setTransformations(*allcrds)
 
         # use the internal raw image to create a display image with chosen
         # scaling
@@ -1069,8 +1072,6 @@ class LiveViewer(QtGui.QDialog):
         # calls internally the plot function of the plot widget
         if self.__imagename is not None and self.__scaledimage is not None:
             self.__ui.fileNameLineEdit.setText(self.__imagename)
-        self.__imagewg.setTransformations(
-            crdtranspose, crdleftrightflip, crdupdownflip)
         self.__imagewg.plot(
             self.__scaledimage,
             self.__displayimage
@@ -1392,30 +1393,40 @@ class LiveViewer(QtGui.QDialog):
     def __transform(self):
         """ does the image transformation on the given numpy array.
 
-        :returns: crdtranspose, crdleftrightflip, crdupdownflip flags
-        :rtype: (:obj:`bool`, :obj:`bool`, :obj:`bool`)
+        :returns: crdtranspose, crdleftrightflip, crdupdownflip,
+         orgtranspose, orgleftrightflip, orgupdownflip flags
+        :rtype: (:obj:`bool`, :obj:`bool`, :obj:`bool`,:obj:`bool`,
+                 :obj:`bool`, :obj:`bool`)
         """
         crdupdownflip = False
         crdleftrightflip = False
         crdtranspose = False
+        orgupdownflip = False
+        orgleftrightflip = False
+        orgtranspose = False
         if self.__trafoname == "none":
             pass
         elif self.__trafoname == "flip (up-down)":
+            orgupdownflip = True
             if self.__settings.keepcoords:
                 crdupdownflip = True
             elif self.__displayimage is not None:
                 self.__displayimage = np.fliplr(self.__displayimage)
         elif self.__trafoname == "flip (left-right)":
+            orgleftrightflip = True
             if self.__settings.keepcoords:
                 crdleftrightflip = True
             elif self.__displayimage is not None:
                 self.__displayimage = np.flipud(self.__displayimage)
         elif self.__trafoname == "transpose":
+            orgtranspose = True
             if self.__displayimage is not None:
                 self.__displayimage = np.transpose(self.__displayimage)
             if self.__settings.keepcoords:
                 crdtranspose = True
         elif self.__trafoname == "rot90 (clockwise)":
+            orgtranspose = True
+            orgupdownflip = True
             if self.__settings.keepcoords:
                 crdtranspose = True
                 crdupdownflip = True
@@ -1425,6 +1436,8 @@ class LiveViewer(QtGui.QDialog):
                 self.__displayimage = np.transpose(
                     np.flipud(self.__displayimage))
         elif self.__trafoname == "rot180":
+            orgupdownflip = True
+            orgleftrightflip = True
             if self.__settings.keepcoords:
                 crdupdownflip = True
                 crdleftrightflip = True
@@ -1432,6 +1445,8 @@ class LiveViewer(QtGui.QDialog):
                 self.__displayimage = np.flipud(
                     np.fliplr(self.__displayimage))
         elif self.__trafoname == "rot270 (clockwise)":
+            orgtranspose = True
+            orgleftrightflip = True
             if self.__settings.keepcoords:
                 crdtranspose = True
                 crdleftrightflip = True
@@ -1441,6 +1456,9 @@ class LiveViewer(QtGui.QDialog):
                 self.__displayimage = np.transpose(
                     np.fliplr(self.__displayimage))
         elif self.__trafoname == "rot180 + transpose":
+            orgtranspose = True
+            orgupdownflip = True
+            orgleftrightflip = True
             if self.__settings.keepcoords:
                 crdtranspose = True
                 crdupdownflip = True
@@ -1450,7 +1468,8 @@ class LiveViewer(QtGui.QDialog):
             elif self.__displayimage is not None:
                 self.__displayimage = np.transpose(
                     np.fliplr(np.flipud(self.__displayimage)))
-        return crdtranspose, crdleftrightflip, crdupdownflip
+        return (crdtranspose, crdleftrightflip, crdupdownflip,
+                orgtranspose, orgleftrightflip, orgupdownflip)
 
     def __scale(self, scalingtype):
         """ sets scaletype on the image

@@ -442,17 +442,22 @@ class ROIExtension(DisplayExtension):
             roi = self._getROI(rid)
             if roi is not None:
                 state = roi.state
+                rcrds = [
+                    state['pos'].x(),
+                    state['pos'].y(),
+                    state['pos'].x() + state['size'].x(),
+                    state['pos'].y() + state['size'].y()]
                 if not self._mainwidget.transformations()[0]:
-                    ptx = int(math.floor(state['pos'].x()))
-                    pty = int(math.floor(state['pos'].y()))
-                    szx = int(math.floor(state['size'].x()))
-                    szy = int(math.floor(state['size'].y()))
+                    ptx1 = int(math.floor(rcrds[0]))
+                    pty1 = int(math.floor(rcrds[1]))
+                    ptx2 = int(math.floor(rcrds[2]))
+                    pty2 = int(math.floor(rcrds[3]))
                 else:
-                    pty = int(math.floor(state['pos'].x()))
-                    ptx = int(math.floor(state['pos'].y()))
-                    szy = int(math.floor(state['size'].x()))
-                    szx = int(math.floor(state['size'].y()))
-                crd = [ptx, pty, ptx + szx, pty + szy]
+                    pty1 = int(math.floor(rcrds[0]))
+                    ptx1 = int(math.floor(rcrds[1]))
+                    pty2 = int(math.floor(rcrds[2]))
+                    ptx2 = int(math.floor(rcrds[3]))
+                crd = [ptx1, pty1, ptx2, pty2]
                 if self.__coords[rid] != crd:
                     self.__coords[rid] = crd
                     self.roiCoordsChanged.emit()

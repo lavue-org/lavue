@@ -140,6 +140,10 @@ class ImageWidget(QtGui.QWidget):
         #: (:class:`numpy.ndarray`) raw data to cut plots
         self.__rawdata = None
 
+        #: ( ( :obj:`bool`, :obj:`bool`,:obj:`bool`) )
+        #        selected (transpose, leftright-flip, updown-flip )
+        self.__selectedtrans = (False, False, False)
+
         #: (:class:`Ui_ImageWidget') ui_imagewidget object from qtdesigner
         self.__ui = _formclass()
         self.__ui.setupUi(self)
@@ -583,7 +587,8 @@ class ImageWidget(QtGui.QWidget):
             self.__ui.cornerWidget.hide()
             self.__ui.oneDRightWidget.hide()
 
-    def setTransformations(self, transpose, leftrightflip, updownflip):
+    def setTransformations(self, transpose, leftrightflip, updownflip,
+                           orgtranspose, orgleftrightflip, orgupdownflip):
         """ sets coordinate transformations
 
         :param transpose: transpose coordinates flag
@@ -592,6 +597,12 @@ class ImageWidget(QtGui.QWidget):
         :type leftrightflip: :obj:`bool`
         :param updownflip: up-down flip coordinates flag
         :type updownflip: :obj:`bool`
+        :param orgtranspose: selected transpose coordinates flag
+        :type orgtranspose: :obj:`bool`
+        :param orgleftrightflip: selected left-right flip coordinates flag
+        :type orgleftrightflip: :obj:`bool`
+        :param orgupdownflip: selected up-down flip coordinates flag
+        :type orgupdownflip: :obj:`bool`
         """
         oldtrans, oldleftright, oldupdown = \
             self.__displaywidget.transformations()
@@ -618,6 +629,7 @@ class ImageWidget(QtGui.QWidget):
                 self.__rightplot.getViewBox(),
                 tuple(self.__rightplot.getViewBox().state['viewRange'][1]))
 
+        self.__selectedtrans = (orgtranspose, orgleftrightflip, orgupdownflip)
         self.__displaywidget.setTransformations(
             transpose, leftrightflip, updownflip)
 
@@ -1083,7 +1095,65 @@ class ImageWidget(QtGui.QWidget):
             if self.__settings.analysisdevice:
                 flatrois = []
                 for crds in roicoords:
-                    flatrois.extend([crds[0], crds[2], crds[1], crds[3]])
+                    if hasattr(self.__rawdata, "shape"):
+                        sh = self.__rawdata.shape
+                    else:
+                        sh = (0, 0)
+                    if self.__settings.keepcoords:
+                        trans, leftright, updown = \
+                            self.__displaywidget.transformations()
+
+                        flatrois.extend(
+                            [crds[1], crds[3] + 1, crds[0], crds[2] + 1])
+                    else:
+                        trans, leftright, updown = self.__selectedtrans
+                        if not trans and not leftright and not updown:
+                            flatrois.extend(
+                                [crds[1], crds[3] + 1,
+                                 crds[0], crds[2] + 1])
+                        elif trans and not leftright and not updown:
+                            flatrois.extend(
+                                [crds[0], crds[2] + 1,
+                                 crds[1], crds[3] + 1])
+                        ###
+                        elif not trans and leftright and not updown:
+                            flatrois.extend(
+                                [crds[1], crds[3] + 1,
+                                 sh[0] - crds[2] - 1, sh[0] - crds[0]])
+                        elif trans and leftright and not updown:
+                            flatrois.extend(
+                                [sh[0] - crds[2] - 1, sh[0] - crds[0],
+                                 crds[1], crds[3] + 1])
+                        ###
+                        elif not trans and not leftright and updown:
+                            flatrois.extend(
+                                [sh[1] - crds[3] - 1, sh[1] - crds[1],
+                                 crds[0], crds[2] + 1])
+                        elif trans and not leftright and updown:
+                            flatrois.extend(
+                                [crds[0], crds[2] + 1,
+                                 sh[1] - crds[3] - 1, sh[1] - crds[1]])
+                        ###
+                        elif not trans and leftright and updown:
+                            flatrois.extend(
+                                [sh[1] - crds[3] - 1, sh[1] - crds[1],
+                                 sh[0] - crds[2] - 1, sh[0] - crds[0]])
+                        elif trans and leftright and updown:
+                            flatrois.extend(
+                                [sh[0] - crds[2] - 1, sh[0] - crds[0],
+                                 sh[1] - crds[3] - 1, sh[1] - crds[1]])
+                        else:
+                            raise Exception("Dead end")
+                    flatrois = [max(cr, 0) for cr in flatrois]
+                    if trans:
+                        sha, shb = sh
+                    else:
+                        shb, sha = sh
+                    for i in range(len(flatrois) // 4):
+                        flatrois[4 * i] = min(flatrois[4 * i], sha)
+                        flatrois[4 * i + 1] = min(flatrois[4 * i + 1], sha)
+                        flatrois[4 * i + 2] = min(flatrois[4 * i + 2], shb)
+                        flatrois[4 * i + 3] = min(flatrois[4 * i + 3], shb)
                 try:
                     adp = self.__sardana.openProxy(
                         str(self.__settings.analysisdevice))
