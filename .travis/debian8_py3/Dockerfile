@@ -2,11 +2,16 @@ FROM debian:jessie
 
 MAINTAINER DESY, Jan Kotanski <jankotan@gmail.com>
 
+RUN sed -i '/jessie-updates/d' /etc/apt/sources.list
 RUN apt-get -qq update && apt-get -qq install -y software-properties-common curl
 RUN curl http://repos.pni-hdri.de/debian_repo.pub.gpg | apt-key add -
 RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian jessie main" -y
+RUN add-apt-repository "deb  http://archive.debian.org/debian jessie-backports main non-free" -y
+RUN echo "Acquire::Check-Valid-Until false;" > /etc/apt/apt.conf
+RUN sed -i '/jessie-updates/d' /etc/apt/sources.list
+
 RUN apt-get -qq update && apt-get -qq -y dist-upgrade
-RUN apt-get -qq update && apt-get -qq install -y mysql-client mysql-client-5.5 python3-pni python3-pninexus python3-h5py python3-sphinx apt-utils debconf-utils omniidl libomniorb4-dev libcos4-dev libomnithread3-dev libzmq3-dev
+RUN apt-get -qq update && apt-get -qq install -y mysql-client mysql-client-5.5 python3-pni python3-pninexus python3-h5py python3-sphinx apt-utils debconf-utils omniidl libomniorb4-dev libcos4-dev libomnithread3-dev libzmq3-dev python3-tz
 RUN useradd -ms /bin/bash tango
 RUN  /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections <<< "mysql-server-5.5 mysql-server/root_password password rootpw"'
 RUN  /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections <<< "mysql-server-5.5 mysql-server/root_password_again password rootpw"'
