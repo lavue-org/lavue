@@ -302,5 +302,9 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
                         imageChanged(
                             self, autoLevel=False, autoRange=autoRange)
         if hx is None or hy is None or not hx.any() or not hy.any():
-            _pg.graphicsItems.HistogramLUTItem.HistogramLUTItem.imageChanged(
-                self, autoLevel=autoLevel, autoRange=autoRange)
+            try:
+                _pg.graphicsItems.HistogramLUTItem.HistogramLUTItem.\
+                    imageChanged(
+                        self, autoLevel=autoLevel, autoRange=autoRange)
+            except Exception:
+                pass
