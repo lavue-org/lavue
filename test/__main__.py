@@ -150,7 +150,15 @@ def main():
     # test runner
     runner = unittest.TextTestRunner()
     # test result
-    result = runner.run(suite).wasSuccessful()
+
+    tresult = runner.run(suite)
+    print("Errors: %s" % tresult.errors)
+    print("Failures: %s" % tresult.failures)
+    print("Skipped: %s" % tresult.skipped)
+    print("UnexpectedSuccesses: %s" % tresult.unexpectedSuccesses)
+    print("ExpectedFailures: %s" % tresult.expectedFailures)
+    result = tresult.wasSuccessful()
+    print("Result: %s" % result)
     sys.exit(not result)
 
     #   if ts:
