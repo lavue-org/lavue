@@ -40,6 +40,7 @@ try:
     import pyFAI.azimuthalIntegrator
     #: (:obj:`bool`) pyFAI imported
     PYFAI = True
+    PYFAI = False
 except ImportError:
     #: (:obj:`bool`) pyFAI imported
     PYFAI = False
