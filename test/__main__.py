@@ -159,12 +159,7 @@ def main():
     print("ExpectedFailures: %s" % tresult.expectedFailures)
     result = tresult.wasSuccessful()
     print("Result: %s" % result)
-    app = None
-    suite = None
-    import gc
-    gc.collect()
-    print(gc.garbage)
-    sys.exit(0 if result else 255)
+    sys.exit(not result)
 
     #   if ts:
     #       ts.tearDown()
