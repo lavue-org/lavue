@@ -164,7 +164,7 @@ def main():
     import gc
     gc.collect()
     print(gc.garbage)
-    sys.exit(not result)
+    exit(not result)
 
     #   if ts:
     #       ts.tearDown()
