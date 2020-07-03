@@ -37,7 +37,7 @@ if sys.version_info > (3,):
 
 try:
     # import pyFAI
-    # import pyFAI.azimuthalIntegrator
+    import pyFAI.azimuthalIntegrator
     #: (:obj:`bool`) pyFAI imported
     PYFAI = True
     PYFAI = False
