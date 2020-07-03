@@ -160,7 +160,7 @@ def main():
     result = tresult.wasSuccessful()
     print("Result: %s" % result)
     app = None
-    suit = None
+    suite = None
     import gc
     gc.collect()
     print(gc.garbage)
