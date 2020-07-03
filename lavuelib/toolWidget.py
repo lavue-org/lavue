@@ -61,7 +61,7 @@ except ImportError:
     PYTANGO = False
 
 try:
-    import pyFAI
+    # import pyFAI
     #: (:obj:`bool`) pyFAI imported
     PYFAI = True
     PYFAI = False

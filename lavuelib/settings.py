@@ -36,8 +36,8 @@ if sys.version_info > (3,):
     unicode = str
 
 try:
-    import pyFAI
-    import pyFAI.azimuthalIntegrator
+    # import pyFAI
+    # import pyFAI.azimuthalIntegrator
     #: (:obj:`bool`) pyFAI imported
     PYFAI = True
     PYFAI = False
