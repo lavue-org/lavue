@@ -163,7 +163,7 @@ def main():
     suit = None
     import gc
     gc.collect()
-    print(gc.get_objects())
+    print(gc.garbage)
     sys.exit(not result)
 
     #   if ts:
