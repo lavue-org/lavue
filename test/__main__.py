@@ -23,7 +23,7 @@
 #
 
 # import os
-import sys
+# import sys
 
 
 from lavuelib.qtuic import qt_api
@@ -161,7 +161,7 @@ def main():
     print("Result: %s" % result)
     # sys.exit(not result)
     with open('testresult.txt', 'w') as fl:
-            fl.write(str(int(not result)) + '\n')
+        fl.write(str(int(not result)) + '\n')
     #   if ts:
     #       ts.tearDown()
 
