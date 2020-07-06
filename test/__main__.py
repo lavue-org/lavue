@@ -159,8 +159,9 @@ def main():
     print("ExpectedFailures: %s" % tresult.expectedFailures)
     result = tresult.wasSuccessful()
     print("Result: %s" % result)
-    sys.exit(not result)
-
+    # sys.exit(not result)
+    with open('testresult.txt', 'w') as fl:
+            fl.write(str(int(not result)) + '\n')
     #   if ts:
     #       ts.tearDown()
 
