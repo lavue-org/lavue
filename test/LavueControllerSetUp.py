@@ -100,7 +100,7 @@ class ControllerSetUp(object):
                 db = PyTango.Database()
             except Exception as e:
                 print(str(e))
-            
+
         db.add_device(self.new_device_info_controller)
         db.add_server(
             self.new_device_info_controller.server,
