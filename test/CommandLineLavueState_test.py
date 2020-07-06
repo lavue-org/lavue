@@ -158,6 +158,9 @@ class CommandLineLavueStateTest(unittest.TestCase):
     def getLavueState(self):
         self.__lavuestate = self.__lcsu.proxy.LavueState
 
+    def getControllerAttr(self, name):
+        return getattr(self.__lcsu.proxy, name)
+
     def test_run(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
@@ -438,8 +441,11 @@ class CommandLineLavueStateTest(unittest.TestCase):
 
         self.__lcsu.proxy.Init()
         self.__lavuestate = None
+        self.__controllerattrs = []
 
-        cfg = '[Tools]\n' \
+        cfg = '[Configuration]\n' \
+            'StoreGeometry=true\n' \
+            '[Tools]\n' \
             'CenterX=1141.4229212387716\n' \
             'CenterY=1285.4342087919763\n' \
             'CorrectSolidAngle=true\n' \
@@ -464,10 +470,10 @@ class CommandLineLavueStateTest(unittest.TestCase):
             mode='expert',
             source='test',
             start=True,
-            instance='test',
             tool='intensity',
             transformation='flip-up-down',
             log='error',
+            instance='unittests',
             scaling='linear',
             autofactor='1.3',
             gradient='flame',
@@ -491,23 +497,28 @@ class CommandLineLavueStateTest(unittest.TestCase):
                 QtTest.QTest.mouseClick, [QtCore.Qt.LeftButton]),
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
-            CmdCheck(
-                "_MainWindow__lavue._LiveViewer__mbufferwg.bufferSize"),
+            ExtCmdCheck(self, "getControllerAttr", ["BeamCenterX"]),
+            ExtCmdCheck(self, "getControllerAttr", ["BeamCenterY"]),
         ])
 
         status = qtck.executeChecksAndClose()
 
         self.assertEqual(status, 0)
-        qtck.compareResults(self, [True, None, None, False, 0])
+        qtck.compareResults(self,
+                            [True, None, None, False,
+                             # LavueController overwrites the values
+                             0.0,
+                             0.0])
 
         ls = json.loads(self.__lavuestate)
         dls = dict(self.__defaultls)
+        print(self.__controllerattrs)
         dls.update(dict(
             mode='expert',
             source='test',
+            instance='unittests',
             configuration='',
             connected=True,
-            instance='test',
             tool='intensity',
             transformation='flip-up-down',
             log='error',

@@ -784,6 +784,14 @@ class Settings(object):
                         splineFile=splineFile,
                         detector=detector,
                         wavelength=wvln)
+                    if not self.detponi1 and not self.detponi2 \
+                       and self.centerx and self.centery:
+                        aif = self.ai.getFit2D()
+                        self.ai.setFit2D(aif["directDist"],
+                                         self.centerx,
+                                         self.centery,
+                                         aif["tilt"],
+                                         aif["tiltPlanRotation"])
 
     def store(self, settings):
         """ Stores settings in QSettings object

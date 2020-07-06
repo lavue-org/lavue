@@ -38,7 +38,7 @@ from pyqtgraph import QtCore
 from pyqtgraph.Qt import QtTest
 
 from qtchecker.qtChecker import (
-    QtChecker, CmdCheck, WrapAttrCheck)
+    QtChecker, CmdCheck, WrapAttrCheck, AttrCheck)
 
 
 try:
@@ -220,6 +220,110 @@ class CommandLineArgumentTest(unittest.TestCase):
             self.assertEqual(iname, '__random_%s__' % (i + 1))
             self.assertEqual(image.shape, (512, 256))
             self.assertEqual(str(image.dtype), "int64")
+
+    def test_geometry(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        cfg = '[Configuration]\n' \
+            'StoreGeometry=true\n' \
+            '[Tools]\n' \
+            'CenterX=1141.5\n' \
+            'CenterY=1285.0\n' \
+            'CorrectSolidAngle=true\n' \
+            'DetectorDistance=162.75\n' \
+            'DetectorName=Eiger4M\n' \
+            'DetectorPONI1=0.125\n' \
+            'DetectorPONI2=0.25\n' \
+            'DetectorRot1=0.5\n' \
+            'DetectorRot2=0.125\n' \
+            'DetectorRot3=-0.25\n' \
+            'DetectorSplineFile=\n' \
+            'DiffractogramNPT=1000\n' \
+            'Energy=13450.\n' \
+            'PixelSizeX=75\n' \
+            'PixelSizeY=65\n'
+
+        if not os.path.exists(self.__cfgfdir):
+            os.makedirs(self.__cfgfdir)
+        with open(self.__cfgfname, "w+") as cf:
+            cf.write(cfg)
+        options = argparse.Namespace(
+            mode='expert',
+            source='test',
+            start=True,
+            tool='intensity',
+            transformation='flip-up-down',
+            log='error',
+            instance='unittests',
+            scaling='linear',
+            autofactor='1.3',
+            gradient='flame',
+        )
+        logging.basicConfig(
+             format="%(levelname)s: %(message)s")
+        logger = logging.getLogger("lavue")
+        lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+        dialog = lavuelib.liveViewer.MainWindow(options=options)
+        dialog.show()
+
+        qtck = QtChecker(app, dialog, True, sleep=1000)
+        qtck.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            WrapAttrCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg"
+                "._SourceTabWidget__sourcetabs[],0._ui.pushButton",
+                QtTest.QTest.mouseClick, [QtCore.Qt.LeftButton]),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.centerx"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.centery"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.detdistance"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.detname"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.detrot1"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.detrot2"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.detrot3"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.energy"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.pixelsizex"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.pixelsizey"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.detponi1"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.detponi2"),
+        ])
+
+        status = qtck.executeChecksAndClose()
+
+        self.assertEqual(status, 0)
+        qtck.compareResults(
+            self,
+            [
+                True, None, False,
+                1141.5,
+                1285.0,
+                162.75,
+                "Eiger4M",
+                0.5,
+                0.125,
+                -0.25,
+                13450.,
+                75,
+                65,
+                0.125,
+                0.25
+            ]
+        )
 
 
 if __name__ == '__main__':
