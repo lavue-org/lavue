@@ -91,7 +91,16 @@ class ControllerSetUp(object):
 
     def setUp(self):
         print("\nsetting up ...")
-        db = PyTango.Database()
+        counts = 10
+        ci = 0
+        db = None
+        while not db and ci < counts:
+            ci += 1
+            try:
+                db = PyTango.Database()
+            except Exception as e:
+                print(str(e))
+            
         db.add_device(self.new_device_info_controller)
         db.add_server(
             self.new_device_info_controller.server,
@@ -127,7 +136,15 @@ class ControllerSetUp(object):
 
     def tearDown(self):
         print("tearing down ...")
-        db = PyTango.Database()
+        counts = 10
+        ci = 0
+        db = None
+        while not db and ci < counts:
+            ci += 1
+            try:
+                db = PyTango.Database()
+            except Exception as e:
+                print(str(e))
         db.delete_server(self.new_device_info_controller.server)
 
         if PY3:

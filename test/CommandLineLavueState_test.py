@@ -91,6 +91,9 @@ class CommandLineLavueStateTest(unittest.TestCase):
             self.__seed = long(time.time() * 256)
 #        self.__seed = 332115341842367128541506422124286219441
         self.__rnd = random.Random(self.__seed)
+        home = os.path.expanduser("~")
+        self.__cfgfdir = "%s/%s" % (home, ".config/DESY")
+        self.__cfgfname = "%s/%s" % (self.__cfgfdir, "LaVue: unittests.conf")
         self.__dialog = None
 
         self.__defaultls = {
@@ -422,6 +425,93 @@ class CommandLineLavueStateTest(unittest.TestCase):
             scaling='linear',
             mbuffer=10,
             channel='0,1,2',
+            autofactor='1.3',
+            gradient='flame',
+            tangodevice='test/lavuecontroller/00'
+        ))
+        self.compareStates(ls, dls,
+                           ['viewrange', '__timestamp__', 'doordevice'])
+
+    def test_geometry(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        self.__lcsu.proxy.Init()
+        self.__lavuestate = None
+
+        cfg = '[Tools]\n' \
+            'CenterX=1141.4229212387716\n' \
+            'CenterY=1285.4342087919763\n' \
+            'CorrectSolidAngle=true\n' \
+            'DetectorDistance=162.68360421509144\n' \
+            'DetectorName=Eiger4M\n' \
+            'DetectorPONI1=0.09638188689262517\n' \
+            'DetectorPONI2=0.08616367970669807\n' \
+            'DetectorRot1=0.0034235683458327527\n' \
+            'DetectorRot2=0.0001578439093215932\n' \
+            'DetectorRot3=-2.4724757830623586e-07\n' \
+            'DetectorSplineFile=\n' \
+            'DiffractogramNPT=1000\n' \
+            'Energy=13449.999523070861\n' \
+            'PixelSizeX=75\n' \
+            'PixelSizeY=75\n'
+
+        if not os.path.exists(self.__cfgfdir):
+            os.makedirs(self.__cfgfdir)
+        with open(self.__cfgfname, "w+") as cf:
+            cf.write(cfg)
+        options = argparse.Namespace(
+            mode='expert',
+            source='test',
+            start=True,
+            instance='test',
+            tool='intensity',
+            transformation='flip-up-down',
+            log='error',
+            scaling='linear',
+            autofactor='1.3',
+            gradient='flame',
+            tangodevice='test/lavuecontroller/00'
+        )
+        logging.basicConfig(
+             format="%(levelname)s: %(message)s")
+        logger = logging.getLogger("lavue")
+        lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+        dialog = lavuelib.liveViewer.MainWindow(options=options)
+        dialog.show()
+
+        qtck = QtChecker(app, dialog, True, sleep=1000)
+        qtck.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            ExtCmdCheck(self, "getLavueState"),
+            WrapAttrCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg"
+                "._SourceTabWidget__sourcetabs[],0._ui.pushButton",
+                QtTest.QTest.mouseClick, [QtCore.Qt.LeftButton]),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__mbufferwg.bufferSize"),
+        ])
+
+        status = qtck.executeChecksAndClose()
+
+        self.assertEqual(status, 0)
+        qtck.compareResults(self, [True, None, None, False, 0])
+
+        ls = json.loads(self.__lavuestate)
+        dls = dict(self.__defaultls)
+        dls.update(dict(
+            mode='expert',
+            source='test',
+            configuration='',
+            connected=True,
+            instance='test',
+            tool='intensity',
+            transformation='flip-up-down',
+            log='error',
+            scaling='linear',
             autofactor='1.3',
             gradient='flame',
             tangodevice='test/lavuecontroller/00'
