@@ -441,7 +441,6 @@ class CommandLineLavueStateTest(unittest.TestCase):
 
         self.__lcsu.proxy.Init()
         self.__lavuestate = None
-        self.__controllerattrs = []
         self.__lcsu.proxy.BeamCenterX = 1232.25
         self.__lcsu.proxy.BeamCenterY = 1222.5
         self.__lcsu.proxy.DetectorDistance = 154.0
@@ -538,7 +537,6 @@ class CommandLineLavueStateTest(unittest.TestCase):
 
         ls = json.loads(self.__lavuestate)
         dls = dict(self.__defaultls)
-        print(self.__controllerattrs)
         dls.update(dict(
             mode='expert',
             source='test',
