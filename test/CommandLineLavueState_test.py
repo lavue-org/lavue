@@ -40,7 +40,7 @@ from pyqtgraph.Qt import QtTest
 
 
 from qtchecker.qtChecker import (
-    QtChecker, CmdCheck, ExtCmdCheck, WrapAttrCheck)
+    QtChecker, CmdCheck, ExtCmdCheck, WrapAttrCheck, AttrCheck)
 
 #  Qt-application
 app = None
@@ -442,6 +442,12 @@ class CommandLineLavueStateTest(unittest.TestCase):
         self.__lcsu.proxy.Init()
         self.__lavuestate = None
         self.__controllerattrs = []
+        self.__lcsu.proxy.BeamCenterX = 1232.25
+        self.__lcsu.proxy.BeamCenterY = 1222.5
+        self.__lcsu.proxy.DetectorDistance = 154.0
+        self.__lcsu.proxy.Energy = 13449.0
+        self.__lcsu.proxy.PixelSizeX = 76.0
+        self.__lcsu.proxy.PixelSizeY = 74.0
 
         cfg = '[Configuration]\n' \
             'StoreGeometry=true\n' \
@@ -470,7 +476,7 @@ class CommandLineLavueStateTest(unittest.TestCase):
             mode='expert',
             source='test',
             start=True,
-            tool='intensity',
+            tool='diffractogram',
             transformation='flip-up-down',
             log='error',
             instance='unittests',
@@ -497,8 +503,24 @@ class CommandLineLavueStateTest(unittest.TestCase):
                 QtTest.QTest.mouseClick, [QtCore.Qt.LeftButton]),
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.centerx"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.centery"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.detdistance"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.energy"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.pixelsizex"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__settings.pixelsizey"),
             ExtCmdCheck(self, "getControllerAttr", ["BeamCenterX"]),
             ExtCmdCheck(self, "getControllerAttr", ["BeamCenterY"]),
+            ExtCmdCheck(self, "getControllerAttr", ["DetectorDistance"]),
+            ExtCmdCheck(self, "getControllerAttr", ["Energy"]),
+            ExtCmdCheck(self, "getControllerAttr", ["PixelSizeX"]),
+            ExtCmdCheck(self, "getControllerAttr", ["PixelSizeY"]),
         ])
 
         status = qtck.executeChecksAndClose()
@@ -507,8 +529,9 @@ class CommandLineLavueStateTest(unittest.TestCase):
         qtck.compareResults(self,
                             [True, None, None, False,
                              # LavueController overwrites the values
-                             0.0,
-                             0.0])
+                             1232.25, 1222.5, 154., 13449., 76., 74.,
+                             1232.25, 1222.5, 154., 13449., 76., 74.
+                            ])
 
         ls = json.loads(self.__lavuestate)
         dls = dict(self.__defaultls)
@@ -519,7 +542,7 @@ class CommandLineLavueStateTest(unittest.TestCase):
             instance='unittests',
             configuration='',
             connected=True,
-            tool='intensity',
+            tool='diffractogram',
             transformation='flip-up-down',
             log='error',
             scaling='linear',
