@@ -526,12 +526,15 @@ class CommandLineLavueStateTest(unittest.TestCase):
         status = qtck.executeChecksAndClose()
 
         self.assertEqual(status, 0)
-        qtck.compareResults(self,
-                            [True, None, None, False,
-                             # LavueController overwrites the values
-                             1232.25, 1222.5, 154., 13449., 76., 74.,
-                             1232.25, 1222.5, 154., 13449., 76., 74.
-                            ])
+        qtck.compareResults(
+            self,
+            [
+                True, None, None, False,
+                # LavueController overwrites the values
+                1232.25, 1222.5, 154., 13449., 76., 74.,
+                1232.25, 1222.5, 154., 13449., 76., 74.
+            ]
+        )
 
         ls = json.loads(self.__lavuestate)
         dls = dict(self.__defaultls)
