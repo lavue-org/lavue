@@ -254,6 +254,9 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         self.assertTrue(np.allclose(res[3], scaledimage))
 
         lastimage = res[4].T
+        if not np.allclose(res[7], lastimage):
+            print(res[7])
+            print(lastimage)
         self.assertTrue(np.allclose(res[7], lastimage))
         scaledimage = np.clip(lastimage, 10e-3, np.inf)
         scaledimage = np.log10(scaledimage)
