@@ -171,6 +171,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         self.__tisu.proxy.StartAcq()
         li = self.__tisu.proxy.LastImage
         app.sendPostedEvents()
+        # yieldCurrentThread()
         return li
 
     def getControllerAttr(self, name):
@@ -234,7 +235,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
         ])
 
-        status = qtck.executeChecksAndClose()
+        status = qtck.executeChecksAndClose(delay=3000)
 
         self.assertEqual(status, 0)
 
