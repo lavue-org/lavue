@@ -181,8 +181,7 @@ class CommandLineArgumentTest(unittest.TestCase):
             tool=None,
             source='test',
             filters=True,
-            log='debug')
-            # log='info')
+            log='info')
         logging.basicConfig(
              format="%(levelname)s: %(message)s")
         logger = logging.getLogger("lavue")
