@@ -170,8 +170,8 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         self.__tisu.proxy.StartAcq()
         return self.__tisu.proxy.LastImage
 
-    def wait1s(self):
-        time.sleep(1)
+    def wait2s(self):
+        time.sleep(2)
 
     def getControllerAttr(self, name):
         return getattr(self.__lcsu.proxy, name)
