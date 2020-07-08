@@ -215,7 +215,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
             ExtCmdCheck(self, "takeNewImage"),
-            ExtCmdCheck(self, "wait1s"),
+            ExtCmdCheck(self, "wait2s"),
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
             CmdCheck(
@@ -223,7 +223,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
             ExtCmdCheck(self, "takeNewImage"),
-            ExtCmdCheck(self, "wait1s"),
+            ExtCmdCheck(self, "wait2s"),
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
             CmdCheck(
