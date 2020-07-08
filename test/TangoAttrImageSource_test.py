@@ -167,8 +167,11 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         self.__lavuestate = self.__lcsu.proxy.LavueState
 
     def takeNewImage(self):
+        global app
         self.__tisu.proxy.StartAcq()
-        return self.__tisu.proxy.LastImage
+        li = self.__tisu.proxy.LastImage
+        app.sendPostedEvents()
+        return li
 
     def getControllerAttr(self, name):
         return getattr(self.__lcsu.proxy, name)
