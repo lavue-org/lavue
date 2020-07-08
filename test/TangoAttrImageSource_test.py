@@ -170,9 +170,6 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         self.__tisu.proxy.StartAcq()
         return self.__tisu.proxy.LastImage
 
-    def wait2s(self):
-        time.sleep(2)
-
     def getControllerAttr(self, name):
         return getattr(self.__lcsu.proxy, name)
 
@@ -205,7 +202,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         dialog = lavuelib.liveViewer.MainWindow(options=options)
         dialog.show()
 
-        qtck = QtChecker(app, dialog, True)
+        qtck = QtChecker(app, dialog, True, sleep=500)
         qtck.setChecks([
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
@@ -215,7 +212,6 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
             ExtCmdCheck(self, "takeNewImage"),
-            ExtCmdCheck(self, "wait2s"),
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
             CmdCheck(
@@ -223,7 +219,6 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
             ExtCmdCheck(self, "takeNewImage"),
-            ExtCmdCheck(self, "wait2s"),
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
             CmdCheck(
@@ -242,9 +237,9 @@ class TangoAttrImageSourceTest(unittest.TestCase):
 
         qtck.compareResults(
             self,
-            [True, None, None, None, None, None, True, None, None,
-             None, None, None, None, None, False],
-            mask=[0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0])
+            [True, None, None, None, None, True, None, None,
+             None, None, None, None, False],
+            mask=[0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0])
 
         res = qtck.results()
         self.assertTrue(np.allclose(res[2], lastimage))
@@ -254,19 +249,19 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         self.assertTrue(np.allclose(res[3], scaledimage))
 
         lastimage = res[4].T
-        if not np.allclose(res[7], lastimage):
-            print(res[7])
+        if not np.allclose(res[6], lastimage):
+            print(res[6])
             print(lastimage)
-        self.assertTrue(np.allclose(res[7], lastimage))
+        self.assertTrue(np.allclose(res[6], lastimage))
         scaledimage = np.clip(lastimage, 10e-3, np.inf)
         scaledimage = np.log10(scaledimage)
-        self.assertTrue(np.allclose(res[8], scaledimage))
+        self.assertTrue(np.allclose(res[7], scaledimage))
 
-        lastimage = res[9].T
-        self.assertTrue(np.allclose(res[11], lastimage))
+        lastimage = res[8].T
+        self.assertTrue(np.allclose(res[9], lastimage))
         scaledimage = np.clip(lastimage, 10e-3, np.inf)
         scaledimage = np.log10(scaledimage)
-        self.assertTrue(np.allclose(res[12], scaledimage))
+        self.assertTrue(np.allclose(res[10], scaledimage))
 
         ls = json.loads(self.__lavuestate)
         dls = dict(self.__defaultls)

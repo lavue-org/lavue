@@ -100,6 +100,7 @@ class TestImageServerSetUp(object):
                     cnt += 1
                     continue
                 self.proxy = PyTango.DeviceProxy(dvname)
+                self.proxy.set_source(PyTango.DevSource.DEV)
                 time.sleep(0.01)
                 if self.proxy.state() == PyTango.DevState.ON:
                     found = True

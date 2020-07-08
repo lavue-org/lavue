@@ -23,7 +23,7 @@
 #
 
 # import os
-# import sys
+import sys
 
 
 from lavuelib.qtuic import qt_api
@@ -165,7 +165,7 @@ def main():
     print("Result: %s" % result)
     with open('testresult.txt', 'w') as fl:
         fl.write(str(int(not result)) + '\n')
-    # sys.exit(not result)
+    sys.exit(not result)
 
 
 if __name__ == "__main__":
