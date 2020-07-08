@@ -85,6 +85,7 @@ DB_AVAILABLE = []
 if PYTANGO_AVAILABLE:
     import LavueController_test
     import CommandLineLavueState_test
+    import TangoAttrImageSource_test
 
 
 if PNI_AVAILABLE:
@@ -146,6 +147,9 @@ def main():
         suite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 CommandLineLavueState_test))
+        suite.addTests(
+            unittest.defaultTestLoader.loadTestsFromModule(
+                TangoAttrImageSource_test))
 
     # test runner
     runner = unittest.TextTestRunner()
