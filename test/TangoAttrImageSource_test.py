@@ -202,7 +202,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         dialog = lavuelib.liveViewer.MainWindow(options=options)
         dialog.show()
 
-        qtck = QtChecker(app, dialog, True, sleep=500)
+        qtck = QtChecker(app, dialog, True, sleep=2000)
         qtck.setChecks([
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
