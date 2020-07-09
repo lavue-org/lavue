@@ -1789,7 +1789,7 @@ class ZMQSourceWidget(SourceBaseWidget):
     #: (:obj:`str`) source name
     name = "ZMQ Stream"
     #: (:obj:`str`) source alias
-    alias = "zmqsource"
+    alias = "zmq"
     #: (:obj:`str`) datasource class name
     datasource = "ZMQSource"
 
