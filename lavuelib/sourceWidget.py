@@ -2016,7 +2016,7 @@ class ZMQSourceWidget(SourceBaseWidget):
         :param configuration: configuration string
         :type configuration: :obj:`str`
         """
-        cnflst = configuration.split(",")
+        cnflst = configuration.replace("/", ",").split(",")
         srvcnf = cnflst[0] if cnflst else ""
         topiccnf = cnflst[1] if len(cnflst) > 1 else ""
 
