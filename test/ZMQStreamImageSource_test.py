@@ -73,6 +73,22 @@ sys.path.insert(0, os.path.abspath(path))
 PY3 = (sys.version_info > (3,))
 
 
+def tostr(x):
+    """ decode bytes to str
+
+    :param x: string
+    :type x: :obj:`bytes`
+    :returns:  decode string in byte array
+    :rtype: :obj:`str`
+    """
+    if isinstance(x, str):
+        return x
+    if sys.version_info > (3,):
+        return str(x, "utf8")
+    else:
+        return str(x)
+
+
 # test fixture
 class ZMQStreamImageSourceTest(unittest.TestCase):
 
@@ -334,8 +350,8 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         self.assertEqual(res1[3], lastimage)
 
         mesg = res1[4]
-        shape = json.loads(mesg[2])
-        # dtype = json.loads(mesg[3])
+        shape = json.loads(tostr(mesg[2]))
+        # dtype = json.loads(tostr(mesg[3]))
         lastimage = mesg[1].T.reshape(shape)
         print(mesg)
         if not np.allclose(res2[1], lastimage):
@@ -347,8 +363,8 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         self.assertTrue(np.allclose(res2[2], scaledimage))
 
         mesg = res2[3]
-        shape = json.loads(mesg[2])
-        # dtype = json.loads(mesg[3])
+        shape = json.loads(tostr(mesg[2]))
+        # dtype = json.loads(tostr(mesg[3]))
         lastimage = mesg[1].T.reshape(shape)
 
         print(mesg)

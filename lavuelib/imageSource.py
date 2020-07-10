@@ -1226,8 +1226,7 @@ class ZMQSource(BaseSource):
         else:
             try:
                 metadata = cPickle.loads(message)
-            except Exception as e:
-                print(str(e))
+            except Exception:
                 smessage = tostr(message)
                 metadata = json.loads(smessage)
         return metadata
