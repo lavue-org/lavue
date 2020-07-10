@@ -105,7 +105,7 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         self.__context = None
         self.__counter = 0
         self.__socket = None
-        self.__tfilter = "12345"
+        self.__tfilter = b"12345"
 
         self.__defaultls = {
             '__timestamp__': 0.0,
