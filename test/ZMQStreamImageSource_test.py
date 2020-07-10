@@ -55,7 +55,6 @@ app = None
 IS64BIT = (struct.calcsize("P") == 8)
 
 if sys.version_info > (3,):
-    buffer = memoryview
     long = int
 
 try:
@@ -105,7 +104,7 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         self.__context = None
         self.__counter = 0
         self.__socket = None
-        self.__tfilter = b"12345"
+        self.__tfilter = "12345"
 
         self.__defaultls = {
             '__timestamp__': 0.0,
@@ -185,11 +184,11 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         # self.__tisu.proxy.StartAcq()
         # li = self.__tisu.proxy.LastImage
         message = (
-            self.__tfilter,
+            self.__tfilter.encode('ascii', 'ignore'),
             value,
             json.dumps(shape).encode('ascii', 'ignore'),
             json.dumps(dtype).encode('ascii', 'ignore'),
-            imagename,
+            imagename.encode('ascii', 'ignore'),
             "JSON".encode('ascii', 'ignore')
         )
         self.__counter += 1
@@ -211,11 +210,11 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         # self.__tisu.proxy.StartAcq()
         # li = self.__tisu.proxy.LastImage
         message = (
-            self.__tfilter,
+            self.__tfilter.encode('ascii', 'ignore'),
             value,
             cPickle.dumps(shape),
             cPickle.dumps(dtype),
-            imagename,
+            imagename.encode('ascii', 'ignore'),
             "PICKLE".encode('ascii', 'ignore')
         )
         self.__counter += 1
@@ -330,14 +329,14 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         res3 = qtck3.results()
         self.assertEqual(res1[2], lastimage)
 
-        scaledimage = np.clip(lastimage, 10e-3, np.inf)
-        scaledimage = np.log10(scaledimage)
+        # scaledimage = np.clip(lastimage, 10e-3, np.inf)
+        # scaledimage = np.log10(scaledimage)
         self.assertEqual(res1[3], lastimage)
 
         mesg = res1[4]
         shape = json.loads(mesg[2])
-        dtype = json.loads(mesg[3])
-        lastimage = np.frombuffer(buffer(mesg[1]), dtype=dtype).reshape(shape)
+        # dtype = json.loads(mesg[3])
+        lastimage = mesg[1].T.reshape(shape)
         print(mesg)
         if not np.allclose(res2[1], lastimage):
             print(res2[1])
@@ -349,8 +348,8 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
 
         mesg = res2[3]
         shape = json.loads(mesg[2])
-        dtype = json.loads(mesg[3])
-        lastimage = np.frombuffer(buffer(mesg[1]), dtype=dtype).reshape(shape)
+        # dtype = json.loads(mesg[3])
+        lastimage = mesg[1].T.reshape(shape)
 
         print(mesg)
         if not np.allclose(res3[0], lastimage):
@@ -398,8 +397,8 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
             configuration=zmqcnf,
             instance='tgtest',
             tool='roi',
-            # log='debug',
-            log='info',
+            log='debug',
+            # log='info',
             scaling='log',
             levels='m20,20',
             gradient='thermal',
@@ -466,14 +465,12 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         res3 = qtck3.results()
         self.assertEqual(res1[2], lastimage)
 
-        scaledimage = np.clip(lastimage, 10e-3, np.inf)
-        scaledimage = np.log10(scaledimage)
         self.assertEqual(res1[3], lastimage)
 
         mesg = res1[4]
         shape = cPickle.loads(mesg[2])
-        dtype = cPickle.loads(mesg[3])
-        lastimage = np.frombuffer(buffer(mesg[1]), dtype=dtype).reshape(shape)
+        # dtype = cPickle.loads(mesg[3])
+        lastimage = mesg[1].T.reshape(shape)
         print(mesg)
         if not np.allclose(res2[1], lastimage):
             print(res2[1])
@@ -485,8 +482,8 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
 
         mesg = res2[3]
         shape = cPickle.loads(mesg[2])
-        dtype = cPickle.loads(mesg[3])
-        lastimage = np.frombuffer(buffer(mesg[1]), dtype=dtype).reshape(shape)
+        # dtype = cPickle.loads(mesg[3])
+        lastimage = mesg[1].T.reshape(shape)
 
         print(mesg)
         if not np.allclose(res3[0], lastimage):
@@ -505,8 +502,8 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
             configuration=zmqcnf,
             instance='tgtest',
             tool='roi',
-            # log='debug',
-            log='info',
+            log='debug',
+            # log='info',
             scaling='log',
             levels='-20.0,20.0',
             gradient='thermal',
