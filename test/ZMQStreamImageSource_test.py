@@ -30,7 +30,6 @@ import binascii
 import time
 import logging
 import json
-import cPickle
 import numpy as np
 import zmq
 
@@ -41,6 +40,10 @@ from pyqtgraph import QtGui
 from pyqtgraph import QtCore
 from pyqtgraph.Qt import QtTest
 
+try:
+    import cPickle
+except Exception:
+    import _pickle as cPickle
 
 from qtchecker.qtChecker import (
     QtChecker, CmdCheck, ExtCmdCheck, WrapAttrCheck)
