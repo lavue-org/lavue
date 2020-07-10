@@ -213,8 +213,8 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         message = (
             self.__tfilter,
             value,
-            cPickle.dumps(shape).encode('ascii', 'ignore'),
-            cPickle.dumps(dtype).encode('ascii', 'ignore'),
+            cPickle.dumps(shape),
+            cPickle.dumps(dtype),
             imagename,
             "PICKLE".encode('ascii', 'ignore')
         )
