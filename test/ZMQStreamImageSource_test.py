@@ -119,7 +119,7 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         self.__dialog = None
         self.__context = None
         self.__counter = 0
-        self.__socket = None
+        self.__socketconn = None
         self.__tfilter = "12345"
 
         self.__defaultls = {
@@ -188,7 +188,8 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
 
     def takeNewJSONImage(self):
         global app
-        socket = self.__socket
+        socket = self.__context.socket(zmq.PUB)
+        socket.bind(self.__socketconn)
         value = np.transpose(
             [
                 [random.randint(0, 1000) for _ in range(512)]
@@ -214,7 +215,8 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
 
     def takeNewPickleImage(self):
         global app
-        socket = self.__socket
+        socket = self.__context.socket(zmq.PUB)
+        socket.bind(self.__socketconn)
         value = np.transpose(
             [
                 [random.randint(0, 1000) for _ in range(512)]
@@ -250,12 +252,10 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
     def __startzmq(self):
         self.__context = zmq.Context()
 
-    def getzmqsocket(self, port):
-        socket = self.__context.socket(zmq.PUB)
+    def getzmqsocketconn(self, port):
         conn = "tcp://*:%s" % (port)
         print("Connecting to: %s" % conn)
-        socket.bind(conn)
-        return socket
+        return conn
 
     def getControllerAttr(self, name):
         return getattr(self.__lcsu.proxy, name)
@@ -266,7 +266,7 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
 
         port = 55535
         self.__lcsu.proxy.Init()
-        self.__socket = self.getzmqsocket(port)
+        self.__socketconn = self.getzmqsocketconn(port)
         self.__lavuestate = None
         lastimage = None
 
@@ -402,7 +402,7 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
 
         port = 55535
         self.__lcsu.proxy.Init()
-        self.__socket = self.getzmqsocket(port)
+        self.__socketconn = self.getzmqsocketconn(port)
         self.__lavuestate = None
         lastimage = None
 
