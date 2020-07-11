@@ -264,7 +264,7 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        port = 55535
+        port = 55536
         self.__lcsu.proxy.Init()
         self.__socketconn = self.getzmqsocketconn(port)
         self.__lavuestate = None
