@@ -29,13 +29,13 @@ docker exec -it --user root ndts service tango-starter restart
 
 if [ "$2" = "2" ]; then
     echo "install python packages"
-    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y   python-pytango python-tz python-pyqtgraph python-setuptools python-zmq python-scipy'
+    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y   python-pytango python-tz python-pyqtgraph python-setuptools python-zmq python-scipy  libzmq3-dev cython'
 else
     echo "install python3 packages"
     if [ "$1" = "ubuntu20.04" ]; then
-	docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y   python3-tango python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy'
+	docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy libzmq3-dev cython3  python3-tango'
     else
-	docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y   python3-pytango python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy'
+	docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy libzmq3-dev cython3  python3-pytango'
     fi
 fi
 if [ "$?" -ne "0" ]

@@ -250,8 +250,8 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
             try:
                 with QtCore.QMutexLocker(self.__mutex):
                     if self.__socket:
-                        if self.__socketconn:
-                            self.__socket.unbind(self.__socketconn)
+                        # if self.__socketconn:
+                        #     self.__socket.unbind(self.__socketconn)
                         self.__socket.close(linger=0)
                         self.__socket = None
                 if self.__context:
@@ -270,8 +270,8 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         print("Connecting to: %s" % conn)
         with QtCore.QMutexLocker(self.__mutex):
             if self.__socket:
-                if self.__socketconn:
-                    self.__socket.unbind(self.__socketconn)
+                # if self.__socketconn:
+                #     self.__socket.unbind(self.__socketconn)
                 self.__socket.close(linger=0)
             self.__socket = self.__context.socket(zmq.PUB)
             self.__socket.bind(conn)
