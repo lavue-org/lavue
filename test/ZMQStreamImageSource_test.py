@@ -121,6 +121,8 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         self.__counter = 0
         self.__socketconn = None
         self.__socket = None
+        #: (:class:`pyqtgraph.QtCore.QMutex`) mutex lock for zmq source
+        self.__mutex = QtCore.QMutex()
         self.__tfilter = "12345"
 
         self.__defaultls = {
@@ -189,7 +191,8 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
 
     def takeNewJSONImage(self):
         global app
-        socket = self.__socket
+        with QtCore.QMutexLocker(self.__mutex):
+            socket = self.__socket
         value = np.transpose(
             [
                 [random.randint(0, 1000) for _ in range(512)]
@@ -209,13 +212,15 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
             "JSON".encode('ascii', 'ignore')
         )
         self.__counter += 1
-        socket.send_multipart(message)
+        with QtCore.QMutexLocker(self.__mutex):
+            socket.send_multipart(message)
         app.sendPostedEvents()
         return message
 
     def takeNewPickleImage(self):
         global app
-        socket = self.__socket
+        with QtCore.QMutexLocker(self.__mutex):
+            socket = self.__socket
         value = np.transpose(
             [
                 [random.randint(0, 1000) for _ in range(512)]
@@ -235,18 +240,20 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
             "PICKLE".encode('ascii', 'ignore')
         )
         self.__counter += 1
-        socket.send_multipart(message)
+        with QtCore.QMutexLocker(self.__mutex):
+            socket.send_multipart(message)
         app.sendPostedEvents()
         return message
 
     def __closezmq(self):
         if self.__context:
             try:
-                if self.__socket:
-                    if self.__socketconn:
-                        self.__socket.unbind(self.__socketconn)
-                    self.__socket.close()
-                    self.__socket = None
+                with QtCore.QMutexLocker(self.__mutex):
+                    if self.__socket:
+                        if self.__socketconn:
+                            self.__socket.unbind(self.__socketconn)
+                        self.__socket.close(linger=0)
+                        self.__socket = None
                 if self.__context:
                     self.__context.destroy()
                     self.__context = None
@@ -261,12 +268,13 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
     def getzmqsocket(self, port):
         conn = "tcp://*:%s" % (port)
         print("Connecting to: %s" % conn)
-        if self.__socket:
-            if self.__socketconn:
-                self.__socket.unbind(self.__socketconn)
-            self.__socket.close()
-        self.__socket = self.__context.socket(zmq.PUB)
-        self.__socket.bind(conn)
+        with QtCore.QMutexLocker(self.__mutex):
+            if self.__socket:
+                if self.__socketconn:
+                    self.__socket.unbind(self.__socketconn)
+                self.__socket.close(linger=0)
+            self.__socket = self.__context.socket(zmq.PUB)
+            self.__socket.bind(conn)
         self.__socketconn = conn
         return conn
 
