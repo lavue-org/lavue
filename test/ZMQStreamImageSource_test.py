@@ -56,6 +56,7 @@ IS64BIT = (struct.calcsize("P") == 8)
 
 if sys.version_info > (3,):
     long = int
+    unicode = str
 
 try:
     from .LavueControllerSetUp import ControllerSetUp
@@ -265,18 +266,31 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
     def __startzmq(self):
         self.__context = zmq.Context()
 
-    def getzmqsocket(self, port):
-        conn = "tcp://*:%s" % (port)
-        print("Connecting to: %s" % conn)
+    def getzmqsocket(self, port=None):
         with QtCore.QMutexLocker(self.__mutex):
             if self.__socket:
-                # if self.__socketconn:
-                #     self.__socket.unbind(self.__socketconn)
                 self.__socket.close(linger=0)
             self.__socket = self.__context.socket(zmq.PUB)
-            self.__socket.bind(conn)
+            if port:
+                conn = "tcp://*:%s" % (port)
+                self.__socket.bind(conn)
+            else:
+                connecting = 10
+                connected = False
+                while not connected or connecting:
+                    try:
+                        conn = b"tcp://*:*"
+                        self.__socket.bind(conn)
+                        port = unicode(self.__socket.getsockopt(
+                            zmq.LAST_ENDPOINT)).split(":")[-1]
+                        connected = True
+                    except Exception as e:
+                        print(str(e))
+                        connecting -= 1
+            print("Connecting to: %s" % conn)
+
         self.__socketconn = conn
-        return conn
+        return port
 
     def getControllerAttr(self, name):
         return getattr(self.__lcsu.proxy, name)
@@ -285,9 +299,9 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        port = 55536
+        # port = 55536
         self.__lcsu.proxy.Init()
-        self.getzmqsocket(port)
+        port = self.getzmqsocket()
         self.__lavuestate = None
         lastimage = None
 
@@ -421,9 +435,9 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        port = 55535
+        # port = 55535
         self.__lcsu.proxy.Init()
-        self.getzmqsocket(port)
+        port = self.getzmqsocket()
         self.__lavuestate = None
         lastimage = None
 
