@@ -31,11 +31,15 @@ if [ "$2" = "2" ]; then
     echo "install python packages"
     docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y   python-pytango python-tz python-pyqtgraph python-setuptools python-zmq python-scipy  libzmq3-dev cython'
 else
+    docker exec -it --user root ndts /bin/sh -c 'git clone https://github.com/zeromq/pyzmq pyzmq-src'
+    docker exec -it --user root ndts /bin/sh -c 'cd pyzmq-src; python setup.py install'
     echo "install python3 packages"
     if [ "$1" = "ubuntu20.04" ]; then
-	docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy libzmq3-dev cython3  python3-tango'
+	docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy python3-tango'
     else
 	docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy libzmq3-dev cython3  python3-pytango'
+	docker exec -it --user root ndts /bin/sh -c 'git clone https://github.com/zeromq/pyzmq pyzmq-src'
+	docker exec -it --user root ndts /bin/sh -c 'cd pyzmq-src; python3 setup.py install'
     fi
 fi
 if [ "$?" -ne "0" ]
