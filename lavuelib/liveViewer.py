@@ -1252,7 +1252,16 @@ class LiveViewer(QtGui.QDialog):
                 else:
                     self.__fieldpath = None
                 self.__growing = 0
-                self._loadfile(fid=0)
+                imagename = self.__settings.imagename
+                if not imagename.endswith(".nxs") \
+                   and not imagename.endswith(".h5") \
+                   and not imagename.endswith(".nx") \
+                   and not imagename.endswith(".ndf") \
+                   and not imagename.endswith(".hdf"):
+                    fid=self.__findfid(imagename)
+                else:
+                    fid=0
+                self._loadfile(fid=fid)
             except Exception:
                 self.__settings.imagename = oldname
                 self.__fieldpath = oldpath
@@ -1656,7 +1665,6 @@ class LiveViewer(QtGui.QDialog):
         if lazy flag it displays only splider value
         """
         if self.__lazyimageslider:
-
             fid = self.__ui.frameHorizontalSlider.value()
             self.__ui.frameLineEdit.textChanged.disconnect(
                 self._spinreloadfile)
@@ -1684,6 +1692,28 @@ class LiveViewer(QtGui.QDialog):
                 self._reloadfile(fid, showmessage)
         finally:
             self.__reloadflag = False
+
+    def __findfid(self, imagename):
+        """ find file id
+        """
+        try:
+            ipath, iname = ntpath.split(imagename)
+            basename, ext = os.path.splitext(iname)
+            ival = True
+            w = 0
+            while ival:
+                try:
+                    int(basename[(- w - 1):])
+                    w += 1
+                    if w == len(basename):
+                        ival = False
+                except Exception:
+                    ival = False
+            fprefix, ffid = basename[:-w], basename[-w:]
+            fid = int(ffid)
+        except Exception:
+            fid = 0
+        return fid
 
     @debugmethod
     def _reloadfile(self, fid=None, showmessage=False, nexus=None):
@@ -2916,7 +2946,7 @@ class LiveViewer(QtGui.QDialog):
                 self.__ui.higherframePushButton.show()
                 self.__ui.frameLineEdit.show()
         else:
-            self.__fieldpath = None
+            # self.__fieldpath = None
             self.__ui.lowerframePushButton.hide()
             self.__ui.higherframePushButton.hide()
             self.__ui.framestepSpinBox.hide()
