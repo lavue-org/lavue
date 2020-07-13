@@ -277,7 +277,7 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
             else:
                 connecting = 10
                 connected = False
-                while not connected or connecting:
+                while not connected and connecting:
                     try:
                         conn = b"tcp://*:*"
                         self.__socket.bind(conn)
@@ -290,7 +290,7 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
             print("Connecting to: %s" % conn)
 
         self.__socketconn = conn
-        return port
+        return int(port[:-1])
 
     def getControllerAttr(self, name):
         return getattr(self.__lcsu.proxy, name)
