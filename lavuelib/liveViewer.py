@@ -1258,9 +1258,9 @@ class LiveViewer(QtGui.QDialog):
                    and not imagename.endswith(".nx") \
                    and not imagename.endswith(".ndf") \
                    and not imagename.endswith(".hdf"):
-                    fid=self.__findfid(imagename)
+                    fid = self.__findfid(imagename)
                 else:
-                    fid=0
+                    fid = 0
                 self._loadfile(fid=fid)
             except Exception:
                 self.__settings.imagename = oldname
@@ -1709,7 +1709,7 @@ class LiveViewer(QtGui.QDialog):
                         ival = False
                 except Exception:
                     ival = False
-            fprefix, ffid = basename[:-w], basename[-w:]
+            ffid = basename[-w:]
             fid = int(ffid)
         except Exception:
             fid = 0
