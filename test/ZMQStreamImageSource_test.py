@@ -283,6 +283,8 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
                         self.__socket.bind(conn)
                         port = unicode(self.__socket.getsockopt(
                             zmq.LAST_ENDPOINT)).split(":")[-1]
+                        if port.endswith("'"):
+                            port = port[:-1]
                         connected = True
                     except Exception as e:
                         print(str(e))
@@ -290,7 +292,7 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
             print("Connecting to: %s" % conn)
 
         self.__socketconn = conn
-        return int(port[:-1])
+        return int(port)
 
     def getControllerAttr(self, name):
         return getattr(self.__lcsu.proxy, name)

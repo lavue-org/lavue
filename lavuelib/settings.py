@@ -496,6 +496,8 @@ class Settings(object):
                     self.secsocket.bind(self.secsockopt)
                     self.secport = unicode(self.secsocket.getsockopt(
                         zmq.LAST_ENDPOINT)).split(":")[-1]
+                    if self.secport.endswith("'"):
+                        self.secport = self.secport[:-1]
                 else:
                     self.secsockopt = b"tcp://*:%s" % self.secport
                     self.secsocket.bind(self.secsockopt)
