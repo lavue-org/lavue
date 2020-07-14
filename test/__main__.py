@@ -28,7 +28,6 @@ import sys
 
 from lavuelib.qtuic import qt_api
 from pyqtgraph import QtGui
-import pyqtgraph as pg
 
 try:
     import PyTango
@@ -173,8 +172,6 @@ def main():
     print("Result: %s" % result)
     with open('testresult.txt', 'w') as fl:
         fl.write(str(int(not result)) + '\n')
-    if sys.version_info > (3,):
-        pg.exit()
     sys.exit(not result)
 
 
