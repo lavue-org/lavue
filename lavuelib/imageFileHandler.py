@@ -284,14 +284,20 @@ class NexusFieldHandler(object):
                 if isinstance(value, np.ndarray):
                     continue
                 try:
-                    units = cls.extract(fld.attributes["units"].read())
-                    if isinstance(units, np.ndarray):
-                        continue
-                    if units:
-                        metadata[nm] = (value, units)
+                    atts = [at.name for at in fld.attributes]
+                    if "units" in atts:
+                        units = cls.extract(fld.attributes["units"].read())
+                        if isinstance(units, np.ndarray):
+                            continue
+                        if units:
+                            metadata[nm] = (value, units)
+                        else:
+                            metadata[nm] = value
                     else:
                         metadata[nm] = value
-                except Exception:
+                except Exception as e:
+                    # print(str(e))
+                    logger.warning(str(e))
                     metadata[nm] = value
         lfld = pgroup.open_link(node.name)
         file_path, lpath = str(lfld.target_path).rsplit(":/", 1)
