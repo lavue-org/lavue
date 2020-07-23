@@ -98,6 +98,7 @@ if H5CPP_AVAILABLE:
     import H5CppWriter_test
     import FileWriterH5Cpp_test
     import CommandLineArgumentH5Cpp_test
+    import NXSFileImageSource_test
 if PNI_AVAILABLE and H5PY_AVAILABLE:
     import FileWriterPNIH5PY_test
 # if PNI_AVAILABLE and H5Cpp_AVAILABLE:
@@ -132,6 +133,9 @@ def main():
         suite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(H5PYWriter_test))
     if H5CPP_AVAILABLE:
+        suite.addTests(
+            unittest.defaultTestLoader.loadTestsFromModule(
+                NXSFileImageSource_test))
         suite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 CommandLineArgumentH5Cpp_test))
