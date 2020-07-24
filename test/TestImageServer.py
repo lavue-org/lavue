@@ -24,20 +24,53 @@ class TestImageServer (PyTango.Device_4Impl):
         # self.attr_LastImage_read = [[10]*2048]*1024
         self.attr_LastImage_read = [
             [i + 100 * j for i in range(512)] for j in range(256)]
+        self.attr_ReadyEventImage_read = [
+            [i + 100 * j for i in range(128)] for j in range(256)]
+        self.attr_ChangeEventImage_read = [
+            [i + 100 * j for i in range(512)] for j in range(128)]
+        self.set_change_event("ChangeEventImage", True, False)
+        self.ReadyEventImage = self.get_device_attr().get_attr_by_name(
+            "ReadyEventImage")
+        self.ReadyEventImage.set_data_ready_event(True)
 
     def read_LastImage(self, attr):
         attr.set_value(self.attr_LastImage_read)
+
+    def read_ChangeEventImage(self, attr):
+        attr.set_value(self.attr_ChangeEventImage_read)
+
+    def read_ReadyEventImage(self, attr):
+        attr.set_value(self.attr_ReadyEventImage_read)
 
     def StartAcq(self):
         """ Start the acquisition. """
         self.attr_LastImage_read = \
             [[random.randint(0, 1000) for i in range(512)] for j in range(256)]
 
+    def ReadyEventAcq(self):
+        """ Start the acquisition. """
+        self.attr_ReadyEventImage_read = \
+            [[random.randint(0, 1000) for i in range(128)] for j in range(256)]
+        self.push_data_ready_event("ReadyEventImage", 0)
+
+    def ChangeEventAcq(self):
+        """ Start the acquisition. """
+        self.attr_ChangeEventImage_read = \
+            [[random.randint(0, 1000) for i in range(512)] for j in range(128)]
+        self.push_change_event("ChangeEventImage",
+                               self.attr_ChangeEventImage_read)
+
 
 class TestImageServerClass(PyTango.DeviceClass):
 
     cmd_list = {
         'StartAcq':
+        [[PyTango.DevVoid, "none"],
+         [PyTango.DevVoid, "none"]],
+        'ReadyEventAcq':
+        [[PyTango.DevVoid, "none"],
+         [PyTango.DevVoid, "none"]],
+        'ChangeEventAcq':
         [[PyTango.DevVoid, "none"],
          [PyTango.DevVoid, "none"]],
         }
@@ -50,6 +83,22 @@ class TestImageServerClass(PyTango.DeviceClass):
          {
              'label': "LastImage",
              'description': "provide last image data",
+         }],
+        'ReadyEventImage':
+        [[PyTango.DevLong,
+          PyTango.IMAGE,
+          PyTango.READ, 4096, 4096],
+         {
+             'label': "ReadyEventImage",
+             'description': "provide ready event image data",
+         }],
+        'ChangeEventImage':
+        [[PyTango.DevLong,
+          PyTango.IMAGE,
+          PyTango.READ, 4096, 4096],
+         {
+             'label': "ChangeEventImage",
+             'description': "provide change event image data",
          }],
     }
 
