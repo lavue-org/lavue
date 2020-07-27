@@ -49,7 +49,7 @@ class Transfer(object):
         self.timeout = timeout
         self.data = None
         if filename:
-            with open(filename, 'r') as ifile:
+            with open(filename, 'rb') as ifile:
                 self.data = ifile.read()
         self.filename = filename.split("/")[-1]
         # print("FILENAME: %s" % filename)
