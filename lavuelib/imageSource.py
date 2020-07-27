@@ -500,6 +500,9 @@ class TangoFileSource(BaseSource):
                 filename = "%s/%s" % (dattr, filename)
                 for key, val in self.__dirtrans.items():
                     filename = filename.replace(key, val)
+            if str(filename) in ["", "/"]:
+                logger.warning("TangoFileSource: File name not defined")
+                return None, None, None
             fh = imageFileHandler.ImageFileHandler(str(filename))
             image = fh.getImage()
             mdata = fh.getMetaData()

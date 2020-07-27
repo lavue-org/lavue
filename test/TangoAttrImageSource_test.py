@@ -30,6 +30,7 @@ import binascii
 import time
 import logging
 import json
+import fabio
 import numpy as np
 
 import argparse
@@ -101,6 +102,9 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         self.__cfgfdir = "%s/%s" % (home, ".config/DESY")
         self.__cfgfname = "%s/%s" % (self.__cfgfdir, "LaVue: unittests.conf")
         self.__dialog = None
+        self.__tangoimgcounter = 0
+        self.__tangofilepattern = "%05d.tif"
+        self.__tangofilepath = ""
 
         self.__defaultls = {
             '__timestamp__': 0.0,
@@ -170,6 +174,21 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         global app
         self.__tisu.proxy.StartAcq()
         li = self.__tisu.proxy.LastImage
+        app.sendPostedEvents()
+        # yieldCurrentThread()
+        return li
+
+    def takeNewTangoFileImage(self):
+        global app
+        self.__tangoimgcounter += 1
+        self.__tisu.proxy.LastImagePath = self.__tangofilepath
+        self.__tisu.proxy.LastImageTaken = \
+            self.__tangofilepattern % self.__tangoimgcounter
+        fname = os.path.join(
+            self.__tisu.proxy.LastImagePath,
+            self.__tisu.proxy.LastImageTaken)
+        image = fabio.open(fname)
+        li = image.data
         app.sendPostedEvents()
         # yieldCurrentThread()
         return li
@@ -551,6 +570,136 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             mode='expert',
             source='tangoevents',
             configuration='test/testimageserver/00/ReadyEventImage',
+            instance='tgtest',
+            tool='roi',
+            # log='debug',
+            log='info',
+            scaling='log',
+            levels='-20.0,20.0',
+            gradient='thermal',
+            tangodevice='test/lavuecontroller/00',
+            connected=True,
+            autofactor=None
+        ))
+        self.compareStates(ls, dls,
+                           ['viewrange', '__timestamp__', 'doordevice'])
+
+    def test_readtangofileimage(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        self.__lcsu.proxy.Init()
+        self.__tisu.proxy.Init()
+        self.__lavuestate = None
+        # lastimage = self.__tisu.proxy.ReadyEventImage.T
+        lastimage = None
+        self.__tangoimgcounter = 0
+        self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
+        self.__tangofilepattern = "%05d.tif"
+        options = argparse.Namespace(
+            mode='expert',
+            source='tangofile',
+            configuration='test/testimageserver/00/LastImageTaken,'
+            'test/testimageserver/00/LastImagePath',
+            instance='tgtest',
+            tool='roi',
+            # log='debug',
+            log='info',
+            scaling='log',
+            levels='m20,20',
+            gradient='thermal',
+            start=True,
+            tangodevice='test/lavuecontroller/00'
+        )
+        logging.basicConfig(
+             format="%(levelname)s: %(message)s")
+        logger = logging.getLogger("lavue")
+        lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+        dialog = lavuelib.liveViewer.MainWindow(options=options)
+        dialog.show()
+
+        qtck1 = QtChecker(app, dialog, True, sleep=100)
+        qtck2 = QtChecker(app, dialog, True, sleep=100)
+        qtck3 = QtChecker(app, dialog, True, sleep=100)
+        qtck1.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            ExtCmdCheck(self, "getLavueState"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            ExtCmdCheck(self, "takeNewTangoFileImage"),
+        ])
+        qtck2.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            ExtCmdCheck(self, "takeNewTangoFileImage"),
+        ])
+        qtck3.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            WrapAttrCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg"
+                "._SourceTabWidget__sourcetabs[],0._ui.pushButton",
+                QtTest.QTest.mouseClick, [QtCore.Qt.LeftButton]),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+        ])
+
+        print("execute")
+        qtck1.executeChecks(delay=3000)
+        qtck2.executeChecks(delay=6000)
+        status = qtck3.executeChecksAndClose(delay=9000)
+
+        self.assertEqual(status, 0)
+
+        qtck1.compareResults(
+            self, [True, None, None, None, None], mask=[0, 0, 1, 1, 1])
+        qtck2.compareResults(
+            self, [True, None, None, None], mask=[0, 1, 1, 1])
+        qtck3.compareResults(
+            self, [None, None, None, False], mask=[1, 1, 0, 0])
+
+        res1 = qtck1.results()
+        res2 = qtck2.results()
+        res3 = qtck3.results()
+        self.assertEqual(res1[2], None)
+        self.assertEqual(res1[3], None)
+        # self.assertTrue(np.allclose(res1[2], lastimage))
+
+        # scaledimage = np.clip(lastimage, 10e-3, np.inf)
+        # scaledimage = np.log10(scaledimage)
+        # self.assertTrue(np.allclose(res1[3], scaledimage))
+
+        lastimage = res1[4].T
+        if not np.allclose(res2[1], lastimage):
+            print(res2[1])
+            print(lastimage)
+        self.assertTrue(np.allclose(res2[1], lastimage))
+        scaledimage = np.clip(lastimage, 10e-3, np.inf)
+        scaledimage = np.log10(scaledimage)
+        self.assertTrue(np.allclose(res2[2], scaledimage))
+
+        lastimage = res2[3].T
+        self.assertTrue(np.allclose(res3[0], lastimage))
+        scaledimage = np.clip(lastimage, 10e-3, np.inf)
+        scaledimage = np.log10(scaledimage)
+        self.assertTrue(np.allclose(res3[1], scaledimage))
+
+        ls = json.loads(self.__lavuestate)
+        dls = dict(self.__defaultls)
+        dls.update(dict(
+            mode='expert',
+            source='tangofile',
+            configuration='test/testimageserver/00/LastImageTaken,'
+            'test/testimageserver/00/LastImagePath,{"/ramdisk/": "/gpfs/"}',
             instance='tgtest',
             tool='roi',
             # log='debug',

@@ -22,6 +22,8 @@ class TestImageServer (PyTango.Device_4Impl):
         self.set_state(PyTango.DevState.ON)
         self.get_device_properties(self.get_device_class())
         # self.attr_LastImage_read = [[10]*2048]*1024
+        self.attr_LastImageTaken_read = ""
+        self.attr_LastImagePath_read = ""
         self.attr_LastImage_read = [
             [i + 100 * j for i in range(512)] for j in range(256)]
         self.attr_ReadyEventImage_read = [
@@ -32,6 +34,18 @@ class TestImageServer (PyTango.Device_4Impl):
         self.ReadyEventImage = self.get_device_attr().get_attr_by_name(
             "ReadyEventImage")
         self.ReadyEventImage.set_data_ready_event(True)
+
+    def read_LastImageTaken(self, attr):
+        attr.set_value(self.attr_LastImageTaken_read)
+
+    def write_LastImageTaken(self, attr):
+        self.attr_LastImageTaken_read = attr.get_write_value()
+
+    def read_LastImagePath(self, attr):
+        attr.set_value(self.attr_LastImagePath_read)
+
+    def write_LastImagePath(self, attr):
+        self.attr_LastImagePath_read = attr.get_write_value()
 
     def read_LastImage(self, attr):
         attr.set_value(self.attr_LastImage_read)
@@ -76,6 +90,22 @@ class TestImageServerClass(PyTango.DeviceClass):
         }
 
     attr_list = {
+        'LastImageTaken':
+        [[PyTango.DevString,
+          PyTango.SCALAR,
+          PyTango.READ_WRITE],
+         {
+             'label': "LastImageTaken",
+             'description': "provide last image taken name",
+         }],
+        'LastImagePath':
+        [[PyTango.DevString,
+          PyTango.SCALAR,
+          PyTango.READ_WRITE],
+         {
+             'label': "LastImagePath",
+             'description': "provide last image path",
+         }],
         'LastImage':
         [[PyTango.DevLong,
           PyTango.IMAGE,
