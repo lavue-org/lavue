@@ -68,6 +68,7 @@ except ImportError as e:
 
 import unittest
 import CommandLineArgument_test
+import HidraImageSource_test
 
 if not PNI_AVAILABLE and not H5PY_AVAILABLE:
     raise Exception("Please install h5py or pni")
@@ -117,10 +118,20 @@ def main():
     print("Using: %s" % qt_api)
     app = QtGui.QApplication([])
     CommandLineArgument_test.app = app
-    CommandLineLavueState_test.app = app
+    HidraImageSource_test.app = app
+    if PYTANGO_AVAILABLE:
+        CommandLineLavueState_test.app = app
+        TangoAttrImageSource_test.app = app
+        ZMQStreamImageSource_test.app = app
+    if H5CPP_AVAILABLE:
+        CommandLineArgumentH5Cpp_test.app = app
+        NXSFileImageSource_test.app = app
     suite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             CommandLineArgument_test))
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(
+            HidraImageSource_test))
     if PNI_AVAILABLE:
         suite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(FileWriter_test))
