@@ -1061,8 +1061,11 @@ class HTTPSource(BaseSource):
                     data = response.content
                     if data[:10] == "###CBF: VE":
                         # print("[cbf source module]::metadata", name)
-                        img = imageFileHandler.CBFLoader().load(
-                            np.fromstring(data[:], dtype=np.uint8))
+                        try:
+                            nimg = np.frombuffer(data[:], dtype=np.uint8)
+                        except Exception:
+                            nimg = np.fromstring(data[:], dtype=np.uint8)
+                        img = imageFileHandler.CBFLoader().load(nimg)
                         if img is None:
                             return None, None, None
                         if hasattr(img, "size") and img.size == 0:
@@ -1104,6 +1107,8 @@ class HTTPSource(BaseSource):
                 return str(e), "__ERROR__", ""
             else:
                 if str(response.text) == 'Image not available':
+                    return str(response.text), None, None
+                if "File not found" in str(response.text):
                     return str(response.text), None, None
                 else:
                     return str(response.text), "__ERROR__", None
