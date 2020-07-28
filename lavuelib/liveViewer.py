@@ -1270,6 +1270,7 @@ class LiveViewer(QtGui.QDialog):
                 {"imagefile": (self.__settings.imagename or "")})
 
         # set image source
+        sourcechanged = False
         if hasattr(options, "source") and options.source is not None:
             srcnames = str(options.source).split(";")
             self.__setNumberOfSources(max(len(srcnames), 1))
@@ -1277,15 +1278,17 @@ class LiveViewer(QtGui.QDialog):
                 if srcname in self.__srcaliasnames.keys():
                     self.__sourcewg.setSourceComboBoxByName(
                         i, self.__srcaliasnames[srcname])
+            sourcechanged = True
 
         QtCore.QCoreApplication.processEvents()
-
         if hasattr(options, "configuration") and \
            options.configuration is not None:
             cnfs = str(options.configuration).split(";")
             for i, cnf in enumerate(cnfs):
                 if i < self.__sourcewg.count():
                     self.__sourcewg.configure(i, str(cnf))
+            if sourcechanged:
+                self._setSourceConfiguration(options.configuration)
 
         QtCore.QCoreApplication.processEvents()
 

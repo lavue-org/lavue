@@ -70,6 +70,7 @@ import unittest
 import CommandLineArgument_test
 import HidraImageSource_test
 import HttpImageSource_test
+import PyTineImageSource_test
 
 if not PNI_AVAILABLE and not H5PY_AVAILABLE:
     raise Exception("Please install h5py or pni")
@@ -119,6 +120,7 @@ def main():
     CommandLineArgument_test.app = app
     HidraImageSource_test.app = app
     HttpImageSource_test.app = app
+    PyTineImageSource_test.app = app
     if PYTANGO_AVAILABLE:
         CommandLineLavueState_test.app = app
         TangoAttrImageSource_test.app = app
@@ -135,6 +137,9 @@ def main():
     suite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             HttpImageSource_test))
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(
+            PyTineImageSource_test))
     if PNI_AVAILABLE:
         suite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(FileWriter_test))

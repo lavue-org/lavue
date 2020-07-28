@@ -1434,7 +1434,7 @@ class HiDRASource(BaseSource):
         #: (:obj:`bool`) use tiff loader
         self.__tiffloader = False
 
-    @debugmethod
+    # @debugmethod
     def setConfiguration(self, configuration):
         """ set configuration
 
@@ -1738,6 +1738,8 @@ class TinePropSource(BaseSource):
             dtype = "u1"
         elif header["bytesPerPixel"] == 2:
             dtype = "u2"
+        elif header["bytesPerPixel"] == 4:
+            dtype = "u4"
         else:
             raise ValueError("Invalid bytesPerPixel: %s"
                              % header["bytesPerPixel"])
