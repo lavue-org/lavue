@@ -36,7 +36,10 @@ try:
     from . import PyTine
 except Exception:
     import PyTine
-import pytinefake
+try:
+    from . import pytinefake
+except Exception:
+    import pytinefake
 
 import argparse
 import lavuelib

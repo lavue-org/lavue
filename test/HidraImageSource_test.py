@@ -36,7 +36,10 @@ try:
     from . import hidra
 except Exception:
     import hidra
-import hidrafake
+try:
+    from . import hidrafake
+except Exception:
+    import hidrafake
 
 import argparse
 import lavuelib
