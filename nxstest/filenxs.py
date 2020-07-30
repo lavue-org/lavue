@@ -1,6 +1,4 @@
 import pni.io.nx.h5 as nexus
-import os
-import sys
 import numpy
 import time
 
@@ -16,21 +14,19 @@ start = 0
 last = 13
 
 
-file2 = nexus.create_file("file2.nxs",True)
+file2 = nexus.create_file("file2.nxs", True)
 root = file2.root()
-en = root.create_group("entry","NXentry")
-ins = en.create_group("instrument","NXinstrument")
-de = ins.create_group("detector","NXdetector")
-datamn = de.create_field("data","uint32",shape=shapemn, chunk=chunkmn)
+en = root.create_group("entry", "NXentry")
+ins = en.create_group("instrument", "NXinstrument")
+de = ins.create_group("detector", "NXdetector")
+datamn = de.create_field("data", "uint32", shape=shapemn, chunk=chunkmn)
 for i in range(50):
     amn = numpy.ones(shape=dshapemn)
     amn.fill(i)
     datamn.grow()
     print(datamn.shape)
     print(amn.shape)
-    datamn[i,:,:] = amn
+    datamn[i, :, :] = amn
     file2.flush()
     time.sleep(1)
-file2.close()    
-
-
+file2.close()

@@ -6,6 +6,6 @@ dset = f["data"]
 while True:
     dset.id.refresh()
     shape = dset.shape
-    print( shape )
-    print( dset.value )
+    print(shape)
+    print(dset.value)
     time.sleep(0.1)
