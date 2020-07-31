@@ -46,8 +46,6 @@ class SourceForm(QtGui.QWidget):
 
     """ source form """
 
-    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) source connected signal
-    sourceConnected = QtCore.pyqtSignal()
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) source state signal
     sourceStateChanged = QtCore.pyqtSignal(int, int)
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) source state signal
@@ -454,10 +452,7 @@ class SourceForm(QtGui.QWidget):
         :param status: source state
         :type status: :obj:`int`
         """
-        if status == -1:
-            self.sourceConnected.emit()
-        else:
-            self.sourceStateChanged.emit(status, self.__sourceid)
+        self.sourceStateChanged.emit(status, self.__sourceid)
 
     @debugmethod
     @QtCore.pyqtSlot(bool)
