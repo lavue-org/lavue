@@ -1299,9 +1299,10 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         ])
 
         print("execute")
-        qtck1.executeChecks(delay=3000)
-        qtck2.executeChecks(delay=6000)
-        status = qtck3.executeChecksAndClose(delay=9000)
+        qtck1.executeChecksAndClose(delay=3000)
+        # qtck1.executeChecks(delay=3000)
+        # qtck2.executeChecks(delay=6000)
+        # status = qtck3.executeChecksAndClose(delay=9000)
 
         # self.assertEqual(status, 0)
 
