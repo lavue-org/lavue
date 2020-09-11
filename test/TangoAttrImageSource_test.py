@@ -1263,43 +1263,43 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         dialog = lavuelib.liveViewer.MainWindow(options=options)
         dialog.show()
 
-        qtck1 = QtChecker(app, dialog, True, sleep=100)
-        qtck2 = QtChecker(app, dialog, True, sleep=100)
-        qtck3 = QtChecker(app, dialog, True, sleep=100)
-        qtck1.setChecks([
-            CmdCheck(
-                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
-            ExtCmdCheck(self, "getLavueState"),
-            CmdCheck(
-                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
-            CmdCheck(
-                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
-            ExtCmdCheck(self, "takeNewTangoFileImage"),
-        ])
-        qtck2.setChecks([
-            CmdCheck(
-                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
-            CmdCheck(
-                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
-            CmdCheck(
-                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
-            ExtCmdCheck(self, "takeNewTangoFileImage"),
-        ])
-        qtck3.setChecks([
-            CmdCheck(
-                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
-            CmdCheck(
-                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
-            WrapAttrCheck(
-                "_MainWindow__lavue._LiveViewer__sourcewg"
-                "._SourceTabWidget__sourcetabs[],0._ui.pushButton",
-                QtTest.QTest.mouseClick, [QtCore.Qt.LeftButton]),
-            CmdCheck(
-                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
-        ])
+        # qtck1 = QtChecker(app, dialog, True, sleep=100)
+        # qtck2 = QtChecker(app, dialog, True, sleep=100)
+        # qtck3 = QtChecker(app, dialog, True, sleep=100)
+        # qtck1.setChecks([
+        #     CmdCheck(
+        #         "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+        #     ExtCmdCheck(self, "getLavueState"),
+        #     CmdCheck(
+        #         "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+        #     CmdCheck(
+        #         "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+        #     ExtCmdCheck(self, "takeNewTangoFileImage"),
+        # ])
+        # qtck2.setChecks([
+        #     CmdCheck(
+        #         "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+        #     CmdCheck(
+        #         "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+        #     CmdCheck(
+        #         "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+        #     ExtCmdCheck(self, "takeNewTangoFileImage"),
+        # ])
+        # qtck3.setChecks([
+        #     CmdCheck(
+        #         "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+        #     CmdCheck(
+        #         "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+        #     WrapAttrCheck(
+        #         "_MainWindow__lavue._LiveViewer__sourcewg"
+        #         "._SourceTabWidget__sourcetabs[],0._ui.pushButton",
+        #         QtTest.QTest.mouseClick, [QtCore.Qt.LeftButton]),
+        #     CmdCheck(
+        #         "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+        # ])
 
-        print("execute")
-        qtck1.executeChecksAndClose(delay=3000)
+        # print("execute")
+        ## qtck1.executeChecksAndClose(delay=3000)
         # qtck1.executeChecks(delay=3000)
         # qtck2.executeChecks(delay=6000)
         # status = qtck3.executeChecksAndClose(delay=9000)
