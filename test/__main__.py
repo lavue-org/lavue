@@ -130,61 +130,61 @@ def main():
     if H5CPP_AVAILABLE:
         CommandLineArgumentH5Cpp_test.app = app
         NXSFileImageSource_test.app = app
-    suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(
-            CommandLineArgument_test))
-    suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(
-            HidraImageSource_test))
-    suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(
-            HttpImageSource_test))
-    suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(
-            PyTineImageSource_test))
-    suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(
-            EpicsImageSource_test))
-    if PNI_AVAILABLE:
-        suite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(FileWriter_test))
-        suite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(PNIWriter_test))
-    if H5PY_AVAILABLE:
-        suite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(
-                FileWriterH5PY_test))
-        suite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(H5PYWriter_test))
-    if H5CPP_AVAILABLE:
-        suite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(
-                NXSFileImageSource_test))
-        suite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(
-                CommandLineArgumentH5Cpp_test))
-        suite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(
-                FileWriterH5Cpp_test))
-        suite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(H5CppWriter_test))
-    if PNI_AVAILABLE and H5PY_AVAILABLE:
-        suite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(
-                FileWriterPNIH5PY_test))
+    # suite.addTests(
+    #     unittest.defaultTestLoader.loadTestsFromModule(
+    #         CommandLineArgument_test))
+    # suite.addTests(
+    #     unittest.defaultTestLoader.loadTestsFromModule(
+    #         HidraImageSource_test))
+    # suite.addTests(
+    #     unittest.defaultTestLoader.loadTestsFromModule(
+    #         HttpImageSource_test))
+    # suite.addTests(
+    #     unittest.defaultTestLoader.loadTestsFromModule(
+    #         PyTineImageSource_test))
+    # suite.addTests(
+    #     unittest.defaultTestLoader.loadTestsFromModule(
+    #         EpicsImageSource_test))
+    # if PNI_AVAILABLE:
+    #     suite.addTests(
+    #         unittest.defaultTestLoader.loadTestsFromModule(FileWriter_test))
+    #     suite.addTests(
+    #         unittest.defaultTestLoader.loadTestsFromModule(PNIWriter_test))
+    # if H5PY_AVAILABLE:
+    #     suite.addTests(
+    #         unittest.defaultTestLoader.loadTestsFromModule(
+    #             FileWriterH5PY_test))
+    #     suite.addTests(
+    #         unittest.defaultTestLoader.loadTestsFromModule(H5PYWriter_test))
+    # if H5CPP_AVAILABLE:
+    #     suite.addTests(
+    #         unittest.defaultTestLoader.loadTestsFromModule(
+    #             NXSFileImageSource_test))
+    #     suite.addTests(
+    #         unittest.defaultTestLoader.loadTestsFromModule(
+    #             CommandLineArgumentH5Cpp_test))
+    #     suite.addTests(
+    #         unittest.defaultTestLoader.loadTestsFromModule(
+    #             FileWriterH5Cpp_test))
+    #     suite.addTests(
+    #         unittest.defaultTestLoader.loadTestsFromModule(H5CppWriter_test))
+    # if PNI_AVAILABLE and H5PY_AVAILABLE:
+    #     suite.addTests(
+    #         unittest.defaultTestLoader.loadTestsFromModule(
+    #             FileWriterPNIH5PY_test))
     if PYTANGO_AVAILABLE:
-        suite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(
-                LavueController_test))
-        suite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(
-                CommandLineLavueState_test))
+        # suite.addTests(
+        #     unittest.defaultTestLoader.loadTestsFromModule(
+        #         LavueController_test))
+        # suite.addTests(
+        #     unittest.defaultTestLoader.loadTestsFromModule(
+        #         CommandLineLavueState_test))
         suite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 TangoAttrImageSource_test))
-        suite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(
-                ZMQStreamImageSource_test))
+        # suite.addTests(
+        #     unittest.defaultTestLoader.loadTestsFromModule(
+        #         ZMQStreamImageSource_test))
 
     # test runner
     runner = unittest.TextTestRunner()

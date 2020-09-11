@@ -170,7 +170,8 @@ class ControllerClient(QtCore.QObject):
         :param value: attribute value
         :type value: :obj:`any`
         """
-        print("WRITEATTR: %s %s %s %s" % (name, value, type(name), type(value)))
+        print("WRITEATTR: %s %s %s %s"
+              % (name, value, type(name), type(value)))
         self.__dp.write_attribute(name, value)
 
     def unsubscribe(self):
