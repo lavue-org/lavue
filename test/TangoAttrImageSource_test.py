@@ -481,7 +481,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
 
-    def ttest_readspectra_color(self):
+    def test_readspectra_color(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 

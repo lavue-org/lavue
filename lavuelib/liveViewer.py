@@ -766,6 +766,7 @@ class LiveViewer(QtGui.QDialog):
         """ set current state """
 
         dssa = ";".join(self.__sourcewg.currentDataSourceAlias())
+        print("CONF %s" % self.__sourcewg.configuration())
         configuration = ";".join(self.__sourcewg.configuration())
         if not self.__levelswg.isAutoLevel():
             levels = self.__levelswg.levels()
@@ -902,6 +903,7 @@ class LiveViewer(QtGui.QDialog):
         :param dct: lavue state dictionary
         :type dct: :obj:`dict` < :obj:`str`, :obj:`any`>
         """
+        print("SLS %s " % str(dct))
         if dct is not None:
             self.__lavuestate.updateState(dct)
         self.__lavuestate.updateState({
@@ -2415,8 +2417,14 @@ class LiveViewer(QtGui.QDialog):
             if ds == \
                str(type(self.__datasources[i]).__name__):
                 self.__datasources[i].setConfiguration(sourceConfiguration[i])
-        self.setLavueState(
-            {"configuration": ";".join(self.__sourceconfiguration or "")})
+        print("SET %s" % self.__sourceconfiguration)
+
+        if isinstance(self.__sourceconfiguration, list):
+            self.setLavueState(
+                {"configuration": ';'.join(self.__sourceconfiguration or "")})
+        else:
+            self.setLavueState(
+                {"configuration": (self.__sourceconfiguration or "")})
 
     @debugmethod
     def _switchSourceDisplay(self, label):
