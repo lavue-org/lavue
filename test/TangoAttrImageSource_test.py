@@ -1229,7 +1229,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
 
-    def test_readtangofileimage(self):
+    def ttest_readtangofileimage(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
