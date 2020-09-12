@@ -190,12 +190,10 @@ class TangoAttrImageSourceTest(unittest.TestCase):
     def takeNewTangoFileImage(self):
         global app
         self.__tangoimgcounter += 1
+        lit = self.__tangofilepattern % self.__tangoimgcounter
         self.__tisu.proxy.LastImagePath = self.__tangofilepath
-        self.__tisu.proxy.LastImageTaken = \
-            self.__tangofilepattern % self.__tangoimgcounter
-        fname = os.path.join(
-            self.__tisu.proxy.LastImagePath,
-            self.__tisu.proxy.LastImageTaken)
+        self.__tisu.proxy.LastImageTaken = lit
+        fname = os.path.join(self.__tangofilepath, lit)
         image = fabio.open(fname)
         li = image.data
         app.sendPostedEvents()

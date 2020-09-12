@@ -38,18 +38,21 @@ class TestImageServer (PyTango.Device_4Impl):
         self.ReadyEventImage.set_data_ready_event(True)
 
     def read_LastImageTaken(self, attr):
+        print("read LastImageTaken")
         attr.set_value(self.attr_LastImageTaken_read)
 
     def write_LastImageTaken(self, attr):
         self.attr_LastImageTaken_read = attr.get_write_value()
 
     def read_LastImagePath(self, attr):
+        print("read LastImagePath")
         attr.set_value(self.attr_LastImagePath_read)
 
     def write_LastImagePath(self, attr):
         self.attr_LastImagePath_read = attr.get_write_value()
 
     def read_LastImage(self, attr):
+        print("read LastImage")
         attr.set_value(self.attr_LastImage_read)
 
     def read_Spectrum1(self, attr):
