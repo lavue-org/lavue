@@ -1406,7 +1406,7 @@ class LiveViewer(QtGui.QDialog):
             self.__bkgsubwg.checkBkgSubtraction(0)
             self.__dobkgsubtraction = None
 
-        if hasattr(options, "brightfieldfile") and options.bffile:
+        if hasattr(options, "brightfieldfile") and options.brightfieldfile:
             if not self.__settings.showsub:
                 self.__settings.showsub = True
                 self.__prepwg.changeView(showsub=True)
@@ -3264,7 +3264,6 @@ class LiveViewer(QtGui.QDialog):
         self.__displayimage = self.__rawgreyimage
 
         if self.__dobkgsubtraction and self.__backgroundimage is not None:
-            # simple subtraction
             try:
                 if (hasattr(self.__rawgreyimage, "dtype") and
                    self.__rawgreyimage.dtype.name in
@@ -3294,7 +3293,6 @@ class LiveViewer(QtGui.QDialog):
                     text, str(value))
 
         if self.__dobfsubtraction and self.__bfmdfimage is not None:
-            # simple subtraction
             try:
                 self.__displayimage = self.__displayimage * self.__bfmdfimage
             except Exception:
