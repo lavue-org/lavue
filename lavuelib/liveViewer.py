@@ -548,8 +548,14 @@ class LiveViewer(QtGui.QDialog):
 
         #: (:class:`numpy.ndarray`) background image
         self.__backgroundimage = None
+        #: (:class:`numpy.ndarray`) brightfield image
+        self.__brightfieldimage = None
+        #: (:obj:`bool`) apply brightfield - darkfield image subtraction
+        self.__bfmdfimage = None
         #: (:obj:`bool`) apply background image subtraction
         self.__dobkgsubtraction = False
+        #: (:obj:`bool`) apply brightfield image subtraction
+        self.__dobfsubtraction = False
 
         #: (:class:`numpy.ndarray`) mask image
         self.__maskimage = None
@@ -709,6 +715,10 @@ class LiveViewer(QtGui.QDialog):
         self.__bkgsubwg.useCurrentImageAsBkg.connect(
             self._setCurrentImageAsBkg)
         self.__bkgsubwg.applyStateChanged.connect(self._checkBkgSubtraction)
+        self.__bkgsubwg.bfFileSelected.connect(self._prepareBFSubtraction)
+        self.__bkgsubwg.useCurrentImageAsBF.connect(
+            self._setCurrentImageAsBF)
+        self.__bkgsubwg.applyBFStateChanged.connect(self._checkBFSubtraction)
 
         self.__maskwg.maskFileSelected.connect(self._prepareMasking)
         self.__maskwg.applyStateChanged.connect(self._checkMasking)
@@ -788,6 +798,9 @@ class LiveViewer(QtGui.QDialog):
         bkgfile = ""
         if self.__bkgsubwg.isBkgSubApplied():
             bkgfile = str(self.__settings.bkgimagename)
+        bffile = ""
+        if self.__bkgsubwg.isBFSubApplied():
+            bffile = str(self.__settings.bfimagename)
         maskfile = ""
         if self.__maskwg.isMaskApplied():
             maskfile = str(self.__settings.maskimagename)
@@ -812,6 +825,7 @@ class LiveViewer(QtGui.QDialog):
                 "maskhighvalue": maskhighvalue,
                 "maskfile": maskfile,
                 "bkgfile": bkgfile,
+                "brightfieldfile": bffile,
                 "channel": self.__channelwg.channelLabel(),
                 "mbuffer": (self.__mbufferwg.bufferSize() or None),
                 "doordevice": self.__settings.doorname,
@@ -1391,6 +1405,15 @@ class LiveViewer(QtGui.QDialog):
         elif hasattr(options, "bkgfile"):
             self.__bkgsubwg.checkBkgSubtraction(0)
             self.__dobkgsubtraction = None
+
+        if hasattr(options, "brightfieldfile") and options.bffile:
+            if not self.__settings.showsub:
+                self.__settings.showsub = True
+                self.__prepwg.changeView(showsub=True)
+            self.__bkgsubwg.setBrightField(str(options.bffile))
+        elif hasattr(options, "brightfieldfile"):
+            self.__bkgsubwg.checkBFSubtraction(0)
+            self.__dobfsubtraction = None
 
         if hasattr(options, "channel") and options.channel is not None:
             try:
@@ -2508,6 +2531,11 @@ class LiveViewer(QtGui.QDialog):
                 values["bkgfile"] = str(self.__settings.bkgimagename)
             else:
                 values["bkgfile"] = ""
+            if self.__bkgsubwg.isBFSubApplied():
+                values["brightfieldfile"] = str(
+                    self.__settings.bfimagename)
+            else:
+                values["brightfieldfile"] = ""
             if self.__maskwg.isMaskApplied():
                 values["maskfile"] = str(self.__settings.maskimagename)
             else:
@@ -3265,6 +3293,25 @@ class LiveViewer(QtGui.QDialog):
                     "to the current image",
                     text, str(value))
 
+        if self.__dobfsubtraction and self.__bfmdfimage is not None:
+            # simple subtraction
+            try:
+                self.__displayimage = self.__displayimage * self.__bfmdfimage
+            except Exception:
+                self._checkBFSubtraction(0)
+                self.__bfmdfimage = None
+                self.__brightfieldimage = None
+                self.__dobfsubtraction = False
+                import traceback
+                value = traceback.format_exc()
+                text = messageBox.MessageBox.getText(
+                    "lavue: Bright field image does not match "
+                    "to the current image")
+                messageBox.MessageBox.warning(
+                    self, "lavue: Bright field image does not match "
+                    "to the current image",
+                    text, str(value))
+
         if self.__settings.showmask and self.__imagewg.applyMask() and \
            self.__imagewg.maskIndices() is not None:
             # set all masked (non-zero values) to zero by index
@@ -3733,6 +3780,26 @@ class LiveViewer(QtGui.QDialog):
         self._plot()
 
     @debugmethod
+    @QtCore.pyqtSlot(int)
+    def _checkBFSubtraction(self, state):
+        """ replots the image with subtranction if background image exists
+
+        :param state: checkbox state
+        :type state:  :obj:`int`
+        """
+        self.__dobfsubtraction = bool(state)
+        if self.__dobfsubtraction and self.__brightfieldimage is None:
+            self.__bkgsubwg.setDisplayedBFName("")
+        else:
+            self.__bkgsubwg.checkBFSubtraction(state)
+        self.__imagewg.setDoBFSubtraction(state)
+        bffile = ""
+        if self.__bfsubwg.isBFSubApplied():
+            bffile = str(self.__settings.bfimagename)
+        self.setLavueState({"brightfieldfile": bffile})
+        self._plot()
+
+    @debugmethod
     @QtCore.pyqtSlot(str)
     def _prepareBkgSubtraction(self, imagename):
         """ reads the background image
@@ -3766,14 +3833,63 @@ class LiveViewer(QtGui.QDialog):
                         handler.getImage(
                             currentfield["node"],
                             frame, growing, refresh=False))
+                    self.__updatebfmdf()
                 else:
                     return
             else:
                 self.__backgroundimage = np.transpose(
                     imageFileHandler.ImageFileHandler(
                         str(imagename)).getImage())
+                self.__updatebfmdf()
         else:
             self.__backgroundimage = None
+            self.__updatebfmdf()
+
+    @debugmethod
+    @QtCore.pyqtSlot(str)
+    def _prepareBFSubtraction(self, imagename):
+        """ reads the brightfield image
+
+        :param imagename: image name
+        :type imagename: :obj:`str`
+        """
+        imagename = str(imagename)
+        if imagename:
+            if imagename.endswith(".nxs") or imagename.endswith(".h5") \
+               or imagename.endswith(".nx") or imagename.endswith(".ndf"):
+                fieldpath = None
+                growing = 0
+                frame = 0
+                handler = imageFileHandler.NexusFieldHandler(
+                    str(imagename))
+                fields = handler.findImageFields()
+                if fields:
+                    imgfield = imageField.ImageField(self)
+                    imgfield.fields = fields
+                    imgfield.frame = 0
+                    imgfield.createGUI()
+                    if imgfield.exec_():
+                        fieldpath = imgfield.field
+                        growing = imgfield.growing
+                        frame = imgfield.frame
+                    else:
+                        return
+                    currentfield = fields[fieldpath]
+                    self.__brightfieldimage = np.transpose(
+                        handler.getImage(
+                            currentfield["node"],
+                            frame, growing, refresh=False))
+                    self.__updatebfmdf()
+                else:
+                    return
+            else:
+                self.__brightfieldimage = np.transpose(
+                    imageFileHandler.ImageFileHandler(
+                        str(imagename)).getImage())
+            self.__updatebfmdf()
+        else:
+            self.__brightfield = None
+            self.__updatebfmdf()
 
     @debugmethod
     @QtCore.pyqtSlot()
@@ -3782,9 +3898,52 @@ class LiveViewer(QtGui.QDialog):
         """
         if self.__rawgreyimage is not None:
             self.__backgroundimage = self.__rawgreyimage
+            self.__updatebfmdf()
             self.__bkgsubwg.setDisplayedName(str(self.__imagename))
         else:
             self.__bkgsubwg.setDisplayedName("")
+
+    @debugmethod
+    @QtCore.pyqtSlot()
+    def _setCurrentImageAsBF(self):
+        """ sets the chrrent image as the brightfield image
+        """
+        if self.__rawgreyimage is not None:
+            self.__brightfieldimage = self.__rawgreyimage
+            self.__updatebfmdf()
+            self.__bkgsubwg.setDisplayedBFName(str(self.__imagename))
+        else:
+            self.__bkgsubwg.setDisplayedBFName("")
+
+    def __updatebfmdf(self):
+        """ sets brightfield - darkfield image
+        """
+        if self.__brightfieldimage is not None and \
+           self.__backgroundimage is not None:
+            try:
+                with np.errstate(divide='ignore', invalid='ignore'):
+                    self.__bfmdfimage = np.true_divide(
+                        1,
+                        (self.__brightfieldimage - self.__backgroundimage),
+                        dtype=self.__settings.floattype)
+                self.__bfmdfimage[np.isinf(self.__bfmdfimage)] = np.nan
+            except Exception as e:
+                logger.warning(str(e))
+                self._checkBFSubtraction(0)
+                self.__brightfieldimage = None
+                self.__dobfsubtraction = False
+                import traceback
+                value = traceback.format_exc()
+                text = messageBox.MessageBox.getText(
+                    "lavue: Bright field image does not match "
+                    "to the current image")
+                messageBox.MessageBox.warning(
+                    self, "lavue: Bright field image does not match "
+                    "to the current image",
+                    text, str(value))
+                self.__bfmdfimage = None
+        else:
+            self.__bfmdfimage = self.__brightfieldimage
 
     @debugmethod
     @QtCore.pyqtSlot(bool)

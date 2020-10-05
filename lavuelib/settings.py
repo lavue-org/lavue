@@ -137,8 +137,10 @@ class Settings(object):
         self.calibrationfilename = None
         #: (:obj:`str`) last mask image file name
         self.maskimagename = None
-        #: (:obj:`str`) last background image file name
+        #: (:obj:`str`) last background/darkfield image file name
         self.bkgimagename = None
+        #: (:obj:`str`) last brightfield image file name
+        self.bfimagename = None
         #: (:obj:`bool`) statistics without scaling
         self.statswoscaling = True
         #: (:obj:`list` < :obj:`str` > ) zmq source topics
@@ -564,6 +566,11 @@ class Settings(object):
         if qstval:
             self.bkgimagename = qstval
         qstval = str(
+            settings.value(
+                "Configuration/LastBrightFieldImageFileName", type=str))
+        if qstval:
+            self.bfimagename = qstval
+        qstval = str(
             settings.value("Configuration/LastCalibrationFileName", type=str))
         if qstval:
             self.calibrationfilename = qstval
@@ -947,6 +954,9 @@ class Settings(object):
         settings.setValue(
             "Configuration/LastBackgroundImageFileName",
             self.bkgimagename)
+        settings.setValue(
+            "Configuration/LastBrightFieldImageFileName",
+            self.bfimagename)
         settings.setValue(
             "Configuration/StatisticsWithoutScaling",
             self.statswoscaling)

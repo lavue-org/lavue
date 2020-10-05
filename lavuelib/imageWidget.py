@@ -1167,6 +1167,14 @@ class ImageWidget(QtGui.QWidget):
         """
         self.__displaywidget.setDoBkgSubtraction(state)
 
+    def setDoBFSubtraction(self, state):
+        """ sets do brightfield subtraction flag
+
+        :param status: do brightfield subtraction flag
+        :type status: :obj:`bool`
+        """
+        self.__displaywidget.setDoBFSubtraction(state)
+
     def setSardanaUtils(self, sardana):
         """ sets sardana utils
 

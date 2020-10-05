@@ -6,101 +6,61 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>420</width>
-    <height>73</height>
+    <width>440</width>
+    <height>132</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>9</number>
-   </property>
+  <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <widget class="QCheckBox" name="applyBkgCheckBox">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="toolTip">
-          <string>apply background substraction to the image</string>
-         </property>
-         <property name="text">
-          <string>Subtract bkg</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QPushButton" name="selectCurrentPushButton">
-           <property name="toolTip">
-            <string>select the current image for the background substraction image</string>
-           </property>
-           <property name="text">
-            <string>Use current</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="selectPushButton">
-           <property name="toolTip">
-            <string>select the background substraction image</string>
-           </property>
-           <property name="text">
-            <string>Select ...</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="selectFilePushButton">
-           <property name="toolTip">
-            <string>select a file for the background substraction image</string>
-           </property>
-           <property name="text">
-            <string>Choose file ...</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
+      <widget class="QCheckBox" name="applyBkgCheckBox">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;apply background or darkfield substraction to the image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>Subtract bkg/DF</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QPushButton" name="selectCurrentPushButton">
          <property name="toolTip">
-          <string>background substraction image file name</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;select the current image for the background or darkfield substraction image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
-          <string>Background image:</string>
+          <string>Use current</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="fileLabel">
+        <widget class="QPushButton" name="selectPushButton">
          <property name="toolTip">
-          <string>background substraction image file name</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;select the background  or darkfield substraction image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
-          <string>no image selected</string>
+          <string>Select ...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="selectFilePushButton">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;select a file for the background or darkfield substraction image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Choose file ...</string>
          </property>
         </widget>
        </item>
@@ -108,8 +68,134 @@
      </item>
     </layout>
    </item>
+   <item row="1" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;background or darkfield substraction image file name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>Bkg/DF image:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="fileLabel">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;background or darkfield substraction image file name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>no image selected</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0">
+    <widget class="QWidget" name="bfWidget" native="true">
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="applyBFCheckBox">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;apply brightfield correction to the image. i.e. (image - DF)/(BF - DF)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Subtrack BF</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QPushButton" name="selectCurrentBFPushButton">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;select the current image for the brightfield substraction image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Use current</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="selectBFPushButton">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;select the brightfield substraction image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Select ...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="selectBFFilePushButton">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;select a file for the brightfield substraction image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Choose file ...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="QLabel" name="bfLabel">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;brightfield substraction image file name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>BF image:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="bfFileLabel">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;brightfield substraction image file name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>no image selected</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>applyBkgCheckBox</tabstop>
+  <tabstop>selectCurrentPushButton</tabstop>
+  <tabstop>selectPushButton</tabstop>
+  <tabstop>selectFilePushButton</tabstop>
+  <tabstop>applyBFCheckBox</tabstop>
+  <tabstop>selectCurrentBFPushButton</tabstop>
+  <tabstop>selectBFPushButton</tabstop>
+  <tabstop>selectBFFilePushButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

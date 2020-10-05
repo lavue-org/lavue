@@ -109,6 +109,8 @@ class IntensityParameters(object):
         """
         #: (:obj:`bool`) do background substraction
         self.dobkgsubtraction = False
+        #: (:obj:`bool`) do brightfield substraction
+        self.dobfsubtraction = False
         #: (:obj:`bool`) calculate statistics without scaling
         self.statswoscaling = True
         #: (:obj:`str`) intensity scaling
@@ -573,8 +575,17 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         if ilabel is None:
             scaling = self.__intensity.scaling \
                 if not self.__intensity.statswoscaling else "linear"
-            if self.__intensity.dobkgsubtraction:
+            if self.__intensity.dobkgsubtraction and \
+               not self.__intensity.dobfsubtraction:
                 ilabel = "%s(intensity-background)" % (
+                    scaling if scaling != "linear" else "")
+            elif (self.__intensity.dobkgsubtraction and
+                  self.__intensity.dobfsubtraction):
+                ilabel = "%s((intensity-DF)/(BF-DF))" % (
+                    scaling if scaling != "linear" else "")
+            elif (not self.__intensity.dobkgsubtraction and
+                  self.__intensity.dobfsubtraction):
+                ilabel = "%s(intensity/BF)" % (
                     scaling if scaling != "linear" else "")
             else:
                 if scaling == "linear":
@@ -1035,6 +1046,14 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         :type status: :obj:`bool`
         """
         self.__intensity.dobkgsubtraction = state
+
+    def setDoBFSubtraction(self, state):
+        """ sets do brightfield subtraction flag
+
+        :param status: do brightfield subtraction flag
+        :type status: :obj:`bool`
+        """
+        self.__intensity.dobfsubtraction = state
 
     def image(self):
         """ provides imageItem object
