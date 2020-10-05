@@ -3794,7 +3794,7 @@ class LiveViewer(QtGui.QDialog):
             self.__bkgsubwg.checkBFSubtraction(state)
         self.__imagewg.setDoBFSubtraction(state)
         bffile = ""
-        if self.__bfsubwg.isBFSubApplied():
+        if self.__bkgsubwg.isBFSubApplied():
             bffile = str(self.__settings.bfimagename)
         self.setLavueState({"brightfieldfile": bffile})
         self._plot()
