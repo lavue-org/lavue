@@ -53,7 +53,7 @@ class BkgSubtractionWidget(QtGui.QWidget):
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) use current image signal
     useCurrentImageAsBF = QtCore.pyqtSignal()
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) apply state change signal
-    bfApplyStateChanged = QtCore.pyqtSignal(int)
+    applyBFStateChanged = QtCore.pyqtSignal(int)
 
     def __init__(self, parent=None, settings=None):
         """ constructor
