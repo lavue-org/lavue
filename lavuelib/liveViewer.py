@@ -1410,7 +1410,7 @@ class LiveViewer(QtGui.QDialog):
             if not self.__settings.showsub:
                 self.__settings.showsub = True
                 self.__prepwg.changeView(showsub=True)
-            self.__bkgsubwg.setBrightField(str(options.bffile))
+            self.__bkgsubwg.setBrightField(str(options.brightfieldfile))
         elif hasattr(options, "brightfieldfile"):
             self.__bkgsubwg.checkBFSubtraction(0)
             self.__dobfsubtraction = None
