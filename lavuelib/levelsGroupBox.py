@@ -229,6 +229,8 @@ class LevelsGroupBox(QtGui.QWidget):
             self.__ui.gradientComboBox.show()
             self.__ui.scalingLabel.show()
             self.__ui.autoLevelsCheckBox.show()
+            self.__ui.autofactorLineEdit.show()
+            self.__ui.autofactorLabel.show()
             self.__ui.maxDoubleSpinBox.show()
             self.__ui.maxLabel.show()
             self.__ui.minDoubleSpinBox.show()
@@ -240,6 +242,8 @@ class LevelsGroupBox(QtGui.QWidget):
 
             self.__ui.scalingLabel.hide()
             self.__ui.autoLevelsCheckBox.hide()
+            self.__ui.autofactorLineEdit.hide()
+            self.__ui.autofactorLabel.hide()
             self.__ui.maxDoubleSpinBox.hide()
             self.__ui.maxLabel.hide()
             self.__ui.minDoubleSpinBox.hide()
