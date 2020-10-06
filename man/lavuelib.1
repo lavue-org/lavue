@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "LAVUELIB" "1" "Sep 29, 2020" "2.48" "lavuelib"
+.TH "LAVUELIB" "1" "Oct 06, 2020" "2.49" "lavuelib"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .
@@ -418,13 +418,34 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
+.B applyBFStateChanged
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) apply state change signal
+.UNINDENT
+.INDENT 7.0
+.TP
 .B applyStateChanged
 (\fBpyqtgraph.QtCore.pyqtSignal\fP) apply state change signal
 .UNINDENT
 .INDENT 7.0
 .TP
+.B bfFileSelected
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) bkg file selected signal
+.UNINDENT
+.INDENT 7.0
+.TP
 .B bkgFileSelected
 (\fBpyqtgraph.QtCore.pyqtSignal\fP) bkg file selected signal
+.UNINDENT
+.INDENT 7.0
+.TP
+.B checkBFSubtraction(state)
+unchecks apply CheckBox if state is 1 and it is checked
+and reset the display
+.INDENT 7.0
+.TP
+.B Parameters
+\fBstate\fP (\fI\%int\fP) – checkbox state
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -436,6 +457,13 @@ and reset the display
 .B Parameters
 \fBstate\fP (\fI\%int\fP) – checkbox state
 .UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B isBFSubApplied()
+if brightfield correction applied
+:returns: apply status
+:rtype: \fI\%bool\fP
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -456,6 +484,26 @@ sets the image background
 .UNINDENT
 .INDENT 7.0
 .TP
+.B setBrightField(fname)
+sets the image background
+.INDENT 7.0
+.TP
+.B Parameters
+\fBfname\fP (\fI\%str\fP) – file name
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setDisplayedBFName(name)
+sets displayed file name
+.INDENT 7.0
+.TP
+.B Parameters
+\fBname\fP (\fI\%str\fP) – file name
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B setDisplayedName(name)
 sets displayed file name
 .INDENT 7.0
@@ -463,6 +511,11 @@ sets displayed file name
 .B Parameters
 \fBname\fP (\fI\%str\fP) – file name
 .UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B useCurrentImageAsBF
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) use current image signal
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -5920,6 +5973,16 @@ sets minimum intensity level
 .UNINDENT
 .INDENT 7.0
 .TP
+.B setDoBFSubtraction(state)
+sets do brightfield subtraction flag
+.INDENT 7.0
+.TP
+.B Parameters
+\fBstatus\fP (\fI\%bool\fP) – do brightfield subtraction flag
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B setDoBkgSubtraction(state)
 sets do background subtraction flag
 .INDENT 7.0
@@ -6131,6 +6194,11 @@ Bases: \fI\%object\fP
 intensity parameters
 .sp
 constructor
+.INDENT 7.0
+.TP
+.B dobfsubtraction = None
+(\fI\%bool\fP) do brightfield substraction
+.UNINDENT
 .INDENT 7.0
 .TP
 .B dobkgsubtraction = None
@@ -8032,6 +8100,16 @@ sets displayed info text and recalculates the current roi sum
 .TP
 .B Parameters
 \fBtext\fP (\fI\%str\fP) – text to display
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setDoBFSubtraction(state)
+sets do brightfield subtraction flag
+.INDENT 7.0
+.TP
+.B Parameters
+\fBstatus\fP (\fI\%bool\fP) – do brightfield subtraction flag
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -11091,8 +11169,13 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
+.B bfimagename = None
+(\fI\%str\fP) last brightfield image file name
+.UNINDENT
+.INDENT 7.0
+.TP
 .B bkgimagename = None
-(\fI\%str\fP) last background image file name
+(\fI\%str\fP) last background/darkfield image file name
 .UNINDENT
 .INDENT 7.0
 .TP
