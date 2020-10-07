@@ -3941,7 +3941,11 @@ class LiveViewer(QtGui.QDialog):
                     text, str(value))
                 self.__bfmdfimage = None
         else:
-            self.__bfmdfimage = self.__brightfieldimage
+            with np.errstate(divide='ignore', invalid='ignore'):
+                self.__bfmdfimage = np.true_divide(
+                    1, self.__brightfieldimage,
+                    dtype=self.__settings.floattype)
+                self.__bfmdfimage[np.isinf(self.__bfmdfimage)] = np.nan
 
     @debugmethod
     @QtCore.pyqtSlot(bool)
