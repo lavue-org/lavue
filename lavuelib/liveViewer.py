@@ -3940,12 +3940,14 @@ class LiveViewer(QtGui.QDialog):
                     "to the current image",
                     text, str(value))
                 self.__bfmdfimage = None
-        else:
+        elif self.__brightfieldimage is not None:
             with np.errstate(divide='ignore', invalid='ignore'):
                 self.__bfmdfimage = np.true_divide(
                     1, self.__brightfieldimage,
                     dtype=self.__settings.floattype)
                 self.__bfmdfimage[np.isinf(self.__bfmdfimage)] = np.nan
+        else:
+            self.__bfmdfimage = None
 
     @debugmethod
     @QtCore.pyqtSlot(bool)
