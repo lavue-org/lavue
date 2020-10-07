@@ -386,7 +386,7 @@ class CommandLineLavueStateTest(unittest.TestCase):
         toolcnf9 = {}
         toolcnf9["tango_det_attrs"] = {
             # 'lmbd2': 'p00/lambda/dellek/LiveLastImageData',
-            'ltangotest': 'sys/tg_test/1/long_image_ro',
+            'detdistance': 'test/lavuecontroller/00/DetectorDistance',
             # 'mca01': 'p00/mca/exp.01/Data'
         }
         cnf9["toolconfig"] = json.dumps(toolcnf9)
