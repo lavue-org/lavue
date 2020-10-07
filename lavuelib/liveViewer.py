@@ -1645,6 +1645,8 @@ class LiveViewer(QtGui.QDialog):
         :type event:  :class:`pyqtgraph.QtCore.QEvent`:
         """
         if not self.__closing:
+            if self.__imagewg:
+                self.__imagewg.disconnecttool()
             if self.__tangoclient:
                 self.__tangoclient.unsubscribe()
             self._storeSettings()

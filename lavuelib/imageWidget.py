@@ -588,7 +588,7 @@ class ImageWidget(QtGui.QWidget):
             self.__currenttool.activate()
 
     # @debugmethod
-    def __disconnecttool(self):
+    def disconnecttool(self):
         """ disconnect current tool widget
         """
         if self.__currenttool:
@@ -689,7 +689,7 @@ class ImageWidget(QtGui.QWidget):
                 stwg = twg
             else:
                 twg.hide()
-        self.__disconnecttool()
+        self.disconnecttool()
         self.__currenttool = stwg
         if stwg is not None:
             stwg.show()
@@ -714,7 +714,7 @@ class ImageWidget(QtGui.QWidget):
                 stwg = twg
             else:
                 twg.hide()
-        self.__disconnecttool()
+        self.disconnecttool()
         self.__currenttool = stwg
         if stwg is not None:
             stwg.show()
@@ -733,7 +733,7 @@ class ImageWidget(QtGui.QWidget):
                 stwg = twg
             else:
                 twg.hide()
-        self.__disconnecttool()
+        self.disconnecttool()
         self.__currenttool = stwg
         if stwg is not None:
             stwg.show()
