@@ -285,7 +285,8 @@ class CommandLineLavueStateTest(unittest.TestCase):
             dialog.show()
 
             cnf = {}
-            cnf["toolconfig"] = '{"aliases": ["pilatus_roi1", "pilatus_roi2"],' \
+            cnf["toolconfig"] = '{' \
+                '"aliases": ["pilatus_roi1", "pilatus_roi2"],' \
                 ' "rois_number": 2}'
             lavuestate1 = json.dumps(cnf)
             cnf2 = {}
@@ -393,7 +394,7 @@ class CommandLineLavueStateTest(unittest.TestCase):
             toolcnf9 = {}
             toolcnf9["tango_det_attrs"] = {
                 # 'lmbd2': 'p00/lambda/dellek/LiveLastImageData',
-                'sepc':'test/testimageserver/00/Spectrum2',
+                'sepc': 'test/testimageserver/00/Spectrum2',
                 # 'mca01': 'p00/mca/exp.01/Data'
             }
             cnf9["toolconfig"] = json.dumps(toolcnf9)
