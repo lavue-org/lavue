@@ -390,9 +390,9 @@ class CommandLineArgumentH5CppTest(unittest.TestCase):
                     "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
             ])
 
-            qtck1.executeChecks(delay=3000)
-            qtck2.executeChecks(delay=6000)
-            status = qtck3.executeChecksAndClose(delay=9000)
+            qtck1.executeChecks(delay=1000)
+            qtck2.executeChecks(delay=3000)
+            status = qtck3.executeChecksAndClose(delay=5000)
 
             self.assertEqual(status, 0)
 
@@ -549,8 +549,8 @@ class CommandLineArgumentH5CppTest(unittest.TestCase):
                     "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
             ])
 
-            qtck1.executeChecks(delay=3000)
-            status = qtck2.executeChecksAndClose(delay=6000)
+            qtck1.executeChecks(delay=1000)
+            status = qtck2.executeChecksAndClose(delay=3000)
 
             self.assertEqual(status, 0)
             qtck1.compareResults(
@@ -693,8 +693,8 @@ class CommandLineArgumentH5CppTest(unittest.TestCase):
                     "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
             ])
 
-            qtck1.executeChecks(delay=3000)
-            status = qtck2.executeChecksAndClose(delay=6000)
+            qtck1.executeChecks(delay=1000)
+            status = qtck2.executeChecksAndClose(delay=3000)
 
             self.assertEqual(status, 0)
             qtck1.compareResults(
@@ -836,8 +836,8 @@ class CommandLineArgumentH5CppTest(unittest.TestCase):
                     "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
             ])
 
-            qtck1.executeChecks(delay=3000)
-            status = qtck2.executeChecksAndClose(delay=6000)
+            qtck1.executeChecks(delay=2000)
+            status = qtck2.executeChecksAndClose(delay=4000)
 
             self.assertEqual(status, 0)
             qtck1.compareResults(

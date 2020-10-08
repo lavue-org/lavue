@@ -232,9 +232,9 @@ class PyTineImageSourceTest(unittest.TestCase):
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
         ])
 
-        qtck1.executeChecks(delay=3000)
-        qtck2.executeChecks(delay=6000)
-        status = qtck3.executeChecksAndClose(delay=9000)
+        qtck1.executeChecks(delay=1000)
+        qtck2.executeChecks(delay=2000)
+        status = qtck3.executeChecksAndClose(delay=3000)
 
         self.assertEqual(status, 0)
 
@@ -341,9 +341,9 @@ class PyTineImageSourceTest(unittest.TestCase):
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
         ])
 
-        qtck1.executeChecks(delay=3000)
-        qtck2.executeChecks(delay=6000)
-        status = qtck3.executeChecksAndClose(delay=9000)
+        qtck1.executeChecks(delay=1000)
+        qtck2.executeChecks(delay=2000)
+        status = qtck3.executeChecksAndClose(delay=3000)
 
         self.assertEqual(status, 0)
 
