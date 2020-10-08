@@ -4400,7 +4400,10 @@ class DiffractogramToolWidget(ToolBaseWidget):
         """
         logger.debug("waiting for Thread")
         if self.__commandthread:
-            self.__commandthread.wait()
+            try:
+                self.__commandthread.wait()
+            except Exception as e:
+                logger.warning(str(e))
         logger.debug("waiting for Thread ENDED")
 
     # @debugmethod
@@ -4534,6 +4537,7 @@ class DiffractogramToolWidget(ToolBaseWidget):
     def deactivate(self):
         """ deactivates tool widget
         """
+        self.waitForThread()
         self._mainwidget.bottomplotShowMenu()
         for curve in self.__curves:
             curve.hide()
