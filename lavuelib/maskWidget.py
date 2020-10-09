@@ -89,6 +89,7 @@ class MaskWidget(QtGui.QWidget):
         """
         self.setDisplayedName(fname)
         self.maskFileSelected.emit(fname)
+        self.__settings.maskimagename = fname
         self.__ui.applyMaskCheckBox.setChecked(True)
         self.applyStateChanged.emit(2)
 
@@ -128,6 +129,7 @@ class MaskWidget(QtGui.QWidget):
         """
         self.setDisplayedName("")
         self.__fileName = ""
+        self.__settings.maskimagename = ""
         self.__ui.applyMaskCheckBox.setChecked(False)
 
     def isMaskApplied(self):

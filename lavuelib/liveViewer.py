@@ -797,13 +797,16 @@ class LiveViewer(QtGui.QDialog):
             levels = ""
         bkgfile = ""
         if self.__bkgsubwg.isBkgSubApplied():
-            bkgfile = str(self.__settings.bkgimagename)
+            if self.__settings.bkgimagename:
+                bkgfile = str(self.__settings.bkgimagename)
         bffile = ""
         if self.__bkgsubwg.isBFSubApplied():
-            bffile = str(self.__settings.bfimagename)
+            if self.__settings.bfimagename:
+                bffile = str(self.__settings.bfimagename)
         maskfile = ""
         if self.__maskwg.isMaskApplied():
-            maskfile = str(self.__settings.maskimagename)
+            if self.__settings.maskimagename:
+                maskfile = str(self.__settings.maskimagename)
         maskhighvalue = ""
         if self.__settings.showhighvaluemask:
             maskhighvalue = str(self.__highvaluemaskwg.mask() or "")
@@ -1219,6 +1222,9 @@ class LiveViewer(QtGui.QDialog):
                     elif running and srccnf and stop is not True:
                         self.__sourcewg.toggleServerConnection()
                 self.__updateTool(tool)
+                self._plot()
+                # print("SETSTATE")
+                self.setState()
             if not dctcnf or \
                ("__update__" in dctcnf.keys() and dctcnf["__update__"]):
                 self.setLavueState()
@@ -1404,8 +1410,9 @@ class LiveViewer(QtGui.QDialog):
             self.__bkgsubwg.setBackground(str(options.bkgfile))
         elif hasattr(options, "bkgfile"):
             self.__bkgsubwg.checkBkgSubtraction(0)
+            self.__settings.bkgimagename = ""
             self.__dobkgsubtraction = None
-
+            self.__backgroundimage = None
         if hasattr(options, "brightfieldfile") and options.brightfieldfile:
             if not self.__settings.showsub:
                 self.__settings.showsub = True
@@ -1414,6 +1421,9 @@ class LiveViewer(QtGui.QDialog):
         elif hasattr(options, "brightfieldfile"):
             self.__bkgsubwg.checkBFSubtraction(0)
             self.__dobfsubtraction = None
+            self.__settings.bfimagename = ""
+            self.__bfmdfimage = None
+            self.__brightfieldimage = None
 
         if hasattr(options, "channel") and options.channel is not None:
             try:
@@ -2529,16 +2539,19 @@ class LiveViewer(QtGui.QDialog):
             else:
                 values["autofactor"] = self.__levelswg.autoFactor()
             values["gradient"] = self.__levelswg.gradient()
-            if self.__bkgsubwg.isBkgSubApplied():
+            if self.__bkgsubwg.isBkgSubApplied() \
+               and self.__settings.bkgimagename:
                 values["bkgfile"] = str(self.__settings.bkgimagename)
             else:
                 values["bkgfile"] = ""
-            if self.__bkgsubwg.isBFSubApplied():
+            if self.__bkgsubwg.isBFSubApplied() \
+               and self.__settings.bfimagename:
                 values["brightfieldfile"] = str(
                     self.__settings.bfimagename)
             else:
                 values["brightfieldfile"] = ""
-            if self.__maskwg.isMaskApplied():
+            if self.__maskwg.isMaskApplied() and \
+               self.__settings.maskimagename:
                 values["maskfile"] = str(self.__settings.maskimagename)
             else:
                 values["maskfile"] = ""
@@ -3701,7 +3714,7 @@ class LiveViewer(QtGui.QDialog):
         if self.__imagewg.applyMask() and self.__maskimage is None:
             self.__maskwg.noImage()
         maskfile = ""
-        if self.__maskwg.isMaskApplied():
+        if self.__maskwg.isMaskApplied() and self.__settings.maskimagename:
             maskfile = str(self.__settings.maskimagename)
         self.setLavueState({"maskfile": maskfile})
         self._plot()
@@ -3774,7 +3787,8 @@ class LiveViewer(QtGui.QDialog):
             self.__bkgsubwg.checkBkgSubtraction(state)
         self.__imagewg.setDoBkgSubtraction(state)
         bkgfile = ""
-        if self.__bkgsubwg.isBkgSubApplied():
+        if self.__bkgsubwg.isBkgSubApplied() and \
+           self.__settings.bkgimagename:
             bkgfile = str(self.__settings.bkgimagename)
         self.setLavueState({"bkgfile": bkgfile})
         self._plot()
@@ -3794,7 +3808,8 @@ class LiveViewer(QtGui.QDialog):
             self.__bkgsubwg.checkBFSubtraction(state)
         self.__imagewg.setDoBFSubtraction(state)
         bffile = ""
-        if self.__bkgsubwg.isBFSubApplied():
+        if self.__bkgsubwg.isBFSubApplied() and \
+           self.__settings.bfimagename:
             bffile = str(self.__settings.bfimagename)
         self.setLavueState({"brightfieldfile": bffile})
         self._plot()
