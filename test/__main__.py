@@ -203,9 +203,9 @@ def main():
         "all": [basicsuite, tangosuite],
     }
 
-    print(options.args)
-    if not options.args or 'all' in options.args:
-        options.args = list(namesuite.keys())
+    # print(options.args)
+    if not options.args:
+        options.args = ["all"]
 
     ts = []
     for nm in options.args:
