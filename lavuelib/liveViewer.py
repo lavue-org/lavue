@@ -1872,7 +1872,7 @@ class LiveViewer(QtGui.QDialog):
                     self.__frame = int(fid)
 
                     iname = "%s%s%s" % (fprefix, fmtfid, ext)
-                    
+
                     imgname = os.path.join(ipath, iname)
                     if os.path.isfile(imgname):
                         imagename = imgname
