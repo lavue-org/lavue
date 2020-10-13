@@ -1847,7 +1847,7 @@ class LiveViewer(QtGui.QDialog):
                or imagename.endswith(".ndf") \
                or imagename.endswith(".hdf"):
                 self.__frame = int(fid)
-            else:
+            elif fid >= 0:
                 try:
                     ipath, iname = ntpath.split(imagename)
                     basename, ext = os.path.splitext(iname)
@@ -1872,7 +1872,10 @@ class LiveViewer(QtGui.QDialog):
                     self.__frame = int(fid)
 
                     iname = "%s%s%s" % (fprefix, fmtfid, ext)
-                    imagename = os.path.join(ipath, iname)
+                    
+                    imgname = os.path.join(ipath, iname)
+                    if os.path.isfile(imgname):
+                        imagename = imgname
                 except Exception:
                     imagename = None
                     fid = None
