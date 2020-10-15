@@ -34,6 +34,8 @@ import json
 
 from pyqtgraph import QtCore
 
+from .omniQThread import OmniQThread
+
 #: (:obj:`float`) refresh rate in seconds
 GLOBALREFRESHRATE = .1
 #: (:obj:`float`) polling inverval in seconds
@@ -43,7 +45,7 @@ logger = logging.getLogger("lavue")
 
 
 # subclass for threading
-class MotorWatchThread(QtCore.QThread):
+class MotorWatchThread(OmniQThread):
 
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) signal with motor status
     motorStatusSignal = QtCore.pyqtSignal(float, str, float, str)
@@ -60,7 +62,7 @@ class MotorWatchThread(QtCore.QThread):
         :param mserver: door server device proxy
         :type mserver: :class:`PyTango.DeviceProxy`
         """
-        QtCore.QThread.__init__(self)
+        OmniQThread.__init__(self)
         #: (:obj:`bool`) execute loop flag
         self.__loop = False
         #: (:class:`PyTango.DeviceProxy`) first motor device proxy
@@ -70,7 +72,7 @@ class MotorWatchThread(QtCore.QThread):
         #: (:class:`PyTango.DeviceProxy`) door server device proxy
         self.__mserver = server
 
-    def run(self):
+    def _run(self):
         """ runner of the fetching thread
         """
         self.__loop = True
@@ -113,7 +115,7 @@ class MotorWatchThread(QtCore.QThread):
 
 
 # subclass for threading
-class AttributeWatchThread(QtCore.QThread):
+class AttributeWatchThread(OmniQThread):
 
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) signal with attribute values
     attrValuesSignal = QtCore.pyqtSignal(str)
@@ -128,7 +130,7 @@ class AttributeWatchThread(QtCore.QThread):
         :param aproxies: attribute proxies
         :type aproxies: :obj:`list` <:class:`PyTango.DeviceProxy`>
         """
-        QtCore.QThread.__init__(self)
+        OmniQThread.__init__(self)
         #: (:obj:`bool`) execute loop flag
         self.__loop = False
         #: (:obj:`bool`) execute loop flag
@@ -137,7 +139,7 @@ class AttributeWatchThread(QtCore.QThread):
         #: (:obj:`list` <:class:`PyTango.DeviceProxy`>)  attribute proxies
         self.__aproxies = aproxies or []
 
-    def run(self):
+    def _run(self):
         """ runner of the fetching thread
         """
         self.__loop = True
