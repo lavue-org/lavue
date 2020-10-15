@@ -43,10 +43,10 @@ except ImportError:
 
 class OmniQThread(QtCore.QThread):
 
-    def __init__(self):
+    def __init__(self, parent=None):
         """ constructor
         """
-        QtCore.QThread.__init__(self)
+        QtCore.QThread.__init__(self, parent)
 
     def run(self):
         """ runner of the fetching thread
