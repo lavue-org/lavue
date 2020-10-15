@@ -116,6 +116,7 @@ def main():
     # ts = None
     # test suit
     basicsuite = unittest.TestSuite()
+    controllersuite = unittest.TestSuite()
     tangosuite = unittest.TestSuite()
     print("Using: %s" % qt_api)
     app = QtGui.QApplication([])
@@ -174,7 +175,7 @@ def main():
             unittest.defaultTestLoader.loadTestsFromModule(
                 FileWriterPNIH5PY_test))
     if PYTANGO_AVAILABLE:
-        basicsuite.addTests(
+        controllersuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 LavueController_test))
         basicsuite.addTests(
@@ -200,6 +201,7 @@ def main():
     namesuite = {
         "basic": [basicsuite],
         "tangosource": [tangosuite],
+        "controller": [controllersuite],
         "all": [basicsuite, tangosuite],
     }
 
