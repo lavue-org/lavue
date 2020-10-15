@@ -34,7 +34,6 @@ eotlib = pffi.verify(r"""
 """, source_extension='.cpp', libraries=["omnithread"])
 
 
-
 class EnsureOmniThread(object):
     "ensure omni thread class"
 
