@@ -160,6 +160,7 @@ class BkgSubtractionWidget(QtGui.QWidget):
         :param fname: file name
         :type fname: :obj:`str`
         """
+        self.__settings.bkgimagename = fname
         self.setDisplayedName(fname)
         self.bkgFileSelected.emit(fname)
         self.__ui.applyBkgCheckBox.setChecked(True)
@@ -171,6 +172,7 @@ class BkgSubtractionWidget(QtGui.QWidget):
         :param fname: file name
         :type fname: :obj:`str`
         """
+        self.__settings.bfimagename = fname
         self.setDisplayedBFName(fname)
         self.bfFileSelected.emit(fname)
         self.__ui.applyBFCheckBox.setChecked(True)

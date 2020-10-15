@@ -366,7 +366,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             tool='roi',
             # log='debug',
             log='info',
-            scaling='log',
+            scaling='sqrt',
             levels='m20,20',
             gradient='thermal',
             start=True,
@@ -437,8 +437,8 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             print(res1[2] - lastimage)
         self.assertTrue(np.allclose(res1[2], lastimage, equal_nan=True))
 
-        scaledimage = np.clip(lastimage, 10e-3, np.inf)
-        scaledimage = np.log10(scaledimage)
+        # scaledimage = np.clip(lastimage, 10e-3, np.inf)
+        scaledimage = np.sqrt(lastimage)
         self.assertTrue(np.allclose(res1[3], scaledimage, equal_nan=True))
 
         l1, l2 = res1[4]
@@ -447,16 +447,16 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             print(res2[1])
             print(lastimage)
         self.assertTrue(np.allclose(res2[1], lastimage, equal_nan=True))
-        scaledimage = np.clip(lastimage, 10e-3, np.inf)
-        scaledimage = np.log10(scaledimage)
+        # scaledimage = np.clip(lastimage, 10e-3, np.inf)
+        scaledimage = np.sqrt(lastimage)
         self.assertTrue(np.allclose(res2[2], scaledimage, equal_nan=True))
 
         l1, l2 = res2[3]
         lastimage = np.stack([l1, zs, zs, l2], 1)
 
         self.assertTrue(np.allclose(res3[0], lastimage, equal_nan=True))
-        scaledimage = np.clip(lastimage, 10e-3, np.inf)
-        scaledimage = np.log10(scaledimage)
+        # scaledimage = np.clip(lastimage, 10e-3, np.inf)
+        scaledimage = np.sqrt(lastimage)
         self.assertTrue(np.allclose(res3[1], scaledimage, equal_nan=True))
 
         ls = json.loads(self.__lavuestate)
@@ -471,7 +471,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             tool='roi',
             # log='debug',
             log='info',
-            scaling='log',
+            scaling='sqrt',
             levels='-20.0,20.0',
             gradient='thermal',
             tangodevice='test/lavuecontroller/00',
