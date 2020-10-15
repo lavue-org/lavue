@@ -19,11 +19,40 @@
 # Boston, MA  02110-1301, USA.
 #
 # Authors:
-#     Christoph Rosemann <christoph.rosemann@desy.de>
 #     Jan Kotanski <jan.kotanski@desy.de>
 #
 
-""" release version """
+""" omni qt thread """
 
-#: (:obj:`str`) the live viewer version
-__version__ = "2.50.0"
+from pyqtgraph import QtCore
+
+try:
+    import PyTango
+    #: (:obj:`bool`) PyTango imported
+    PYTANGO = True
+    if hasattr(PyTango, "EnsureOmniThread"):
+        EnsureOmniThread = PyTango.EnsureOmniThread
+    else:
+        from . import cpplib
+        EnsureOmniThread = cpplib.EnsureOmniThread
+except ImportError:
+    #: (:obj:`bool`) PyTango imported
+    PYTANGO = False
+    EnsureOmniThread = None
+
+
+class OmniQThread(QtCore.QThread):
+
+    def __init__(self, parent=None):
+        """ constructor
+        """
+        QtCore.QThread.__init__(self, parent)
+
+    def run(self):
+        """ runner of the fetching thread
+        """
+        if EnsureOmniThread is not None:
+            with EnsureOmniThread():
+                self._run()
+        else:
+            self._run()

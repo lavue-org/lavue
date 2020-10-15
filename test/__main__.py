@@ -178,7 +178,7 @@ def main():
         controllersuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 LavueController_test))
-        basicsuite.addTests(
+        controllersuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 CommandLineLavueState_test))
         tangosuite.addTests(

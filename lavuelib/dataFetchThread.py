@@ -30,6 +30,7 @@ from __future__ import unicode_literals
 
 from pyqtgraph import QtCore
 import time
+from .omniQThread import OmniQThread
 
 #: (:obj:`float`) refresh rate in seconds
 GLOBALREFRESHRATE = .1
@@ -75,7 +76,7 @@ class ExchangeList(object):
 
 
 # subclass for threading
-class DataFetchThread(QtCore.QThread):
+class DataFetchThread(OmniQThread):
 
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) new data name signal
     newDataNameFetched = QtCore.pyqtSignal(str, str)
@@ -88,7 +89,7 @@ class DataFetchThread(QtCore.QThread):
         :param alist: exchange object
         :type alist: :class:`ExchangeList`
         """
-        QtCore.QThread.__init__(self)
+        OmniQThread.__init__(self)
         #: (:class:`lavuelib.imageSource.BaseSource`) image source
         self.__datasource = datasource
         #: (:class:`ExchangeList`) exchange list
@@ -102,8 +103,8 @@ class DataFetchThread(QtCore.QThread):
         #: (:class:`pyqtgraph.QtCore.QMutex`) thread mutex
         self.__mutex = QtCore.QMutex()
 
-    def run(self):
-        """ runner of the fetching thread
+    def _run(self):
+        """ run function of the fetching thread
         """
         self.__loop = True
         dt = 0

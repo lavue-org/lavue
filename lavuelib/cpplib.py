@@ -19,11 +19,33 @@
 # Boston, MA  02110-1301, USA.
 #
 # Authors:
-#     Christoph Rosemann <christoph.rosemann@desy.de>
 #     Jan Kotanski <jan.kotanski@desy.de>
-#
 
-""" release version """
+import cffi
 
-#: (:obj:`str`) the live viewer version
-__version__ = "2.50.0"
+pffi = cffi.FFI()
+pffi.cdef("void* EnsureOmniThread();")
+eotlib = pffi.verify(r"""
+    #include <omnithread.h>
+
+    void* EnsureOmniThread(){
+    return new omni_thread::ensure_self;
+    }
+""", source_extension='.cpp', libraries=["omnithread"])
+
+
+class EnsureOmniThread(object):
+    "ensure omni thread class"
+
+    def __init__(self):
+        """ constructor """
+        self.__eot = None
+
+    def __enter__(self):
+        """ enter operator """
+        self.__eot = eotlib.EnsureOmniThread()
+        return self.__eot
+
+    def __exit__(self, type, value, traceback):
+        """ exit operator """
+        self.__eot = None

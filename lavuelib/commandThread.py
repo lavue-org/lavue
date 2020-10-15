@@ -26,12 +26,14 @@
 
 from pyqtgraph import QtCore
 
+from .omniQThread import OmniQThread
+
 import logging
 #: (:obj:`logging.Logger`) logger object
 logger = logging.getLogger(__name__)
 
 
-class CommandThread(QtCore.QThread):
+class CommandThread(OmniQThread):
     """ thread which executes a list of commands
     """
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) finished signal
@@ -48,7 +50,7 @@ class CommandThread(QtCore.QThread):
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
 
-        QtCore.QThread.__init__(self, parent)
+        OmniQThread.__init__(self, parent)
         #: (:obj:`instanceobj` or :obj:`type`) command instance
         self.instance = instance
         #: (:obj:`list` <:obj:`str`>) a list of commands
@@ -56,7 +58,7 @@ class CommandThread(QtCore.QThread):
         #: (:obj:`Exception`) error thrown by the executed command
         self.error = None
 
-    def run(self):
+    def _run(self):
         """ run thread method
         """
         try:
