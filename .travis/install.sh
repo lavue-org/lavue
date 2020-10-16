@@ -10,6 +10,9 @@ fi
 
 # workaround for a bug in debian9, i.e. starting mysql hangs
 docker exec -it --user root ndts service mysql stop
+if [ "$1" = "ubuntu20.04" ]; then
+    docker exec -it --user root ndts /bin/sh -c 'sudo usermod -d /var/lib/mysql/ mysql'
+fi
 docker exec -it --user root ndts /bin/sh -c '$(service mysql start &) && sleep 30'
 
 docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y   tango-db tango-common; sleep 10'
