@@ -1333,7 +1333,7 @@ class CommandLineLavueStateTest(unittest.TestCase):
             ls, dls,
             ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
 
-    def ttest_tango_maskhighvalue_nan(self):
+    def test_tango_maskhighvalue_nan(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
