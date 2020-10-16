@@ -185,8 +185,12 @@ class CommandLineLavueStateTest(unittest.TestCase):
     def getLavueStatePar(self):
         try:
             ls = self.__lcsu.proxy.LavueState
+            print("getLavueState")
+            os.system("ps -ef | grep DataBaseds | grep -v 'grep'")
         except Exception as e:
             print(str(e))
+            print("getLavueState EXCEPT")
+            os.system("ps -ef | grep DataBaseds | grep -v 'grep'")
             dp = PyTango.DeviceProxy('test/lavuecontroller/00')
             ls = dp.LavueState
         return ls
