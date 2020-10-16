@@ -567,7 +567,7 @@ class CommandLineLavueStateTest(unittest.TestCase):
         finally:
             tisu.tearDown()
 
-    def ttest_tango_diff(self):
+    def test_tango_diff(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
@@ -1333,7 +1333,7 @@ class CommandLineLavueStateTest(unittest.TestCase):
             ls, dls,
             ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
 
-    def test_tango_maskhighvalue_nan(self):
+    def ttest_tango_maskhighvalue_nan(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
