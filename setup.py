@@ -34,6 +34,7 @@ from setuptools.command.build_py import build_py
 from distutils.command.clean import clean
 from distutils.util import get_platform
 import shutil
+from lavuelib import cpplib
 
 try:
     from sphinx.setup_command import BuildDoc
@@ -233,6 +234,7 @@ SETUPDATA = dict(
     # include_package_data=True, # do not include image an qrc files
     scripts=(get_scripts(GUISCRIPTS) + SCRIPTS),
     zip_safe=False,
+    ext_modules=[cpplib.pffi.verifier.get_extension()],
     setup_requires=pytest_runner,
     tests_require=['pytest'],
     cmdclass={
