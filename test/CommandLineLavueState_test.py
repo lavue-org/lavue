@@ -567,7 +567,7 @@ class CommandLineLavueStateTest(unittest.TestCase):
         finally:
             tisu.tearDown()
 
-    def test_tango_diff(self):
+    def ttest_tango_diff(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
