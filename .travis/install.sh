@@ -34,6 +34,8 @@ else
     echo "install python3 packages"
     if [ "$1" = "debian10" ] || [ "$1" = "ubuntu20.04" ] ; then
 	docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy python3-tango'
+	docker exec -it --user root ndts /bin/sh -c 'git clone -b wrapper https://github.com/jkotan/qtchecker qtchecker-src'
+	docker exec -it --user root ndts /bin/sh -c 'cd qtchecker-src; python3 setup.py install'
     else
 	docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy python3-pytango'
     fi
