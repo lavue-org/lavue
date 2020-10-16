@@ -187,11 +187,8 @@ class CommandLineLavueStateTest(unittest.TestCase):
             ls = self.__lcsu.proxy.LavueState
         except Exception as e:
             print(str(e))
-            try:
-                ls = self.__lcsu.proxy.LavueState
-            except Exception as e2:
-                print(str(e2))
-                ls = self.__lcsu.proxy.LavueState
+            dp = PyTango.DeviceProxy('test/lavuecontroller/00')
+            ls = dp.LavueState
         return ls
 
     def setLavueStatePar(self, arg):
