@@ -183,7 +183,16 @@ class CommandLineLavueStateTest(unittest.TestCase):
         self.__lcsu.proxy.LavueState = self.__lavuestate
 
     def getLavueStatePar(self):
-        return self.__lcsu.proxy.LavueState
+        try:
+            ls = self.__lcsu.proxy.LavueState
+        except Exception as e:
+            print(str(e))
+            try:
+                ls = self.__lcsu.proxy.LavueState
+            except Exception as e2:
+                print(str(e2))
+                ls = self.__lcsu.proxy.LavueState
+        return ls
 
     def setLavueStatePar(self, arg):
         self.__lcsu.proxy.LavueState = arg
