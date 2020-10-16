@@ -54,6 +54,20 @@ if sys.version_info > (3,):
     long = int
 
 try:
+    import PyTango
+    #: (:obj:`bool`) PyTango imported
+    PYTANGO = True
+    if hasattr(PyTango, "EnsureOmniThread"):
+        EnsureOmniThread = PyTango.EnsureOmniThread
+    else:
+        from lavuelib import cpplib
+        EnsureOmniThread = cpplib.EnsureOmniThread
+except ImportError:
+    #: (:obj:`bool`) PyTango imported
+    PYTANGO = False
+    EnsureOmniThread = None
+
+try:
     from .LavueControllerSetUp import ControllerSetUp
     # from .LavueControllerSetUp import TangoCB
 except Exception:
@@ -251,9 +265,12 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         dialog = lavuelib.liveViewer.MainWindow(options=options)
         dialog.show()
 
-        qtck1 = QtChecker(app, dialog, True, sleep=100)
-        qtck2 = QtChecker(app, dialog, True, sleep=100)
-        qtck3 = QtChecker(app, dialog, True, sleep=100)
+        qtck1 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck2 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck3 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
         qtck1.setChecks([
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
@@ -379,9 +396,12 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         dialog = lavuelib.liveViewer.MainWindow(options=options)
         dialog.show()
 
-        qtck1 = QtChecker(app, dialog, True, sleep=100)
-        qtck2 = QtChecker(app, dialog, True, sleep=100)
-        qtck3 = QtChecker(app, dialog, True, sleep=100)
+        qtck1 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck2 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck3 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
         qtck1.setChecks([
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
@@ -532,9 +552,12 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         dialog = lavuelib.liveViewer.MainWindow(options=options)
         dialog.show()
 
-        qtck1 = QtChecker(app, dialog, True, sleep=100)
-        qtck2 = QtChecker(app, dialog, True, sleep=100)
-        qtck3 = QtChecker(app, dialog, True, sleep=100)
+        qtck1 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck2 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck3 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
         qtck1.setChecks([
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
@@ -692,9 +715,12 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         dialog = lavuelib.liveViewer.MainWindow(options=options)
         dialog.show()
 
-        qtck1 = QtChecker(app, dialog, True, sleep=100)
-        qtck2 = QtChecker(app, dialog, True, sleep=100)
-        qtck3 = QtChecker(app, dialog, True, sleep=100)
+        qtck1 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck2 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck3 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
         qtck1.setChecks([
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
@@ -862,9 +888,12 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         dialog = lavuelib.liveViewer.MainWindow(options=options)
         dialog.show()
 
-        qtck1 = QtChecker(app, dialog, True, sleep=100)
-        qtck2 = QtChecker(app, dialog, True, sleep=100)
-        qtck3 = QtChecker(app, dialog, True, sleep=100)
+        qtck1 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck2 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck3 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
         qtck1.setChecks([
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
@@ -1010,9 +1039,12 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         dialog = lavuelib.liveViewer.MainWindow(options=options)
         dialog.show()
 
-        qtck1 = QtChecker(app, dialog, True, sleep=100)
-        qtck2 = QtChecker(app, dialog, True, sleep=100)
-        qtck3 = QtChecker(app, dialog, True, sleep=100)
+        qtck1 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck2 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck3 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
         qtck1.setChecks([
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
@@ -1134,9 +1166,12 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         dialog = lavuelib.liveViewer.MainWindow(options=options)
         dialog.show()
 
-        qtck1 = QtChecker(app, dialog, True, sleep=100)
-        qtck2 = QtChecker(app, dialog, True, sleep=100)
-        qtck3 = QtChecker(app, dialog, True, sleep=100)
+        qtck1 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck2 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck3 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
         qtck1.setChecks([
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
@@ -1263,9 +1298,12 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         dialog = lavuelib.liveViewer.MainWindow(options=options)
         dialog.show()
 
-        qtck1 = QtChecker(app, dialog, True, sleep=100)
-        qtck2 = QtChecker(app, dialog, True, sleep=100)
-        qtck3 = QtChecker(app, dialog, True, sleep=100)
+        qtck1 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck2 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck3 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
         qtck1.setChecks([
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
