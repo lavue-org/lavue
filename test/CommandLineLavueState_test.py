@@ -191,6 +191,8 @@ class CommandLineLavueStateTest(unittest.TestCase):
             print(str(e))
             print("getLavueState EXCEPT")
             os.system("ps -ef | grep DataBaseds | grep -v 'grep'")
+            db = PyTango.Database()
+            print(db.get_db_host())
             dp = PyTango.DeviceProxy('test/lavuecontroller/00')
             ls = dp.LavueState
         return ls
