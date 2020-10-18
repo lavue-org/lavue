@@ -33,8 +33,6 @@ docker exec -it --user root ndts service tango-starter restart
 if [ "$2" = "2" ]; then
     echo "install python packages"
 	docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python-tz python-pyqtgraph python-setuptools python-zmq python-scipy python-pytango'
-	docker exec -it --user root ndts /bin/sh -c 'git clone -b wrapper https://github.com/jkotan/qtchecker qtchecker-src'
-	docker exec -it --user root ndts /bin/sh -c 'cd qtchecker-src; python setup.py install'
 else
     echo "install python3 packages"
     if [ "$1" = "debian10" ] || [ "$1" = "ubuntu20.04" ] ; then
@@ -42,8 +40,6 @@ else
     else
 	docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy python3-pytango'
     fi
-    docker exec -it --user root ndts /bin/sh -c 'git clone -b wrapper https://github.com/jkotan/qtchecker qtchecker-src'
-    docker exec -it --user root ndts /bin/sh -c 'cd qtchecker-src; python3 setup.py install'
 fi
 if [ "$?" -ne "0" ]
 then
