@@ -33,12 +33,26 @@ try:
     if hasattr(PyTango, "EnsureOmniThread"):
         EnsureOmniThread = PyTango.EnsureOmniThread
     else:
-        from . import cpplib
-        EnsureOmniThread = cpplib.EnsureOmniThread
+        try:
+            from . import cpplib
+            EnsureOmniThread = cpplib.EnsureOmniThread
+        except Exception as e:
+            print(str(e))
+            EnsureOmniThread = NullWrapper
+
 except ImportError:
     #: (:obj:`bool`) PyTango imported
     PYTANGO = False
     EnsureOmniThread = None
+
+
+class NullWrapper(object):
+
+    def __enter__(self):
+        pass
+
+    def __exit__(self, type, value, traceback):
+        pass
 
 
 class OmniQThread(QtCore.QThread):
