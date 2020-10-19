@@ -26,6 +26,16 @@
 
 from pyqtgraph import QtCore
 
+
+class NullWrapper(object):
+
+    def __enter__(self):
+        pass
+
+    def __exit__(self, type, value, traceback):
+        pass
+
+
 try:
     import PyTango
     #: (:obj:`bool`) PyTango imported
@@ -44,15 +54,6 @@ except ImportError:
     #: (:obj:`bool`) PyTango imported
     PYTANGO = False
     EnsureOmniThread = None
-
-
-class NullWrapper(object):
-
-    def __enter__(self):
-        pass
-
-    def __exit__(self, type, value, traceback):
-        pass
 
 
 class OmniQThread(QtCore.QThread):
