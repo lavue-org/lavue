@@ -200,6 +200,18 @@ package_data = {
     'lavuelib': ['ui/*.ui', 'qrc/*.rcc']
 }
 
+
+def get_modules():
+    ext_modules = []
+    try:
+        import PyTango
+        if not hasattr(PyTango, "EnsureOmniThread"):
+            ext_modules = [cpplib.pffi.verifier.get_extension()]
+    except Exception:
+        pass
+    return ext_modules
+
+
 #: (:obj:`dict` <:obj:`str`, `any`>) metadata for distutils
 SETUPDATA = dict(
     name='lavue',
@@ -234,7 +246,7 @@ SETUPDATA = dict(
     # include_package_data=True, # do not include image an qrc files
     scripts=(get_scripts(GUISCRIPTS) + SCRIPTS),
     zip_safe=False,
-    ext_modules=[cpplib.pffi.verifier.get_extension()],
+    ext_modules=get_modules(),
     setup_requires=pytest_runner,
     tests_require=['pytest'],
     cmdclass={
