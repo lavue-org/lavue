@@ -34,12 +34,7 @@ try:
     if hasattr(PyTango, "EnsureOmniThread"):
         EnsureOmniThread = PyTango.EnsureOmniThread
     else:
-        try:
-            from . import cpplib
-            EnsureOmniThread = cpplib.EnsureOmniThread
-        except Exception as e:
-            print(str(e))
-            EnsureOmniThread = None
+        EnsureOmniThread = None
 except ImportError:
     #: (:obj:`bool`) PyTango imported
     PYTANGO = False
