@@ -3,15 +3,27 @@ dist: bionic
 
 env:
   - TEST="flake8"
-  - OS=debian10 PY=3 TEST="all"
-  - OS=debian10 PY=2 TEST="all"
-  - OS=debian9 PY=3 TEST="all"
-  - OS=debian9 PY=2 TEST="all"
-  - OS=ubuntu18.04 PY=3 TEST="all"
-  - OS=ubuntu18.04 PY=2 TEST="all"
+  - OS=debian10 PY=3 TEST="basic"
+  - OS=debian10 PY=3 TEST="controller"
+  - OS=debian10 PY=3 TEST="tangosource"
+  - OS=debian10 PY=2 TEST="basic"
+  - OS=debian10 PY=2 TEST="controller"
+  - OS=debian10 PY=2 TEST="tangosource"
   - OS=ubuntu20.04 PY=3 TEST="basic"
   - OS=ubuntu20.04 PY=3 TEST="controller"
   - OS=ubuntu20.04 PY=3 TEST="tangosource"
+  - OS=debian9 PY=3 TEST="basic"
+  - OS=debian9 PY=3 TEST="controller"
+  - OS=debian9 PY=3 TEST="tangosource"
+  - OS=debian9 PY=2 TEST="basic"
+  - OS=debian9 PY=2 TEST="controller"
+  - OS=debian9 PY=2 TEST="tangosource"
+  - OS=ubuntu18.04 PY=3 TEST="basic"
+  - OS=ubuntu18.04 PY=3 TEST="controller"
+  - OS=ubuntu18.04 PY=3 TEST="tangosource"
+  - OS=ubuntu18.04 PY=2 TEST="basic"
+  - OS=ubuntu18.04 PY=2 TEST="controller"
+  - OS=ubuntu18.04 PY=2 TEST="tangosource"
 
 services:
   - docker
