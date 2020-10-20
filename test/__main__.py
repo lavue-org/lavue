@@ -87,6 +87,7 @@ DB_AVAILABLE = []
 if PYTANGO_AVAILABLE:
     import LavueController_test
     import CommandLineLavueState_test
+    import CommandLineLavueState2_test
     import TangoAttrImageSource_test
     import ZMQStreamImageSource_test
 
@@ -117,6 +118,7 @@ def main():
     # test suit
     basicsuite = unittest.TestSuite()
     controllersuite = unittest.TestSuite()
+    controllersuite2 = unittest.TestSuite()
     tangosuite = unittest.TestSuite()
     print("Using: %s" % qt_api)
     app = QtGui.QApplication([])
@@ -127,6 +129,7 @@ def main():
     EpicsImageSource_test.app = app
     if PYTANGO_AVAILABLE:
         CommandLineLavueState_test.app = app
+        CommandLineLavueState2_test.app = app
         TangoAttrImageSource_test.app = app
         ZMQStreamImageSource_test.app = app
     if H5CPP_AVAILABLE:
@@ -181,6 +184,9 @@ def main():
         controllersuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 CommandLineLavueState_test))
+        controllersuite2.addTests(
+            unittest.defaultTestLoader.loadTestsFromModule(
+                CommandLineLavueState2_test))
         tangosuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 TangoAttrImageSource_test))
@@ -202,7 +208,8 @@ def main():
         "basic": [basicsuite],
         "tangosource": [tangosuite],
         "controller": [controllersuite],
-        "all": [basicsuite, tangosuite, controllersuite],
+        "controller2": [controllersuite2],
+        "all": [basicsuite, tangosuite, controllersuite, controllersuite2],
     }
 
     # print(options.args)
