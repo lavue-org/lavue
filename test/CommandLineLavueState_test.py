@@ -185,8 +185,8 @@ class CommandLineLavueStateTest(unittest.TestCase):
     def getLavueStatePar(self):
         try:
             ls = self.__lcsu.proxy.LavueState
-            print("getLavueState")
-            os.system("ps -ef | grep DataBaseds | grep -v 'grep'")
+            # print("getLavueState")
+            # os.system("ps -ef | grep DataBaseds | grep -v 'grep'")
         except Exception as e:
             print(str(e))
             print("getLavueState EXCEPT")
@@ -497,17 +497,17 @@ class CommandLineLavueStateTest(unittest.TestCase):
             ])
 
             print("execute")
-            qtck1.executeChecks(delay=1000)
-            qtck2.executeChecks(delay=2000)
-            qtck3.executeChecks(delay=3000)
-            qtck4.executeChecks(delay=4000)
-            qtck5.executeChecks(delay=5000)
-            qtck6.executeChecks(delay=6000)
-            qtck7.executeChecks(delay=7000)
-            qtck8.executeChecks(delay=8000)
-            qtck9.executeChecks(delay=9000)
-            qtck10.executeChecks(delay=12000)
-            status = qtck11.executeChecksAndClose(delay=15000)
+            qtck1.executeChecks(delay=6000)
+            qtck2.executeChecks(delay=12000)
+            qtck3.executeChecks(delay=18000)
+            qtck4.executeChecks(delay=24000)
+            qtck5.executeChecks(delay=30000)
+            qtck6.executeChecks(delay=36000)
+            qtck7.executeChecks(delay=42000)
+            qtck8.executeChecks(delay=48000)
+            qtck9.executeChecks(delay=54000)
+            qtck10.executeChecks(delay=60000)
+            status = qtck11.executeChecksAndClose(delay=66000)
 
             self.assertEqual(status, 0)
             qtck1.compareResults(self, [False, None])
@@ -673,9 +673,9 @@ class CommandLineLavueStateTest(unittest.TestCase):
         ])
 
         print("execute")
-        qtck1.executeChecks(delay=1000)
-        qtck2.executeChecks(delay=3000)
-        status = qtck3.executeChecksAndClose(delay=6000)
+        qtck1.executeChecks(delay=6000)
+        qtck2.executeChecks(delay=12000)
+        status = qtck3.executeChecksAndClose(delay=18000)
 
         self.assertEqual(status, 0)
         qtck1.compareResults(self, [False, None])
@@ -831,11 +831,11 @@ class CommandLineLavueStateTest(unittest.TestCase):
         ])
 
         print("execute")
-        qtck1.executeChecks(delay=1000)
-        qtck2.executeChecks(delay=2000)
-        qtck3.executeChecks(delay=3000)
-        qtck4.executeChecks(delay=4000)
-        status = qtck5.executeChecksAndClose(delay=5000)
+        qtck1.executeChecks(delay=6000)
+        qtck2.executeChecks(delay=12000)
+        qtck3.executeChecks(delay=18000)
+        qtck4.executeChecks(delay=24000)
+        status = qtck5.executeChecksAndClose(delay=30000)
 
         self.assertEqual(status, 0)
         qtck1.compareResults(
@@ -1018,9 +1018,9 @@ class CommandLineLavueStateTest(unittest.TestCase):
         ])
 
         print("execute")
-        qtck1.executeChecks(delay=1000)
-        qtck2.executeChecks(delay=2000)
-        status = qtck3.executeChecksAndClose(delay=3000)
+        qtck1.executeChecks(delay=6000)
+        qtck2.executeChecks(delay=12000)
+        status = qtck3.executeChecksAndClose(delay=18000)
 
         self.assertEqual(status, 0)
         qtck1.compareResults(
@@ -1172,9 +1172,9 @@ class CommandLineLavueStateTest(unittest.TestCase):
         ])
 
         print("execute")
-        qtck1.executeChecks(delay=1000)
-        qtck2.executeChecks(delay=2000)
-        status = qtck3.executeChecksAndClose(delay=3000)
+        qtck1.executeChecks(delay=6000)
+        qtck2.executeChecks(delay=12000)
+        status = qtck3.executeChecksAndClose(delay=18000)
 
         self.assertEqual(status, 0)
         qtck1.compareResults(
@@ -1324,9 +1324,9 @@ class CommandLineLavueStateTest(unittest.TestCase):
         ])
 
         print("execute")
-        qtck1.executeChecks(delay=1000)
-        qtck2.executeChecks(delay=2000)
-        status = qtck3.executeChecksAndClose(delay=3000)
+        qtck1.executeChecks(delay=6000)
+        qtck2.executeChecks(delay=12000)
+        status = qtck3.executeChecksAndClose(delay=18000)
 
         self.assertEqual(status, 0)
         qtck1.compareResults(
@@ -1477,9 +1477,9 @@ class CommandLineLavueStateTest(unittest.TestCase):
         ])
 
         print("execute")
-        qtck1.executeChecks(delay=1000)
-        qtck2.executeChecks(delay=2000)
-        status = qtck3.executeChecksAndClose(delay=3000)
+        qtck1.executeChecks(delay=6000)
+        qtck2.executeChecks(delay=12000)
+        status = qtck3.executeChecksAndClose(delay=18000)
 
         self.assertEqual(status, 0)
         qtck1.compareResults(
@@ -1682,14 +1682,14 @@ class CommandLineLavueStateTest(unittest.TestCase):
         ])
 
         print("execute")
-        qtck1.executeChecks(delay=1000)
-        qtck2.executeChecks(delay=2000)
-        qtck3.executeChecks(delay=3000)
-        qtck4.executeChecks(delay=4000)
-        qtck5.executeChecks(delay=5000)
-        qtck6.executeChecks(delay=6000)
-        qtck7.executeChecks(delay=7000)
-        status = qtck8.executeChecksAndClose(delay=8000)
+        qtck1.executeChecks(delay=6000)
+        qtck2.executeChecks(delay=12000)
+        qtck3.executeChecks(delay=18000)
+        qtck4.executeChecks(delay=24000)
+        qtck5.executeChecks(delay=30000)
+        qtck6.executeChecks(delay=36000)
+        qtck7.executeChecks(delay=42000)
+        status = qtck8.executeChecksAndClose(delay=48000)
 
         self.assertEqual(status, 0)
         qtck1.compareResults(
@@ -1932,14 +1932,14 @@ class CommandLineLavueStateTest(unittest.TestCase):
         ])
 
         print("execute")
-        qtck1.executeChecks(delay=1000)
-        qtck2.executeChecks(delay=2000)
-        qtck3.executeChecks(delay=3000)
-        qtck4.executeChecks(delay=4000)
-        qtck5.executeChecks(delay=5000)
-        qtck6.executeChecks(delay=6000)
-        qtck7.executeChecks(delay=7000)
-        status = qtck8.executeChecksAndClose(delay=8000)
+        qtck1.executeChecks(delay=6000)
+        qtck2.executeChecks(delay=12000)
+        qtck3.executeChecks(delay=18000)
+        qtck4.executeChecks(delay=24000)
+        qtck5.executeChecks(delay=30000)
+        qtck6.executeChecks(delay=36000)
+        qtck7.executeChecks(delay=42000)
+        status = qtck8.executeChecksAndClose(delay=48000)
 
         self.assertEqual(status, 0)
         qtck1.compareResults(
