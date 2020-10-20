@@ -390,9 +390,9 @@ class CommandLineArgumentH5CppTest(unittest.TestCase):
                     "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
             ])
 
-            qtck1.executeChecks(delay=1000)
-            qtck2.executeChecks(delay=3000)
-            status = qtck3.executeChecksAndClose(delay=5000)
+            qtck1.executeChecks(delay=6000)
+            qtck2.executeChecks(delay=12000)
+            status = qtck3.executeChecksAndClose(delay=18000)
 
             self.assertEqual(status, 0)
 
