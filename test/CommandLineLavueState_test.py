@@ -2316,7 +2316,7 @@ class CommandLineLavueStateTest(unittest.TestCase):
         dialog = lavuelib.liveViewer.MainWindow(options=options)
         dialog.show()
 
-        qtck = QtChecker(app, dialog, True, sleep=1000)
+        qtck = QtChecker(app, dialog, True, sleep=100)
         qtck.setChecks([
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
@@ -2347,7 +2347,7 @@ class CommandLineLavueStateTest(unittest.TestCase):
             ExtCmdCheck(self, "getControllerAttr", ["PixelSizeY"]),
         ])
 
-        status = qtck.executeChecksAndClose()
+        status = qtck.executeChecksAndClose(delay=6000)
 
         self.assertEqual(status, 0)
         qtck.compareResults(
