@@ -175,7 +175,7 @@ def main():
             unittest.defaultTestLoader.loadTestsFromModule(
                 FileWriterPNIH5PY_test))
     if PYTANGO_AVAILABLE:
-        controllersuite.addTests(
+        basicsuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 LavueController_test))
         controllersuite.addTests(
