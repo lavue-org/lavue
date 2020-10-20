@@ -549,8 +549,8 @@ class CommandLineArgumentH5CppTest(unittest.TestCase):
                     "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
             ])
 
-            qtck1.executeChecks(delay=1000)
-            status = qtck2.executeChecksAndClose(delay=4000)
+            qtck1.executeChecks(delay=6000)
+            status = qtck2.executeChecksAndClose(delay=18000)
 
             self.assertEqual(status, 0)
             qtck1.compareResults(
@@ -693,8 +693,8 @@ class CommandLineArgumentH5CppTest(unittest.TestCase):
                     "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
             ])
 
-            qtck1.executeChecks(delay=1000)
-            status = qtck2.executeChecksAndClose(delay=4000)
+            qtck1.executeChecks(delay=6000)
+            status = qtck2.executeChecksAndClose(delay=18000)
 
             self.assertEqual(status, 0)
             qtck1.compareResults(

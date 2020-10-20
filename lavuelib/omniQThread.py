@@ -26,6 +26,7 @@
 
 from pyqtgraph import QtCore
 
+
 try:
     import PyTango
     #: (:obj:`bool`) PyTango imported
@@ -33,8 +34,7 @@ try:
     if hasattr(PyTango, "EnsureOmniThread"):
         EnsureOmniThread = PyTango.EnsureOmniThread
     else:
-        from . import cpplib
-        EnsureOmniThread = cpplib.EnsureOmniThread
+        EnsureOmniThread = None
 except ImportError:
     #: (:obj:`bool`) PyTango imported
     PYTANGO = False

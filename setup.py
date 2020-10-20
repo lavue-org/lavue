@@ -200,6 +200,7 @@ package_data = {
     'lavuelib': ['ui/*.ui', 'qrc/*.rcc']
 }
 
+
 #: (:obj:`dict` <:obj:`str`, `any`>) metadata for distutils
 SETUPDATA = dict(
     name='lavue',
