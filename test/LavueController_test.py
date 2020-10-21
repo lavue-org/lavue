@@ -28,7 +28,10 @@
 import sys
 import os
 import unittest
-import PyTango
+try:
+    import tango
+except ImportError:
+    import PyTango as tango
 import numpy as np
 
 if sys.version_info > (3,):
@@ -102,7 +105,7 @@ class LavueControllerTest(unittest.TestCase):
                [61, 91, 83, 146, 1, 21, 33, 146]]]],
         ]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(self.__lcsu.proxy.name(), {'DynamicROIs': True})
         self.__lcsu.proxy.Init()
 
@@ -167,7 +170,7 @@ class LavueControllerTest(unittest.TestCase):
                [12312., 1232131.]]]],
         ]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(
             self.__lcsu.proxy.name(), {'DynamicROIsValues': True})
         self.__lcsu.proxy.Init()
@@ -243,7 +246,7 @@ class LavueControllerTest(unittest.TestCase):
             [[], True, True, True,
              ["Pilatus1ROI", "Pilatus2ROI", "Pilatus1Sums", "Pilatus2Sum"]],
         ]
-        db = PyTango.Database()
+        db = tango.Database()
 
         for wvl in testvalues:
             db.put_device_property(
@@ -270,7 +273,7 @@ class LavueControllerTest(unittest.TestCase):
         """Test for State"""
         print("Run: %s.%s() " % (
             self.__class__.__name__, sys._getframe().f_code.co_name))
-        self.assertEqual(self.__lcsu.proxy.state(), PyTango.DevState.ON)
+        self.assertEqual(self.__lcsu.proxy.state(), tango.DevState.ON)
 
     def test_Status(self):
         """Test for Status"""
@@ -287,7 +290,7 @@ class LavueControllerTest(unittest.TestCase):
         queue = Queue.Queue()
         cb = TangoCB(queue)
         cb_id = self.__lcsu.proxy.subscribe_event(
-            "BeamCenterX", PyTango.EventType.CHANGE_EVENT, cb)
+            "BeamCenterX", tango.EventType.CHANGE_EVENT, cb)
         elem = queue.get(block=True, timeout=3)
 
         for wvl in testvalues:
@@ -309,7 +312,7 @@ class LavueControllerTest(unittest.TestCase):
         queue = Queue.Queue()
         cb = TangoCB(queue)
         cb_id = self.__lcsu.proxy.subscribe_event(
-            "BeamCenterY", PyTango.EventType.CHANGE_EVENT, cb)
+            "BeamCenterY", tango.EventType.CHANGE_EVENT, cb)
         elem = queue.get(block=True, timeout=3)
 
         for wvl in testvalues:
@@ -331,7 +334,7 @@ class LavueControllerTest(unittest.TestCase):
         queue = Queue.Queue()
         cb = TangoCB(queue)
         cb_id = self.__lcsu.proxy.subscribe_event(
-            "DetectorDistance", PyTango.EventType.CHANGE_EVENT, cb)
+            "DetectorDistance", tango.EventType.CHANGE_EVENT, cb)
         elem = queue.get(block=True, timeout=3)
 
         for wvl in testvalues:
@@ -378,7 +381,7 @@ class LavueControllerTest(unittest.TestCase):
         queue = Queue.Queue()
         cb = TangoCB(queue)
         cb_id = self.__lcsu.proxy.subscribe_event(
-            "DetectorROIs", PyTango.EventType.CHANGE_EVENT, cb)
+            "DetectorROIs", tango.EventType.CHANGE_EVENT, cb)
         elem = queue.get(block=True, timeout=3)
 
         for wvl in testvalues:
@@ -425,7 +428,7 @@ class LavueControllerTest(unittest.TestCase):
         queue = Queue.Queue()
         cb = TangoCB(queue)
         cb_id = self.__lcsu.proxy.subscribe_event(
-            "DetectorROIsValues", PyTango.EventType.CHANGE_EVENT, cb)
+            "DetectorROIsValues", tango.EventType.CHANGE_EVENT, cb)
         elem = queue.get(block=True, timeout=3)
 
         for wvl in testvalues:
@@ -453,7 +456,7 @@ class LavueControllerTest(unittest.TestCase):
         queue = Queue.Queue()
         cb = TangoCB(queue)
         cb_id = self.__lcsu.proxy.subscribe_event(
-            "Energy", PyTango.EventType.CHANGE_EVENT, cb)
+            "Energy", tango.EventType.CHANGE_EVENT, cb)
         elem = queue.get(block=True, timeout=3)
 
         for wvl in testvalues:

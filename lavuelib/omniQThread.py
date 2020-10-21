@@ -28,16 +28,19 @@ from pyqtgraph import QtCore
 
 
 try:
-    import PyTango
-    #: (:obj:`bool`) PyTango imported
-    PYTANGO = True
-    if hasattr(PyTango, "EnsureOmniThread"):
-        EnsureOmniThread = PyTango.EnsureOmniThread
+    try:
+        import tango
+    except ImportError:
+        import PyTango as tango
+    #: (:obj:`bool`) tango imported
+    TANGO = True
+    if hasattr(tango, "EnsureOmniThread"):
+        EnsureOmniThread = tango.EnsureOmniThread
     else:
         EnsureOmniThread = None
 except ImportError:
-    #: (:obj:`bool`) PyTango imported
-    PYTANGO = False
+    #: (:obj:`bool`) tango imported
+    TANGO = False
     EnsureOmniThread = None
 
 

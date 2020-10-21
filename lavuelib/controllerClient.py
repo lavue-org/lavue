@@ -29,7 +29,17 @@
 from pyqtgraph import QtCore
 
 import logging
-import PyTango
+
+try:
+    try:
+        import tango
+    except ImportError:
+        import PyTango as tango
+    #: (:obj:`bool`) tango imported
+    TANGO = True
+except ImportError:
+    #: (:obj:`bool`) tango imported
+    TANGO = False
 
 
 logger = logging.getLogger("lavue")
@@ -93,8 +103,8 @@ class ControllerClient(QtCore.QObject):
         :type device: :obj:`str`
         """
         QtCore.QObject.__init__(self)
-        #: (:class:`PyTango.DeviceProxy`) controller device proxy
-        self.__dp = PyTango.DeviceProxy(device)
+        #: (:class:`tango.DeviceProxy`) controller device proxy
+        self.__dp = tango.DeviceProxy(device)
         #: (:obj:`str`) tango device name
         self.__device = device
         #: (:obj:`bool`) subscribe flag
@@ -130,35 +140,35 @@ class ControllerClient(QtCore.QObject):
 
         self.__energy_id = self.__dp.subscribe_event(
             "Energy",
-            PyTango.EventType.CHANGE_EVENT,
+            tango.EventType.CHANGE_EVENT,
             energy_cb)
         self.__distance_id = self.__dp.subscribe_event(
             "DetectorDistance",
-            PyTango.EventType.CHANGE_EVENT,
+            tango.EventType.CHANGE_EVENT,
             distance_cb)
         self.__rois_id = self.__dp.subscribe_event(
             "DetectorROIs",
-            PyTango.EventType.CHANGE_EVENT,
+            tango.EventType.CHANGE_EVENT,
             rois_cb)
         self.__centerx_id = self.__dp.subscribe_event(
             "BeamCenterX",
-            PyTango.EventType.CHANGE_EVENT,
+            tango.EventType.CHANGE_EVENT,
             centerx_cb)
         self.__centery_id = self.__dp.subscribe_event(
             "BeamCenterY",
-            PyTango.EventType.CHANGE_EVENT,
+            tango.EventType.CHANGE_EVENT,
             centery_cb)
         self.__pixelsizex_id = self.__dp.subscribe_event(
             "PixelSizeX",
-            PyTango.EventType.CHANGE_EVENT,
+            tango.EventType.CHANGE_EVENT,
             pixelsizex_cb)
         self.__pixelsizey_id = self.__dp.subscribe_event(
             "PixelSizeY",
-            PyTango.EventType.CHANGE_EVENT,
+            tango.EventType.CHANGE_EVENT,
             pixelsizey_cb)
         self.__lavuestate_id = self.__dp.subscribe_event(
             "LavueState",
-            PyTango.EventType.CHANGE_EVENT,
+            tango.EventType.CHANGE_EVENT,
             lavuestate_cb)
         self.__subscribed = True
 

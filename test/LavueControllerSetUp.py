@@ -29,7 +29,10 @@ import sys
 import os
 import subprocess
 import time
-import PyTango
+try:
+    import tango
+except ImportError:
+    import PyTango as tango
 
 
 # Path
@@ -64,7 +67,7 @@ class ControllerSetUp(object):
         """
         self.instance = 'TEST'
         self.device = 'test/lavuecontroller/00'
-        self.new_device_info_controller = PyTango.DbDevInfo()
+        self.new_device_info_controller = tango.DbDevInfo()
         self.new_device_info_controller._class = "LavueController"
         self.new_device_info_controller.server = "LavueController/%s" % \
                                                  self.instance
@@ -97,7 +100,7 @@ class ControllerSetUp(object):
         while not db and ci < counts:
             ci += 1
             try:
-                db = PyTango.Database()
+                db = tango.Database()
             except Exception as e:
                 print(str(e))
 
@@ -123,9 +126,9 @@ class ControllerSetUp(object):
                     time.sleep(0.01)
                     cnt += 1
                     continue
-                dp = PyTango.DeviceProxy(dvname)
+                dp = tango.DeviceProxy(dvname)
                 time.sleep(0.1)
-                if dp.state() == PyTango.DevState.ON:
+                if dp.state() == tango.DevState.ON:
                     found = True
             except Exception as e:
                 found = False
@@ -142,7 +145,7 @@ class ControllerSetUp(object):
         while not db and ci < counts:
             ci += 1
             try:
-                db = PyTango.Database()
+                db = tango.Database()
             except Exception as e:
                 print(str(e))
         db.delete_server(self.new_device_info_controller.server)

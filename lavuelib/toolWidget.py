@@ -55,12 +55,15 @@ from . import commandThread
 # from .sardanaUtils import debugmethod
 
 try:
-    import PyTango
-    #: (:obj:`bool`) PyTango imported
-    PYTANGO = True
+    try:
+        import tango
+    except ImportError:
+        import PyTango as tango
+    #: (:obj:`bool`) tango imported
+    TANGO = True
 except ImportError:
-    #: (:obj:`bool`) PyTango imported
-    PYTANGO = False
+    #: (:obj:`bool`) tango imported
+    TANGO = False
 
 try:
     import pyFAI
@@ -510,7 +513,7 @@ class MotorsToolWidget(ToolBaseWidget):
     #: (:obj:`str`) tool name alias
     alias = "movemotors"
     #: (:obj:`tuple` <:obj:`str`>) capitalized required packages
-    requires = ("PYTANGO",)
+    requires = ("TANGO",)
 
     def __init__(self, parent=None):
         """ constructor
@@ -532,9 +535,9 @@ class MotorsToolWidget(ToolBaseWidget):
         self.__statex = None
         #: (:obj:`str`) state of y-motor
         self.__statey = None
-        #: (:class:`PyTango.DeviceProxy`) x-motor device
+        #: (:class:`tango.DeviceProxy`) x-motor device
         self.__xmotordevice = None
-        #: (:class:`PyTango.DeviceProxy`) y-motor device
+        #: (:class:`tango.DeviceProxy`) y-motor device
         self.__ymotordevice = None
         #: (:class:`lavuelib.motorWatchThread.motorWatchThread`) motor watcher
         self.__motorWatcher = None
@@ -585,7 +588,7 @@ class MotorsToolWidget(ToolBaseWidget):
             if "motors" in cnf.keys():
                 try:
                     motorname = cnf["motors"][0]
-                    motordevice = PyTango.DeviceProxy(motorname)
+                    motordevice = tango.DeviceProxy(motorname)
                     for attr in ["state", "position"]:
                         if not hasattr(motordevice, attr):
                             raise Exception("Missing %s" % attr)
@@ -595,7 +598,7 @@ class MotorsToolWidget(ToolBaseWidget):
                     logger.warning(str(e))
                 try:
                     motorname = cnf["motors"][1]
-                    motordevice = PyTango.DeviceProxy(motorname)
+                    motordevice = tango.DeviceProxy(motorname)
                     for attr in ["state", "position"]:
                         if not hasattr(motordevice, attr):
                             raise Exception("Missing %s" % attr)
@@ -911,7 +914,7 @@ class ParametersToolWidget(ToolBaseWidget):
     #: (:obj:`str`) tool name alias
     alias = "parameters"
     #: (:obj:`tuple` <:obj:`str`>) capitalized required packages
-    requires = ("PYTANGO",)
+    requires = ("TANGO",)
 
     #: (:obj:`dict` <:obj:`str` , :obj:`type` or :obj:`types.MethodType` >) \
     #:      map of type : converting function
@@ -936,7 +939,7 @@ class ParametersToolWidget(ToolBaseWidget):
         # #: (:obj:`list` <str, str, str>)
         #        detector parameters (label, devicename, type)
         self.__detparams = []
-        #: (:obj:`list` <:class:`PyTango.DeviceProxy`>)  attribute proxies
+        #: (:obj:`list` <:class:`tango.DeviceProxy`>)  attribute proxies
         self.__aproxies = []
         #: (:obj:`list` <:list:`any`>)  attribute values
         self.__avalues = []
@@ -1050,7 +1053,7 @@ class ParametersToolWidget(ToolBaseWidget):
         for lb in sorted(record.keys()):
             try:
                 dv = record[lb]
-                ap = PyTango.AttributeProxy(dv)
+                ap = tango.AttributeProxy(dv)
                 unit = ""
                 frm = ""
                 try:
@@ -1226,7 +1229,7 @@ class MeshToolWidget(ToolBaseWidget):
     #: (:obj:`str`) tool name alias
     alias = "meshscan"
     #: (:obj:`tuple` <:obj:`str`>) capitalized required packages
-    requires = ("PYTANGO",)
+    requires = ("TANGO",)
 
     def __init__(self, parent=None):
         """ constructor
@@ -1244,11 +1247,11 @@ class MeshToolWidget(ToolBaseWidget):
         self.__statex = None
         #: (:obj:`str`) state of y-motor
         self.__statey = None
-        #: (:class:`PyTango.DeviceProxy`) x-motor device
+        #: (:class:`tango.DeviceProxy`) x-motor device
         self.__xmotordevice = None
-        #: (:class:`PyTango.DeviceProxy`) y-motor device
+        #: (:class:`tango.DeviceProxy`) y-motor device
         self.__ymotordevice = None
-        #: (:class:`PyTango.DeviceProxy`) door server
+        #: (:class:`tango.DeviceProxy`) door server
         self.__door = None
         #: (:class:`lavuelib.motorWatchThread.motorWatchThread`) motor watcher
         self.__motorWatcher = None
@@ -1304,7 +1307,7 @@ class MeshToolWidget(ToolBaseWidget):
             if "motors" in cnf.keys():
                 try:
                     motorname = cnf["motors"][0]
-                    motordevice = PyTango.DeviceProxy(motorname)
+                    motordevice = tango.DeviceProxy(motorname)
                     for attr in ["state", "position"]:
                         if not hasattr(motordevice, attr):
                             raise Exception("Missing %s" % attr)
@@ -1314,7 +1317,7 @@ class MeshToolWidget(ToolBaseWidget):
                     logger.warning(str(e))
                 try:
                     motorname = cnf["motors"][1]
-                    motordevice = PyTango.DeviceProxy(motorname)
+                    motordevice = tango.DeviceProxy(motorname)
                     for attr in ["state", "position"]:
                         if not hasattr(motordevice, attr):
                             raise Exception("Missing %s" % attr)

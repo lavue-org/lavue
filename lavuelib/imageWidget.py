@@ -1196,7 +1196,7 @@ class ImageWidget(QtGui.QWidget):
         :rtype: :obj:`bool`
         """
         dp = None
-        if isr.PYTANGO:
+        if isr.TANGO:
             if not self.__settings.doorname:
                 self.__settings.doorname = self.__sardana.getDeviceName("Door")
             try:
@@ -1219,7 +1219,7 @@ class ImageWidget(QtGui.QWidget):
         :rtype: :obj:`list` <:obj:`str`>
         """
         elements = None
-        if isr.PYTANGO and self.__sardana:
+        if isr.TANGO and self.__sardana:
             if not self.__settings.doorname:
                 self.__settings.doorname = self.__sardana.getDeviceName("Door")
             try:
@@ -1239,7 +1239,7 @@ class ImageWidget(QtGui.QWidget):
         :return: macro runned
         :rtype: :obj:`bool`
         """
-        if isr.PYTANGO:
+        if isr.TANGO:
             if not self.__settings.doorname:
                 self.__settings.doorname = self.__sardana.getDeviceName("Door")
             try:
@@ -1267,7 +1267,7 @@ class ImageWidget(QtGui.QWidget):
     def showDoorError(self):
         """ show door error
         """
-        if isr.PYTANGO:
+        if isr.TANGO:
             if not self.__settings.doorname:
                 self.__settings.doorname = self.__sardana.getDeviceName("Door")
             try:
@@ -1297,7 +1297,7 @@ class ImageWidget(QtGui.QWidget):
         :param roispin: the current number of rois
         :type roispin: :obj:`int`
         """
-        if isr.PYTANGO:
+        if isr.TANGO:
             if self.__settings.sardana:
                 if not self.__settings.doorname:
                     self.__settings.doorname = self.__sardana.getDeviceName(
@@ -1493,7 +1493,7 @@ class ImageWidget(QtGui.QWidget):
         :param rlabel: rois aliases separated by space
         :type rlabel: :obj:`str`
         """
-        if isr.PYTANGO:
+        if isr.TANGO:
             if not self.__settings.doorname:
                 self.__settings.doorname = self.__sardana.getDeviceName("Door")
             try:

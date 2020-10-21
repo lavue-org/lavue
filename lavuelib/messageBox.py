@@ -27,13 +27,17 @@
 """ error message box """
 
 import sys
+
 try:
-    import PyTango
-    #: (:obj:`bool`) PyTango imported
-    PYTANGO = True
+    try:
+        import tango
+    except ImportError:
+        import PyTango as tango
+    #: (:obj:`bool`) tango imported
+    TANGO = True
 except ImportError:
-    #: (:obj:`bool`) PyTango imported
-    PYTANGO = False
+    #: (:obj:`bool`) tango imported
+    TANGO = False
 
 from pyqtgraph import QtCore, QtGui
 
@@ -65,7 +69,7 @@ class MessageBox(QtCore.QObject):
             error = sys.exc_info()[1]
         text = default
         try:
-            if PYTANGO and isinstance(error, PyTango.DevFailed):
+            if TANGO and isinstance(error, tango.DevFailed):
                 text = str("\n".join(["%s " % (err.desc) for err in error]))
             else:
                 text = str(error)

@@ -30,13 +30,16 @@ from lavuelib.qtuic import qt_api
 from pyqtgraph import QtGui
 
 try:
-    import PyTango
-    # if module PyTango avalable
-    PyTango.Database()
-    PYTANGO_AVAILABLE = True
+    try:
+        import tango
+    except ImportError:
+        import PyTango as tango
+    # if module tango avalable
+    tango.Database()
+    TANGO_AVAILABLE = True
 except ImportError as e:
-    PYTANGO_AVAILABLE = False
-    print("PyTango is not available: %s" % e)
+    TANGO_AVAILABLE = False
+    print("tango is not available: %s" % e)
 
 try:
     try:
@@ -84,7 +87,7 @@ if not PNI_AVAILABLE and not H5PY_AVAILABLE:
 # list of available databases
 DB_AVAILABLE = []
 
-if PYTANGO_AVAILABLE:
+if TANGO_AVAILABLE:
     import LavueController_test
     import CommandLineLavueState_test
     import CommandLineLavueState2_test
@@ -127,7 +130,7 @@ def main():
     HttpImageSource_test.app = app
     PyTineImageSource_test.app = app
     EpicsImageSource_test.app = app
-    if PYTANGO_AVAILABLE:
+    if TANGO_AVAILABLE:
         CommandLineLavueState_test.app = app
         CommandLineLavueState2_test.app = app
         TangoAttrImageSource_test.app = app
@@ -177,7 +180,7 @@ def main():
         basicsuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 FileWriterPNIH5PY_test))
-    if PYTANGO_AVAILABLE:
+    if TANGO_AVAILABLE:
         basicsuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 LavueController_test))

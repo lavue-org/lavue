@@ -68,17 +68,20 @@ except Exception:
     from TestImageServerSetUp import TestImageServerSetUp
 
 try:
-    import PyTango
-    #: (:obj:`bool`) PyTango imported
-    PYTANGO = True
-    if hasattr(PyTango, "EnsureOmniThread"):
-        EnsureOmniThread = PyTango.EnsureOmniThread
+    try:
+        import tango
+    except ImportError:
+        import PyTango as tango
+    #: (:obj:`bool`) tango imported
+    TANGO = True
+    if hasattr(tango, "EnsureOmniThread"):
+        EnsureOmniThread = tango.EnsureOmniThread
     else:
         from lavuelib import cpplib
         EnsureOmniThread = cpplib.EnsureOmniThread
 except ImportError:
-    #: (:obj:`bool`) PyTango imported
-    PYTANGO = False
+    #: (:obj:`bool`) tango imported
+    TANGO = False
     EnsureOmniThread = None
 
 
@@ -193,9 +196,9 @@ class CommandLineLavueStateTest(unittest.TestCase):
             print(str(e))
             print("getLavueState EXCEPT")
             os.system("ps -ef | grep DataBaseds | grep -v 'grep'")
-            db = PyTango.Database()
+            db = tango.Database()
             print(db.get_db_host())
-            dp = PyTango.DeviceProxy('test/lavuecontroller/00')
+            dp = tango.DeviceProxy('test/lavuecontroller/00')
             ls = dp.LavueState
         return ls
 

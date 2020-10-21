@@ -51,12 +51,15 @@ except ImportError:
     HIDRA = False
 
 try:
-    import PyTango
-    #: (:obj:`bool`) PyTango imported
-    PYTANGO = True
+    try:
+        import tango
+    except ImportError:
+        import PyTango as tango
+    #: (:obj:`bool`) tango imported
+    TANGO = True
 except ImportError:
-    #: (:obj:`bool`) PyTango imported
-    PYTANGO = False
+    #: (:obj:`bool`) tango imported
+    TANGO = False
 
 try:
     __import__("pyFAI")
@@ -492,10 +495,10 @@ class TangoFileSource(BaseSource):
         :type timeout: :obj:`int`
         """
         BaseSource.__init__(self, timeout)
-        #: (:class`PyTango.AttributeProxy`:)
+        #: (:class`tango.AttributeProxy`:)
         #:       device proxy for the image file name
         self.__fproxy = None
-        #: (:class`PyTango.AttributeProxy`:)
+        #: (:class`tango.AttributeProxy`:)
         #:      device proxy for the image directory
         self.__dproxy = None
         #: (:dict: <:obj:`str`, :obj:`str`>)
@@ -546,9 +549,9 @@ class TangoFileSource(BaseSource):
                 self._configuration).strip().split(",", 2)
             self.__dirtrans = json.loads(dirtrans)
             if not self._initiated:
-                self.__fproxy = PyTango.AttributeProxy(fattr)
+                self.__fproxy = tango.AttributeProxy(fattr)
                 if dattr:
-                    self.__dproxy = PyTango.AttributeProxy(dattr)
+                    self.__dproxy = tango.AttributeProxy(dattr)
                 else:
                     self.__dproxy = None
             return True
@@ -686,7 +689,7 @@ class TangoAttrSource(BaseSource):
         :type timeout: :obj:`int`
         """
         BaseSource.__init__(self, timeout)
-        #: (:class`PyTango.AttributeProxy`:)
+        #: (:class`tango.AttributeProxy`:)
         #:      device proxy for the image attribute
         self.__aproxy = None
         #: (:dict: <:obj:`str`, :obj:`any`>)
@@ -720,11 +723,11 @@ class TangoAttrSource(BaseSource):
                     attr = self.__aproxy.read()
                 else:
                     attr = self.__aproxy.read(
-                        extract_as=PyTango.ExtractAs.ByteArray)
+                        extract_as=tango.ExtractAs.ByteArray)
             except Exception:
                 if sys.version_info > (3,):
                     attr = self.__aproxy.read(
-                        extract_as=PyTango.ExtractAs.ByteArray)
+                        extract_as=tango.ExtractAs.ByteArray)
                     self.__bytearray = True
                 else:
                     attr = self.__aproxy.read()
@@ -742,8 +745,8 @@ class TangoAttrSource(BaseSource):
                                 self._configuration, str(attr.time)), "")
                 elif avalue[0] in self.__tangodecoders:
                     da = self.__aproxy.read(
-                        extract_as=PyTango.ExtractAs.Nothing)
-                    enc = PyTango.EncodedAttribute()
+                        extract_as=tango.ExtractAs.Nothing)
+                    enc = tango.EncodedAttribute()
                     data = getattr(enc, self.__tangodecoders[avalue[0]])(da)
                     return (np.transpose(data),
                             '%s  (%s)' % (
@@ -782,7 +785,7 @@ class TangoAttrSource(BaseSource):
         self.__bytearray = False
         try:
             if not self._initiated:
-                self.__aproxy = PyTango.AttributeProxy(
+                self.__aproxy = tango.AttributeProxy(
                     str(self._configuration))
             return True
         except Exception as e:
@@ -905,7 +908,7 @@ class TangoEventsSource(BaseSource):
         self.fresh = False
         #: (:class:`pyqtgraph.QtCore.QMutex`) mutex lock for CB
         self.__mutex = QtCore.QMutex()
-        #: (:class`PyTango.DeviceProxy`:)
+        #: (:class`tango.DeviceProxy`:)
         #:      device proxy for the image attribute
         self.__proxy = None
         self.__attrid = None
@@ -954,8 +957,8 @@ class TangoEventsSource(BaseSource):
                                 "")
                     elif avalue[0] in self.__tangodecoders:
                         # da = self.__aproxy.read(
-                        #     extract_as=PyTango.ExtractAs.Nothing)
-                        enc = PyTango.EncodedAttribute()
+                        #     extract_as=tango.ExtractAs.Nothing)
+                        enc = tango.EncodedAttribute()
                         data = getattr(
                             enc, self.__tangodecoders[avalue[0]])(self.attr)
                         return (np.transpose(data),
@@ -1000,12 +1003,12 @@ class TangoEventsSource(BaseSource):
                 dvname, atname = str(self._configuration).rsplit('/', 1)
                 attr_cb = TangoEventsCB(self, atname, self.__mutex)
                 rattr_cb = TangoReadyEventsCB(self, atname, self.__mutex)
-                self.__proxy = PyTango.DeviceProxy(dvname)
+                self.__proxy = tango.DeviceProxy(dvname)
                 exc = ""
                 try:
                     self.__attrid = self.__proxy.subscribe_event(
                         atname,
-                        PyTango.EventType.CHANGE_EVENT,
+                        tango.EventType.CHANGE_EVENT,
                         attr_cb)
                 except Exception as e:
                     self.__attrid = None
@@ -1013,7 +1016,7 @@ class TangoEventsSource(BaseSource):
                     try:
                         self.__rattrid = self.__proxy.subscribe_event(
                             atname,
-                            PyTango.EventType.DATA_READY_EVENT,
+                            tango.EventType.DATA_READY_EVENT,
                             rattr_cb)
                     except Exception as e:
                         self.__rattrid = None

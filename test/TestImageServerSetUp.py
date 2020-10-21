@@ -26,7 +26,10 @@ import os
 import sys
 import subprocess
 
-import PyTango
+try:
+    import tango
+except ImportError:
+    import PyTango as tango
 import time
 
 try:
@@ -42,7 +45,7 @@ class TestImageServerSetUp(object):
     # \brief defines server parameters
 
     def __init__(self, device="test/testimageserver/00", instance="S1"):
-        self.new_device_info = PyTango.DbDevInfo()
+        self.new_device_info = tango.DbDevInfo()
         self.new_device_info._class = "TestImageServer"
         self.new_device_info.server = "TestImageServer/%s" % instance
         self.new_device_info.name = device
@@ -64,7 +67,7 @@ class TestImageServerSetUp(object):
     # \brief Common set up of Tango Server
     def setUp(self):
         print("\nsetting up...")
-        db = PyTango.Database()
+        db = tango.Database()
         db.add_device(self.new_device_info)
         db.add_server(
             self.new_device_info.server, self.new_device_info)
@@ -99,10 +102,10 @@ class TestImageServerSetUp(object):
                     time.sleep(0.01)
                     cnt += 1
                     continue
-                self.proxy = PyTango.DeviceProxy(dvname)
-                self.proxy.set_source(PyTango.DevSource.DEV)
+                self.proxy = tango.DeviceProxy(dvname)
+                self.proxy.set_source(tango.DevSource.DEV)
                 time.sleep(0.01)
-                if self.proxy.state() == PyTango.DevState.ON:
+                if self.proxy.state() == tango.DevState.ON:
                     found = True
             except Exception:
                 found = False
@@ -113,7 +116,7 @@ class TestImageServerSetUp(object):
     # \brief Common tear down oif Tango Server
     def tearDown(self):
         print("tearing down ...")
-        db = PyTango.Database()
+        db = tango.Database()
         db.delete_server(self.new_device_info.server)
         if sys.version_info > (3,):
             with subprocess.Popen(

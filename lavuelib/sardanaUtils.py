@@ -33,12 +33,15 @@ import logging
 import functools
 
 try:
-    import PyTango
-    #: (:obj:`bool`) PyTango imported
-    PYTANGO = True
+    try:
+        import tango
+    except ImportError:
+        import PyTango as tango
+    #: (:obj:`bool`) tango imported
+    TANGO = True
 except ImportError:
-    #: (:obj:`bool`) PyTango imported
-    PYTANGO = False
+    #: (:obj:`bool`) tango imported
+    TANGO = False
 
 if sys.version_info > (3,):
     basestring = str
@@ -86,11 +89,11 @@ class SardanaUtils(object):
     def __init__(self):
         """ constructor """
 
-        #: (:obj:`list` <:class:`PyTango.DeviceProxy`>) pool tango servers
+        #: (:obj:`list` <:class:`tango.DeviceProxy`>) pool tango servers
         self.__pools = []
         try:
-            #: (:class:`PyTango.Database`) tango database
-            self.__db = PyTango.Database()
+            #: (:class:`tango.Database`) tango database
+            self.__db = tango.Database()
         except Exception:
             self.__db = None
 
@@ -101,11 +104,11 @@ class SardanaUtils(object):
         :param device: device name
         :type device: :obj:`str`
         :returns: DeviceProxy of device
-        :rtype: :class:`PyTango.DeviceProxy`
+        :rtype: :class:`tango.DeviceProxy`
         """
         found = False
         cnt = 0
-        cnfServer = PyTango.DeviceProxy(str(device))
+        cnfServer = tango.DeviceProxy(str(device))
 
         while not found and cnt < counter:
             if cnt > 1:
@@ -113,7 +116,7 @@ class SardanaUtils(object):
             try:
                 cnfServer.ping()
                 found = True
-            except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
+            except (tango.DevFailed, tango.Except, tango.DevError):
                 time.sleep(0.01)
                 found = False
                 if cnt == counter - 1:
@@ -129,7 +132,7 @@ class SardanaUtils(object):
         :param door: door device name
         :type door: :obj:`str`
         :returns: macroserver device proxy
-        :rtype: :class:`PyTango.DeviceProxy`
+        :rtype: :class:`tango.DeviceProxy`
         """
         if not door:
             raise Exception("Door '%s' cannot be found" % door)
@@ -143,7 +146,7 @@ class SardanaUtils(object):
             "SardanaUtils.getMacroServer: Tango Host = %s" % tangohost)
         if tangohost or not self.__db:
             host, port = tangohost.split(":")
-            db = PyTango.Database(host, int(port))
+            db = tango.Database(host, int(port))
         else:
             db = self.__db
         logger.debug("SardanaUtils.getMacroServer: Database = %s" % str(db))
@@ -219,7 +222,7 @@ class SardanaUtils(object):
         :param cname: device class name
         :type cname: :obj:`str`
         :param db: tango database
-        :type db: :class:`PyTango.Database`
+        :type db: :class:`tango.Database`
         :returns: device name if exists
         :rtype: :obj:`str`
         """
@@ -236,7 +239,7 @@ class SardanaUtils(object):
                 dp.ping()
                 device = server
                 break
-            except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
+            except (tango.DevFailed, tango.Except, tango.DevError):
                 pass
         return device
 
@@ -292,7 +295,7 @@ class SardanaUtils(object):
         if proxy is None:
             proxy = self.openProxy(name)
         for _ in range(maxcount):
-            if proxy.state() == PyTango.DevState.ON:
+            if proxy.state() == tango.DevState.ON:
                 break
             time.sleep(0.01)
 
@@ -324,7 +327,7 @@ class SardanaUtils(object):
 
         try:
             doorproxy.RunMacro(command)
-        except PyTango.DevFailed as e:
+        except tango.DevFailed as e:
             if e.args[0].reason == 'API_CommandNotAllowed':
                 self.wait(proxy=doorproxy)
                 doorproxy.RunMacro(command)
@@ -436,14 +439,14 @@ class SardanaUtils(object):
         :param names: given device names
         :type names: :obj:`list` <:obj:`str`>
         :returns: list of device DeviceProxies
-        :rtype: :obj:`list` <:class:`PyTango.DeviceProxy`>
+        :rtype: :obj:`list` <:class:`tango.DeviceProxy`>
         """
         dps = []
         for name in names:
-            dp = PyTango.DeviceProxy(str(name))
+            dp = tango.DeviceProxy(str(name))
             try:
                 dp.ping()
                 dps.append(dp)
-            except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
+            except (tango.DevFailed, tango.Except, tango.DevError):
                 pass
         return dps

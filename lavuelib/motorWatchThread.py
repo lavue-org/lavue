@@ -56,20 +56,20 @@ class MotorWatchThread(OmniQThread):
         """ constructor
 
         :param motor1: first motor device proxy
-        :type motor1: :class:`PyTango.DeviceProxy`
+        :type motor1: :class:`tango.DeviceProxy`
         :param motor2: second motor device proxy
-        :type motor2: :class:`PyTango.DeviceProxy`
+        :type motor2: :class:`tango.DeviceProxy`
         :param mserver: door server device proxy
-        :type mserver: :class:`PyTango.DeviceProxy`
+        :type mserver: :class:`tango.DeviceProxy`
         """
         OmniQThread.__init__(self)
         #: (:obj:`bool`) execute loop flag
         self.__loop = False
-        #: (:class:`PyTango.DeviceProxy`) first motor device proxy
+        #: (:class:`tango.DeviceProxy`) first motor device proxy
         self.__motor1 = motor1
-        #: (:class:`PyTango.DeviceProxy`) second motor device proxy
+        #: (:class:`tango.DeviceProxy`) second motor device proxy
         self.__motor2 = motor2
-        #: (:class:`PyTango.DeviceProxy`) door server device proxy
+        #: (:class:`tango.DeviceProxy`) door server device proxy
         self.__mserver = server
 
     def _run(self):
@@ -126,9 +126,9 @@ class AttributeWatchThread(OmniQThread):
         """ constructor
 
         :param refreshtime: refresh time
-        :type refreshtime: :class:`PyTango.DeviceProxy`
+        :type refreshtime: :class:`tango.DeviceProxy`
         :param aproxies: attribute proxies
-        :type aproxies: :obj:`list` <:class:`PyTango.DeviceProxy`>
+        :type aproxies: :obj:`list` <:class:`tango.DeviceProxy`>
         """
         OmniQThread.__init__(self)
         #: (:obj:`bool`) execute loop flag
@@ -136,7 +136,7 @@ class AttributeWatchThread(OmniQThread):
         #: (:obj:`bool`) execute loop flag
         self.__refreshtime = refreshtime or POLLINGINTERVAL
 
-        #: (:obj:`list` <:class:`PyTango.DeviceProxy`>)  attribute proxies
+        #: (:obj:`list` <:class:`tango.DeviceProxy`>)  attribute proxies
         self.__aproxies = aproxies or []
 
     def _run(self):

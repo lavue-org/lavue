@@ -7,19 +7,23 @@ __all__ = ["TestImageServer", "TestImageServerClass", "main"]
 
 __docformat__ = 'restructuredtext'
 
-import PyTango
+try:
+    import tango
+except ImportError:
+    import PyTango as tango
+
 import sys
 import random
 
 
-class TestImageServer (PyTango.Device_4Impl):
+class TestImageServer (tango.Device_4Impl):
 
     def __init__(self, cl, name):
-        PyTango.Device_4Impl.__init__(self, cl, name)
+        tango.Device_4Impl.__init__(self, cl, name)
         TestImageServer.init_device(self)
 
     def init_device(self):
-        self.set_state(PyTango.DevState.ON)
+        self.set_state(tango.DevState.ON)
         self.get_device_properties(self.get_device_class())
         # self.attr_LastImage_read = [[10]*2048]*1024
         self.attr_LastImageTaken_read = ""
@@ -87,73 +91,73 @@ class TestImageServer (PyTango.Device_4Impl):
                                self.attr_ChangeEventImage_read)
 
 
-class TestImageServerClass(PyTango.DeviceClass):
+class TestImageServerClass(tango.DeviceClass):
 
     cmd_list = {
         'StartAcq':
-        [[PyTango.DevVoid, "none"],
-         [PyTango.DevVoid, "none"]],
+        [[tango.DevVoid, "none"],
+         [tango.DevVoid, "none"]],
         'ReadyEventAcq':
-        [[PyTango.DevVoid, "none"],
-         [PyTango.DevVoid, "none"]],
+        [[tango.DevVoid, "none"],
+         [tango.DevVoid, "none"]],
         'ChangeEventAcq':
-        [[PyTango.DevVoid, "none"],
-         [PyTango.DevVoid, "none"]],
+        [[tango.DevVoid, "none"],
+         [tango.DevVoid, "none"]],
         }
 
     attr_list = {
         'LastImageTaken':
-        [[PyTango.DevString,
-          PyTango.SCALAR,
-          PyTango.READ_WRITE],
+        [[tango.DevString,
+          tango.SCALAR,
+          tango.READ_WRITE],
          {
              'label': "LastImageTaken",
              'description': "provide last image taken name",
          }],
         'LastImagePath':
-        [[PyTango.DevString,
-          PyTango.SCALAR,
-          PyTango.READ_WRITE],
+        [[tango.DevString,
+          tango.SCALAR,
+          tango.READ_WRITE],
          {
              'label': "LastImagePath",
              'description': "provide last image path",
          }],
         'LastImage':
-        [[PyTango.DevLong,
-          PyTango.IMAGE,
-          PyTango.READ, 4096, 4096],
+        [[tango.DevLong,
+          tango.IMAGE,
+          tango.READ, 4096, 4096],
          {
              'label': "LastImage",
              'description': "provide last image data",
          }],
         'Spectrum1':
-        [[PyTango.DevLong,
-          PyTango.SPECTRUM,
-          PyTango.READ, 4096],
+        [[tango.DevLong,
+          tango.SPECTRUM,
+          tango.READ, 4096],
          {
              'label': "Spectrum1",
              'description': "provide last spectrum data",
          }],
         'Spectrum2':
-        [[PyTango.DevLong,
-          PyTango.SPECTRUM,
-          PyTango.READ, 4096],
+        [[tango.DevLong,
+          tango.SPECTRUM,
+          tango.READ, 4096],
          {
              'label': "Spectrum2",
              'description': "provide last spectrum data",
          }],
         'ReadyEventImage':
-        [[PyTango.DevLong,
-          PyTango.IMAGE,
-          PyTango.READ, 4096, 4096],
+        [[tango.DevLong,
+          tango.IMAGE,
+          tango.READ, 4096, 4096],
          {
              'label': "ReadyEventImage",
              'description': "provide ready event image data",
          }],
         'ChangeEventImage':
-        [[PyTango.DevLong,
-          PyTango.IMAGE,
-          PyTango.READ, 4096, 4096],
+        [[tango.DevLong,
+          tango.IMAGE,
+          tango.READ, 4096, 4096],
          {
              'label': "ChangeEventImage",
              'description': "provide change event image data",
@@ -163,14 +167,14 @@ class TestImageServerClass(PyTango.DeviceClass):
 
 def main():
     try:
-        py = PyTango.Util(sys.argv)
+        py = tango.Util(sys.argv)
         py.add_class(TestImageServerClass, TestImageServer, 'TestImageServer')
 
-        U = PyTango.Util.instance()
+        U = tango.Util.instance()
         U.server_init()
         U.server_run()
 
-    except PyTango.DevFailed as e:
+    except tango.DevFailed as e:
         print('-------> Received a DevFailed exception: %s' % str(e))
     except Exception as e:
         print('-------> An unforeseen exception occured.... %s' % str(e))

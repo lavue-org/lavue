@@ -30,12 +30,15 @@ from pyqtgraph import QtCore, QtGui
 import os
 
 try:
-    import PyTango
-    #: (:obj:`bool`) PyTango imported
-    PYTANGO = True
+    try:
+        import tango
+    except ImportError:
+        import PyTango as tango
+    #: (:obj:`bool`) tango imported
+    TANGO = True
 except ImportError:
-    #: (:obj:`bool`) PyTango imported
-    PYTANGO = False
+    #: (:obj:`bool`) tango imported
+    TANGO = False
 
 
 _formclass, _baseclass = uic.loadUiType(
@@ -67,9 +70,9 @@ class TakeMotorsDialog(QtGui.QDialog):
         self.motortips = []
         #: (:obj:`str`) group title
         self.title = None
-        #: (:class:`PyTango.DeviceProxy`) x motor device
+        #: (:class:`tango.DeviceProxy`) x motor device
         self.xmotordevice = None
-        #: (:class:`PyTango.DeviceProxy`) y motor device
+        #: (:class:`tango.DeviceProxy`) y motor device
         self.ymotordevice = None
 
     def createGUI(self):
@@ -87,7 +90,7 @@ class TakeMotorsDialog(QtGui.QDialog):
         """
         try:
             self.xmotorname = str(self.__ui.xComboBox.currentText())
-            self.xmotordevice = PyTango.DeviceProxy(self.xmotorname)
+            self.xmotordevice = tango.DeviceProxy(self.xmotorname)
             for attr in ["state", "position"]:
                 if not hasattr(self.xmotordevice, attr):
                     raise Exception("Missing %s" % attr)
@@ -96,7 +99,7 @@ class TakeMotorsDialog(QtGui.QDialog):
             return
         try:
             self.ymotorname = str(self.__ui.yComboBox.currentText())
-            self.ymotordevice = PyTango.DeviceProxy(self.ymotorname)
+            self.ymotordevice = tango.DeviceProxy(self.ymotorname)
             for attr in ["state", "position"]:
                 if not hasattr(self.ymotordevice, attr):
                     raise Exception("Missing %s" % attr)

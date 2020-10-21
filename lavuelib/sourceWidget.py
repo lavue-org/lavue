@@ -672,7 +672,7 @@ class TangoAttrSourceWidget(SourceBaseWidget):
     #: (:obj:`str`) source alias
     alias = "tangoattr"
     #: (:obj:`tuple` <:obj:`str`>) capitalized required packages
-    requires = ("PYTANGO",)
+    requires = ("TANGO",)
     #: (:obj:`str`) datasource class name
     datasource = "TangoAttrSource"
 
@@ -980,7 +980,7 @@ class TangoEventsSourceWidget(SourceBaseWidget):
     #: (:obj:`str`) source alias
     alias = "tangoevents"
     #: (:obj:`tuple` <:obj:`str`>) capitalized required packages
-    requires = ("PYTANGO",)
+    requires = ("TANGO",)
     #: (:obj:`str`) datasource class name
     datasource = "TangoEventsSource"
 
@@ -1132,7 +1132,7 @@ class TangoFileSourceWidget(SourceBaseWidget):
     #: (:obj:`str`) source alias
     alias = "tangofile"
     #: (:obj:`tuple` <:obj:`str`>) capitalized required packages
-    requires = ("PYTANGO",)
+    requires = ("TANGO",)
     #: (:obj:`str`) datasource class name
     datasource = "TangoFileSource"
 

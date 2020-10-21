@@ -54,17 +54,20 @@ if sys.version_info > (3,):
     long = int
 
 try:
-    import PyTango
-    #: (:obj:`bool`) PyTango imported
-    PYTANGO = True
-    if hasattr(PyTango, "EnsureOmniThread"):
-        EnsureOmniThread = PyTango.EnsureOmniThread
+    try:
+        import tango
+    except ImportError:
+        import PyTango as tango
+    #: (:obj:`bool`) tango imported
+    TANGO = True
+    if hasattr(tango, "EnsureOmniThread"):
+        EnsureOmniThread = tango.EnsureOmniThread
     else:
         from lavuelib import cpplib
         EnsureOmniThread = cpplib.EnsureOmniThread
 except ImportError:
-    #: (:obj:`bool`) PyTango imported
-    PYTANGO = False
+    #: (:obj:`bool`) tango imported
+    TANGO = False
     EnsureOmniThread = None
 
 try:
