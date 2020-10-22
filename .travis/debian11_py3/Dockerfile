@@ -1,7 +1,7 @@
 FROM debian:bullseye
 
 MAINTAINER DESY, Jan Kotanski <jankotan@gmail.com>
-RUN /bin/bash -c 'echo "deb http://ftp.de.debian.org/debian bullseye main" > /etc/apt/sources.list.d/debian11de.list'
+# RUN /bin/bash -c 'echo "deb http://ftp.de.debian.org/debian bullseye main" > /etc/apt/sources.list.d/debian11de.list'
 RUN apt-get -qq update && apt-get -qq install -y libterm-readline-gnu-perl software-properties-common coreutils gnupg2 procps apt-utils curl apt-transport-https gnupg2 ca-certificates wget
 RUN wget --retry-connrefused http://repos.pni-hdri.de/debian_repo.pub.gpg
 RUN apt-key add debian_repo.pub.gpg
