@@ -6,7 +6,7 @@ if [ "$2" = "2" ]; then
 else
     echo "run python3-lavue tests"
     # workaround for pyfai docker problem, return I/O error status=74
-    if [ "$3" = "ubuntu20.04" ] || [ "$3" = "debian11" ] ; then
+    if [ "$3" = "ubuntu20.04" ] || [ "$3" = "debian11" ]  || [ "$3" = "ubuntu20.10" ] ; then
 	if [ "$1" = "basic" ]; then
 	    docker exec -it ndts sh -c 'python3 test/__main__.py basic; status=$?; teststatus=$(cat "testresult.txt") && echo "Exit status: $status, Test Result: $teststatus" && exit $teststatus'
 	elif [ "$1" = "controller" ]; then
