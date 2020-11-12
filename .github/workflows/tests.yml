@@ -1,0 +1,73 @@
+name: Test Package
+
+on: [push, pull_request]
+
+jobs:
+
+  flake8_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install flake8
+        run: pip install flake8
+      - name: Run flake8
+        run: flake8 .
+
+  python3_tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [debian11, debian10, debian9, ubuntu20.10, ubuntu20.04, ubuntu18.04]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - run: npm install
+      - run: sudo apt-get install xvfb
+      - run: xvfb-run --auto-servernum npm test
+      - name: Update bash files
+        run: |
+          chmod +x .ci/run.sh
+          chmod +x .ci/install.sh
+      - name: Build the docker
+        env:
+          OSYS: ${{ matrix.os }}
+        run: docker build -t ndts .ci/${OSYS}_py3
+      - name: Run the docker
+        run: docker run  --name  ndts -d -it -v `pwd`:/home/tango  -v /tmp/.X11-unix:/tmp/.X11-unix:ro  -e DISPLAY=$DISPLAY   ndts
+      - name: install tango
+        env:
+          OSYS: ${{ matrix.os }}
+        run: .ci/install.sh ${OSYS} 3
+      - name: run tests
+        run: .ci/run.sh 3 ${OSYS}
+
+  python2_tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [debian10, debian9, ubuntu18.04]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - run: npm install
+      - run: sudo apt-get install xvfb
+      - run: xvfb-run --auto-servernum npm test
+      - name: Update bash files
+        run: |
+          chmod +x .ci/run.sh
+          chmod +x .ci/install.sh
+      - name: Build the docker
+        env:
+          OSYS: ${{ matrix.os }}
+        run: docker build -t ndts .ci/${OSYS}_py2
+      - name: Run the docker
+        run: docker run  --name  ndts -d -it -v `pwd`:/home/tango  -v /tmp/.X11-unix:/tmp/.X11-unix:ro  -e DISPLAY=$DISPLAY   ndts
+      - name: install tango
+        env:
+          OSYS: ${{ matrix.os }}
+        run: .ci/install.sh ${OSYS} 2
+      - name: run tests
+        run: .ci/run.sh 2 ${OSYS}

@@ -11,11 +11,11 @@ fi
 # workaround for a bug in debian9, i.e. starting mysql hangs
 docker exec -it --user root ndts service mysql stop
 if [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ]; then
-    docker exec -it --user root ndts /bin/bash -c 'sudo usermod -d /var/lib/mysql/ mysql'
+    docker exec --user root ndts /bin/bash -c 'sudo usermod -d /var/lib/mysql/ mysql'
 fi
-docker exec -it --user root ndts /bin/bash -c '$(service mysql start &) && sleep 30'
+docker exec  --user root ndts /bin/bash -c '$(service mysql start &) && sleep 30'
 
-docker exec -it --user root ndts /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y   tango-db tango-common; sleep 10'
+docker exec  --user root ndts /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y   tango-db tango-common; sleep 10'
 if [ "$?" -ne "0" ]
 then
     exit -1
@@ -27,18 +27,18 @@ then
     exit -1
 fi
 
-docker exec -it --user root ndts service tango-db restart
-docker exec -it --user root ndts service tango-starter restart
+docker exec  --user root ndts service tango-db restart
+docker exec  --user root ndts service tango-starter restart
 
 if [ "$2" = "2" ]; then
     echo "install python packages"
-	docker exec -it --user root ndts /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python-tz python-pyqtgraph python-setuptools python-zmq python-scipy python-pytango'
+	docker exec  --user root ndts /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python-tz python-pyqtgraph python-setuptools python-zmq python-scipy python-pytango'
 else
     echo "install python3 packages"
     if [ "$1" = "debian10" ] || [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "debian11" ] ; then
-	docker exec -it --user root ndts /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy python3-tango'
+	docker exec  --user root ndts /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy python3-tango'
     else
-	docker exec -it --user root ndts /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy python3-pytango'
+	docker exec  --user root ndts /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy python3-pytango'
     fi
 fi
 if [ "$?" -ne "0" ]
@@ -48,14 +48,14 @@ fi
 
 if [ "$2" = "2" ]; then
     echo "install python-lavue"
-    docker exec -it --user root ndts chown -R tango:tango .
-    docker exec -it --user root ndts python setup.py build
-    docker exec -it --user root ndts python setup.py install
+    docker exec  --user root ndts chown -R tango:tango .
+    docker exec  --user root ndts python setup.py build
+    docker exec  --user root ndts python setup.py install
 else
     echo "install python3-lavue"
-    docker exec -it --user root ndts chown -R tango:tango .
-    docker exec -it --user root ndts python3 setup.py build
-    docker exec -it --user root ndts python3 setup.py install
+    docker exec  --user root ndts chown -R tango:tango .
+    docker exec  --user root ndts python3 setup.py build
+    docker exec  --user root ndts python3 setup.py install
 fi
 if [ "$?" -ne "0" ]
 then
