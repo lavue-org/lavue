@@ -24,9 +24,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
-      - run: export DISPLAY=':99.0'
-      - run: sudo apt-get install xvfb
-      - run: Xvfb :99 &
       - name: Update bash files
         run: |
           chmod +x .ci/run.sh
@@ -36,7 +33,7 @@ jobs:
           OSYS: ${{ matrix.os }}
         run: docker build -t ndts .ci/${OSYS}_py3
       - name: Run the docker
-        run: docker run  --name  ndts -d -it -v `pwd`:/home/tango  -v /tmp/.X11-unix:/tmp/.X11-unix:ro  -e DISPLAY=$DISPLAY   ndts
+        run: docker run  --name  ndts -d -it -v `pwd`:/home/tango    ndts
       - name: install tango
         env:
           OSYS: ${{ matrix.os }}

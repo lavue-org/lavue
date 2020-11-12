@@ -15,11 +15,14 @@ if [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ]; then
 fi
 docker exec  --user root ndts /bin/bash -c '$(service mysql start &) && sleep 30'
 
-docker exec  --user root ndts /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y   tango-db tango-common; sleep 10'
+
+docker exec  --user root ndts /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y xvfb tango-db tango-common; sleep 10'
 if [ "$?" -ne "0" ]
 then
     exit -1
 fi
+docker exec  --user root ndts /bin/bash -c 'export DISPLAY=":99.0"; Xvfb :99 -screen 0 1024x768x16 &'
+
 echo "install tango servers"
 docker exec --user root ndts /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive;  apt-get -qq update; apt-get -qq install -y  tango-starter tango-test liblog4j1.2-java pyqt5-dev-tools git'
 if [ "$?" -ne "0" ]
