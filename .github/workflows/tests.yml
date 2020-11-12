@@ -24,6 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
+      - run: export DISPLAY=':99.0'
       - run: sudo apt-get install xvfb
       - run: Xvfb :99 &
       - name: Update bash files
