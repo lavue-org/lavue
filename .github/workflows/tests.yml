@@ -53,7 +53,7 @@ jobs:
       - uses: actions/setup-python@v2
       - run: npm install
       - run: sudo apt-get install xvfb
-      - run: xvfb-run --auto-servernum npm test
+      - run: Xvfb :99 &
       - name: Update bash files
         run: |
           chmod +x .ci/run.sh
