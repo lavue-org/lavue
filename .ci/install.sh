@@ -21,7 +21,7 @@ then
     exit -1
 fi
 echo "install tango servers"
-docker exec -it --user root ndts /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive;  apt-get -qq update; apt-get -qq install -y  tango-starter tango-test liblog4j1.2-java pyqt5-dev-tools git'
+docker exec --user root ndts /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive;  apt-get -qq update; apt-get -qq install -y  tango-starter tango-test liblog4j1.2-java pyqt5-dev-tools git'
 if [ "$?" -ne "0" ]
 then
     exit -1
