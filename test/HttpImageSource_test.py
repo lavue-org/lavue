@@ -244,7 +244,7 @@ class httpImageSourceTest(unittest.TestCase):
         qtck1.executeChecks(delay=1000)
         qtck2.executeChecks(delay=7000)
         qtck3.executeChecks(delay=13000)
-        status = qtck4.executeChecksAndClose(delay=18000)
+        status = qtck4.executeChecksAndClose(delay=20000)
 
         self.assertEqual(status, 0)
 
