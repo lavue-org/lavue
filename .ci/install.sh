@@ -16,7 +16,12 @@ fi
 docker exec  --user root ndts /bin/bash -c '$(service mysql start &) && sleep 30'
 
 
-docker exec  --user root ndts /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y xvfb tango-db tango-common; sleep 10'
+docker exec  --user root ndts /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y tango-db tango-common; sleep 10'
+if [ "$?" -ne "0" ]
+then
+    exit -1
+fi
+docker exec  --user root ndts /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y xvfb  libxcb1 libx11-xcb1 libxcb-keysyms1 libxcb-image0 libxcb-icccm4 libxcb-render-util0'
 if [ "$?" -ne "0" ]
 then
     exit -1
