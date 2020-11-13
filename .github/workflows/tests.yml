@@ -60,7 +60,7 @@ jobs:
           OSYS: ${{ matrix.os }}
         run: docker build -t ndts .ci/${OSYS}_py2
       - name: Run the docker
-        run: docker run  --name  ndts -d -it -v `pwd`:/home/tango  -v /tmp/.X11-unix:/tmp/.X11-unix:ro  -e DISPLAY=$DISPLAY   ndts
+        run: docker run  --name  ndts -d -it -v `pwd`:/home/tango ndts
       - name: install tango
         env:
           OSYS: ${{ matrix.os }}
