@@ -25,8 +25,6 @@ if [ "$?" -ne "0" ]; then exit -1; fi
 docker exec  --user root ndts mkdir -p /tmp/runtime-tango
 docker exec  --user root ndts chown -R tango:tango /tmp/runtime-tango
 
-docker exec  --user root ndts /bin/bash -c 'ls -ltr /tmp/.X11-unix/'
-docker exec  --user root ndts /bin/bash -c 'rm -rf /tmp/.X11-unix/X99 && rm -rf /tmp/.X99'
 if [ "$?" -ne "0" ]; then exit -1; fi
 echo "start Xvfb :99 -screen 0 1024x768x24 &"
 docker exec  --user root ndts /bin/bash -c 'export DISPLAY=":99.0"; Xvfb :99 -screen 0 1024x768x24 &'

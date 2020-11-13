@@ -29,8 +29,8 @@ RUN /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections 
 RUN /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections <<< "nxsconfigserver-db nxsconfigserver-db/db/app-user string tango"'
 
 ENV PKG_CONFIG_PATH=/home/tango/lib/pkgconfig
-ENV QT_XKB_CONFIG_ROOT=/usr/share/X11/xkb
-ENV XDG_RUNTIME_DIR=/tmp/runtime-tango
-ENV RUNLEVEL=3
+# ENV QT_XKB_CONFIG_ROOT=/usr/share/X11/xkb
+# ENV XDG_RUNTIME_DIR=/tmp/runtime-tango
+# ENV RUNLEVEL=3
 USER tango
 WORKDIR /home/tango
