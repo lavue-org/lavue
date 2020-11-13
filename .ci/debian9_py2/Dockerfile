@@ -29,8 +29,8 @@ RUN /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections 
 
 ENV PKG_CONFIG_PATH=/home/tango/lib/pkgconfig
 ENV QT_XKB_CONFIG_ROOT=/usr/share/X11/xkb
-# ENV XDG_RUNTIME_DIR=/tmp/runtime-tango
-# ENV RUNLEVEL=3
+ENV XDG_RUNTIME_DIR=/tmp/runtime-tango
+ENV RUNLEVEL=3
 # create /tmp/runtime-tango and set 0700
 USER tango
 WORKDIR /home/tango
