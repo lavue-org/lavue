@@ -1,4 +1,3 @@
-	    docker exec ndts sh -c 'export DISPLAY=":99.0"; python3 test/__main__.py tangosource; status=$?; teststatus=$(cat "testresult.txt") && echo "Exit status: $status, Test Result: $teststatus" && exit $teststatus'
 #!/usr/bin/env bash
 
 if [ "$2" = "2" ]; then
