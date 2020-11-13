@@ -21,7 +21,7 @@ if [ "$?" -ne "0" ]
 then
     exit -1
 fi
-echo "start Xvfb :99 -screen 0 1024x768x16 &"
+echo "start Xvfb :99 -screen 0 1024x768x24 &"
 docker exec  --user root ndts /bin/bash -c 'export DISPLAY=":99.0"; Xvfb :99 -screen 0 1024x768x16 &'
 
 echo "install tango servers"
