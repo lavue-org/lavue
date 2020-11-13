@@ -39,7 +39,11 @@ jobs:
           OSYS: ${{ matrix.os }}
         run: .ci/install.sh ${OSYS} 3
       - name: run tests
+        env:
+          OSYS: ${{ matrix.os }}
         run: .ci/run.sh all_splitted 3 ${OSYS}
+      - name: Stop the docker
+        run: docker container stop ndts
 
   python2_tests:
     runs-on: ubuntu-latest
@@ -67,4 +71,8 @@ jobs:
           OSYS: ${{ matrix.os }}
         run: .ci/install.sh ${OSYS} 2
       - name: run tests
+        env:
+          OSYS: ${{ matrix.os }}
         run: .ci/run.sh all 2 ${OSYS}
+      - name: Stop the docker
+        run: docker container stop ndts
