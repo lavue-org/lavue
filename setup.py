@@ -208,7 +208,7 @@ SETUPDATA = dict(
     long_description=read('README.rst'),
     # long_description_content_type='text/x-rst',
     install_requires=install_requires,
-    url='https://github.com/jkotan/lavue',
+    url='https://github.com/lavue-org/lavue',
     author='J.Kotanski, Ch.Rosemann, A.Rothkirch',
     author_email='jan.kotanski@desy.de, '
     'christoph.rosemann@desy.de, '

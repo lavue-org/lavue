@@ -10,7 +10,7 @@ This is a simple implementation of a live viewer front end.
 It is supposed to show a live image view from xray-detectors at PETRA3 @ desy.de,
 e.g. ``Pilatus``, ``Lambda``, ``Eiger``, ``PerkinElmer``, ``PCO``, ``LimaCCD``, and others.
 
-.. image:: https://github.com/jkotan/lavue/blob/develop/doc/_images/lavue.png?raw=true
+.. image:: https://github.com/lavue-org/lavue/blob/develop/doc/_images/lavue.png?raw=true
 
 
 Installation
@@ -24,7 +24,7 @@ It is also recommended to install: ``pytango  hidra  pil  fabio  requests  h5py 
 From sources
 """"""""""""
 
-Download the latest LaVue version from https://github.com/jkotan/lavue
+Download the latest LaVue version from https://github.com/lavue-org/lavue
 
 Extract sources and run
 
