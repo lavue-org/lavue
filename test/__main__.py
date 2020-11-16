@@ -123,6 +123,7 @@ def main():
     controllersuite = unittest.TestSuite()
     controllersuite2 = unittest.TestSuite()
     tangosuite = unittest.TestSuite()
+    httpsuite = unittest.TestSuite()
     print("Using: %s" % qt_api)
     app = QtGui.QApplication([])
     CommandLineArgument_test.app = app
@@ -144,7 +145,7 @@ def main():
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             HidraImageSource_test))
-    basicsuite.addTests(
+    httpsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             HttpImageSource_test))
     basicsuite.addTests(
@@ -202,17 +203,21 @@ def main():
 
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('args', metavar='name', type=str, nargs='*',
-                        help='suite names: all, basic, tangosource '
-                        )
+    parser.add_argument(
+        'args', metavar='name', type=str, nargs='*',
+        help='suite names: all, basic, tangosource, httpsource, '
+        ' controller, controller2'
+    )
     options = parser.parse_args()
 
     namesuite = {
         "basic": [basicsuite],
+        "httpsource": [httpsuite],
         "tangosource": [tangosuite],
         "controller": [controllersuite],
         "controller2": [controllersuite2],
-        "all": [basicsuite, tangosuite, controllersuite, controllersuite2],
+        "all": [basicsuite, tangosuite, httpsuite,
+                controllersuite, controllersuite2],
     }
 
     # print(options.args)

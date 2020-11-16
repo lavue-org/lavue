@@ -38,8 +38,16 @@ jobs:
         env:
           OSYS: ${{ matrix.os }}
         run: .ci/install.sh ${OSYS} 3
-      - name: run tests
-        run: .ci/run.sh 3
+      - name: run basic tests
+        run: .ci/run.sh 3 basic
+      - name: run controller tests
+        run: .ci/run.sh 3 controller
+      - name: run controller2 tests
+        run: .ci/run.sh 3 controller2
+      - name: run tangosource tests
+        run: .ci/run.sh 3 tangosource
+      - name: run httpsource tests
+        run: .ci/run.sh 3 httpsource
       - name: Stop the docker
         run: docker container stop ndts
 
@@ -66,6 +74,6 @@ jobs:
           OSYS: ${{ matrix.os }}
         run: .ci/install.sh ${OSYS} 2
       - name: run tests
-        run: .ci/run.sh 2
+        run: .ci/run.sh 2 all
       - name: Stop the docker
         run: docker container stop ndts
