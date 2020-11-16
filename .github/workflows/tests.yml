@@ -30,14 +30,14 @@ jobs:
           chmod +x .ci/install.sh
       - name: Build the docker
         env:
-          OSYS: ${{ matrix.os }}
-        run: docker build -t ndts .ci/${OSYS}_py3
+          OS: ${{ matrix.os }}
+        run: docker build -t ndts .ci/${OS}_py3
       - name: Run the docker
         run: docker run  --name  ndts -d -it -v `pwd`:/home/tango    ndts
       - name: install tango
         env:
-          OSYS: ${{ matrix.os }}
-        run: .ci/install.sh ${OSYS} 3
+          OS: ${{ matrix.os }}
+        run: .ci/install.sh ${OS} 3
       - name: run basic tests
         run: .ci/run.sh 3 basic
       - name: run controller tests
@@ -65,15 +65,23 @@ jobs:
           chmod +x .ci/install.sh
       - name: Build the docker
         env:
-          OSYS: ${{ matrix.os }}
-        run: docker build -t ndts .ci/${OSYS}_py2
+          OS: ${{ matrix.os }}
+        run: docker build -t ndts .ci/${OS}_py2
       - name: Run the docker
         run: docker run  --name  ndts -d -it -v `pwd`:/home/tango ndts
       - name: install tango
         env:
-          OSYS: ${{ matrix.os }}
-        run: .ci/install.sh ${OSYS} 2
-      - name: run tests
-        run: .ci/run.sh 2 all
+          OS: ${{ matrix.os }}
+        run: .ci/install.sh ${OS} 2
+      - name: run basic tests
+        run: .ci/run.sh 2 basic
+      - name: run controller tests
+        run: .ci/run.sh 2 controller
+      - name: run controller2 tests
+        run: .ci/run.sh 2 controller2
+      - name: run tangosource tests
+        run: .ci/run.sh 2 tangosource
+      - name: run httpsource tests
+        run: .ci/run.sh 2 httpsource
       - name: Stop the docker
         run: docker container stop ndts
