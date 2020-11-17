@@ -92,7 +92,7 @@ PY3 = (sys.version_info > (3,))
 
 
 # test fixture
-class DiffractorgramToolTest(unittest.TestCase):
+class DiffractogramToolTest(unittest.TestCase):
 
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)

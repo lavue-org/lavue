@@ -91,7 +91,7 @@ if TANGO_AVAILABLE:
     import LavueController_test
     import GeneralTool_test
     import SpecializedTool_test
-    import DiffractorgramTool_test
+    import DiffractogramTool_test
     import TangoAttrImageSource_test
     import ZMQStreamImageSource_test
 
@@ -138,7 +138,7 @@ def main():
     if TANGO_AVAILABLE:
         GeneralTool_test.app = app
         SpecializedTool_test.app = app
-        DiffractorgramTool_test.app = app
+        DiffractogramTool_test.app = app
         TangoAttrImageSource_test.app = app
         ZMQStreamImageSource_test.app = app
     if H5CPP_AVAILABLE:
@@ -198,7 +198,7 @@ def main():
                 SpecializedTool_test))
         diffractogramsuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
-                DiffractorgramTool_test))
+                DiffractogramTool_test))
         tangosuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 TangoAttrImageSource_test))
