@@ -9,5 +9,5 @@ else
     command='export DISPLAY=":99.0"; python3 test/__main__.py '$2'; status=$?; teststatus=$(cat "testresult.txt") && echo "Exit status: $status, Test Result: $teststatus" && exit $teststatus'
 fi
 echo "$command"
-docker exec ndts sh -c $command
+docker exec ndts bash -c "$command"
 if [ "$?" -ne "0" ]; then exit -1; fi
