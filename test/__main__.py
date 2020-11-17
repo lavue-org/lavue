@@ -89,8 +89,9 @@ DB_AVAILABLE = []
 
 if TANGO_AVAILABLE:
     import LavueController_test
-    import CommandLineLavueState_test
-    import CommandLineLavueState2_test
+    import GeneralTool_test
+    import SpecializedTool_test
+    import DiffractorgramTool_test
     import TangoAttrImageSource_test
     import ZMQStreamImageSource_test
 
@@ -120,8 +121,11 @@ def main():
     # ts = None
     # test suit
     basicsuite = unittest.TestSuite()
-    controllersuite = unittest.TestSuite()
-    controllersuite2 = unittest.TestSuite()
+    generalsuite = unittest.TestSuite()
+    specializedsuite = unittest.TestSuite()
+    generalsuite = unittest.TestSuite()
+    specializedsuite = unittest.TestSuite()
+    diffractogramsuite = unittest.TestSuite()
     tangosuite = unittest.TestSuite()
     httpsuite = unittest.TestSuite()
     print("Using: %s" % qt_api)
@@ -132,8 +136,9 @@ def main():
     PyTineImageSource_test.app = app
     EpicsImageSource_test.app = app
     if TANGO_AVAILABLE:
-        CommandLineLavueState_test.app = app
-        CommandLineLavueState2_test.app = app
+        GeneralTool_test.app = app
+        SpecializedTool_test.app = app
+        DiffractorgramTool_test.app = app
         TangoAttrImageSource_test.app = app
         ZMQStreamImageSource_test.app = app
     if H5CPP_AVAILABLE:
@@ -185,12 +190,15 @@ def main():
         basicsuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 LavueController_test))
-        controllersuite.addTests(
+        generalsuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
-                CommandLineLavueState_test))
-        controllersuite2.addTests(
+                GeneralTool_test))
+        specializedsuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
-                CommandLineLavueState2_test))
+                SpecializedTool_test))
+        diffractogramsuite.addTests(
+            unittest.defaultTestLoader.loadTestsFromModule(
+                DiffractorgramTool_test))
         tangosuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 TangoAttrImageSource_test))
@@ -206,7 +214,7 @@ def main():
     parser.add_argument(
         'args', metavar='name', type=str, nargs='*',
         help='suite names: all, basic, tangosource, httpsource, '
-        ' controller, controller2'
+        ' generaltools, specializedtools, diffractogram'
     )
     options = parser.parse_args()
 
@@ -214,10 +222,12 @@ def main():
         "basic": [basicsuite],
         "httpsource": [httpsuite],
         "tangosource": [tangosuite],
-        "controller": [controllersuite],
-        "controller2": [controllersuite2],
+        "generaltools": [generalsuite],
+        "specializedtools": [specializedsuite],
+        "diffractogram": [diffractogramsuite],
         "all": [basicsuite, tangosuite, httpsuite,
-                controllersuite, controllersuite2],
+                generalsuite, specializedsuite,
+                diffractogramsuite],
     }
 
     # print(options.args)

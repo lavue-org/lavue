@@ -40,10 +40,12 @@ jobs:
         run: .ci/install.sh ${OS} 3
       - name: run basic tests
         run: .ci/run.sh 3 basic
-      - name: run controller tests
-        run: .ci/run.sh 3 controller
-      - name: run controller2 tests
-        run: .ci/run.sh 3 controller2
+      - name: run general tool tests
+        run: .ci/run.sh 3 generaltools
+      - name: run specialized tool tests
+        run: .ci/run.sh 3 specializedtools
+      - name: run diffractogram tests
+        run: .ci/run.sh 3 diffractogram
       - name: run tangosource tests
         run: .ci/run.sh 3 tangosource
       - name: run httpsource tests
@@ -75,10 +77,12 @@ jobs:
         run: .ci/install.sh ${OS} 2
       - name: run basic tests
         run: .ci/run.sh 2 basic
-      - name: run controller tests
-        run: .ci/run.sh 2 controller
-      - name: run controller2 tests
-        run: .ci/run.sh 2 controller2
+      - name: run general tool tests
+        run: .ci/run.sh 2 generaltools
+      - name: run specialized tool tests
+        run: .ci/run.sh 2 specializedtools
+      - name: run diffractogram tests
+        run: .ci/run.sh 2 diffractogram
       - name: run tangosource tests
         run: .ci/run.sh 2 tangosource
       - name: run httpsource tests
