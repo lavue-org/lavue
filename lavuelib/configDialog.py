@@ -281,6 +281,13 @@ class ConfigDialog(QtGui.QDialog):
         #: (:obj:`bool`) crosshair locker switched on
         self.crosshairlocker = True
 
+        #: (:obj:`list` < :obj:`str`>) asapo endpoint list
+        self.asapoendpoints = "[]"
+        #: (:obj:`str`) asapo token
+        self.asapotoken = ""
+        #: (:obj:`str`) asapo beamtime id
+        self.asapobeamtime = ""
+
         #: (:obj:`str`) json hidra detector server list
         self.detservers = "[]"
         #: (:obj:`bool`) use default detector servers
@@ -455,6 +462,10 @@ class ConfigDialog(QtGui.QDialog):
         self.__ui.zmqtopicsLineEdit.setText(" ".join(self.zmqtopics))
         self.__ui.detserversLineEdit.setText(
             " ".join(json.loads(self.detservers)))
+        self.__ui.asapoendpointsLineEdit.setText(
+            " ".join(json.loads(self.asapoendpoints)))
+        self.__ui.asapotokenLineEdit.setText(self.asapotoken)
+        self.__ui.asapobeamtimeLineEdit.setText(self.asapobeamtime)
         self.__ui.defdetserversCheckBox.setChecked(self.defdetservers)
         self.__ui.autozmqtopicsCheckBox.setChecked(self.autozmqtopics)
         self.__ui.interruptCheckBox.setChecked(self.interruptonerror)
@@ -911,10 +922,16 @@ class ConfigDialog(QtGui.QDialog):
             return
         zmqtopics = str(self.__ui.zmqtopicsLineEdit.text()).strip().split(" ")
         self.zmqtopics = [tp for tp in zmqtopics if tp]
-        detservers = str(
-            self.__ui.detserversLineEdit.text()).strip().split(" ")
         self.autozmqtopics = self.__ui.autozmqtopicsCheckBox.isChecked()
         self.interruptonerror = self.__ui.interruptCheckBox.isChecked()
+        endpoints = str(
+            self.__ui.asapoendpointsLineEdit.text()).strip().split(" ")
+        self.asapoendpoints = json.dumps([ds for ds in endpoints if ds])
+        self.asapotoken = str(self.__ui.asapotokenLineEdit.text()).strip()
+        self.asapobeamtime = str(
+            self.__ui.asapobeamtimeLineEdit.text()).strip()
+        detservers = str(
+            self.__ui.detserversLineEdit.text()).strip().split(" ")
         self.detservers = json.dumps([ds for ds in detservers if ds])
         try:
             self.timeout = int(self.__ui.timeoutLineEdit.text())

@@ -51,6 +51,14 @@ except ImportError:
     HIDRA = False
 
 try:
+    import asapo_consumer
+    #: (:obj:`bool`) asapo imported
+    ASAPO = True
+except ImportError:
+    #: (:obj:`bool`) asapo imported
+    ASAPO = False
+
+try:
     try:
         import tango
     except ImportError:
@@ -1423,6 +1431,167 @@ class ZMQSource(BaseSource):
         """
         self.disconnect()
         self.__context.destroy()
+
+
+class AsapoSource(BaseSource):
+
+    """ hidra image source"""
+
+    @debugmethod
+    def __init__(self, timeout=None):
+        """ constructor
+
+        :param timeout: timeout for setting connection in ms
+        :type timeout: :obj:`int`
+        """
+
+        BaseSource.__init__(self, timeout)
+        #: (:obj:`str`) asapo token
+        self.__token = ""
+        #: (:obj:`str`) beamtime
+        self.__beamtime = ""
+        #: (:obj:`str`) asapo endpoint
+        self.__endpoint = ""
+        #: (:obj:`str`) asapo client server
+        self.__targetname = socket.getfqdn()
+        #: (:obj:`asapo_consumer.broker`) asapo consumer
+        self.__broker = None
+        #: (:obj:`int`) group id
+        self.__group_id = None
+        #: (:class:`pyqtgraph.QtCore.QMutex`) mutex lock for hidra source
+        self.__mutex = QtCore.QMutex()
+        #: (:obj:`bool`) use tiff loader
+        self.__tiffloader = False
+
+    # @debugmethod
+    def setConfiguration(self, configuration):
+        """ set configuration
+
+        :param configuration:  configuration string
+        :type configuration: :obj:`str`
+        """
+        if self._configuration != configuration:
+            try:
+                self.__endpoint, self.__token, self.__beamtime \
+                    = str(configuration).split()
+            except Exception:
+                self._initiated = False
+            self._initiated = False
+
+    @debugmethod
+    def connect(self):
+        """ connects the source
+        """
+        self.__tiffloader = False
+        try:
+
+            self.__broker = asapo_consumer.create_server_broker(
+                self.__endpoint, "", False, self.__beamtime, "",
+                self.__token, 60000)
+            with QtCore.QMutexLocker(self.__mutex):
+                self.__group_id = self.__broker.generate_group_id()
+                self._initiated = True
+
+            # print("TARGET %s" % self.__target)
+            logger.info(
+                "AsapoSource.connect: ENDPOINT %s" % self.__endpoint)
+            return True
+        except Exception as e:
+            logger.warning(str(e))
+            # print(str(e))
+            with QtCore.QMutexLocker(self.__mutex):
+                self.__broker = None
+                self.__group_id = None
+            self._updaterror()
+            return False
+
+    @debugmethod
+    def disconnect(self):
+        """ disconnects the source
+        """
+        try:
+            if self.__broker is not None:
+                with QtCore.QMutexLocker(self.__mutex):
+                    self.__broker = None
+                    self.__group_id = None
+            self._initiated = False
+        except Exception:
+            self._updaterror()
+
+    @debugmethod
+    def getData(self):
+        """ provides image name, image data and metadata
+
+        :returns:  image name, image data, json dictionary with metadata
+        :rtype: (:obj:`str` , :class:`numpy.ndarray` , :obj:`str`)
+        """
+        metadata = None
+        data = None
+        if self.__broker is None:
+            return "No endpoint defined", "__ERROR__", None
+        if self.__group_id is None:
+            return "No group_id defined", "__ERROR__", None
+        if not self._initiated:
+            return None, None, None
+        imagename = ""
+        try:
+            with QtCore.QMutexLocker(self.__mutex):
+                data, metadata = self.__broker.get_next(
+                    self.__group_id, meta_only=False)
+                imagename = "%s (%s)" % (metadata["name"], metadata["_id"])
+                # print ('id:', metadata['_id'])
+                # print ('file name:', metadata['name'])
+                # print ('file content:', data.tostring().decode("utf-8"))
+        except Exception as e:
+            logger.warning(str(e))
+            # print(str(e))
+            pass  # this needs a bit more care
+
+        if metadata is not None and data is not None:
+            # print("data", str(data)[:10])
+
+            if data[:10] == "###CBF: VE":
+                # print("[cbf source module]::metadata", metadata["filename"])
+                logger.info(
+                    "AsapoSource.getData: "
+                    "[cbf source module]::metadata", metadata["name"])
+                npdata = np.fromstring(data[:], dtype=np.uint8)
+                img = imageFileHandler.CBFLoader().load(npdata)
+
+                mdata = imageFileHandler.CBFLoader().metadata(npdata)
+
+                if hasattr(img, "size") and img.size == 0:
+                    return None, None, None
+                return np.transpose(img), imagename, mdata
+            else:
+                # elif data[:2] in ["II\x2A\x00", "MM\x00\x2A"]:
+                logger.info(
+                    "AsapoSource.getData:"
+                    "[tif source module]::metadata", metadata["name"])
+                # print("[tif source module]::metadata", metadata["filename"])
+                if PILLOW and not self.__tiffloader:
+                    try:
+                        img = np.array(PIL.Image.open(BytesIO(str(data))))
+                    except Exception:
+                        img = imageFileHandler.TIFLoader().load(
+                            np.fromstring(data[:], dtype=np.uint8))
+                        self.__tiffloader = True
+                    if hasattr(img, "size") and img.size == 0:
+                        return None, None, None
+                    if img is not None:
+                        return np.transpose(img), imagename, ""
+                else:
+                    img = imageFileHandler.TIFLoader().load(
+                        np.fromstring(data[:], dtype=np.uint8))
+                    if hasattr(img, "size") and img.size == 0:
+                        return None, None, None
+                    if img is not None:
+                        return np.transpose(img), imagename, ""
+            # else:
+            #     print(
+            #       "[unknown source module]::metadata", metadata["name"])
+        else:
+            return None, None, None
 
 
 class HiDRASource(BaseSource):

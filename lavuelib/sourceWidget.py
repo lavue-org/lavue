@@ -48,6 +48,10 @@ _hidraformclass, _hidrabaseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  "ui", "HidraSourceWidget.ui"))
 
+_asapoformclass, _asapobaseclass = uic.loadUiType(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                 "ui", "AsapoSourceWidget.ui"))
+
 _tangoattrformclass, _tangoattrbaseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  "ui", "TangoAttrSourceWidget.ui"))
@@ -92,6 +96,7 @@ __all__ = [
     'NXSFileSourceWidget',
     'TinePropSourceWidget',
     'EpicsPVSourceWidget',
+    'AsapoSourceWidget',
     # 'FixTestSourceWidget',
     'TestSourceWidget',
     'swproperties'
@@ -644,6 +649,9 @@ class HidraSourceWidget(SourceBaseWidget):
         :param configuration: configuration string
         :type configuration: :obj:`str`
         """
+        configuration = configuration.split(" ")
+        if configuration:
+            configuration = configuration[0]
         iid = self._ui.serverComboBox.findText(configuration)
         if iid == -1:
             self._ui.serverComboBox.addItem(configuration)
@@ -661,6 +669,133 @@ class HidraSourceWidget(SourceBaseWidget):
         else:
             label = str(self._ui.serverComboBox.currentText()).strip()
             return re.sub("[^a-zA-Z0-9_]+", "_", label)
+
+
+class AsapoSourceWidget(SourceBaseWidget):
+
+    """ test source widget """
+
+    #: (:obj:`str`) source name
+    name = "Asapo"
+    #: (:obj:`str`) source alias
+    alias = "asapo"
+    #: (:obj:`tuple` <:obj:`str`>) capitalized required packages
+    requires = ("ASAPO",)
+    #: (:obj:`str`) datasource class name
+    datasource = "AsapoSource"
+
+    def __init__(self, parent=None):
+        """ constructor
+
+        :param parent: parent object
+        :type parent: :class:`pyqtgraph.QtCore.QObject`
+        """
+        SourceBaseWidget.__init__(self, parent)
+
+        self._ui = _asapoformclass()
+        self._ui.setupUi(self)
+
+        #: (:obj:`list` <:obj:`str`>) subwidget object names
+        self.widgetnames = [
+            "asapoendpointLabel", "asapoendpointComboBox"
+        ]
+        #: (:obj:`list` <:obj:`str`> >) sorted endpoint list
+        self.__endpoints = []
+
+        #: (:obj:`str`>) beamtime id
+        self.__beamtime = ""
+        #: (:obj:`str`>) asapo token
+        self.__token = ""
+
+        self._detachWidgets()
+
+        self._connectComboBox(self._ui.endpointComboBox)
+
+    @QtCore.pyqtSlot()
+    def updateButton(self):
+        """ update slot for Hidra source
+        """
+        if not self.active:
+            return
+        if not self._ui.endpointComboBox.count() \
+           or not self._ui.endpointComboBox.currentText():
+            self.buttonEnabled.emit(False)
+        else:
+            self.buttonEnabled.emit(True)
+            self.sourceLabelChanged.emit()
+
+    def configuration(self):
+        """ provides configuration for the current image source
+
+        :returns configuration: configuration string
+        :rtype configuration: :obj:`str`
+        """
+        return "%s %s %s" % (
+            str(self._ui.endpointComboBox.currentText()),
+            self.__token,
+            self.__beamtime
+        )
+
+    def updateMetaData(self, asapoendpoints=None, asapotoken=None,
+                       asapobeamtime=None, **kargs):
+        """ update source input parameters
+
+        :param serverdict: server dictionary
+        :type serverdict: :obj:`dict` < :obj:`str`, :obj:`list` <:obj:`str`> >
+        :param kargs:  source widget input parameter dictionary
+        :type kargs: :obj:`dict` < :obj:`str`, :obj:`any`>
+        """
+        if isinstance(asapoendpoints, list):
+            self._ui.endpointComboBox.currentIndexChanged.disconnect(
+                self.updateButton)
+            self.__endpoints = asapoendpoints
+            for i in reversed(range(0, self._ui.endpointComboBox.count())):
+                self._ui.endpointComboBox.removeItem(i)
+            self._ui.endpointComboBox.addItems(self.__endpoints)
+            self._ui.endpointComboBox.currentIndexChanged.connect(
+                self.updateButton)
+            self._ui.endpointComboBox.setCurrentIndex(0)
+        if asapotoken:
+            self.__asapotoken = asapotoken
+        if asapobeamtime:
+            self.__asapobeamtime = asapobeamtime
+        self.sourceLabelChanged.emit()
+
+    def connectWidget(self):
+        """ connects widget
+        """
+        self._connected = True
+        self._ui.endpointComboBox.setEnabled(False)
+
+    def disconnectWidget(self):
+        """ disconnects widget
+        """
+        self._connected = False
+        self._ui.endpointComboBox.setEnabled(True)
+
+    def configure(self, configuration):
+        """ set configuration for the current image source
+
+        :param configuration: configuration string
+        :type configuration: :obj:`str`
+        """
+        configuration = configuration.split(" ")
+        if configuration:
+            configuration = configuration[0]
+        iid = self._ui.endpointComboBox.findText(configuration)
+        if iid == -1:
+            self._ui.endpointComboBox.addItem(configuration)
+            iid = self._ui.endpointComboBox.findText(configuration)
+        self._ui.endpointComboBox.setCurrentIndex(iid)
+
+    def label(self):
+        """ return a label of the current detector
+
+        :return: label of the current detector
+        :rtype: :obj:`str`
+        """
+        label = str(self._ui.endpointComboBox.currentText()).strip()
+        return re.sub("[^a-zA-Z0-9_]+", "_", label)
 
 
 class TangoAttrSourceWidget(SourceBaseWidget):

@@ -1186,7 +1186,10 @@ class LiveViewer(QtGui.QDialog):
             doocsprops=self.__settings.doocsprops,
             tineprops=self.__settings.tineprops,
             epicspvnames=self.__settings.epicspvnames,
-            epicspvshapes=self.__settings.epicspvshapes
+            epicspvshapes=self.__settings.epicspvshapes,
+            asapoendpoints=json.loads(self.__settings.asapoendpoints or "[]"),
+            asapotoken=self.__settings.asapotoken,
+            asapobeamtime=self.__settings.asapobeamtime
         )
 
     @debugmethod
@@ -2142,6 +2145,9 @@ class LiveViewer(QtGui.QDialog):
         cnfdlg.availimagesources = self.__allsourcealiases
         cnfdlg.availtoolwidgets = self.__alltoolaliases
         cnfdlg.defdetservers = self.__settings.defdetservers
+        cnfdlg.asapoendpoints = self.__settings.asapoendpoints
+        cnfdlg.asapotoken = self.__settings.asapotoken
+        cnfdlg.asapobeamtime = self.__settings.asapobeamtime
         cnfdlg.detservers = json.dumps(self.__mergeDetServers(
             HIDRASERVERLIST if cnfdlg.defdetservers else {"pool": []},
             json.loads(self.__settings.detservers)))
@@ -2366,6 +2372,15 @@ class LiveViewer(QtGui.QDialog):
             json.loads(dialog.detservers)))
         if self.__settings.detservers != detservers:
             self.__settings.detservers = detservers
+            setsrc = True
+        if self.__settings.asapoendpoints != dialog.asapoendpoints:
+            self.__settings.asapoendpoints = dialog.asapoendpoints
+            setsrc = True
+        if self.__settings.asapotoken != dialog.asapotoken:
+            self.__settings.asapotoken = dialog.asapotoken
+            setsrc = True
+        if self.__settings.asapobeamtime != dialog.asapobeamtime:
+            self.__settings.asapobeamtime = dialog.asapobeamtime
             setsrc = True
         if self.__settings.autozmqtopics != dialog.autozmqtopics:
             self.__settings.autozmqtopics = dialog.autozmqtopics
