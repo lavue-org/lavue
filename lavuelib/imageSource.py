@@ -1433,9 +1433,9 @@ class ZMQSource(BaseSource):
         self.__context.destroy()
 
 
-class AsapoSource(BaseSource):
+class ASAPOSource(BaseSource):
 
-    """ hidra image source"""
+    """ asapo image source"""
 
     @debugmethod
     def __init__(self, timeout=None):
@@ -1458,7 +1458,7 @@ class AsapoSource(BaseSource):
         self.__broker = None
         #: (:obj:`int`) group id
         self.__group_id = None
-        #: (:class:`pyqtgraph.QtCore.QMutex`) mutex lock for hidra source
+        #: (:class:`pyqtgraph.QtCore.QMutex`) mutex lock for asapo source
         self.__mutex = QtCore.QMutex()
         #: (:obj:`bool`) use tiff loader
         self.__tiffloader = False
@@ -1494,7 +1494,7 @@ class AsapoSource(BaseSource):
 
             # print("TARGET %s" % self.__target)
             logger.info(
-                "AsapoSource.connect: ENDPOINT %s" % self.__endpoint)
+                "ASAPOSource.connect: ENDPOINT %s" % self.__endpoint)
             return True
         except Exception as e:
             logger.warning(str(e))
@@ -1536,8 +1536,10 @@ class AsapoSource(BaseSource):
         imagename = ""
         try:
             with QtCore.QMutexLocker(self.__mutex):
-                data, metadata = self.__broker.get_next(
+                data, metadata = self.__broker.get_last(
                     self.__group_id, meta_only=False)
+                # data, metadata = self.__broker.get_next(
+                #     self.__group_id, meta_only=False)
                 imagename = "%s (%s)" % (metadata["name"], metadata["_id"])
                 # print ('id:', metadata['_id'])
                 # print ('file name:', metadata['name'])
@@ -1553,7 +1555,7 @@ class AsapoSource(BaseSource):
             if data[:10] == "###CBF: VE":
                 # print("[cbf source module]::metadata", metadata["filename"])
                 logger.info(
-                    "AsapoSource.getData: "
+                    "ASAPOSource.getData: "
                     "[cbf source module]::metadata", metadata["name"])
                 npdata = np.fromstring(data[:], dtype=np.uint8)
                 img = imageFileHandler.CBFLoader().load(npdata)
@@ -1566,7 +1568,7 @@ class AsapoSource(BaseSource):
             else:
                 # elif data[:2] in ["II\x2A\x00", "MM\x00\x2A"]:
                 logger.info(
-                    "AsapoSource.getData:"
+                    "ASAPOSource.getData:"
                     "[tif source module]::metadata", metadata["name"])
                 # print("[tif source module]::metadata", metadata["filename"])
                 if PILLOW and not self.__tiffloader:

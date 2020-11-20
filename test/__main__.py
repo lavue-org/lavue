@@ -72,6 +72,7 @@ except ImportError as e:
 import unittest
 import CommandLineArgument_test
 import HidraImageSource_test
+import ASAPOImageSource_test
 import HttpImageSource_test
 import PyTineImageSource_test
 import EpicsImageSource_test
@@ -132,6 +133,7 @@ def main():
     app = QtGui.QApplication([])
     CommandLineArgument_test.app = app
     HidraImageSource_test.app = app
+    ASAPOImageSource_test.app = app
     HttpImageSource_test.app = app
     PyTineImageSource_test.app = app
     EpicsImageSource_test.app = app
@@ -150,6 +152,9 @@ def main():
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             HidraImageSource_test))
+    basicsuite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(
+            ASAPOImageSource_test))
     httpsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             HttpImageSource_test))

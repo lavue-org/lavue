@@ -607,7 +607,7 @@ class Settings(object):
 
         qstval = \
             settings.value(
-                "Configuration/AsapoEndpoints", type=str)
+                "Configuration/ASAPOEndpoints", type=str)
         if qstval:
             try:
                 json.loads(qstval)
@@ -616,12 +616,12 @@ class Settings(object):
                 self.asapoendpoints = json.dumps([str(tp) for tp in qstval])
         qstval = \
             settings.value(
-                "Configuration/AsapoToken", type=str)
+                "Configuration/ASAPOToken", type=str)
         if qstval:
             self.asapotoken = str(qstval)
         qstval = \
             settings.value(
-                "Configuration/AsapoBeamtime", type=str)
+                "Configuration/ASAPOBeamtime", type=str)
         if qstval:
             self.asapobeamtime = str(qstval)
 
@@ -996,13 +996,13 @@ class Settings(object):
             "Configuration/ZMQStreamTopics",
             self.zmqtopics)
         settings.setValue(
-            "Configuration/AsapoEndpoints",
+            "Configuration/ASAPOEndpoints",
             self.asapoendpoints)
         settings.setValue(
-            "Configuration/AsapoToken",
+            "Configuration/ASAPOToken",
             self.asapotoken)
         settings.setValue(
-            "Configuration/AsapoBeamtime",
+            "Configuration/ASAPOBeamtime",
             self.asapobeamtime)
         settings.setValue(
             "Configuration/HidraDetectorServers",
