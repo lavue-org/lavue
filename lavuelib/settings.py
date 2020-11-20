@@ -192,8 +192,8 @@ class Settings(object):
         self.nxslast = False
         #: (:obj:`list` < :obj:`str`>) hidra detector server list
         self.detservers = "[]"
-        #: (:obj:`list` < :obj:`str`>) asapo endpoint list
-        self.asapoendpoints = "[]"
+        #: (:obj:`list` < :obj:`str`>) asapo server list
+        self.asaposervers = "[]"
         #: (:obj:`str`) asapo token
         self.asapotoken = ""
         #: (:obj:`str`) asapo beamtime id
@@ -607,13 +607,13 @@ class Settings(object):
 
         qstval = \
             settings.value(
-                "Configuration/ASAPOEndpoints", type=str)
+                "Configuration/ASAPOServers", type=str)
         if qstval:
             try:
                 json.loads(qstval)
-                self.asapoendpoints = qstval
+                self.asaposervers = qstval
             except Exception:
-                self.asapoendpoints = json.dumps([str(tp) for tp in qstval])
+                self.asaposervers = json.dumps([str(tp) for tp in qstval])
         qstval = \
             settings.value(
                 "Configuration/ASAPOToken", type=str)
@@ -996,8 +996,8 @@ class Settings(object):
             "Configuration/ZMQStreamTopics",
             self.zmqtopics)
         settings.setValue(
-            "Configuration/ASAPOEndpoints",
-            self.asapoendpoints)
+            "Configuration/ASAPOServers",
+            self.asaposervers)
         settings.setValue(
             "Configuration/ASAPOToken",
             self.asapotoken)

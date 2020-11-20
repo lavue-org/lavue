@@ -281,8 +281,8 @@ class ConfigDialog(QtGui.QDialog):
         #: (:obj:`bool`) crosshair locker switched on
         self.crosshairlocker = True
 
-        #: (:obj:`list` < :obj:`str`>) asapo endpoint list
-        self.asapoendpoints = "[]"
+        #: (:obj:`list` < :obj:`str`>) asapo server list
+        self.asaposervers = "[]"
         #: (:obj:`str`) asapo token
         self.asapotoken = ""
         #: (:obj:`str`) asapo beamtime id
@@ -462,8 +462,8 @@ class ConfigDialog(QtGui.QDialog):
         self.__ui.zmqtopicsLineEdit.setText(" ".join(self.zmqtopics))
         self.__ui.detserversLineEdit.setText(
             " ".join(json.loads(self.detservers)))
-        self.__ui.asapoendpointsLineEdit.setText(
-            " ".join(json.loads(self.asapoendpoints)))
+        self.__ui.asaposerversLineEdit.setText(
+            " ".join(json.loads(self.asaposervers)))
         self.__ui.asapotokenLineEdit.setText(self.asapotoken)
         self.__ui.asapobeamtimeLineEdit.setText(self.asapobeamtime)
         self.__ui.defdetserversCheckBox.setChecked(self.defdetservers)
@@ -924,9 +924,9 @@ class ConfigDialog(QtGui.QDialog):
         self.zmqtopics = [tp for tp in zmqtopics if tp]
         self.autozmqtopics = self.__ui.autozmqtopicsCheckBox.isChecked()
         self.interruptonerror = self.__ui.interruptCheckBox.isChecked()
-        endpoints = str(
-            self.__ui.asapoendpointsLineEdit.text()).strip().split(" ")
-        self.asapoendpoints = json.dumps([ds for ds in endpoints if ds])
+        servers = str(
+            self.__ui.asaposerversLineEdit.text()).strip().split(" ")
+        self.asaposervers = json.dumps([ds for ds in servers if ds])
         self.asapotoken = str(self.__ui.asapotokenLineEdit.text()).strip()
         self.asapobeamtime = str(
             self.__ui.asapobeamtimeLineEdit.text()).strip()

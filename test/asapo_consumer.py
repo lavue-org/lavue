@@ -27,26 +27,26 @@ filename = ""
 group_id = "12345678"
 beamtime_cache = ""
 gtoken_cache = ""
-endpoint_cache = ""
+server_cache = ""
 
 
 def create_server_broker(server_name, source_path, has_filesystem,
                          beamtime_id, stream, token, timeout_ms):
     global beamtime_cache
     global token_cache
-    global endpoint_cache
+    global server_cache
 
     token_cache = token
     beamtime_cache = beamtime_id
-    endpoint_cache = server_name
+    server_cache = server_name
     return Broker(server_name, beamtime_id, token)
 
 
 class Broker(object):
     """ mock asapo brocker """
 
-    def __init__(self, endpoint, beamtime, token):
-        self.endpoint = endpoint
+    def __init__(self, server, beamtime, token):
+        self.server = server
         self.beamtime = beamtime
         self.token = token
         self.counter = 1

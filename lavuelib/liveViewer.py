@@ -1187,7 +1187,7 @@ class LiveViewer(QtGui.QDialog):
             tineprops=self.__settings.tineprops,
             epicspvnames=self.__settings.epicspvnames,
             epicspvshapes=self.__settings.epicspvshapes,
-            asapoendpoints=json.loads(self.__settings.asapoendpoints or "[]"),
+            asaposervers=json.loads(self.__settings.asaposervers or "[]"),
             asapotoken=self.__settings.asapotoken,
             asapobeamtime=self.__settings.asapobeamtime
         )
@@ -2145,7 +2145,7 @@ class LiveViewer(QtGui.QDialog):
         cnfdlg.availimagesources = self.__allsourcealiases
         cnfdlg.availtoolwidgets = self.__alltoolaliases
         cnfdlg.defdetservers = self.__settings.defdetservers
-        cnfdlg.asapoendpoints = self.__settings.asapoendpoints
+        cnfdlg.asaposervers = self.__settings.asaposervers
         cnfdlg.asapotoken = self.__settings.asapotoken
         cnfdlg.asapobeamtime = self.__settings.asapobeamtime
         cnfdlg.detservers = json.dumps(self.__mergeDetServers(
@@ -2373,8 +2373,8 @@ class LiveViewer(QtGui.QDialog):
         if self.__settings.detservers != detservers:
             self.__settings.detservers = detservers
             setsrc = True
-        if self.__settings.asapoendpoints != dialog.asapoendpoints:
-            self.__settings.asapoendpoints = dialog.asapoendpoints
+        if self.__settings.asaposervers != dialog.asaposervers:
+            self.__settings.asaposervers = dialog.asaposervers
             setsrc = True
         if self.__settings.asapotoken != dialog.asapotoken:
             self.__settings.asapotoken = dialog.asapotoken

@@ -697,10 +697,10 @@ class ASAPOSourceWidget(SourceBaseWidget):
 
         #: (:obj:`list` <:obj:`str`>) subwidget object names
         self.widgetnames = [
-            "asapoendpointLabel", "asapoendpointComboBox"
+            "asaposerverLabel", "asaposerverComboBox"
         ]
-        #: (:obj:`list` <:obj:`str`> >) sorted endpoint list
-        self.__endpoints = []
+        #: (:obj:`list` <:obj:`str`> >) sorted server list
+        self.__servers = []
 
         #: (:obj:`str`>) beamtime id
         self.__beamtime = ""
@@ -709,7 +709,7 @@ class ASAPOSourceWidget(SourceBaseWidget):
 
         self._detachWidgets()
 
-        self._connectComboBox(self._ui.asapoendpointComboBox)
+        self._connectComboBox(self._ui.asaposerverComboBox)
 
     @QtCore.pyqtSlot()
     def updateButton(self):
@@ -717,8 +717,8 @@ class ASAPOSourceWidget(SourceBaseWidget):
         """
         if not self.active:
             return
-        if not self._ui.asapoendpointComboBox.count() \
-           or not self._ui.asapoendpointComboBox.currentText():
+        if not self._ui.asaposerverComboBox.count() \
+           or not self._ui.asaposerverComboBox.currentText():
             self.buttonEnabled.emit(False)
         else:
             self.buttonEnabled.emit(True)
@@ -731,12 +731,12 @@ class ASAPOSourceWidget(SourceBaseWidget):
         :rtype configuration: :obj:`str`
         """
         return "%s %s %s" % (
-            str(self._ui.asapoendpointComboBox.currentText()),
+            str(self._ui.asaposerverComboBox.currentText()),
             self.__token,
             self.__beamtime
         )
 
-    def updateMetaData(self, asapoendpoints=None, asapotoken=None,
+    def updateMetaData(self, asaposervers=None, asapotoken=None,
                        asapobeamtime=None, **kargs):
         """ update source input parameters
 
@@ -745,17 +745,17 @@ class ASAPOSourceWidget(SourceBaseWidget):
         :param kargs:  source widget input parameter dictionary
         :type kargs: :obj:`dict` < :obj:`str`, :obj:`any`>
         """
-        if isinstance(asapoendpoints, list):
-            self._ui.asapoendpointComboBox.currentIndexChanged.disconnect(
+        if isinstance(asaposervers, list):
+            self._ui.asaposerverComboBox.currentIndexChanged.disconnect(
                 self.updateButton)
-            self.__endpoints = asapoendpoints
+            self.__servers = asaposervers
             for i in reversed(
-                    range(0, self._ui.asapoendpointComboBox.count())):
-                self._ui.asapoendpointComboBox.removeItem(i)
-            self._ui.asapoendpointComboBox.addItems(self.__endpoints)
-            self._ui.asapoendpointComboBox.currentIndexChanged.connect(
+                    range(0, self._ui.asaposerverComboBox.count())):
+                self._ui.asaposerverComboBox.removeItem(i)
+            self._ui.asaposerverComboBox.addItems(self.__servers)
+            self._ui.asaposerverComboBox.currentIndexChanged.connect(
                 self.updateButton)
-            self._ui.asapoendpointComboBox.setCurrentIndex(0)
+            self._ui.asaposerverComboBox.setCurrentIndex(0)
         if asapotoken:
             self.__asapotoken = asapotoken
         if asapobeamtime:
@@ -766,13 +766,13 @@ class ASAPOSourceWidget(SourceBaseWidget):
         """ connects widget
         """
         self._connected = True
-        self._ui.asapoendpointComboBox.setEnabled(False)
+        self._ui.asaposerverComboBox.setEnabled(False)
 
     def disconnectWidget(self):
         """ disconnects widget
         """
         self._connected = False
-        self._ui.asapoendpointComboBox.setEnabled(True)
+        self._ui.asaposerverComboBox.setEnabled(True)
 
     def configure(self, configuration):
         """ set configuration for the current image source
@@ -783,11 +783,11 @@ class ASAPOSourceWidget(SourceBaseWidget):
         configuration = configuration.split(" ")
         if configuration:
             configuration = configuration[0]
-        iid = self._ui.asapoendpointComboBox.findText(configuration)
+        iid = self._ui.asaposerverComboBox.findText(configuration)
         if iid == -1:
-            self._ui.asapoendpointComboBox.addItem(configuration)
-            iid = self._ui.asapoendpointComboBox.findText(configuration)
-        self._ui.asapoendpointComboBox.setCurrentIndex(iid)
+            self._ui.asaposerverComboBox.addItem(configuration)
+            iid = self._ui.asaposerverComboBox.findText(configuration)
+        self._ui.asaposerverComboBox.setCurrentIndex(iid)
 
     def label(self):
         """ return a label of the current detector
@@ -795,7 +795,7 @@ class ASAPOSourceWidget(SourceBaseWidget):
         :return: label of the current detector
         :rtype: :obj:`str`
         """
-        label = str(self._ui.asapoendpointComboBox.currentText()).strip()
+        label = str(self._ui.asaposerverComboBox.currentText()).strip()
         return re.sub("[^a-zA-Z0-9_]+", "_", label)
 
 

@@ -153,7 +153,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
         self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
         self.__tangofilepattern = "%05d.tif"
         cfg = '[Configuration]\n' \
-            'ASAPOEndpoints="[\"haso.desy.de:8500\"]"\n' \
+            'ASAPOServers="[\"haso.desy.de:8500\"]"\n' \
             'StoreGeometry=true\n' \
             'GeometryFromSource=true'
 

@@ -1450,8 +1450,8 @@ class ASAPOSource(BaseSource):
         self.__token = ""
         #: (:obj:`str`) beamtime
         self.__beamtime = ""
-        #: (:obj:`str`) asapo endpoint
-        self.__endpoint = ""
+        #: (:obj:`str`) asapo server
+        self.__server = ""
         #: (:obj:`str`) asapo client server
         self.__targetname = socket.getfqdn()
         #: (:obj:`asapo_consumer.broker`) asapo consumer
@@ -1472,7 +1472,7 @@ class ASAPOSource(BaseSource):
         """
         if self._configuration != configuration:
             try:
-                self.__endpoint, self.__token, self.__beamtime \
+                self.__server, self.__token, self.__beamtime \
                     = str(configuration).split()
             except Exception:
                 self._initiated = False
@@ -1486,7 +1486,7 @@ class ASAPOSource(BaseSource):
         try:
 
             self.__broker = asapo_consumer.create_server_broker(
-                self.__endpoint, "", False, self.__beamtime, "",
+                self.__server, "", False, self.__beamtime, "",
                 self.__token, 60000)
             with QtCore.QMutexLocker(self.__mutex):
                 self.__group_id = self.__broker.generate_group_id()
@@ -1494,7 +1494,7 @@ class ASAPOSource(BaseSource):
 
             # print("TARGET %s" % self.__target)
             logger.info(
-                "ASAPOSource.connect: ENDPOINT %s" % self.__endpoint)
+                "ASAPOSource.connect: ENDPOINT %s" % self.__server)
             return True
         except Exception as e:
             logger.warning(str(e))
@@ -1528,7 +1528,7 @@ class ASAPOSource(BaseSource):
         metadata = None
         data = None
         if self.__broker is None:
-            return "No endpoint defined", "__ERROR__", None
+            return "No server defined", "__ERROR__", None
         if self.__group_id is None:
             return "No group_id defined", "__ERROR__", None
         if not self._initiated:
