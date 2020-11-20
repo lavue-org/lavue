@@ -208,6 +208,7 @@ class httpImageSourceTest(unittest.TestCase):
         qtck2 = QtChecker(app, dialog, True, sleep=100)
         qtck3 = QtChecker(app, dialog, True, sleep=100)
         qtck4 = QtChecker(app, dialog, True, sleep=100)
+        qtck5 = QtChecker(app, dialog, True, sleep=100)
         qtck1.setChecks([
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
@@ -244,7 +245,8 @@ class httpImageSourceTest(unittest.TestCase):
         qtck1.executeChecks(delay=3000)
         qtck2.executeChecks(delay=10000)
         qtck3.executeChecks(delay=17000)
-        status = qtck4.executeChecksAndClose(delay=24000)
+        qtck4.executeChecks(delay=24000)
+        status = qtck5.executeChecksAndClose(delay=28000)
 
         self.assertEqual(status, 0)
 
