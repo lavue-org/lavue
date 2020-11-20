@@ -11,7 +11,9 @@ fi
 # workaround for a bug in debian9, i.e. starting mysql hangs
 docker exec --user root ndts service mysql stop
 if [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ]; then
-    docker exec --user root ndts /bin/bash -c 'sudo usermod -d /var/lib/mysql/ mysql'
+    # docker exec --user root ndts /bin/bash -c 'mkdir -p /var/lib/mysql'
+    # docker exec --user root ndts /bin/bash -c 'chown mysql:mysql /var/lib/mysql'
+    docker exec --user root ndts /bin/bash -c 'usermod -d /var/lib/mysql/ mysql'
 fi
 docker exec  --user root ndts /bin/bash -c '$(service mysql start &) && sleep 30'
 
