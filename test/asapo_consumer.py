@@ -30,15 +30,16 @@ gtoken_cache = ""
 endpoint_cache = ""
 
 
-def create_server_broker(endpoint, p1, p2, beamtime, p3, token, p4):
+def create_server_broker(server_name, source_path, has_filesystem,
+                         beamtime_id, stream, token, timeout_ms):
     global beamtime_cache
     global token_cache
     global endpoint_cache
 
     token_cache = token
-    beamtime_cache = beamtime
-    endpoint_cache = endpoint_cache
-    return Broker(endpoint, beamtime, token)
+    beamtime_cache = beamtime_id
+    endpoint_cache = server_name
+    return Broker(server_name, beamtime_id, token)
 
 
 class Broker(object):
@@ -55,7 +56,10 @@ class Broker(object):
     def generate_group_id(self):
         return group_id
 
-    def get_last(self, gid, meta_only):
+    def get_substream_list(self, from_substream=''):
+        return ["stream1", "stream2"]
+
+    def get_last(self, gid, substream="default", meta_only=True):
         global filename
         self.gid = gid
         self.metaonly = meta_only
@@ -64,8 +68,6 @@ class Broker(object):
             with open(filename, 'rb') as ifile:
                 self.data = ifile.read()
         self.filename = filename.split("/")[-1]
-        # print("FILENAME: %s" % filename)
-        # print(self.data)
         self.counter += 1
         metadata = {"name": self.filename, "_id": self.counter}
         return self.data, metadata
