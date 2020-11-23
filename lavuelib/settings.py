@@ -657,7 +657,7 @@ class Settings(object):
             self.autozmqtopics = True
 
         qstval = str(settings.value(
-            "Configuration/AutoASAPOSubstreams", type=str))
+            "Configuration/ASAPOAutoSubstreams", type=str))
         if qstval.lower() == "true":
             self.autoasaposubstreams = True
 
@@ -1024,6 +1024,9 @@ class Settings(object):
             "Configuration/ASAPOBeamtime",
             self.asapobeamtime)
         settings.setValue(
+            "Configuration/ASAPOAutoSubstreams",
+            self.autoasaposubstreams)
+        settings.setValue(
             "Configuration/HidraDetectorServers",
             self.detservers)
         settings.setValue(
@@ -1032,9 +1035,6 @@ class Settings(object):
         settings.setValue(
             "Configuration/AutoZMQStreamTopics",
             self.autozmqtopics)
-        settings.setValue(
-            "Configuration/AutoASAPOSubstreams",
-            self.autoasaposubstreams)
         settings.setValue(
             "Configuration/DirectoryTranslation",
             self.dirtrans)

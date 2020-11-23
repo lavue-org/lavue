@@ -72,5 +72,15 @@ class Broker(object):
                 self.data = ifile.read()
         self.filename = filename.split("/")[-1]
         self.counter += 1
-        metadata = {"name": self.filename, "_id": self.counter}
+        iid = self.counter
+        streambaseid = {
+            "default": 1000,
+            "sub1": 2000,
+            "sub2": 3000,
+            "stream1": 4000,
+            "stream2": 5000,
+        }
+        if substream in streambaseid.keys():
+            iid += streambaseid[substream]
+        metadata = {"name": self.filename, "_id": iid}
         return self.data, metadata
