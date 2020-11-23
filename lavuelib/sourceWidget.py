@@ -872,7 +872,7 @@ class ASAPOSourceWidget(SourceBaseWidget):
         :param configuration: configuration string
         :type configuration: :obj:`str`
         """
-        cnflst = configuration.split(" ")
+        cnflst = configuration.split(",")
         server = cnflst[0] if cnflst else ""
 
         substream = ""
