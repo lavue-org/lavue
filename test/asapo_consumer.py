@@ -54,12 +54,15 @@ class Broker(object):
         self.metaonly = True
 
     def generate_group_id(self):
+        print("Broker.generate_group_id()")
         return group_id
 
     def get_substream_list(self, from_substream=''):
+        print("Broker.get_substream_list()")
         return ["stream1", "stream2"]
 
     def get_last(self, gid, substream="default", meta_only=True):
+        print("Broker.get_last(%s, %s, %s)" % (gid, substream, meta_only))
         global filename
         self.gid = gid
         self.metaonly = meta_only

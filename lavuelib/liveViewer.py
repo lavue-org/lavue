@@ -1189,8 +1189,11 @@ class LiveViewer(QtGui.QDialog):
             epicspvshapes=self.__settings.epicspvshapes,
             asaposervers=json.loads(self.__settings.asaposervers or "[]"),
             asapotoken=self.__settings.asapotoken,
+            asaposubstreams=self.__settings.asaposubstreams,
+            autoasaposubstreams=self.__settings.autoasaposubstreams,
             asapobeamtime=self.__settings.asapobeamtime
         )
+        self._updateSource(-1, -1)
 
     @debugmethod
     @QtCore.pyqtSlot(str)
@@ -2148,6 +2151,8 @@ class LiveViewer(QtGui.QDialog):
         cnfdlg.asaposervers = self.__settings.asaposervers
         cnfdlg.asapotoken = self.__settings.asapotoken
         cnfdlg.asapobeamtime = self.__settings.asapobeamtime
+        cnfdlg.asaposubstreams = self.__settings.asaposubstreams
+        cnfdlg.autoasaposubstreams = self.__settings.autoasaposubstreams
         cnfdlg.detservers = json.dumps(self.__mergeDetServers(
             HIDRASERVERLIST if cnfdlg.defdetservers else {"pool": []},
             json.loads(self.__settings.detservers)))
@@ -2364,6 +2369,9 @@ class LiveViewer(QtGui.QDialog):
         if self.__settings.zmqtopics != dialog.zmqtopics:
             self.__settings.zmqtopics = dialog.zmqtopics
             setsrc = True
+        if self.__settings.asaposubstreams != dialog.asaposubstreams:
+            self.__settings.asaposubstreams = dialog.asaposubstreams
+            setsrc = True
         if self.__settings.defdetservers != dialog.defdetservers:
             self.__settings.defdetservers = dialog.defdetservers
             setsrc = True
@@ -2381,6 +2389,9 @@ class LiveViewer(QtGui.QDialog):
             setsrc = True
         if self.__settings.asapobeamtime != dialog.asapobeamtime:
             self.__settings.asapobeamtime = dialog.asapobeamtime
+            setsrc = True
+        if self.__settings.autoasaposubstreams != dialog.autoasaposubstreams:
+            self.__settings.autoasaposubstreams = dialog.autoasaposubstreams
             setsrc = True
         if self.__settings.autozmqtopics != dialog.autozmqtopics:
             self.__settings.autozmqtopics = dialog.autozmqtopics
@@ -2631,6 +2642,7 @@ class LiveViewer(QtGui.QDialog):
         :param sid: source tab id starting from 0 and -1 for all
         :type sid: :obj:`int`
         """
+        # print("SourceUdate %s %s" % (status, sid))
         if status:
             dss = self.__sourcewg.currentDataSources()
             if sid == -1:
@@ -2810,6 +2822,7 @@ class LiveViewer(QtGui.QDialog):
         :param status: current source status id
         :type status: :obj:`int`
         """
+        # print("Connect Source %s" % status)
         lstatus = json.loads(str(status))
         status = lstatus[0]
         self.__viewFrameRate(self.__settings.showframerate)

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1102</width>
-    <height>693</height>
+    <height>768</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1292,7 +1292,7 @@
                  <string>show widgets to select the image transformations</string>
                 </property>
                 <property name="text">
-                 <string>Transformations:</string>
+                 <string>&amp;Transformations:</string>
                 </property>
                 <property name="buddy">
                  <cstring>showtransCheckBox</cstring>
@@ -1494,69 +1494,10 @@
        </widget>
        <widget class="QWidget" name="sourceTab">
         <attribute name="title">
-         <string>Hidra/HTTP/ZMQ/NeXus Image Sources</string>
+         <string>Hidra/HTTP/ZMQ/ASAPO/NeXus Image Sources</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_13">
-         <item row="6" column="0">
-          <widget class="QGroupBox" name="nexusGroupBox">
-           <property name="title">
-            <string>Nexus File</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_21">
-            <item row="0" column="0">
-             <layout class="QGridLayout" name="gridLayout_20">
-              <item row="0" column="1">
-               <widget class="QCheckBox" name="nxsopenCheckBox">
-                <property name="toolTip">
-                 <string>nexus source keeps the file open</string>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="nxsopenLabel">
-                <property name="toolTip">
-                 <string>nexus source keeps the file open</string>
-                </property>
-                <property name="text">
-                 <string>Keep the file open:</string>
-                </property>
-                <property name="buddy">
-                 <cstring>nxsopenCheckBox</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="nxslastLabel">
-                <property name="toolTip">
-                 <string>nexus source starts from the last image</string>
-                </property>
-                <property name="text">
-                 <string>Start from the last &amp;image:</string>
-                </property>
-                <property name="buddy">
-                 <cstring>nxslastCheckBox</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QCheckBox" name="nxslastCheckBox">
-                <property name="toolTip">
-                 <string>nexus source starts from the last image</string>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="8" column="0">
+         <item row="9" column="0">
           <spacer name="verticalSpacer_3">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -1768,7 +1709,7 @@
                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ASAPO uid token&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="text">
-                 <string>Token:</string>
+                 <string>&amp;Token:</string>
                 </property>
                 <property name="buddy">
                  <cstring>asapotokenLineEdit</cstring>
@@ -1819,6 +1760,108 @@
                <widget class="QLineEdit" name="asaposerversLineEdit">
                 <property name="toolTip">
                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;asapo servers list separated by spaces where server is a host:port string, &lt;/p&gt;&lt;p&gt;e.g.&lt;/p&gt;&lt;p&gt;asap3-utl.desy.de:8400 asap2-utl.desy.de:8200&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QLineEdit" name="asaposubstreamsLineEdit">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ASAPO substream names separated by spaces&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="asaposubstreamsLabel">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ASAPO substream names separated by spaces&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Substreams:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>asaposubstreamsLineEdit</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="asapoautosubstreamsLabel">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;load possible ASAPO substream names from the asapo broker&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Automatic substreams:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>asapoautosubstreamsCheckBox</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QCheckBox" name="asapoautosubstreamsCheckBox">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;load possible ASAPO substream names from the asapo broker&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="8" column="0">
+          <widget class="QGroupBox" name="nexusGroupBox">
+           <property name="title">
+            <string>Nexus File</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_21">
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="gridLayout_20">
+              <item row="0" column="1">
+               <widget class="QCheckBox" name="nxsopenCheckBox">
+                <property name="toolTip">
+                 <string>nexus source keeps the file open</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="nxsopenLabel">
+                <property name="toolTip">
+                 <string>nexus source keeps the file open</string>
+                </property>
+                <property name="text">
+                 <string>&amp;Keep the file open:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>nxsopenCheckBox</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="nxslastLabel">
+                <property name="toolTip">
+                 <string>nexus source starts from the last image</string>
+                </property>
+                <property name="text">
+                 <string>Start from the last &amp;image:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>nxslastCheckBox</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QCheckBox" name="nxslastCheckBox">
+                <property name="toolTip">
+                 <string>nexus source starts from the last image</string>
+                </property>
+                <property name="text">
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -2187,11 +2230,13 @@ in the file name and the file directory for Tango File Source</string>
   <tabstop>zmqserversLineEdit</tabstop>
   <tabstop>autozmqtopicsCheckBox</tabstop>
   <tabstop>zmqtopicsLineEdit</tabstop>
-  <tabstop>nxsopenCheckBox</tabstop>
-  <tabstop>nxslastCheckBox</tabstop>
   <tabstop>asaposerversLineEdit</tabstop>
   <tabstop>asapotokenLineEdit</tabstop>
   <tabstop>asapobeamtimeLineEdit</tabstop>
+  <tabstop>asapoautosubstreamsCheckBox</tabstop>
+  <tabstop>asaposubstreamsLineEdit</tabstop>
+  <tabstop>nxsopenCheckBox</tabstop>
+  <tabstop>nxslastCheckBox</tabstop>
   <tabstop>attrLineEdit</tabstop>
   <tabstop>evattrLineEdit</tabstop>
   <tabstop>fileattrLineEdit</tabstop>

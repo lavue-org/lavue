@@ -1452,6 +1452,8 @@ class ASAPOSource(BaseSource):
         self.__beamtime = ""
         #: (:obj:`str`) asapo server
         self.__server = ""
+        #: (:obj:`str`) substream
+        self.__substream = ""
         #: (:obj:`str`) asapo client server
         self.__targetname = socket.getfqdn()
         #: (:obj:`asapo_consumer.broker`) asapo consumer
@@ -1472,11 +1474,35 @@ class ASAPOSource(BaseSource):
         """
         if self._configuration != configuration:
             try:
-                self.__server, self.__token, self.__beamtime \
-                    = str(configuration).split()
-            except Exception:
+                self.__server, self.__token, self.__beamtime, \
+                    self.__substream = str(configuration).split()
+            except Exception as e:
+                logger.warning(str(e))
+                print(str(e))
                 self._initiated = False
             self._initiated = False
+
+    def getMetaData(self):
+        """ get metadata
+
+        :returns: dictionary with metadata
+        :rtype: :obj:`dict` <:obj:`str`, :obj:`any`>
+        """
+        ""
+        substreams = []
+        meta = {}
+        connected = False
+        if self.__broker is None:
+            self.connect()
+            connected = True
+        if self.__broker is not None:
+            substreams = self.__broker.get_substream_list()
+        if connected:
+            self.disconnect()
+
+        if substreams:
+            meta["substreams"] = substreams
+        return meta
 
     @debugmethod
     def connect(self):
@@ -1485,14 +1511,14 @@ class ASAPOSource(BaseSource):
         self.__tiffloader = False
         try:
 
-            self.__broker = asapo_consumer.create_server_broker(
-                self.__server, "", False, self.__beamtime, "",
-                self.__token, 60000)
             with QtCore.QMutexLocker(self.__mutex):
+                self.__broker = asapo_consumer.create_server_broker(
+                    self.__server, "", False, self.__beamtime, "",
+                    self.__token, 60000)
                 self.__group_id = self.__broker.generate_group_id()
                 self._initiated = True
 
-            # print("TARGET %s" % self.__target)
+            # print("BORKER %s" % self.__broker)
             logger.info(
                 "ASAPOSource.connect: ENDPOINT %s" % self.__server)
             return True
@@ -1537,7 +1563,9 @@ class ASAPOSource(BaseSource):
         try:
             with QtCore.QMutexLocker(self.__mutex):
                 data, metadata = self.__broker.get_last(
-                    self.__group_id, meta_only=False)
+                    self.__group_id,
+                    substream=(self.__substream or "default"),
+                    meta_only=False)
                 # data, metadata = self.__broker.get_next(
                 #     self.__group_id, meta_only=False)
                 imagename = "%s (%s)" % (metadata["name"], metadata["_id"])
