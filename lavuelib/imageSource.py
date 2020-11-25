@@ -1454,6 +1454,10 @@ class ASAPOSource(BaseSource):
         self.__server = ""
         #: (:obj:`str`) substream
         self.__substream = ""
+        #: (:obj:`str`) last name
+        self.__lastname = ""
+        #: (:obj:`str`) last name
+        self.__lastid = ""
         #: (:obj:`str`) asapo client server
         self.__targetname = socket.getfqdn()
         #: (:obj:`asapo_consumer.broker`) asapo consumer
@@ -1476,9 +1480,11 @@ class ASAPOSource(BaseSource):
             try:
                 self.__server, self.__token, self.__beamtime, \
                     self.__substream = str(configuration).split()
+                self.__lastname = ""
+                self.__lastid = ""
             except Exception as e:
                 logger.warning(str(e))
-                print(str(e))
+                # print(str(e))
                 self._initiated = False
             self._initiated = False
 
@@ -1512,11 +1518,14 @@ class ASAPOSource(BaseSource):
         try:
 
             with QtCore.QMutexLocker(self.__mutex):
-                self.__broker = asapo_consumer.create_server_broker(
-                    self.__server, "", False, self.__beamtime, "",
-                    self.__token, 60000)
-                self.__group_id = self.__broker.generate_group_id()
-                self._initiated = True
+                if self.__server and self.__beamtime and self.__token:
+                    self.__broker = asapo_consumer.create_server_broker(
+                        self.__server, "", False, self.__beamtime, "",
+                        self.__token, 60000)
+                    self.__group_id = self.__broker.generate_group_id()
+                    self._initiated = True
+                    self.__lastname = ""
+                    self.__lastid = ""
 
             # print("BORKER %s" % self.__broker)
             logger.info(
@@ -1562,13 +1571,26 @@ class ASAPOSource(BaseSource):
         imagename = ""
         try:
             with QtCore.QMutexLocker(self.__mutex):
+                check = True
+                if self.__lastid and self.__lastname:
+                    _, metadata = self.__broker.get_last(
+                        self.__group_id,
+                        substream=(self.__substream or "default"),
+                        meta_only=True)
+                    curname, curid = metadata["name"], metadata["_id"]
+                    if curname == self.__lastname and curid == self.__lastid:
+                        check = False
+                if not check:
+                    return None, None, None
                 data, metadata = self.__broker.get_last(
                     self.__group_id,
                     substream=(self.__substream or "default"),
                     meta_only=False)
                 # data, metadata = self.__broker.get_next(
                 #     self.__group_id, meta_only=False)
-                imagename = "%s (%s)" % (metadata["name"], metadata["_id"])
+                self.__lastname = metadata["name"]
+                self.__lastid = metadata["_id"]
+                imagename = "%s (%s)" % (self.__lastname, self.__lastid)
                 # print ('id:', metadata['_id'])
                 # print ('file name:', metadata['name'])
                 # print ('file content:', data.tostring().decode("utf-8"))
@@ -1584,7 +1606,7 @@ class ASAPOSource(BaseSource):
                 # print("[cbf source module]::metadata", metadata["filename"])
                 logger.info(
                     "ASAPOSource.getData: "
-                    "[cbf source module]::metadata", metadata["name"])
+                    "[cbf source module]::metadata %s" % metadata["name"])
                 npdata = np.fromstring(data[:], dtype=np.uint8)
                 img = imageFileHandler.CBFLoader().load(npdata)
 
@@ -1595,10 +1617,10 @@ class ASAPOSource(BaseSource):
                 return np.transpose(img), imagename, mdata
             else:
                 # elif data[:2] in ["II\x2A\x00", "MM\x00\x2A"]:
+                # print("[tif source module]::metadata", metadata["name"])
                 logger.info(
                     "ASAPOSource.getData:"
-                    "[tif source module]::metadata", metadata["name"])
-                # print("[tif source module]::metadata", metadata["filename"])
+                    "[tif source module]::metadata %s" % metadata["name"])
                 if PILLOW and not self.__tiffloader:
                     try:
                         img = np.array(PIL.Image.open(BytesIO(str(data))))
@@ -1764,7 +1786,7 @@ class HiDRASource(BaseSource):
                 # print("[cbf source module]::metadata", metadata["filename"])
                 logger.info(
                     "HiDRASource.getData: "
-                    "[cbf source module]::metadata", metadata["filename"])
+                    "[cbf source module]::metadata %s" % metadata["filename"])
                 npdata = np.fromstring(data[:], dtype=np.uint8)
                 img = imageFileHandler.CBFLoader().load(npdata)
 
@@ -1777,7 +1799,7 @@ class HiDRASource(BaseSource):
                 # elif data[:2] in ["II\x2A\x00", "MM\x00\x2A"]:
                 logger.info(
                     "HiDRASource.getData:"
-                    "[tif source module]::metadata", metadata["filename"])
+                    "[tif source module]::metadata %s" % metadata["filename"])
                 # print("[tif source module]::metadata", metadata["filename"])
                 if PILLOW and not self.__tiffloader:
                     try:
