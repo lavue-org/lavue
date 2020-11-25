@@ -1469,7 +1469,7 @@ class ASAPOSource(BaseSource):
         #: (:obj:`bool`) use tiff loader
         self.__tiffloader = False
 
-    # @debugmethod
+    @debugmethod
     def setConfiguration(self, configuration):
         """ set configuration
 
@@ -1488,6 +1488,7 @@ class ASAPOSource(BaseSource):
                 self._initiated = False
             self._initiated = False
 
+    @debugmethod
     def getMetaData(self):
         """ get metadata
 
