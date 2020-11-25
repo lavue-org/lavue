@@ -714,6 +714,8 @@ class ASAPOSourceWidget(SourceBaseWidget):
         self.__autosubstreams = False
         #: (:obj:`bool`) updating flag
         self.__updating = False
+        #: (:class:`pyqtgraph.QtCore.QMutex`) update mutex
+        self.__udmutex = QtCore.QMutex()
 
         #: (:class:`pyqtgraph.QtCore.QMutex`) zmq datasource mutex
         self.__mutex = QtCore.QMutex()
@@ -728,9 +730,11 @@ class ASAPOSourceWidget(SourceBaseWidget):
     def updateButton(self, disconnect=True):
         """ update slot for Asapo source
         """
-        if not self.active or self.__updating:
-            return
-        self.__updating = True
+        with QtCore.QMutexLocker(self.__udmutex):
+            if not self.active or self.__updating:
+                return
+            else:
+                self.__updating = True
         with QtCore.QMutexLocker(self.__mutex):
             if disconnect:
                 self._ui.asaposubstreamComboBox.\
@@ -746,6 +750,7 @@ class ASAPOSourceWidget(SourceBaseWidget):
                 self._ui.asaposubstreamComboBox.\
                     currentIndexChanged.connect(
                         self._updateSubstreamComboBox)
+        with QtCore.QMutexLocker(self.__udmutex):
             self.__updating = False
 
     def configuration(self):
@@ -2090,6 +2095,8 @@ class ZMQSourceWidget(SourceBaseWidget):
 
         #: (:class:`pyqtgraph.QtCore.QMutex`) zmq datasource mutex
         self.__mutex = QtCore.QMutex()
+        #: (:class:`pyqtgraph.QtCore.QMutex`) update mutex
+        self.__udmutex = QtCore.QMutex()
         #: (:obj:`bool`) updating flag
         self.__updating = False
 
@@ -2125,9 +2132,11 @@ class ZMQSourceWidget(SourceBaseWidget):
     def updateButton(self, disconnect=True):
         """ update slot for ZMQ source
         """
-        if not self.active or self.__updating:
-            return
-        self.__updating = True
+        with QtCore.QMutexLocker(self.__udmutex):
+            if not self.active or self.__updating:
+                return
+            else:
+                self.__updating = True
         with QtCore.QMutexLocker(self.__mutex):
             if disconnect:
                 self._ui.pickleTopicComboBox.currentIndexChanged.disconnect(
@@ -2141,7 +2150,8 @@ class ZMQSourceWidget(SourceBaseWidget):
             if disconnect:
                 self._ui.pickleTopicComboBox.currentIndexChanged.connect(
                     self._updateZMQComboBox)
-        self.__updating = False
+        with QtCore.QMutexLocker(self.__udmutex):
+            self.__updating = False
 
     def configuration(self):
         """ provides configuration for the current image source
