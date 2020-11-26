@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>LineCut Tool</title>
+        <title>ASAPO</title>
         <link rel="stylesheet" href="styles/site.css" type="text/css" />
         <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
@@ -22,13 +22,13 @@
                                 <span><a href="LaVue---GUI_98091927.html">GUI</a></span>
                             </li>
                                                     <li>
-                                <span><a href="LaVue---Specialized-Tools_98091979.html">Specialized Tools</a></span>
+                                <span><a href="LaVue---Image-Sources--and-stitching-images_98091949.html">Image Sources  and stitching images</a></span>
                             </li>
                                                 </ol>
                     </div>
                     <h1 id="title-heading" class="pagetitle">
                                                 <span id="title-text">
-                            LineCut Tool
+                            ASAPO
                         </span>
                     </h1>
                 </div>
@@ -44,7 +44,7 @@
         
                         </div>
                     <div id="main-content" class="wiki-content group">
-                    <p><strong>LineCut Tool</strong> selects Line Cuts and shows their 1d intensity plots</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image"  src="attachments/98092081/99485595.png" data-image-src="attachments/98092081/99485595.png" data-unresolved-comment-count="0" data-linked-resource-id="99485595" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="linecutlavue.png" data-base-url="https://confluence.desy.de" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98092081" data-linked-resource-container-version="6"></span></p><ul><li><strong>X in 1d:</strong> Points, X-Pixels, Y-Pixels</li><li><strong>All Cuts: </strong>displays all cuts on the 1d-plot</li></ul><p>The <strong>width</strong> of the line-cut can be set the handle in the middle of the line-cut selector.</p><p><br/></p><p>The <strong>configuration</strong> of the tool can be set with a JSON dictionary passed in the  <code>--tool-configuration</code>  option in command line or a<code> toolconfig</code> variable of <code>LavueController.LavueState</code> with the following keys:</p><p><code>x_coordinates</code> (<code>points</code>, <code>x-pixels</code>  or <code>y-pixels</code> string), <code>cuts_number</code> (integer), <code>all_cuts</code> (boolean)</p><p><code> </code>e.g.</p><p><code>lavue -u linecut --tool-configuration \{\&quot;cuts_number\&quot;:2,\&quot;x_coordinates\&quot;:\&quot;y-pixels\&quot;,\&quot;all_cuts\&quot;:true}</code></p><p><br/></p>
+                    <p>Images from a  <a href="https://confluence.desy.de/display/ASAPO/ASAP%3A%3AO">ASAP::O</a> server, e.g. detector servers. It is used to send <code>post-processed images</code></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image"  src="attachments/185888718/185888724.png" data-image-src="attachments/185888718/185888724.png" data-unresolved-comment-count="0" data-linked-resource-id="185888724" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="asapolavue.png" data-base-url="https://confluence.desy.de" data-linked-resource-content-type="image/png" data-linked-resource-container-id="185888718" data-linked-resource-container-version="2"></span></span></p><p>The  <strong>ASAPO</strong> image source frame contains the following fields:</p><ul><li><strong>Server</strong>: selects the asapo server host and data port.</li><li><strong>Substream:</strong> name of asapo substream. Possible substreams can be predefined in the configuration or fetched from the ASAPO server.</li><li><strong>Status:</strong> shows the connection status. It also displays a port of ZMQ security stream if it is enabled.</li><li><strong>Start/Stop</strong> button to launch or interrupt image querying</li></ul><p>In order to use <strong>ASAPO</strong> image source user has to set asapo token and asapo beamtime  in the lavue Configuration.</p>
                     </div>
 
                                         </div><section><!-- <div class="pageSection group">
@@ -54,7 +54,10 @@
 
                         <div class="greybox" align="left">
                                                             <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
-                                <a href="attachments/98092081/99485595.png">linecutlavue.png</a> (image/png)
+                                <a href="attachments/185888718/185888722.png">zmqstreamlavue.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/185888718/185888724.png">asapolavue.png</a> (image/png)
                                 <br/>
                                                     </div>
                     </div>
