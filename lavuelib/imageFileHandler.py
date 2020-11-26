@@ -457,11 +457,13 @@ class CBFLoader(object):
     """ CBF loader """
 
     @classmethod
-    def metadata(cls, flbuffer):
+    def metadata(cls, flbuffer, premeta=None):
         """ extract header_contents from CBF file image data
 
         :param flbuffer: numpy array with CBF file image data
         :type flbuffer: :class:`numpy.ndarray` or :obj:`str`
+        :param premeta: metadata to be merged
+        :type premeta: :obj:`dict`  <:obj:`str`, :obj:`any`>
         :returns: metadata dictionary
         :rtype: :class:`numpy.ndarray`
         """
@@ -557,9 +559,11 @@ class CBFLoader(object):
                 # print(str(e))
                 logger.warning(str(e))
         if mdata:
+            if premeta:
+                mdata.update(premeta)
             return json.dumps(mdata)
         else:
-            return ""
+            return json.dumps(premeta) if premeta else ""
 
     @classmethod
     def load(cls, flbuffer):

@@ -281,16 +281,14 @@ class ConfigDialog(QtGui.QDialog):
         #: (:obj:`bool`) crosshair locker switched on
         self.crosshairlocker = True
 
-        #: (:obj:`list` < :obj:`str`>) asapo server list
-        self.asaposervers = "[]"
+        #: (:obj:`str`) asapo server
+        self.asaposerver = ""
         #: (:obj:`str`) asapo token
         self.asapotoken = ""
         #: (:obj:`str`) asapo beamtime id
         self.asapobeamtime = ""
         #: (:obj:`list` < :obj:`str` > ) asapo substreams
-        self.asaposubstreams = []
-        #: (:obj:`bool`) automatic asapo substream names
-        self.autoasaposubstreams = False
+        self.asapostreams = []
 
         #: (:obj:`str`) json hidra detector server list
         self.detservers = "[]"
@@ -464,18 +462,15 @@ class ConfigDialog(QtGui.QDialog):
         self.__ui.showframerateCheckBox.setChecked(self.showframerate)
         self.__ui.timeoutLineEdit.setText(str(self.timeout))
         self.__ui.zmqtopicsLineEdit.setText(" ".join(self.zmqtopics))
-        self.__ui.asaposubstreamsLineEdit.setText(
-            " ".join(self.asaposubstreams))
+        self.__ui.asapostreamsLineEdit.setText(
+            " ".join(self.asapostreams))
         self.__ui.detserversLineEdit.setText(
             " ".join(json.loads(self.detservers)))
-        self.__ui.asaposerversLineEdit.setText(
-            " ".join(json.loads(self.asaposervers)))
+        self.__ui.asaposerverLineEdit.setText(self.asaposerver)
         self.__ui.asapotokenLineEdit.setText(self.asapotoken)
         self.__ui.asapobeamtimeLineEdit.setText(self.asapobeamtime)
         self.__ui.defdetserversCheckBox.setChecked(self.defdetservers)
         self.__ui.autozmqtopicsCheckBox.setChecked(self.autozmqtopics)
-        self.__ui.asapoautosubstreamsCheckBox.setChecked(
-            self.autoasaposubstreams)
         self.__ui.interruptCheckBox.setChecked(self.interruptonerror)
         self.__ui.dirtransLineEdit.setText(self.dirtrans)
         self.__ui.attrLineEdit.setText(self.tangoattrs)
@@ -930,17 +925,15 @@ class ConfigDialog(QtGui.QDialog):
             return
         zmqtopics = str(self.__ui.zmqtopicsLineEdit.text()).strip().split(" ")
         self.zmqtopics = [tp for tp in zmqtopics if tp]
-        self.autozmqtopics = self.__ui.autozmqtopicsCheckBox.isChecked()
-        substreams = str(
-            self.__ui.asaposubstreamsLineEdit.text()).strip().split(" ")
-        self.asaposubstreams = [tp for tp in substreams if tp]
-        self.autoasaposubstreams = \
-            self.__ui.asapoautosubstreamsCheckBox.isChecked()
         self.interruptonerror = self.__ui.interruptCheckBox.isChecked()
-        servers = str(
-            self.__ui.asaposerversLineEdit.text()).strip().split(" ")
-        self.asaposervers = json.dumps([ds for ds in servers if ds])
-        self.asapotoken = str(self.__ui.asapotokenLineEdit.text()).strip()
+        self.autozmqtopics = self.__ui.autozmqtopicsCheckBox.isChecked()
+        streams = str(
+            self.__ui.asapostreamsLineEdit.text()).strip().split(" ")
+        self.asapostreams = [tp for tp in streams if tp]
+        self.asaposerver = str(
+            self.__ui.asaposerverLineEdit.text()).strip()
+        self.asapotoken = str(
+            self.__ui.asapotokenLineEdit.text()).strip()
         self.asapobeamtime = str(
             self.__ui.asapobeamtimeLineEdit.text()).strip()
         detservers = str(

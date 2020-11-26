@@ -153,6 +153,14 @@ class SourceBaseWidget(QtGui.QWidget):
         #: (:obj:`bool`) source widget detached
         self.__detached = False
 
+    def setActive(self, active=True):
+        """ set active flag
+
+        :param active: active flag
+        :type active: :obj:`bool`
+        """
+        self.active = active
+
     @QtCore.pyqtSlot()
     def updateButton(self):
         """ update slot for test source
@@ -697,21 +705,21 @@ class ASAPOSourceWidget(SourceBaseWidget):
 
         #: (:obj:`list` <:obj:`str`>) subwidget object names
         self.widgetnames = [
-            "asaposerverLabel", "asaposerverComboBox",
+            "asapostreamLabel", "asapostreamComboBox",
             "asaposubstreamLabel", "asaposubstreamComboBox",
         ]
-        #: (:obj:`list` <:obj:`str`> >) sorted server list
-        self.__servers = []
 
+        #: (:obj:`str`>) asapo server i.e. host:port
+        self.__server = ""
         #: (:obj:`str`>) beamtime id
         self.__beamtime = ""
         #: (:obj:`str`>) asapo token
         self.__token = ""
 
+        #: (:obj:`list` <:obj:`str`> >) sorted server list
+        self.__streams = []
         #: (:obj:`list` <:obj:`str`> >) asapo substreams
         self.__substreams = []
-        #: (:obj:`bool`) automatic substream names enabled
-        self.__autosubstreams = False
         #: (:obj:`bool`) updating flag
         self.__updating = False
         #: (:class:`pyqtgraph.QtCore.QMutex`) update mutex
@@ -722,7 +730,11 @@ class ASAPOSourceWidget(SourceBaseWidget):
 
         self._detachWidgets()
 
-        self._connectComboBox(self._ui.asaposerverComboBox)
+        self._ui.asapostreamComboBox.addItems(["detector"])
+        self._ui.asaposubstreamComboBox.addItems(["default", "**ALL**"])
+        self._ui.asapostreamComboBox.currentIndexChanged.connect(
+            self.updateButton)
+        # self._connectComboBox()
         self._ui.asaposubstreamComboBox.currentIndexChanged.connect(
             self._updateSubstreamComboBox)
 
@@ -741,7 +753,10 @@ class ASAPOSourceWidget(SourceBaseWidget):
                     currentIndexChanged.disconnect(
                         self._updateSubstreamComboBox)
             if not self._ui.asaposubstreamComboBox.count() \
-               or not self._ui.asaposerverComboBox.currentText():
+               or not self._ui.asapostreamComboBox.currentText() \
+               or not self.__server \
+               or not self.__token \
+               or not self.__beamtime:
                 self.buttonEnabled.emit(False)
             else:
                 self.buttonEnabled.emit(True)
@@ -759,32 +774,31 @@ class ASAPOSourceWidget(SourceBaseWidget):
         :returns configuration: configuration string
         :rtype configuration: :obj:`str`
         """
-        return "%s %s %s %s" % (
-            str(self._ui.asaposerverComboBox.currentText()),
+        return "%s %s %s %s %s" % (
+            self.__server,
             self.__token,
             self.__beamtime,
+            str(self._ui.asapostreamComboBox.currentText()),
             str(self._ui.asaposubstreamComboBox.currentText())
         )
 
-    def updateMetaData(self, asaposervers=None, asapotoken=None,
-                       asapobeamtime=None, asaposubstreams=None,
-                       autoasaposubstreams=None,
-                       substreams=None, disconnect=True,
+    def updateMetaData(self, asaposerver=None, asapotoken=None,
+                       asapobeamtime=None,
+                       asapostreams=None, asaposubstreams=None,
+                       disconnect=True,
                        **kargs):
         """ update source input parameters
 
-        :param asaposervers: json list with asapo servers
+        :param asaposervers asapo servers, i.e. host:port
         :type asaposervers: :obj:`str`
         :param asapotoken: asapo token
         :type asapotoken: :obj:`str`
         :param asapobeamtime: beamtime id
         :type asapobeamtime: :obj:`str`
+        :param asapostreams: asapo stream names
+        :type asapostreams: :obj:`list` <:obj:`str`> >
         :param asaposubstreams: asapo substream names
         :type asaposubstreams: :obj:`list` <:obj:`str`> >
-        :param autosubstreams: automatic asapo substream namesenabled
-        :type autosubstreams: :obj:`bool`
-        :param substreams: automatic asapo source subsstreams
-        :type substreams: :obj:`list` <:obj:`str`> >
         :param disconnect: disconnect on update
         :type disconnect: :obj:`bool`
         :param kargs:  source widget input parameter dictionary
@@ -796,39 +810,34 @@ class ASAPOSourceWidget(SourceBaseWidget):
                     disconnect(self._updateSubstreamComboBox)
         text = None
         updatecombo = False
-        if isinstance(asaposervers, list):
-            self._ui.asaposerverComboBox.currentIndexChanged.disconnect(
+        if isinstance(asapostreams, list):
+            self._ui.asapostreamComboBox.currentIndexChanged.disconnect(
                 self.updateButton)
-            self.__servers = asaposervers
+            self.__streams = asapostreams
             for i in reversed(
-                    range(0, self._ui.asaposerverComboBox.count())):
-                self._ui.asaposerverComboBox.removeItem(i)
-            self._ui.asaposerverComboBox.addItems(self.__servers)
-            self._ui.asaposerverComboBox.currentIndexChanged.connect(
+                    range(0, self._ui.asapostreamComboBox.count())):
+                self._ui.asapostreamComboBox.removeItem(i)
+            if not asapostreams:
+                self._ui.asapostreamComboBox.addItems(["detector"])
+            self._ui.asapostreamComboBox.addItems(self.__streams)
+            self._ui.asapostreamComboBox.currentIndexChanged.connect(
                 self.updateButton)
-            self._ui.asaposerverComboBox.setCurrentIndex(0)
-        if asapotoken:
+            self._ui.asapostreamComboBox.setCurrentIndex(0)
+        if asaposerver is not None:
+            self.__server = asaposerver
+        if asapotoken is not None:
             self.__token = asapotoken
-        if asapobeamtime:
+        if asapobeamtime is not None:
             self.__beamtime = asapobeamtime
         if isinstance(asaposubstreams, list):
             with QtCore.QMutexLocker(self.__mutex):
-                text = str(self._ui.asaposubstreamComboBox.currentText())
+                text = str(
+                    self._ui.asaposubstreamComboBox.currentText())
             if not text or text not in asaposubstreams:
-                text = None
+                if text != "default":
+                    text = None
             self.__substreams = asaposubstreams
             updatecombo = True
-        if autoasaposubstreams is not None:
-            self.__autosubstreams = autoasaposubstreams
-        if self.__autosubstreams:
-            updatecombo = True
-            with QtCore.QMutexLocker(self.__mutex):
-                text = str(self._ui.asaposubstreamComboBox.currentText())
-            if isinstance(substreams, list):
-                if not text or text not in substreams:
-                    if text != "default":
-                        text = None
-                self.__substreams = substreams
         if updatecombo is True:
             with QtCore.QMutexLocker(self.__mutex):
                 for i in reversed(
@@ -837,7 +846,11 @@ class ASAPOSourceWidget(SourceBaseWidget):
                 if not self.__substreams or \
                    "default" not in self.__substreams:
                     self._ui.asaposubstreamComboBox.addItem("default")
-                self._ui.asaposubstreamComboBox.addItems(self.__substreams)
+                self._ui.asaposubstreamComboBox.addItems(
+                    sorted(self.__substreams))
+                if not self.__substreams or \
+                   "**ALL**" not in self.__substreams:
+                    self._ui.asaposubstreamComboBox.addItem("**ALL**")
                 if text:
                     tid = self._ui.asaposubstreamComboBox.findText(text)
                     if tid > -1:
@@ -867,13 +880,13 @@ class ASAPOSourceWidget(SourceBaseWidget):
         """ connects widget
         """
         self._connected = True
-        self._ui.asaposerverComboBox.setEnabled(False)
+        self._ui.asapostreamComboBox.setEnabled(False)
 
     def disconnectWidget(self):
         """ disconnects widget
         """
         self._connected = False
-        self._ui.asaposerverComboBox.setEnabled(True)
+        self._ui.asapostreamComboBox.setEnabled(True)
 
     def configure(self, configuration):
         """ set configuration for the current image source
@@ -882,7 +895,7 @@ class ASAPOSourceWidget(SourceBaseWidget):
         :type configuration: :obj:`str`
         """
         cnflst = configuration.split(",")
-        server = cnflst[0] if cnflst else ""
+        stream = cnflst[0] if cnflst else ""
 
         substream = ""
         if len(cnflst) > 1:
@@ -890,11 +903,11 @@ class ASAPOSourceWidget(SourceBaseWidget):
             if not substream:
                 substream = "default"
 
-        iid = self._ui.asaposerverComboBox.findText(server)
+        iid = self._ui.asapostreamComboBox.findText(stream)
         if iid == -1:
-            self._ui.asaposerverComboBox.addItem(server)
-            iid = self._ui.asaposerverComboBox.findText(server)
-        self._ui.asaposerverComboBox.setCurrentIndex(iid)
+            self._ui.asapostreamComboBox.addItem(stream)
+            iid = self._ui.asapostreamComboBox.findText(stream)
+        self._ui.asapostreamComboBox.setCurrentIndex(iid)
 
         if substream:
             iid = self._ui.asaposubstreamComboBox.findText(substream)
@@ -909,7 +922,7 @@ class ASAPOSourceWidget(SourceBaseWidget):
         :return: label of the current detector
         :rtype: :obj:`str`
         """
-        label = str(self._ui.asaposerverComboBox.currentText()).strip()
+        label = str(self._ui.asapostreamComboBox.currentText()).strip()
         return re.sub("[^a-zA-Z0-9_]+", "_", label)
 
 

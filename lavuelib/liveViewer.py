@@ -378,7 +378,7 @@ class LiveViewer(QtGui.QDialog):
         self.__targetname = socket.getfqdn()
 
         #: (:obj:`list` < :obj:`str` > ) allowed source metadata
-        self.__allowedmdata = ["datasources"]
+        self.__allowedmdata = ["datasources", "asaposubstreams"]
         #: (:obj:`list` < :obj:`str` > ) allowed widget metadata
         self.__allowedwgdata = ["axisscales", "axislabels"]
 
@@ -1187,10 +1187,9 @@ class LiveViewer(QtGui.QDialog):
             tineprops=self.__settings.tineprops,
             epicspvnames=self.__settings.epicspvnames,
             epicspvshapes=self.__settings.epicspvshapes,
-            asaposervers=json.loads(self.__settings.asaposervers or "[]"),
+            asaposerver=self.__settings.asaposerver,
             asapotoken=self.__settings.asapotoken,
-            asaposubstreams=self.__settings.asaposubstreams,
-            autoasaposubstreams=self.__settings.autoasaposubstreams,
+            asapostreams=self.__settings.asapostreams,
             asapobeamtime=self.__settings.asapobeamtime
         )
         self._updateSource(-1, -1)
@@ -2148,11 +2147,10 @@ class LiveViewer(QtGui.QDialog):
         cnfdlg.availimagesources = self.__allsourcealiases
         cnfdlg.availtoolwidgets = self.__alltoolaliases
         cnfdlg.defdetservers = self.__settings.defdetservers
-        cnfdlg.asaposervers = self.__settings.asaposervers
+        cnfdlg.asaposerver = self.__settings.asaposerver
         cnfdlg.asapotoken = self.__settings.asapotoken
         cnfdlg.asapobeamtime = self.__settings.asapobeamtime
-        cnfdlg.asaposubstreams = self.__settings.asaposubstreams
-        cnfdlg.autoasaposubstreams = self.__settings.autoasaposubstreams
+        cnfdlg.asapostreams = self.__settings.asapostreams
         cnfdlg.detservers = json.dumps(self.__mergeDetServers(
             HIDRASERVERLIST if cnfdlg.defdetservers else {"pool": []},
             json.loads(self.__settings.detservers)))
@@ -2369,8 +2367,8 @@ class LiveViewer(QtGui.QDialog):
         if self.__settings.zmqtopics != dialog.zmqtopics:
             self.__settings.zmqtopics = dialog.zmqtopics
             setsrc = True
-        if self.__settings.asaposubstreams != dialog.asaposubstreams:
-            self.__settings.asaposubstreams = dialog.asaposubstreams
+        if self.__settings.asapostreams != dialog.asapostreams:
+            self.__settings.asapostreams = dialog.asapostreams
             setsrc = True
         if self.__settings.defdetservers != dialog.defdetservers:
             self.__settings.defdetservers = dialog.defdetservers
@@ -2381,17 +2379,14 @@ class LiveViewer(QtGui.QDialog):
         if self.__settings.detservers != detservers:
             self.__settings.detservers = detservers
             setsrc = True
-        if self.__settings.asaposervers != dialog.asaposervers:
-            self.__settings.asaposervers = dialog.asaposervers
+        if self.__settings.asaposerver != dialog.asaposerver:
+            self.__settings.asaposerver = dialog.asaposerver
             setsrc = True
         if self.__settings.asapotoken != dialog.asapotoken:
             self.__settings.asapotoken = dialog.asapotoken
             setsrc = True
         if self.__settings.asapobeamtime != dialog.asapobeamtime:
             self.__settings.asapobeamtime = dialog.asapobeamtime
-            setsrc = True
-        if self.__settings.autoasaposubstreams != dialog.autoasaposubstreams:
-            self.__settings.autoasaposubstreams = dialog.autoasaposubstreams
             setsrc = True
         if self.__settings.autozmqtopics != dialog.autozmqtopics:
             self.__settings.autozmqtopics = dialog.autozmqtopics
@@ -2618,6 +2613,8 @@ class LiveViewer(QtGui.QDialog):
                 if ds != str(type(self.__datasources[i]).__name__):
                     self.__datasources[i] = getattr(
                         isr, ds)(self.__settings.timeout)
+        self._setSourceConfiguration()
+        for i, ds in enumerate(dss):
             self.__sourcewg.updateSourceMetaData(
                 i, **self.__datasources[i].getMetaData())
         dssa = ";".join(self.__sourcewg.currentDataSourceAlias())

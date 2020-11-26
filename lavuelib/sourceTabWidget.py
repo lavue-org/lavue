@@ -357,11 +357,10 @@ class SourceForm(QtGui.QWidget):
                 self._emitAddIconClicked)
             self.__currentSource.removeIconClicked.disconnect(
                 self._emitRemoveIconClicked)
-            self.__currentSource.active = False
+            self.__currentSource.setActive(False)
             self.__currentSource.disconnectWidget()
         if name is not None and name in self.__sourcewidgets.keys():
             self.__currentSource = self.__sourcewidgets[name]
-            self.__currentSource.active = True
             self.__currentSource.buttonEnabled.connect(
                 self.emitButtonEnabled)
             self.__currentSource.sourceLabelChanged.connect(
@@ -372,6 +371,7 @@ class SourceForm(QtGui.QWidget):
                 self._emitAddIconClicked)
             self.__currentSource.removeIconClicked.connect(
                 self._emitRemoveIconClicked)
+            self.__currentSource.setActive(True)
         self.updateLayout()
         self.updateMetaData(disconnect=disconnect)
         self.emitSourceChanged()

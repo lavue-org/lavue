@@ -1452,6 +1452,8 @@ class ASAPOSource(BaseSource):
         self.__beamtime = ""
         #: (:obj:`str`) asapo server
         self.__server = ""
+        #: (:obj:`str`) stream
+        self.__stream = ""
         #: (:obj:`str`) substream
         self.__substream = ""
         #: (:obj:`str`) last name
@@ -1468,6 +1470,12 @@ class ASAPOSource(BaseSource):
         self.__mutex = QtCore.QMutex()
         #: (:obj:`bool`) use tiff loader
         self.__tiffloader = False
+        #: (:obj:`int`) counter
+        self.__subcounter = 0
+        #: (:obj:`int`) counter max
+        self.__subcntmax = 10
+        #: (:obj:`str`) counter max
+        self.__lastjsubmeta = None
 
     @debugmethod
     def setConfiguration(self, configuration):
@@ -1478,10 +1486,12 @@ class ASAPOSource(BaseSource):
         """
         if self._configuration != configuration:
             try:
-                self.__server, self.__token, self.__beamtime, \
+                self.__server, self.__token, self.__beamtime, self.__stream, \
                     self.__substream = str(configuration).split()
                 self.__lastname = ""
                 self.__lastid = ""
+                self.__subcounter = 0
+                self.__lastjsubmeta = None
             except Exception as e:
                 logger.warning(str(e))
                 # print(str(e))
@@ -1508,7 +1518,7 @@ class ASAPOSource(BaseSource):
             self.disconnect()
 
         if substreams:
-            meta["substreams"] = substreams
+            meta["asaposubstreams"] = substreams
         return meta
 
     @debugmethod
@@ -1521,12 +1531,14 @@ class ASAPOSource(BaseSource):
             with QtCore.QMutexLocker(self.__mutex):
                 if self.__server and self.__beamtime and self.__token:
                     self.__broker = asapo_consumer.create_server_broker(
-                        self.__server, "", False, self.__beamtime, "",
-                        self.__token, 60000)
+                        self.__server, "", False, self.__beamtime,
+                        self.__stream, self.__token, 60000)
                     self.__group_id = self.__broker.generate_group_id()
                     self._initiated = True
                     self.__lastname = ""
                     self.__lastid = ""
+                    self.__lastjsubmeta = None
+                    self.__subcounter = 0
 
             # print("BORKER %s" % self.__broker)
             logger.info(
@@ -1570,9 +1582,23 @@ class ASAPOSource(BaseSource):
         if not self._initiated:
             return None, None, None
         imagename = ""
+        submeta = {}
+        jsubmeta = None
         try:
             with QtCore.QMutexLocker(self.__mutex):
                 check = True
+                if self.__subcounter == 0:
+                    submeta = self.getMetaData()
+                    if submeta:
+                        jsubmeta = json.dumps(submeta)
+                        if jsubmeta == self.__lastjsubmeta:
+                            jsubmeta = None
+                        else:
+                            self.__lastjsubmeta = jsubmeta
+                self.__subcounter += 1
+                if self.__subcntmax == self.__subcounter:
+                    self.__subcounter = 0
+
                 if self.__lastid and self.__lastname:
                     _, metadata = self.__broker.get_last(
                         self.__group_id,
@@ -1582,7 +1608,10 @@ class ASAPOSource(BaseSource):
                     if curname == self.__lastname and curid == self.__lastid:
                         check = False
                 if not check:
+                    if jsubmeta:
+                        return "", "", jsubmeta
                     return None, None, None
+
                 data, metadata = self.__broker.get_last(
                     self.__group_id,
                     substream=(self.__substream or "default"),
@@ -1611,9 +1640,11 @@ class ASAPOSource(BaseSource):
                 npdata = np.fromstring(data[:], dtype=np.uint8)
                 img = imageFileHandler.CBFLoader().load(npdata)
 
-                mdata = imageFileHandler.CBFLoader().metadata(npdata)
+                mdata = imageFileHandler.CBFLoader().metadata(npdata, submeta)
 
                 if hasattr(img, "size") and img.size == 0:
+                    if jsubmeta:
+                        return "", "", jsubmeta
                     return None, None, None
                 return np.transpose(img), imagename, mdata
             else:
@@ -1630,20 +1661,25 @@ class ASAPOSource(BaseSource):
                             np.fromstring(data[:], dtype=np.uint8))
                         self.__tiffloader = True
                     if hasattr(img, "size") and img.size == 0:
+                        if jsubmeta:
+                            return "", "", jsubmeta
                         return None, None, None
                     if img is not None:
-                        return np.transpose(img), imagename, ""
+                        return np.transpose(img), imagename, jsubmeta
                 else:
                     img = imageFileHandler.TIFLoader().load(
                         np.fromstring(data[:], dtype=np.uint8))
                     if hasattr(img, "size") and img.size == 0:
+                        if jsubmeta:
+                            return "", "", jsubmeta
                         return None, None, None
                     if img is not None:
-                        return np.transpose(img), imagename, ""
-            # else:
+                        return np.transpose(img), imagename, jsubmeta
             #     print(
             #       "[unknown source module]::metadata", metadata["name"])
         else:
+            if jsubmeta:
+                return "", "", jsubmeta
             return None, None, None
 
 

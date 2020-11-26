@@ -192,16 +192,16 @@ class Settings(object):
         self.nxslast = False
         #: (:obj:`list` < :obj:`str`>) hidra detector server list
         self.detservers = "[]"
-        #: (:obj:`list` < :obj:`str`>) asapo server list
-        self.asaposervers = "[]"
+
+        #: (:obj:`str`) asapo server
+        self.asaposerver = ""
         #: (:obj:`str`) asapo token
         self.asapotoken = ""
         #: (:obj:`str`) asapo beamtime id
         self.asapobeamtime = ""
         #: (:obj:`list` < :obj:`str` > ) asapo substreams
-        self.asaposubstreams = []
-        #: (:obj:`bool`) automatic asapo substream names
-        self.autoasaposubstreams = False
+        self.asapostreams = []
+
         #: (:obj:`bool`) use default detector servers
         self.defdetservers = True
         #: (:obj:`bool`) store detector geometry
@@ -611,19 +611,16 @@ class Settings(object):
 
         qstval = \
             settings.value(
-                "Configuration/ASAPOSubstreams", type=str)
+                "Configuration/ASAPOStreams", type=str)
         if qstval:
-            self.asaposubstreams = [str(tp) for tp in qstval]
+            self.asapostreams = [str(tp) for tp in qstval]
 
         qstval = \
             settings.value(
-                "Configuration/ASAPOServers", type=str)
+                "Configuration/ASAPOServer", type=str)
         if qstval:
-            try:
-                json.loads(qstval)
-                self.asaposervers = qstval
-            except Exception:
-                self.asaposervers = json.dumps([str(tp) for tp in qstval])
+            self.asaposerver = str(qstval)
+
         qstval = \
             settings.value(
                 "Configuration/ASAPOToken", type=str)
@@ -655,11 +652,6 @@ class Settings(object):
             "Configuration/AutoZMQStreamTopics", type=str))
         if qstval.lower() == "true":
             self.autozmqtopics = True
-
-        qstval = str(settings.value(
-            "Configuration/ASAPOAutoSubstreams", type=str))
-        if qstval.lower() == "true":
-            self.autoasaposubstreams = True
 
         qstval = str(
             settings.value("Configuration/DirectoryTranslation", type=str))
@@ -1012,20 +1004,17 @@ class Settings(object):
             "Configuration/ZMQStreamTopics",
             self.zmqtopics)
         settings.setValue(
-            "Configuration/ASAPOSubstreams",
-            self.asaposubstreams)
+            "Configuration/ASAPOStreams",
+            self.asapostreams)
         settings.setValue(
-            "Configuration/ASAPOServers",
-            self.asaposervers)
+            "Configuration/ASAPOServer",
+            self.asaposerver)
         settings.setValue(
             "Configuration/ASAPOToken",
             self.asapotoken)
         settings.setValue(
             "Configuration/ASAPOBeamtime",
             self.asapobeamtime)
-        settings.setValue(
-            "Configuration/ASAPOAutoSubstreams",
-            self.autoasaposubstreams)
         settings.setValue(
             "Configuration/HidraDetectorServers",
             self.detservers)
