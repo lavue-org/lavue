@@ -1090,7 +1090,7 @@ class HTTPSource(BaseSource):
                 if response.ok:
                     name = self._configuration
                     data = response.content
-                    if data[:10] == "###CBF: VE":
+                    if data[:10] == b"###CBF: VE":
                         # print("[cbf source module]::metadata", name)
                         try:
                             nimg = np.frombuffer(data[:], dtype=np.uint8)
@@ -1643,12 +1643,28 @@ class ASAPOSource(BaseSource):
 
         if metadata is not None and data is not None:
             # print("data", str(data)[:10])
-            if data[:10] == "###CBF: VE":
+            label = data[:10]
+            if type(label).__name__ == "ndarray":
+                try:
+                    label = BytesIO(label)
+                except Exception:
+                    try:
+                        label = BytesIO(str(label))
+                    except Exception:
+                        label = b""
+
+            if label == b"###CBF: VE":
                 # print("[cbf source module]::metadata", metadata["filename"])
                 logger.info(
                     "ASAPOSource.getData: "
                     "[cbf source module]::metadata %s" % metadata["name"])
-                npdata = np.fromstring(data[:], dtype=np.uint8)
+                if type(data).__name__ == "ndarray":
+                    npdata = np.array(data, dtype=np.uint8)
+                else:
+                    try:
+                        npdata = np.frombuffer(data[:], dtype=np.uint8)
+                    except Exception:
+                        npdata = np.fromstring(data[:], dtype=np.uint8)
                 img = imageFileHandler.CBFLoader().load(npdata)
 
                 mdata = imageFileHandler.CBFLoader().metadata(npdata, submeta)
@@ -1830,7 +1846,7 @@ class HiDRASource(BaseSource):
         if metadata is not None and data is not None:
             # print("data", str(data)[:10])
 
-            if data[:10] == "###CBF: VE":
+            if data[:10] == b"###CBF: VE":
                 # print("[cbf source module]::metadata", metadata["filename"])
                 logger.info(
                     "HiDRASource.getData: "
