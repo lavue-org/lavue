@@ -242,11 +242,11 @@ class httpImageSourceTest(unittest.TestCase):
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
         ])
 
-        qtck1.executeChecks(delay=3000)
-        qtck2.executeChecks(delay=10000)
-        qtck3.executeChecks(delay=17000)
-        qtck4.executeChecks(delay=24000)
-        status = qtck5.executeChecksAndClose(delay=30000)
+        qtck1.executeChecks(delay=6000)
+        qtck2.executeChecks(delay=13000)
+        qtck3.executeChecks(delay=20000)
+        qtck4.executeChecks(delay=27000)
+        status = qtck5.executeChecksAndClose(delay=33000)
 
         self.assertEqual(status, 0)
 
