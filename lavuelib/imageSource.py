@@ -1643,7 +1643,6 @@ class ASAPOSource(BaseSource):
 
         if metadata is not None and data is not None:
             # print("data", str(data)[:10])
-            print(data.dtype)
             if data[:10] == "###CBF: VE":
                 # print("[cbf source module]::metadata", metadata["filename"])
                 logger.info(
