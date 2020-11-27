@@ -28,6 +28,7 @@ group_id = "12345678"
 beamtime_cache = ""
 gtoken_cache = ""
 server_cache = ""
+stream_cache = ""
 
 
 def create_server_broker(server_name, source_path, has_filesystem,
@@ -35,19 +36,22 @@ def create_server_broker(server_name, source_path, has_filesystem,
     global beamtime_cache
     global token_cache
     global server_cache
+    global stream_cache
 
     token_cache = token
     beamtime_cache = beamtime_id
     server_cache = server_name
-    return Broker(server_name, beamtime_id, token)
+    stream_cache = stream
+    return Broker(server_name, beamtime_id, stream, token)
 
 
 class Broker(object):
     """ mock asapo brocker """
 
-    def __init__(self, server, beamtime, token):
+    def __init__(self, server, beamtime, stream, token):
         self.server = server
         self.beamtime = beamtime
+        self.stream = stream
         self.token = token
         self.counter = 1
         self.gid = 1
@@ -73,14 +77,20 @@ class Broker(object):
         self.filename = filename.split("/")[-1]
         self.counter += 1
         iid = self.counter
-        streambaseid = {
+        substreambaseid = {
             "default": 1000,
             "sub1": 2000,
             "sub2": 3000,
             "stream1": 4000,
             "stream2": 5000,
         }
-        if substream in streambaseid.keys():
-            iid += streambaseid[substream]
+        streambaseid = {
+            "detector": 10000,
+            "pilatus": 20000,
+        }
+        if substream in substreambaseid.keys():
+            iid += substreambaseid[substream]
+        if self.stream in streambaseid.keys():
+            iid += streambaseid[self.stream]
         metadata = {"name": self.filename, "_id": iid}
         return self.data, metadata

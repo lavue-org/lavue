@@ -1457,6 +1457,8 @@ class ASAPOSource(BaseSource):
         self.__stream = ""
         #: (:obj:`str`) substream
         self.__substream = ""
+        #: (:obj:`str`) substream
+        self.__substreams = []
         #: (:obj:`str`) last name
         self.__lastname = ""
         #: (:obj:`str`) last name
@@ -1487,9 +1489,8 @@ class ASAPOSource(BaseSource):
         """
         if self._configuration != configuration:
             try:
-                self.__server, self.__stream, self.__substream, \
-                    self.__token, self.__beamtime = \
-                        str(configuration).split(",", 5)
+                (self.__server, self.__stream, self.__substream, self.__token,
+                 self.__beamtime) = str(configuration).split(",", 5)
                 self.__lastname = ""
                 self.__lastid = ""
                 self.__subcounter = 0
@@ -1517,6 +1518,7 @@ class ASAPOSource(BaseSource):
             connected = True
         if self.__broker is not None:
             substreams = self.__broker.get_substream_list()
+            self.__substreams = substreams
         if connected:
             self.disconnect()
 
@@ -1602,11 +1604,13 @@ class ASAPOSource(BaseSource):
                 if self.__subcntmax == self.__subcounter:
                     self.__subcounter = 0
 
+                substream = self.__substream or "default"
+                if self.__substream == "**ALL**" and self.__substreams:
+                    substream = self.__substreams[-1]
+
                 if self.__lastid and self.__lastname:
                     _, metadata = self.__broker.get_last(
-                        self.__group_id,
-                        substream=(self.__substream or "default"),
-                        meta_only=True)
+                        self.__group_id, substream=substream, meta_only=True)
                     curname, curid = metadata["name"], metadata["_id"]
                     if curname == self.__lastname and curid == self.__lastid:
                         check = False
@@ -1617,7 +1621,7 @@ class ASAPOSource(BaseSource):
 
                 data, metadata = self.__broker.get_last(
                     self.__group_id,
-                    substream=(self.__substream or "default"),
+                    substream=substream,
                     meta_only=False)
                 # data, metadata = self.__broker.get_next(
                 #     self.__group_id, meta_only=False)

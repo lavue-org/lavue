@@ -809,7 +809,6 @@ class ASAPOSourceWidget(SourceBaseWidget):
                 self._ui.asaposubstreamComboBox.currentIndexChanged.\
                     disconnect(self._updateSubstreamComboBox)
         text = None
-        updatecombo = False
         if isinstance(asapostreams, list):
             self._ui.asapostreamComboBox.currentIndexChanged.disconnect(
                 self.updateButton)
@@ -829,12 +828,13 @@ class ASAPOSourceWidget(SourceBaseWidget):
             self.__token = asapotoken
         if asapobeamtime is not None:
             self.__beamtime = asapobeamtime
+        updatecombo = False
         if isinstance(asaposubstreams, list):
             with QtCore.QMutexLocker(self.__mutex):
                 text = str(
                     self._ui.asaposubstreamComboBox.currentText())
             if not text or text not in asaposubstreams:
-                if text != "default":
+                if text not in ["default", "**ALL**"]:
                     text = None
             self.__substreams = asaposubstreams
             updatecombo = True
@@ -902,7 +902,6 @@ class ASAPOSourceWidget(SourceBaseWidget):
             substream = cnflst[1]
             if not substream:
                 substream = "default"
-
         iid = self._ui.asapostreamComboBox.findText(stream)
         if iid == -1:
             self._ui.asapostreamComboBox.addItem(stream)

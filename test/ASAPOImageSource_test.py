@@ -157,7 +157,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
             'ASAPOServer="haso.desy.de:8500"\n' \
             'ASAPOToken=2asaldskjsalkdjflsakjflksj \n' \
             'ASAPOBeamtime=123124 \n' \
-            'ASAPOStreams=detector\n' \
+            'ASAPOStreams=detector, \n' \
             'StoreGeometry=true\n' \
             'GeometryFromSource=true'
 
@@ -171,7 +171,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
         options = argparse.Namespace(
             mode='expert',
             source='asapo',
-            configuration='hasyla.desy.de:8500',
+            configuration=None,
             # % self._fname,
             start=True,
             # levels="0,1000",
@@ -263,8 +263,8 @@ class ASAPOImageSourceTest(unittest.TestCase):
             iid = int(fnames[1][:-1])
         except Exception:
             iid = -1
-        self.assertTrue(iid > 1000)
-        self.assertTrue(iid < 2000)
+        self.assertTrue(iid > 11000)
+        self.assertTrue(iid < 12000)
         self.assertEqual(fnames[0].strip(), "00001.tif")
 
         lastimage = res2[4].T
@@ -281,8 +281,8 @@ class ASAPOImageSourceTest(unittest.TestCase):
             iid = int(fnames[1][:-1])
         except Exception:
             iid = -1
-        self.assertTrue(iid > 1000)
-        self.assertTrue(iid < 2000)
+        self.assertTrue(iid > 11000)
+        self.assertTrue(iid < 12000)
         self.assertEqual(fnames[0].strip(), "00002.tif")
 
     def test_readimage_substream(self):
@@ -298,7 +298,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
             'ASAPOServer="haso.desy.de:8500"\n' \
             'ASAPOToken=2asaldskjsalkdjflsakjflksj \n' \
             'ASAPOBeamtime=123124 \n' \
-            'ASAPOStreams=detector\n' \
+            'ASAPOStreams=detector, \n' \
             'StoreGeometry=true\n' \
             'GeometryFromSource=true'
 
@@ -312,7 +312,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
         options = argparse.Namespace(
             mode='expert',
             source='asapo',
-            configuration='hasyla.desy.de:8500,stream2',
+            configuration='pilatus,stream1',
             # % self._fname,
             start=True,
             # levels="0,1000",
@@ -404,8 +404,8 @@ class ASAPOImageSourceTest(unittest.TestCase):
             iid = int(fnames[1][:-1])
         except Exception:
             iid = -1
-        self.assertTrue(iid > 5000)
-        self.assertTrue(iid < 6000)
+        self.assertTrue(iid > 24000)
+        self.assertTrue(iid < 25000)
         self.assertEqual(fnames[0].strip(), "00001.tif")
 
         lastimage = res2[4].T
@@ -422,8 +422,149 @@ class ASAPOImageSourceTest(unittest.TestCase):
             iid = int(fnames[1][:-1])
         except Exception:
             iid = -1
-        self.assertTrue(iid > 5000)
-        self.assertTrue(iid < 6000)
+        self.assertTrue(iid > 24000)
+        self.assertTrue(iid < 25000)
+        self.assertEqual(fnames[0].strip(), "00002.tif")
+
+    def test_readimage_autosubstream(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        lastimage = None
+        asapo_consumer.filename = ""
+        self.__tangoimgcounter = 0
+        self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
+        self.__tangofilepattern = "%05d.tif"
+        cfg = '[Configuration]\n' \
+            'ASAPOServer="haso.desy.de:8500"\n' \
+            'ASAPOToken=2asaldskjsalkdjflsakjflksj \n' \
+            'ASAPOBeamtime=123124 \n' \
+            'ASAPOStreams=detector, \n' \
+            'StoreGeometry=true\n' \
+            'GeometryFromSource=true'
+
+        if not os.path.exists(self.__cfgfdir):
+            os.makedirs(self.__cfgfdir)
+        with open(self.__cfgfname, "w+") as cf:
+            cf.write(cfg)
+
+        lastimage = None
+
+        options = argparse.Namespace(
+            mode='expert',
+            source='asapo',
+            configuration='detector,**ALL**',
+            # % self._fname,
+            start=True,
+            # levels="0,1000",
+            tool='intensity',
+            transformation='none',
+            log='error',
+            # log='debug',
+            instance='unittests',
+            scaling='linear',
+            gradient='spectrum',
+        )
+        logging.basicConfig(
+             format="%(levelname)s: %(message)s")
+        logger = logging.getLogger("lavue")
+        lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+        dialog = lavuelib.liveViewer.MainWindow(options=options)
+        dialog.show()
+
+        qtck1 = QtChecker(app, dialog, True, sleep=100)
+        qtck2 = QtChecker(app, dialog, True, sleep=100)
+        qtck3 = QtChecker(app, dialog, True, sleep=100)
+        qtck1.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__imagename"),
+            ExtCmdCheck(self, "takeNewImage"),
+        ])
+        qtck2.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__imagename"),
+            ExtCmdCheck(self, "takeNewImage"),
+        ])
+        qtck3.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__imagename"),
+            WrapAttrCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg"
+                "._SourceTabWidget__sourcetabs[],0._ui.pushButton",
+                QtTest.QTest.mouseClick, [QtCore.Qt.LeftButton]),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+        ])
+
+        qtck1.executeChecks(delay=1000)
+        qtck2.executeChecks(delay=2000)
+        status = qtck3.executeChecksAndClose(delay=3000)
+
+        self.assertEqual(status, 0)
+
+        qtck1.compareResults(
+            self, [True, None, None, None, None], mask=[0, 1, 1, 1, 1])
+        qtck2.compareResults(
+            self, [True, None, None, None, None], mask=[0, 1, 1, 1, 1])
+        qtck3.compareResults(
+            self, [None, None, None, None, False], mask=[1, 1, 1, 0, 0])
+
+        res1 = qtck1.results()
+        res2 = qtck2.results()
+        res3 = qtck3.results()
+        self.assertEqual(res1[1], None)
+        self.assertEqual(res1[2], None)
+        self.assertEqual(res1[3], None)
+
+        lastimage = res1[4].T
+        if not np.allclose(res2[1], lastimage):
+            print(res2[1])
+            print(lastimage)
+        self.assertTrue(np.allclose(res2[1], lastimage))
+        self.assertTrue(np.allclose(res2[2], lastimage))
+
+        fnames = res2[3].split("(")
+        self.assertTrue(len(fnames), 2)
+        try:
+            iid = int(fnames[1][:-1])
+        except Exception:
+            iid = -1
+        self.assertTrue(iid > 15000)
+        self.assertTrue(iid < 16000)
+        self.assertEqual(fnames[0].strip(), "00001.tif")
+
+        lastimage = res2[4].T
+
+        if not np.allclose(res3[0], lastimage):
+            print(res3[0])
+            print(lastimage)
+        self.assertTrue(np.allclose(res3[0], lastimage))
+        self.assertTrue(np.allclose(res3[1], lastimage))
+
+        fnames = res3[2].split("(")
+        self.assertTrue(len(fnames), 2)
+        try:
+            iid = int(fnames[1][:-1])
+        except Exception:
+            iid = -1
+        self.assertTrue(iid > 15000)
+        self.assertTrue(iid < 16000)
         self.assertEqual(fnames[0].strip(), "00002.tif")
 
 
