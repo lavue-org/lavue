@@ -589,7 +589,7 @@ class HidraSourceWidget(SourceBaseWidget):
         :returns configuration: configuration string
         :rtype configuration: :obj:`str`
         """
-        return "%s %s %s" % (
+        return "%s,%s,%s" % (
             str(self._ui.serverComboBox.currentText()),
             self.__targetname,
             self.__portnumber
@@ -774,12 +774,12 @@ class ASAPOSourceWidget(SourceBaseWidget):
         :returns configuration: configuration string
         :rtype configuration: :obj:`str`
         """
-        return "%s %s %s %s %s" % (
+        return "%s,%s,%s,%s,%s" % (
             self.__server,
-            self.__token,
-            self.__beamtime,
             str(self._ui.asapostreamComboBox.currentText()),
-            str(self._ui.asaposubstreamComboBox.currentText())
+            str(self._ui.asaposubstreamComboBox.currentText()),
+            self.__beamtime,
+            self.__token
         )
 
     def updateMetaData(self, asaposerver=None, asapotoken=None,

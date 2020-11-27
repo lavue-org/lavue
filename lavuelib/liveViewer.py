@@ -644,7 +644,6 @@ class LiveViewer(QtGui.QDialog):
         self.__scalingwg.simpleScalingChanged.connect(self._plot)
         self.__scalingwg.scalingChanged.connect(
             self._setScalingState)
-
         # signal from limit setting widget
         self.__levelswg.minLevelChanged.connect(self._setMinLevelState)
         self.__levelswg.maxLevelChanged.connect(self._setMaxLevelState)
@@ -657,6 +656,7 @@ class LiveViewer(QtGui.QDialog):
         self.__ui.loadPushButton.clicked.connect(self._clickloadfile)
         self.__ui.reloadPushButton.clicked.connect(self._pushreloadfile)
         self.__ui.helpPushButton.clicked.connect(self._showhelp)
+
         if self.__umode in ["user"]:
             self.__ui.cnfPushButton.hide()
         if QtGui.QIcon.hasThemeIcon("applications-system"):
@@ -1660,6 +1660,15 @@ class LiveViewer(QtGui.QDialog):
         :type event:  :class:`pyqtgraph.QtCore.QEvent`:
         """
         if not self.__closing:
+            self.__sourcewg.sourceStateChanged.disconnect(
+                self._updateSource)
+            self.__sourcewg.sourceChanged.disconnect(
+                self._onSourceChanged)
+            self.__sourcewg.sourceConnected.disconnect(
+                self._connectSource)
+            self.__sourcewg.sourceDisconnected.disconnect(
+                self._disconnectSource)
+
             if self.__imagewg:
                 self.__imagewg.disconnecttool()
             if self.__tangoclient:
@@ -1676,7 +1685,7 @@ class LiveViewer(QtGui.QDialog):
 
             if self.__sourcewg.isConnected():
                 self.__sourcewg.toggleServerConnection()
-            self._disconnectSource()
+            self.__disconnectSource()
             for df in self.__dataFetchers:
                 df.stop()
                 df.wait()
@@ -2865,6 +2874,15 @@ class LiveViewer(QtGui.QDialog):
     def _disconnectSource(self):
         """ calls the disconnect function of the source interface
         """
+        self.__disconnectSource()
+        self._updateSource(0, -1)
+        self.__setSourceLabel()
+        self.setLavueState({"connected": self.__sourcewg.isConnected()})
+        # self.__datasources[0] = None
+
+    def __disconnectSource(self):
+        """ calls the disconnect function of the source interface
+        """
         self._stopPlotting()
         for ds in self.__datasources:
             ds.disconnect()
@@ -2872,15 +2890,13 @@ class LiveViewer(QtGui.QDialog):
         if self.__settings.secstream:
             calctime = time.time()
             messagedata = {
-                'command': 'stop', 'calctime': calctime, 'pid': self.__apppid}
+                'command': 'stop',
+                'calctime': calctime,
+                'pid': self.__apppid}
             # print(str(messagedata))
             topic = 10001
             self.__settings.secsocket.send_string("%d %s" % (
                 topic, str(json.dumps(messagedata)).encode("ascii")))
-        self._updateSource(0, -1)
-        self.__setSourceLabel()
-        self.setLavueState({"connected": self.__sourcewg.isConnected()})
-        # self.__datasources[0] = None
 
     # @debugmethod
     def __mergeData(self, fulldata, oldname, channels=False):

@@ -371,11 +371,12 @@ class NXSFileSource(BaseSource):
         if self._configuration != configuration:
             self._configuration = configuration
             self._initiated = False
-            params = str(
-                    self._configuration).strip().split(",")
             try:
+                params = str(
+                    configuration).strip().split(",")
                 self.__lastframe = int(params[2])
-            except Exception:
+            except Exception as e:
+                logger.warning(str(e))
                 self.__lastframe = -1
 
     @debugmethod
@@ -1486,12 +1487,14 @@ class ASAPOSource(BaseSource):
         """
         if self._configuration != configuration:
             try:
-                self.__server, self.__token, self.__beamtime, self.__stream, \
-                    self.__substream = str(configuration).split()
+                self.__server, self.__stream, self.__substream, \
+                    self.__token, self.__beamtime = \
+                        str(configuration).split(",", 5)
                 self.__lastname = ""
                 self.__lastid = ""
                 self.__subcounter = 0
                 self.__lastjsubmeta = None
+                self._configuration = configuration
             except Exception as e:
                 logger.warning(str(e))
                 # print(str(e))
@@ -1724,7 +1727,7 @@ class HiDRASource(BaseSource):
         if self._configuration != configuration:
             try:
                 self.__shost, self.__targetname, self.__portnumber \
-                    = str(configuration).split()
+                    = str(configuration).split(",")
             except Exception:
                 self._initiated = False
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -2115,6 +2118,10 @@ class TinePropSource(BaseSource):
         :type configuration: :obj:`str`
         """
         if self._configuration != configuration:
-            self._configuration = configuration
-            self.__address, self.__prop = str(
-                self._configuration).rsplit("/", 1)
+            try:
+                self.__address, self.__prop = str(
+                    configuration).rsplit("/", 1)
+                self._configuration = configuration
+            except Exception as e:
+                print(str(e))
+                logger.warning(str(e))
