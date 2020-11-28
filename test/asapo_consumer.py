@@ -22,6 +22,9 @@
 #     Jan Kotanski <jan.kotanski@desy.de>
 #
 
+import numpy as np
+
+
 #: (:obj:`str`) file name
 filename = ""
 group_id = "12345678"
@@ -72,8 +75,9 @@ class Broker(object):
         self.metaonly = meta_only
         self.data = None
         if filename:
-            with open(filename, 'rb') as ifile:
-                self.data = ifile.read()
+            self.data = np.fromfile(filename, dtype="int8")
+            # with open(filename, 'rb') as ifile:
+            #     self.data = ifile.read()
         self.filename = filename.split("/")[-1]
         self.counter += 1
         iid = self.counter
