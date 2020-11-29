@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "LAVUELIB" "1" "Nov 26, 2020" "2.52" "lavuelib"
+.TH "LAVUELIB" "1" "Nov 29, 2020" "2.52" "lavuelib"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .
@@ -285,7 +285,7 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
-\fBconfiguration\fP (\fI\%str\fP) – JSON list with horizontal gap pixels to add
+\fBconfiguration\fP (\fI\%str\fP) \-\- JSON list with horizontal gap pixels to add
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -299,7 +299,7 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
-\fBconfiguration\fP (\fI\%str\fP) – JSON list with vertical gap pixels to add
+\fBconfiguration\fP (\fI\%str\fP) \-\- JSON list with vertical gap pixels to add
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -311,13 +311,13 @@ rotate image by 45 deg
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBimage\fP (\fI\%numpy.ndarray\fP) – numpy array with an image
+\fBimage\fP (\fI\%numpy.ndarray\fP) \-\- numpy array with an image
 .IP \(bu 2
-\fBimagename\fP (\fI\%str\fP) – image name
+\fBimagename\fP (\fI\%str\fP) \-\- image name
 .IP \(bu 2
-\fBmetadata\fP (\fI\%str\fP) – JSON dictionary with metadata
+\fBmetadata\fP (\fI\%str\fP) \-\- JSON dictionary with metadata
 .IP \(bu 2
-\fBimagewg\fP (\fBlavuelib.imageWidget.ImageWidget\fP) – image wigdet
+\fBimagewg\fP (\fBlavuelib.imageWidget.ImageWidget\fP) \-\- image wigdet
 .UNINDENT
 .TP
 .B Returns
@@ -718,12 +718,12 @@ updates class variables with the form content
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asaposervers = None
-(\fBlist\fP < \fI\%str\fP>) asapo server list
+.B asaposerver = None
+(\fI\%str\fP) asapo server
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asaposubstreams = None
+.B asapostreams = None
 (\fBlist\fP < \fI\%str\fP > ) asapo substreams
 .UNINDENT
 .INDENT 7.0
@@ -735,11 +735,6 @@ updates class variables with the form content
 .TP
 .B aspectlocked = None
 (\fI\%bool\fP) aspect ratio locked
-.UNINDENT
-.INDENT 7.0
-.TP
-.B autoasaposubstreams = None
-(\fI\%bool\fP) automatic asapo substream names
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -6377,12 +6372,17 @@ image data
 .UNINDENT
 .INDENT 7.0
 .TP
-.B classmethod metadata(flbuffer)
+.B classmethod metadata(flbuffer, premeta=None)
 extract header_contents from CBF file image data
 .INDENT 7.0
 .TP
 .B Parameters
+.INDENT 7.0
+.IP \(bu 2
 \fBflbuffer\fP (\fI\%numpy.ndarray\fP or \fI\%str\fP) \-\- numpy array with CBF file image data
+.IP \(bu 2
+\fBpremeta\fP (\fI\%dict\fP  <\fI\%str\fP, \fI\%any\fP>) \-\- metadata to be merged
+.UNINDENT
 .TP
 .B Returns
 metadata dictionary
@@ -6825,7 +6825,7 @@ image name, image data, json dictionary with metadata
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.HIDRA = True
+.B lavuelib.imageSource.HIDRA = False
 (\fI\%bool\fP) hidra imported
 .UNINDENT
 .INDENT 0.0
@@ -6977,7 +6977,7 @@ set configuration
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.PYTINE = True
+.B lavuelib.imageSource.PYTINE = False
 (\fI\%bool\fP) PyTine imported
 .UNINDENT
 .INDENT 0.0
@@ -10374,12 +10374,12 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asaposervers = None
-(\fBlist\fP < \fI\%str\fP>) asapo server list
+.B asaposerver = None
+(\fI\%str\fP) asapo server
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asaposubstreams = None
+.B asapostreams = None
 (\fBlist\fP < \fI\%str\fP > ) asapo substreams
 .UNINDENT
 .INDENT 7.0
@@ -10391,11 +10391,6 @@ constructor
 .TP
 .B aspectlocked = None
 (\fI\%bool\fP) image aspect ratio locked
-.UNINDENT
-.INDENT 7.0
-.TP
-.B autoasaposubstreams = None
-(\fI\%bool\fP) automatic asapo substream names
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -11922,6 +11917,16 @@ label of the current detector
 .UNINDENT
 .INDENT 7.0
 .TP
+.B setActive(active=True)
+set active flag
+.INDENT 7.0
+.TP
+.B Parameters
+\fBactive\fP (\fI\%bool\fP) \-\- active flag
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B sourceLabelChanged
 (\fBpyqtgraph.QtCore.pyqtSignal\fP) source label name signal
 .UNINDENT
@@ -13343,30 +13348,23 @@ update slot for Asapo source
 .UNINDENT
 .INDENT 7.0
 .TP
-.B updateMetaData(asaposervers=None, asapotoken=None, asapobeamtime=None, asaposubstreams=None, autoasaposubstreams=None, substreams=None, disconnect=True, **kargs)
+.B updateMetaData(asaposerver=None, asapotoken=None, asapobeamtime=None, asapostreams=None, asaposubstreams=None, disconnect=True, **kargs)
 update source input parameters
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBasaposervers\fP (\fI\%str\fP) \-\- json list with asapo servers
-.IP \(bu 2
-\fBasapotoken\fP (\fI\%str\fP) \-\- asapo token
-.IP \(bu 2
-\fBasapobeamtime\fP (\fI\%str\fP) \-\- beamtime id
-.IP \(bu 2
-\fBasaposubstreams\fP (\fBlist\fP <\fI\%str\fP> >) \-\- asapo substream names
-.IP \(bu 2
-\fBautosubstreams\fP (\fI\%bool\fP) \-\- automatic asapo substream namesenabled
-.IP \(bu 2
-\fBsubstreams\fP (\fBlist\fP <\fI\%str\fP> >) \-\- automatic asapo source subsstreams
-.IP \(bu 2
-\fBdisconnect\fP (\fI\%bool\fP) \-\- disconnect on update
-.IP \(bu 2
-\fBkargs\fP (\fI\%dict\fP < \fI\%str\fP, \fI\%any\fP>) \-\- source widget input parameter dictionary
-.UNINDENT
-.UNINDENT
+.sp
+:param asaposervers asapo servers, i.e. host:port
+:type asaposervers: \fI\%str\fP
+:param asapotoken: asapo token
+:type asapotoken: \fI\%str\fP
+:param asapobeamtime: beamtime id
+:type asapobeamtime: \fI\%str\fP
+:param asapostreams: asapo stream names
+:type asapostreams: \fBlist\fP <\fI\%str\fP> >
+:param asaposubstreams: asapo substream names
+:type asaposubstreams: \fBlist\fP <\fI\%str\fP> >
+:param disconnect: disconnect on update
+:type disconnect: \fI\%bool\fP
+:param kargs:  source widget input parameter dictionary
+:type kargs: \fI\%dict\fP < \fI\%str\fP, \fI\%any\fP>
 .UNINDENT
 .INDENT 7.0
 .TP

@@ -44,7 +44,7 @@ Configuration path
 .IP "-f IMAGEFILE, --image-file IMAGEFILE"
 image file name to show, e.g. /tmp/myfile2.nxs://entry/data/pilatus,,-1
 .IP "-s SOURCE, --source SOURCE"
-image source, i.e. hidra, http, tangoattr, tangofile, zmq, nxsfile, test
+image source, i.e. hidra, http, tangoattr, tangofile, zmq, asapo, nxsfile, test
 multiple-source names is separated by semicolon ';'
 .IP "-c CONFIGURATION, --configuration CONFIGURATION"
 configuration strings for the image source separated by comma, e.g.
@@ -55,6 +55,11 @@ configuration strings for the image source separated by comma, e.g.
   zmq -> '-c haso228:5535,topic'
   doocsprop -> '-c TTF2.FEL/BLFW2.CAM/BL0M1.CAM/IMAGE_EXT'
   nxsfile -> '-c /tmp/myfile.nxs://entry/data/pilatus'
+        or   '-c /tmp/myfile2.nxs://entry/data/pilatus,0,34'  
+  tineprop -> '-c /HASYLAB/P00_LM00/Output/Frame'
+  asapo -> '-c pilatus,substream2'
+  epicspv -> '-c '00SIM0:cam1:,[640,480]'
+  
 configuration for multiple-sources is separated by semicolon ';
 .IP "--offset OFFSET"
 relative offset x,y[,TRANSFORMATION]

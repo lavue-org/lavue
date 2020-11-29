@@ -126,7 +126,7 @@ def main():
         "-s", "--source", dest="source",
         help="image source(s), i.e. hidra, http, tangoattr,\n"
         "    tangoevents, tangofile, doocsprop, tineprop,\n"
-        "    epicspv, zmq, nxsfile, test\n"
+        "    epicspv, zmq, asapo, nxsfile, test\n"
         "multiple-source names is separated by semicolon ';'")
     parser.add_argument(
         "-c", "--configuration", dest="configuration",
@@ -142,7 +142,8 @@ def main():
         "  doocsprop -> '-c TTF2.FEL/BLFW2.CAM/BL0M1.CAM/IMAGE_EXT'\n"
         "  nxsfile -> '-c /tmp/myfile.nxs://entry/data/pilatus'  \n"
         "        or   '-c /tmp/myfile2.nxs://entry/data/pilatus,0,34'  \n"
-        "  tineprop -> '-c '/HASYLAB/P00_LM00/Output/Frame'\n"
+        "  tineprop -> '-c /HASYLAB/P00_LM00/Output/Frame'\n"
+        "  asapo -> '-c pilatus,substream2'\n"
         "  epicspv -> '-c '00SIM0:cam1:,[640,480]'\n"
         "configuration for multiple-sources is separated"
         " by semicolon ';'"
