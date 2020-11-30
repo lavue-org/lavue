@@ -1644,16 +1644,13 @@ class ASAPOSource(BaseSource):
         if metadata is not None and data is not None:
             # print("data", str(data)[:10])
             label = data[:10]
-            print(len(data))
             if label == b"###CBF: VE" or \
                np.all(label == np.fromstring("###CBF: VE", dtype=np.int8)):
                 # print("[cbf source module]::metadata", metadata["filename"])
                 logger.info(
                     "ASAPOSource.getData: "
                     "[cbf source module]::metadata %s" % metadata["name"])
-                print(type(data).__name__)
                 if type(data).__name__ == "ndarray":
-                    print(data)
                     npdata = np.array(data[:], dtype="uint8")
                 else:
                     try:
