@@ -171,7 +171,7 @@ class DataFetchThread(OmniQThread):
         self.__ready = True
         self.__loop = False
 
-    def isRunning(self):
+    def isFetching(self):
         """ is datasource source connected
 
         :returns: if datasource source connected

@@ -103,7 +103,7 @@ class MotorWatchThread(OmniQThread):
                 logger.warning(str(e))
 
     @debugmethod
-    def isRunning(self):
+    def isWatching(self):
         """ is datasource source connected
 
         :returns: if datasource source connected
@@ -154,11 +154,8 @@ class AttributeWatchThread(OmniQThread):
             try:
                 attrs = []
                 for ap in self.__aproxies:
-                    logger.debug("ATTR READ %s" % str(ap))
                     ra = ap.read()
-                    logger.debug("ATTR READ 1 %s" % str(ra))
                     vl = ra.value
-                    logger.debug("ATTR READ 2 %s" % str(vl))
                     if hasattr(vl, "tolist"):
                         vl = vl.tolist()
                     attrs.append(vl)
@@ -169,7 +166,7 @@ class AttributeWatchThread(OmniQThread):
                 time.sleep(self.__refreshtime)
 
     @debugmethod
-    def isRunning(self):
+    def isWatching(self):
         """ is datasource source connected
 
         :returns: if datasource source connected

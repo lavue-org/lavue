@@ -2808,7 +2808,7 @@ class LiveViewer(QtGui.QDialog):
             return
         for dft in self.__dataFetchers:
             dft.changeStatus(True)
-            if not dft.isRunning():
+            if not dft.isFetching():
                 dft.start()
 
     @debugmethod

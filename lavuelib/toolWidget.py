@@ -1081,6 +1081,9 @@ class ParametersToolWidget(ToolBaseWidget):
             self.__aproxies, self.__settings.toolpollinginterval)
         self.__attrWatcher.attrValuesSignal.connect(self._showValues)
         self.__attrWatcher.start()
+        while not self.__attrWatcher.isWatching():
+            QtCore.QCoreApplication.processEvents()
+            time.sleep(0.1)
 
     def __updateWidgets(self):
         """ add widgets
