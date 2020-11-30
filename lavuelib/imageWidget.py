@@ -43,7 +43,7 @@ from . import imageSource as isr
 from . import toolWidget
 from . import memoExportDialog
 from . import sardanaUtils
-# from .sardanaUtils import debugmethod
+from .sardanaUtils import debugmethod
 
 # _VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(".") \
 #     if _pg.__version__ else ("0", "9", "0")
@@ -1772,6 +1772,7 @@ class ImageWidget(QtGui.QWidget):
         """
         self.__displaywidget.setDoubleClickLock(status)
 
+    @debugmethod
     def setTool(self, tool):
         """ sets tool from string
 
@@ -1787,6 +1788,7 @@ class ImageWidget(QtGui.QWidget):
             self.__ui.rgbtoolComboBox.setCurrentIndex(index)
             self.showCurrentRGBTool()
 
+    @debugmethod
     def setToolConfiguration(self, config):
         """ sets tool configuration from JSON dictionary
 

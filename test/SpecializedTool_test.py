@@ -422,9 +422,7 @@ class SpecializedToolTest(unittest.TestCase):
             qtck10.setChecks([
                 ExtCmdCheck(self, "getLavueStatePar"),
             ])
-            qtck11.setChecks([
-                ExtCmdCheck(self, "getLavueStatePar")
-            ])
+            qtck11.setChecks([])
 
             print("execute")
             qtck1.executeChecks(delay=6000)
@@ -437,7 +435,7 @@ class SpecializedToolTest(unittest.TestCase):
             qtck8.executeChecks(delay=48000)
             qtck9.executeChecks(delay=54000)
             qtck10.executeChecks(delay=60000)
-            status = qtck11.executeChecksAndClose(delay=66000)
+            status = qtck11.executeChecksAndClose(delay=67000)
 
             self.assertEqual(status, 0)
             qtck1.compareResults(self, [False, None])
