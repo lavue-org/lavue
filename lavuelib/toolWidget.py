@@ -52,7 +52,7 @@ from . import motorWatchThread
 from . import edDictDialog
 from . import edListDialog
 from . import commandThread
-# from .sardanaUtils import debugmethod
+from .sardanaUtils import debugmethod
 
 try:
     try:
@@ -972,6 +972,7 @@ class ParametersToolWidget(ToolBaseWidget):
         self.__applymapper = QtCore.QSignalMapper(self)
         self.__applymapper.mapped.connect(self._applypars)
 
+    @debugmethod
     def configure(self, configuration):
         """ set configuration for the current tool
 
@@ -986,6 +987,7 @@ class ParametersToolWidget(ToolBaseWidget):
                     self.__settings.tangodetattrs = str(json.dumps(record))
                 self.__updateParams()
 
+    @debugmethod
     def configuration(self):
         """ provides configuration for the current tool
 
@@ -1041,6 +1043,7 @@ class ParametersToolWidget(ToolBaseWidget):
         except Exception as e:
             logger.warning(str(e))
 
+    @debugmethod
     def activate(self):
         """ activates tool widget
         """
@@ -1130,6 +1133,7 @@ class ParametersToolWidget(ToolBaseWidget):
             self.__widgets[i][WD.read.value].setToolTip(vl)
             self.__widgets[i][WD.read.value].setText(vl)
 
+    @debugmethod
     def deactivate(self):
         """ activates tool widget
         """
