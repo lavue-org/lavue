@@ -142,6 +142,9 @@ class ImageWidget(QtGui.QWidget):
         #:           tool names
         self.__rgbtoolwidgets = {}
 
+        #: (:class:`pyqtgraph.QtCore.QMutex`) mutex lock for CB
+        self.__mutex = QtCore.QMutex()
+
         #: (:class:`lavuelib.settings.Settings`) settings
         self.__settings = settings
         #: (:class:`lavuelib.controllerClient.ControllerClient`)
@@ -678,50 +681,52 @@ class ImageWidget(QtGui.QWidget):
     def showCurrentTool(self):
         """ shows the current tool
         """
-        text = self.__ui.toolComboBox.currentText()
-        stwg = None
-        self.__ui.rgbtoolComboBox.hide()
-        self.__ui.toolComboBox.show()
-        for nm, twg in self.__rgbtoolwidgets.items():
-            twg.hide()
-        for nm, twg in self.__toolwidgets.items():
-            if text == nm:
-                stwg = twg
-            else:
+        with QtCore.QMutexLocker(self.__mutex):
+            text = self.__ui.toolComboBox.currentText()
+            stwg = None
+            self.__ui.rgbtoolComboBox.hide()
+            self.__ui.toolComboBox.show()
+            for nm, twg in self.__rgbtoolwidgets.items():
                 twg.hide()
-        self.disconnecttool()
-        self.__currenttool = stwg
-        if stwg is not None:
-            stwg.show()
-            self.updateinfowidgets(stwg.parameters)
+            for nm, twg in self.__toolwidgets.items():
+                if text == nm:
+                    stwg = twg
+                else:
+                    twg.hide()
+            self.disconnecttool()
+            self.__currenttool = stwg
+            if stwg is not None:
+                stwg.show()
+                self.updateinfowidgets(stwg.parameters)
 
-        self.__connecttool()
-        self.currentToolChanged.emit(text)
+            self.__connecttool()
+            self.currentToolChanged.emit(text)
 
     @debugmethod
     @QtCore.pyqtSlot()
     def showCurrentRGBTool(self):
         """ shows the current tool
         """
-        text = self.__ui.rgbtoolComboBox.currentText()
-        stwg = None
-        self.__ui.toolComboBox.hide()
-        self.__ui.rgbtoolComboBox.show()
-        for nm, twg in self.__toolwidgets.items():
-            twg.hide()
-        for nm, twg in self.__rgbtoolwidgets.items():
-            if text == nm:
-                stwg = twg
-            else:
+        with QtCore.QMutexLocker(self.__mutex):
+            text = self.__ui.rgbtoolComboBox.currentText()
+            stwg = None
+            self.__ui.toolComboBox.hide()
+            self.__ui.rgbtoolComboBox.show()
+            for nm, twg in self.__toolwidgets.items():
                 twg.hide()
-        self.disconnecttool()
-        self.__currenttool = stwg
-        if stwg is not None:
-            stwg.show()
-            self.updateinfowidgets(stwg.parameters)
+            for nm, twg in self.__rgbtoolwidgets.items():
+                if text == nm:
+                    stwg = twg
+                else:
+                    twg.hide()
+            self.disconnecttool()
+            self.__currenttool = stwg
+            if stwg is not None:
+                stwg.show()
+                self.updateinfowidgets(stwg.parameters)
 
-        self.__connecttool()
-        self.currentToolChanged.emit(text)
+            self.__connecttool()
+            self.currentToolChanged.emit(text)
 
     # @debugmethod
     def showTool(self, text):
