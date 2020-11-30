@@ -29,12 +29,14 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import time
-import logging
 import json
+import logging
 
 from pyqtgraph import QtCore
 
 from .omniQThread import OmniQThread
+from .sardanaUtils import debugmethod
+
 
 #: (:obj:`float`) refresh rate in seconds
 GLOBALREFRESHRATE = .1
@@ -72,6 +74,7 @@ class MotorWatchThread(OmniQThread):
         #: (:class:`tango.DeviceProxy`) door server device proxy
         self.__mserver = server
 
+    @debugmethod
     def _run(self):
         """ runner of the fetching thread
         """
@@ -99,6 +102,7 @@ class MotorWatchThread(OmniQThread):
             except Exception as e:
                 logger.warning(str(e))
 
+    @debugmethod
     def isRunning(self):
         """ is datasource source connected
 
@@ -107,6 +111,7 @@ class MotorWatchThread(OmniQThread):
         """
         return self.__loop
 
+    @debugmethod
     def stop(self):
         """ stops loop
 
@@ -139,25 +144,31 @@ class AttributeWatchThread(OmniQThread):
         #: (:obj:`list` <:class:`tango.DeviceProxy`>)  attribute proxies
         self.__aproxies = aproxies or []
 
+    @debugmethod
     def _run(self):
         """ runner of the fetching thread
         """
         self.__loop = True
         while self.__loop:
+            logger.debug("ATTR LOOP %s" % (self._loop))
             try:
                 attrs = []
                 for ap in self.__aproxies:
+                    logger.debug("ATTR READ %s" % str(ap))
                     ra = ap.read()
+                    logger.debug("ATTR READ 1 %s" % str(ra))
                     vl = ra.value
+                    logger.debug("ATTR READ 2 %s" % str(vl))
                     if hasattr(vl, "tolist"):
                         vl = vl.tolist()
                     attrs.append(vl)
                 self.attrValuesSignal.emit(str(json.dumps(attrs)))
             except Exception as e:
                 logger.warning(str(e))
-            if time:
+            if time and self.__loop:
                 time.sleep(self.__refreshtime)
 
+    @debugmethod
     def isRunning(self):
         """ is datasource source connected
 
@@ -166,6 +177,7 @@ class AttributeWatchThread(OmniQThread):
         """
         return self.__loop
 
+    @debugmethod
     def stop(self):
         """ stops loop
 

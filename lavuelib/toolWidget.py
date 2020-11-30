@@ -1140,8 +1140,11 @@ class ParametersToolWidget(ToolBaseWidget):
         if self.__attrWatcher:
             self.__attrWatcher.attrValuesSignal.disconnect(self._showValues)
             # self.__attrWatcher.watchingFinished.disconnect(self._finished)
+            logger.debug("STOPING %s" % str(self.__attrWatcher))
             self.__attrWatcher.stop()
+            logger.debug("WAITING  for %s" % str(self.__attrWatcher))
             self.__attrWatcher.wait()
+            logger.debug("REMOVING  for %s" % str(self.__attrWatcher))
             self.__attrWatcher = None
         self.__aproxies = []
         self.__detparams = []
