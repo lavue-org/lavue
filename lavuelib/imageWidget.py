@@ -673,7 +673,7 @@ class ImageWidget(QtGui.QWidget):
         """
         return str(self.__ui.toolComboBox.currentText())
 
-    # @debugmethod
+    @debugmethod
     @QtCore.pyqtSlot()
     def showCurrentTool(self):
         """ shows the current tool
@@ -698,7 +698,7 @@ class ImageWidget(QtGui.QWidget):
         self.__connecttool()
         self.currentToolChanged.emit(text)
 
-    # @debugmethod
+    @debugmethod
     @QtCore.pyqtSlot()
     def showCurrentRGBTool(self):
         """ shows the current tool
