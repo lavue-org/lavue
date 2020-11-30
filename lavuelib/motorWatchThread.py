@@ -183,3 +183,4 @@ class AttributeWatchThread(OmniQThread):
 
         """
         self.__loop = False
+        logger.debug("STOP LOOP %s" % (self.__loop))
