@@ -1644,8 +1644,9 @@ class ASAPOSource(BaseSource):
         if metadata is not None and data is not None:
             # print("data", str(data)[:10])
             label = data[:10]
-            if label == b"###CBF: VE" or \
-               np.all(label == np.fromstring("###CBF: VE", dtype=np.int8)):
+            if (type(data).__name__ == "ndarray" and
+                np.all(label == np.fromstring("###CBF: VE", dtype=np.int8))) \
+                or label == b"###CBF: VE":
                 # print("[cbf source module]::metadata", metadata["filename"])
                 logger.info(
                     "ASAPOSource.getData: "

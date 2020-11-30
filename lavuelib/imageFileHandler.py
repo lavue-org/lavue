@@ -467,8 +467,8 @@ class CBFLoader(object):
         :returns: metadata dictionary
         :rtype: :class:`numpy.ndarray`
         """
-        headerstart = '_array_data.header_convention'
-        headerend = '_array_data.data'
+        headerstart = b'_array_data.header_convention'
+        headerend = b'_array_data.data'
         mdata = {}
         try:
             if hasattr(flbuffer, "tostring"):
