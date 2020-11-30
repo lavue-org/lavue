@@ -577,7 +577,7 @@ class ImageWidget(QtGui.QWidget):
         """
         return self.__settings
 
-    # @debugmethod
+    @debugmethod
     def __connecttool(self):
         """ connect current tool widget
         """
@@ -590,7 +590,7 @@ class ImageWidget(QtGui.QWidget):
                 signal.connect(slot)
             self.__currenttool.activate()
 
-    # @debugmethod
+    @debugmethod
     def disconnecttool(self):
         """ disconnect current tool widget
         """
