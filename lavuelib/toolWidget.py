@@ -1047,9 +1047,7 @@ class ParametersToolWidget(ToolBaseWidget):
         record = json.loads(str(self.__settings.tangodetattrs or "{}").strip())
         if not isinstance(record, dict):
             record = {}
-        self.__aproxies = []
-        self.__detparams = []
-        self.__avalues = []
+        self.deactivate()
         for lb in sorted(record.keys()):
             try:
                 dv = record[lb]
