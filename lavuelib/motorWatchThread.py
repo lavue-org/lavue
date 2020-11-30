@@ -150,7 +150,7 @@ class AttributeWatchThread(OmniQThread):
         """
         self.__loop = True
         while self.__loop:
-            logger.debug("ATTR LOOP %s" % (self._loop))
+            logger.debug("ATTR LOOP %s" % (self.__loop))
             try:
                 attrs = []
                 for ap in self.__aproxies:
