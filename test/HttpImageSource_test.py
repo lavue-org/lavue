@@ -175,6 +175,7 @@ class httpImageSourceTest(unittest.TestCase):
         # lastimage = self.takeNewImage().T
         cfg = '[Configuration]\n' \
             'StoreGeometry=true\n' \
+            'InterruptOnError=false\n'\
             'GeometryFromSource=true'
 
         if not os.path.exists(self.__cfgfdir):
