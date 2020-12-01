@@ -1542,7 +1542,8 @@ class ASAPOSource(BaseSource):
                 if self.__server and self.__beamtime and self.__token:
                     self.__broker = asapo_consumer.create_server_broker(
                         self.__server, "", False, self.__beamtime,
-                        self.__stream, self.__token, 60000)
+                        self.__stream, self.__token,
+                        self._timeout or 3000)
                     self.__group_id = self.__broker.generate_group_id()
                     self._initiated = True
                     self.__lastname = ""
