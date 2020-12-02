@@ -1523,12 +1523,17 @@ class ASAPOSource(BaseSource):
             except Exception as e:
                 logger.warning(str(e))
             if substreams:
-                self.__substreams = substreams
+                self.__substreams = []
+                for subs in substreams:
+                    if isinstance(subs, dict) and "name" in subs.keys():
+                        self.__substreams.append(subs["name"])
+                    else:
+                        self.__substreams.append(subs)
         if connected:
             self.disconnect()
 
         if substreams:
-            meta["asaposubstreams"] = substreams
+            meta["asaposubstreams"] = self.__substreams
         return meta
 
     @debugmethod
