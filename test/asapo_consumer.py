@@ -27,6 +27,7 @@ import numpy as np
 
 #: (:obj:`str`) file name
 filename = ""
+substreams = ["stream1", "stream2"]
 group_id = "12345678"
 beamtime_cache = ""
 gtoken_cache = ""
@@ -66,7 +67,7 @@ class Broker(object):
 
     def get_substream_list(self, from_substream=''):
         print("Broker.get_substream_list()")
-        return ["stream1", "stream2"]
+        return substreams
 
     def get_last(self, gid, substream="default", meta_only=True):
         print("Broker.get_last(%s, %s, %s)" % (gid, substream, meta_only))
