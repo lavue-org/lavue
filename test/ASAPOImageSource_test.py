@@ -660,9 +660,9 @@ class ASAPOImageSourceTest(unittest.TestCase):
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
         ])
 
-        qtck1.executeChecks(delay=3000)
-        qtck2.executeChecks(delay=6000)
-        status = qtck3.executeChecksAndClose(delay=9000)
+        qtck1.executeChecks(delay=5000)
+        qtck2.executeChecks(delay=10000)
+        status = qtck3.executeChecksAndClose(delay=15000)
 
         self.assertEqual(status, 0)
 
