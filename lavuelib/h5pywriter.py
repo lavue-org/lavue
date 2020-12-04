@@ -33,6 +33,15 @@ import io
 from . import filewriter
 # from .Types import nptype
 
+try:
+    sver = h5py.__version__.split(".", 2)
+    h5maj = int(sver[0])
+    h5min = int(sver[1])
+    h5ver = h5maj * 1000 + h5min
+except Exception:
+    h5ver =1000
+
+    
 
 if sys.version_info > (3,):
     unicode = str
@@ -67,6 +76,8 @@ def load_file(membuffer, filename=None, readonly=False, **pars):
     :returns: file object
     :rtype: :class:`H5PYFile`
     """
+    if h5ver < 2009:
+        raise Exception("Loading a file from a memory buffer not supported")
     if not isinstance(membuffer, io.BytesIO):
         if hasattr(membuffer, "tobytes"):
             membuffer = membuffer.tobytes()
