@@ -1187,6 +1187,14 @@ class H5CppAttributeManager(filewriter.FTAttributeManager):
         return H5CppAttribute(
             self._h5object.__getitem__(name), self.parent)
 
+    def names(self):
+        """ key values
+
+        :returns: attribute names
+        :rtype: :obj:`list` <:obj:`str`>
+        """
+        return [att.name for att in self._h5object]
+
     def close(self):
         """ close attribure manager
         """

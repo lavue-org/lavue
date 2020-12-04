@@ -1181,6 +1181,7 @@ class H5PYWriterTest(unittest.TestCase):
             self.assertEqual(fl.parent, None)
             self.assertEqual(fl.readonly, False)
 
+            self.assertEqual(fl.default_field(), None)
             fl.close()
 
             fl.reopen(True)
@@ -2330,6 +2331,7 @@ class H5PYWriterTest(unittest.TestCase):
             self.assertEqual(fl.parent, None)
             self.assertEqual(fl.readonly, False)
 
+            self.assertEqual(fl.default_field().name, "lkfloatvec")
             fl.close()
 
             fl.reopen(True)

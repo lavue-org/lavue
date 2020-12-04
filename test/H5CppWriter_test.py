@@ -1237,6 +1237,7 @@ class H5CppWriterTest(unittest.TestCase):
             self.assertEqual(fl.readonly, False)
             # self.assertEqual(fl.h5object.readonly, False)
 
+            self.assertEqual(fl.default_field(), None)
             fl.close()
 
             fl.reopen(True)
@@ -2525,6 +2526,7 @@ class H5CppWriterTest(unittest.TestCase):
             self.assertEqual(fl.readonly, False)
             # self.assertEqual(fl.h5object.readonly, False)
 
+            self.assertEqual(fl.default_field().name, "lkfloatvec")
             fl.close()
 
             fl.reopen(True)
