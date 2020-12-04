@@ -46,7 +46,7 @@ if int(H5PYMAJOR) > 2 or (int(H5PYMAJOR) == 2 and int(H5PYMINOR) >= 9):
     MEMBUF = True
 else:
     MEMBUF = True
-    
+
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)

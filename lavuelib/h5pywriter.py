@@ -39,9 +39,8 @@ try:
     h5min = int(sver[1])
     h5ver = h5maj * 1000 + h5min
 except Exception:
-    h5ver =1000
+    h5ver = 1000
 
-    
 
 if sys.version_info > (3,):
     unicode = str
