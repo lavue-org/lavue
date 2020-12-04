@@ -78,7 +78,7 @@ def load_file(membuffer, filename=None, readonly=False, **pars):
     """
     if h5ver < 2009:
         raise Exception("Loading a file from a memory buffer not supported")
-    if not isinstance(membuffer, io.BytesIO):
+    if not hasattr(membuffer, 'read') or not hasattr(membuffer, 'seek'):
         if hasattr(membuffer, "tobytes"):
             membuffer = membuffer.tobytes()
         membuffer = io.BytesIO(membuffer)
