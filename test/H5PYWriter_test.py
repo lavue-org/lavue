@@ -45,7 +45,7 @@ else:
 if int(H5PYMAJOR) > 3 or (int(H5PYMAJOR) == 2 and int(H5PYMINOR) >= 9):
     MEMBUF = True
 else:
-    MEMBUF = True
+    MEMBUF = False
 
 
 # if 64-bit machione
