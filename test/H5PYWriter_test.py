@@ -42,7 +42,7 @@ if int(H5PYMAJOR) > 1 or (int(H5PYMAJOR) == 1 and int(H5PYMINOR) > 4):
 else:
     SWMR = False
 
-if int(H5PYMAJOR) > 2 or (int(H5PYMAJOR) == 2 and int(H5PYMINOR) >= 9):
+if int(H5PYMAJOR) > 3 or (int(H5PYMAJOR) == 2 and int(H5PYMINOR) >= 9):
     MEMBUF = True
 else:
     MEMBUF = True
