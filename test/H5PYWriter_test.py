@@ -24,6 +24,7 @@
 import unittest
 import os
 import sys
+import io
 import struct
 import random
 import binascii
@@ -234,6 +235,29 @@ class H5PYWriterTest(unittest.TestCase):
 
             fl2 = H5PYWriter.create_file(self._fname, True)
             fl2.close()
+            with open(self._fname, "rb") as fh:
+                buf = io.BytesIO(fh.read())
+
+            fl = H5PYWriter.load_file(buf, self._fname, readonly=True)
+            f = fl.root()
+            self.assertEqual(6, len(f.attributes))
+            self.assertEqual(
+                f.attributes["file_name"][...], self._fname)
+            for at in f.attributes:
+                print("%s %s %s" % (at.name, at.dtype, at.read()))
+            self.assertTrue(f.attributes["NX_class"][...], "NXroot")
+            self.assertEqual(f.size, 0)
+            fl.close()
+            fl.reopen()
+            self.assertEqual(6, len(f.attributes))
+            for at in f.attributes:
+                print("%s %s %s" % (at.name, at.read(), at.dtype))
+            self.assertEqual(
+                f.attributes["file_name"][...],
+                self._fname)
+            self.assertTrue(f.attributes["NX_class"][...], "NXroot")
+            self.assertEqual(f.size, 0)
+            fl.close()
 
         finally:
             os.remove(self._fname)

@@ -28,6 +28,7 @@ import h5py
 import numpy as np
 import os
 import sys
+import io
 
 from . import filewriter
 # from .Types import nptype
@@ -50,6 +51,31 @@ def nptype(dtype):
     if str(dtype) in ['string', b'string']:
         return 'str'
     return dtype
+
+
+def load_file(membuffer, filename=None, readonly=False, **pars):
+    """ load a file from memory byte buffer
+
+    :param membuffer: memory buffer
+    :type membuffer: :obj:`bytes` or :obj:`io.BytesIO`
+    :param filename: file name
+    :type filename: :obj:`str`
+    :param readonly: readonly flag
+    :type readonly: :obj:`bool`
+    :param pars: parameters
+    :type pars: :obj:`dict` < :obj:`str`, :obj:`str`>
+    :returns: file object
+    :rtype: :class:`H5PYFile`
+    """
+    if not isinstance(membuffer, io.BytesIO):
+        if hasattr(membuffer, "tobytes"):
+            membuffer = membuffer.tobytes()
+        membuffer = io.BytesIO(membuffer)
+    if readonly:
+        fobj = h5py.File(membuffer, "r", **pars)
+    else:
+        fobj = h5py.File(membuffer, "r+", **pars)
+    return H5PYFile(fobj, filename)
 
 
 def open_file(filename, readonly=False, **pars):

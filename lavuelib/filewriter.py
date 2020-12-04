@@ -86,6 +86,31 @@ def create_file(filename, overwrite=False, **pars):
     return fl
 
 
+def load_file(membuffer, filename=None, readonly=False, **pars):
+    """ load a file from memory byte buffer
+
+    :param membuffer: memory buffer
+    :type membuffer: :obj:`bytes` or :obj:`io.BytesIO`
+    :param filename: file name
+    :type filename: :obj:`str`
+    :param readonly: readonly flag
+    :type readonly: :obj:`bool`
+    :param pars: parameters
+    :type pars: :obj:`dict` < :obj:`str`, :obj:`str`>
+    :returns: file object
+    :rtype: :class:`H5PYFile`
+    """
+    if 'writer' in pars.keys():
+        wr = pars.pop('writer')
+    else:
+        with writerlock:
+            wr = writer
+    fl = wr.open_file(membuffer, filename, readonly, **pars)
+    if hasattr(fl, "writer"):
+        fl.writer = wr
+    return fl
+
+
 def link(target, parent, name):
     """ create link
 
