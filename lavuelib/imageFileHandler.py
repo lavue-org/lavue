@@ -100,6 +100,8 @@ class NexusFieldHandler(object):
         self.__fields = {}
         # (:class:`lavuelib.filewriter.root`) nexus file root
         self.__root = None
+        # (:class:`lavuelib.filewriter.FTFile') nexus file object
+        self.__fl = None
         #: (:obj:`str`) json dictionary with metadata or empty string
         self.__metadata = ""
 
@@ -115,14 +117,14 @@ class NexusFieldHandler(object):
         wrmodule = WRITERS[writer.lower()]
         if fname:
             try:
-                fl = filewriter.open_file(
+                self.__fl = filewriter.open_file(
                     fname, writer=wrmodule, readonly=True,
                     libver='latest',
                     swmr=(True if writer in ["h5py", "h5cpp"] else False)
                 )
             except Exception:
                 try:
-                    fl = filewriter.open_file(
+                    self.__fl = filewriter.open_file(
                         fname, writer=wrmodule, readonly=True)
                 except Exception:
                     raise Exception("File '%s' cannot be opened \n" % (fname))
@@ -130,7 +132,48 @@ class NexusFieldHandler(object):
                 #     raise Exception("File '%s' cannot be opened %s\n"
                 #                % (fname, str(e)))
 
-            self.__root = fl.root()
+            self.__root = self.__fl.root()
+
+    def frombuffer(self, membuffer, fname=None, writer=None):
+        """ constructor
+
+        :param membuffer: memory buffer
+        :type membuffer: :obj:`bytes` or :obj:`io.BytesIO`
+        :param fname: file name
+        :type fname: :obj:`str`
+        :param writer: h5 writer module: "pni" or "h5py"
+        :type writer: :obj:`str`
+        """
+        if fname is not None:
+            self.__fname = fname
+
+        if not writer:
+            if "h5py" in WRITERS.keys():
+                writer = "h5py"
+            elif "h5cpp" in WRITERS.keys():
+                writer = "h5cpp"
+            else:
+                writer = "pni"
+        if writer not in WRITERS.keys():
+            raise Exception("Writer '%s' cannot be opened" % writer)
+        wrmodule = WRITERS[writer.lower()]
+        try:
+            self.__fl = filewriter.load_file(
+                membuffer,
+                fname=self.__fname, writer=wrmodule, readonly=True,
+                libver='latest',
+                swmr=(True if writer in ["h5py", "h5cpp"] else False)
+            )
+        except Exception:
+            try:
+                self.__fl = filewriter.load_file(
+                    membuffer,
+                    fname, writer=wrmodule, readonly=True)
+            except Exception:
+                raise Exception(
+                    "File '%s' cannot be loaded \n" % (self.__fname))
+
+        self.__root = self.__fl.root()
 
     def findImageFields(self):
         """ provides a dictionary with of all image fields
@@ -217,7 +260,7 @@ class NexusFieldHandler(object):
             finally:
                 pass
 
-    def getNode(self, field):
+    def getNode(self, field=None):
         """ get node
         :param field: field path
         :type field: :obj:`str`
@@ -235,6 +278,8 @@ class NexusFieldHandler(object):
             for name in sfield:
                 if name:
                     node = node.open(name)
+        else:
+            node = self.__fl.default_field()
         return node
 
     @classmethod
@@ -360,6 +405,8 @@ class NexusFieldHandler(object):
         if node:
             shape = node.shape
         if shape:
+            if frame is None:
+                return node.read()
             if len(shape) == 2:
                 return node[...]
             elif len(shape) == 3:

@@ -30,6 +30,7 @@ from pyqtgraph import QtCore, QtGui
 import json
 import struct
 import logging
+import os
 
 from . import dataFetchThread
 from .sardanaUtils import debugmethod
@@ -1634,9 +1635,7 @@ class ASAPOSource(BaseSource):
                     self.__group_id,
                     substream=substream,
                     meta_only=False)
-                # data, metadata = self.__broker.get_next(
-                #     self.__group_id, meta_only=False)
-                self.__lastname = metadata["name"]
+                self.__lastname = str(metadata["name"] or "")
                 self.__lastid = metadata["_id"]
                 imagename = "%s (%s)" % (self.__lastname, self.__lastid)
                 # print ('id:', metadata['_id'])
@@ -1644,16 +1643,49 @@ class ASAPOSource(BaseSource):
                 # print ('file content:', data.tostring().decode("utf-8"))
         except Exception as e:
             logger.warning(str(e))
-            # print(str(e))
-            pass  # this needs a bit more care
 
         if metadata is not None and data is not None:
             # print("data", str(data)[:10])
-            label = data[:10]
-            if ((type(data).__name__ == "ndarray") and
-                np.all(
-                    label == np.fromstring("###CBF: VE", dtype=np.int8))) or \
-               label == b"###CBF: VE":
+            nameext = ""
+            if self.__lastname:
+                nameext = os.path.splitext(self.__lastname)
+            if nameext in [".nxs", ".h5", "nx", "ndf", "hdf"]:
+                try:
+                    handler = imageFileHandler.NexusFieldHandler()
+                    handler.frombuffer(data[:])
+                    nexus_path = None
+                    if "meta" in metadata.keys() and \
+                       "nexus_path" in metadata["meta"].keys():
+                        nexus_path = metadata["meta"]["nexus_path"]
+                    frame = None
+                    if "meta" in metadata.keys() and \
+                       "nexus_dataset_frame" in metadata["meta"].keys():
+                        try:
+                            frame = int(
+                                metadata["meta"]["nexus_dataset_frame"])
+                        except Exception as e:
+                            logger.warning(str(e))
+                    node = handler.getNode(nexus_path)
+                    try:
+                        mdata = handler.getMetaData(node, submeta)
+                    except Exception as e:
+                        logger.warning(str(e))
+                    image = self.__handler.getImage(
+                        node, frame)
+                except Exception as e:
+                    logger.warning(str(e))
+                if image is not None:
+                    if hasattr(image, "size") and image.size == 0:
+                        if jsubmeta:
+                            return "", "", jsubmeta
+                        return None, None, None
+                    self.__frame += 1
+                    return (np.transpose(image), imagename, mdata)
+                return None, None, None
+            elif (((type(data).__name__ == "ndarray") and
+                   np.all(data[:10] == np.fromstring(
+                       "###CBF: VE", dtype=np.int8))) or
+                  data[:10] == b"###CBF: VE"):
                 # print("[cbf source module]::metadata", metadata["filename"])
                 logger.info(
                     "ASAPOSource.getData: "
