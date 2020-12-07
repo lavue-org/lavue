@@ -346,7 +346,7 @@ class ASAPOImageSourceH5PYTest(unittest.TestCase):
             self.assertTrue(iid < 12000)
             self.assertEqual(
                 fnames[0].strip(),
-                "ASAPOImageSourceTesttest_readnxsfile_default.nxs")
+                "ASAPOImageSourceH5PYTesttest_readnxsfile_default.nxs")
 
         finally:
             if os.path.isfile(self._fname):
@@ -470,7 +470,7 @@ class ASAPOImageSourceH5PYTest(unittest.TestCase):
             self.assertTrue(iid < 12000)
             self.assertEqual(
                 fnames[0].strip(),
-                "ASAPOImageSourceTesttest_readnxsfile_nexuspath.nxs")
+                "ASAPOImageSourceH5PYTesttest_readnxsfile_nexuspath.nxs")
 
         finally:
             if os.path.isfile(self._fname):
@@ -595,7 +595,8 @@ class ASAPOImageSourceH5PYTest(unittest.TestCase):
             self.assertTrue(iid < 12000)
             self.assertEqual(
                 fnames[0].strip(),
-                "ASAPOImageSourceTesttest_readnxsfile_nexusdatasetframe.nxs")
+                "ASAPOImageSourceH5PYTesttest_readnxsfile_"
+                "nexusdatasetframe.nxs")
 
         finally:
             if os.path.isfile(self._fname):
