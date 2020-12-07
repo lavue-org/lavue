@@ -96,7 +96,7 @@ def tostr(x):
 
 
 # test fixture
-class ASAPOImageSourceTest(unittest.TestCase):
+class ASAPOImageSourceH5PYTest(unittest.TestCase):
 
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
