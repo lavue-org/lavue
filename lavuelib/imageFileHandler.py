@@ -321,7 +321,6 @@ class NexusFieldHandler(object):
                   'x_pixel_size', 'y_pixel_size',
                   'beam_center_x', 'beam_center_y']
         names = pgroup.names()
-
         for nm in mnames:
             if nm in names and nm not in metadata.keys():
                 fld = pgroup.open(nm)
@@ -345,12 +344,19 @@ class NexusFieldHandler(object):
                     logger.warning(str(e))
                     metadata[nm] = value
         lfld = pgroup.open_link(node.name)
-        file_path, lpath = str(lfld.target_path).rsplit(":/", 1)
+        slpath = str(lfld.target_path).rsplit(":/", 1)
+        if len(slpath) > 1:
+            file_path = slpath[0]
+            lpath = slpath[1]
+        else:
+            file_path = None
+            lpath = slpath[0]
         opath = "/".join([gr.split(":")[0]
                           for gr in node.path.split("/") if gr != '.'])
         lpath = lpath.replace("//", "/")
         lfile = lfld.getfilename(lfld)
-        if maxrec and lfile == file_path and str(lpath) != str(opath):
+        if lfile is not None and \
+           maxrec and lfile == file_path and str(lpath) != str(opath):
             try:
                 root = None
                 par = pgroup

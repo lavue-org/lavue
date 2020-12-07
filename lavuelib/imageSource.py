@@ -1648,11 +1648,11 @@ class ASAPOSource(BaseSource):
             # print("data", str(data)[:10])
             nameext = ""
             if self.__lastname:
-                nameext = os.path.splitext(self.__lastname)
+                _, nameext = os.path.splitext(self.__lastname)
             if nameext in [".nxs", ".h5", "nx", "ndf", "hdf"]:
                 try:
                     handler = imageFileHandler.NexusFieldHandler()
-                    handler.frombuffer(data[:])
+                    handler.frombuffer(data[:], self.__lastname)
                     nexus_path = None
                     if "meta" in metadata.keys() and \
                        "nexus_path" in metadata["meta"].keys():
@@ -1670,7 +1670,7 @@ class ASAPOSource(BaseSource):
                         mdata = handler.getMetaData(node, submeta)
                     except Exception as e:
                         logger.warning(str(e))
-                    image = self.__handler.getImage(
+                    image = handler.getImage(
                         node, frame)
                 except Exception as e:
                     logger.warning(str(e))
@@ -1679,8 +1679,11 @@ class ASAPOSource(BaseSource):
                         if jsubmeta:
                             return "", "", jsubmeta
                         return None, None, None
-                    self.__frame += 1
-                    return (np.transpose(image), imagename, mdata)
+                    if hasattr(image, "shape") and len(image.shape) == 3 \
+                       and image.shape[0] == 1:
+                        return (np.transpose(image[0, :, :]), imagename, mdata)
+                    else:
+                        return (np.transpose(image), imagename, mdata)
                 return None, None, None
             elif (((type(data).__name__ == "ndarray") and
                    np.all(data[:10] == np.fromstring(
@@ -1734,6 +1737,7 @@ class ASAPOSource(BaseSource):
                         return None, None, None
                     if img is not None:
                         return np.transpose(img), imagename, jsubmeta
+
             #     print(
             #       "[unknown source module]::metadata", metadata["name"])
         else:

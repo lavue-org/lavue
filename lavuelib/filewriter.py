@@ -105,7 +105,7 @@ def load_file(membuffer, filename=None, readonly=False, **pars):
     else:
         with writerlock:
             wr = writer
-    fl = wr.open_file(membuffer, filename, readonly, **pars)
+    fl = wr.load_file(membuffer, filename, readonly, **pars)
     if hasattr(fl, "writer"):
         fl.writer = wr
     return fl
