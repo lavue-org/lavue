@@ -29,6 +29,7 @@ import struct
 import binascii
 import time
 import logging
+import h5py
 import numpy as np
 import lavuelib.h5pywriter as h5pyWriter
 
@@ -51,6 +52,13 @@ from pyqtgraph.Qt import QtTest
 
 from qtchecker.qtChecker import (
     QtChecker, CmdCheck, ExtCmdCheck, WrapAttrCheck, AttrCheck)
+
+H5PYMAJOR, H5PYMINOR, H5PYPATCH = h5py.__version__.split(".", 2)
+if int(H5PYMAJOR) > 3 or (int(H5PYMAJOR) == 2 and int(H5PYMINOR) >= 9):
+    MEMBUF = True
+else:
+    MEMBUF = False
+
 
 #  Qt-application
 app = None
@@ -225,6 +233,9 @@ class ASAPOImageSourceTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
+        if not MEMBUF:
+            print("Loading a file from a memory buffer not supported")
+            return
         self._fname = '%s/%s%s.nxs' % (
             os.getcwd(), self.__class__.__name__, fun)
 
@@ -344,6 +355,9 @@ class ASAPOImageSourceTest(unittest.TestCase):
     def test_readnxsfile_nexuspath(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        if not MEMBUF:
+            print("Loading a file from a memory buffer not supported")
+            return
 
         self._fname = '%s/%s%s.nxs' % (
             os.getcwd(), self.__class__.__name__, fun)
@@ -466,6 +480,9 @@ class ASAPOImageSourceTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
+        if not MEMBUF:
+            print("Loading a file from a memory buffer not supported")
+            return
         self._fname = '%s/%s%s.nxs' % (
             os.getcwd(), self.__class__.__name__, fun)
 
