@@ -1679,9 +1679,12 @@ class ASAPOSource(BaseSource):
                         if jsubmeta:
                             return "", "", jsubmeta
                         return None, None, None
-                    if hasattr(image, "shape") and len(image.shape) == 3 \
-                       and image.shape[0] == 1:
+                    if hasattr(image, "shape") and \
+                       len(image.shape) == 3 and image.shape[0] == 1:
                         return (np.transpose(image[0, :, :]), imagename, mdata)
+                    elif (frame is None and hasattr(image, "shape") and
+                          len(image.shape) > 2):
+                        return (np.swapaxes(image, 1, 2), imagename, mdata)
                     else:
                         return (np.transpose(image), imagename, mdata)
                 return None, None, None

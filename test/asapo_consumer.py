@@ -33,6 +33,7 @@ beamtime_cache = ""
 gtoken_cache = ""
 server_cache = ""
 stream_cache = ""
+usermeta = None
 
 
 def create_server_broker(server_name, source_path, has_filesystem,
@@ -98,4 +99,6 @@ class Broker(object):
         if self.stream in streambaseid.keys():
             iid += streambaseid[self.stream]
         metadata = {"name": self.filename, "_id": iid}
+        if usermeta:
+            metadata["meta"] = dict(usermeta)
         return self.data, metadata

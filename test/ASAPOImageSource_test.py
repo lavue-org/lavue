@@ -138,6 +138,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
             self.__tangofilepattern % self.__tangoimgcounter
         fname = os.path.join(ipath, iname)
         asapo_consumer.filename = fname
+        asapo_consumer.usermeta = None
         print("SET: %s" % asapo_consumer.filename)
         image = fabio.open(fname)
         li = image.data
@@ -153,6 +154,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
         self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
         self.__tangofilepattern = "%05d.tif"
         asapo_consumer.filename = ""
+        asapo_consumer.usermeta = None
         asapo_consumer.substreams = ["stream1", "stream2"]
         cfg = '[Configuration]\n' \
             'ASAPOServer="haso.desy.de:8500"\n' \
@@ -292,6 +294,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
 
         lastimage = None
         asapo_consumer.filename = ""
+        asapo_consumer.usermeta = None
         asapo_consumer.substreams = ["stream1", "stream2"]
         self.__tangoimgcounter = 0
         self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
@@ -434,6 +437,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
 
         lastimage = None
         asapo_consumer.filename = ""
+        asapo_consumer.usermeta = None
         asapo_consumer.substreams = [
             {"name": "stream1", "timestampCreated": 0},
             {"name": "stream2", "timestampCreated": 0}
@@ -579,6 +583,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
 
         lastimage = None
         asapo_consumer.filename = ""
+        asapo_consumer.usermeta = None
         asapo_consumer.substreams = ["stream1", "stream2"]
         self.__tangoimgcounter = 0
         self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
@@ -724,6 +729,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
         self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
         self.__tangofilepattern = "tst_05717_%05d.cbf"
         asapo_consumer.filename = ""
+        asapo_consumer.usermeta = None
         cfg = '[Configuration]\n' \
             'ASAPOServer="haso.desy.de:8500"\n' \
             'ASAPOToken=2asaldskjsalkdjflsakjflksj \n' \

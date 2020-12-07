@@ -80,10 +80,6 @@ import EpicsImageSource_test
 if not PNI_AVAILABLE and not H5PY_AVAILABLE:
     raise Exception("Please install h5py or pni")
 
-# if PNI_AVAILABLE:
-# if H5PY_AVAILABLE:
-# if PNI_AVAILABLE and H5PY_AVAILABLE:
-
 
 # list of available databases
 DB_AVAILABLE = []
@@ -102,6 +98,7 @@ if PNI_AVAILABLE:
 if H5PY_AVAILABLE:
     import H5PYWriter_test
     import FileWriterH5PY_test
+    import ASAPOImageSourceH5PY_test
 if H5CPP_AVAILABLE:
     import H5CppWriter_test
     import FileWriterH5Cpp_test
@@ -146,6 +143,8 @@ def main():
     if H5CPP_AVAILABLE:
         CommandLineArgumentH5Cpp_test.app = app
         NXSFileImageSource_test.app = app
+    if H5PY_AVAILABLE:
+        ASAPOImageSourceH5PY_test.app = app
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             CommandLineArgument_test))
@@ -175,6 +174,9 @@ def main():
                 FileWriterH5PY_test))
         basicsuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(H5PYWriter_test))
+        basicsuite.addTests(
+            unittest.defaultTestLoader.loadTestsFromModule(
+                ASAPOImageSourceH5PY_test))
     if H5CPP_AVAILABLE:
         basicsuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(

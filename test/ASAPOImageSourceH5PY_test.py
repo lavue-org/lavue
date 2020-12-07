@@ -143,6 +143,17 @@ class ASAPOImageSourceTest(unittest.TestCase):
         app.sendPostedEvents()
         return li
 
+    def takeNewPathImage(self):
+        global app
+        self.__counter += 1
+
+        asapo_consumer.filename = self._fname
+        print("SET: %s" % asapo_consumer.filename)
+
+        li = self.__datamn
+        app.sendPostedEvents()
+        return li
+
     def createdetfile(self, fname):
         nx = 128
         ny = 256
@@ -222,6 +233,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
 
             lastimage = None
             asapo_consumer.filename = ""
+            asapo_consumer.usermeta = None
             asapo_consumer.substreams = ["stream1", "stream2"]
             cfg = '[Configuration]\n' \
                 'ASAPOServer="haso.desy.de:8500"\n' \
@@ -324,6 +336,249 @@ class ASAPOImageSourceTest(unittest.TestCase):
             self.assertEqual(
                 fnames[0].strip(),
                 "ASAPOImageSourceTesttest_readnxsfile_default.nxs")
+
+        finally:
+            if os.path.isfile(self._fname):
+                os.remove(self._fname)
+
+    def test_readnxsfile_nexuspath(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        self._fname = '%s/%s%s.nxs' % (
+            os.getcwd(), self.__class__.__name__, fun)
+
+        try:
+            self.createdetfile(self._fname)
+
+            lastimage = None
+            asapo_consumer.filename = ""
+            asapo_consumer.usermeta = {
+                "nexus_path": "/entry/instrument/detector/data"}
+            asapo_consumer.substreams = ["stream1", "stream2"]
+            cfg = '[Configuration]\n' \
+                'ASAPOServer="haso.desy.de:8500"\n' \
+                'ASAPOToken=2asaldskjsalkdjflsakjflksj \n' \
+                'ASAPOBeamtime=123124 \n' \
+                'ASAPOStreams=detector, \n' \
+                'StoreGeometry=true\n' \
+                'GeometryFromSource=true'
+
+            if not os.path.exists(self.__cfgfdir):
+                os.makedirs(self.__cfgfdir)
+            with open(self.__cfgfname, "w+") as cf:
+                cf.write(cfg)
+
+            lastimage = None
+
+            options = argparse.Namespace(
+                mode='expert',
+                source='asapo',
+                configuration=None,
+                # % self._fname,
+                start=True,
+                # levels="0,1000",
+                tool='intensity',
+                transformation='none',
+                # log='error',
+                log='debug',
+                instance='unittests',
+                scaling='linear',
+                gradient='spectrum',
+            )
+            logging.basicConfig(
+                 format="%(levelname)s: %(message)s")
+            logger = logging.getLogger("lavue")
+            lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+            dialog = lavuelib.liveViewer.MainWindow(options=options)
+            dialog.show()
+
+            qtck1 = QtChecker(app, dialog, True, sleep=100)
+            qtck2 = QtChecker(app, dialog, True, sleep=100)
+            qtck1.setChecks([
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+                AttrCheck(
+                    "_MainWindow__lavue._LiveViewer__imagename"),
+                ExtCmdCheck(self, "takeNewPathImage"),
+            ])
+            qtck2.setChecks([
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+                AttrCheck(
+                    "_MainWindow__lavue._LiveViewer__imagename"),
+                WrapAttrCheck(
+                    "_MainWindow__lavue._LiveViewer__sourcewg"
+                    "._SourceTabWidget__sourcetabs[],0._ui.pushButton",
+                    QtTest.QTest.mouseClick, [QtCore.Qt.LeftButton]),
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            ])
+
+            qtck1.executeChecks(delay=3000)
+            status = qtck2.executeChecksAndClose(delay=6000)
+
+            self.assertEqual(status, 0)
+
+            qtck1.compareResults(
+                self, [True, None, None, None, None], mask=[0, 1, 1, 1, 1])
+            qtck2.compareResults(
+                self, [True, None, None, None, None, False],
+                mask=[0, 1, 1, 1, 0, 0])
+
+            res1 = qtck1.results()
+            res2 = qtck2.results()
+            self.assertEqual(res1[1], None)
+            self.assertEqual(res1[2], None)
+
+            lastimage = np.sum(res1[4], 0).T
+            if not np.allclose(res2[1], lastimage):
+                print(res2[1])
+                print(lastimage)
+            self.assertTrue(np.allclose(res2[1], lastimage))
+            self.assertTrue(np.allclose(res2[2], lastimage))
+
+            fnames = res2[3].split("(")
+            self.assertTrue(len(fnames), 2)
+            try:
+                iid = int(fnames[1][:-1])
+            except Exception:
+                iid = -1
+            self.assertTrue(iid > 11000)
+            self.assertTrue(iid < 12000)
+            self.assertEqual(
+                fnames[0].strip(),
+                "ASAPOImageSourceTesttest_readnxsfile_nexuspath.nxs")
+
+        finally:
+            if os.path.isfile(self._fname):
+                os.remove(self._fname)
+
+    def test_readnxsfile_nexusdatasetframe(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        self._fname = '%s/%s%s.nxs' % (
+            os.getcwd(), self.__class__.__name__, fun)
+
+        try:
+            self.createdetfile(self._fname)
+
+            lastimage = None
+            asapo_consumer.filename = ""
+            asapo_consumer.usermeta = {
+                "nexus_dataset_frame": 3,
+                "nexus_path": "/entry/instrument/detector/data"}
+            asapo_consumer.substreams = ["stream1", "stream2"]
+            cfg = '[Configuration]\n' \
+                'ASAPOServer="haso.desy.de:8500"\n' \
+                'ASAPOToken=2asaldskjsalkdjflsakjflksj \n' \
+                'ASAPOBeamtime=123124 \n' \
+                'ASAPOStreams=detector, \n' \
+                'StoreGeometry=true\n' \
+                'GeometryFromSource=true'
+
+            if not os.path.exists(self.__cfgfdir):
+                os.makedirs(self.__cfgfdir)
+            with open(self.__cfgfname, "w+") as cf:
+                cf.write(cfg)
+
+            lastimage = None
+
+            options = argparse.Namespace(
+                mode='expert',
+                source='asapo',
+                configuration=None,
+                # % self._fname,
+                start=True,
+                # levels="0,1000",
+                tool='intensity',
+                transformation='none',
+                # log='error',
+                log='debug',
+                instance='unittests',
+                scaling='linear',
+                gradient='spectrum',
+            )
+            logging.basicConfig(
+                 format="%(levelname)s: %(message)s")
+            logger = logging.getLogger("lavue")
+            lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+            dialog = lavuelib.liveViewer.MainWindow(options=options)
+            dialog.show()
+
+            qtck1 = QtChecker(app, dialog, True, sleep=100)
+            qtck2 = QtChecker(app, dialog, True, sleep=100)
+            qtck1.setChecks([
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+                AttrCheck(
+                    "_MainWindow__lavue._LiveViewer__imagename"),
+                ExtCmdCheck(self, "takeNewPathImage"),
+            ])
+            qtck2.setChecks([
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+                AttrCheck(
+                    "_MainWindow__lavue._LiveViewer__imagename"),
+                WrapAttrCheck(
+                    "_MainWindow__lavue._LiveViewer__sourcewg"
+                    "._SourceTabWidget__sourcetabs[],0._ui.pushButton",
+                    QtTest.QTest.mouseClick, [QtCore.Qt.LeftButton]),
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            ])
+
+            qtck1.executeChecks(delay=3000)
+            status = qtck2.executeChecksAndClose(delay=6000)
+
+            self.assertEqual(status, 0)
+
+            qtck1.compareResults(
+                self, [True, None, None, None, None], mask=[0, 1, 1, 1, 1])
+            qtck2.compareResults(
+                self, [True, None, None, None, None, False],
+                mask=[0, 1, 1, 1, 0, 0])
+
+            res1 = qtck1.results()
+            res2 = qtck2.results()
+            self.assertEqual(res1[1], None)
+            self.assertEqual(res1[2], None)
+
+            lastimage = res1[4][3, :, :].T
+            if not np.allclose(res2[1], lastimage):
+                print(res2[1])
+                print(lastimage)
+            self.assertTrue(np.allclose(res2[1], lastimage))
+            self.assertTrue(np.allclose(res2[2], lastimage))
+
+            fnames = res2[3].split("(")
+            self.assertTrue(len(fnames), 2)
+            try:
+                iid = int(fnames[1][:-1])
+            except Exception:
+                iid = -1
+            self.assertTrue(iid > 11000)
+            self.assertTrue(iid < 12000)
+            self.assertEqual(
+                fnames[0].strip(),
+                "ASAPOImageSourceTesttest_readnxsfile_nexusdatasetframe.nxs")
 
         finally:
             if os.path.isfile(self._fname):
