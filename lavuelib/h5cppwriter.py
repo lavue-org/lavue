@@ -260,6 +260,8 @@ def load_file(membuffer, filename=None, readonly=False, **pars):
     else:
         if hasattr(membuffer, "getbuffer"):
             membuffer = membuffer.getbuffer()
+        elif hasattr(membuffer, "getvalue"):
+            membuffer = membuffer.getvalue()
         try:
             npdata = np.frombuffer(membuffer[:], dtype=np.uint8)
         except Exception:
