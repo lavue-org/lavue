@@ -29,6 +29,7 @@ import random
 import binascii
 import string
 import time
+import io
 
 import lavuelib.filewriter as FileWriter
 import lavuelib.h5cppwriter as H5CppWriter
@@ -234,6 +235,64 @@ class H5CppWriterTest(unittest.TestCase):
 
             fl2 = H5CppWriter.create_file(self._fname, overwrite=True)
             fl2.close()
+        finally:
+            os.remove(self._fname)
+
+    # default createfile test
+    # \brief It tests default settings
+    def test_default_loadfile(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        self._fname = '%s/%s%s.h5' % (os.getcwd(),
+                                      self.__class__.__name__, fun)
+        try:
+            fl = H5CppWriter.create_file(self._fname)
+            fl.close()
+            fl = H5CppWriter.create_file(self._fname, True)
+            fl.close()
+
+            fl = H5CppWriter.open_file(self._fname, readonly=True)
+            f = fl.root()
+            self.assertEqual(6, len(f.attributes))
+            self.assertEqual(
+                f.attributes["file_name"][...],
+                self._fname)
+            for at in f.attributes:
+                print("%s %s %s" % (at.name, at.read(), at.dtype))
+                at.close()
+            self.assertTrue(f.attributes["NX_class"][...], "NXroot")
+            self.assertEqual(f.size, 0)
+            f.close()
+            fl.close()
+
+            with open(self._fname, "rb") as fh:
+                buf = io.BytesIO(fh.read())
+
+            if not H5CppWriter.is_image_file_supported():
+                self.myAssertRaise(
+                    Exception, H5CppWriter.load_file, buf, self._fname)
+            else:
+                fl = H5CppWriter.load_file(buf, self._fname, readonly=True)
+                f = fl.root()
+                self.assertEqual(6, len(f.attributes))
+                self.assertEqual(
+                    f.attributes["file_name"][...], self._fname)
+                for at in f.attributes:
+                    print("%s %s %s" % (at.name, at.dtype, at.read()))
+                self.assertTrue(f.attributes["NX_class"][...], "NXroot")
+                self.assertEqual(f.size, 0)
+                fl.close()
+                fl.reopen()
+                self.assertEqual(6, len(f.attributes))
+                for at in f.attributes:
+                    print("%s %s %s" % (at.name, at.read(), at.dtype))
+                self.assertEqual(
+                    f.attributes["file_name"][...],
+                    self._fname)
+                self.assertTrue(f.attributes["NX_class"][...], "NXroot")
+                self.assertEqual(f.size, 0)
+                fl.close()
+
         finally:
             os.remove(self._fname)
 

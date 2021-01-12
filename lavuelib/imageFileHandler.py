@@ -148,10 +148,16 @@ class NexusFieldHandler(object):
             self.__fname = fname
 
         if not writer:
-            if "h5py" in WRITERS.keys():
+            if "h5cpp" in WRITERS.keys() and \
+               WRITERS["h5cp"].is_image_file_supported():
+                writer = "h5cpp"
+            elif "h5py" in WRITERS.keys() and \
+                 WRITERS["h5py"].is_image_file_supported():
                 writer = "h5py"
             elif "h5cpp" in WRITERS.keys():
                 writer = "h5cpp"
+            elif "h5py" in WRITERS.keys():
+                writer = "h5py"
             else:
                 writer = "pni"
         if writer not in WRITERS.keys():

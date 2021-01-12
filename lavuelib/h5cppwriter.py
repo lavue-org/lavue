@@ -228,6 +228,16 @@ def open_file(filename, readonly=False, libver=None, swmr=False):
     return H5CppFile(h5cpp.file.open(filename, flag, fapl), filename)
 
 
+def is_image_file_supported():
+    """ provides if loading of image files are supported
+
+    :retruns: if loading of image files are supported
+    :rtype: :obj:`bool`
+    """
+    return hasattr(h5cpp.file, "from_buffer") and \
+        hasattr(h5cpp.file, "ImageFlags")
+
+
 def load_file(membuffer, filename=None, readonly=False, **pars):
     """ load a file from memory byte buffer
 
@@ -242,7 +252,23 @@ def load_file(membuffer, filename=None, readonly=False, **pars):
     :returns: file object
     :rtype: :class:`H5PYFile`
     """
-    raise Exception("Loading a file from a memory buffer not supported")
+    if not is_image_file_supported():
+        raise Exception(
+            "Loading a file from a memory buffer not supported")
+    if type(membuffer).__name__ == "ndarray":
+        npdata = np.array(membuffer[:], dtype="uint8")
+    else:
+        if hasattr(membuffer, "getbuffer"):
+            membuffer = membuffer.getbuffer()
+        try:
+            npdata = np.frombuffer(membuffer[:], dtype=np.uint8)
+        except Exception:
+            npdata = np.fromstring(membuffer[:], dtype=np.uint8)
+    if readonly:
+        flag = h5cpp.file.ImageFlags.READONLY
+    else:
+        flag = h5cpp.file.ImageFlags.READWRITE
+    return H5CppFile(h5cpp.file.from_buffer(npdata, flag), filename)
 
 
 def create_file(filename, overwrite=False, libver=None, swmr=None):

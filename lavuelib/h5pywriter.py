@@ -61,6 +61,15 @@ def nptype(dtype):
     return dtype
 
 
+def is_image_file_supported():
+    """ provides if loading of image files are supported
+
+    :retruns: if loading of image files are supported
+    :rtype: :obj:`bool`
+    """
+    return h5ver >= 2009
+
+
 def load_file(membuffer, filename=None, readonly=False, **pars):
     """ load a file from memory byte buffer
 
@@ -75,7 +84,7 @@ def load_file(membuffer, filename=None, readonly=False, **pars):
     :returns: file object
     :rtype: :class:`H5PYFile`
     """
-    if h5ver < 2009:
+    if not is_image_file_supported():
         raise Exception("Loading a file from a memory buffer not supported")
     if not hasattr(membuffer, 'read') or not hasattr(membuffer, 'seek'):
         if hasattr(membuffer, "tobytes"):

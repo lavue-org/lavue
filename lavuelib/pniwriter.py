@@ -60,6 +60,15 @@ def create_file(filename, overwrite=False, libver=None):
     return PNIFile(nx.create_file(filename, overwrite), filename)
 
 
+def is_image_file_supported():
+    """ provides if loading of image files are supported
+
+    :retruns: if loading of image files are supported
+    :rtype: :obj:`bool`
+    """
+    return False
+
+
 def load_file(membuffer, filename=None, readonly=False, **pars):
     """ load a file from memory byte buffer
 

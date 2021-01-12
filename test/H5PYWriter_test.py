@@ -274,7 +274,7 @@ class H5PYWriterTest(unittest.TestCase):
             with open(self._fname, "rb") as fh:
                 buf = io.BytesIO(fh.read())
 
-            if not MEMBUF:
+            if not H5PYWriter.is_image_file_supported():
                 self.myAssertRaise(
                     Exception, H5PYWriter.load_file, buf, self._fname)
             else:
