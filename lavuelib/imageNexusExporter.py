@@ -36,11 +36,6 @@ from . import filewriter
 #: (:obj:`dict` <:obj:`str`, :obj:`module`> ) nexus writer modules
 WRITERS = {}
 try:
-    from . import pniwriter
-    WRITERS["pni"] = pniwriter
-except Exception:
-    pass
-try:
     from . import h5pywriter
     WRITERS["h5py"] = h5pywriter
 except Exception:
@@ -137,10 +132,8 @@ class ImageNexusExporter(Exporter):
             filename = None
         if "h5cpp" in WRITERS.keys():
             writer = "h5cpp"
-        elif "h5py" in WRITERS.keys():
-            writer = "h5py"
         else:
-            writer = "pni"
+            writer = "h5py"
         if writer not in WRITERS.keys():
             raise Exception("Writer '%s' cannot be opened" % writer)
         wrmodule = WRITERS[writer.lower()]

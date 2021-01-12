@@ -171,7 +171,7 @@ def get_links(parent):
     :type parent: :class:`FTObject`
     :returns: list of link objects
     :returns: link object
-    :rtype: :obj: `list` <:class:`PNILink`>
+    :rtype: :obj: `list` <:class:`H5PYLink`>
     """
 
     return [H5PYLink(
@@ -199,7 +199,7 @@ class H5PYFile(filewriter.FTFile):
     def __init__(self, h5object, filename):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param filename:  file name
         :type filename: :obj:`str`
@@ -298,7 +298,7 @@ class H5PYGroup(filewriter.FTGroup):
     def __init__(self, h5object, tparent=None):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param tparent: treee parent
         :type tparent: :obj:`FTObject`
@@ -510,7 +510,7 @@ class H5PYGroup(filewriter.FTGroup):
     def names(self):
         """ read the child names
 
-        :returns: pni object
+        :returns: h5 object
         :rtype: :obj:`list` <`str`>
         """
         return list(self._h5object.keys())
@@ -545,7 +545,7 @@ class H5PYField(filewriter.FTField):
     def __init__(self, h5object, tparent=None):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param tparent: treee parent
         :type tparent: :obj:`FTObject`
@@ -604,7 +604,7 @@ class H5PYField(filewriter.FTField):
     def read(self):
         """ read the field value
 
-        :returns: pni object
+        :returns: h5 object
         :rtype: :obj:`any`
         """
         fl = self._h5object[...]
@@ -616,7 +616,7 @@ class H5PYField(filewriter.FTField):
     def write(self, o):
         """ write the field value
 
-        :param o: pni object
+        :param o: h5 object
         :type o: :obj:`any`
         """
         self._h5object[...] = o
@@ -626,7 +626,7 @@ class H5PYField(filewriter.FTField):
 
         :param t: slice tuple
         :type t: :obj:`tuple`
-        :param o: pni object
+        :param o: h5 object
         :type o: :obj:`any`
         """
         if isinstance(o, np.ndarray):
@@ -648,7 +648,7 @@ class H5PYField(filewriter.FTField):
 
         :param t: slice tuple
         :type t: :obj:`tuple`
-        :returns: pni object
+        :returns: h5 object
         :rtype: :obj:`any`
         """
         fl = self._h5object.__getitem__(t)
@@ -715,7 +715,7 @@ class H5PYLink(filewriter.FTLink):
     def __init__(self, h5object, tparent=None):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param tparent: treee parent
         :type tparent: :obj:`FTObject`
@@ -837,7 +837,7 @@ class H5PYAttributeManager(filewriter.FTAttributeManager):
     def __init__(self, h5object, tparent=None):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param tparent: treee parent
         :type tparent: :obj:`FTObject`
@@ -990,7 +990,7 @@ class H5PYAttribute(filewriter.FTAttribute):
     def __init__(self, h5object, tparent=None):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param tparent: treee parent
         :type tparent: :obj:`FTObject`

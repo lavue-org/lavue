@@ -57,11 +57,6 @@ except ImportError:
 #: (:obj:`dict` <:obj:`str`, :obj:`module`> ) nexus writer modules
 WRITERS = {}
 try:
-    from . import pniwriter
-    WRITERS["pni"] = pniwriter
-except Exception:
-    pass
-try:
     from . import h5pywriter
     WRITERS["h5py"] = h5pywriter
 except Exception:
@@ -86,7 +81,7 @@ class NexusFieldHandler(object):
 
         :param fname: file name
         :type fname: :obj:`str`
-        :param writer: h5 writer module: "pni" or "h5py"
+        :param writer: h5 writer module: "h5cpp" or "h5py"
         :type writer: :obj:`str`
         """
         #: (:obj:`any`) module image object
@@ -108,10 +103,8 @@ class NexusFieldHandler(object):
         if not writer:
             if "h5cpp" in WRITERS.keys():
                 writer = "h5cpp"
-            elif "h5py" in WRITERS.keys():
-                writer = "h5py"
             else:
-                writer = "pni"
+                writer = "h5py"
         if writer not in WRITERS.keys():
             raise Exception("Writer '%s' cannot be opened" % writer)
         wrmodule = WRITERS[writer.lower()]
@@ -141,7 +134,7 @@ class NexusFieldHandler(object):
         :type membuffer: :obj:`bytes` or :obj:`io.BytesIO`
         :param fname: file name
         :type fname: :obj:`str`
-        :param writer: h5 writer module: "pni" or "h5py"
+        :param writer: h5 writer module: "h5py" or "h5py"
         :type writer: :obj:`str`
         """
         if fname is not None:
@@ -156,10 +149,8 @@ class NexusFieldHandler(object):
                 writer = "h5py"
             elif "h5cpp" in WRITERS.keys():
                 writer = "h5cpp"
-            elif "h5py" in WRITERS.keys():
-                writer = "h5py"
             else:
-                writer = "pni"
+                writer = "h5py"
         if writer not in WRITERS.keys():
             raise Exception("Writer '%s' cannot be opened" % writer)
         wrmodule = WRITERS[writer.lower()]
@@ -209,11 +200,8 @@ class NexusFieldHandler(object):
         """adds the node into the description list
 
         :param node: nexus node
-        :type node: :class:`pni.io.nx.h5.nxfield` or \
-                    :class:`pni.io.nx.h5.nxgroup` or \
-                    :class:`pni.io.nx.h5.nxlink` or \
-                    :class:`pni.io.nx.h5.nxattribute` or \
-                    :class:`pni.io.nx.h5.nxroot`
+        :type node: :class:`lavuelib.filewriter.FTField` or \
+                    :class:`lavuelib.filewriter.FTGroup`
         :param path: path of the link target or `None`
         :type path: :obj:`str`
         """
@@ -242,11 +230,8 @@ class NexusFieldHandler(object):
         """parses the node and add it into the description list
 
         :param node: nexus node
-        :type node: :class:`pni.io.nx.h5.nxfield` or \
-                    :class:`pni.io.nx.h5.nxgroup` or \
-                    :class:`pni.io.nx.h5.nxlink` or \
-                    :class:`pni.io.nx.h5.nxattribute` or \
-                    :class:`pni.io.nx.h5.nxroot`
+        :type node: :class:`lavuelib.filewriter.FTField` or \
+                    :class:`lavuelib.filewriter.FTGroup` or
         :param path: path of the link target or `None`
         :type path: :obj:`str`
         """
@@ -271,11 +256,7 @@ class NexusFieldHandler(object):
         :param field: field path
         :type field: :obj:`str`
         :returns: nexus field node
-        :rtype: :class:`pni.io.nx.h5.nxfield` or \
-                :class:`pni.io.nx.h5.nxgroup` or \
-                :class:`pni.io.nx.h5.nxlink` or \
-                :class:`pni.io.nx.h5.nxattribute` or \
-                :class:`pni.io.nx.h5.nxroot`
+        :rtype: :class:`lavuelib.filewriter.FTField`
         """
         node = None
         if field is not None:
@@ -293,11 +274,7 @@ class NexusFieldHandler(object):
         """ provides the last frame number
 
         :param node: nexus field node
-        :type node: :class:`pni.io.nx.h5.nxfield` or \
-                    :class:`pni.io.nx.h5.nxgroup` or \
-                    :class:`pni.io.nx.h5.nxlink` or \
-                    :class:`pni.io.nx.h5.nxattribute` or \
-                    :class:`pni.io.nx.h5.nxroot`
+        :type node: :class:`lavuelib.filewriter.FTField`
         :param growing: growing dimension
         :type growing: :obj:`int`
         :param refresh: refresh image node
@@ -398,11 +375,7 @@ class NexusFieldHandler(object):
         """parses the field and add it into the description list
 
         :param node: nexus field node
-        :type node: :class:`pni.io.nx.h5.nxfield` or \
-                    :class:`pni.io.nx.h5.nxgroup` or \
-                    :class:`pni.io.nx.h5.nxlink` or \
-                    :class:`pni.io.nx.h5.nxattribute` or \
-                    :class:`pni.io.nx.h5.nxroot`
+        :type node: :class:`lavuelib.filewriter.FTField`
         :param frame: frame to take, the last one is -1
         :type frame: :obj:`int`
         :param growing: growing dimension

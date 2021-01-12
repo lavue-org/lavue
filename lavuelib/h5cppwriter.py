@@ -22,7 +22,7 @@
 #     Jan Kotanski <jan.kotanski@desy.de>
 #
 
-""" Provides pni file writer """
+""" Provides h5cpp file writer """
 
 import math
 import os
@@ -379,7 +379,7 @@ class H5CppFile(filewriter.FTFile):
     def __init__(self, h5object, filename):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param filename:  file name
         :type filename: :obj:`str`
@@ -484,7 +484,7 @@ class H5CppGroup(filewriter.FTGroup):
     def __init__(self, h5object, tparent=None):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param tparent: tree parent
         :type tparent: :obj:`FTObject`
@@ -680,7 +680,7 @@ class H5CppGroup(filewriter.FTGroup):
     def names(self):
         """ read the child names
 
-        :returns: pni object
+        :returns: h5 object
         :rtype: :obj:`list` <`str`>
         """
         return [
@@ -745,7 +745,7 @@ class H5CppField(filewriter.FTField):
     def __init__(self, h5object, tparent=None):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param tparent: treee parent
         :type tparent: :obj:`FTObject`
@@ -815,7 +815,7 @@ class H5CppField(filewriter.FTField):
     def read(self):
         """ read the field value
 
-        :returns: pni object
+        :returns: h5 object
         :rtype: :obj:`any`
         """
         if self.dtype in ['string', b'string']:
@@ -839,7 +839,7 @@ class H5CppField(filewriter.FTField):
     def write(self, o):
         """ write the field value
 
-        :param o: pni object
+        :param o: h5 object
         :type o: :obj:`any`
         """
         self._h5object.write(o)
@@ -849,7 +849,7 @@ class H5CppField(filewriter.FTField):
 
         :param t: slice tuple
         :type t: :obj:`tuple`
-        :param o: pni object
+        :param o: h5 object
         :type o: :obj:`any`
         """
         if self.shape == (1,) and t == 0:
@@ -865,7 +865,7 @@ class H5CppField(filewriter.FTField):
 
         :param t: slice tuple
         :type t: :obj:`tuple`
-        :returns: pni object
+        :returns: h5 object
         :rtype: :obj:`any`
         """
         if self.shape == (1,) and t == 0:
@@ -1032,7 +1032,7 @@ class H5CppLink(filewriter.FTLink):
     def __init__(self, h5object, tparent=None):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param tparent: treee parent
         :type tparent: :obj:`FTObject`
@@ -1134,7 +1134,7 @@ class H5CppAttributeManager(filewriter.FTAttributeManager):
     def __init__(self, h5object, tparent=None):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param tparent: treee parent
         :type tparent: :obj:`FTObject`
@@ -1252,7 +1252,7 @@ class H5CppAttribute(filewriter.FTAttribute):
     def __init__(self, h5object, tparent=None):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param tparent: treee parent
         :type tparent: :obj:`FTObject`

@@ -42,17 +42,6 @@ except ImportError as e:
     print("tango is not available: %s" % e)
 
 try:
-    try:
-        __import__("pni.io.nx.h5")
-    except Exception:
-        __import__("pni.nx.h5")
-    # if module pni avalable
-    PNI_AVAILABLE = True
-except ImportError as e:
-    PNI_AVAILABLE = False
-    print("pni is not available: %s" % e)
-
-try:
     __import__("h5py")
     # if module h5py avalable
     H5PY_AVAILABLE = True
@@ -77,7 +66,7 @@ import HttpImageSource_test
 import PyTineImageSource_test
 import EpicsImageSource_test
 
-if not PNI_AVAILABLE and not H5PY_AVAILABLE:
+if not H5CPP_AVAILABLE and not H5PY_AVAILABLE:
     raise Exception("Please install h5py or pni")
 
 
@@ -92,9 +81,6 @@ if TANGO_AVAILABLE:
     import TangoAttrImageSource_test
     import ZMQStreamImageSource_test
 
-if PNI_AVAILABLE:
-    import FileWriter_test
-    import PNIWriter_test
 if H5PY_AVAILABLE:
     import H5PYWriter_test
     import FileWriterH5PY_test
@@ -104,12 +90,8 @@ if H5CPP_AVAILABLE:
     import FileWriterH5Cpp_test
     import CommandLineArgumentH5Cpp_test
     import NXSFileImageSource_test
-if PNI_AVAILABLE and H5PY_AVAILABLE:
-    import FileWriterPNIH5PY_test
-# if PNI_AVAILABLE and H5Cpp_AVAILABLE:
-#     import FileWriterPNIH5Cpp_test
-# if H5CPP_AVAILABLE and H5PY_AVAILABLE:
-#     import FileWriterH5CppH5PY_test
+if H5CPP_AVAILABLE and H5PY_AVAILABLE:
+    import FileWriterH5CppH5PY_test
 
 
 # main function
@@ -163,11 +145,6 @@ def main():
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             EpicsImageSource_test))
-    if PNI_AVAILABLE:
-        basicsuite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(FileWriter_test))
-        basicsuite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(PNIWriter_test))
     if H5PY_AVAILABLE:
         basicsuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
@@ -189,10 +166,10 @@ def main():
                 FileWriterH5Cpp_test))
         basicsuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(H5CppWriter_test))
-    if PNI_AVAILABLE and H5PY_AVAILABLE:
+    if H5CPP_AVAILABLE and H5PY_AVAILABLE:
         basicsuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
-                FileWriterPNIH5PY_test))
+                FileWriterH5CppH5PY_test))
     if TANGO_AVAILABLE:
         basicsuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(

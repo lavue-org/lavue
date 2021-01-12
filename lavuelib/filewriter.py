@@ -32,7 +32,7 @@ import threading
 import numpy
 
 
-#: (:mod:`PNIWriter` or :mod:`H5PYWriter`or :mod:`H5CppWriter`)
+#: (:mod:`H5PYWriter`or :mod:`H5CppWriter`)
 #    default writer module
 writer = None
 
@@ -197,7 +197,7 @@ def setwriter(wr):
     """ sets writer
 
     :param wr: writer module
-    :type wr: :mod:`PNIWriter` or :mod:`H5PYWriter` or :mod:`H5CppWriter`
+    :type wr: :mod:`H5PYWriter` or :mod:`H5CppWriter`
     """
     global writer
     with writerlock:
@@ -274,7 +274,7 @@ class FTObject(object):
     def h5object(self):
         """ provide object of native library
 
-        :returns: pni object
+        :returns: h5 object
         :rtype: :obj:`any`
         """
         return self._h5object
@@ -311,18 +311,17 @@ class FTFile(FTObject):
     def __init__(self, h5object, filename):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param filename:  file name
         :type filename: :obj:`str`
         :param writer: writer module
-        :type writer: :mod:`PNIWriter` or :mod:`H5PYWriter`
-                        or :mod:`H5CppWriter`
+        :type writer: :mod:`H5PYWriter` or :mod:`H5CppWriter`
         """
         FTObject.__init__(self, h5object, None)
         #: (:obj:`str`) file name
         self.name = filename
-        #: (:mod:`PNIWriter` or :mod:`H5PYWriter` or :mod:`H5CppWriter`)
+        #: (:mod:`H5PYWriter` or :mod:`H5CppWriter`)
         # writer module
         self.writer = None
 
@@ -452,7 +451,7 @@ class FTGroup(FTObject):
     def __init__(self, h5object, tparent=None):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param tparent: treee parent
         :type tparent: :obj:`FTObject`
@@ -538,7 +537,7 @@ class FTGroup(FTObject):
     def names(self):
         """ read the child names
 
-        :returns: pni object
+        :returns: h5 object
         :rtype: :obj:`list` <`str`>
         """
 
@@ -556,7 +555,7 @@ class FTField(FTObject):
     def __init__(self, h5object, tparent=None):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param tparent: treee parent
         :type tparent: :obj:`FTObject`
@@ -590,14 +589,14 @@ class FTField(FTObject):
     def read(self):
         """ read the field value
 
-        :returns: pni object
+        :returns: h5 object
         :rtype: :obj:`any`
         """
 
     def write(self, o):
         """ write the field value
 
-        :param o: pni object
+        :param o: h5 object
         :type o: :obj:`any`
         """
 
@@ -606,7 +605,7 @@ class FTField(FTObject):
 
         :param t: slice tuple
         :type t: :obj:`tuple`
-        :param o: pni object
+        :param o: h5 object
         :type o: :obj:`any`
         """
 
@@ -615,7 +614,7 @@ class FTField(FTObject):
 
         :param t: slice tuple
         :type t: :obj:`tuple`
-        :returns: pni object
+        :returns: h5 object
         :rtype: :obj:`any`
         """
 
@@ -657,7 +656,7 @@ class FTLink(FTObject):
     def __init__(self, h5object, tparent=None):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param tparent: treee parent
         :type tparent: :obj:`FTObject`
@@ -693,7 +692,7 @@ class FTDataFilter(FTObject):
     def __init__(self, h5object=None, tparent=None):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param tparent: treee parent
         :type tparent: :obj:`FTObject`
@@ -798,7 +797,7 @@ class FTAttributeManager(FTObject):
     def __init__(self, h5object, tparent=None):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param tparent: treee parent
         :type tparent: :obj:`FTObject`
@@ -857,7 +856,7 @@ class FTAttribute(FTObject):
     def __init__(self, h5object, tparent=None):
         """ constructor
 
-        :param h5object: pni object
+        :param h5object: h5 object
         :type h5object: :obj:`any`
         :param tparent: treee parent
         :type tparent: :obj:`FTObject`
