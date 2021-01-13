@@ -167,5 +167,5 @@ Further reading
 More information can be found at: `LaVue
 <https://confluence.desy.de/display/FSEC/LaVue+-+Live+Image+Viewer>`_
 
-The LavueController Tango Server API: https://lavue-org.github.io/lavue/doc_html
-The lavuelib module API: https://lavue-org.github.io/lavue
+| LavueController Tango Server API: https://lavue-org.github.io/lavue/doc_html
+| lavuelib module API: https://lavue-org.github.io/lavue
