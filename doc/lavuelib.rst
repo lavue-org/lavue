@@ -36,6 +36,14 @@ lavuelib.channelGroupBox module
     :undoc-members:
     :show-inheritance:
 
+lavuelib.commandThread module
+=============================
+
+.. automodule:: lavuelib.commandThread
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 lavuelib.configDialog module
 ============================
 
@@ -84,6 +92,14 @@ lavuelib.edDictDialog module
     :undoc-members:
     :show-inheritance:
 
+lavuelib.edListDialog module
+============================
+
+.. automodule:: lavuelib.edListDialog
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 lavuelib.filewriter module
 ==========================
 
@@ -116,6 +132,14 @@ lavuelib.geometryDialog module
     :undoc-members:
     :show-inheritance:
 
+lavuelib.gradientDialog module
+==============================
+
+.. automodule:: lavuelib.gradientDialog
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 lavuelib.h5cppwriter
 ====================
 
@@ -128,6 +152,14 @@ lavuelib.h5pywriter
 ===================
 
 .. automodule:: lavuelib.h5pywriter
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+lavuelib.helpForm
+=================
+
+.. automodule:: lavuelib.helpForm
     :members:
     :undoc-members:
     :show-inheritance:
@@ -156,14 +188,6 @@ lavuelib.histogramWidget module
     :undoc-members:
     :show-inheritance:
 
-lavuelib.helpForm module
-========================
-
-.. automodule:: lavuelib.helpForm
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 lavuelib.imageDisplayWidget module
 ==================================
 
@@ -184,6 +208,14 @@ lavuelib.imageFileHandler module
 ================================
 
 .. automodule:: lavuelib.imageFileHandler
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+lavuelib.imageNexusExporter module
+==================================
+
+.. automodule:: lavuelib.imageNexusExporter
     :members:
     :undoc-members:
     :show-inheritance:
@@ -268,10 +300,10 @@ lavuelib.motorWatchThread module
     :undoc-members:
     :show-inheritance:
 
-lavuelib.pniwriter
-==================
+lavuelib.omniQThread module
+===========================
 
-.. automodule:: lavuelib.pniwriter
+.. automodule:: lavuelib.omniQThread
     :members:
     :undoc-members:
     :show-inheritance:
@@ -340,8 +372,8 @@ lavuelib.settings module
     :undoc-members:
     :show-inheritance:
 
-lavuelib.sourceGroupBox module
-==============================
+lavuelib.sourceTabWidget module
+===============================
 
 .. automodule:: lavuelib.sourceTabWidget
     :members:
