@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>lavuelib.histogramWidget &#8212; lavuelib 2.54.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          lavuelib</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.54</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../lavuelib.html">lavuelib package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.axesDialog">lavuelib.axesDialog module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.bkgSubtractionWidget">lavuelib.bkgSubtractionWidget module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.channelGroupBox">lavuelib.channelGroupBox module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.commandThread">lavuelib.commandThread module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.configDialog">lavuelib.configDialog module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.controllerClient">lavuelib.controllerClient module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.dataFetchThread">lavuelib.dataFetchThread module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.diffRangeDialog">lavuelib.diffRangeDialog module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.displayExtensions">lavuelib.displayExtensions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.edDictDialog">lavuelib.edDictDialog module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.edListDialog">lavuelib.edListDialog module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.filewriter">lavuelib.filewriter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.filters">lavuelib.filters module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.filtersGroupBox">lavuelib.filtersGroupBox module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.geometryDialog">lavuelib.geometryDialog module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.gradientDialog">lavuelib.gradientDialog module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.h5cppwriter">lavuelib.h5cppwriter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.h5pywriter">lavuelib.h5pywriter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.helpForm">lavuelib.helpForm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.hidraServerList">lavuelib.hidraServerList module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.highValueMaskWidget">lavuelib.highValueMaskWidget module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.histogramWidget">lavuelib.histogramWidget module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageDisplayWidget">lavuelib.imageDisplayWidget module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageField">lavuelib.imageField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageFileHandler">lavuelib.imageFileHandler module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageNexusExporter">lavuelib.imageNexusExporter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageSource">lavuelib.imageSource module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageWidget">lavuelib.imageWidget module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.intervalsDialog">lavuelib.intervalsDialog module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.levelsGroupBox">lavuelib.levelsGroupBox module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.liveViewer">lavuelib.liveViewer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.maskWidget">lavuelib.maskWidget module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.memoExportDialog">lavuelib.memoExportDialog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.memoryBufferGroupBox">lavuelib.memoryBufferGroupBox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.messageBox">lavuelib.messageBox module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.motorWatchThread">lavuelib.motorWatchThread module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.omniQThread">lavuelib.omniQThread module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.preparationGroupBox">lavuelib.preparationGroupBox module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.qtuic">lavuelib.qtuic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.rangeDialog">lavuelib.rangeDialog module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.rangeWindowGroupBox">lavuelib.rangeWindowGroupBox module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.release">lavuelib.release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.sardanaUtils">lavuelib.sardanaUtils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.scalingGroupBox">lavuelib.scalingGroupBox module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.settings">lavuelib.settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.sourceTabWidget">lavuelib.sourceTabWidget module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.sourceWidget">lavuelib.sourceWidget module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.statisticsGroupBox">lavuelib.statisticsGroupBox module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.takeMotorsDialog">lavuelib.takeMotorsDialog module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.toolWidget">lavuelib.toolWidget module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.transformationsWidget">lavuelib.transformationsWidget module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <h1>Source code for lavuelib.histogramWidget</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (C) 2017  DESY, Notkestr. 85, D-22607 Hamburg</span>
+<span class="c1">#</span>
+<span class="c1"># lavue is an image viewing program for photon science imaging detectors.</span>
+<span class="c1"># Its usual application is as a live viewer using hidra as data source.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is free software; you can redistribute it and/or</span>
+<span class="c1"># modify it under the terms of the GNU General Public License</span>
+<span class="c1"># as published by the Free Software Foundation in  version 2</span>
+<span class="c1"># of the License.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with this program; if not, write to the Free Software</span>
+<span class="c1"># Foundation, Inc., 51 Franklin Street, Fifth Floor,</span>
+<span class="c1"># Boston, MA  02110-1301, USA.</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:</span>
+<span class="c1">#     Jan Kotanski &lt;jan.kotanski@desy.de&gt;</span>
+<span class="c1">#     Christoph Rosemann &lt;christoph.rosemann@desy.de&gt;</span>
+<span class="c1">#</span>
+
+<span class="sd">&quot;&quot;&quot; Horizontal HistogramWidget &quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">pyqtgraph</span> <span class="k">as</span> <span class="nn">_pg</span>
+<span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="k">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtGui</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="c1">#: ( (:obj:`str`,:obj:`str`,:obj:`str`) )</span>
+<span class="c1">#:         pg major version, pg minor verion, pg patch version</span>
+<span class="n">_VMAJOR</span><span class="p">,</span> <span class="n">_VMINOR</span><span class="p">,</span> <span class="n">_VPATCH</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">__version__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span> \
+    <span class="k">if</span> <span class="n">_pg</span><span class="o">.</span><span class="n">__version__</span> <span class="k">else</span> <span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;9&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">)</span>
+
+<span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span><span class="n">Gradients</span><span class="p">[</span><span class="s1">&#39;reversegrey&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;ticks&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)),</span>
+              <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)),</span> <span class="p">],</span> <span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="s1">&#39;rgb&#39;</span><span class="p">}</span>
+<span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span><span class="n">Gradients</span><span class="p">[</span><span class="s1">&#39;highcontrast&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;ticks&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)),</span>
+              <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)),</span> <span class="p">],</span> <span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="s1">&#39;rgb&#39;</span><span class="p">}</span>
+<span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span><span class="n">Gradients</span><span class="p">[</span><span class="s1">&#39;spectrum&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;ticks&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)),</span>
+              <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">))],</span> <span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="s1">&#39;hsv&#39;</span><span class="p">}</span>
+<span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span><span class="n">Gradients</span><span class="p">[</span><span class="s1">&#39;spectrumclip&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;ticks&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)),</span>
+              <span class="p">(</span><span class="o">.</span><span class="mi">99</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)),</span>
+              <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))],</span> <span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="s1">&#39;hsv&#39;</span><span class="p">}</span>
+<span class="c1"># define two new gradients of choice</span>
+<span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span><span class="n">Gradients</span><span class="p">[</span><span class="s1">&#39;inverted&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;ticks&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)),</span>
+              <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)),</span> <span class="p">],</span> <span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="s1">&#39;rgb&#39;</span><span class="p">}</span>
+<span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span><span class="n">Gradients</span><span class="p">[</span><span class="s1">&#39;highcontrastclip&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;ticks&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)),</span>
+              <span class="p">(</span><span class="mf">0.15</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)),</span>
+              <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)),</span>
+              <span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)),</span>
+              <span class="p">(</span><span class="mf">0.99</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)),</span>
+              <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)),</span> <span class="p">],</span> <span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="s1">&#39;rgb&#39;</span><span class="p">}</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;HistogramHLUTWidget&#39;</span><span class="p">]</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;lavue&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="HistogramHLUTWidget"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.histogramWidget.HistogramHLUTWidget">[docs]</a><span class="k">class</span> <span class="nc">HistogramHLUTWidget</span><span class="p">(</span><span class="n">_pg</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">GraphicsView</span><span class="o">.</span><span class="n">GraphicsView</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot; Horizontal HistogramWidget &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param parent: parent object</span>
+<span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
+<span class="sd">        :param bins: bins edges algorithm for histogram, default: &#39;auto&#39;</span>
+<span class="sd">        :type bins: :obj:`str`</span>
+<span class="sd">        :param step: data step for calculation of histogram levels,</span>
+<span class="sd">                     default: &#39;auto&#39;</span>
+<span class="sd">        :type step: :obj:`str` or :obj:`int`</span>
+<span class="sd">        :param args: HistogramHLUTItem parameters list</span>
+<span class="sd">        :type args: :obj:`list` &lt; :obj:`any`&gt;</span>
+<span class="sd">        :param kargs:  HistogramHLUTItem parameter dictionary</span>
+<span class="sd">        :type kargs: :obj:`dict` &lt; :obj:`str`, :obj:`any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">background</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;background&#39;</span><span class="p">,</span> <span class="s1">&#39;default&#39;</span><span class="p">)</span>
+        <span class="n">_pg</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">GraphicsView</span><span class="o">.</span><span class="n">GraphicsView</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">useOpenGL</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="n">background</span><span class="p">)</span>
+        <span class="c1">#: (:class:`HistogramHLUTItem`) histogram item</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item</span> <span class="o">=</span> <span class="n">HistogramHLUTItem</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCentralItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span>
+            <span class="n">QtGui</span><span class="o">.</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Preferred</span><span class="p">,</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Expanding</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setMinimumWidth</span><span class="p">(</span><span class="mi">95</span><span class="p">)</span>
+
+<div class="viewcode-block" id="HistogramHLUTWidget.sizeHint"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.histogramWidget.HistogramHLUTWidget.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets size hint</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QSize</span><span class="p">(</span><span class="mi">115</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; gets attribute of HistogramHLUTItem</span>
+<span class="sd">        :param attr: attribute name</span>
+<span class="sd">        :type attr: :obj:`str`</span>
+<span class="sd">        :returns: attribute value</span>
+<span class="sd">        :rtype: :obj:`any`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+
+<div class="viewcode-block" id="HistogramHLUTWidget.setAutoFactor"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.histogramWidget.HistogramHLUTWidget.setAutoFactor">[docs]</a>    <span class="k">def</span> <span class="nf">setAutoFactor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets auto level factor</span>
+
+<span class="sd">        :param factor: auto level factor of maximal peak</span>
+<span class="sd">        :type factor: :obj:`float`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">autolevelfactor</span> <span class="o">=</span> <span class="n">factor</span></div>
+
+<div class="viewcode-block" id="HistogramHLUTWidget.setBins"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.histogramWidget.HistogramHLUTWidget.setBins">[docs]</a>    <span class="k">def</span> <span class="nf">setBins</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bins</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets bins edges algorithm for histogram</span>
+
+<span class="sd">        :param channel: bins edges algorithm for histogram</span>
+<span class="sd">        :type channel: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">setBins</span><span class="p">(</span><span class="n">bins</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HistogramHLUTWidget.setStep"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.histogramWidget.HistogramHLUTWidget.setStep">[docs]</a>    <span class="k">def</span> <span class="nf">setStep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets image step data for algorithm of histogram</span>
+
+<span class="sd">        :param channel: image step data for algorithm of histogram</span>
+<span class="sd">        :type channel: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">setStep</span><span class="p">(</span><span class="n">step</span><span class="p">)</span></div></div>
+
+
+<span class="k">class</span> <span class="nc">GradientEditorItemWS</span><span class="p">(</span>
+        <span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot; gradient editor item with a signal on loadPreset &quot;&quot;&quot;</span>
+
+    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) minimum level changed signal</span>
+    <span class="n">sigNameChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param args: GradientEditorItem parameters list</span>
+<span class="sd">        :type args: :obj:`list` &lt; :obj:`any`&gt;</span>
+<span class="sd">        :param kargs:  GradientEditorItem parameter dictionary</span>
+<span class="sd">        :type kargs: :obj:`dict` &lt; :obj:`str`, :obj:`any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__skipupdate</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__skipupdate</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">saveAction</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;Save ...&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">removeAction</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;Remove&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">addMenuActions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; add save/remove actions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">saveAction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">removeAction</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">removeTick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tick</span><span class="p">,</span> <span class="n">finish</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; removes ticks with hook</span>
+
+<span class="sd">        :param tick: ticks to remove</span>
+<span class="sd">        :type tick:  :obj:`list` &lt; :obj:`any`&gt;</span>
+<span class="sd">        :param finish: finish remove flag</span>
+<span class="sd">        :type finish: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__skipupdate</span><span class="p">:</span>
+            <span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span>\
+                <span class="n">removeTick</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="p">,</span> <span class="n">tick</span><span class="o">=</span><span class="n">tick</span><span class="p">,</span> <span class="n">finish</span><span class="o">=</span><span class="n">finish</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span><span class="n">TickSliderItem</span><span class="o">.</span>\
+                <span class="n">removeTick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tick</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">finish</span><span class="p">:</span>
+                <span class="c1"># hook for a pyqtgraph bug</span>
+                <span class="c1"># self.updateGradient()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sigGradientChangeFinished</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getCurrentGradient</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides dictionary with the current gradient</span>
+
+<span class="sd">        :returns: gradient dictionary with:</span>
+<span class="sd">           {&quot;mode&quot;: &lt;colorMode&gt;,</span>
+<span class="sd">            &quot;ticks&quot;: [</span>
+<span class="sd">                (&lt;pos&gt;, (&lt;r&gt;, &lt;g&gt;, &lt;b&gt;, &lt;a&gt;)),</span>
+<span class="sd">                (&lt;pos&gt;, (&lt;r&gt;, &lt;g&gt;, &lt;b&gt;, &lt;a&gt;)),</span>
+<span class="sd">                      ...</span>
+<span class="sd">                (&lt;pos&gt;, (&lt;r&gt;, &lt;g&gt;, &lt;b&gt;, &lt;a&gt;)),</span>
+<span class="sd">            ]</span>
+<span class="sd">           }</span>
+<span class="sd">        :rtype: :obj:`dict` &lt; :obj:`str`:,  :obj:`str`: or :obj:`list`:&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">listTicks</span><span class="p">()</span>
+        <span class="n">tdct</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">tdct</span><span class="p">[</span><span class="s1">&#39;ticks&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">tdct</span><span class="p">[</span><span class="s1">&#39;mode&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">colorMode</span>
+        <span class="k">for</span> <span class="n">tck</span><span class="p">,</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">tlist</span><span class="p">:</span>
+            <span class="n">clr</span> <span class="o">=</span> <span class="n">tck</span><span class="o">.</span><span class="n">color</span>
+            <span class="n">tdct</span><span class="p">[</span><span class="s1">&#39;ticks&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">pos</span><span class="p">,</span>
+                 <span class="p">(</span><span class="n">clr</span><span class="o">.</span><span class="n">red</span><span class="p">(),</span> <span class="n">clr</span><span class="o">.</span><span class="n">green</span><span class="p">(),</span> <span class="n">clr</span><span class="o">.</span><span class="n">blue</span><span class="p">(),</span> <span class="n">clr</span><span class="o">.</span><span class="n">alpha</span><span class="p">()))</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">tdct</span>
+
+    <span class="k">def</span> <span class="nf">loadPreset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; loads a predefined gradient and emits sigNameChanged</span>
+
+<span class="sd">        :param name: gradient name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span><span class="n">loadPreset</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigNameChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">HistogramHLUTItem</span><span class="p">(</span><span class="n">_pg</span><span class="o">.</span><span class="n">HistogramLUTItem</span><span class="p">):</span>
+
+    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) automatic levels changed signal</span>
+    <span class="n">autoLevelsChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># bool does not work...</span>
+    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) minimum level changed signal</span>
+    <span class="n">sigNameChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) save gradient requested</span>
+    <span class="n">saveGradientRequested</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) remove gradient requested</span>
+    <span class="n">removeGradientRequested</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+
+    <span class="sd">&quot;&quot;&quot; Horizontal HistogramItem &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fillHistogram</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">expertmode</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param bins: bins edges algorithm for histogram, default: &#39;auto&#39;</span>
+<span class="sd">        :type bins: :obj:`str`</span>
+<span class="sd">        :param step: data step for calculation of histogram levels,</span>
+<span class="sd">                     default: &#39;auto&#39;</span>
+<span class="sd">        :type step: :obj:`str` or :obj:`int`</span>
+<span class="sd">        :param image: 2d image</span>
+<span class="sd">        :type image: :class:`pyqtgraph.ImageItem`</span>
+<span class="sd">        :param fillHistogram: histogram will be filled in</span>
+<span class="sd">        :type fillHistogram: :obj:`bool`</span>
+<span class="sd">        :param expertmode: expert mode flag</span>
+<span class="sd">        :type expertmode: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">GraphicsWidget</span><span class="o">.</span><span class="n">GraphicsWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1">#: (:obj:`bool`) expert mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__expertmode</span> <span class="o">=</span> <span class="n">expertmode</span>
+
+        <span class="c1">#: (:class:`numpy.ndarray`) look up table</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lut</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">_VMAJOR</span> <span class="o">==</span> <span class="s1">&#39;0&#39;</span> <span class="ow">and</span> <span class="nb">int</span><span class="p">(</span><span class="n">_VMINOR</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="ow">and</span> <span class="nb">int</span><span class="p">(</span><span class="n">_VPATCH</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="p">:</span>
+            <span class="c1">#: (:class:`weakref.ref` or :class:`pyqtgraph.ImageItem`)</span>
+            <span class="c1">#: weakref to image item or image item itself  (for &lt; 0.9.8)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">imageItem</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">imageItem</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span>
+
+        <span class="c1">#: (:obj: `bool`) rgb flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__rgb</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1">#: (:class:`PyQt5.QtGui.QGraphicsGridLayout`) grid layout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QGraphicsGridLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1">#: (:class:`pyqtgraph.graphicsItems.ViewBox.ViewBox`) view box</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vb</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">ViewBox</span><span class="o">.</span><span class="n">ViewBox</span><span class="p">()</span>
+        <span class="c1"># self.vb.setMaximumHeight(152)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vb</span><span class="o">.</span><span class="n">setMinimumHeight</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vb</span><span class="o">.</span><span class="n">setMouseEnabled</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># self.vb.setMouseEnabled(x=False, y=True)</span>
+
+        <span class="c1">#: (:class:`GradientEditorItemWS`) gradient editor item with a signal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span> <span class="o">=</span> <span class="n">GradientEditorItemWS</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__expertmode</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">addMenuActions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">setOrientation</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">loadPreset</span><span class="p">(</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
+
+        <span class="c1">#: (:class:`pyqtgraph.graphicsItems.LinearRegionItem.LinearRegionItem`)</span>
+        <span class="c1">#:    linear region item</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">LinearRegionItem</span><span class="o">.</span><span class="n">LinearRegionItem</span><span class="p">(</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">LinearRegionItem</span><span class="o">.</span><span class="n">LinearRegionItem</span><span class="o">.</span><span class="n">Vertical</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">setZValue</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vb</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="p">)</span>
+
+        <span class="c1">#: (:class:`pyqtgraph.graphicsItems.AxisItem.AxisItem`) axis item</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axis</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">AxisItem</span><span class="o">.</span><span class="n">AxisItem</span><span class="p">(</span>
+            <span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">linkView</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vb</span><span class="p">,</span> <span class="n">maxTickLength</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">showValues</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vb</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">range</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">autolevelfactor</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__step</span> <span class="o">=</span> <span class="n">step</span> <span class="ow">or</span> <span class="s1">&#39;auto&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__bins</span> <span class="o">=</span> <span class="n">bins</span> <span class="ow">or</span> <span class="s1">&#39;auto&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">setFlag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">ItemStacksBehindParent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vb</span><span class="o">.</span><span class="n">setFlag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">ItemStacksBehindParent</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">sigGradientChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gradientChanged</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">sigNameChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_emitSigNameChanged</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">saveAction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_emitSaveGradientRequested</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">removeAction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_emitRemoveGradientRequested</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">sigRegionChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regionChanging</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">sigRegionChangeFinished</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regionChanged</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vb</span><span class="o">.</span><span class="n">sigRangeChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">viewRangeChanged</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">PlotDataItem</span><span class="o">.</span><span class="n">PlotDataItem</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plots</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">]</span>
+        <span class="c1"># self.plot.dataBounds(1, 0.9)</span>
+        <span class="c1"># self.plot.dataBounds(0, 0.9)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">levelMode</span> <span class="o">=</span> <span class="s1">&#39;mono&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fillHistogram</span><span class="p">(</span><span class="n">fillHistogram</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vb</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoHistogramRange</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setImageItem</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="c1"># self.background = None</span>
+
+    <span class="k">def</span> <span class="nf">setRGB</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rgb</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets rgb flag</span>
+
+<span class="sd">        :param rgb: rgb lag</span>
+<span class="sd">        :type rgb: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__rgb</span> <span class="o">=</span> <span class="n">rgb</span>
+
+    <span class="k">def</span> <span class="nf">gradientChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; gradient changed with rgb</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rgb</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lut</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sigLookupTableChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_pg</span><span class="o">.</span><span class="n">HistogramLUTItem</span><span class="o">.</span><span class="n">gradientChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">resetGradient</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; resets gradient widget</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">sigGradientChanged</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gradientChanged</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">sigNameChanged</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_emitSigNameChanged</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">saveAction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_emitSaveGradientRequested</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">removeAction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_emitRemoveGradientRequested</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">removeItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span> <span class="o">=</span> <span class="n">GradientEditorItemWS</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__expertmode</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">addMenuActions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">setOrientation</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">loadPreset</span><span class="p">(</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">sigGradientChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gradientChanged</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">sigNameChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_emitSigNameChanged</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">saveAction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_emitSaveGradientRequested</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">removeAction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_emitRemoveGradientRequested</span><span class="p">)</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_emitSigNameChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; emits SigNameChanged</span>
+
+<span class="sd">        :param name: gradient name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigNameChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_emitSaveGradientRequested</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; emits saveGradientRequested</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">saveGradientRequested</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_emitRemoveGradientRequested</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; emits removeGradientRequested</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">removeGradientRequested</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">setBins</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bins</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets bins edges algorithm for histogram</span>
+
+<span class="sd">        :param channel: bins edges algorithm for histogram</span>
+<span class="sd">        :type channel: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__bins</span> <span class="o">=</span> <span class="n">bins</span>
+
+    <span class="k">def</span> <span class="nf">setStep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets image step data for algorithm of histogram</span>
+
+<span class="sd">        :param channel: image step data for algorithm of histogram</span>
+<span class="sd">        :type channel: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__step</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__step</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__step</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__step</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span>
+
+    <span class="k">def</span> <span class="nf">setGradientByName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets gradient by name</span>
+
+<span class="sd">        :param name: gradient name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">loadPreset</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">loadPreset</span><span class="p">(</span><span class="s2">&quot;highcontrast&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">paint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; paints the histogram item</span>
+
+<span class="sd">        :param p: QPainter painter</span>
+<span class="sd">        :type p: :class:`PyQt5.QtGui.QPainter`</span>
+<span class="sd">        :param args: paint argument</span>
+<span class="sd">        :type args: :obj:`list` &lt; :obj:`any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">pen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pen</span>
+        <span class="n">rgn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getLevels</span><span class="p">()</span>
+        <span class="n">p1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vb</span><span class="o">.</span><span class="n">mapFromViewToItem</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">_pg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">rgn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">vb</span><span class="o">.</span><span class="n">viewRect</span><span class="p">()</span><span class="o">.</span><span class="n">center</span><span class="p">()</span><span class="o">.</span><span class="n">y</span><span class="p">()))</span>
+        <span class="n">p2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vb</span><span class="o">.</span><span class="n">mapFromViewToItem</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">_pg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">rgn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">vb</span><span class="o">.</span><span class="n">viewRect</span><span class="p">()</span><span class="o">.</span><span class="n">center</span><span class="p">()</span><span class="o">.</span><span class="n">y</span><span class="p">()))</span>
+        <span class="n">gradRect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">mapRectToParent</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">gradRect</span><span class="o">.</span><span class="n">rect</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">pen</span> <span class="ow">in</span> <span class="p">[</span><span class="n">_pg</span><span class="o">.</span><span class="n">functions</span><span class="o">.</span><span class="n">mkPen</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span> <span class="n">pen</span><span class="p">]:</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">pen</span><span class="p">)</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">drawLine</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">gradRect</span><span class="o">.</span><span class="n">topLeft</span><span class="p">())</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">drawLine</span><span class="p">(</span><span class="n">p2</span><span class="p">,</span> <span class="n">gradRect</span><span class="o">.</span><span class="n">topRight</span><span class="p">())</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">drawLine</span><span class="p">(</span><span class="n">gradRect</span><span class="o">.</span><span class="n">topLeft</span><span class="p">(),</span> <span class="n">gradRect</span><span class="o">.</span><span class="n">bottomLeft</span><span class="p">())</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">drawLine</span><span class="p">(</span><span class="n">gradRect</span><span class="o">.</span><span class="n">topRight</span><span class="p">(),</span> <span class="n">gradRect</span><span class="o">.</span><span class="n">bottomRight</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">setHistogramRange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mn</span><span class="p">,</span> <span class="n">mx</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;sets the Y range on the histogram plot. This disables auto-scaling.</span>
+
+<span class="sd">        :param mn: minimum range level</span>
+<span class="sd">        :type mn: :obj:`float`</span>
+<span class="sd">        :param mx: maximum range level</span>
+<span class="sd">        :type mx: :obj:`float`</span>
+<span class="sd">        :param padding: histogram padding</span>
+<span class="sd">        :type padding: :obj:`float`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vb</span><span class="o">.</span><span class="n">enableAutoRange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vb</span><span class="o">.</span><span class="n">XAxis</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vb</span><span class="o">.</span><span class="n">setYRange</span><span class="p">(</span><span class="n">mn</span><span class="p">,</span> <span class="n">mx</span><span class="p">,</span> <span class="n">padding</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__imageItem</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides imageItem independent of the pyqtgraph version</span>
+
+<span class="sd">        :returns: image item</span>
+<span class="sd">        :rtype: :class:`pyqtgraph.ImageItem`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">_VMAJOR</span> <span class="o">==</span> <span class="s1">&#39;0&#39;</span> <span class="ow">and</span> <span class="nb">int</span><span class="p">(</span><span class="n">_VMINOR</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="ow">and</span> <span class="nb">int</span><span class="p">(</span><span class="n">_VPATCH</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="p">:</span>
+            <span class="c1">#: (:class:`weakref.ref` or :class:`pyqtgraph.ImageItem`)</span>
+            <span class="c1">#: weakref to image item or image item itself  (for &lt; 0.9.8)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">imageItem</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">imageItem</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">getFactorRegion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides auto levels calculated from autofactor</span>
+
+<span class="sd">        :returns: minlevel, maxlevel</span>
+<span class="sd">        :rtype: (float, float)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">hx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">hy</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autolevelfactor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">hx</span><span class="p">,</span> <span class="n">hy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imageItem</span><span class="p">()</span><span class="o">.</span><span class="n">getHistogram</span><span class="p">(</span>
+                    <span class="n">step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__step</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__bins</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                <span class="c1"># print(str(e))</span>
+            <span class="k">if</span> <span class="n">hy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">hx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">hx</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="ow">and</span> <span class="n">hy</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">hx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1.e-3</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">hx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mf">2.</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1.e-3</span><span class="p">:</span>
+                    <span class="n">hx</span> <span class="o">=</span> <span class="n">hx</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                    <span class="n">hy</span> <span class="o">=</span> <span class="n">hy</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="k">if</span> <span class="n">hx</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="ow">and</span> <span class="n">hy</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                    <span class="n">hmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">hy</span><span class="p">)</span>
+                    <span class="n">hmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">autolevelfactor</span><span class="o">*</span><span class="n">hmax</span><span class="o">/</span><span class="mf">100.</span>
+                    <span class="n">mn</span><span class="p">,</span> <span class="n">mx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imageItem</span><span class="p">()</span><span class="o">.</span><span class="n">levels</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">indexes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hy</span> <span class="o">&gt;=</span> <span class="n">hmin</span><span class="p">)</span>
+                    <span class="n">ind1</span> <span class="o">=</span> <span class="n">indexes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">ind2</span> <span class="o">=</span> <span class="n">indexes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">return</span> <span class="n">hx</span><span class="p">[</span><span class="n">ind1</span><span class="p">],</span> <span class="n">hx</span><span class="p">[</span><span class="n">ind2</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">imageChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">autoLevel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">autoRange</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; overload imageChange method</span>
+
+<span class="sd">        :param autoLevel: auto level flag</span>
+<span class="sd">        :type autoLevel: :obj:`bool`</span>
+<span class="sd">        :param autoRange: auto range flag</span>
+<span class="sd">        :type autoRange: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">mn</span><span class="p">,</span> <span class="n">mx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imageItem</span><span class="p">()</span><span class="o">.</span><span class="n">levels</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">hx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">hy</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autolevelfactor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">hx</span><span class="p">,</span> <span class="n">hy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imageItem</span><span class="p">()</span><span class="o">.</span><span class="n">getHistogram</span><span class="p">(</span>
+                    <span class="n">step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__step</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__bins</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                <span class="c1"># print(str(e))</span>
+            <span class="k">if</span> <span class="n">hy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">hx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">hx</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="ow">and</span> <span class="n">hy</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">hx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1.e-3</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">hx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mf">2.</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1.e-3</span><span class="p">:</span>
+                    <span class="n">hhx</span> <span class="o">=</span> <span class="n">hx</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                    <span class="n">hhy</span> <span class="o">=</span> <span class="n">hy</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">hhx</span> <span class="o">=</span> <span class="n">hx</span>
+                    <span class="n">hhy</span> <span class="o">=</span> <span class="n">hy</span>
+                <span class="k">if</span> <span class="n">hhx</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="ow">and</span> <span class="n">hhy</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                    <span class="n">hmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">hhy</span><span class="p">)</span>
+                    <span class="n">hmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">autolevelfactor</span> <span class="o">*</span> <span class="n">hmax</span> <span class="o">/</span> <span class="mf">100.</span>
+                    <span class="n">mn</span><span class="p">,</span> <span class="n">mx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imageItem</span><span class="p">()</span><span class="o">.</span><span class="n">levels</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">indexes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hhy</span> <span class="o">&gt;=</span> <span class="n">hmin</span><span class="p">)</span>
+                    <span class="n">ind1</span> <span class="o">=</span> <span class="n">indexes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">ind2</span> <span class="o">=</span> <span class="n">indexes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">setRegion</span><span class="p">([</span><span class="n">hhx</span><span class="p">[</span><span class="n">ind1</span><span class="p">],</span> <span class="n">hhx</span><span class="p">[</span><span class="n">ind2</span><span class="p">]])</span>
+                    <span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">HistogramLUTItem</span><span class="o">.</span><span class="n">HistogramLUTItem</span><span class="o">.</span>\
+                        <span class="n">imageChanged</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="p">,</span> <span class="n">autoLevel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">autoRange</span><span class="o">=</span><span class="n">autoRange</span><span class="p">)</span>
+                    <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># _pg.graphicsItems.HistogramLUTItem.HistogramLUTItem.\</span>
+            <span class="c1">#     imageChanged(</span>
+            <span class="c1">#         self, autoLevel=autoLevel, autoRange=autoRange)</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imageItem</span><span class="p">()</span><span class="o">.</span><span class="n">getHistogram</span><span class="p">(</span>
+                <span class="n">step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__step</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__bins</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">h</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="o">*</span><span class="n">h</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">autoLevel</span><span class="p">:</span>
+                <span class="n">mn</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">mx</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">setRegion</span><span class="p">([</span><span class="n">mn</span><span class="p">,</span> <span class="n">mx</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="c1"># print(str(e))</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+
+GNU GENERAL PUBLIC LICENSE, version 2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
