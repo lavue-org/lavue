@@ -25,6 +25,7 @@ RUN /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections 
 RUN /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections <<< "nxsconfigserver-db nxsconfigserver-db/db/app-user string tango"'
 
 ENV PKG_CONFIG_PATH=/home/tango/lib/pkgconfig
+ENV HDF5_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/hdf5/plugins
 USER tango
 WORKDIR /home/tango
 

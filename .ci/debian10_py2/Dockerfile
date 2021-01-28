@@ -8,6 +8,7 @@ RUN apt-key add debian_repo.pub.gpg
 RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian buster main" -y
 RUN apt-get -qq update && apt-get -qq -y dist-upgrade
 RUN apt-get -qq update && apt-get -qq install -y default-mysql-client  python-h5py  python-sphinx  apt-utils debconf-utils net-tools  omniidl libomniorb4-dev libcos4-dev libomnithread4-dev libzmq3-dev  python-mysqldb python-pyqt5 python-pyqt5.qtsvg python-qtchecker python-pyfai  qt4-qtconfig libqt4-dev-bin python-requests
+RUN apt-get -qq install -y hdf5-plugin-bshuf hdf5-plugin-bz2 hdf5-plugin-lz4
 RUN apt-get -qq update && apt-get  install -y python-pninexus 
 # RUN apt-get install -y  python-pni
 RUN useradd -ms /bin/bash tango
@@ -29,6 +30,7 @@ RUN /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections 
 RUN /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections <<< "nxsconfigserver-db nxsconfigserver-db/db/app-user string tango"'
 
 ENV PKG_CONFIG_PATH=/home/tango/lib/pkgconfig
+ENV HDF5_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/hdf5/plugins
 # ENV QT_XKB_CONFIG_ROOT=/usr/share/X11/xkb
 # ENV XDG_RUNTIME_DIR=/tmp/runtime-tango
 # ENV RUNLEVEL=3

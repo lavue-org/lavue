@@ -97,8 +97,8 @@ def load_file(membuffer, filename=None, readonly=False, **pars):
     :type readonly: :obj:`bool`
     :param pars: parameters
     :type pars: :obj:`dict` < :obj:`str`, :obj:`str`>
-    :returns: file object
-    :rtype: :class:`H5PYFile`
+    :returns: file objects
+    :rtype: :class:`H5PYFile` or :class:`H5CppFile`
     """
     if 'writer' in pars.keys():
         wr = pars.pop('writer')
@@ -191,6 +191,74 @@ def data_filter(parent=None):
 
 
 deflate_filter = data_filter
+
+
+def external_field(filename, fieldpath, shape,
+                   dtype=None, maxshape=None, parent=None):
+    """ create external field for VDS
+
+    :param filename: file name
+    :type filename: :obj:`str`
+    :param fieldpath: nexus field path
+    :type fieldpath: :obj:`str`
+    :param shape: shape
+    :type shape: :obj:`list` < :obj:`int` >
+    :param dtype: attribute type
+    :type dtype: :obj:`str`
+    :param maxshape: shape
+    :type maxshape: :obj:`list` < :obj:`int` >
+    :param parent: parent object
+    :type parent: :class:`FTObject`
+    :returns: external field object
+    :rtype: :class:`FTExternalField`
+    """
+    node = parent
+    wr = None
+    while node:
+        if hasattr(node, "writer"):
+            wr = node.writer
+            break
+        else:
+            if hasattr(node, "parent"):
+                node = node.parent
+            else:
+                break
+    if not wr:
+        with writerlock:
+            wr = writer
+    return wr.external_field(filename, fieldpath, shape,
+                             dtype, maxshape)
+
+
+def virtual_field_layout(shape, dtype=None, maxshape=None, parent=None):
+    """ creates a virtual field layout for a VDS file
+
+    :param shape: shape
+    :type shape: :obj:`list` < :obj:`int` >
+    :param dtype: attribute type
+    :type dtype: :obj:`str`
+    :param maxshape: shape
+    :type maxshape: :obj:`list` < :obj:`int` >
+    :param parent: parent object
+    :type parent: :class:`FTObject`
+    :returns: virtual layout
+    :rtype: :class:`FTVirtualFieldLayout`
+    """
+    node = parent
+    wr = None
+    while node:
+        if hasattr(node, "writer"):
+            wr = node.writer
+            break
+        else:
+            if hasattr(node, "parent"):
+                node = node.parent
+            else:
+                break
+    if not wr:
+        with writerlock:
+            wr = writer
+    return wr.virtual_field_layout(shape, dtype, maxshape)
 
 
 def setwriter(wr):
@@ -491,6 +559,17 @@ class FTGroup(FTObject):
         :rtype: :class:`FTGroup`
         """
 
+    def create_virtual_field(self, name, layout, fillvalue=None):
+        """ creates a virtual filed tres element
+
+        :param name: group name
+        :type name: :obj:`str`
+        :param layout: virual field layout
+        :type layout: :class:`H5CppFieldLayout`
+        :param fillvalue:  fill value
+        :type fillvalue: :obj:`int` or :class:`np.ndarray`
+        """
+
     def create_field(self, name, type_code,
                      shape=None, chunk=None, dfilter=None):
         """ open a file tree element
@@ -547,9 +626,55 @@ class FTGroup(FTObject):
         FTObject._reopen(self)
 
 
+class FTVirtualFieldLayout(FTObject):
+
+    """ virtual field layout """
+
+    def __init__(self, h5object=None):
+        """ constructor
+
+        :param h5object: h5 object
+        :type h5object: :obj:`any`
+        """
+        FTObject.__init__(self, h5object)
+
+    def __setitem__(self, key, source):
+        """ add external field to layout
+
+        :param key: slide or selection
+        :type key: :obj:`tuple`
+        :param source: external field
+        :type source: :class:`FTExternalField`
+        """
+        self._h5object.__setitem__(key, source._h5object)
+
+    def add(self, key, source):
+        """ add external field to layout
+
+        :param key: slide or selection
+        :type key: :obj:`tuple`
+        :param source: external field
+        :type source: :class:`FTExternalField`
+        """
+        self._h5object.__setitem__(key, source._h5object)
+
+
+class FTExternalField(FTObject):
+
+    """ external field for VDS"""
+
+    def __init__(self, h5object=None):
+        """ constructor
+
+        :param h5object: h5 object
+        :type h5object: :obj:`any`
+        """
+        FTObject.__init__(self, h5object)
+
+
 class FTField(FTObject):
 
-    """ file tree file
+    """ file writer field
     """
 
     def __init__(self, h5object, tparent=None):
