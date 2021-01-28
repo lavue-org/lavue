@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.h5cppwriter &#8212; lavuelib 2.54.0 documentation</title>
+    <title>lavuelib.h5cppwriter &#8212; lavuelib 2.54.1 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -255,7 +255,7 @@
             <span class="k">return</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">dataspace</span><span class="o">.</span><span class="n">Hyperslab</span><span class="p">(</span>
                 <span class="n">offset</span><span class="o">=</span><span class="p">(</span><span class="n">start</span><span class="p">,),</span>
                 <span class="n">count</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">stop</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">step</span><span class="p">))),</span>
-                <span class="n">stride</span><span class="o">=</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,))</span>
+                <span class="n">stride</span><span class="o">=</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">step</span><span class="p">,))</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">)):</span>
         <span class="k">return</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">dataspace</span><span class="o">.</span><span class="n">Hyperslab</span><span class="p">(</span>
             <span class="n">offset</span><span class="o">=</span><span class="p">(</span><span class="n">t</span><span class="p">,),</span> <span class="n">block</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,))</span>
@@ -293,7 +293,7 @@
                     <span class="n">count</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                         <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span>
                             <span class="p">(</span><span class="n">stop</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">tel</span><span class="o">.</span><span class="n">step</span><span class="p">))))</span>
-                    <span class="n">stride</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tel</span><span class="o">.</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">stride</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tel</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">tel</span> <span class="ow">is</span> <span class="bp">Ellipsis</span><span class="p">:</span>
                 <span class="n">esize</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
                 <span class="k">for</span> <span class="n">jt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">esize</span><span class="p">):</span>
@@ -392,6 +392,16 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">h5cpp</span><span class="o">.</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;from_buffer&quot;</span><span class="p">)</span> <span class="ow">and</span> \
         <span class="nb">hasattr</span><span class="p">(</span><span class="n">h5cpp</span><span class="o">.</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;ImageFlags&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="is_vds_supported"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5cppwriter.is_vds_supported">[docs]</a><span class="k">def</span> <span class="nf">is_vds_supported</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; provides if vds are supported</span>
+
+<span class="sd">    :retruns: if vds are supported</span>
+<span class="sd">    :rtype: :obj:`bool`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">h5cpp</span><span class="o">.</span><span class="n">property</span><span class="p">,</span> <span class="s2">&quot;VirtualDataMaps&quot;</span><span class="p">)</span> <span class="ow">and</span> \
+        <span class="nb">hasattr</span><span class="p">(</span><span class="n">h5cpp</span><span class="o">.</span><span class="n">property</span><span class="p">,</span> <span class="s2">&quot;VirtualDataMaps&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="load_file"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5cppwriter.load_file">[docs]</a><span class="k">def</span> <span class="nf">load_file</span><span class="p">(</span><span class="n">membuffer</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">):</span>
@@ -525,6 +535,46 @@
 
 
 <span class="n">deflate_filter</span> <span class="o">=</span> <span class="n">data_filter</span>
+
+
+<div class="viewcode-block" id="external_field"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5cppwriter.external_field">[docs]</a><span class="k">def</span> <span class="nf">external_field</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fieldpath</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span>
+                   <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; create external field for VDS</span>
+
+<span class="sd">    :param filename: file name</span>
+<span class="sd">    :type filename: :obj:`str`</span>
+<span class="sd">    :param fieldpath: nexus field path</span>
+<span class="sd">    :type fieldpath: :obj:`str`</span>
+<span class="sd">    :param shape: shape</span>
+<span class="sd">    :type shape: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">    :param dtype: attribute type</span>
+<span class="sd">    :type dtype: :obj:`str`</span>
+<span class="sd">    :param maxshape: shape</span>
+<span class="sd">    :type maxshape: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">    :returns: external field object</span>
+<span class="sd">    :rtype: :class:`H5CppExternalField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">H5CppExternalField</span><span class="p">(</span>
+        <span class="n">filename</span><span class="p">,</span> <span class="n">fieldpath</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">maxshape</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="virtual_field_layout"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5cppwriter.virtual_field_layout">[docs]</a><span class="k">def</span> <span class="nf">virtual_field_layout</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; creates a virtual field layout for a VDS file</span>
+
+<span class="sd">    :param shape: shape</span>
+<span class="sd">    :type shape: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">    :param dtype: attribute type</span>
+<span class="sd">    :type dtype: :obj:`str`</span>
+<span class="sd">    :param maxshape: shape</span>
+<span class="sd">    :type maxshape: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">    :returns: virtual layout</span>
+<span class="sd">    :rtype: :class:`H5CppVirtualFieldLayout`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_vds_supported</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;VDS not supported&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">H5CppVirtualFieldLayout</span><span class="p">(</span>
+        <span class="n">h5cpp</span><span class="o">.</span><span class="n">property</span><span class="o">.</span><span class="n">VirtualDataMaps</span><span class="p">(),</span>
+        <span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">maxshape</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="H5CppFile"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5cppwriter.H5CppFile">[docs]</a><span class="k">class</span> <span class="nc">H5CppFile</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTFile</span><span class="p">):</span>
@@ -734,6 +784,40 @@
                 <span class="s2">&quot;NX_class&quot;</span><span class="p">,</span> <span class="n">pTh</span><span class="p">[</span><span class="s2">&quot;unicode&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">unicode</span><span class="p">(</span><span class="n">nxclass</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">H5CppGroup</span><span class="p">(</span><span class="n">gr</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="H5CppGroup.create_virtual_field"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5cppwriter.H5CppGroup.create_virtual_field">[docs]</a>    <span class="k">def</span> <span class="nf">create_virtual_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">layout</span><span class="p">,</span> <span class="n">fillvalue</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; creates a virtual filed tres element</span>
+
+<span class="sd">        :param name: group name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :param layout: virual field layout</span>
+<span class="sd">        :type layout: :class:`H5CppFieldLayout`</span>
+<span class="sd">        :param fillvalue:  fill value</span>
+<span class="sd">        :type fillvalue: :obj:`int` or :class:`np.ndarray`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_vds_supported</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;VDS not supported&quot;</span><span class="p">)</span>
+        <span class="n">dcpl</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">property</span><span class="o">.</span><span class="n">DatasetCreationList</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">fillvalue</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dcpl</span><span class="p">,</span> <span class="s2">&quot;set_fill_value&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fillvalue</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+                    <span class="n">dcpl</span><span class="o">.</span><span class="n">set_fill_value</span><span class="p">(</span>
+                        <span class="n">fillvalue</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pTh</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">fillvalue</span><span class="o">.</span><span class="n">dtype</span><span class="p">)])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">dcpl</span><span class="o">.</span><span class="n">set_fill_value</span><span class="p">(</span>
+                        <span class="n">fillvalue</span><span class="p">,</span> <span class="n">pTh</span><span class="p">[</span><span class="n">_tostr</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">dtype</span><span class="p">)])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;VDS fill_value not supported&quot;</span><span class="p">)</span>
+
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">layout</span><span class="o">.</span><span class="n">shape</span> <span class="ow">or</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">dataspace</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">dataspace</span><span class="o">.</span><span class="n">Simple</span><span class="p">(</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="n">shape</span><span class="p">),</span>
+            <span class="nb">tuple</span><span class="p">([</span><span class="n">h5cpp</span><span class="o">.</span><span class="n">dataspace</span><span class="o">.</span><span class="n">UNLIMITED</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">H5CppField</span><span class="p">(</span><span class="n">h5cpp</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">VirtualDataset</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="p">,</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+            <span class="n">pTh</span><span class="p">[</span><span class="n">_tostr</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">dtype</span><span class="p">)],</span> <span class="n">dataspace</span><span class="p">,</span>
+            <span class="n">layout</span><span class="o">.</span><span class="n">_h5object</span><span class="p">,</span> <span class="n">dcpl</span><span class="o">=</span><span class="n">dcpl</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="H5CppGroup.create_field"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5cppwriter.H5CppGroup.create_field">[docs]</a>    <span class="k">def</span> <span class="nf">create_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type_code</span><span class="p">,</span>
                      <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chunk</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dfilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; open a file tree element</span>
@@ -770,15 +854,10 @@
             <span class="n">chunk</span> <span class="o">=</span> <span class="p">[(</span><span class="n">dm</span> <span class="k">if</span> <span class="n">dm</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">dm</span> <span class="ow">in</span> <span class="n">shape</span><span class="p">]</span>
         <span class="n">dcpl</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">property</span><span class="o">.</span><span class="n">DatasetLayout</span><span class="o">.</span><span class="n">CHUNKED</span>
         <span class="n">dcpl</span><span class="o">.</span><span class="n">chunk</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
-        <span class="n">field</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span>
+        <span class="k">return</span> <span class="n">H5CppField</span><span class="p">(</span><span class="n">h5cpp</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="p">,</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
             <span class="n">pTh</span><span class="p">[</span><span class="n">_tostr</span><span class="p">(</span><span class="n">type_code</span><span class="p">)],</span> <span class="n">dataspace</span><span class="p">,</span>
-            <span class="n">dcpl</span><span class="o">=</span><span class="n">dcpl</span><span class="p">)</span>
-
-        <span class="n">fld</span> <span class="o">=</span> <span class="n">H5CppField</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-        <span class="c1"># if type_code == &quot;bool&quot;:</span>
-        <span class="c1">#     fld.boolflag = True</span>
-        <span class="k">return</span> <span class="n">fld</span></div>
+            <span class="n">dcpl</span><span class="o">=</span><span class="n">dcpl</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1278,8 +1357,94 @@
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
+<div class="viewcode-block" id="H5CppVirtualFieldLayout"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5cppwriter.H5CppVirtualFieldLayout">[docs]</a><span class="k">class</span> <span class="nc">H5CppVirtualFieldLayout</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTVirtualFieldLayout</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot; virtual field layout &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param h5object: h5 object</span>
+<span class="sd">        :type h5object: :obj:`any`</span>
+<span class="sd">        :param shape: shape</span>
+<span class="sd">        :type shape: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">        :param dtype: attribute type</span>
+<span class="sd">        :type dtype: :obj:`str`</span>
+<span class="sd">        :param maxshape: shape</span>
+<span class="sd">        :type maxshape: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">filewriter</span><span class="o">.</span><span class="n">FTVirtualFieldLayout</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">)</span>
+        <span class="c1">#: (:obj:`list` &lt; :obj:`int` &gt;) shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span>
+        <span class="c1"># : (:obj:`str`): data type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
+        <span class="c1">#: (:obj:`list` &lt; :obj:`int` &gt;) maximal shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxshape</span> <span class="o">=</span> <span class="n">maxshape</span>
+
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; add external field to layout</span>
+
+<span class="sd">        :param key: slide</span>
+<span class="sd">        :type key: :obj:`tuple`</span>
+<span class="sd">        :param source: external field</span>
+<span class="sd">        :type source: :class:`H5PYExternalField`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span>
+
+<div class="viewcode-block" id="H5CppVirtualFieldLayout.add"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5cppwriter.H5CppVirtualFieldLayout.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; add external field to layout</span>
+
+<span class="sd">        :param key: slide</span>
+<span class="sd">        :type key: :obj:`tuple`</span>
+<span class="sd">        :param source: external field</span>
+<span class="sd">        :type source: :class:`H5PYExternalField`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">selection</span> <span class="o">=</span> <span class="n">_slice2selection</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">lds</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">dataspace</span><span class="o">.</span><span class="n">Simple</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+        <span class="n">lview</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">dataspace</span><span class="o">.</span><span class="n">View</span><span class="p">(</span><span class="n">lds</span><span class="p">,</span> <span class="n">selection</span><span class="p">)</span>
+        <span class="n">eview</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">dataspace</span><span class="o">.</span><span class="n">View</span><span class="p">(</span>
+            <span class="n">h5cpp</span><span class="o">.</span><span class="n">dataspace</span><span class="o">.</span><span class="n">Simple</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">shape</span><span class="p">)))</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">filename</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">fieldpath</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">h5cpp</span><span class="o">.</span><span class="n">property</span><span class="o">.</span><span class="n">VirtualDataMap</span><span class="p">(</span>
+            <span class="n">lview</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">eview</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="H5CppExternalField"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5cppwriter.H5CppExternalField">[docs]</a><span class="k">class</span> <span class="nc">H5CppExternalField</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTExternalField</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot; external field for VDS &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">fieldpath</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param filename: file name</span>
+<span class="sd">        :type filename: :obj:`str`</span>
+<span class="sd">        :param fieldpath: nexus field path</span>
+<span class="sd">        :type fieldpath: :obj:`str`</span>
+<span class="sd">        :param shape: shape</span>
+<span class="sd">        :type shape: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">        :param dtype: attribute type</span>
+<span class="sd">        :type dtype: :obj:`str`</span>
+<span class="sd">        :param maxshape: shape</span>
+<span class="sd">        :type maxshape: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">filewriter</span><span class="o">.</span><span class="n">FTExternalField</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="c1">#: (:obj:`str`) directory and file name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="c1">#: (:obj:`str`) nexus field path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fieldpath</span> <span class="o">=</span> <span class="n">fieldpath</span>
+        <span class="c1">#: (:obj:`list` &lt; :obj:`int` &gt;) shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span>
+        <span class="c1"># : (:obj:`str`): data type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
+        <span class="c1">#: (:obj:`list` &lt; :obj:`int` &gt;) maximal shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxshape</span> <span class="o">=</span> <span class="n">maxshape</span></div>
+
+
 <div class="viewcode-block" id="H5CppDeflate"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5cppwriter.H5CppDeflate">[docs]</a><span class="k">class</span> <span class="nc">H5CppDeflate</span><span class="p">(</span><span class="n">H5CppDataFilter</span><span class="p">):</span>
-    <span class="k">pass</span></div>
+
+    <span class="sd">&quot;&quot;&quot; deflate filter &quot;&quot;&quot;</span></div>
 
 
 <div class="viewcode-block" id="H5CppAttributeManager"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5cppwriter.H5CppAttributeManager">[docs]</a><span class="k">class</span> <span class="nc">H5CppAttributeManager</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTAttributeManager</span><span class="p">):</span>

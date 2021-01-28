@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.h5pywriter &#8212; lavuelib 2.54.0 documentation</title>
+    <title>lavuelib.h5pywriter &#8212; lavuelib 2.54.1 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -226,6 +226,15 @@
     <span class="k">return</span> <span class="n">h5ver</span> <span class="o">&gt;=</span> <span class="mi">2009</span></div>
 
 
+<div class="viewcode-block" id="is_vds_supported"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.is_vds_supported">[docs]</a><span class="k">def</span> <span class="nf">is_vds_supported</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; provides if VDS are supported</span>
+
+<span class="sd">    :retruns: if VDS are supported</span>
+<span class="sd">    :rtype: :obj:`bool`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">h5ver</span> <span class="o">&gt;=</span> <span class="mi">2009</span></div>
+
+
 <div class="viewcode-block" id="load_file"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.load_file">[docs]</a><span class="k">def</span> <span class="nf">load_file</span><span class="p">(</span><span class="n">membuffer</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; load a file from memory byte buffer</span>
 
@@ -345,6 +354,50 @@
 
 
 <span class="n">deflate_filter</span> <span class="o">=</span> <span class="n">data_filter</span>
+
+
+<div class="viewcode-block" id="external_field"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.external_field">[docs]</a><span class="k">def</span> <span class="nf">external_field</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fieldpath</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span>
+                   <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; create external field for VDS</span>
+
+<span class="sd">    :param filename: file name</span>
+<span class="sd">    :type filename: :obj:`str`</span>
+<span class="sd">    :param fieldpath: nexus field path</span>
+<span class="sd">    :type fieldpath: :obj:`str`</span>
+<span class="sd">    :param shape: shape</span>
+<span class="sd">    :type shape: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">    :param dtype: attribute type</span>
+<span class="sd">    :type dtype: :obj:`str`</span>
+<span class="sd">    :param maxshape: shape</span>
+<span class="sd">    :type maxshape: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">    :returns: external field object</span>
+<span class="sd">    :rtype: :class:`FTExternalField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_vds_supported</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;VDS not supported&quot;</span><span class="p">)</span>
+    <span class="n">maxshape</span> <span class="o">=</span> <span class="n">maxshape</span> <span class="ow">or</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">shape</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">H5PYExternalField</span><span class="p">(</span>
+        <span class="n">h5py</span><span class="o">.</span><span class="n">VirtualSource</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fieldpath</span><span class="p">,</span>
+                           <span class="nb">tuple</span><span class="p">(</span><span class="n">shape</span><span class="p">),</span> <span class="n">dtype</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">maxshape</span> <span class="ow">or</span> <span class="p">[])))</span></div>
+
+
+<div class="viewcode-block" id="virtual_field_layout"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.virtual_field_layout">[docs]</a><span class="k">def</span> <span class="nf">virtual_field_layout</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; creates a virtual field layout for a VDS file</span>
+
+<span class="sd">    :param shape: shape</span>
+<span class="sd">    :type shape: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">    :param dtype: attribute type</span>
+<span class="sd">    :type dtype: :obj:`str`</span>
+<span class="sd">    :param maxshape: shape</span>
+<span class="sd">    :type maxshape: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">    :returns: virtual layout</span>
+<span class="sd">    :rtype: :class:`FTVirtualFieldLayout`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_vds_supported</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;VDS not supported&quot;</span><span class="p">)</span>
+    <span class="n">maxshape</span> <span class="o">=</span> <span class="n">maxshape</span> <span class="ow">or</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">shape</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">H5PYVirtualFieldLayout</span><span class="p">(</span>
+        <span class="n">h5py</span><span class="o">.</span><span class="n">VirtualLayout</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">shape</span><span class="p">),</span> <span class="n">dtype</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">maxshape</span> <span class="ow">or</span> <span class="p">[])))</span></div>
 
 
 <div class="viewcode-block" id="H5PYFile"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYFile">[docs]</a><span class="k">class</span> <span class="nc">H5PYFile</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTFile</span><span class="p">):</span>
@@ -575,12 +628,29 @@
             <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;NX_class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">nxclass</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">H5PYGroup</span><span class="p">(</span><span class="n">grp</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="H5PYGroup.create_virtual_field"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYGroup.create_virtual_field">[docs]</a>    <span class="k">def</span> <span class="nf">create_virtual_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">layout</span><span class="p">,</span> <span class="n">fillvalue</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; creates a virtual filed tres element</span>
+
+<span class="sd">        :param name: group name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :param layout: virual field layout</span>
+<span class="sd">        :type layout: :class:`H5PYFieldLayout`</span>
+<span class="sd">        :param fillvalue:  fill value</span>
+<span class="sd">        :type fillvalue: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_vds_supported</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;VDS not supported&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">H5PYField</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">create_virtual_dataset</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">_h5object</span><span class="p">,</span> <span class="n">fillvalue</span><span class="p">),</span>
+            <span class="bp">self</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="H5PYGroup.create_field"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYGroup.create_field">[docs]</a>    <span class="k">def</span> <span class="nf">create_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type_code</span><span class="p">,</span>
                      <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chunk</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dfilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; open a file tree element</span>
+        <span class="sd">&quot;&quot;&quot; creates a field tree element</span>
 
-<span class="sd">        :param n: group name</span>
-<span class="sd">        :type n: :obj:`str`</span>
+<span class="sd">        :param name: group name</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        :param type_code: nexus field type</span>
 <span class="sd">        :type type_code: :obj:`str`</span>
 <span class="sd">        :param shape: shape</span>
@@ -695,7 +765,7 @@
 
 <div class="viewcode-block" id="H5PYField"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYField">[docs]</a><span class="k">class</span> <span class="nc">H5PYField</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTField</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; file tree file</span>
+    <span class="sd">&quot;&quot;&quot; file writer field</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -979,6 +1049,36 @@
 
     <span class="sd">&quot;&quot;&quot; file tree data filter</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="H5PYVirtualFieldLayout"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYVirtualFieldLayout">[docs]</a><span class="k">class</span> <span class="nc">H5PYVirtualFieldLayout</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTVirtualFieldLayout</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot; virtual field layout &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; add external field to layout</span>
+
+<span class="sd">        :param key: slide</span>
+<span class="sd">        :type key: :obj:`tuple`</span>
+<span class="sd">        :param source: external field</span>
+<span class="sd">        :type source: :class:`H5PYExternalField`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">_h5object</span><span class="p">)</span>
+
+<div class="viewcode-block" id="H5PYVirtualFieldLayout.add"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYVirtualFieldLayout.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; add external field to layout</span>
+
+<span class="sd">        :param key: slide</span>
+<span class="sd">        :type key: :obj:`tuple`</span>
+<span class="sd">        :param source: external field</span>
+<span class="sd">        :type source: :class:`H5PYExternalField`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">_h5object</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="H5PYExternalField"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYExternalField">[docs]</a><span class="k">class</span> <span class="nc">H5PYExternalField</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTExternalField</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot; external field for VDS &quot;&quot;&quot;</span></div>
 
 
 <div class="viewcode-block" id="H5PYDeflate"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYDeflate">[docs]</a><span class="k">class</span> <span class="nc">H5PYDeflate</span><span class="p">(</span><span class="n">H5PYDataFilter</span><span class="p">):</span>
