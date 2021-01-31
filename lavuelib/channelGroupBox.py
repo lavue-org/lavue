@@ -274,7 +274,7 @@ class ChannelGroupBox(QtGui.QWidget):
         if self.__connected:
             self.channelChanged.emit()
 
-    def updateChannelLabels(self, chlabels):
+    def updateChannelLabels(self, chlabels=None):
         """ update red channel
 
         :param chlabels: dictionary with channel labels
@@ -292,6 +292,8 @@ class ChannelGroupBox(QtGui.QWidget):
                     except Exception as e:
                         logger.warning(str(e))
                         # print(str(e))
+        else:
+            self.__channellabels = {}
 
     def setChannelItemText(self, iid, text):
         """ sets channel item text

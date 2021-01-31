@@ -102,6 +102,14 @@ class MemoryBufferGroupBox(QtGui.QGroupBox):
             size = self.__maxindex
         return size
 
+    def isOn(self):
+        """ is on flag
+
+        :returns: is on flag
+        :rtype: bool
+        """
+        return self.__isOn
+
     def setBufferSize(self, buffersize):
         """ sets buffer size
 

@@ -877,6 +877,14 @@ class LiveViewer(QtGui.QDialog):
         """ sets buffer size state
         """
         self.setLavueState({"mbuffer": size or None})
+        if size == 0:
+            if "channellabels" in self.__mdata:
+                self.__mdata.pop("channellabels")
+                self.__channelwg.updateChannelLabels()
+            if "suminthelast" in self.__mdata:
+                self.__mdata.pop("suminthelast")
+            if "skipfirst" in self.__mdata:
+                self.__mdata.pop("skipfirst")
 
     def __setLevelState(self):
         """ sets intensity level state
@@ -2697,13 +2705,12 @@ class LiveViewer(QtGui.QDialog):
             self.__applyRange()
             # apply user filters
             self.__applyFilters()
-            if self.__settings.showmbuffer:
+            if self.__settings.showmbuffer and self.__mbufferwg.isOn():
                 result = self.__mbufferwg.process(
                     self.__filteredimage, self.__imagename)
                 if isinstance(result, tuple) and len(result) == 2:
                     self.__filteredimage, mdata = result
                     self.__mdata.update(mdata)
-
             if "channellabels" in self.__mdata:
                 self.__channelwg.updateChannelLabels(
                     self.__mdata["channellabels"])
