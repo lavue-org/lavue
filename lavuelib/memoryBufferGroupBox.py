@@ -205,6 +205,9 @@ class MemoryBufferGroupBox(QtGui.QGroupBox):
         """
         if self.__isOn and image is not None:
             mdata = {}
+            ics = int(self.__computeSum)
+            if ics:
+                mdata["suminthelast"] = True
             if self.__lastimage is None \
                or self.__lastimage.shape != image.shape \
                or self.__lastimage.dtype != image.dtype \
@@ -219,7 +222,6 @@ class MemoryBufferGroupBox(QtGui.QGroupBox):
                         self.__imagesum = None
                         self.__first = True
                         self.__current = 1
-                ics = int(self.__computeSum)
                 if self.__imagestack is None:
                     newshape = np.concatenate(
                         ([self.__maxindex + 1 + ics],

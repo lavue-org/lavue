@@ -42,7 +42,7 @@ from pyqtgraph.Qt import QtTest
 
 
 from qtchecker.qtChecker import (
-    QtChecker, CmdCheck, ExtCmdCheck, WrapAttrCheck, AttrChange)
+    QtChecker, CmdCheck, ExtCmdCheck, WrapAttrCheck)
 
 #  Qt-application
 app = None
@@ -858,7 +858,8 @@ class TangoAttrImageSourceTest(unittest.TestCase):
 
         cfg = '[Configuration]\n' \
             'ShowSubtraction=false\n' \
-            'ShowTransformations=false\n'
+            'ShowTransformations=false\n' \
+            'ImageChannels=true\n'
 
         if not os.path.exists(self.__cfgfdir):
             os.makedirs(self.__cfgfdir)
@@ -934,12 +935,6 @@ class TangoAttrImageSourceTest(unittest.TestCase):
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__mbufferwg.onOff", [False]),
-            CmdCheck(
-                "_MainWindow__lavue._setBufferSizeState", [0]),
-            AttrChange(
-                "_MainWindow__lavue._LiveViewer__settings.imagechannels",
-                True),
-
         ])
         qtck4.setChecks([
             CmdCheck(
@@ -982,26 +977,18 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             self, [True, None, None, None, None], mask=[0, 0, 1, 1, 1])
         qtck2.compareResults(
             self, [True, None, None, None], mask=[0, 1, 1, 1])
-#         qtck3.compareResults(
-#             self, [None, None, None, None, False, None, None, None],
-#             mask=[1, 1, 1, 0, 0, 1, 1, 1])
 
-        # res1 = qtck1.results()
-        # res2 = qtck2.results()
         res3 = qtck3.results()
-        # res4 = qtck4.results()
         res5 = qtck5.results()
         chs = res3[2]
         self.assertEqual(chs[0], "0: the last image")
         for i in range(1, 3):
-            print(chs[i])
             self.assertTrue(chs[i].startswith(
                 "%s: test/testimageserver/00/LastImage  (" % i))
         for i in range(4, 11):
-            print(chs[i])
             self.assertTrue(chs[i].startswith(
                 "%s:" % i))
-        print(res5[0])
+        self.assertEqual(res5[0], [])
 
     def test_readimage_sum(self):
         fun = sys._getframe().f_code.co_name

@@ -203,7 +203,6 @@ class ChannelGroupBox(QtGui.QWidget):
         :type force: :obj:`bool`
         """
         if self.__colorchannel != channel or force:
-
             if channel >= 0 and channel <= self.__numberofchannels + 2:
                 if channel == self.__numberofchannels + 2:
                     self.__colorchannel = channel
@@ -293,12 +292,8 @@ class ChannelGroupBox(QtGui.QWidget):
                         logger.warning(str(e))
                         # print(str(e))
         else:
-            # self.__channellabels = []
-            for ky in self.__channellabels.keys():
-                vl = "channel %s" % ky
-                if vl and ky < self.__numberofchannels:
-                    self.__channellabels[int(ky)] = vl
-                    self.setChannelItemText(int(ky), vl)
+            self.__channellabels = {}
+            self.__numberofchannels = 0
 
     def channelLabels(self):
         """ provides channel labels
