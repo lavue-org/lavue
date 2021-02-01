@@ -42,7 +42,7 @@ from pyqtgraph.Qt import QtTest
 
 
 from qtchecker.qtChecker import (
-    QtChecker, CmdCheck, ExtCmdCheck, WrapAttrCheck)
+    QtChecker, CmdCheck, ExtCmdCheck, WrapAttrCheck, AttrChange)
 
 #  Qt-application
 app = None
@@ -836,6 +836,172 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+
+    def test_readimage_colorchannels(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        self.__lcsu.proxy.Init()
+        self.__tisu.proxy.Init()
+        self.__lavuestate = None
+        l1 = self.__tisu.proxy.LastImage.T
+        lsh = l1.shape
+        zzs = np.zeros(dtype="float64", shape=[lsh[0], lsh[1]])
+        zzs[:] = np.nan
+        ll1 = np.array(zzs)
+        ll2 = np.array(zzs)
+        ll3 = np.array(zzs)
+        ll1[0:lsh[0], 0:lsh[1]] = l1
+        ll2[0:lsh[0], 0:lsh[1]] = l1
+        ll3[0:lsh[0], 0:lsh[1]] = l1
+        # lastimage = np.stack([ll1, ll2, ll3], 2)
+
+        cfg = '[Configuration]\n' \
+            'ShowSubtraction=false\n' \
+            'ShowTransformations=false\n'
+
+        if not os.path.exists(self.__cfgfdir):
+            os.makedirs(self.__cfgfdir)
+        with open(self.__cfgfname, "w+") as cf:
+            cf.write(cfg)
+
+        options = argparse.Namespace(
+            mode='expert',
+            source='tangoattr',
+            offset=';,;,',
+            configuration='test/testimageserver/00/LastImage;',
+            # 'test/testimageserver/00/LastImage;'
+            # 'test/testimageserver/00/LastImage',
+            instance='tgtest2',
+            mbuffer='11',
+            tool='roi',
+            # log='debug',
+            log='info',
+            scaling='log',
+            # gradient='thermal',
+            channel='rgb',
+            start=True,
+            tangodevice='test/lavuecontroller/00'
+        )
+        logging.basicConfig(
+             format="%(levelname)s: %(message)s")
+        logger = logging.getLogger("lavue")
+        lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+        dialog = lavuelib.liveViewer.MainWindow(options=options)
+        dialog.show()
+
+        qtck1 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck2 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck3 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck4 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck5 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck1.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            ExtCmdCheck(self, "getLavueState"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            ExtCmdCheck(self, "takeNewImage"),
+        ])
+        qtck2.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            ExtCmdCheck(self, "takeNewImage"),
+        ])
+        qtck3.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__channelwg.channelLabels"),
+            WrapAttrCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg"
+                "._SourceTabWidget__sourcetabs[],0._ui.pushButton",
+                QtTest.QTest.mouseClick, [QtCore.Qt.LeftButton]),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__mbufferwg.onOff", [False]),
+            CmdCheck(
+                "_MainWindow__lavue._setBufferSizeState", [0]),
+            AttrChange(
+                "_MainWindow__lavue._LiveViewer__settings.imagechannels",
+                True),
+
+        ])
+        qtck4.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._updateLavueState",
+                ['{"source":"tangoattr;tangoattr;tangoattr",'
+                 '"configuration":"test/testimageserver/00/LastImage;'
+                 'test/testimageserver/00/LastImage;'
+                 'test/testimageserver/00/LastImage",'
+                 '"start":true}']),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            ExtCmdCheck(self, "takeNewImage"),
+        ])
+        qtck5.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__channelwg.channelLabels"
+            ),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            WrapAttrCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg"
+                "._SourceTabWidget__sourcetabs[],0._ui.pushButton",
+                QtTest.QTest.mouseClick, [QtCore.Qt.LeftButton]),
+        ])
+
+        print("execute")
+        qtck1.executeChecks(delay=6000)
+        qtck2.executeChecks(delay=12000)
+        qtck3.executeChecks(delay=18000)
+        qtck4.executeChecks(delay=24000)
+        status = qtck5.executeChecksAndClose(delay=30000)
+
+        self.assertEqual(status, 0)
+
+        qtck1.compareResults(
+            self, [True, None, None, None, None], mask=[0, 0, 1, 1, 1])
+        qtck2.compareResults(
+            self, [True, None, None, None], mask=[0, 1, 1, 1])
+#         qtck3.compareResults(
+#             self, [None, None, None, None, False, None, None, None],
+#             mask=[1, 1, 1, 0, 0, 1, 1, 1])
+
+        # res1 = qtck1.results()
+        # res2 = qtck2.results()
+        res3 = qtck3.results()
+        # res4 = qtck4.results()
+        res5 = qtck5.results()
+        chs = res3[2]
+        self.assertEqual(chs[0], "0: the last image")
+        for i in range(1, 3):
+            print(chs[i])
+            self.assertTrue(chs[i].startswith(
+                "%s: test/testimageserver/00/LastImage  (" % i))
+        for i in range(4, 11):
+            print(chs[i])
+            self.assertTrue(chs[i].startswith(
+                "%s:" % i))
+        print(res5[0])
 
     def test_readimage_sum(self):
         fun = sys._getframe().f_code.co_name
