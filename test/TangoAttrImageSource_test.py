@@ -859,6 +859,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         cfg = '[Configuration]\n' \
             'ShowSubtraction=false\n' \
             'ShowTransformations=false\n' \
+            'AccelerateBufferSum=true\n' \
             'ImageChannels=true\n'
 
         if not os.path.exists(self.__cfgfdir):
@@ -981,6 +982,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         res3 = qtck3.results()
         res5 = qtck5.results()
         chs = res3[2]
+        self.assertTrue(res3[0].shape, (512, 256, 3))
         self.assertEqual(chs[0], "0: the last image")
         for i in range(1, 3):
             self.assertTrue(chs[i].startswith(
@@ -989,6 +991,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             self.assertTrue(chs[i].startswith(
                 "%s:" % i))
         self.assertEqual(res5[0], [])
+        self.assertTrue(res5[1].shape, (512, 768, 3))
 
     def test_readimage_sum(self):
         fun = sys._getframe().f_code.co_name
