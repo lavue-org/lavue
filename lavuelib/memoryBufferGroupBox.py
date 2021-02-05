@@ -208,6 +208,8 @@ class MemoryBufferGroupBox(QtGui.QGroupBox):
             ics = int(self.__computeSum)
             if ics:
                 mdata["suminthelast"] = True
+            while len(image.shape) > 2:
+                image = np.nansum(image, 0)
             if self.__lastimage is None \
                or self.__lastimage.shape != image.shape \
                or self.__lastimage.dtype != image.dtype \
