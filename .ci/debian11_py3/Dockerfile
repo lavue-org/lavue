@@ -13,8 +13,8 @@ RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian bullseye main" -
 RUN apt-get update  
 # RUN apt-get purge -y base-passwd
 # RUN apt-get install -y base-passwd
-# RUN apt-get  -y  dist-upgrade
-RUN apt-get -qq update && apt-get -qq install -y default-mysql-client  python3-h5py  python3-mysqldb python3-sphinx  apt-utils debconf-utils net-tools  omniidl libomniorb4-dev libcos4-dev libomnithread4-dev libzmq3-dev python3-pyqt5 python3-pyqt5.qtsvg python3-qtchecker python3-pyfai qt5-default qtchooser python3-requests
+RUN apt-get  -y  dist-upgrade
+RUN apt-get -qq update && apt-get -qq install -y default-mysql-client  python3-h5py  python3-mysqldb python3-sphinx  apt-utils debconf-utils net-tools  omniidl libomniorb4-dev libcos4-dev libomnithread4-dev libzmq3-dev python3-pyqt5 python3-pyqt5.qtsvg python3-qtchecker python3-pyfai  qtchooser python3-requests
 RUN apt-get -qq install -y python3-pninexus
 # RUN apt-get -qq install -y hdf5-plugin-bshuf hdf5-plugin-bz2 hdf5-plugin-lz4
 # RUN apt-get -qq install -y  python3-pni
