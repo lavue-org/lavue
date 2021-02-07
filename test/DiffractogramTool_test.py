@@ -206,7 +206,7 @@ class DiffractogramToolTest(unittest.TestCase):
     def getControllerAttr(self, name):
         return getattr(self.__lcsu.proxy, name)
 
-    def ttest_tango_diff(self):
+    def test_tango_diff(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 

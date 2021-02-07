@@ -88,7 +88,8 @@ class HistogramHLUTWidget(_pg.widgets.GraphicsView.GraphicsView):
         :param kargs:  HistogramHLUTItem parameter dictionary
         :type kargs: :obj:`dict` < :obj:`str`, :obj:`any`>
         """
-        background = kargs.get('background', 'default')
+        background = kargs.pop('background', 'default')
+
         _pg.widgets.GraphicsView.GraphicsView.__init__(
             self, parent, useOpenGL=False, background=background)
         #: (:class:`HistogramHLUTItem`) histogram item
@@ -357,27 +358,8 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
     def resetGradient(self):
         """ resets gradient widget
         """
-        self.gradient.sigGradientChanged.disconnect(self.gradientChanged)
-        self.gradient.sigNameChanged.disconnect(self._emitSigNameChanged)
-        self.gradient.saveAction.triggered.disconnect(
-            self._emitSaveGradientRequested)
-        self.gradient.removeAction.triggered.disconnect(
-            self._emitRemoveGradientRequested)
-        self.gradient.hide()
-        self.layout.removeItem(self.gradient)
-        self.gradient = GradientEditorItemWS()
-        if self.__expertmode:
-            self.gradient.addMenuActions()
         self.gradient.setOrientation('bottom')
         self.gradient.loadPreset('grey')
-        self.layout.addItem(self.gradient, 2, 0)
-
-        self.gradient.sigGradientChanged.connect(self.gradientChanged)
-        self.gradient.sigNameChanged.connect(self._emitSigNameChanged)
-        self.gradient.saveAction.triggered.connect(
-            self._emitSaveGradientRequested)
-        self.gradient.removeAction.triggered.connect(
-            self._emitRemoveGradientRequested)
 
     @QtCore.pyqtSlot(str)
     def _emitSigNameChanged(self, name):

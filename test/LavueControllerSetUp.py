@@ -123,11 +123,11 @@ class ControllerSetUp(object):
                 sys.stdout.flush()
                 exl = db.get_device_exported(dvname)
                 if dvname not in exl.value_string:
-                    time.sleep(0.01)
+                    time.sleep(0.05)
                     cnt += 1
                     continue
                 dp = tango.DeviceProxy(dvname)
-                time.sleep(0.1)
+                time.sleep(0.2)
                 if dp.state() == tango.DevState.ON:
                     found = True
             except Exception as e:
