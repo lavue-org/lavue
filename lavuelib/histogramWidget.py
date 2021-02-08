@@ -290,7 +290,8 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
             self.gradient.addMenuActions()
         self.gradient.setOrientation('bottom')
         self.gradient.loadPreset('grey')
-
+        #: (:obj:`list`) buffer for removed gradients
+        self.__oldgradient = []
         #: (:class:`pyqtgraph.graphicsItems.LinearRegionItem.LinearRegionItem`)
         #:    linear region item
         self.region = _pg.graphicsItems.LinearRegionItem.LinearRegionItem(
@@ -358,8 +359,31 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
     def resetGradient(self):
         """ resets gradient widget
         """
+        self.gradient.sigGradientChanged.disconnect(self.gradientChanged)
+        self.gradient.sigNameChanged.disconnect(self._emitSigNameChanged)
+        self.gradient.saveAction.triggered.disconnect(
+            self._emitSaveGradientRequested)
+        self.gradient.removeAction.triggered.disconnect(
+            self._emitRemoveGradientRequested)
+        self.gradient.hide()
+        if hasattr(self.gradient, "prepareGeometryChange"):
+            self.gradient.prepareGeometryChange()
+        self.layout.removeItem(self.gradient)
+        self.gradient.close()
+        self.__oldgradient.append(self.gradient)
+        self.gradient = GradientEditorItemWS()
+        if self.__expertmode:
+            self.gradient.addMenuActions()
         self.gradient.setOrientation('bottom')
         self.gradient.loadPreset('grey')
+        self.layout.addItem(self.gradient, 2, 0)
+
+        self.gradient.sigGradientChanged.connect(self.gradientChanged)
+        self.gradient.sigNameChanged.connect(self._emitSigNameChanged)
+        self.gradient.saveAction.triggered.connect(
+            self._emitSaveGradientRequested)
+        self.gradient.removeAction.triggered.connect(
+            self._emitRemoveGradientRequested)
 
     @QtCore.pyqtSlot(str)
     def _emitSigNameChanged(self, name):

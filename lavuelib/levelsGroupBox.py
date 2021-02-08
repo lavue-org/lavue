@@ -112,6 +112,11 @@ class LevelsGroupBox(QtGui.QWidget):
 
         #: (:class: `lavuelib.histogramWidget.HistogramHLUTWidget`)
         #:      intensity histogram widget
+
+        for name in _pg.graphicsItems.GradientEditorItem.\
+                Gradients.keys():
+            self._addGradientItem(name)
+
         self.__histogram = HistogramHLUTWidget(
             bins='auto', step='auto',
             expertmode=expertmode)
