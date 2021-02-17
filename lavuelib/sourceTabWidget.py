@@ -770,6 +770,9 @@ class SourceTabWidget(QtGui.QTabWidget):
         if 2 not in self.__tabcheckboxstates:
             for sid in range(len(self.__tabcheckboxstates)):
                 self.setCheckState(sid, 2)
+        if self.isConnected():
+            self.toggleServerConnection()
+            self.toggleServerConnection()
 
     @debugmethod
     def tabCheckBoxStates(self):

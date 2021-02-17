@@ -2849,8 +2849,10 @@ class LiveViewer(QtGui.QDialog):
                     "Please select the image source")
         self._setSourceConfiguration()
         consuccess = bool(len(self.__datasources))
-        for ds in self.__datasources:
-            if not ds.connect():
+        states = self.__sourcewg.tabCheckBoxStates()
+        print(states)
+        for ids, ds in enumerate(self.__datasources):
+            if not ds.connect() and states[ids]:
                 self.__sourcewg.connectFailure()
                 messageBox.MessageBox.warning(
                     self, "lavue: The %s connection could not be established"
