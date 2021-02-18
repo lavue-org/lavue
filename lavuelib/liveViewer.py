@@ -2850,7 +2850,6 @@ class LiveViewer(QtGui.QDialog):
         self._setSourceConfiguration()
         consuccess = bool(len(self.__datasources))
         states = self.__sourcewg.tabCheckBoxStates()
-        print(states)
         for ids, ds in enumerate(self.__datasources):
             if not ds.connect() and states[ids]:
                 self.__sourcewg.connectFailure()
