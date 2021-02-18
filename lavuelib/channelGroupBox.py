@@ -294,6 +294,9 @@ class ChannelGroupBox(QtGui.QWidget):
         else:
             self.__channellabels = {}
             self.__numberofchannels = 0
+            self.__ui.channelGroupBox.hide()
+            self.__ui.channelComboBox.hide()
+            self.__colors = False
 
     def channelLabels(self):
         """ provides channel labels
