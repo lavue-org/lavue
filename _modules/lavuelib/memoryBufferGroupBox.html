@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.memoryBufferGroupBox &#8212; lavuelib 2.54.1 documentation</title>
+    <title>lavuelib.memoryBufferGroupBox &#8212; lavuelib 2.55.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.54</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.55</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -258,6 +258,14 @@
             <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span>
         <span class="k">return</span> <span class="n">size</span></div>
 
+<div class="viewcode-block" id="MemoryBufferGroupBox.isOn"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.isOn">[docs]</a>    <span class="k">def</span> <span class="nf">isOn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; is on flag</span>
+
+<span class="sd">        :returns: is on flag</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__isOn</span></div>
+
 <div class="viewcode-block" id="MemoryBufferGroupBox.setBufferSize"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.setBufferSize">[docs]</a>    <span class="k">def</span> <span class="nf">setBufferSize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffersize</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets buffer size</span>
 
@@ -353,6 +361,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__isOn</span> <span class="ow">and</span> <span class="n">image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">mdata</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">ics</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__computeSum</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ics</span><span class="p">:</span>
+                <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;suminthelast&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lastimage</span> <span class="ow">is</span> <span class="kc">None</span> \
                <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lastimage</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span> \
                <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lastimage</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">image</span><span class="o">.</span><span class="n">dtype</span> \
@@ -367,7 +380,6 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">=</span> <span class="kc">None</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__first</span> <span class="o">=</span> <span class="kc">True</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__current</span> <span class="o">=</span> <span class="mi">1</span>
-                <span class="n">ics</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__computeSum</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">newshape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
                         <span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">ics</span><span class="p">],</span>
@@ -490,7 +502,7 @@
         &copy; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.<br/>
     </p>
   </div>
 </footer>

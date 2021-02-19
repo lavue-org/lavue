@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>logging &#8212; lavuelib 2.54.1 documentation</title>
+    <title>logging &#8212; lavuelib 2.55.0 documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="../index.html">
           lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.54</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.55</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -179,11 +179,9 @@
 <span class="sd">To use, simply &#39;import logging&#39; and log away!</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">io</span><span class="o">,</span> <span class="nn">re</span><span class="o">,</span> <span class="nn">traceback</span><span class="o">,</span> <span class="nn">warnings</span><span class="o">,</span> <span class="nn">weakref</span><span class="o">,</span> <span class="nn">collections.abc</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">io</span><span class="o">,</span> <span class="nn">traceback</span><span class="o">,</span> <span class="nn">warnings</span><span class="o">,</span> <span class="nn">weakref</span><span class="o">,</span> <span class="nn">collections.abc</span>
 
 <span class="kn">from</span> <span class="nn">string</span> <span class="k">import</span> <span class="n">Template</span>
-<span class="kn">from</span> <span class="nn">string</span> <span class="k">import</span> <span class="n">Formatter</span> <span class="k">as</span> <span class="n">StrFormatter</span>
-
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;BASIC_FORMAT&#39;</span><span class="p">,</span> <span class="s1">&#39;BufferingFormatter&#39;</span><span class="p">,</span> <span class="s1">&#39;CRITICAL&#39;</span><span class="p">,</span> <span class="s1">&#39;DEBUG&#39;</span><span class="p">,</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">,</span>
            <span class="s1">&#39;FATAL&#39;</span><span class="p">,</span> <span class="s1">&#39;FileHandler&#39;</span><span class="p">,</span> <span class="s1">&#39;Filter&#39;</span><span class="p">,</span> <span class="s1">&#39;Formatter&#39;</span><span class="p">,</span> <span class="s1">&#39;Handler&#39;</span><span class="p">,</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
@@ -387,38 +385,49 @@
 <span class="c1"># Prevent a held logging lock from blocking a child from logging.</span>
 
 <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">os</span><span class="p">,</span> <span class="s1">&#39;register_at_fork&#39;</span><span class="p">):</span>  <span class="c1"># Windows and friends.</span>
-    <span class="k">def</span> <span class="nf">_register_at_fork_reinit_lock</span><span class="p">(</span><span class="n">instance</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_register_at_fork_acquire_release</span><span class="p">(</span><span class="n">instance</span><span class="p">):</span>
         <span class="k">pass</span>  <span class="c1"># no-op when os.register_at_fork does not exist.</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="c1"># A collection of instances with a createLock method (logging.Handler)</span>
-    <span class="c1"># to be called in the child after forking.  The weakref avoids us keeping</span>
-    <span class="c1"># discarded Handler instances alive.  A set is used to avoid accumulating</span>
-    <span class="c1"># duplicate registrations as createLock() is responsible for registering</span>
-    <span class="c1"># a new Handler instance with this set in the first place.</span>
-    <span class="n">_at_fork_reinit_lock_weakset</span> <span class="o">=</span> <span class="n">weakref</span><span class="o">.</span><span class="n">WeakSet</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>  <span class="c1"># The os.register_at_fork API exists</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">register_at_fork</span><span class="p">(</span><span class="n">before</span><span class="o">=</span><span class="n">_acquireLock</span><span class="p">,</span>
+                        <span class="n">after_in_child</span><span class="o">=</span><span class="n">_releaseLock</span><span class="p">,</span>
+                        <span class="n">after_in_parent</span><span class="o">=</span><span class="n">_releaseLock</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_register_at_fork_reinit_lock</span><span class="p">(</span><span class="n">instance</span><span class="p">):</span>
-        <span class="n">_acquireLock</span><span class="p">()</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">_at_fork_reinit_lock_weakset</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
-        <span class="k">finally</span><span class="p">:</span>
-            <span class="n">_releaseLock</span><span class="p">()</span>
+    <span class="c1"># A collection of instances with acquire and release methods (logging.Handler)</span>
+    <span class="c1"># to be called before and after fork.  The weakref avoids us keeping discarded</span>
+    <span class="c1"># Handler instances alive forever in case an odd program creates and destroys</span>
+    <span class="c1"># many over its lifetime.</span>
+    <span class="n">_at_fork_acquire_release_weakset</span> <span class="o">=</span> <span class="n">weakref</span><span class="o">.</span><span class="n">WeakSet</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">_after_at_fork_child_reinit_locks</span><span class="p">():</span>
-        <span class="c1"># _acquireLock() was called in the parent before forking.</span>
-        <span class="k">for</span> <span class="n">handler</span> <span class="ow">in</span> <span class="n">_at_fork_reinit_lock_weakset</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">_register_at_fork_acquire_release</span><span class="p">(</span><span class="n">instance</span><span class="p">):</span>
+        <span class="c1"># We put the instance itself in a single WeakSet as we MUST have only</span>
+        <span class="c1"># one atomic weak ref. used by both before and after atfork calls to</span>
+        <span class="c1"># guarantee matched pairs of acquire and release calls.</span>
+        <span class="n">_at_fork_acquire_release_weakset</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_at_fork_weak_calls</span><span class="p">(</span><span class="n">method_name</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">instance</span> <span class="ow">in</span> <span class="n">_at_fork_acquire_release_weakset</span><span class="p">:</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">handler</span><span class="o">.</span><span class="n">createLock</span><span class="p">()</span>
+                <span class="n">method</span><span class="p">()</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
                 <span class="c1"># Similar to what PyErr_WriteUnraisable does.</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ignoring exception from logging atfork&quot;</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span>
-                      <span class="s2">&quot;._reinit_lock() method:&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
-        <span class="n">_releaseLock</span><span class="p">()</span>  <span class="c1"># Acquired by os.register_at_fork(before=.</span>
+                      <span class="n">method_name</span><span class="p">,</span> <span class="s2">&quot;method:&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
 
 
-    <span class="n">os</span><span class="o">.</span><span class="n">register_at_fork</span><span class="p">(</span><span class="n">before</span><span class="o">=</span><span class="n">_acquireLock</span><span class="p">,</span>
-                        <span class="n">after_in_child</span><span class="o">=</span><span class="n">_after_at_fork_child_reinit_locks</span><span class="p">,</span>
-                        <span class="n">after_in_parent</span><span class="o">=</span><span class="n">_releaseLock</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_before_at_fork_weak_calls</span><span class="p">():</span>
+        <span class="n">_at_fork_weak_calls</span><span class="p">(</span><span class="s1">&#39;acquire&#39;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_after_at_fork_weak_calls</span><span class="p">():</span>
+        <span class="n">_at_fork_weak_calls</span><span class="p">(</span><span class="s1">&#39;release&#39;</span><span class="p">)</span>
+
+
+    <span class="n">os</span><span class="o">.</span><span class="n">register_at_fork</span><span class="p">(</span><span class="n">before</span><span class="o">=</span><span class="n">_before_at_fork_weak_calls</span><span class="p">,</span>
+                        <span class="n">after_in_child</span><span class="o">=</span><span class="n">_after_at_fork_weak_calls</span><span class="p">,</span>
+                        <span class="n">after_in_parent</span><span class="o">=</span><span class="n">_after_at_fork_weak_calls</span><span class="p">)</span>
 
 
 <span class="c1">#---------------------------------------------------------------------------</span>
@@ -509,9 +518,11 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;&lt;LogRecord: </span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">, &quot;</span><span class="si">%s</span><span class="s1">&quot;&gt;&#39;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">levelno</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pathname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lineno</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="fm">__repr__</span> <span class="o">=</span> <span class="fm">__str__</span>
 
     <span class="k">def</span> <span class="nf">getMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -558,20 +569,15 @@
     <span class="n">rv</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">rv</span>
 
-
 <span class="c1">#---------------------------------------------------------------------------</span>
 <span class="c1">#   Formatter classes and functions</span>
 <span class="c1">#---------------------------------------------------------------------------</span>
-<span class="n">_str_formatter</span> <span class="o">=</span> <span class="n">StrFormatter</span><span class="p">()</span>
-<span class="k">del</span> <span class="n">StrFormatter</span>
-
 
 <span class="k">class</span> <span class="nc">PercentStyle</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="n">default_format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%(message)s</span><span class="s1">&#39;</span>
     <span class="n">asctime_format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1">&#39;</span>
     <span class="n">asctime_search</span> <span class="o">=</span> <span class="s1">&#39;%(asctime)&#39;</span>
-    <span class="n">validation_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;%\(\w+\)[#0+ -]*(\*|\d+)?(\.(\*|\d+))?[diouxefgcrsa%]&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fmt</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fmt</span> <span class="o">=</span> <span class="n">fmt</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_format</span>
@@ -579,49 +585,16 @@
     <span class="k">def</span> <span class="nf">usesTime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fmt</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">asctime_search</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span>
 
-    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Validate the input format, ensure it matches the correct style&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">validation_pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fmt</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid format &#39;</span><span class="si">%s</span><span class="s2">&#39; for &#39;</span><span class="si">%s</span><span class="s2">&#39; style&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fmt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_format</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-
-    <span class="k">def</span> <span class="nf">_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fmt</span> <span class="o">%</span> <span class="n">record</span><span class="o">.</span><span class="vm">__dict__</span>
-
     <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Formatting field not found in record: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
-
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fmt</span> <span class="o">%</span> <span class="n">record</span><span class="o">.</span><span class="vm">__dict__</span>
 
 <span class="k">class</span> <span class="nc">StrFormatStyle</span><span class="p">(</span><span class="n">PercentStyle</span><span class="p">):</span>
     <span class="n">default_format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{message}</span><span class="s1">&#39;</span>
     <span class="n">asctime_format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{asctime}</span><span class="s1">&#39;</span>
     <span class="n">asctime_search</span> <span class="o">=</span> <span class="s1">&#39;{asctime&#39;</span>
 
-    <span class="n">fmt_spec</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^(.?[&lt;&gt;=^])?[+ -]?#?0?(\d+|{\w+})?[,_]?(\.(\d+|{\w+}))?[bcdefgnosx%]?$&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
-    <span class="n">field_spec</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^(\d+|\w+)(\.\w+|\[[^]]+\])*$&#39;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">record</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Validate the input format, ensure it is the correct string formatting style&quot;&quot;&quot;</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">fieldname</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">conversion</span> <span class="ow">in</span> <span class="n">_str_formatter</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fmt</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">fieldname</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_spec</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">fieldname</span><span class="p">):</span>
-                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;invalid field name/expression: </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">fieldname</span><span class="p">)</span>
-                    <span class="n">fields</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">fieldname</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">conversion</span> <span class="ow">and</span> <span class="n">conversion</span> <span class="ow">not</span> <span class="ow">in</span> <span class="s1">&#39;rsa&#39;</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;invalid conversion: </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">conversion</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">spec</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">fmt_spec</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">spec</span><span class="p">):</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;bad specifier: </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">spec</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;invalid format: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">fields</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;invalid format: no fields&#39;</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">StringTemplateStyle</span><span class="p">(</span><span class="n">PercentStyle</span><span class="p">):</span>
@@ -637,23 +610,8 @@
         <span class="n">fmt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fmt</span>
         <span class="k">return</span> <span class="n">fmt</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;$asctime&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">fmt</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">asctime_format</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span>
 
-    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">pattern</span> <span class="o">=</span> <span class="n">Template</span><span class="o">.</span><span class="n">pattern</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">pattern</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fmt</span><span class="p">):</span>
-            <span class="n">d</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">groupdict</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;named&#39;</span><span class="p">]:</span>
-                <span class="n">fields</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;named&#39;</span><span class="p">])</span>
-            <span class="k">elif</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;braced&#39;</span><span class="p">]:</span>
-                <span class="n">fields</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;braced&#39;</span><span class="p">])</span>
-            <span class="k">elif</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;$&#39;</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;invalid format: bare </span><span class="se">\&#39;</span><span class="s1">$</span><span class="se">\&#39;</span><span class="s1"> not allowed&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">fields</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;invalid format: no fields&#39;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tpl</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="o">**</span><span class="n">record</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
-
 
 <span class="n">BASIC_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(levelname)s</span><span class="s2">:</span><span class="si">%(name)s</span><span class="s2">:</span><span class="si">%(message)s</span><span class="s2">&quot;</span>
 
@@ -708,7 +666,7 @@
 
     <span class="n">converter</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">localtime</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;%&#39;</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;%&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the formatter with specified format strings.</span>
 
@@ -728,9 +686,6 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Style must be one of: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                              <span class="n">_STYLES</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_style</span> <span class="o">=</span> <span class="n">_STYLES</span><span class="p">[</span><span class="n">style</span><span class="p">][</span><span class="mi">0</span><span class="p">](</span><span class="n">fmt</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_style</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">_fmt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_style</span><span class="o">.</span><span class="n">_fmt</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datefmt</span> <span class="o">=</span> <span class="n">datefmt</span>
 
@@ -1045,7 +1000,7 @@
 <span class="sd">        Acquire a thread lock for serializing access to the underlying I/O.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
-        <span class="n">_register_at_fork_reinit_lock</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">_register_at_fork_acquire_release</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">acquire</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1175,8 +1130,6 @@
                     <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Message: </span><span class="si">%r</span><span class="se">\n</span><span class="s1">&#39;</span>
                                      <span class="s1">&#39;Arguments: </span><span class="si">%s</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">msg</span><span class="p">,</span>
                                                           <span class="n">record</span><span class="o">.</span><span class="n">args</span><span class="p">))</span>
-                <span class="k">except</span> <span class="n">RecursionError</span><span class="p">:</span>  <span class="c1"># See issue 36272</span>
-                    <span class="k">raise</span>
                 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                     <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Unable to print the message and arguments&#39;</span>
                                      <span class="s1">&#39; - possible formatting error.</span><span class="se">\n</span><span class="s1">Use the&#39;</span>
@@ -1239,8 +1192,6 @@
             <span class="c1"># issue 35046: merged two stream.writes into one.</span>
             <span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">terminator</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
-        <span class="k">except</span> <span class="n">RecursionError</span><span class="p">:</span>  <span class="c1"># See issue 36272</span>
-            <span class="k">raise</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">handleError</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
 
@@ -1267,8 +1218,6 @@
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">level</span> <span class="o">=</span> <span class="n">getLevelName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">)</span>
         <span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="c1">#  bpo-36015: name can be an int</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span>
         <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">(</span><span class="si">%s</span><span class="s1">)&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
@@ -1655,7 +1604,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">level</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">findCaller</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stack_info</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">findCaller</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stack_info</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Find the stack frame of the caller so that we can note the source</span>
 <span class="sd">        file name, line number and function name.</span>
@@ -1665,12 +1614,6 @@
         <span class="c1">#IronPython isn&#39;t run with -X:Frames.</span>
         <span class="k">if</span> <span class="n">f</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">f</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">f_back</span>
-        <span class="n">orig_f</span> <span class="o">=</span> <span class="n">f</span>
-        <span class="k">while</span> <span class="n">f</span> <span class="ow">and</span> <span class="n">stacklevel</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">f_back</span>
-            <span class="n">stacklevel</span> <span class="o">-=</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="n">orig_f</span>
         <span class="n">rv</span> <span class="o">=</span> <span class="s2">&quot;(unknown file)&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;(unknown function)&quot;</span><span class="p">,</span> <span class="kc">None</span>
         <span class="k">while</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;f_code&quot;</span><span class="p">):</span>
             <span class="n">co</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">f_code</span>
@@ -1706,8 +1649,7 @@
                 <span class="n">rv</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">extra</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">rv</span>
 
-    <span class="k">def</span> <span class="nf">_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stack_info</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-             <span class="n">stacklevel</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stack_info</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Low-level logging routine which creates a LogRecord and then calls</span>
 <span class="sd">        all the handlers of this logger to handle the record.</span>
@@ -1718,7 +1660,7 @@
             <span class="c1">#exception on some versions of IronPython. We trap it here so that</span>
             <span class="c1">#IronPython can use logging.</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">fn</span><span class="p">,</span> <span class="n">lno</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">sinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">findCaller</span><span class="p">(</span><span class="n">stack_info</span><span class="p">,</span> <span class="n">stacklevel</span><span class="p">)</span>
+                <span class="n">fn</span><span class="p">,</span> <span class="n">lno</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">sinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">findCaller</span><span class="p">(</span><span class="n">stack_info</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span> <span class="c1"># pragma: no cover</span>
                 <span class="n">fn</span><span class="p">,</span> <span class="n">lno</span><span class="p">,</span> <span class="n">func</span> <span class="o">=</span> <span class="s2">&quot;(unknown file)&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;(unknown function)&quot;</span>
         <span class="k">else</span><span class="p">:</span> <span class="c1"># pragma: no cover</span>
@@ -1834,22 +1776,16 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Is this logger enabled for level &#39;level&#39;?</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">disabled</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">False</span>
-
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="n">_acquireLock</span><span class="p">()</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">disable</span> <span class="o">&gt;=</span> <span class="n">level</span><span class="p">:</span>
-                    <span class="n">is_enabled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">level</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">is_enabled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">level</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="n">level</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span>
-                    <span class="p">)</span>
-            <span class="k">finally</span><span class="p">:</span>
-                <span class="n">_releaseLock</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">disable</span> <span class="o">&gt;=</span> <span class="n">level</span><span class="p">:</span>
+                <span class="n">is_enabled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">level</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">is_enabled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">level</span><span class="p">]</span> <span class="o">=</span> <span class="n">level</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span>
+            <span class="n">_releaseLock</span><span class="p">()</span>
+
             <span class="k">return</span> <span class="n">is_enabled</span>
 
     <span class="k">def</span> <span class="nf">getChild</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suffix</span><span class="p">):</span>
@@ -2054,8 +1990,7 @@
 <span class="sd">    Do basic configuration for the logging system.</span>
 
 <span class="sd">    This function does nothing if the root logger already has handlers</span>
-<span class="sd">    configured, unless the keyword argument *force* is set to ``True``.</span>
-<span class="sd">    It is a convenience method intended for use by simple scripts</span>
+<span class="sd">    configured. It is a convenience method intended for use by simple scripts</span>
 <span class="sd">    to do one-shot configuration of the logging package.</span>
 
 <span class="sd">    The default behaviour is to create a StreamHandler which writes to</span>
@@ -2083,18 +2018,12 @@
 <span class="sd">              handlers, which will be added to the root handler. Any handler</span>
 <span class="sd">              in the list which does not have a formatter assigned will be</span>
 <span class="sd">              assigned the formatter created in this function.</span>
-<span class="sd">    force     If this keyword  is specified as true, any existing handlers</span>
-<span class="sd">              attached to the root logger are removed and closed, before</span>
-<span class="sd">              carrying out the configuration as specified by the other</span>
-<span class="sd">              arguments.</span>
+
 <span class="sd">    Note that you could specify a stream created using open(filename, mode)</span>
 <span class="sd">    rather than passing the filename and mode in. However, it should be</span>
 <span class="sd">    remembered that StreamHandler does not close its stream (since it may be</span>
 <span class="sd">    using sys.stdout or sys.stderr), whereas FileHandler closes its stream</span>
 <span class="sd">    when the handler is closed.</span>
-
-<span class="sd">    .. versionchanged:: 3.8</span>
-<span class="sd">       Added the ``force`` parameter.</span>
 
 <span class="sd">    .. versionchanged:: 3.2</span>
 <span class="sd">       Added the ``style`` parameter.</span>
@@ -2110,11 +2039,6 @@
     <span class="c1"># basicConfig() from multiple threads</span>
     <span class="n">_acquireLock</span><span class="p">()</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">force</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;force&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">force</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">handlers</span><span class="p">[:]:</span>
-                <span class="n">root</span><span class="o">.</span><span class="n">removeHandler</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
-                <span class="n">h</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">handlers</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">handlers</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;handlers&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">handlers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2360,7 +2284,7 @@
         &copy; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.<br/>
     </p>
   </div>
 </footer>
