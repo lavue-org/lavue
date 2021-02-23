@@ -527,6 +527,16 @@ class TangoFileSource(BaseSource):
             return "No file attribute defined", "__ERROR__", None
         try:
             filename = self.__fproxy.read().value
+            if filename.startswith("file:/localhost//"):
+                filename = filename[16:]
+            elif filename.startswith("file:////"):
+                filename = filename[8:]
+            elif filename.startswith("file:///"):
+                filename = filename[7:]
+            elif filename.startswith("file://"):
+                filename = filename[6:]
+            elif filename.startswith("file:/"):
+                filename = filename[5:]
             if self.__dproxy:
                 dattr = self.__dproxy.read().value
                 filename = "%s/%s" % (dattr, filename)
