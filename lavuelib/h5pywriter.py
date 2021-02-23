@@ -79,6 +79,17 @@ def is_vds_supported():
     return h5ver >= 2009
 
 
+def unlimited(parent=None):
+    """ return dataspace UNLIMITED variable for the current writer module
+
+    :param parent: parent object
+    :type parent: :class:`FTObject`
+    :returns:  dataspace UNLIMITED variable
+    :rtype: :class:`h5py.UNLIMITED`
+    """
+    return h5py.UNLIMITED
+
+
 def load_file(membuffer, filename=None, readonly=False, **pars):
     """ load a file from memory byte buffer
 
@@ -138,9 +149,9 @@ def create_file(filename, overwrite=False, **pars):
     """
     fl = h5py.File(filename, "w" if overwrite else "w-", **pars)
     fl.attrs["file_time"] = unicode(H5PYFile.currenttime())
-    fl.attrs["HDF5_version"] = u""
+    fl.attrs["HDF5_Version"] = str(h5py.version.hdf5_version)
     fl.attrs["NX_class"] = u"NXroot"
-    fl.attrs["NeXus_version"] = u"4.3.0"
+    # fl.attrs["NeXus_version"] = u"4.3.0"
     fl.attrs["file_name"] = unicode(filename)
     fl.attrs["file_update_time"] = unicode(H5PYFile.currenttime())
     return H5PYFile(fl, filename)
@@ -506,12 +517,17 @@ class H5PYGroup(filewriter.FTGroup):
         :returns: file tree field
         :rtype: :class:`H5PYField`
         """
-        shape = shape or [1]
-        mshape = [None for _ in shape] or (None,)
         if type_code in ['string', b'string']:
             type_code = h5py.special_dtype(vlen=unicode)
             # type_code = h5py.special_dtype(vlen=unicode)
             # type_code = h5py.special_dtype(vlen=bytes)
+        if type_code == h5py.special_dtype(vlen=unicode) and \
+           shape is None and chunk is None:
+            return H5PYField(
+                self._h5object.create_dataset(name, (), type_code), self)
+
+        shape = shape or [1]
+        mshape = [None for _ in shape] or (None,)
         if dfilter:
             if dfilter.filterid == 1:
                 f = H5PYField(
@@ -668,8 +684,11 @@ class H5PYField(filewriter.FTField):
         :type dim: :obj:`int`
         """
         shape = list(self._h5object.shape)
-        shape[dim] += ext
-        return self._h5object.resize(shape)
+        if shape:
+            shape[dim] += ext
+            return self._h5object.resize(shape)
+        else:
+            return self._h5object
 
     def read(self):
         """ read the field value
@@ -909,15 +928,20 @@ class H5PYVirtualFieldLayout(filewriter.FTVirtualFieldLayout):
         """
         self._h5object.__setitem__(key, source._h5object)
 
-    def add(self, key, source):
+    def add(self, key, source, sourcekey=None):
         """ add external field to layout
 
         :param key: slide
         :type key: :obj:`tuple`
         :param source: external field
         :type source: :class:`H5PYExternalField`
+        :param sourcekey: slide or selection
+        :type sourcekey: :obj:`tuple`
         """
-        self._h5object.__setitem__(key, source._h5object)
+        if sourcekey is not None:
+            self._h5object.__setitem__(key, source._h5object[sourcekey])
+        else:
+            self._h5object.__setitem__(key, source._h5object)
 
 
 class H5PYExternalField(filewriter.FTExternalField):
@@ -1251,9 +1275,9 @@ class H5PYAttribute(filewriter.FTAttribute):
         :rtype: :obj:`list` < :obj:`int` >
         """
         if hasattr(self._h5object[0][self.name], "shape"):
-            return self._h5object[0][self.name].shape or (1,)
+            return self._h5object[0][self.name].shape
         else:
-            return (1,)
+            return ()
 
     def reopen(self):
         """ reopen attribute

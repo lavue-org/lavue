@@ -193,6 +193,31 @@ def data_filter(parent=None):
 deflate_filter = data_filter
 
 
+def unlimited(parent=None):
+    """ return dataspace UNLIMITED variable for the current writer module
+
+    :param parent: parent object
+    :type parent: :class:`FTObject`
+    :returns:  dataspace UNLIMITED variable
+    :rtype: :class:`h5cpp.dataspace.UNLIMITED` or :class:`h5py.UNLIMITED`
+    """
+    node = parent
+    wr = None
+    while node:
+        if hasattr(node, "writer"):
+            wr = node.writer
+            break
+        else:
+            if hasattr(node, "parent"):
+                node = node.parent
+            else:
+                break
+    if not wr:
+        with writerlock:
+            wr = writer
+    return wr.unlimited()
+
+
 def external_field(filename, fieldpath, shape,
                    dtype=None, maxshape=None, parent=None):
     """ create external field for VDS
@@ -270,6 +295,16 @@ def setwriter(wr):
     global writer
     with writerlock:
         writer = wr
+
+
+class FTHyperslab(object):
+
+    def __init__(self, offset=None, block=None, count=None, stride=None):
+
+        self.offset = offset
+        self.block = block
+        self.count = count
+        self.stride = stride
 
 
 class FTObject(object):
@@ -365,10 +400,12 @@ def first(array):
     :returns: first element of the array
     :type array: :obj:`any`
     """
-    if isinstance(array, numpy.ndarray) and len(array) == 1:
-        return array[0]
-    else:
-        return array
+    try:
+        if isinstance(array, numpy.ndarray) and len(array) == 1:
+            return array[0]
+    except Exception:
+        pass
+    return array
 
 
 class FTFile(FTObject):
@@ -648,15 +685,17 @@ class FTVirtualFieldLayout(FTObject):
         """
         self._h5object.__setitem__(key, source._h5object)
 
-    def add(self, key, source):
+    def add(self, key, source, sourcekey=None):
         """ add external field to layout
 
         :param key: slide or selection
         :type key: :obj:`tuple`
         :param source: external field
         :type source: :class:`FTExternalField`
+        :param sourcekey: slide or selection
+        :type sourcekey: :obj:`tuple`
         """
-        self._h5object.__setitem__(key, source._h5object)
+        self._h5object.add(key, source, sourcekey)
 
 
 class FTExternalField(FTObject):
