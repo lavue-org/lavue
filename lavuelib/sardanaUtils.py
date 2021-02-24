@@ -98,7 +98,7 @@ class SardanaUtils(object):
             self.__db = None
 
     @classmethod
-    def openProxy(cls, device, counter=1000):
+    def openProxy(cls, device, counter=100):
         """ opens device proxy of the given device
 
         :param device: device name
@@ -116,7 +116,7 @@ class SardanaUtils(object):
             try:
                 cnfServer.ping()
                 found = True
-            except (tango.DevFailed, tango.Except, tango.DevError):
+            except tango.DevFailed:
                 time.sleep(0.01)
                 found = False
                 if cnt == counter - 1:
@@ -239,7 +239,7 @@ class SardanaUtils(object):
                 dp.ping()
                 device = server
                 break
-            except (tango.DevFailed, tango.Except, tango.DevError):
+            except tango.DevFailed:
                 pass
         return device
 
@@ -447,6 +447,6 @@ class SardanaUtils(object):
             try:
                 dp.ping()
                 dps.append(dp)
-            except (tango.DevFailed, tango.Except, tango.DevError):
+            except tango.DevFailed:
                 pass
         return dps
