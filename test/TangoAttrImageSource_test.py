@@ -438,7 +438,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
                   "PyTango < 9.2.5 is not supported")
             print("Skipping ...")
             return
-            
+
         self.__lcsu.proxy.Init()
         self.__tisu.proxy.Init()
         self.__lavuestate = None
