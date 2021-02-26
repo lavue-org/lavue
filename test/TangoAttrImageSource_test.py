@@ -1864,7 +1864,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             '\x00\x00\x00\x10\x00\x00\x00\x11\x00\x00\x00\x12\x00\x00\x00' \
             '\x13\x00\x00\x00\x14\x00\x00\x00\x15\x00\x00\x00\x16\x00\x00' \
             '\x00\x17\x00\x00\x00'
-        ad = lavuelib.imageSource.ARRAYDATAdecoder()
+        ad = lavuelib.imageSource.DATAARRAYdecoder()
 
         ad.load(("DATA_ARRAY", w1))
         dw1 = ad.decode()
