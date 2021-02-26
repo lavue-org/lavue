@@ -146,6 +146,23 @@ else:
 
 logger = logging.getLogger("lavue")
 
+#: (:obj:`bool`) PyTango bug #213 flag related to EncodedAttributes in python3
+PYTG_BUG_213 = False
+if sys.version_info > (3,):
+    try:
+        PYTGMAJOR, PYTGMINOR, PYTGPATCH = list(
+            map(int, tango.__version__.split(".")[:3]))
+        if PYTGMAJOR <= 9:
+            if PYTGMAJOR == 9:
+                if PYTGMINOR < 2:
+                    PYTG_BUG_213 = True
+                elif PYTGMINOR == 2 and PYTGPATCH <= 4:
+                    PYTG_BUG_213 = True
+            else:
+                PYTG_BUG_213 = True
+    except Exception:
+        pass
+
 
 def tobytes(x):
     """ decode str to bytes
@@ -886,6 +903,11 @@ class TangoAttrSource(BaseSource):
                 else:
                     attr = self.__aproxy.read()
             if str(attr.type) == "DevEncoded":
+                if PYTG_BUG_213:
+                    raise Exception(
+                        "Reading Encoded Attributes for python3 and "
+                        "PyTango < 9.2.5 is not supported")
+
                 avalue = attr.value
                 if avalue[0] in ["RGB24", "JPEG_RGB"]:
                     image = QtGui.QImage.fromData(avalue[1])
