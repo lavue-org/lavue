@@ -698,7 +698,7 @@ class VDEOdecoder(object):
 
 class DATAARRAYdecoder(object):
 
-    """ ARRAY DATA LIMA decoder
+    """ DATA ARRAY LIMA decoder
     """
 
     @debugmethod
