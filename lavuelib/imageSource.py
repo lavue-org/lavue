@@ -926,6 +926,13 @@ class TangoAttrSource(BaseSource):
                     return (np.transpose(attr.value),
                             '%s  (%s)' % (
                                 self._configuration, str(attr.time)), "")
+        except tango.DevFailed as e:
+            if "Frame(s) not available yet" in str((e.args[0]).desc):
+                logger.warning("TangoAttrSource: Frame(s) not available yet")
+                return None, None, None
+            logger.warning(str(e))
+            # print(str(e))
+            return str(e), "__ERROR__", ""
         except Exception as e:
             logger.warning(str(e))
             # print(str(e))
