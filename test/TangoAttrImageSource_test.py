@@ -122,6 +122,27 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         self.__tangoimgcounter = 0
         self.__tangofilepattern = "%05d.tif"
         self.__tangofilepath = ""
+        self.__images = [
+            b'YATD\x02\x00@\x00\x02\x00\x00\x00\x05\x00\x00\x00\x00\x00'
+            b'\x02\x00\x06\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02'
+            b'\x00\x00\x00\x0c\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+            b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+            b'\x00\x00\x00\x01\x00\x02\x00\x03\x00\x04\x00\x05\x00\x06\x00'
+            b'\x07\x00\x08\x00\t\x00\n\x00\x0b\x00\x0c\x00\r\x00\x0e\x00'
+            b'\x0f\x00\x10\x00\x11\x00\x12\x00\x13\x00\x14\x00\x15\x00\x16'
+            b'\x00\x17\x00',
+            b'YATD\x02\x00@\x00\x02\x00\x00\x00\x02\x00\x00\x00\x00\x00'
+            b'\x03\x00\x02\x00\x03\x00\x04\x00\x00\x00\x00\x00\x00\x00\x04'
+            b'\x00\x00\x00\x08\x00\x00\x00\x18\x00\x00\x00\x00\x00\x00\x00'
+            b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+            b'\x00\x00\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x03\x00'
+            b'\x00\x00\x04\x00\x00\x00\x05\x00\x00\x00\x06\x00\x00\x00\x07'
+            b'\x00\x00\x00\x08\x00\x00\x00\t\x00\x00\x00\n\x00\x00\x00\x0b'
+            b'\x00\x00\x00\x0c\x00\x00\x00\r\x00\x00\x00\x0e\x00\x00\x00\x0f'
+            b'\x00\x00\x00\x10\x00\x00\x00\x11\x00\x00\x00\x12\x00\x00\x00'
+            b'\x13\x00\x00\x00\x14\x00\x00\x00\x15\x00\x00\x00\x16\x00\x00'
+            b'\x00\x17\x00\x00\x00'
+        ]
 
         self.__defaultls = {
             '__timestamp__': 0.0,
@@ -191,6 +212,19 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         global app
         self.__tisu.proxy.StartAcq()
         li = self.__tisu.proxy.LastImage
+        app.sendPostedEvents()
+        # yieldCurrentThread()
+        return li
+
+    def takeNewEncodedImage(self):
+        global app
+        self.__tangoimgcounter += 1
+        if self.__tangoimgcounter % 2:
+            self.__tisu.proxy.StartAcq()
+        else:
+            self.__tisu.proxy.ReadyEventAcq()
+        li = self.__tisu.proxy.ImageEncoded
+        # print(li)
         app.sendPostedEvents()
         # yieldCurrentThread()
         return li
@@ -364,6 +398,135 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             mode='expert',
             source='tangoattr',
             configuration='test/testimageserver/00/LastImage',
+            instance='tgtest',
+            tool='roi',
+            # log='debug',
+            log='info',
+            scaling='log',
+            levels='-20.0,20.0',
+            gradient='thermal',
+            tangodevice='test/lavuecontroller/00',
+            connected=True,
+            autofactor=None
+        ))
+        self.compareStates(ls, dls,
+                           ['viewrange', '__timestamp__', 'doordevice'])
+
+    def test_readencodedimage(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        self.__lcsu.proxy.Init()
+        self.__tisu.proxy.Init()
+        self.__lavuestate = None
+        lastimage1 = np.array([[2, 5], [3, 4]], dtype='uint8')
+        lastimage2 = np.array(range(24), dtype='int16').reshape(4, 6)
+        lastimage3 = np.array(range(24), dtype='uint32').reshape(4, 3, 2)
+
+        options = argparse.Namespace(
+            mode='expert',
+            source='tangoattr',
+            configuration='test/testimageserver/00/ImageEncoded',
+            instance='tgtest',
+            tool='roi',
+            # log='debug',
+            log='info',
+            scaling='log',
+            levels='m20,20',
+            gradient='thermal',
+            start=True,
+            tangodevice='test/lavuecontroller/00'
+        )
+        logging.basicConfig(
+             format="%(levelname)s: %(message)s")
+        logger = logging.getLogger("lavue")
+        lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+        dialog = lavuelib.liveViewer.MainWindow(options=options)
+        dialog.show()
+
+        qtck1 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck2 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck3 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck1.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            ExtCmdCheck(self, "getLavueState"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            ExtCmdCheck(self, "takeNewEncodedImage"),
+        ])
+        qtck2.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            ExtCmdCheck(self, "takeNewEncodedImage"),
+        ])
+        qtck3.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            WrapAttrCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg"
+                "._SourceTabWidget__sourcetabs[],0._ui.pushButton",
+                QtTest.QTest.mouseClick, [QtCore.Qt.LeftButton]),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+        ])
+
+        print("execute")
+        qtck1.executeChecks(delay=6000)
+        qtck2.executeChecks(delay=12000)
+        status = qtck3.executeChecksAndClose(delay=18000)
+
+        self.assertEqual(status, 0)
+
+        qtck1.compareResults(
+            self, [True, None, None, None, None], mask=[0, 0, 1, 1, 1])
+        qtck2.compareResults(
+            self, [True, None, None, None], mask=[0, 1, 1, 1])
+        qtck3.compareResults(
+            self, [None, None, None, False], mask=[1, 1, 0, 0])
+
+        lastimage = lastimage1.T
+        res1 = qtck1.results()
+        res2 = qtck2.results()
+        res3 = qtck3.results()
+        self.assertTrue(np.allclose(res1[2], lastimage))
+
+        scaledimage = np.clip(lastimage, 10e-3, np.inf)
+        scaledimage = np.log10(scaledimage)
+        self.assertTrue(np.allclose(res1[3], scaledimage))
+
+        lastimage = lastimage2
+        if not np.allclose(res2[1], lastimage):
+            print(res2[1])
+            print(lastimage)
+        self.assertTrue(np.allclose(res2[1], lastimage))
+        scaledimage = np.clip(lastimage, 10e-3, np.inf)
+        scaledimage = np.log10(scaledimage)
+        self.assertTrue(np.allclose(res2[2], scaledimage))
+
+        lastimage = np.nansum(lastimage3, 0)
+        self.assertTrue(np.allclose(res3[0], lastimage))
+        scaledimage = np.clip(lastimage, 10e-3, np.inf)
+        scaledimage = np.log10(scaledimage)
+        self.assertTrue(np.allclose(res3[1], scaledimage))
+
+        ls = json.loads(self.__lavuestate)
+        dls = dict(self.__defaultls)
+        dls.update(dict(
+            mode='expert',
+            source='tangoattr',
+            configuration='test/testimageserver/00/ImageEncoded',
             instance='tgtest',
             tool='roi',
             # log='debug',
@@ -1845,25 +2008,8 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        w1 = b'YATD\x02\x00@\x00\x02\x00\x00\x00\x05\x00\x00\x00\x00\x00' \
-            b'\x02\x00\x06\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02' \
-            b'\x00\x00\x00\x0c\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00' \
-            b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00' \
-            b'\x00\x00\x00\x01\x00\x02\x00\x03\x00\x04\x00\x05\x00\x06\x00' \
-            b'\x07\x00\x08\x00\t\x00\n\x00\x0b\x00\x0c\x00\r\x00\x0e\x00' \
-            b'\x0f\x00\x10\x00\x11\x00\x12\x00\x13\x00\x14\x00\x15\x00\x16' \
-            b'\x00\x17\x00'
-        w2 = b'YATD\x02\x00@\x00\x02\x00\x00\x00\x02\x00\x00\x00\x00\x00' \
-            b'\x03\x00\x02\x00\x03\x00\x04\x00\x00\x00\x00\x00\x00\x00\x04' \
-            b'\x00\x00\x00\x08\x00\x00\x00\x18\x00\x00\x00\x00\x00\x00\x00' \
-            b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00' \
-            b'\x00\x00\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x03\x00' \
-            b'\x00\x00\x04\x00\x00\x00\x05\x00\x00\x00\x06\x00\x00\x00\x07' \
-            b'\x00\x00\x00\x08\x00\x00\x00\t\x00\x00\x00\n\x00\x00\x00\x0b' \
-            b'\x00\x00\x00\x0c\x00\x00\x00\r\x00\x00\x00\x0e\x00\x00\x00\x0f' \
-            b'\x00\x00\x00\x10\x00\x00\x00\x11\x00\x00\x00\x12\x00\x00\x00' \
-            b'\x13\x00\x00\x00\x14\x00\x00\x00\x15\x00\x00\x00\x16\x00\x00' \
-            b'\x00\x17\x00\x00\x00'
+        w1 = self.__images[0]
+        w2 = self.__images[1]
         ad = lavuelib.imageSource.DATAARRAYdecoder()
 
         ad.load(("DATA_ARRAY", w1))

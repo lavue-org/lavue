@@ -14,6 +14,8 @@ except ImportError:
 
 import sys
 import random
+import struct
+import numpy
 
 
 class TestImageServer (tango.Device_4Impl):
@@ -40,6 +42,65 @@ class TestImageServer (tango.Device_4Impl):
         self.ReadyEventImage = self.get_device_attr().get_attr_by_name(
             "ReadyEventImage")
         self.ReadyEventImage.set_data_ready_event(True)
+        self.attr_ImageUChar = numpy.array([[2, 5], [3, 4]], dtype='uint8')
+        self.attr_ImageEncoded = self.encodeImage()
+        self.__images = [
+            b'YATD\x02\x00@\x00\x02\x00\x00\x00\x05\x00\x00\x00\x00\x00'
+            b'\x02\x00\x06\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02'
+            b'\x00\x00\x00\x0c\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+            b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+            b'\x00\x00\x00\x01\x00\x02\x00\x03\x00\x04\x00\x05\x00\x06\x00'
+            b'\x07\x00\x08\x00\t\x00\n\x00\x0b\x00\x0c\x00\r\x00\x0e\x00'
+            b'\x0f\x00\x10\x00\x11\x00\x12\x00\x13\x00\x14\x00\x15\x00\x16'
+            b'\x00\x17\x00',
+            b'YATD\x02\x00@\x00\x02\x00\x00\x00\x02\x00\x00\x00\x00\x00'
+            b'\x03\x00\x02\x00\x03\x00\x04\x00\x00\x00\x00\x00\x00\x00\x04'
+            b'\x00\x00\x00\x08\x00\x00\x00\x18\x00\x00\x00\x00\x00\x00\x00'
+            b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+            b'\x00\x00\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x03\x00'
+            b'\x00\x00\x04\x00\x00\x00\x05\x00\x00\x00\x06\x00\x00\x00\x07'
+            b'\x00\x00\x00\x08\x00\x00\x00\t\x00\x00\x00\n\x00\x00\x00\x0b'
+            b'\x00\x00\x00\x0c\x00\x00\x00\r\x00\x00\x00\x0e\x00\x00\x00\x0f'
+            b'\x00\x00\x00\x10\x00\x00\x00\x11\x00\x00\x00\x12\x00\x00\x00'
+            b'\x13\x00\x00\x00\x14\x00\x00\x00\x15\x00\x00\x00\x16\x00\x00'
+            b'\x00\x17\x00\x00\x00'
+        ]
+
+    def encodeImage(self):
+        format = 'VIDEO_IMAGE'
+        # uint8 B
+        mode = 0
+        # uint16 H
+#        mode = 1
+        height, width = self.attr_ImageUChar.shape
+        version = 1
+        endian = sys.byteorder == u'big'
+        hsize = struct.calcsize('!IHHqiiHHHH')
+        header = struct.pack(
+            '!IHHqiiHHHH', 0x5644454f, version, mode, -1,
+            width, height, endian, hsize, 0, 0)
+        fimage = self.attr_ImageUChar.flatten()
+        ibuffer = struct.pack('B' * fimage.size, *fimage)
+        return [format, bytes(header + ibuffer)]
+
+    # ------------------------------------------------------------------
+    #    Read ImageUChar attribute
+    # ------------------------------------------------------------------
+    def read_ImageUChar(self, attr):
+        attr.set_value(self.attr_ImageUChar)
+
+    # ------------------------------------------------------------------
+    #    Write ImageUChar attribute
+    # ------------------------------------------------------------------
+    def write_ImageUChar(self, attr):
+        self.attr_ImageUChar = attr.get_write_value()
+
+    def read_ImageEncoded(self, attr):
+        attr.set_value(
+            self.attr_ImageEncoded[0], self.attr_ImageEncoded[1])
+
+    def write_ImageEncoded(self, attr):
+        self.attr_ImageEncoded = attr.get_write_value()
 
     def read_LastImageTaken(self, attr):
         attr.set_value(self.attr_LastImageTaken_read)
@@ -76,12 +137,14 @@ class TestImageServer (tango.Device_4Impl):
             [random.randint(0, 1000) for j in range(256)]
         self.attr_Spectrum2_read = \
             [random.randint(0, 1000) for j in range(256)]
+        self.attr_ImageEncoded = ("DATA_ARRAY", self.__images[0])
 
     def ReadyEventAcq(self):
         """ Start the acquisition. """
         self.attr_ReadyEventImage_read = \
             [[random.randint(0, 1000) for i in range(128)] for j in range(256)]
         self.push_data_ready_event("ReadyEventImage", 0)
+        self.attr_ImageEncoded = ("DATA_ARRAY", self.__images[1])
 
     def ChangeEventAcq(self):
         """ Start the acquisition. """
@@ -146,6 +209,20 @@ class TestImageServerClass(tango.DeviceClass):
              'label': "Spectrum2",
              'description': "provide last spectrum data",
          }],
+        'ImageEncoded':
+        [[tango.DevEncoded,
+          tango.SCALAR,
+          tango.READ_WRITE],
+         {
+             'description': "ImageEncoded attribute",
+        }],
+        'ImageUChar':
+        [[tango.DevUChar,
+          tango.IMAGE,
+          tango.READ_WRITE, 4096, 4096],
+         {
+             'description': "ImageUChar attribute",
+        }],
         'ReadyEventImage':
         [[tango.DevLong,
           tango.IMAGE,
