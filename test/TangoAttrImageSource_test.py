@@ -529,7 +529,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         scaledimage = np.log10(scaledimage)
         self.assertTrue(np.allclose(res1[3], scaledimage))
 
-        lastimage = lastimage2
+        lastimage = lastimage2.T
         if not np.allclose(res2[1], lastimage):
             print(res2[1])
             print(lastimage)
@@ -538,7 +538,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         scaledimage = np.log10(scaledimage)
         self.assertTrue(np.allclose(res2[2], scaledimage))
 
-        lastimage = np.nansum(lastimage3, 0)
+        lastimage = np.nansum(lastimage3.T, 0)
         self.assertTrue(np.allclose(res3[0], lastimage))
         scaledimage = np.clip(lastimage, 10e-3, np.inf)
         scaledimage = np.log10(scaledimage)
@@ -2039,14 +2039,14 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         dw1 = ad.decode()
         tw1 = np.array(range(24), dtype='int16').reshape(4, 6)
         self.assertEqual(dw1.shape, (4, 6))
-        self.assertEqual(ad.shape(), [6, 4])
+        self.assertEqual(ad.shape(), [4, 6])
         self.assertTrue(np.allclose(dw1, tw1))
 
         ad.load(("DATA_ARRAY", w2))
         dw2 = ad.decode()
         tw2 = np.array(range(24), dtype='uint32').reshape(4, 3, 2)
         self.assertEqual(tw2.shape, (4, 3, 2))
-        self.assertEqual(ad.shape(), [2, 3, 4])
+        self.assertEqual(ad.shape(), [4, 3, 2])
         self.assertTrue(np.allclose(dw2, tw2))
 
 

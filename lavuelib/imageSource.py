@@ -700,8 +700,7 @@ class VDEOdecoder(object):
             fSize = struct.calcsize(dformat)
             self.__value = np.array(
                 struct.unpack(dformat * (len(image) // fSize), image),
-                dtype=self.dtype).reshape(self.__header['height'],
-                                          self.__header['width']).T
+                dtype=self.dtype).reshape(self.shape())
             fendian = self.__header['endianness']
             lendian = ord(struct.pack('=H', 1).decode()[-1])
             if fendian != lendian:
@@ -803,8 +802,9 @@ class DATAARRAYdecoder(object):
         :rtype: :obj:`list` <:obj:`int` >
         """
         if self.__header:
-            return [self.__header['shape'][i]
-                    for i in range(self.__header['dim'])]
+            return list(reversed(
+                [self.__header['shape'][i]
+                 for i in range(self.__header['dim'])]))
 
     @debugmethod
     def steps(self):
@@ -814,8 +814,9 @@ class DATAARRAYdecoder(object):
         :rtype: :obj:`list` <:obj:`int` >
         """
         if self.__header:
-            return [self.__header['steps'][i]
-                    for i in range(self.__header['dim'])]
+            return list(reversed(
+                [self.__header['steps'][i]
+                 for i in range(self.__header['dim'])]))
 
     @debugmethod
     def decode(self):
@@ -832,7 +833,7 @@ class DATAARRAYdecoder(object):
             fSize = struct.calcsize(dformat)
             self.__value = np.array(
                 struct.unpack(dformat * (len(image) // fSize), image),
-                dtype=self.dtype).reshape(list(reversed(self.shape())))
+                dtype=self.dtype).reshape(self.shape())
             fendian = self.__header['endianness']
             lendian = ord(struct.pack('=H', 1).decode()[-1])
             if fendian != lendian:
@@ -934,8 +935,7 @@ class TangoAttrSource(BaseSource):
                     shape = dec.shape()
                     if shape is None or shape[0] <= 0 or shape[1] <= 0:
                         return None, None, None
-                    # no need to transpose
-                    return (dec.decode(),
+                    return (dec.decode().T,
                             '%s %s (%s)' % (
                                 self._configuration,
                                 fnumber,
@@ -1155,11 +1155,10 @@ class TangoEventsSource(BaseSource):
                     else:
                         dec = self.__decoders[avalue[0]]
                         dec.load(avalue)
-                        # no need to transpose
                         shape = dec.shape()
                         if shape is None or shape[0] <= 0 or shape[1] <= 0:
                             return None, None, None
-                        return (dec.decode(),
+                        return (dec.decode().T,
                                 '%s  (%s)' % (
                                     self._configuration, str(self.attr.time)),
                                 "")
