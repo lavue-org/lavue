@@ -217,6 +217,10 @@ class BaseSource(object):
         self.__counter = 0
         #: (:obj:`str`) errormessage
         self.errormessage = ""
+        #: (:obj:`list` <:obj:`numpy.ndarray`>) list of test images
+        self.__images = []
+        #: (:obj:`int` <>) a number of test images
+        self.__isize = 9
 
     def getMetaData(self):
         """ get metadata
@@ -256,12 +260,16 @@ class BaseSource(object):
         self.__counter += 1
         # if self.__counter % 20 == 0:
         #     return str("Test error"), "__ERROR__", ""
-        return (np.transpose(
-            [
-                [random.randint(0, 1000) for _ in range(512)]
-                for _ in range(256)
-            ]),
-            '__random_%s__' % self.__counter, "")
+        if not self.__images:
+            for i in range(self.__isize):
+                self.__images.append(np.transpose(
+                    [
+                        [random.randint(0, 1000) for _ in range(512)]
+                        for _ in range(256)
+                    ])
+                )
+        return (self.__images[self.__counter % self.__isize],
+                '__random_%s__' % self.__counter, "")
 
     @debugmethod
     def connect(self):
@@ -269,6 +277,7 @@ class BaseSource(object):
         """
         self._initiated = True
         self.__counter = 0
+        self.__images = []
         return True
 
     @debugmethod
