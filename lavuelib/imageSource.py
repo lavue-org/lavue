@@ -220,7 +220,7 @@ class BaseSource(object):
         #: (:obj:`list` <:obj:`numpy.ndarray`>) list of test images
         self.__images = []
         #: (:obj:`int` <>) a number of test images
-        self.__isize = 9
+        self.__isize = 11
 
     def getMetaData(self):
         """ get metadata
