@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.sardanaUtils &#8212; lavuelib 2.55.0 documentation</title>
+    <title>lavuelib.sardanaUtils &#8212; lavuelib 2.57.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.55</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.57</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -254,7 +254,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__db</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="SardanaUtils.openProxy"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.sardanaUtils.SardanaUtils.openProxy">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">openProxy</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">counter</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">openProxy</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">counter</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; opens device proxy of the given device</span>
 
 <span class="sd">        :param device: device name</span>
@@ -272,7 +272,7 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">cnfServer</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
                 <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">except</span> <span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">,</span> <span class="n">tango</span><span class="o">.</span><span class="n">Except</span><span class="p">,</span> <span class="n">tango</span><span class="o">.</span><span class="n">DevError</span><span class="p">):</span>
+            <span class="k">except</span> <span class="n">tango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">:</span>
                 <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
                 <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="k">if</span> <span class="n">cnt</span> <span class="o">==</span> <span class="n">counter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
@@ -395,7 +395,7 @@
                 <span class="n">dp</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
                 <span class="n">device</span> <span class="o">=</span> <span class="n">server</span>
                 <span class="k">break</span>
-            <span class="k">except</span> <span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">,</span> <span class="n">tango</span><span class="o">.</span><span class="n">Except</span><span class="p">,</span> <span class="n">tango</span><span class="o">.</span><span class="n">DevError</span><span class="p">):</span>
+            <span class="k">except</span> <span class="n">tango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">:</span>
                 <span class="k">pass</span>
         <span class="k">return</span> <span class="n">device</span></div>
 
@@ -603,7 +603,7 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">dp</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
                 <span class="n">dps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span>
-            <span class="k">except</span> <span class="p">(</span><span class="n">tango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">,</span> <span class="n">tango</span><span class="o">.</span><span class="n">Except</span><span class="p">,</span> <span class="n">tango</span><span class="o">.</span><span class="n">DevError</span><span class="p">):</span>
+            <span class="k">except</span> <span class="n">tango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">:</span>
                 <span class="k">pass</span>
         <span class="k">return</span> <span class="n">dps</span></div></div>
 </pre></div>

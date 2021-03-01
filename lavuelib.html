@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib package &#8212; lavuelib 2.55.0 documentation</title>
+    <title>lavuelib package &#8212; lavuelib 2.57.0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -38,7 +38,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.55</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.57</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -3821,6 +3821,12 @@ and reset the display</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="lavuelib.filewriter.FTHyperslab">
+<em class="property">class </em><code class="descclassname">lavuelib.filewriter.</code><code class="descname">FTHyperslab</code><span class="sig-paren">(</span><em>offset=None</em>, <em>block=None</em>, <em>count=None</em>, <em>stride=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/filewriter.html#FTHyperslab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.filewriter.FTHyperslab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
 <dt id="lavuelib.filewriter.FTLink">
 <em class="property">class </em><code class="descclassname">lavuelib.filewriter.</code><code class="descname">FTLink</code><span class="sig-paren">(</span><em>h5object</em>, <em>tparent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/filewriter.html#FTLink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.filewriter.FTLink" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#lavuelib.filewriter.FTObject" title="lavuelib.filewriter.FTObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">lavuelib.filewriter.FTObject</span></code></a></p>
@@ -3988,7 +3994,7 @@ and reset the display</p>
 </table>
 <dl class="method">
 <dt id="lavuelib.filewriter.FTVirtualFieldLayout.add">
-<code class="descname">add</code><span class="sig-paren">(</span><em>key</em>, <em>source</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/filewriter.html#FTVirtualFieldLayout.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.filewriter.FTVirtualFieldLayout.add" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add</code><span class="sig-paren">(</span><em>key</em>, <em>source</em>, <em>sourcekey=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/filewriter.html#FTVirtualFieldLayout.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.filewriter.FTVirtualFieldLayout.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>add external field to layout</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -3997,6 +4003,7 @@ and reset the display</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a>) – slide or selection</li>
 <li><strong>source</strong> (<a class="reference internal" href="#lavuelib.filewriter.FTExternalField" title="lavuelib.filewriter.FTExternalField"><code class="xref py py-class docutils literal notranslate"><span class="pre">FTExternalField</span></code></a>) – external field</li>
+<li><strong>sourcekey</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a>) – slide or selection</li>
 </ul>
 </td>
 </tr>
@@ -4222,6 +4229,24 @@ and reset the display</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>wr</strong> (<code class="xref py py-mod docutils literal notranslate"><span class="pre">H5PYWriter</span></code> or <code class="xref py py-mod docutils literal notranslate"><span class="pre">H5CppWriter</span></code>) – writer module</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="lavuelib.filewriter.unlimited">
+<code class="descclassname">lavuelib.filewriter.</code><code class="descname">unlimited</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/filewriter.html#unlimited"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.filewriter.unlimited" title="Permalink to this definition">¶</a></dt>
+<dd><p>return dataspace UNLIMITED variable for the current writer module</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>parent</strong> (<a class="reference internal" href="#lavuelib.filewriter.FTObject" title="lavuelib.filewriter.FTObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">FTObject</span></code></a>) – parent object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dataspace UNLIMITED variable</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">h5cpp.dataspace.UNLIMITED</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">h5py.UNLIMITED</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -5255,14 +5280,14 @@ and reset the display</p>
 
 <dl class="method">
 <dt id="lavuelib.h5cppwriter.H5CppGroup.create_virtual_field">
-<code class="descname">create_virtual_field</code><span class="sig-paren">(</span><em>name</em>, <em>layout</em>, <em>fillvalue=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/h5cppwriter.html#H5CppGroup.create_virtual_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.h5cppwriter.H5CppGroup.create_virtual_field" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create_virtual_field</code><span class="sig-paren">(</span><em>name</em>, <em>layout</em>, <em>fillvalue=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/h5cppwriter.html#H5CppGroup.create_virtual_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.h5cppwriter.H5CppGroup.create_virtual_field" title="Permalink to this definition">¶</a></dt>
 <dd><p>creates a virtual filed tres element</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – group name</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – field name</li>
 <li><strong>layout</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">H5CppFieldLayout</span></code>) – virual field layout</li>
 <li><strong>fillvalue</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>) – fill value</li>
 </ul>
@@ -5513,7 +5538,7 @@ and reset the display</p>
 </table>
 <dl class="method">
 <dt id="lavuelib.h5cppwriter.H5CppVirtualFieldLayout.add">
-<code class="descname">add</code><span class="sig-paren">(</span><em>key</em>, <em>source</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/h5cppwriter.html#H5CppVirtualFieldLayout.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.h5cppwriter.H5CppVirtualFieldLayout.add" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add</code><span class="sig-paren">(</span><em>key</em>, <em>source</em>, <em>sourcekey=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/h5cppwriter.html#H5CppVirtualFieldLayout.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.h5cppwriter.H5CppVirtualFieldLayout.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>add external field to layout</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -5522,6 +5547,7 @@ and reset the display</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a>) – slide</li>
 <li><strong>source</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">H5PYExternalField</span></code>) – external field</li>
+<li><strong>sourcekey</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a>) – slide or selection</li>
 </ul>
 </td>
 </tr>
@@ -5776,6 +5802,24 @@ and reset the display</p>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#lavuelib.h5cppwriter.H5CppFile" title="lavuelib.h5cppwriter.H5CppFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">H5CppFile</span></code></a></p>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="lavuelib.h5cppwriter.unlimited">
+<code class="descclassname">lavuelib.h5cppwriter.</code><code class="descname">unlimited</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/h5cppwriter.html#unlimited"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.h5cppwriter.unlimited" title="Permalink to this definition">¶</a></dt>
+<dd><p>return dataspace UNLIMITED variable for the current writer module</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>parent</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">FTObject</span></code>) – parent object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dataspace UNLIMITED variable</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">h5cpp.dataspace.UNLIMITED</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -6778,7 +6822,7 @@ and reset the display</p>
 </table>
 <dl class="method">
 <dt id="lavuelib.h5pywriter.H5PYVirtualFieldLayout.add">
-<code class="descname">add</code><span class="sig-paren">(</span><em>key</em>, <em>source</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/h5pywriter.html#H5PYVirtualFieldLayout.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.h5pywriter.H5PYVirtualFieldLayout.add" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add</code><span class="sig-paren">(</span><em>key</em>, <em>source</em>, <em>sourcekey=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/h5pywriter.html#H5PYVirtualFieldLayout.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.h5pywriter.H5PYVirtualFieldLayout.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>add external field to layout</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -6787,6 +6831,7 @@ and reset the display</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a>) – slide</li>
 <li><strong>source</strong> (<a class="reference internal" href="#lavuelib.h5pywriter.H5PYExternalField" title="lavuelib.h5pywriter.H5PYExternalField"><code class="xref py py-class docutils literal notranslate"><span class="pre">H5PYExternalField</span></code></a>) – external field</li>
+<li><strong>sourcekey</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a>) – slide or selection</li>
 </ul>
 </td>
 </tr>
@@ -7029,6 +7074,24 @@ and reset the display</p>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#lavuelib.h5pywriter.H5PYFile" title="lavuelib.h5pywriter.H5PYFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">H5PYFile</span></code></a></p>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="lavuelib.h5pywriter.unlimited">
+<code class="descclassname">lavuelib.h5pywriter.</code><code class="descname">unlimited</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/h5pywriter.html#unlimited"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.h5pywriter.unlimited" title="Permalink to this definition">¶</a></dt>
+<dd><p>return dataspace UNLIMITED variable for the current writer module</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>parent</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">FTObject</span></code>) – parent object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dataspace UNLIMITED variable</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">h5py.UNLIMITED</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -8726,6 +8789,108 @@ Reads image from file and returns the numpy array.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="lavuelib.imageSource.DATAARRAYdecoder">
+<em class="property">class </em><code class="descclassname">lavuelib.imageSource.</code><code class="descname">DATAARRAYdecoder</code><a class="reference internal" href="_modules/lavuelib/imageSource.html#DATAARRAYdecoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageSource.DATAARRAYdecoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>DATA ARRAY LIMA decoder</p>
+<p>constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body">It clears the local variables</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="lavuelib.imageSource.DATAARRAYdecoder.decode">
+<code class="descname">decode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/imageSource.html#DATAARRAYdecoder.decode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageSource.DATAARRAYdecoder.decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>provides the decoded data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the decoded data if data was loaded</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lavuelib.imageSource.DATAARRAYdecoder.dtype">
+<code class="descname">dtype</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.imageSource.DATAARRAYdecoder.dtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) data type</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lavuelib.imageSource.DATAARRAYdecoder.format">
+<code class="descname">format</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.imageSource.DATAARRAYdecoder.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) decoder format</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavuelib.imageSource.DATAARRAYdecoder.frameNumber">
+<code class="descname">frameNumber</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/imageSource.html#DATAARRAYdecoder.frameNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageSource.DATAARRAYdecoder.frameNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>no data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavuelib.imageSource.DATAARRAYdecoder.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/imageSource.html#DATAARRAYdecoder.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageSource.DATAARRAYdecoder.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>loads encoded data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> ([<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>]) – encoded data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lavuelib.imageSource.DATAARRAYdecoder.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.imageSource.DATAARRAYdecoder.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) decoder name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavuelib.imageSource.DATAARRAYdecoder.shape">
+<code class="descname">shape</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/imageSource.html#DATAARRAYdecoder.shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageSource.DATAARRAYdecoder.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>provides the data shape</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the data shape if data was loaded</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a> &gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavuelib.imageSource.DATAARRAYdecoder.steps">
+<code class="descname">steps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/imageSource.html#DATAARRAYdecoder.steps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageSource.DATAARRAYdecoder.steps" title="Permalink to this definition">¶</a></dt>
+<dd><p>provides the data steps</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the data steps if data was loaded</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a> &gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="lavuelib.imageSource.DOOCSPropSource">
 <em class="property">class </em><code class="descclassname">lavuelib.imageSource.</code><code class="descname">DOOCSPropSource</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/imageSource.html#DOOCSPropSource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageSource.DOOCSPropSource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#lavuelib.imageSource.BaseSource" title="lavuelib.imageSource.BaseSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">lavuelib.imageSource.BaseSource</span></code></a></p>
@@ -9029,6 +9194,12 @@ an image file name and its directory</p>
 <dt id="lavuelib.imageSource.PYFAI">
 <code class="descclassname">lavuelib.imageSource.</code><code class="descname">PYFAI</code><em class="property"> = True</em><a class="headerlink" href="#lavuelib.imageSource.PYFAI" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) pyFAI imported</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="lavuelib.imageSource.PYTG_BUG_213">
+<code class="descclassname">lavuelib.imageSource.</code><code class="descname">PYTG_BUG_213</code><em class="property"> = False</em><a class="headerlink" href="#lavuelib.imageSource.PYTG_BUG_213" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) PyTango bug #213 flag related to EncodedAttributes in python3</p>
 </dd></dl>
 
 <dl class="data">
@@ -12948,7 +13119,7 @@ or <cite>None</cite></p>
 
 <dl class="classmethod">
 <dt id="lavuelib.sardanaUtils.SardanaUtils.openProxy">
-<em class="property">classmethod </em><code class="descname">openProxy</code><span class="sig-paren">(</span><em>device</em>, <em>counter=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/sardanaUtils.html#SardanaUtils.openProxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.sardanaUtils.SardanaUtils.openProxy" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">openProxy</code><span class="sig-paren">(</span><em>device</em>, <em>counter=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lavuelib/sardanaUtils.html#SardanaUtils.openProxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.sardanaUtils.SardanaUtils.openProxy" title="Permalink to this definition">¶</a></dt>
 <dd><p>opens device proxy of the given device</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

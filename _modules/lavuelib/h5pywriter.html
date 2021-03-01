@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.h5pywriter &#8212; lavuelib 2.55.0 documentation</title>
+    <title>lavuelib.h5pywriter &#8212; lavuelib 2.57.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.55</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.57</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -235,6 +235,17 @@
     <span class="k">return</span> <span class="n">h5ver</span> <span class="o">&gt;=</span> <span class="mi">2009</span></div>
 
 
+<div class="viewcode-block" id="unlimited"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.unlimited">[docs]</a><span class="k">def</span> <span class="nf">unlimited</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; return dataspace UNLIMITED variable for the current writer module</span>
+
+<span class="sd">    :param parent: parent object</span>
+<span class="sd">    :type parent: :class:`FTObject`</span>
+<span class="sd">    :returns:  dataspace UNLIMITED variable</span>
+<span class="sd">    :rtype: :class:`h5py.UNLIMITED`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">h5py</span><span class="o">.</span><span class="n">UNLIMITED</span></div>
+
+
 <div class="viewcode-block" id="load_file"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.load_file">[docs]</a><span class="k">def</span> <span class="nf">load_file</span><span class="p">(</span><span class="n">membuffer</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; load a file from memory byte buffer</span>
 
@@ -294,9 +305,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">fl</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span> <span class="k">if</span> <span class="n">overwrite</span> <span class="k">else</span> <span class="s2">&quot;w-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">)</span>
     <span class="n">fl</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;file_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">H5PYFile</span><span class="o">.</span><span class="n">currenttime</span><span class="p">())</span>
-    <span class="n">fl</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;HDF5_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;&quot;</span>
+    <span class="n">fl</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;HDF5_Version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">h5py</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">hdf5_version</span><span class="p">)</span>
     <span class="n">fl</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;NX_class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;NXroot&quot;</span>
-    <span class="n">fl</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;NeXus_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;4.3.0&quot;</span>
+    <span class="c1"># fl.attrs[&quot;NeXus_version&quot;] = u&quot;4.3.0&quot;</span>
     <span class="n">fl</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;file_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="n">fl</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;file_update_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">H5PYFile</span><span class="o">.</span><span class="n">currenttime</span><span class="p">())</span>
     <span class="k">return</span> <span class="n">H5PYFile</span><span class="p">(</span><span class="n">fl</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
@@ -662,12 +673,17 @@
 <span class="sd">        :returns: file tree field</span>
 <span class="sd">        :rtype: :class:`H5PYField`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span> <span class="ow">or</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">mshape</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">shape</span><span class="p">]</span> <span class="ow">or</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span>
         <span class="k">if</span> <span class="n">type_code</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;string&#39;</span><span class="p">]:</span>
             <span class="n">type_code</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">special_dtype</span><span class="p">(</span><span class="n">vlen</span><span class="o">=</span><span class="n">unicode</span><span class="p">)</span>
             <span class="c1"># type_code = h5py.special_dtype(vlen=unicode)</span>
             <span class="c1"># type_code = h5py.special_dtype(vlen=bytes)</span>
+        <span class="k">if</span> <span class="n">type_code</span> <span class="o">==</span> <span class="n">h5py</span><span class="o">.</span><span class="n">special_dtype</span><span class="p">(</span><span class="n">vlen</span><span class="o">=</span><span class="n">unicode</span><span class="p">)</span> <span class="ow">and</span> \
+           <span class="n">shape</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chunk</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">H5PYField</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">(),</span> <span class="n">type_code</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>
+
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span> <span class="ow">or</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">mshape</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">shape</span><span class="p">]</span> <span class="ow">or</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span>
         <span class="k">if</span> <span class="n">dfilter</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">dfilter</span><span class="o">.</span><span class="n">filterid</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">f</span> <span class="o">=</span> <span class="n">H5PYField</span><span class="p">(</span>
@@ -824,8 +840,11 @@
 <span class="sd">        :type dim: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">shape</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-        <span class="n">shape</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">+=</span> <span class="n">ext</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">shape</span><span class="p">:</span>
+            <span class="n">shape</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">+=</span> <span class="n">ext</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span></div>
 
 <div class="viewcode-block" id="H5PYField.read"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYField.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; read the field value</span>
@@ -1065,15 +1084,20 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">_h5object</span><span class="p">)</span>
 
-<div class="viewcode-block" id="H5PYVirtualFieldLayout.add"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYVirtualFieldLayout.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYVirtualFieldLayout.add"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYVirtualFieldLayout.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">sourcekey</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add external field to layout</span>
 
 <span class="sd">        :param key: slide</span>
 <span class="sd">        :type key: :obj:`tuple`</span>
 <span class="sd">        :param source: external field</span>
 <span class="sd">        :type source: :class:`H5PYExternalField`</span>
+<span class="sd">        :param sourcekey: slide or selection</span>
+<span class="sd">        :type sourcekey: :obj:`tuple`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">_h5object</span><span class="p">)</span></div></div>
+        <span class="k">if</span> <span class="n">sourcekey</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">_h5object</span><span class="p">[</span><span class="n">sourcekey</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">_h5object</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="H5PYExternalField"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYExternalField">[docs]</a><span class="k">class</span> <span class="nc">H5PYExternalField</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTExternalField</span><span class="p">):</span>
@@ -1407,9 +1431,9 @@
 <span class="sd">        :rtype: :obj:`list` &lt; :obj:`int` &gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">],</span> <span class="s2">&quot;shape&quot;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span> <span class="ow">or</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+            <span class="k">return</span> <span class="p">()</span>
 
 <div class="viewcode-block" id="H5PYAttribute.reopen"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYAttribute.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reopen attribute</span>
