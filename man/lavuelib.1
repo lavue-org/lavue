@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "LAVUELIB" "1" "Feb 24, 2021" "2.56" "lavuelib"
+.TH "LAVUELIB" "1" "Feb 27, 2021" "2.57" "lavuelib"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .
@@ -7574,6 +7574,89 @@ set timeout
 .UNINDENT
 .INDENT 0.0
 .TP
+.B class lavuelib.imageSource.DATAARRAYdecoder
+Bases: \fI\%object\fP
+.sp
+DATA ARRAY LIMA decoder
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It clears the local variables
+.UNINDENT
+.INDENT 7.0
+.TP
+.B decode()
+provides the decoded data
+.INDENT 7.0
+.TP
+.B Returns
+the decoded data if data was loaded
+.TP
+.B Return type
+\fI\%numpy.ndarray\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B dtype = None
+(\fI\%str\fP) data type
+.UNINDENT
+.INDENT 7.0
+.TP
+.B format = None
+(\fI\%str\fP) decoder format
+.UNINDENT
+.INDENT 7.0
+.TP
+.B frameNumber()
+no data
+.UNINDENT
+.INDENT 7.0
+.TP
+.B load(data)
+loads encoded data
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdata\fP ([\fI\%str\fP, \fI\%str\fP]) – encoded data
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name = None
+(\fI\%str\fP) decoder name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B shape()
+provides the data shape
+.INDENT 7.0
+.TP
+.B Returns
+the data shape if data was loaded
+.TP
+.B Return type
+\fI\%list\fP <\fI\%int\fP >
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B steps()
+provides the data steps
+.INDENT 7.0
+.TP
+.B Returns
+the data steps if data was loaded
+.TP
+.B Return type
+\fI\%list\fP <\fI\%int\fP >
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
 .B class lavuelib.imageSource.DOOCSPropSource(timeout=None)
 Bases: \fI\%lavuelib.imageSource.BaseSource\fP
 .sp
@@ -7825,6 +7908,11 @@ set configuration
 .TP
 .B lavuelib.imageSource.PYFAI = True
 (\fI\%bool\fP) pyFAI imported
+.UNINDENT
+.INDENT 0.0
+.TP
+.B lavuelib.imageSource.PYTG_BUG_213 = False
+(\fI\%bool\fP) PyTango bug #213 flag related to EncodedAttributes in python3
 .UNINDENT
 .INDENT 0.0
 .TP
