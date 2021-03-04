@@ -843,8 +843,8 @@ class LiveViewer(QtGui.QDialog):
                 "maskfile": maskfile,
                 "bkgfile": bkgfile,
                 "bkgscale": bkgscale,
-                "brightfieldscale": bffile,
-                "brightfieldfile": bfscale,
+                "brightfieldfile": bffile,
+                "brightfieldscale": bfscale,
                 "channel": self.__channelwg.channelLabel(),
                 "mbuffer": (self.__mbufferwg.bufferSize() or None),
                 "doordevice": self.__settings.doorname,
@@ -1443,15 +1443,15 @@ class LiveViewer(QtGui.QDialog):
             self.__dobkgsubtraction = None
             self.__backgroundimage = None
             self.__scbackgroundimage = None
-        if hasattr(options, "bkgscale") and options.bkgscale:
+        if hasattr(options, "bkgscale") and \
+           options.bkgscale not in [None, ""]:
             if not self.__settings.showsubsf:
                 self.__settings.showsub = True
                 self.__settings.showsubsf = True
                 self.__prepwg.changeView(showsub=True, showsubsf=True)
             self.__bkgsubwg.setBkgScalingFactor(str(options.bkgscale))
             self._updateBkgScale()
-        if hasattr(options, "brightfieldfile") and \
-           options.brightfieldfile not in [None, ""]:
+        if hasattr(options, "brightfieldfile") and options.brightfieldfile:
             if not self.__settings.showsub:
                 self.__settings.showsub = True
                 self.__prepwg.changeView(showsub=True)
@@ -4045,7 +4045,6 @@ class LiveViewer(QtGui.QDialog):
     def _updateBFScale(self, fetchscale=True):
         if fetchscale:
             self.__brightfieldscale = self.__bkgsubwg.bfScalingFactor()
-        print("UPDATE BF %s" % self.__brightfieldscale)
         if self.__brightfieldimage is None:
             self.__scbrightfieldimage = None
         elif self.__brightfieldscale in [1, None] \
