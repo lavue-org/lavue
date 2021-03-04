@@ -48,12 +48,16 @@ class BkgSubtractionWidget(QtGui.QWidget):
     useCurrentImageAsBkg = QtCore.pyqtSignal()
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) apply state change signal
     applyStateChanged = QtCore.pyqtSignal(int)
-    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) bkg file selected signal
+    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) BF file selected signal
     bfFileSelected = QtCore.pyqtSignal(str)
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) use current image signal
     useCurrentImageAsBF = QtCore.pyqtSignal()
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) apply state change signal
     applyBFStateChanged = QtCore.pyqtSignal(int)
+    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) BF scaling factor change signal
+    bfScalingFactorChanged = QtCore.pyqtSignal()
+    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) bkg scaling factor change signal
+    bkgScalingFactorChanged = QtCore.pyqtSignal()
 
     def __init__(self, parent=None, settings=None):
         """ constructor
@@ -69,8 +73,6 @@ class BkgSubtractionWidget(QtGui.QWidget):
         self.__ui = _formclass()
         self.__ui.setupUi(self)
 
-        #: (:obj:`str`) file name
-        self.__fileName = ""
         #: (:class:`lavuelib.settings.Settings`) settings
         self.__settings = settings
 
@@ -96,9 +98,65 @@ class BkgSubtractionWidget(QtGui.QWidget):
             self._showBFFileDialog)
         self.__ui.applyBFCheckBox.clicked.connect(
             self._emitApplyBFStateChanged)
+        self.__ui.dfsfLineEdit.textChanged.connect(
+            self._emitBkgScalingFactorChanged)
+        self.__ui.bfsfLineEdit.textChanged.connect(
+            self._emitBFScalingFactorChanged)
         if QtGui.QIcon.hasThemeIcon("document-open"):
             icon = QtGui.QIcon.fromTheme("document-open")
             self.__ui.selectBFPushButton.setIcon(icon)
+
+    def setBkgScalingFactor(self, scale):
+        """ sets the background scaling factor
+
+        :param scale: background scaling factor
+        :type scale: :obj:`float` or :obj:`str`
+        """
+        self.__ui.bfsfLineEdit.setText(str(scale if scale is not None else ""))
+
+    def setBFScalingFactor(self, scale):
+        """ sets the bright field scaling factor
+
+        :param scale: bright field scaling factor
+        :type scale: :obj:`float` or :obj:`str`
+        """
+        self.__ui.dfsfLineEdit.setText(str(scale if scale is not None else ""))
+
+    def bkgScalingFactor(self):
+        """ provides background scaling factor
+
+        :returns: background scaling factor
+        :rtype: :obj:`float`
+        """
+        try:
+            scale = float(self.__ui.dfsfLineEdit.text())
+        except Exception:
+            scale = None
+        return scale
+
+    def bfScalingFactor(self):
+        """ provides bright field scaling factor
+
+        :returns: bright field scaling factor
+        :rtype: :obj:`float`
+        """
+        try:
+            scale = float(self.__ui.bfsfLineEdit.text())
+        except Exception:
+            scale = None
+        return scale
+
+    @QtCore.pyqtSlot()
+    def _emitBkgScalingFactorChanged(self):
+        """ emits bkg scaling factor chnaged
+        """
+        self.bkgScalingFactorChanged.emit()
+
+    @QtCore.pyqtSlot()
+    def _emitBFScalingFactorChanged(self):
+        """ emits BF scaling factor chnaged
+        """
+        self.bfScalingFactorChanged.emit()
 
     @QtCore.pyqtSlot(bool)
     def _emitApplyStateChanged(self, state):
@@ -233,6 +291,15 @@ class BkgSubtractionWidget(QtGui.QWidget):
         self.__ui.selectCurrentBFPushButton.show()
         self.__ui.selectBFFilePushButton.show()
         self.__ui.selectBFPushButton.hide()
+
+    @QtCore.pyqtSlot()
+    def showScalingFactors(self, show=True):
+        if show:
+            self.__ui.bfsfWidget.show()
+            self.__ui.dfsfWidget.show()
+        else:
+            self.__ui.bfsfWidget.hide()
+            self.__ui.dfsfWidget.hide()
 
     def __hideImageSelection(self):
         """ hides image selection

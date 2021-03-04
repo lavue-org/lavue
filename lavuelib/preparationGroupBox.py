@@ -69,6 +69,8 @@ class PreparationGroupBox(QtGui.QGroupBox):
         self.__bkgsub = True
         #: (:obj:`bool`) show transformations widget
         self.__trans = True
+        #: (:obj:`bool`) show scalar factors
+        self._subsf = False
 
         #: (:class:`lavuelib.maskWidget.Maskwidget`) mask widget
         self.maskWidget = maskWidget.MaskWidget(
@@ -96,7 +98,7 @@ class PreparationGroupBox(QtGui.QGroupBox):
         self.setLayout(vlayout)
 
     def changeView(self, showmask=None, showsub=None, showtrans=None,
-                   showhighvaluemask=None):
+                   showhighvaluemask=None, showsubsf=None):
         """ show or hide widgets in the preparation colection
 
         :param showmask: mask widget shown
@@ -107,6 +109,8 @@ class PreparationGroupBox(QtGui.QGroupBox):
         :type showtrans: :obj:`bool`
         :param showhighvaluemask: mask widget shown
         :type showhighvaluemask: :obj:`bool`
+        :param showsub: subtraction scaling widget shown
+        :type showsub: :obj:`bool`
         """
 
         if showmask is True:
@@ -122,6 +126,13 @@ class PreparationGroupBox(QtGui.QGroupBox):
         elif showsub is False:
             self.__bkgsub = False
             self.bkgSubWidget.hide()
+
+        if showsubsf is True and showsub is True:
+            self.__subsf = True
+            self.bkgSubWidget.showScalingFactors(True)
+
+        elif showsubsf is False:
+            self.bkgSubWidget.showScalingFactors(False)
 
         if showtrans is True:
             self.__trans = True

@@ -247,6 +247,8 @@ class ConfigDialog(QtGui.QDialog):
 
         #: (:obj:`bool`) show bakcground subtraction widget
         self.showsub = True
+        #: (:obj:`bool`) show bakcground subtraction scaling widget
+        self.showsubsf = False
         #: (:obj:`bool`) show transformation widget
         self.showtrans = True
         #: (:obj:`bool`) show memory buffer widget
@@ -453,6 +455,7 @@ class ConfigDialog(QtGui.QDialog):
         self.__ui.showstepsCheckBox.setChecked(self.showsteps)
         self.__ui.calcvarianceCheckBox.setChecked(self.calcvariance)
         self.__ui.showsubCheckBox.setChecked(self.showsub)
+        self.__ui.showsubsfCheckBox.setChecked(self.showsubsf)
         self.__ui.showtransCheckBox.setChecked(self.showtrans)
         self.__ui.showmbufferCheckBox.setChecked(self.showmbuffer)
         self.__ui.showrangeCheckBox.setChecked(self.showrange)
@@ -767,6 +770,7 @@ class ConfigDialog(QtGui.QDialog):
         self.diffnpt = int(
             self.__ui.diffsizeSpinBox.value())
         self.showsub = self.__ui.showsubCheckBox.isChecked()
+        self.showsubsf = self.__ui.showsubsfCheckBox.isChecked()
         self.showtrans = self.__ui.showtransCheckBox.isChecked()
         self.showmbuffer = self.__ui.showmbufferCheckBox.isChecked()
         self.showrange = self.__ui.showrangeCheckBox.isChecked()

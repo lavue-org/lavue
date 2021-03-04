@@ -548,8 +548,16 @@ class LiveViewer(QtGui.QDialog):
 
         #: (:class:`numpy.ndarray`) background image
         self.__backgroundimage = None
+        #: (:class:`numpy.ndarray`) scaled background image
+        self.__scbackgroundimage = None
+        #: (:class:`numpy.ndarray`) scaled background scale
+        self.__backgroundscale = None
         #: (:class:`numpy.ndarray`) brightfield image
         self.__brightfieldimage = None
+        #: (:class:`numpy.ndarray`) scaled brightfield image
+        self.__scbrightfieldimage = None
+        #: (:class:`numpy.ndarray`) scaled brightfield scale
+        self.__brightfieldscale = None
         #: (:obj:`bool`) apply brightfield - darkfield image subtraction
         self.__bfmdfimage = None
         #: (:obj:`bool`) apply background image subtraction
@@ -715,10 +723,12 @@ class LiveViewer(QtGui.QDialog):
         self.__bkgsubwg.useCurrentImageAsBkg.connect(
             self._setCurrentImageAsBkg)
         self.__bkgsubwg.applyStateChanged.connect(self._checkBkgSubtraction)
+        self.__bkgsubwg.bkgScalingFactorChanged.connect(self._updateBkgScale)
         self.__bkgsubwg.bfFileSelected.connect(self._prepareBFSubtraction)
         self.__bkgsubwg.useCurrentImageAsBF.connect(
             self._setCurrentImageAsBF)
         self.__bkgsubwg.applyBFStateChanged.connect(self._checkBFSubtraction)
+        self.__bkgsubwg.bfScalingFactorChanged.connect(self._updateBFScale)
 
         self.__maskwg.maskFileSelected.connect(self._prepareMasking)
         self.__maskwg.applyStateChanged.connect(self._checkMasking)
@@ -810,6 +820,10 @@ class LiveViewer(QtGui.QDialog):
         maskhighvalue = ""
         if self.__settings.showhighvaluemask:
             maskhighvalue = str(self.__highvaluemaskwg.mask() or "")
+        bkgscale = self.__backgroundscale \
+            if not self.__settings.showsubsf else None
+        bfscale = self.__brightfieldscale \
+            if not self.__settings.showsubsf else None
         self.setLavueState(
             {
                 "connected": self.__sourcewg.isConnected(),
@@ -828,7 +842,9 @@ class LiveViewer(QtGui.QDialog):
                 "maskhighvalue": maskhighvalue,
                 "maskfile": maskfile,
                 "bkgfile": bkgfile,
-                "brightfieldfile": bffile,
+                "bkgscale": bkgscale,
+                "brightfieldscale": bffile,
+                "brightfieldfile": bfscale,
                 "channel": self.__channelwg.channelLabel(),
                 "mbuffer": (self.__mbufferwg.bufferSize() or None),
                 "doordevice": self.__settings.doorname,
@@ -1426,7 +1442,16 @@ class LiveViewer(QtGui.QDialog):
             self.__settings.bkgimagename = ""
             self.__dobkgsubtraction = None
             self.__backgroundimage = None
-        if hasattr(options, "brightfieldfile") and options.brightfieldfile:
+            self.__scbackgroundimage = None
+        if hasattr(options, "bkgscale") and options.bkgscale:
+            if not self.__settings.showsubsf:
+                self.__settings.showsub = True
+                self.__settings.showsubsf = True
+                self.__prepwg.changeView(showsub=True, showsubsf=True)
+            self.__bkgsubwg.setBkgScalingFactor(str(options.bkgscale))
+            self._updateBkgScale()
+        if hasattr(options, "brightfieldfile") and \
+           options.brightfieldfile not in [None, ""]:
             if not self.__settings.showsub:
                 self.__settings.showsub = True
                 self.__prepwg.changeView(showsub=True)
@@ -1437,6 +1462,15 @@ class LiveViewer(QtGui.QDialog):
             self.__settings.bfimagename = ""
             self.__bfmdfimage = None
             self.__brightfieldimage = None
+            self.__scbrightfieldimage = None
+        if hasattr(options, "brightfieldscale") and \
+           options.brightfieldscale not in [None, ""]:
+            if not self.__settings.showsubsf:
+                self.__settings.showsub = True
+                self.__settings.showsubsf = True
+                self.__prepwg.changeView(showsub=True, showsubsf=True)
+            self.__bkgsubwg.setBFScalingFactor(str(options.brightfieldscale))
+            self._updateBFScale()
 
         if hasattr(options, "channel") and options.channel is not None:
             try:
@@ -1612,8 +1646,11 @@ class LiveViewer(QtGui.QDialog):
             self.__settings.showmask,
             self.__settings.showsub,
             self.__settings.showtrans,
-            self.__settings.showhighvaluemask
+            self.__settings.showhighvaluemask,
+            self.__settings.showsubsf,
         )
+        self._updateBkgScale()
+        self._updateBFScale()
         self.__rangewg.changeView(self.__settings.showrange)
         self._resizePlot(self.__settings.showrange)
         self.__filterswg.changeView(self.__settings.showfilters)
@@ -2097,6 +2134,7 @@ class LiveViewer(QtGui.QDialog):
         cnfdlg.orderrois = self.__settings.orderrois
         cnfdlg.imagechannels = self.__settings.imagechannels
         cnfdlg.showsub = self.__settings.showsub
+        cnfdlg.showsubsf = self.__settings.showsubsf
         cnfdlg.showtrans = self.__settings.showtrans
         cnfdlg.showscale = self.__settings.showscale
         cnfdlg.showlevels = self.__settings.showlevels
@@ -2195,6 +2233,16 @@ class LiveViewer(QtGui.QDialog):
         if self.__settings.showsub != dialog.showsub:
             self.__prepwg.changeView(showsub=dialog.showsub)
             self.__settings.showsub = dialog.showsub
+        if self.__settings.showsubsf != dialog.showsubsf:
+            if dialog.showsubsf:
+                self.__settings.showsub = True
+                self.__prepwg.changeView(showsub=True,
+                                         showsubsf=dialog.showsubsf)
+            else:
+                self.__prepwg.changeView(showsubsf=dialog.showsubsf)
+            self.__settings.showsubsf = dialog.showsubsf
+            self._updateBkgScale()
+            self._updateBFScale()
         if self.__settings.showtrans != dialog.showtrans:
             self.__prepwg.changeView(showtrans=dialog.showtrans)
             self.__settings.showtrans = dialog.showtrans
@@ -2591,6 +2639,12 @@ class LiveViewer(QtGui.QDialog):
                     self.__settings.bfimagename)
             else:
                 values["brightfieldfile"] = ""
+            bkgscale = self.__backgoundscale \
+                if not self.__settings.showsubsf else None
+            bfscale = self.__brightfieldscale \
+                if not self.__settings.showsubsf else None
+            values["bfscale"] = bfscale
+            values["bkgscale"] = bkgscale
             if self.__maskwg.isMaskApplied() and \
                self.__settings.maskimagename:
                 values["maskfile"] = str(self.__settings.maskimagename)
@@ -3329,24 +3383,25 @@ class LiveViewer(QtGui.QDialog):
 
         self.__displayimage = self.__rawgreyimage
 
-        if self.__dobkgsubtraction and self.__backgroundimage is not None:
+        if self.__dobkgsubtraction and self.__scbackgroundimage is not None:
             try:
                 if (hasattr(self.__rawgreyimage, "dtype") and
                    self.__rawgreyimage.dtype.name in
                     self.__unsignedmap.keys()) \
-                   and (hasattr(self.__backgroundimage, "dtype") and
-                   self.__backgroundimage.dtype.name in
+                   and (hasattr(self.__scbackgroundimage, "dtype") and
+                   self.__scbackgroundimage.dtype.name in
                         self.__unsignedmap.keys()):
                     self.__displayimage = np.subtract(
-                        self.__rawgreyimage, self.__backgroundimage,
+                        self.__rawgreyimage, self.__scbackgroundimage,
                         dtype=self.__unsignedmap[
                             self.__rawgreyimage.dtype.name])
                 else:
                     self.__displayimage = \
-                        self.__rawgreyimage - self.__backgroundimage
+                        self.__rawgreyimage - self.__scbackgroundimage
             except Exception:
                 self._checkBkgSubtraction(0)
                 self.__backgroundimage = None
+                self.__scbackgroundimage = None
                 self.__dobkgsubtraction = False
                 import traceback
                 value = traceback.format_exc()
@@ -3365,6 +3420,7 @@ class LiveViewer(QtGui.QDialog):
                 self._checkBFSubtraction(0)
                 self.__bfmdfimage = None
                 self.__brightfieldimage = None
+                self.__scbrightfieldimage = None
                 self.__dobfsubtraction = False
                 import traceback
                 value = traceback.format_exc()
@@ -3832,7 +3888,7 @@ class LiveViewer(QtGui.QDialog):
         :type state:  :obj:`int`
         """
         self.__dobkgsubtraction = bool(state)
-        if self.__dobkgsubtraction and self.__backgroundimage is None:
+        if self.__dobkgsubtraction and self.__scbackgroundimage is None:
             self.__bkgsubwg.setDisplayedName("")
         else:
             self.__bkgsubwg.checkBkgSubtraction(state)
@@ -3853,7 +3909,7 @@ class LiveViewer(QtGui.QDialog):
         :type state:  :obj:`int`
         """
         self.__dobfsubtraction = bool(state)
-        if self.__dobfsubtraction and self.__brightfieldimage is None:
+        if self.__dobfsubtraction and self.__scbrightfieldimage is None:
             self.__bkgsubwg.setDisplayedBFName("")
         else:
             self.__bkgsubwg.checkBFSubtraction(state)
@@ -3899,16 +3955,17 @@ class LiveViewer(QtGui.QDialog):
                         handler.getImage(
                             currentfield["node"],
                             frame, growing, refresh=False))
-                    self.__updatebfmdf()
+                    self._updateBkgScale(False)
                 else:
                     return
             else:
                 self.__backgroundimage = np.transpose(
                     imageFileHandler.ImageFileHandler(
                         str(imagename)).getImage())
-                self.__updatebfmdf()
+                self._updateBkgScale(False)
         else:
             self.__backgroundimage = None
+            self.__scbackgroundimage = None
             self.__updatebfmdf()
 
     @debugmethod
@@ -3945,14 +4002,13 @@ class LiveViewer(QtGui.QDialog):
                         handler.getImage(
                             currentfield["node"],
                             frame, growing, refresh=False))
-                    self.__updatebfmdf()
                 else:
                     return
             else:
                 self.__brightfieldimage = np.transpose(
                     imageFileHandler.ImageFileHandler(
                         str(imagename)).getImage())
-            self.__updatebfmdf()
+            self._updateBFScale(False)
         else:
             self.__brightfield = None
             self.__updatebfmdf()
@@ -3964,10 +4020,41 @@ class LiveViewer(QtGui.QDialog):
         """
         if self.__rawgreyimage is not None:
             self.__backgroundimage = self.__rawgreyimage
-            self.__updatebfmdf()
+            self._updateBkgScale(False)
             self.__bkgsubwg.setDisplayedName(str(self.__imagename))
         else:
             self.__bkgsubwg.setDisplayedName("")
+
+    @debugmethod
+    @QtCore.pyqtSlot()
+    def _updateBkgScale(self, fetchscale=True):
+        if fetchscale:
+            self.__backgroundscale = self.__bkgsubwg.bkgScalingFactor()
+        if self.__backgroundimage is None:
+            self.__scbackgroundimage = None
+        elif self.__backgroundscale in [1, None] \
+                or not self.__settings.showsubsf:
+            self.__scbackgroundimage = self.__backgroundimage
+        else:
+            self.__scbackgroundimage = \
+                self.__backgroundimage * self.__backgroundscale
+        self.__updatebfmdf()
+
+    @debugmethod
+    @QtCore.pyqtSlot()
+    def _updateBFScale(self, fetchscale=True):
+        if fetchscale:
+            self.__brightfieldscale = self.__bkgsubwg.bfScalingFactor()
+        print("UPDATE BF %s" % self.__brightfieldscale)
+        if self.__brightfieldimage is None:
+            self.__scbrightfieldimage = None
+        elif self.__brightfieldscale in [1, None] \
+                or not self.__settings.showsubsf:
+            self.__scbrightfieldimage = self.__brightfieldimage
+        else:
+            self.__scbrightfieldimage = \
+                self.__brightfieldimage * self.__brightfieldscale
+        self.__updatebfmdf()
 
     @debugmethod
     @QtCore.pyqtSlot()
@@ -3976,7 +4063,7 @@ class LiveViewer(QtGui.QDialog):
         """
         if self.__rawgreyimage is not None:
             self.__brightfieldimage = self.__rawgreyimage
-            self.__updatebfmdf()
+            self._updateBFScale(False)
             self.__bkgsubwg.setDisplayedBFName(str(self.__imagename))
         else:
             self.__bkgsubwg.setDisplayedBFName("")
@@ -3984,19 +4071,21 @@ class LiveViewer(QtGui.QDialog):
     def __updatebfmdf(self):
         """ sets brightfield - darkfield image
         """
-        if self.__brightfieldimage is not None and \
-           self.__backgroundimage is not None:
+        if self.__scbrightfieldimage is not None and \
+           self.__scbackgroundimage is not None:
             try:
                 with np.errstate(divide='ignore', invalid='ignore'):
                     self.__bfmdfimage = np.true_divide(
                         1,
-                        (self.__brightfieldimage - self.__backgroundimage),
+                        (self.__scbrightfieldimage
+                         - self.__scbackgroundimage),
                         dtype=self.__settings.floattype)
                 self.__bfmdfimage[np.isinf(self.__bfmdfimage)] = np.nan
             except Exception as e:
                 logger.warning(str(e))
                 self._checkBFSubtraction(0)
                 self.__brightfieldimage = None
+                self.__scbrightfieldimage = None
                 self.__dobfsubtraction = False
                 import traceback
                 value = traceback.format_exc()
@@ -4008,10 +4097,10 @@ class LiveViewer(QtGui.QDialog):
                     "to the current image",
                     text, str(value))
                 self.__bfmdfimage = None
-        elif self.__brightfieldimage is not None:
+        elif self.__scbrightfieldimage is not None:
             with np.errstate(divide='ignore', invalid='ignore'):
                 self.__bfmdfimage = np.true_divide(
-                    1, self.__brightfieldimage,
+                    1, self.__scbrightfieldimage,
                     dtype=self.__settings.floattype)
                 self.__bfmdfimage[np.isinf(self.__bfmdfimage)] = np.nan
         else:

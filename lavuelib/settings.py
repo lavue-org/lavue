@@ -77,6 +77,8 @@ class Settings(object):
         self.calcvariance = False
         #: (:obj:`bool`) show bakcground subtraction widget
         self.showsub = True
+        #: (:obj:`bool`) show bakcground subtraction scaling widget
+        self.showsubsf = False
         #: (:obj:`bool`) show transformation widget
         self.showtrans = True
         #: (:obj:`bool`) show memory buffer widget
@@ -385,6 +387,10 @@ class Settings(object):
             "Configuration/ShowSubtraction", type=str))
         if qstval.lower() == "false":
             self.showsub = False
+        qstval = str(settings.value(
+            "Configuration/ShowSubtractionScaling", type=str))
+        if qstval.lower() == "true":
+            self.showsubsf = True
         qstval = str(settings.value(
             "Configuration/ShowTransformations", type=str))
         if qstval.lower() == "false":
@@ -871,6 +877,9 @@ class Settings(object):
         settings.setValue(
             "Configuration/ShowSubtraction",
             self.showsub)
+        settings.setValue(
+            "Configuration/ShowSubtractionScaling",
+            self.showsubsf)
         settings.setValue(
             "Configuration/ShowTransformations",
             self.showtrans)
