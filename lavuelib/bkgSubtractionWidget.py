@@ -112,7 +112,7 @@ class BkgSubtractionWidget(QtGui.QWidget):
         :param scale: background scaling factor
         :type scale: :obj:`float` or :obj:`str`
         """
-        self.__ui.bfsfLineEdit.setText(str(scale if scale is not None else ""))
+        self.__ui.dfsfLineEdit.setText(str(scale if scale is not None else ""))
 
     def setBFScalingFactor(self, scale):
         """ sets the bright field scaling factor
@@ -120,7 +120,7 @@ class BkgSubtractionWidget(QtGui.QWidget):
         :param scale: bright field scaling factor
         :type scale: :obj:`float` or :obj:`str`
         """
-        self.__ui.dfsfLineEdit.setText(str(scale if scale is not None else ""))
+        self.__ui.bfsfLineEdit.setText(str(scale if scale is not None else ""))
 
     def bkgScalingFactor(self):
         """ provides background scaling factor

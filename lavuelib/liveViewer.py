@@ -821,9 +821,9 @@ class LiveViewer(QtGui.QDialog):
         if self.__settings.showhighvaluemask:
             maskhighvalue = str(self.__highvaluemaskwg.mask() or "")
         bkgscale = self.__backgroundscale \
-            if not self.__settings.showsubsf else None
+            if self.__settings.showsubsf else None
         bfscale = self.__brightfieldscale \
-            if not self.__settings.showsubsf else None
+            if self.__settings.showsubsf else None
         self.setLavueState(
             {
                 "connected": self.__sourcewg.isConnected(),
@@ -1451,6 +1451,10 @@ class LiveViewer(QtGui.QDialog):
                 self.__prepwg.changeView(showsub=True, showsubsf=True)
             self.__bkgsubwg.setBkgScalingFactor(str(options.bkgscale))
             self._updateBkgScale()
+        elif hasattr(options, "bkgscale") and \
+                options.bkgscale in [None, ""]:
+            self.__bkgsubwg.setBkgScalingFactor("")
+            self._updateBkgScale()
         if hasattr(options, "brightfieldfile") and options.brightfieldfile:
             if not self.__settings.showsub:
                 self.__settings.showsub = True
@@ -1470,6 +1474,11 @@ class LiveViewer(QtGui.QDialog):
                 self.__settings.showsubsf = True
                 self.__prepwg.changeView(showsub=True, showsubsf=True)
             self.__bkgsubwg.setBFScalingFactor(str(options.brightfieldscale))
+            self._updateBFScale()
+
+        elif hasattr(options, "brightfieldscale") and \
+                options.brightfieldscale in [None, ""]:
+            self.__bkgsubwg.setBFScalingFactor("")
             self._updateBFScale()
 
         if hasattr(options, "channel") and options.channel is not None:

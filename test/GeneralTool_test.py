@@ -495,6 +495,233 @@ class GeneralToolTest(unittest.TestCase):
             ls, dls,
             ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
 
+    def test_tango_corrections_scale(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        self.__lcsu.proxy.Init()
+        self.__lavuestate = None
+        filepath = "%s/%s" % (os.path.abspath(path), "test/images")
+        filename = "%05d.tif" % 1
+        imagefile = os.path.join(filepath, filename)
+        dffilename = "%05d.tif" % 2
+        dfimagefile = os.path.join(filepath, dffilename)
+        bffilename = "%05d.tif" % 3
+        bfimagefile = os.path.join(filepath, bffilename)
+        image = fabio.open(imagefile)
+        t1 = image.data
+        image = fabio.open(dfimagefile)
+        t2 = image.data
+        image = fabio.open(bfimagefile)
+        t3 = image.data
+
+        sdfa = 1.4
+        sdfb = 1.2
+        sbfi = 1.1
+        sbfj = 1.3
+
+        t12a = (t1 - t2 * sdfa)
+        t12b = (t1 - t2 * sdfb)
+
+        with np.errstate(divide='ignore', invalid='ignore'):
+            t12d32bj = np.true_divide(
+                t12b, t3 * sbfj - t2 * sdfb, dtype="float64")
+
+        t12d32bj[np.isinf(t12d32bj)] = np.nan
+
+        with np.errstate(divide='ignore', invalid='ignore'):
+            t1d3i = np.true_divide(
+                t1, t3 * sbfi, dtype="float64")
+        t1d3i[np.isinf(t1d3i)] = np.nan
+
+        options = argparse.Namespace(
+            mode='expert',
+            source='tangoattr',
+            configuration='test/lavuecontroller/00/Image',
+            instance='tgtest',
+            tool='roi',
+            transformation='none',
+            # log='debug',
+            log='info',
+            imagefile=imagefile,
+            bkgfile=dfimagefile,
+            brightfieldfile=bfimagefile,
+            bkgscale=sdfb,
+            brightfieldscale=sbfj,
+            scaling='linear',
+            levels='m20,20',
+            gradient='thermal',
+            tangodevice='test/lavuecontroller/00'
+        )
+        logging.basicConfig(
+             format="%(levelname)s: %(message)s")
+        logger = logging.getLogger("lavue")
+        lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+        dialog = lavuelib.liveViewer.MainWindow(options=options)
+        dialog.show()
+
+        cnf1 = {"bkgfile": '', "brightfieldfile": '',
+                "bkgscale": None,  "brightfieldscale": None}
+        lavuestate1 = json.dumps(cnf1)
+        cnf2 = {"bkgfile": dfimagefile, "brightfieldfile": '',
+                "bkgscale": sdfa,  "brightfieldscale": None}
+        lavuestate2 = json.dumps(cnf2)
+        cnf3 = {"bkgfile": '', "brightfieldfile": bfimagefile,
+                "bkgscale": None,  "brightfieldscale": sbfi}
+        lavuestate3 = json.dumps(cnf3)
+        cnf4 = {"bkgfile": dfimagefile, "brightfieldfile": bfimagefile,
+                "bkgscale": sdfb,  "brightfieldscale": sbfj}
+        lavuestate4 = json.dumps(cnf4)
+
+        qtck1 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck2 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck3 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck4 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck5 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck1.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            ExtCmdCheck(self, "setLavueStatePar", [lavuestate1])
+        ])
+        qtck2.setChecks([
+            ExtCmdCheck(self, "getLavueStatePar"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            ExtCmdCheck(self, "setLavueStatePar", [lavuestate2])
+        ])
+        qtck3.setChecks([
+            ExtCmdCheck(self, "getLavueStatePar"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            ExtCmdCheck(self, "setLavueStatePar", [lavuestate3])
+        ])
+        qtck4.setChecks([
+            ExtCmdCheck(self, "getLavueStatePar"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            ExtCmdCheck(self, "setLavueStatePar", [lavuestate4])
+        ])
+        qtck5.setChecks([
+            ExtCmdCheck(self, "getLavueStatePar"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+        ])
+
+        print("execute")
+        qtck1.executeChecks(delay=6000)
+        qtck2.executeChecks(delay=12000)
+        qtck3.executeChecks(delay=18000)
+        qtck4.executeChecks(delay=24000)
+        status = qtck5.executeChecksAndClose(delay=30000)
+
+        self.assertEqual(status, 0)
+        qtck1.compareResults(
+            self, [False, None, None, None], mask=[0, 1, 1, 1])
+
+        lastimage = t12d32bj.T
+        res1 = qtck1.results()
+        res2 = qtck2.results()
+        res3 = qtck3.results()
+        res4 = qtck4.results()
+        res5 = qtck5.results()
+
+        lastimage = t12d32bj.T
+        if not np.allclose(res1[2], lastimage, equal_nan=True):
+            print(res1[2])
+            print(lastimage)
+        self.assertTrue(np.allclose(res1[1], lastimage, equal_nan=True))
+        self.assertTrue(np.allclose(res1[2], lastimage, equal_nan=True))
+
+        lastimage = t1.T
+        if not np.allclose(res2[2], lastimage, equal_nan=True):
+            print(res2[1])
+            print(res2[2])
+            print(lastimage)
+        self.assertTrue(np.allclose(res2[1], lastimage, equal_nan=True))
+        self.assertTrue(np.allclose(res2[2], lastimage, equal_nan=True))
+
+        lastimage = t12a.T
+        if not np.allclose(res3[2], lastimage, equal_nan=True):
+            print(res3[1])
+            print(res3[2])
+            print(lastimage)
+        self.assertTrue(np.allclose(res3[1], lastimage, equal_nan=True))
+        self.assertTrue(np.allclose(res3[2], lastimage, equal_nan=True))
+
+        lastimage = t1d3i.T
+        if not np.allclose(res4[2], lastimage, equal_nan=True):
+            print(res4[1])
+            print(res4[2])
+            print(lastimage)
+        self.assertTrue(np.allclose(res4[1], lastimage, equal_nan=True))
+        self.assertTrue(np.allclose(res4[2], lastimage, equal_nan=True))
+
+        lastimage = t12d32bj.T
+        if not np.allclose(res5[2], lastimage, equal_nan=True):
+            print(res5[1])
+            print(res5[2])
+            print(lastimage)
+        self.assertTrue(np.allclose(res5[1], lastimage, equal_nan=True))
+        self.assertTrue(np.allclose(res5[2], lastimage, equal_nan=True))
+
+        ls = json.loads(res2[0])
+        dls = dict(self.__defaultls)
+        dls.update(dict(
+            mode='expert',
+            source='tangoattr',
+            configuration='test/lavuecontroller/00/Image',
+            instance='tgtest',
+            tool='roi',
+            transformation='none',
+            log='info',
+            # log='debug',
+            scaling='linear',
+            imagefile=imagefile,
+            levels='-20.0,20.0',
+            gradient='thermal',
+            tangodevice='test/lavuecontroller/00',
+            autofactor=None,
+
+        ))
+
+        ls = json.loads(res2[0])
+        dls.update(cnf1)
+        self.compareStates(
+            ls, dls,
+            ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+        ls = json.loads(res3[0])
+        dls.update(cnf2)
+        self.compareStates(
+            ls, dls,
+            ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+        ls = json.loads(res4[0])
+        dls.update(cnf3)
+        self.compareStates(
+            ls, dls,
+            ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+        ls = json.loads(res5[0])
+        dls.update(cnf4)
+        self.compareStates(
+            ls, dls,
+            ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+
     def test_tango_maskfile(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
