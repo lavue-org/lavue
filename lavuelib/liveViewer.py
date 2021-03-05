@@ -2648,7 +2648,7 @@ class LiveViewer(QtGui.QDialog):
                     self.__settings.bfimagename)
             else:
                 values["brightfieldfile"] = ""
-            bkgscale = self.__backgoundscale \
+            bkgscale = self.__backgroundscale \
                 if not self.__settings.showsubsf else None
             bfscale = self.__brightfieldscale \
                 if not self.__settings.showsubsf else None
