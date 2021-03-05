@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.bkgSubtractionWidget &#8212; lavuelib 2.57.0 documentation</title>
+    <title>lavuelib.bkgSubtractionWidget &#8212; lavuelib 2.58.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.57</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.58</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -204,12 +204,16 @@
     <span class="n">useCurrentImageAsBkg</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) apply state change signal</span>
     <span class="n">applyStateChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) bkg file selected signal</span>
+    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) BF file selected signal</span>
     <span class="n">bfFileSelected</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) use current image signal</span>
     <span class="n">useCurrentImageAsBF</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) apply state change signal</span>
     <span class="n">applyBFStateChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) BF scaling factor change signal</span>
+    <span class="n">bfScalingFactorChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) bkg scaling factor change signal</span>
+    <span class="n">bkgScalingFactorChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
@@ -225,8 +229,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span> <span class="o">=</span> <span class="n">_formclass</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-        <span class="c1">#: (:obj:`str`) file name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__fileName</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="c1">#: (:class:`lavuelib.settings.Settings`) settings</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span> <span class="o">=</span> <span class="n">settings</span>
 
@@ -252,9 +254,65 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_showBFFileDialog</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">applyBFCheckBox</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_emitApplyBFStateChanged</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">dfsfLineEdit</span><span class="o">.</span><span class="n">textChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_emitBkgScalingFactorChanged</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">bfsfLineEdit</span><span class="o">.</span><span class="n">textChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_emitBFScalingFactorChanged</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QIcon</span><span class="o">.</span><span class="n">hasThemeIcon</span><span class="p">(</span><span class="s2">&quot;document-open&quot;</span><span class="p">):</span>
             <span class="n">icon</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QIcon</span><span class="o">.</span><span class="n">fromTheme</span><span class="p">(</span><span class="s2">&quot;document-open&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectBFPushButton</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">icon</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BkgSubtractionWidget.setBkgScalingFactor"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.bkgSubtractionWidget.BkgSubtractionWidget.setBkgScalingFactor">[docs]</a>    <span class="k">def</span> <span class="nf">setBkgScalingFactor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets the background scaling factor</span>
+
+<span class="sd">        :param scale: background scaling factor</span>
+<span class="sd">        :type scale: :obj:`float` or :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">dfsfLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">scale</span> <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="BkgSubtractionWidget.setBFScalingFactor"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.bkgSubtractionWidget.BkgSubtractionWidget.setBFScalingFactor">[docs]</a>    <span class="k">def</span> <span class="nf">setBFScalingFactor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets the bright field scaling factor</span>
+
+<span class="sd">        :param scale: bright field scaling factor</span>
+<span class="sd">        :type scale: :obj:`float` or :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">bfsfLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">scale</span> <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="BkgSubtractionWidget.bkgScalingFactor"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.bkgSubtractionWidget.BkgSubtractionWidget.bkgScalingFactor">[docs]</a>    <span class="k">def</span> <span class="nf">bkgScalingFactor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides background scaling factor</span>
+
+<span class="sd">        :returns: background scaling factor</span>
+<span class="sd">        :rtype: :obj:`float`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">dfsfLineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">scale</span></div>
+
+<div class="viewcode-block" id="BkgSubtractionWidget.bfScalingFactor"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.bkgSubtractionWidget.BkgSubtractionWidget.bfScalingFactor">[docs]</a>    <span class="k">def</span> <span class="nf">bfScalingFactor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides bright field scaling factor</span>
+
+<span class="sd">        :returns: bright field scaling factor</span>
+<span class="sd">        :rtype: :obj:`float`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">bfsfLineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">scale</span></div>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_emitBkgScalingFactorChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; emits bkg scaling factor chnaged</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bkgScalingFactorChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_emitBFScalingFactorChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; emits BF scaling factor chnaged</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bfScalingFactorChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_emitApplyStateChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
@@ -389,6 +447,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectCurrentBFPushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectBFFilePushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectBFPushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+
+<div class="viewcode-block" id="BkgSubtractionWidget.showScalingFactors"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.bkgSubtractionWidget.BkgSubtractionWidget.showScalingFactors">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">showScalingFactors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">bfsfWidget</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">dfsfWidget</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">bfsfWidget</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">dfsfWidget</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">__hideImageSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; hides image selection</span>
