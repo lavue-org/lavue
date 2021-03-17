@@ -204,8 +204,8 @@ def main():
     parser.add_argument(
         'args', metavar='name', type=str, nargs='*',
         help='suite names: all, basic, tangosource, httpsource, '
-        ' generaltools, specializedtools, diffractogram',
-        'tangofilesource'
+        ' generaltools, specializedtools, diffractogram'
+        ', tangofilesource'
     )
     options = parser.parse_args()
 
