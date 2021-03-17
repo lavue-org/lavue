@@ -79,6 +79,7 @@ if TANGO_AVAILABLE:
     import SpecializedTool_test
     import DiffractogramTool_test
     import TangoAttrImageSource_test
+    import TangoFileImageSource_test
     import ZMQStreamImageSource_test
 
 if H5PY_AVAILABLE:
@@ -107,6 +108,7 @@ def main():
     specializedsuite = unittest.TestSuite()
     diffractogramsuite = unittest.TestSuite()
     tangosuite = unittest.TestSuite()
+    tangofilesuite = unittest.TestSuite()
     httpsuite = unittest.TestSuite()
     print("Using: %s" % qt_api)
     app = QtGui.QApplication([])
@@ -121,6 +123,7 @@ def main():
         SpecializedTool_test.app = app
         DiffractogramTool_test.app = app
         TangoAttrImageSource_test.app = app
+        TangoFileImageSource_test.app = app
         ZMQStreamImageSource_test.app = app
     if H5CPP_AVAILABLE:
         CommandLineArgumentH5Cpp_test.app = app
@@ -186,6 +189,9 @@ def main():
         tangosuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 TangoAttrImageSource_test))
+        tangofilesuite.addTests(
+            unittest.defaultTestLoader.loadTestsFromModule(
+                TangoFileImageSource_test))
         basicsuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 ZMQStreamImageSource_test))
@@ -198,7 +204,8 @@ def main():
     parser.add_argument(
         'args', metavar='name', type=str, nargs='*',
         help='suite names: all, basic, tangosource, httpsource, '
-        ' generaltools, specializedtools, diffractogram'
+        ' generaltools, specializedtools, diffractogram',
+        'tangofilesource'
     )
     options = parser.parse_args()
 
@@ -206,6 +213,7 @@ def main():
         "basic": [basicsuite],
         "httpsource": [httpsuite],
         "tangosource": [tangosuite],
+        "tangofilesource": [tangofilesuite],
         "generaltools": [generalsuite],
         "specializedtools": [specializedsuite],
         "diffractogram": [diffractogramsuite],
