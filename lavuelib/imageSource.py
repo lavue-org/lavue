@@ -472,7 +472,6 @@ class NXSFileSource(BaseSource):
             logger.warning(str(e))
             # print(str(e))
             return str(e), "__ERROR__", ""
-            pass  # this needs a bit more care
         return None, None, None
 
     @debugmethod
@@ -540,6 +539,27 @@ class TangoFileSource(BaseSource):
         #: (:dict: <:obj:`str`, :obj:`str`>)
         #:      translation dictionary for the image directory
         self.__dirtrans = {"/ramdisk/": "/gpfs/"}
+        #: (:obj:`str`) nexus file name with the full path
+        self.__nxsfile = None
+        #: (:obj:`str`) nexus field path
+        self.__nxsfield = None
+        #: (:obj:`int`) stacking dimension
+        self.__gdim = 0
+        #: (:obj:`int`) the current frame
+        self.__frame = 0
+        #: (:obj:`int`) the last frame to view
+        self.__lastframe = -1
+        #: (:class:`lavuelib.imageFileHandler.NexusFieldHandler`)
+        #: the nexus file handler
+        self.__handler = None
+        #: (:class:`lavuelib.filewriter.FTField`) field object
+        self.__node = None
+        #: (:obj:`bool`) nexus file source keeps the file open
+        self.__nxsopen = False
+        #: (:obj:`bool`) nexus file source starts from the last image
+        self.__nxslast = False
+        self.__schema = ["file:/localhost//", "file:////", "file:///",
+                         "file://", "file:/"]
 
     @debugmethod
     def getData(self):
@@ -552,47 +572,132 @@ class TangoFileSource(BaseSource):
         if self.__fproxy is None:
             return "No file attribute defined", "__ERROR__", None
         try:
+            scheme = None
             filename = self.__fproxy.read().value
-            if filename.startswith("file:/localhost//"):
-                filename = filename[16:]
-            elif filename.startswith("file:////"):
-                filename = filename[8:]
-            elif filename.startswith("file:///"):
-                filename = filename[7:]
-            elif filename.startswith("file://"):
-                filename = filename[6:]
-            elif filename.startswith("file:/"):
-                filename = filename[5:]
+            for sm in self.__schema:
+                if filename.startswith(sm):
+                    filename = filename[(len(sm) - 1):]
+                    scheme = "file"
+                    break
+            if not scheme:
+                for sm in self.__schema:
+                    if filename.startswith("h5" + sm):
+                        filename = filename[(len(sm) + 1):]
+                        scheme = "h5file"
+                        break
             if self.__dproxy:
                 dattr = self.__dproxy.read().value
                 filename = "%s/%s" % (dattr, filename)
-                for key, val in self.__dirtrans.items():
-                    filename = filename.replace(key, val)
+            for key, val in self.__dirtrans.items():
+                filename = filename.replace(key, val)
             if str(filename) in ["", "/"]:
                 logger.warning("TangoFileSource: File name not defined")
                 return None, None, None
-            fh = imageFileHandler.ImageFileHandler(str(filename))
-            image = fh.getImage()
-            mdata = fh.getMetaData()
-            if image is not None:
-                if hasattr(image, "size"):
-                    if image.size == 0:
-                        return None, None, None
-                return (np.transpose(image), '%s' % (filename), mdata)
+            if scheme in ["h5file"]:
+                if "::" in filename:
+                    nxsfile, nxsfield = filename.split("::", 1)
+                else:
+                    nxsfield = None
+                    nxsfile = filename
+                if nxsfile != self.__nxsfile:
+                    self.__nxsfile = nxsfile
+                    self.__handler = None
+                if nxsfield != self.__nxsfield:
+                    self.__nxsfield = nxsfield
+                    self.__node = None
+
+                image = None
+                metadata = ""
+                try:
+                    if self.__handler is None:
+                        self.__handler = imageFileHandler.NexusFieldHandler(
+                            str(self.__nxsfile))
+                    if self.__node is None:
+                        self.__node = self.__handler.getNode(self.__nxsfield)
+                        try:
+                            metadata = self.__handler.getMetaData(self.__node)
+                        except Exception as e:
+                            logger.warning(str(e))
+                            metadata = ""
+                        # if metadata:
+                        #     print("IMAGE Metadata = %s" % str(metadata))
+                    fid = self.__handler.getFrameCount(
+                        self.__node, self.__gdim)
+                    if self.__lastframe < 0:
+                        if fid > - self.__lastframe:
+                            fid -= - self.__lastframe - 1
+                        else:
+                            fid = min(1, fid)
+                    elif fid > self.__lastframe + 1:
+                        fid = self.__lastframe + 1
+                    if self.__nxslast:
+                        if fid - 1 != self.__frame:
+                            self.__frame = fid - 1
+                    else:
+                        if fid - 1 < self.__frame:
+                            self.__frame = fid - 1
+
+                    image = self.__handler.getImage(
+                        self.__node, self.__frame, self.__gdim)
+                except Exception as e:
+                    logger.warning(str(e))
+                if not self.__nxsopen:
+                    self.__handler = None
+                    if hasattr(self.__node, "close"):
+                        self.__node.close()
+                    self.__node = None
+                if image is not None:
+                    if hasattr(image, "size"):
+                        if image.size == 0:
+                            return None, None, None
+                    filename = "%s/%s:%s" % (
+                        self.__nxsfile, self.__nxsfield, self.__frame)
+                    self.__frame += 1
+                    return (np.transpose(image), '%s' % (filename), metadata)
+
+            else:
+                self.__resetnexus()
+                fh = imageFileHandler.ImageFileHandler(str(filename))
+                image = fh.getImage()
+                mdata = fh.getMetaData()
+                if image is not None:
+                    if hasattr(image, "size"):
+                        if image.size == 0:
+                            return None, None, None
+                    return (np.transpose(image), '%s' % (filename), mdata)
         except Exception as e:
+            if "no successful acquisition done so far" in str(e):
+                logger.warning("TangoFileSource: "
+                               "no successful acquisition done so far")
+                return None, None, None
+            elif "no successful acquisition done" in str(e):
+                logger.warning("TangoFileSource: no acquisition done")
+                return None, None, None
             logger.warning(str(e))
             # print(str(e))
             return str(e), "__ERROR__", ""
-            pass  # this needs a bit more care
         return None, None, None
+
+    def __resetnexus(self):
+        """ resets nexus variables"""
+        self.__nxsfile = None
+        self.__nxsfield = None
+        self.__gdim = 0
+        self.__frame = 0
+        self.__lastframe = -1
+        self.__handler = None
+        self.__node = None
+        # self.__nxsopen = False
+        # self.__nxslast = False
 
     @debugmethod
     def connect(self):
         """ connects the source
         """
+        self.__resetnexus()
         try:
-            fattr, dattr, dirtrans = str(
-                self._configuration).strip().split(",", 2)
+            fattr, dattr, dirtrans, nxsopen, nxslast = str(
+                self._configuration).strip().split(",", 4)
             self.__dirtrans = json.loads(dirtrans)
             if not self._initiated:
                 self.__fproxy = tango.AttributeProxy(fattr)
@@ -600,12 +705,26 @@ class TangoFileSource(BaseSource):
                     self.__dproxy = tango.AttributeProxy(dattr)
                 else:
                     self.__dproxy = None
+            if nxsopen.lower() == "false":
+                self.__nxsopen = False
+            else:
+                self.__nxsopen = True
+            if nxslast.lower() == "false":
+                self.__nxslast = False
+            else:
+                self.__nxslast = True
             return True
         except Exception as e:
             self._updaterror()
             logger.warning(str(e))
             # print(str(e))
             return False
+
+    @debugmethod
+    def disconnect(self):
+        """ disconnects the source
+        """
+        self.__resetnexus()
 
 
 class VDEOdecoder(object):
@@ -1316,7 +1435,6 @@ class HTTPSource(BaseSource):
                 else:
                     logger.info(
                         "HTTPSource.getData: %s" % str(response.content))
-                    pass
             except Exception as e:
                 # print(str(e))
                 logger.warning(str(e))
@@ -1608,7 +1726,6 @@ class ZMQSource(BaseSource):
         except Exception as e:
             logger.warning(str(e))
             # print(str(e))
-            pass
         with QtCore.QMutexLocker(self.__mutex):
             self.__bindaddress = None
 
@@ -2064,7 +2181,6 @@ class HiDRASource(BaseSource):
         except Exception as e:
             logger.warning(str(e))
             # print(str(e))
-            pass  # this needs a bit more care
 
         if metadata is not None and data is not None:
             # print("data", str(data)[:10])
@@ -2205,7 +2321,6 @@ class EpicsPVSource(BaseSource):
             logger.warning(str(e))
             # print(str(e))
             return str(e), "__ERROR__", ""
-            pass  # this needs a bit more care
         return None, None, None
 
     @debugmethod
@@ -2354,7 +2469,6 @@ class TinePropSource(BaseSource):
             logger.warning(str(e))
             # print(str(e))
             return str(e), "__ERROR__", ""
-            pass  # this needs a bit more care
         return None, None, None
 
     @debugmethod

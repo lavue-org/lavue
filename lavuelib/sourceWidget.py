@@ -1431,6 +1431,11 @@ class TangoFileSourceWidget(SourceBaseWidget):
         #: (:obj:`list` <:obj:`str`>) user dir tango attributes
         self.__userdirattrs = []
 
+        #: (:obj:`bool`) nexus file source keeps the file open
+        self.__nxsopen = False
+        #: (:obj:`bool`) nexus file source starts from the last image
+        self.__nxslast = False
+
         self._detachWidgets()
 
         #: (:obj:`str`) default file tip
@@ -1478,7 +1483,7 @@ class TangoFileSourceWidget(SourceBaseWidget):
         """
         if not self.active:
             return
-        fattr, dattr, dt = self.__configuration()
+        fattr, dattr, dt, no, nl = self.__configuration()
         if not fattr:
             self.buttonEnabled.emit(False)
         else:
@@ -1500,7 +1505,7 @@ class TangoFileSourceWidget(SourceBaseWidget):
         if dattr in self.__tangodirattrs.keys():
             dattr = str(self.__tangodirattrs[dattr]).strip()
         dt = self.__dirtrans
-        return (fattr, dattr, dt)
+        return (fattr, dattr, dt, self.__nxsopen, self.__nxslast)
 
     def configuration(self):
         """ provides configuration for the current image source
@@ -1508,10 +1513,10 @@ class TangoFileSourceWidget(SourceBaseWidget):
         :returns configuration: configuration string
         :rtype configuration: :obj:`str`
         """
-        return "%s,%s,%s" % self.__configuration()
+        return "%s,%s,%s,%s,%s" % self.__configuration()
 
     def updateMetaData(self, tangofileattrs=None, tangodirattrs=None,
-                       dirtrans=None, **kargs):
+                       dirtrans=None, nxsopen=None, nxslast=None, **kargs):
         """ update source input parameters
 
         :param tangofileattrs: json dictionary with
@@ -1523,6 +1528,10 @@ class TangoFileSourceWidget(SourceBaseWidget):
         :param dirtrans: json dictionary with directory
                          and file name translation
         :type dirtrans: :obj:`str`
+        :param nxsopen: nexus file source keeps the file open
+        :type nxsopen: :obj:`bool`
+        :param nxslast: nexus file source starts from the last image
+        :type nxslast: :obj:`bool`
         :param kargs:  source widget input parameter dictionary
         :type kargs: :obj:`dict` < :obj:`str`, :obj:`any`>
         """
@@ -1538,6 +1547,10 @@ class TangoFileSourceWidget(SourceBaseWidget):
                 self.__userdirattrs)
         if dirtrans is not None:
             self.__dirtrans = dirtrans
+        if nxsopen is not None:
+            self.__nxsopen = nxsopen
+        if nxslast is not None:
+            self.__nxslast = nxslast
         self.sourceLabelChanged.emit()
 
     @QtCore.pyqtSlot()
