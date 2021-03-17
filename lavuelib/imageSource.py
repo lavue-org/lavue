@@ -1781,6 +1781,7 @@ class ASAPOSource(BaseSource):
         self.__subcntmax = 10
         #: (:obj:`str`) counter max
         self.__lastjsubmeta = None
+        self.__asapoversion = 'last'
 
     @debugmethod
     def setConfiguration(self, configuration):
@@ -1812,7 +1813,6 @@ class ASAPOSource(BaseSource):
         :returns: dictionary with metadata
         :rtype: :obj:`dict` <:obj:`str`, :obj:`any`>
         """
-        ""
         substreams = []
         meta = {}
         connected = False
@@ -1821,7 +1821,10 @@ class ASAPOSource(BaseSource):
             connected = True
         if self.__broker is not None:
             try:
-                substreams = self.__broker.get_substream_list()
+                if self.__asapoversion in ['old']:
+                    substreams = self.__broker.get_substream_list()
+                else:
+                    substreams = self.__broker.get_stream_list()
             except Exception as e:
                 logger.warning(str(e))
             if substreams:
@@ -1847,10 +1850,18 @@ class ASAPOSource(BaseSource):
 
             with QtCore.QMutexLocker(self.__mutex):
                 if self.__server and self.__beamtime and self.__token:
-                    self.__broker = asapo_consumer.create_server_broker(
-                        self.__server, "", False, self.__beamtime,
-                        self.__stream, self.__token,
-                        self._timeout or 3000)
+                    if hasattr(asapo_consumer, "create_server_broker"):
+                        self.__broker = asapo_consumer.create_server_broker(
+                            self.__server, "", False, self.__beamtime,
+                            self.__stream, self.__token,
+                            self._timeout or 3000)
+                        self.__asapoversion = 'old'
+                    else:
+                        self.__broker = asapo_consumer.create_consumer(
+                            self.__server, "", False, self.__beamtime,
+                            self.__stream, self.__token,
+                            self._timeout or 3000)
+                        self.__asapoversion = 'last'
                     self.__group_id = self.__broker.generate_group_id()
                     self._initiated = True
                     self.__lastname = ""
@@ -1922,8 +1933,13 @@ class ASAPOSource(BaseSource):
                     substream = self.__substreams[-1]
 
                 if self.__lastid and self.__lastname:
-                    _, metadata = self.__broker.get_last(
-                        self.__group_id, substream=substream, meta_only=True)
+                    if self.__asapoversion in ['old']:
+                        _, metadata = self.__broker.get_last(
+                            self.__group_id,
+                            substream=substream, meta_only=True)
+                    else:
+                        _, metadata = self.__broker.get_last(
+                            meta_only=True, stream=substream)
                     curname, curid = metadata["name"], metadata["_id"]
                     if curname == self.__lastname and curid == self.__lastid:
                         check = False
@@ -1932,10 +1948,14 @@ class ASAPOSource(BaseSource):
                         return "", "", jsubmeta
                     return None, None, None
 
-                data, metadata = self.__broker.get_last(
-                    self.__group_id,
-                    substream=substream,
-                    meta_only=False)
+                if self.__asapoversion in ['old']:
+                    data, metadata = self.__broker.get_last(
+                        self.__group_id,
+                        substream=substream,
+                        meta_only=False)
+                else:
+                    data, metadata = self.__broker.get_last(
+                        meta_only=False, stream=substream)
                 self.__lastname = str(metadata["name"] or "")
                 self.__lastid = metadata["_id"]
                 imagename = "%s (%s)" % (self.__lastname, self.__lastid)

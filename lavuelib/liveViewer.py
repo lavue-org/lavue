@@ -3131,7 +3131,9 @@ class LiveViewer(QtGui.QDialog):
             name, rawimage, metadata = self.__mergeData(
                 fulldata, str(self.__imagename).strip(),
                 self.__settings.imagechannels)
-
+        if hasattr(rawimage, "dtype") and str(rawimage.dtype) == 'object':
+            rawimage = "%s string (%s) cannot be read" % (name, rawimage)
+            name = "__ERROR__"
         if str(self.__imagename).strip() == str(name).strip() and not metadata:
             for dft in self.__dataFetchers:
                 dft.ready()
