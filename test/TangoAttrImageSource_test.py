@@ -1954,7 +1954,8 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             mode='expert',
             source='tangofile',
             configuration='test/testimageserver/00/LastImageTaken,'
-            'test/testimageserver/00/LastImagePath,{"/ramdisk/": "/gpfs/"}',
+            'test/testimageserver/00/LastImagePath,{"/ramdisk/": "/gpfs/"}'
+            ',False,False',
             instance='tgtest',
             tool='roi',
             # log='debug',
@@ -2086,7 +2087,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             mode='expert',
             source='tangofile',
             configuration='test/testimageserver/00/LastImageTaken,,'
-            '{"/ramdisk/": "/gpfs/"}',
+            '{"/ramdisk/": "/gpfs/"},False,False',
             instance='tgtest',
             tool='roi',
             # log='debug',
