@@ -289,8 +289,8 @@ class ConfigDialog(QtGui.QDialog):
         self.asapotoken = ""
         #: (:obj:`str`) asapo beamtime id
         self.asapobeamtime = ""
-        #: (:obj:`list` < :obj:`str` > ) asapo substreams
-        self.asapostreams = []
+        #: (:obj:`list` < :obj:`str` > ) asapo datasources
+        self.asapodatasources = []
 
         #: (:obj:`str`) json hidra detector server list
         self.detservers = "[]"
@@ -465,8 +465,8 @@ class ConfigDialog(QtGui.QDialog):
         self.__ui.showframerateCheckBox.setChecked(self.showframerate)
         self.__ui.timeoutLineEdit.setText(str(self.timeout))
         self.__ui.zmqtopicsLineEdit.setText(" ".join(self.zmqtopics))
-        self.__ui.asapostreamsLineEdit.setText(
-            " ".join(self.asapostreams))
+        self.__ui.asapodatasourcesLineEdit.setText(
+            " ".join(self.asapodatasources))
         self.__ui.detserversLineEdit.setText(
             " ".join(json.loads(self.detservers)))
         self.__ui.asaposerverLineEdit.setText(self.asaposerver)
@@ -931,9 +931,9 @@ class ConfigDialog(QtGui.QDialog):
         self.zmqtopics = [tp for tp in zmqtopics if tp]
         self.interruptonerror = self.__ui.interruptCheckBox.isChecked()
         self.autozmqtopics = self.__ui.autozmqtopicsCheckBox.isChecked()
-        streams = str(
-            self.__ui.asapostreamsLineEdit.text()).strip().split(" ")
-        self.asapostreams = [tp for tp in streams if tp]
+        datasources = str(
+            self.__ui.asapodatasourcesLineEdit.text()).strip().split(" ")
+        self.asapodatasources = [tp for tp in datasources if tp]
         self.asaposerver = str(
             self.__ui.asaposerverLineEdit.text()).strip()
         self.asapotoken = str(

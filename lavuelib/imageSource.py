@@ -1394,7 +1394,7 @@ class HTTPSource(BaseSource):
                 if response.ok:
                     name = self._configuration
                     data = response.content
-                    if data[:10] == b"###CBF: VE":
+                    if str(data[:10]) == "###CBF: VE":
                         # print("[cbf source module]::metadata", name)
                         try:
                             nimg = np.frombuffer(data[:], dtype=np.uint8)
@@ -1756,11 +1756,11 @@ class ASAPOSource(BaseSource):
         #: (:obj:`str`) asapo server
         self.__server = ""
         #: (:obj:`str`) stream
+        self.__datasource = ""
+        #: (:obj:`str`) stream
         self.__stream = ""
-        #: (:obj:`str`) substream
-        self.__substream = ""
-        #: (:obj:`str`) substream
-        self.__substreams = []
+        #: (:obj:`str`) stream
+        self.__streams = []
         #: (:obj:`str`) last name
         self.__lastname = ""
         #: (:obj:`str`) last name
@@ -1792,8 +1792,8 @@ class ASAPOSource(BaseSource):
         """
         if self._configuration != configuration:
             try:
-                (self.__server, self.__stream,
-                 self.__substream, self.__beamtime,
+                (self.__server, self.__datasource,
+                 self.__stream, self.__beamtime,
                  self.__token) = str(configuration).split(",", 5)
                 self.__lastname = ""
                 self.__lastid = ""
@@ -1813,7 +1813,7 @@ class ASAPOSource(BaseSource):
         :returns: dictionary with metadata
         :rtype: :obj:`dict` <:obj:`str`, :obj:`any`>
         """
-        substreams = []
+        streams = []
         meta = {}
         connected = False
         if self.__broker is None:
@@ -1822,23 +1822,23 @@ class ASAPOSource(BaseSource):
         if self.__broker is not None:
             try:
                 if self.__asapoversion in ['old']:
-                    substreams = self.__broker.get_substream_list()
+                    streams = self.__broker.get_substream_list()
                 else:
-                    substreams = self.__broker.get_stream_list()
+                    streams = self.__broker.get_stream_list()
             except Exception as e:
                 logger.warning(str(e))
-            if substreams:
-                self.__substreams = []
-                for subs in substreams:
+            if streams:
+                self.__streams = []
+                for subs in streams:
                     if isinstance(subs, dict) and "name" in subs.keys():
-                        self.__substreams.append(subs["name"])
+                        self.__streams.append(subs["name"])
                     else:
-                        self.__substreams.append(subs)
+                        self.__streams.append(subs)
         if connected:
             self.disconnect()
 
-        if substreams:
-            meta["asaposubstreams"] = self.__substreams
+        if streams:
+            meta["asapostreams"] = self.__streams
         return meta
 
     @debugmethod
@@ -1853,13 +1853,13 @@ class ASAPOSource(BaseSource):
                     if hasattr(asapo_consumer, "create_server_broker"):
                         self.__broker = asapo_consumer.create_server_broker(
                             self.__server, "", False, self.__beamtime,
-                            self.__stream, self.__token,
+                            self.__datasource, self.__token,
                             self._timeout or 3000)
                         self.__asapoversion = 'old'
                     else:
                         self.__broker = asapo_consumer.create_consumer(
                             self.__server, "", False, self.__beamtime,
-                            self.__stream, self.__token,
+                            self.__datasource, self.__token,
                             self._timeout or 3000)
                         self.__asapoversion = 'last'
                     self.__group_id = self.__broker.generate_group_id()
@@ -1928,18 +1928,18 @@ class ASAPOSource(BaseSource):
                 if self.__subcntmax == self.__subcounter:
                     self.__subcounter = 0
 
-                substream = self.__substream or "default"
-                if self.__substream == "**ALL**" and self.__substreams:
-                    substream = self.__substreams[-1]
+                stream = self.__stream or "default"
+                if self.__stream == "**ALL**" and self.__streams:
+                    stream = self.__streams[-1]
 
                 if self.__lastid and self.__lastname:
                     if self.__asapoversion in ['old']:
                         _, metadata = self.__broker.get_last(
                             self.__group_id,
-                            substream=substream, meta_only=True)
+                            substream=stream, meta_only=True)
                     else:
                         _, metadata = self.__broker.get_last(
-                            meta_only=True, stream=substream)
+                            meta_only=True, stream=stream)
                     curname, curid = metadata["name"], metadata["_id"]
                     if curname == self.__lastname and curid == self.__lastid:
                         check = False
@@ -1951,11 +1951,11 @@ class ASAPOSource(BaseSource):
                 if self.__asapoversion in ['old']:
                     data, metadata = self.__broker.get_last(
                         self.__group_id,
-                        substream=substream,
+                        substream=stream,
                         meta_only=False)
                 else:
                     data, metadata = self.__broker.get_last(
-                        meta_only=False, stream=substream)
+                        meta_only=False, stream=stream)
                 self.__lastname = str(metadata["name"] or "")
                 self.__lastid = metadata["_id"]
                 imagename = "%s (%s)" % (self.__lastname, self.__lastid)
@@ -2010,9 +2010,9 @@ class ASAPOSource(BaseSource):
                         return (np.transpose(image), imagename, mdata)
                 return None, None, None
             elif (((type(data).__name__ == "ndarray") and
-                   np.all(data[:10] == np.fromstring(
-                       "###CBF: VE", dtype=np.int8))) or
-                  data[:10] == b"###CBF: VE"):
+                   np.all(data[:10] == np.frombuffer(
+                       b"###CBF: VE", dtype=np.int8))) or
+                  str(data[:10]) == "###CBF: VE"):
                 # print("[cbf source module]::metadata", metadata["filename"])
                 logger.info(
                     "ASAPOSource.getData: "
@@ -2044,7 +2044,7 @@ class ASAPOSource(BaseSource):
                         img = np.array(PIL.Image.open(BytesIO(str(data))))
                     except Exception:
                         img = imageFileHandler.TIFLoader().load(
-                            np.fromstring(data[:], dtype=np.uint8))
+                            np.frombuffer(data[:], dtype=np.uint8))
                         self.__tiffloader = True
                     if hasattr(img, "size") and img.size == 0:
                         if jsubmeta:
@@ -2054,7 +2054,7 @@ class ASAPOSource(BaseSource):
                         return np.transpose(img), imagename, jsubmeta
                 else:
                     img = imageFileHandler.TIFLoader().load(
-                        np.fromstring(data[:], dtype=np.uint8))
+                        np.frombuffer(data[:], dtype=np.uint8))
                     if hasattr(img, "size") and img.size == 0:
                         if jsubmeta:
                             return "", "", jsubmeta
@@ -2205,7 +2205,7 @@ class HiDRASource(BaseSource):
         if metadata is not None and data is not None:
             # print("data", str(data)[:10])
 
-            if data[:10] == b"###CBF: VE":
+            if str(data[:10]) == "###CBF: VE":
                 # print("[cbf source module]::metadata", metadata["filename"])
                 logger.info(
                     "HiDRASource.getData: "

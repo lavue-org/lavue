@@ -160,7 +160,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
             'ASAPOServer="haso.desy.de:8500"\n' \
             'ASAPOToken=2asaldskjsalkdjflsakjflksj \n' \
             'ASAPOBeamtime=123124 \n' \
-            'ASAPOStreams=detector, \n' \
+            'ASAPODataSources=detector, \n' \
             'StoreGeometry=true\n' \
             'GeometryFromSource=true'
 
@@ -303,7 +303,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
             'ASAPOServer="haso.desy.de:8500"\n' \
             'ASAPOToken=2asaldskjsalkdjflsakjflksj \n' \
             'ASAPOBeamtime=123124 \n' \
-            'ASAPOStreams=detector, \n' \
+            'ASAPODataSources=detector, \n' \
             'StoreGeometry=true\n' \
             'GeometryFromSource=true'
 
@@ -449,7 +449,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
             'ASAPOServer="haso.desy.de:8500"\n' \
             'ASAPOToken=2asaldskjsalkdjflsakjflksj \n' \
             'ASAPOBeamtime=123124 \n' \
-            'ASAPOStreams=detector, \n' \
+            'ASAPODataSources=detector, \n' \
             'StoreGeometry=true\n' \
             'GeometryFromSource=true'
 
@@ -592,7 +592,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
             'ASAPOServer="haso.desy.de:8500"\n' \
             'ASAPOToken=2asaldskjsalkdjflsakjflksj \n' \
             'ASAPOBeamtime=123124 \n' \
-            'ASAPOStreams=detector, \n' \
+            'ASAPODataSources=detector, \n' \
             'StoreGeometry=true\n' \
             'GeometryFromSource=true'
 
@@ -734,7 +734,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
             'ASAPOServer="haso.desy.de:8500"\n' \
             'ASAPOToken=2asaldskjsalkdjflsakjflksj \n' \
             'ASAPOBeamtime=123124 \n' \
-            'ASAPOStreams=detector, \n' \
+            'ASAPODataSources=detector, \n' \
             'StoreGeometry=true\n' \
             'GeometryFromSource=true'
 

@@ -35,9 +35,11 @@ server_cache = ""
 datasource_cache = ""
 usermeta = None
 
+
 # old version
 # def create_server_broker(server_name, source_path, has_filesystem,
 #                          beamtime_id, stream, token, timeout_ms):
+
 
 def create_consumer(server_name, source_path, has_filesystem,
                     beamtime_id, data_source, token, timeout_ms):
@@ -57,6 +59,7 @@ class Broker(object):
     """ mock asapo brocker """
 
     def __init__(self, server, beamtime, data_source, token):
+        print("Broker.__init()")
         self.server = server
         self.beamtime = beamtime
         self.data_source = data_source
@@ -80,9 +83,9 @@ class Broker(object):
     # def get_last(self, gid, substream="default", meta_only=True):
 
     def get_last(self, meta_only=True, stream="default"):
-        print("Broker.get_last(%s, %s, %s)" % (gid, stream, meta_only))
+        print("Broker.get_last(%s, %s)" % (stream, meta_only))
         global filename
-        self.gid = gid
+        # self.gid = gid
         self.metaonly = meta_only
         self.data = None
         if filename:

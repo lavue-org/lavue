@@ -378,7 +378,7 @@ class LiveViewer(QtGui.QDialog):
         self.__targetname = socket.getfqdn()
 
         #: (:obj:`list` < :obj:`str` > ) allowed source metadata
-        self.__allowedmdata = ["datasources", "asaposubstreams"]
+        self.__allowedmdata = ["datasources", "asapostreams"]
         #: (:obj:`list` < :obj:`str` > ) allowed widget metadata
         self.__allowedwgdata = ["axisscales", "axislabels"]
 
@@ -1213,7 +1213,7 @@ class LiveViewer(QtGui.QDialog):
             epicspvshapes=self.__settings.epicspvshapes,
             asaposerver=self.__settings.asaposerver,
             asapotoken=self.__settings.asapotoken,
-            asapostreams=self.__settings.asapostreams,
+            asapodatasources=self.__settings.asapodatasources,
             asapobeamtime=self.__settings.asapobeamtime
         )
         self._updateSource(-1, -1)
@@ -2214,7 +2214,7 @@ class LiveViewer(QtGui.QDialog):
         cnfdlg.asaposerver = self.__settings.asaposerver
         cnfdlg.asapotoken = self.__settings.asapotoken
         cnfdlg.asapobeamtime = self.__settings.asapobeamtime
-        cnfdlg.asapostreams = self.__settings.asapostreams
+        cnfdlg.asapodatasources = self.__settings.asapodatasources
         cnfdlg.detservers = json.dumps(self.__mergeDetServers(
             HIDRASERVERLIST if cnfdlg.defdetservers else {"pool": []},
             json.loads(self.__settings.detservers)))
@@ -2441,8 +2441,8 @@ class LiveViewer(QtGui.QDialog):
         if self.__settings.zmqtopics != dialog.zmqtopics:
             self.__settings.zmqtopics = dialog.zmqtopics
             setsrc = True
-        if self.__settings.asapostreams != dialog.asapostreams:
-            self.__settings.asapostreams = dialog.asapostreams
+        if self.__settings.asapodatasources != dialog.asapodatasources:
+            self.__settings.asapodatasources = dialog.asapodatasources
             setsrc = True
         if self.__settings.defdetservers != dialog.defdetservers:
             self.__settings.defdetservers = dialog.defdetservers

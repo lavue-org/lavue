@@ -201,8 +201,8 @@ class Settings(object):
         self.asapotoken = ""
         #: (:obj:`str`) asapo beamtime id
         self.asapobeamtime = ""
-        #: (:obj:`list` < :obj:`str` > ) asapo substreams
-        self.asapostreams = []
+        #: (:obj:`list` < :obj:`str` > ) asapo datasources
+        self.asapodatasources = []
 
         #: (:obj:`bool`) use default detector servers
         self.defdetservers = True
@@ -615,11 +615,16 @@ class Settings(object):
         if qstval:
             self.zmqtopics = [str(tp) for tp in qstval]
 
-        qstval = \
+        qstval2 = \
             settings.value(
                 "Configuration/ASAPOStreams", type=str)
+        qstval = \
+            settings.value(
+                "Configuration/ASAPODataSources", type=str)
         if qstval:
-            self.asapostreams = [str(tp) for tp in qstval]
+            self.asapodatasources = [str(tp) for tp in qstval]
+        elif qstval2:
+            self.asapodatasources = [str(tp) for tp in qstval2]
 
         qstval = \
             settings.value(
@@ -1013,8 +1018,8 @@ class Settings(object):
             "Configuration/ZMQStreamTopics",
             self.zmqtopics)
         settings.setValue(
-            "Configuration/ASAPOStreams",
-            self.asapostreams)
+            "Configuration/ASAPODataSources",
+            self.asapodatasources)
         settings.setValue(
             "Configuration/ASAPOServer",
             self.asaposerver)
