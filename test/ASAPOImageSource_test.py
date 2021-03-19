@@ -155,7 +155,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
         self.__tangofilepattern = "%05d.tif"
         asapo_consumer.filename = ""
         asapo_consumer.usermeta = None
-        asapo_consumer.substreams = ["stream1", "stream2"]
+        asapo_consumer.streams = ["stream1", "stream2"]
         cfg = '[Configuration]\n' \
             'ASAPOServer="haso.desy.de:8500"\n' \
             'ASAPOToken=2asaldskjsalkdjflsakjflksj \n' \
@@ -288,14 +288,14 @@ class ASAPOImageSourceTest(unittest.TestCase):
         self.assertTrue(iid < 12000)
         self.assertEqual(fnames[0].strip(), "00002.tif")
 
-    def test_readimage_substream(self):
+    def test_readimage_stream(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         lastimage = None
         asapo_consumer.filename = ""
         asapo_consumer.usermeta = None
-        asapo_consumer.substreams = ["stream1", "stream2"]
+        asapo_consumer.streams = ["stream1", "stream2"]
         self.__tangoimgcounter = 0
         self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
         self.__tangofilepattern = "%05d.tif"
@@ -431,14 +431,14 @@ class ASAPOImageSourceTest(unittest.TestCase):
         self.assertTrue(iid < 25000)
         self.assertEqual(fnames[0].strip(), "00002.tif")
 
-    def test_readimage_newsubstream(self):
+    def test_readimage_newstream(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         lastimage = None
         asapo_consumer.filename = ""
         asapo_consumer.usermeta = None
-        asapo_consumer.substreams = [
+        asapo_consumer.streams = [
             {"name": "stream1", "timestampCreated": 0},
             {"name": "stream2", "timestampCreated": 0}
         ]
@@ -577,14 +577,14 @@ class ASAPOImageSourceTest(unittest.TestCase):
         self.assertTrue(iid < 26000)
         self.assertEqual(fnames[0].strip(), "00002.tif")
 
-    def test_readimage_autosubstream(self):
+    def test_readimage_autostream(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         lastimage = None
         asapo_consumer.filename = ""
         asapo_consumer.usermeta = None
-        asapo_consumer.substreams = ["stream1", "stream2"]
+        asapo_consumer.streams = ["stream1", "stream2"]
         self.__tangoimgcounter = 0
         self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
         self.__tangofilepattern = "%05d.tif"
