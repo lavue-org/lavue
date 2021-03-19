@@ -2498,7 +2498,7 @@ class TinePropSource(BaseSource):
         :param configuration:  configuration string
         :type configuration: :obj:`str`
         """
-        if self._configuration != configuration:
+        if configuration and self._configuration != configuration:
             try:
                 self.__address, self.__prop = str(
                     configuration).rsplit("/", 1)
