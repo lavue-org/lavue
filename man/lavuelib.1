@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "LAVUELIB" "1" "Feb 27, 2021" "2.57" "lavuelib"
+.TH "LAVUELIB" "1" "Mar 19, 2021" "2.59" "lavuelib"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .
@@ -434,12 +434,48 @@ constructor
 .INDENT 7.0
 .TP
 .B bfFileSelected
-(\fBpyqtgraph.QtCore.pyqtSignal\fP) bkg file selected signal
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) BF file selected signal
+.UNINDENT
+.INDENT 7.0
+.TP
+.B bfScalingFactor()
+provides bright field scaling factor
+.INDENT 7.0
+.TP
+.B Returns
+bright field scaling factor
+.TP
+.B Return type
+\fI\%float\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B bfScalingFactorChanged
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) BF scaling factor change signal
 .UNINDENT
 .INDENT 7.0
 .TP
 .B bkgFileSelected
 (\fBpyqtgraph.QtCore.pyqtSignal\fP) bkg file selected signal
+.UNINDENT
+.INDENT 7.0
+.TP
+.B bkgScalingFactor()
+provides background scaling factor
+.INDENT 7.0
+.TP
+.B Returns
+background scaling factor
+.TP
+.B Return type
+\fI\%float\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B bkgScalingFactorChanged
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) bkg scaling factor change signal
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -479,12 +515,32 @@ if background subtraction applied
 .UNINDENT
 .INDENT 7.0
 .TP
+.B setBFScalingFactor(scale)
+sets the bright field scaling factor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBscale\fP (\fI\%float\fP or \fI\%str\fP) – bright field scaling factor
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B setBackground(fname)
 sets the image background
 .INDENT 7.0
 .TP
 .B Parameters
 \fBfname\fP (\fI\%str\fP) – file name
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setBkgScalingFactor(scale)
+sets the background scaling factor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBscale\fP (\fI\%float\fP or \fI\%str\fP) – background scaling factor
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -516,6 +572,10 @@ sets displayed file name
 .B Parameters
 \fBname\fP (\fI\%str\fP) – file name
 .UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B showScalingFactors(show=True)
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -785,13 +845,13 @@ updates class variables with the form content
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asaposerver = None
-(\fI\%str\fP) asapo server
+.B asapodatasources = None
+(\fI\%list\fP < \fI\%str\fP > ) asapo datasources
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asapostreams = None
-(\fI\%list\fP < \fI\%str\fP > ) asapo substreams
+.B asaposerver = None
+(\fI\%str\fP) asapo server
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -1068,6 +1128,11 @@ status flag
 .TP
 .B showsub = None
 (\fI\%bool\fP) show bakcground subtraction widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B showsubsf = None
+(\fI\%bool\fP) show bakcground subtraction scaling widget
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -8055,6 +8120,11 @@ connects the source
 .UNINDENT
 .INDENT 7.0
 .TP
+.B disconnect()
+disconnects the source
+.UNINDENT
+.INDENT 7.0
+.TP
 .B getData()
 provides image name, image data and metadata
 .INDENT 7.0
@@ -10773,7 +10843,7 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B changeView(showmask=None, showsub=None, showtrans=None, showhighvaluemask=None)
+.B changeView(showmask=None, showsub=None, showtrans=None, showhighvaluemask=None, showsubsf=None)
 show or hide widgets in the preparation colection
 .INDENT 7.0
 .TP
@@ -10787,6 +10857,8 @@ show or hide widgets in the preparation colection
 \fBshowtrans\fP (\fI\%bool\fP) – transformation widget shown
 .IP \(bu 2
 \fBshowhighvaluemask\fP (\fI\%bool\fP) – mask widget shown
+.IP \(bu 2
+\fBshowsub\fP – subtraction scaling widget shown
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -11345,13 +11417,13 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asaposerver = None
-(\fI\%str\fP) asapo server
+.B asapodatasources = None
+(\fI\%list\fP < \fI\%str\fP > ) asapo datasources
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asapostreams = None
-(\fI\%list\fP < \fI\%str\fP > ) asapo substreams
+.B asaposerver = None
+(\fI\%str\fP) asapo server
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -11874,6 +11946,11 @@ sets source display parameters
 .TP
 .B showsub = None
 (\fI\%bool\fP) show bakcground subtraction widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B showsubsf = None
+(\fI\%bool\fP) show bakcground subtraction scaling widget
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -13550,7 +13627,7 @@ updates ComboBox
 .UNINDENT
 .INDENT 7.0
 .TP
-.B updateMetaData(tangofileattrs=None, tangodirattrs=None, dirtrans=None, **kargs)
+.B updateMetaData(tangofileattrs=None, tangodirattrs=None, dirtrans=None, nxsopen=None, nxslast=None, **kargs)
 update source input parameters
 .INDENT 7.0
 .TP
@@ -13565,6 +13642,10 @@ update source input parameters
 .IP \(bu 2
 \fBdirtrans\fP (\fI\%str\fP) – json dictionary with directory
 and file name translation
+.IP \(bu 2
+\fBnxsopen\fP (\fI\%bool\fP) – nexus file source keeps the file open
+.IP \(bu 2
+\fBnxslast\fP (\fI\%bool\fP) – nexus file source starts from the last image
 .IP \(bu 2
 \fBkargs\fP (\fI\%dict\fP < \fI\%str\fP, \fI\%any\fP>) – source widget input parameter dictionary
 .UNINDENT
@@ -14319,7 +14400,7 @@ update slot for Asapo source
 .UNINDENT
 .INDENT 7.0
 .TP
-.B updateMetaData(asaposerver=None, asapotoken=None, asapobeamtime=None, asapostreams=None, asaposubstreams=None, disconnect=True, **kargs)
+.B updateMetaData(asaposerver=None, asapotoken=None, asapobeamtime=None, asapodatasources=None, asapostreams=None, disconnect=True, **kargs)
 update source input parameters
 .sp
 :param asaposervers asapo servers, i.e. host:port
@@ -14328,10 +14409,10 @@ update source input parameters
 :type asapotoken: \fI\%str\fP
 :param asapobeamtime: beamtime id
 :type asapobeamtime: \fI\%str\fP
+:param asapodatasources: asapo datasource names
+:type asapodatasources: \fI\%list\fP <\fI\%str\fP> >
 :param asapostreams: asapo stream names
 :type asapostreams: \fI\%list\fP <\fI\%str\fP> >
-:param asaposubstreams: asapo substream names
-:type asaposubstreams: \fI\%list\fP <\fI\%str\fP> >
 :param disconnect: disconnect on update
 :type disconnect: \fI\%bool\fP
 :param kargs:  source widget input parameter dictionary
