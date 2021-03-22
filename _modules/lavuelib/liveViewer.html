@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.liveViewer &#8212; lavuelib 2.58.0 documentation</title>
+    <title>lavuelib.liveViewer &#8212; lavuelib 2.59.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.58</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.59</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -534,7 +534,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__targetname</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">getfqdn</span><span class="p">()</span>
 
         <span class="c1">#: (:obj:`list` &lt; :obj:`str` &gt; ) allowed source metadata</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__allowedmdata</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;datasources&quot;</span><span class="p">,</span> <span class="s2">&quot;asaposubstreams&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__allowedmdata</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;datasources&quot;</span><span class="p">,</span> <span class="s2">&quot;asapostreams&quot;</span><span class="p">]</span>
         <span class="c1">#: (:obj:`list` &lt; :obj:`str` &gt; ) allowed widget metadata</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__allowedwgdata</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;axisscales&quot;</span><span class="p">,</span> <span class="s2">&quot;axislabels&quot;</span><span class="p">]</span>
 
@@ -1369,7 +1369,7 @@
             <span class="n">epicspvshapes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">epicspvshapes</span><span class="p">,</span>
             <span class="n">asaposerver</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asaposerver</span><span class="p">,</span>
             <span class="n">asapotoken</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapotoken</span><span class="p">,</span>
-            <span class="n">asapostreams</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapostreams</span><span class="p">,</span>
+            <span class="n">asapodatasources</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapodatasources</span><span class="p">,</span>
             <span class="n">asapobeamtime</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapobeamtime</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateSource</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
@@ -2370,7 +2370,7 @@
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">asaposerver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asaposerver</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">asapotoken</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapotoken</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">asapobeamtime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapobeamtime</span>
-        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">asapostreams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapostreams</span>
+        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">asapodatasources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapodatasources</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">detservers</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mergeDetServers</span><span class="p">(</span>
             <span class="n">HIDRASERVERLIST</span> <span class="k">if</span> <span class="n">cnfdlg</span><span class="o">.</span><span class="n">defdetservers</span> <span class="k">else</span> <span class="p">{</span><span class="s2">&quot;pool&quot;</span><span class="p">:</span> <span class="p">[]},</span>
             <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">detservers</span><span class="p">)))</span>
@@ -2597,8 +2597,8 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">zmqtopics</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">zmqtopics</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">zmqtopics</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">zmqtopics</span>
             <span class="n">setsrc</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapostreams</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">asapostreams</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapostreams</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">asapostreams</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapodatasources</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">asapodatasources</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapodatasources</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">asapodatasources</span>
             <span class="n">setsrc</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">defdetservers</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">defdetservers</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">defdetservers</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">defdetservers</span>
@@ -2804,7 +2804,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">bfimagename</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">values</span><span class="p">[</span><span class="s2">&quot;brightfieldfile&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-            <span class="n">bkgscale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backgoundscale</span> \
+            <span class="n">bkgscale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backgroundscale</span> \
                 <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsubsf</span> <span class="k">else</span> <span class="kc">None</span>
             <span class="n">bfscale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__brightfieldscale</span> \
                 <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsubsf</span> <span class="k">else</span> <span class="kc">None</span>
@@ -3287,7 +3287,10 @@
             <span class="n">name</span><span class="p">,</span> <span class="n">rawimage</span><span class="p">,</span> <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mergeData</span><span class="p">(</span>
                 <span class="n">fulldata</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__imagename</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">imagechannels</span><span class="p">)</span>
-
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">rawimage</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">rawimage</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span> \
+           <span class="ow">and</span> <span class="n">rawimage</span><span class="p">:</span>
+            <span class="n">rawimage</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> string (</span><span class="si">%s</span><span class="s2">) cannot be read&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">rawimage</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;__ERROR__&quot;</span>
         <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__imagename</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">metadata</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">dft</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dataFetchers</span><span class="p">:</span>
                 <span class="n">dft</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span>

@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.sourceWidget &#8212; lavuelib 2.58.0 documentation</title>
+    <title>lavuelib.sourceWidget &#8212; lavuelib 2.59.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.58</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.59</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -861,8 +861,8 @@
 
         <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) subwidget object names</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">widgetnames</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;asapodatasourceLabel&quot;</span><span class="p">,</span> <span class="s2">&quot;asapodatasourceComboBox&quot;</span><span class="p">,</span>
             <span class="s2">&quot;asapostreamLabel&quot;</span><span class="p">,</span> <span class="s2">&quot;asapostreamComboBox&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;asaposubstreamLabel&quot;</span><span class="p">,</span> <span class="s2">&quot;asaposubstreamComboBox&quot;</span><span class="p">,</span>
         <span class="p">]</span>
 
         <span class="c1">#: (:obj:`str`&gt;) asapo server i.e. host:port</span>
@@ -872,10 +872,10 @@
         <span class="c1">#: (:obj:`str`&gt;) asapo token</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__token</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt; &gt;) sorted server list</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt; &gt;) datasource list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datasources</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt; &gt;) asapo streams</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__streams</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt; &gt;) asapo substreams</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__substreams</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1">#: (:obj:`bool`) updating flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updating</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:class:`pyqtgraph.QtCore.QMutex`) update mutex</span>
@@ -886,13 +886,13 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_detachWidgets</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="s2">&quot;detector&quot;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s2">&quot;**ALL**&quot;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="s2">&quot;detector&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s2">&quot;**ALL**&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateButton</span><span class="p">)</span>
         <span class="c1"># self._connectComboBox()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_updateSubstreamComboBox</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_updateStreamComboBox</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ASAPOSourceWidget.updateButton"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.sourceWidget.ASAPOSourceWidget.updateButton">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">disconnect</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -905,11 +905,11 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__updating</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">disconnect</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span>\
                     <span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_updateSubstreamComboBox</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> \
-               <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_updateStreamComboBox</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> \
+               <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span> \
                <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__server</span> \
                <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__token</span> \
                <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime</span><span class="p">:</span>
@@ -918,9 +918,9 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">buttonEnabled</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sourceLabelChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">disconnect</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span>\
                     <span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_updateSubstreamComboBox</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_updateStreamComboBox</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__udmutex</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__updating</span> <span class="o">=</span> <span class="kc">False</span></div>
 
@@ -932,15 +932,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__server</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()),</span>
             <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()),</span>
-            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()),</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__token</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="ASAPOSourceWidget.updateMetaData"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.sourceWidget.ASAPOSourceWidget.updateMetaData">[docs]</a>    <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asaposerver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">asapotoken</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">asapobeamtime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">asapostreams</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">asaposubstreams</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">asapodatasources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">asapostreams</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">disconnect</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                        <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update source input parameters</span>
@@ -951,10 +951,10 @@
 <span class="sd">        :type asapotoken: :obj:`str`</span>
 <span class="sd">        :param asapobeamtime: beamtime id</span>
 <span class="sd">        :type asapobeamtime: :obj:`str`</span>
+<span class="sd">        :param asapodatasources: asapo datasource names</span>
+<span class="sd">        :type asapodatasources: :obj:`list` &lt;:obj:`str`&gt; &gt;</span>
 <span class="sd">        :param asapostreams: asapo stream names</span>
 <span class="sd">        :type asapostreams: :obj:`list` &lt;:obj:`str`&gt; &gt;</span>
-<span class="sd">        :param asaposubstreams: asapo substream names</span>
-<span class="sd">        :type asaposubstreams: :obj:`list` &lt;:obj:`str`&gt; &gt;</span>
 <span class="sd">        :param disconnect: disconnect on update</span>
 <span class="sd">        :type disconnect: :obj:`bool`</span>
 <span class="sd">        :param kargs:  source widget input parameter dictionary</span>
@@ -962,22 +962,22 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">disconnect</span><span class="p">:</span>
             <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span>\
-                    <span class="n">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_updateSubstreamComboBox</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span>\
+                    <span class="n">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_updateStreamComboBox</span><span class="p">)</span>
         <span class="n">text</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asapostreams</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asapodatasources</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">updateButton</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__streams</span> <span class="o">=</span> <span class="n">asapostreams</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datasources</span> <span class="o">=</span> <span class="n">asapodatasources</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span>
-                    <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">count</span><span class="p">())):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">removeItem</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">asapostreams</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="s2">&quot;detector&quot;</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">addItems</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__streams</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+                    <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">count</span><span class="p">())):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">removeItem</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">asapodatasources</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="s2">&quot;detector&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">addItems</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__datasources</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">updateButton</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">asaposerver</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__server</span> <span class="o">=</span> <span class="n">asaposerver</span>
         <span class="k">if</span> <span class="n">asapotoken</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -985,43 +985,43 @@
         <span class="k">if</span> <span class="n">asapobeamtime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime</span> <span class="o">=</span> <span class="n">asapobeamtime</span>
         <span class="n">updatecombo</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asaposubstreams</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asapostreams</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
                 <span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span> <span class="ow">or</span> <span class="n">text</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">asaposubstreams</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span> <span class="ow">or</span> <span class="n">text</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">asapostreams</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">text</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s2">&quot;**ALL**&quot;</span><span class="p">]:</span>
                     <span class="n">text</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__substreams</span> <span class="o">=</span> <span class="n">asaposubstreams</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__streams</span> <span class="o">=</span> <span class="n">asapostreams</span>
             <span class="n">updatecombo</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="n">updatecombo</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span>
-                        <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">count</span><span class="p">())):</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">removeItem</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__substreams</span> <span class="ow">or</span> \
-                   <span class="s2">&quot;default&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__substreams</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">addItems</span><span class="p">(</span>
-                    <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__substreams</span><span class="p">))</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__substreams</span> <span class="ow">or</span> \
-                   <span class="s2">&quot;**ALL**&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__substreams</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="s2">&quot;**ALL**&quot;</span><span class="p">)</span>
+                        <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">count</span><span class="p">())):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">removeItem</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__streams</span> <span class="ow">or</span> \
+                   <span class="s2">&quot;default&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__streams</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">addItems</span><span class="p">(</span>
+                    <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__streams</span><span class="p">))</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__streams</span> <span class="ow">or</span> \
+                   <span class="s2">&quot;**ALL**&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__streams</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="s2">&quot;**ALL**&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">text</span><span class="p">:</span>
-                    <span class="n">tid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+                    <span class="n">tid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">tid</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">tid</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">tid</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">disconnect</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateButton</span><span class="p">(</span><span class="n">disconnect</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_updateSubstreamComboBox</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_updateStreamComboBox</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">updatecombo</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">text</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_updateSubstreamComboBox</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_updateStreamComboBox</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sourceLabelChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">_updateSubstreamComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_updateStreamComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update ASAPO substream combobox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">disconnected</span> <span class="o">=</span> <span class="kc">False</span>
@@ -1036,13 +1036,13 @@
         <span class="sd">&quot;&quot;&quot; connects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ASAPOSourceWidget.disconnectWidget"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.sourceWidget.ASAPOSourceWidget.disconnectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">disconnectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; disconnects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ASAPOSourceWidget.configure"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.sourceWidget.ASAPOSourceWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
@@ -1051,25 +1051,24 @@
 <span class="sd">        :type configuration: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cnflst</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
-        <span class="n">stream</span> <span class="o">=</span> <span class="n">cnflst</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">cnflst</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
-
-        <span class="n">substream</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">datasource</span> <span class="o">=</span> <span class="n">cnflst</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">cnflst</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">stream</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnflst</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">substream</span> <span class="o">=</span> <span class="n">cnflst</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">substream</span><span class="p">:</span>
-                <span class="n">substream</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span>
-        <span class="n">iid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+            <span class="n">stream</span> <span class="o">=</span> <span class="n">cnflst</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">stream</span><span class="p">:</span>
+                <span class="n">stream</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span>
+        <span class="n">iid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">datasource</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">iid</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
-            <span class="n">iid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">iid</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">datasource</span><span class="p">)</span>
+            <span class="n">iid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">datasource</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">iid</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">substream</span><span class="p">:</span>
-            <span class="n">iid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">substream</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">stream</span><span class="p">:</span>
+            <span class="n">iid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">iid</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">substream</span><span class="p">)</span>
-                <span class="n">iid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">substream</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asaposubstreamComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">iid</span><span class="p">)</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+                <span class="n">iid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">iid</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ASAPOSourceWidget.label"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.sourceWidget.ASAPOSourceWidget.label">[docs]</a>    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
@@ -1587,6 +1586,11 @@
         <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) user dir tango attributes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__userdirattrs</span> <span class="o">=</span> <span class="p">[]</span>
 
+        <span class="c1">#: (:obj:`bool`) nexus file source keeps the file open</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__nxsopen</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) nexus file source starts from the last image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__nxslast</span> <span class="o">=</span> <span class="kc">False</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_detachWidgets</span><span class="p">()</span>
 
         <span class="c1">#: (:obj:`str`) default file tip</span>
@@ -1634,7 +1638,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
             <span class="k">return</span>
-        <span class="n">fattr</span><span class="p">,</span> <span class="n">dattr</span><span class="p">,</span> <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__configuration</span><span class="p">()</span>
+        <span class="n">fattr</span><span class="p">,</span> <span class="n">dattr</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">nl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__configuration</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">fattr</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">buttonEnabled</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1656,7 +1660,7 @@
         <span class="k">if</span> <span class="n">dattr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tangodirattrs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">dattr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tangodirattrs</span><span class="p">[</span><span class="n">dattr</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dirtrans</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">fattr</span><span class="p">,</span> <span class="n">dattr</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">fattr</span><span class="p">,</span> <span class="n">dattr</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nxsopen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nxslast</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TangoFileSourceWidget.configuration"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.sourceWidget.TangoFileSourceWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
@@ -1664,10 +1668,10 @@
 <span class="sd">        :returns configuration: configuration string</span>
 <span class="sd">        :rtype configuration: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__configuration</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__configuration</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TangoFileSourceWidget.updateMetaData"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.sourceWidget.TangoFileSourceWidget.updateMetaData">[docs]</a>    <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tangofileattrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tangodirattrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">dirtrans</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+                       <span class="n">dirtrans</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nxsopen</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nxslast</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update source input parameters</span>
 
 <span class="sd">        :param tangofileattrs: json dictionary with</span>
@@ -1679,6 +1683,10 @@
 <span class="sd">        :param dirtrans: json dictionary with directory</span>
 <span class="sd">                         and file name translation</span>
 <span class="sd">        :type dirtrans: :obj:`str`</span>
+<span class="sd">        :param nxsopen: nexus file source keeps the file open</span>
+<span class="sd">        :type nxsopen: :obj:`bool`</span>
+<span class="sd">        :param nxslast: nexus file source starts from the last image</span>
+<span class="sd">        :type nxslast: :obj:`bool`</span>
 <span class="sd">        :param kargs:  source widget input parameter dictionary</span>
 <span class="sd">        :type kargs: :obj:`dict` &lt; :obj:`str`, :obj:`any`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1694,6 +1702,10 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__userdirattrs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">dirtrans</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__dirtrans</span> <span class="o">=</span> <span class="n">dirtrans</span>
+        <span class="k">if</span> <span class="n">nxsopen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__nxsopen</span> <span class="o">=</span> <span class="n">nxsopen</span>
+        <span class="k">if</span> <span class="n">nxslast</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__nxslast</span> <span class="o">=</span> <span class="n">nxslast</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sourceLabelChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TangoFileSourceWidget.updateComboBox"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.sourceWidget.TangoFileSourceWidget.updateComboBox">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>

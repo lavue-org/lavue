@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.settings &#8212; lavuelib 2.58.0 documentation</title>
+    <title>lavuelib.settings &#8212; lavuelib 2.59.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.58</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.59</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -357,8 +357,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">asapotoken</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="c1">#: (:obj:`str`) asapo beamtime id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">asapobeamtime</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="c1">#: (:obj:`list` &lt; :obj:`str` &gt; ) asapo substreams</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">asapostreams</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">#: (:obj:`list` &lt; :obj:`str` &gt; ) asapo datasources</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">asapodatasources</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1">#: (:obj:`bool`) use default detector servers</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">defdetservers</span> <span class="o">=</span> <span class="kc">True</span>
@@ -771,11 +771,16 @@
         <span class="k">if</span> <span class="n">qstval</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">zmqtopics</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span> <span class="k">for</span> <span class="n">tp</span> <span class="ow">in</span> <span class="n">qstval</span><span class="p">]</span>
 
-        <span class="n">qstval</span> <span class="o">=</span> \
+        <span class="n">qstval2</span> <span class="o">=</span> \
             <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
                 <span class="s2">&quot;Configuration/ASAPOStreams&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+        <span class="n">qstval</span> <span class="o">=</span> \
+            <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">&quot;Configuration/ASAPODataSources&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">qstval</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">asapostreams</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span> <span class="k">for</span> <span class="n">tp</span> <span class="ow">in</span> <span class="n">qstval</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">asapodatasources</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span> <span class="k">for</span> <span class="n">tp</span> <span class="ow">in</span> <span class="n">qstval</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">qstval2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">asapodatasources</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span> <span class="k">for</span> <span class="n">tp</span> <span class="ow">in</span> <span class="n">qstval2</span><span class="p">]</span>
 
         <span class="n">qstval</span> <span class="o">=</span> \
             <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
@@ -1169,8 +1174,8 @@
             <span class="s2">&quot;Configuration/ZMQStreamTopics&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">zmqtopics</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
-            <span class="s2">&quot;Configuration/ASAPOStreams&quot;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">asapostreams</span><span class="p">)</span>
+            <span class="s2">&quot;Configuration/ASAPODataSources&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">asapodatasources</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/ASAPOServer&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">asaposerver</span><span class="p">)</span>
