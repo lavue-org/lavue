@@ -558,6 +558,7 @@ class TangoFileSource(BaseSource):
         self.__nxsopen = False
         #: (:obj:`bool`) nexus file source starts from the last image
         self.__nxslast = False
+        #: (:obj:`list`) list of supported scheme
         self.__schema = ["file:/localhost//", "file:////", "file:///",
                          "file://", "file:/"]
 
@@ -2100,6 +2101,9 @@ class HiDRASource(BaseSource):
         self.__mutex = QtCore.QMutex()
         #: (:obj:`bool`) use tiff loader
         self.__tiffloader = False
+        #: (:obj:`list`) list of supported scheme
+        self.__schema = ["file:/localhost//", "file:////", "file:///",
+                         "file://", "file:/"]
 
     # @debugmethod
     def setConfiguration(self, configuration):
@@ -2205,12 +2209,75 @@ class HiDRASource(BaseSource):
         if metadata is not None and data is not None:
             # print("data", str(data)[:10])
 
-            if str(data[:10]) == "###CBF: VE":
+            nameext = ""
+            filename = metadata["filename"]
+            imagename = metadata["filename"] or ""
+            scheme = None
+            for sm in self.__schema:
+                if filename.startswith(sm):
+                    filename = filename[(len(sm) - 1):]
+                    scheme = "file"
+                    break
+            if not scheme:
+                for sm in self.__schema:
+                    if filename.startswith("h5" + sm):
+                        filename = filename[(len(sm) + 1):]
+                        scheme = "h5file"
+                        break
+            if filename:
+                _, nameext = os.path.splitext(filename)
+            if scheme in ["h5file"] or \
+               nameext in [".nxs", ".h5", "nx", "ndf", "hdf"]:
+                try:
+                    nexus_path = None
+                    if scheme in ["h5file"]:
+                        if "::" in filename:
+                            filename, nexus_path = filename.split("::", 1)
+                    handler = imageFileHandler.NexusFieldHandler()
+                    handler.frombuffer(data[:], filename)
+                    if not nexus_path and "nexus_path" in metadata.keys():
+                        nexus_path = metadata["nexus_path"]
+                    frame = None
+                    if "nexus_image_frame" in metadata.keys():
+                        try:
+                            frame = int(
+                                metadata["nexus_image_frame"])
+                        except Exception as e:
+                            logger.warning(str(e))
+                    node = handler.getNode(nexus_path)
+                    try:
+                        mdata = handler.getMetaData(node)
+                    except Exception as e:
+                        logger.warning(str(e))
+                    image = handler.getImage(
+                        node, frame)
+                except Exception as e:
+                    logger.warning(str(e))
+                if image is not None:
+                    if hasattr(image, "size") and image.size == 0:
+                        return None, None, None
+                    if hasattr(image, "shape") and \
+                       len(image.shape) == 3 and image.shape[0] == 1:
+                        return (np.transpose(image[0, :, :]),
+                                imagename, mdata)
+                    elif (frame is None and hasattr(image, "shape") and
+                          len(image.shape) > 2):
+                        return (np.swapaxes(image, 1, 2), imagename, mdata)
+                    else:
+                        return (np.transpose(image), imagename, mdata)
+                return None, None, None
+            elif str(data[:10]) == "###CBF: VE":
                 # print("[cbf source module]::metadata", metadata["filename"])
                 logger.info(
                     "HiDRASource.getData: "
                     "[cbf source module]::metadata %s" % metadata["filename"])
-                npdata = np.fromstring(data[:], dtype=np.uint8)
+                if type(data).__name__ == "ndarray":
+                    npdata = np.array(data[:], dtype="uint8")
+                else:
+                    try:
+                        npdata = np.frombuffer(data[:], dtype=np.uint8)
+                    except Exception:
+                        npdata = np.fromstring(data[:], dtype=np.uint8)
                 img = imageFileHandler.CBFLoader().load(npdata)
 
                 mdata = imageFileHandler.CBFLoader().metadata(npdata)
@@ -2228,16 +2295,25 @@ class HiDRASource(BaseSource):
                     try:
                         img = np.array(PIL.Image.open(BytesIO(str(data))))
                     except Exception:
-                        img = imageFileHandler.TIFLoader().load(
-                            np.fromstring(data[:], dtype=np.uint8))
+                        try:
+                            img = imageFileHandler.TIFLoader().load(
+                                np.frombuffer(data[:], dtype=np.uint8))
+                        except Exception:
+                            img = imageFileHandler.TIFLoader().load(
+                                np.fromstring(data[:], dtype=np.uint8))
                         self.__tiffloader = True
                     if hasattr(img, "size") and img.size == 0:
                         return None, None, None
                     if img is not None:
                         return np.transpose(img), metadata["filename"], ""
                 else:
-                    img = imageFileHandler.TIFLoader().load(
-                        np.fromstring(data[:], dtype=np.uint8))
+                    try:
+                        img = imageFileHandler.TIFLoader().load(
+                            np.frombuffer(data[:], dtype=np.uint8))
+                    except Exception:
+                        img = imageFileHandler.TIFLoader().load(
+                            np.fromstring(data[:], dtype=np.uint8))
+
                     if hasattr(img, "size") and img.size == 0:
                         return None, None, None
                     if img is not None:
