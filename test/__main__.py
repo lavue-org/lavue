@@ -90,6 +90,7 @@ if H5CPP_AVAILABLE:
     import H5CppWriter_test
     import FileWriterH5Cpp_test
     import CommandLineArgumentH5Cpp_test
+    import ASAPOImageSourceH5Cpp_test
     import NXSFileImageSource_test
 if H5CPP_AVAILABLE and H5PY_AVAILABLE:
     import FileWriterH5CppH5PY_test
@@ -128,6 +129,7 @@ def main():
     if H5CPP_AVAILABLE:
         CommandLineArgumentH5Cpp_test.app = app
         NXSFileImageSource_test.app = app
+        ASAPOImageSourceH5Cpp_test.app = app
     if H5PY_AVAILABLE:
         ASAPOImageSourceH5PY_test.app = app
     basicsuite.addTests(
@@ -167,6 +169,9 @@ def main():
         basicsuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 FileWriterH5Cpp_test))
+        basicsuite.addTests(
+            unittest.defaultTestLoader.loadTestsFromModule(
+                ASAPOImageSourceH5Cpp_test))
         basicsuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(H5CppWriter_test))
     if H5CPP_AVAILABLE and H5PY_AVAILABLE:
