@@ -290,8 +290,8 @@ class HidraImageSourceH5CppTest(unittest.TestCase):
                     "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
             ])
 
-            qtck1.executeChecks(delay=3000)
-            status = qtck2.executeChecksAndClose(delay=6000)
+            qtck1.executeChecks(delay=6000)
+            status = qtck2.executeChecksAndClose(delay=12000)
 
             self.assertEqual(status, 0)
 

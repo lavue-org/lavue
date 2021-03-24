@@ -95,7 +95,7 @@ def tostr(x):
 
 
 # test fixture
-class HidraImageSourceH5CppTest(unittest.TestCase):
+class HidraImageSourceH5PYTest(unittest.TestCase):
 
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
@@ -294,8 +294,8 @@ class HidraImageSourceH5CppTest(unittest.TestCase):
                     "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
             ])
 
-            qtck1.executeChecks(delay=3000)
-            status = qtck2.executeChecksAndClose(delay=6000)
+            qtck1.executeChecks(delay=6000)
+            status = qtck2.executeChecksAndClose(delay=12000)
 
             self.assertEqual(status, 0)
 
@@ -320,7 +320,7 @@ class HidraImageSourceH5CppTest(unittest.TestCase):
             fnames = res2[3].split("(")
             self.assertEqual(
                 fnames[0].strip(),
-                "HidraImageSourceH5CppTesttest_readnxsfile_default.nxs")
+                "HidraImageSourceH5PYTesttest_readnxsfile_default.nxs")
 
         finally:
             if os.path.isfile(self._fname):
