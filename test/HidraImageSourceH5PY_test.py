@@ -231,6 +231,7 @@ class HidraImageSourceH5PYTest(unittest.TestCase):
             self.createdetfile(self._fname)
 
             lastimage = None
+            hidra.filename = None
             cfg = '[Configuration]\n' \
                 'StoreGeometry=true\n' \
                 'GeometryFromSource=true'

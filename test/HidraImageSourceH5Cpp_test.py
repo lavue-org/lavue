@@ -236,6 +236,7 @@ class HidraImageSourceH5CppTest(unittest.TestCase):
             with open(self.__cfgfname, "w+") as cf:
                 cf.write(cfg)
 
+            hidra.filename = None
             lastimage = None
 
             options = argparse.Namespace(
