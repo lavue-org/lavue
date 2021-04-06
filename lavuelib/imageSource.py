@@ -1413,7 +1413,7 @@ class HTTPSource(BaseSource):
                         if PILLOW and not self.__tiffloader:
                             try:
                                 img = np.array(
-                                    PIL.Image.open(BytesIO(str(data))))
+                                    PIL.Image.open(BytesIO(bytes(data))))
                             except Exception:
                                 img = imageFileHandler.TIFLoader().load(
                                     np.fromstring(data[:], dtype=np.uint8))
@@ -2042,7 +2042,7 @@ class ASAPOSource(BaseSource):
                     "[tif source module]::metadata %s" % metadata["name"])
                 if PILLOW and not self.__tiffloader:
                     try:
-                        img = np.array(PIL.Image.open(BytesIO(str(data))))
+                        img = np.array(PIL.Image.open(BytesIO(bytes(data))))
                     except Exception:
                         img = imageFileHandler.TIFLoader().load(
                             np.frombuffer(data[:], dtype=np.uint8))
@@ -2293,7 +2293,7 @@ class HiDRASource(BaseSource):
                 # print("[tif source module]::metadata", metadata["filename"])
                 if PILLOW and not self.__tiffloader:
                     try:
-                        img = np.array(PIL.Image.open(BytesIO(str(data))))
+                        img = np.array(PIL.Image.open(BytesIO(bytes(data))))
                     except Exception:
                         try:
                             img = imageFileHandler.TIFLoader().load(
