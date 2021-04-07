@@ -129,6 +129,7 @@ import numpy as np
 import random
 import time
 import datetime
+import pytz
 try:
     import cPickle
 except Exception:
@@ -187,7 +188,13 @@ def currenttime():
     :returns:  current time in iso format
     :rtype: :obj:`str`
     """
-    return datetime.datetime.utcnow().astimezone().isoformat()
+    # does not work on py2 and old py3
+    # return datetime.datetime.utcnow().astimezone().isoformat()
+    tzone = time.tzname[0]
+    tz = pytz.timezone(tzone)
+    fmt = '%Y-%m-%dT%H:%M:%S.%f%z'
+    starttime = tz.localize(datetime.datetime.now())
+    return str(starttime.strftime(fmt))
 
 
 def tostr(x):
