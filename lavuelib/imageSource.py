@@ -128,6 +128,7 @@ import socket
 import numpy as np
 import random
 import time
+import datetime
 try:
     import cPickle
 except Exception:
@@ -178,6 +179,15 @@ def tobytes(x):
         return bytes(x, "utf8")
     else:
         return bytes(x)
+
+
+def currenttime():
+    """ provides current time in iso format
+
+    :returns:  current time in iso format
+    :rtype: :obj:`str`
+    """
+    return datetime.datetime.utcnow().astimezone().isoformat()
 
 
 def tostr(x):
@@ -1415,7 +1425,7 @@ class HTTPSource(BaseSource):
                         if hasattr(img, "size") and img.size == 0:
                             return None, None, None
                         return (np.transpose(img),
-                                "%s (%s)" % (name, time.ctime()), "")
+                                "%s (%s)" % (name, currenttime()), "")
                     else:
                         # print("[tif source module]::metadata", name)
                         if PILLOW and not self.__tiffloader:
@@ -1435,7 +1445,7 @@ class HTTPSource(BaseSource):
                             if hasattr(img, "size") and img.size == 0:
                                 return None, None, None
                             return (np.transpose(img),
-                                    "%s (%s)" % (name, time.ctime()), "")
+                                    "%s (%s)" % (name, currenttime()), "")
                         else:
                             try:
                                 img = imageFileHandler.TIFLoader().load(
@@ -1448,7 +1458,7 @@ class HTTPSource(BaseSource):
                             if hasattr(img, "size") and img.size == 0:
                                 return None, None, None
                             return (np.transpose(img),
-                                    "%s (%s)" % (name, time.ctime()), "")
+                                    "%s (%s)" % (name, currenttime()), "")
                 else:
                     logger.info(
                         "HTTPSource.getData: %s" % str(response.content))
@@ -2428,7 +2438,7 @@ class EpicsPVSource(BaseSource):
                 else:
                     image = rawdata
                 return (np.transpose(image),
-                        '%s (%s)' % (self._configuration, time.time()), None)
+                        '%s (%s)' % (self._configuration, currenttime()), None)
         except Exception as e:
             logger.warning(str(e))
             # print(str(e))

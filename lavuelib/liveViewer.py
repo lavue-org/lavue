@@ -3093,6 +3093,7 @@ class LiveViewer(QtGui.QDialog):
         """
         fulldata = []
         states = self.__sourcewg.tabCheckBoxStates()
+        name = None
         for i, df in enumerate(self.__dataFetchers):
             if states[i]:
                 cnt = 0
