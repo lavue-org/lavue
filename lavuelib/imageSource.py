@@ -279,11 +279,9 @@ class BaseSource(object):
         #     return str("Test error"), "__ERROR__", ""
         if not self.__images:
             for i in range(self.__isize):
-                self.__images.append(np.transpose(
-                    [
-                        [random.randint(0, 1000) for _ in range(512)]
-                        for _ in range(256)
-                    ])
+                self.__images.append(
+                        np.random.randint(
+                            1001, size=(512, 256), dtype='int16')
                 )
         return (self.__images[self.__counter % self.__isize],
                 '__random_%s__' % self.__counter, "")

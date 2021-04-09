@@ -268,6 +268,20 @@ class PartialData(object):
         else:
             return None
 
+    def intmaxvalue(self):
+        """ provides data type maximal value
+
+        :returns: integer data type maximal value
+        :rtype: :obj:`int`
+        """
+        maxval = None
+        if self.dtype() and issubclass(self.dtype().type, np.integer):
+            try:
+                maxval = np.iinfo(self.dtype()).max
+            except Exception:
+                maxval = None
+        return maxval
+
     def data(self):
         """ provides transformed data
 
@@ -537,6 +551,8 @@ class LiveViewer(QtGui.QDialog):
         self.__imagename = None
         #: (:obj:`str`) last image name
         self.__lastimagename = None
+        #: (:obj:`int`) integer max value
+        self.__intmaxvalue = None
         #: (:obj:`str`) metadata JSON dictionary
         self.__metadata = ""
         #: (:obj:`str`) metadata dictionary
@@ -3124,8 +3140,16 @@ class LiveViewer(QtGui.QDialog):
                 )
                 fulldata.append(
                     PartialData(name, rawimage, metadata, x, y, tr))
+
+        self.__intmaxvalue = None
+        for fd in fulldata:
+            imv = fd.intmaxvalue()
+            if imv is not None:
+                self.__intmaxvalue = imv
+
         if not self.__sourcewg.isConnected():
             return
+
         if len(fulldata) == 1:
             name, rawimage, metadata = fulldata[0].tolist()[:3]
         else:
@@ -3472,6 +3496,9 @@ class LiveViewer(QtGui.QDialog):
 
         if self.__settings.showhighvaluemask and \
            self.__imagewg.maskValue() is not None:
+            maskvalue = self.__imagewg.maskValue()
+            if maskvalue < 0 and self.__intmaxvalue is not None:
+                maskvalue += self.__intmaxvalue
             try:
                 if self.__settings.nanmask:
                     self.__displayimage = np.array(
@@ -3481,13 +3508,13 @@ class LiveViewer(QtGui.QDialog):
                         np.warnings.filterwarnings(
                             'ignore', r'invalid value encountered in greater')
                         self.__imagewg.setMaskValueIndices(
-                            self.__displayimage > self.__imagewg.maskValue())
+                            self.__displayimage > maskvalue)
                         self.__displayimage[
                             self.__imagewg.maskValueIndices()] = np.nan
                 else:
                     self.__displayimage = np.array(self.__displayimage)
                     self.__imagewg.setMaskValueIndices(
-                        self.__displayimage > self.__imagewg.maskValue())
+                        self.__displayimage > maskvalue)
                     self.__displayimage[
                             self.__imagewg.maskValueIndices()] = 0
             except IndexError:
