@@ -244,6 +244,8 @@ class ConfigDialog(QtGui.QDialog):
         self.zeromask = False
         #: (:obj:`bool`) nan mask enabled
         self.nanmask = True
+        #: (:obj:`bool`) adding maximal type value to negative high value mask
+        self.negmask = False
 
         #: (:obj:`bool`) show bakcground subtraction widget
         self.showsub = True
@@ -443,6 +445,7 @@ class ConfigDialog(QtGui.QDialog):
         self.__ui.secstreamCheckBox.setChecked(self.secstream)
         self.__ui.zeromaskCheckBox.setChecked(self.zeromask)
         self.__ui.nanmaskCheckBox.setChecked(self.nanmask)
+        self.__ui.negmaskCheckBox.setChecked(self.negmask)
         self.__ui.secautoportCheckBox.setChecked(self.secautoport)
         self.__ui.secportLineEdit.setText(self.secport)
         self.__ui.hidraportLineEdit.setText(self.hidraport)
@@ -758,6 +761,7 @@ class ConfigDialog(QtGui.QDialog):
         self.secstream = self.__ui.secstreamCheckBox.isChecked()
         self.zeromask = self.__ui.zeromaskCheckBox.isChecked()
         self.nanmask = self.__ui.nanmaskCheckBox.isChecked()
+        self.negmask = self.__ui.negmaskCheckBox.isChecked()
         self.secautoport = self.__ui.secautoportCheckBox.isChecked()
         self.refreshrate = float(self.__ui.rateDoubleSpinBox.value())
         self.floattype = str(self.__ui.floatComboBox.currentText())

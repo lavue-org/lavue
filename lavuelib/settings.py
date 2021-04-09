@@ -123,6 +123,8 @@ class Settings(object):
         self.zeromask = False
         #: (:obj:`bool`) nan mask enabled
         self.nanmask = True
+        #: (:obj:`bool`) adding maximal type value to negative high value mask
+        self.negmask = False
         #: (:obj:`bool`) security stream options
         self.secsockopt = b""
         #: (:obj:`float`) refresh rate is s
@@ -522,6 +524,10 @@ class Settings(object):
             "Configuration/MaskingAsNAN", type=str))
         if qstval.lower() == "false":
             self.nanmask = False
+        qstval = str(settings.value(
+            "Configuration/AddMaxValueToNegativeMask", type=str))
+        if qstval.lower() == "true":
+            self.negmask = True
 
         qstval = str(settings.value("Configuration/SecStream", type=str))
         if qstval.lower() == "true":
@@ -963,6 +969,9 @@ class Settings(object):
         settings.setValue(
             "Configuration/MaskingAsNAN",
             self.nanmask)
+        settings.setValue(
+            "Configuration/AddMaxValueToNegativeMask",
+            self.negmask)
         settings.setValue(
             "Configuration/Sardana",
             self.sardana)

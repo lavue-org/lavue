@@ -2122,13 +2122,20 @@ class LiveViewer(QtGui.QDialog):
                     if self.__settings.geometryfromsource:
                         self.__settings.updateMetaData(**self.__mdata)
                         self.__imagewg.updateCenter(
-                            self.__settings.centerx, self.__settings.centery)
+                            self.__settings.centerx,
+                            self.__settings.centery)
                         self.__imagewg.mouseImagePositionChanged.emit()
                         self.__imagewg.geometryChanged.emit()
                 else:
                     self.__mdata = {}
                 self.__imagename = imagename
                 self.__rawimage = np.transpose(newimage)
+                self.__intmaxvalue = None
+                pd = PartialData(imagename, self.__rawimage, metadata,
+                                 0, 0, None)
+                imv = pd.intmaxvalue()
+                if imv is not None:
+                    self.__intmaxvalue = imv
                 self._plot()
                 if fid is None:
                     self.__imagewg.autoRange()
@@ -2183,6 +2190,7 @@ class LiveViewer(QtGui.QDialog):
         cnfdlg.secstream = self.__settings.secstream
         cnfdlg.zeromask = self.__settings.zeromask
         cnfdlg.nanmask = self.__settings.nanmask
+        cnfdlg.negmask = self.__settings.negmask
         cnfdlg.refreshrate = dataFetchThread.GLOBALREFRESHRATE
         cnfdlg.toolrefreshtime = self.__settings.toolrefreshtime
         cnfdlg.toolpollinginterval = self.__settings.toolpollinginterval
@@ -2521,6 +2529,11 @@ class LiveViewer(QtGui.QDialog):
 
         if self.__settings.nanmask != dialog.nanmask:
             self.__settings.nanmask = dialog.nanmask
+            remasking = True
+            replot = True
+
+        if self.__settings.negmask != dialog.negmask:
+            self.__settings.negmask = dialog.negmask
             remasking = True
             replot = True
 
@@ -3142,10 +3155,11 @@ class LiveViewer(QtGui.QDialog):
                     PartialData(name, rawimage, metadata, x, y, tr))
 
         self.__intmaxvalue = None
-        for fd in fulldata:
-            imv = fd.intmaxvalue()
-            if imv is not None:
-                self.__intmaxvalue = imv
+        if self.__settings.negmask:
+            imvtb = [fd.intmaxvalue() for fd in fulldata]
+            imvtb = [vl for vl in imvtb if vl is not None]
+            if imvtb:
+                self.__intmaxvalue = np.max(imvtb)
 
         if not self.__sourcewg.isConnected():
             return
@@ -3497,7 +3511,8 @@ class LiveViewer(QtGui.QDialog):
         if self.__settings.showhighvaluemask and \
            self.__imagewg.maskValue() is not None:
             maskvalue = self.__imagewg.maskValue()
-            if maskvalue < 0 and self.__intmaxvalue is not None:
+            if self.__settings.negmask and \
+               maskvalue < 0 and self.__intmaxvalue is not None:
                 maskvalue += self.__intmaxvalue
             try:
                 if self.__settings.nanmask:
