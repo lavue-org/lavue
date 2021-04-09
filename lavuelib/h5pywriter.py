@@ -48,6 +48,178 @@ else:
     bytes = str
 
 
+def _slice2selection(t, shape):
+    """ converts slice(s) to selection
+
+    :param t: slice tuple
+    :type t: :obj:`tuple`
+    :return shape: field shape
+    :type shape: :obj:`list` < :obj:`int` >
+    :returns: hyperslab selection
+    :rtype: :class:`h5cpp.dataspace.Hyperslab`
+    """
+    if isinstance(t, filewriter.FTHyperslab):
+        offset = list(t.offset or [])
+        block = list(t.block or [])
+        count = list(t.count or [])
+        stride = list(t.stride or [])
+        slices = []
+        for dm, sz in enumerate(shape):
+            if len(offset) > dm:
+                if offset[dm] is None:
+                    offset[dm] = 0
+            else:
+                offset.append(0)
+            if len(block) > dm:
+                if block[dm] is None:
+                    block[dm] = 1
+            else:
+                block.append(1)
+            if len(count) > dm:
+                if count[dm] is None:
+                    count[dm] = sz
+            else:
+                count.append(sz)
+            if len(stride) > dm:
+                if stride[dm] is None:
+                    stride[dm] = 1
+            else:
+                stride.append(1)
+            slices.append(
+                h5py.MultiBlockSlice(
+                    start=offset[dm], count=count[dm],
+                    stride=stride[dm], block=block[dm]))
+        return tuple(slices)
+    return t
+
+
+def unlimited_selection(sel, shape):
+    """ checks if hyperslab is unlimited
+
+    :param sel: hyperslab selection
+    :type sel: :class:`filewriter.FTHyperslab`
+    :param shape: give shape
+    :type shape: :obj:`list`
+    :returns: if hyperslab is unlimited list
+    :rtype: :obj:`list` <:obj:`bool`>
+    """
+    res = None
+    if isinstance(sel, tuple):
+        res = []
+        for sl in sel:
+            if hasattr(sl, "stop"):
+                res.append(
+                    True if sl.stop in [unlimited()]
+                    else False)
+            elif hasattr(sl, "count"):
+                res.append(
+                    True if sl.count in [unlimited()]
+                    else False)
+            else:
+                res.append(
+                    True if sl in [unlimited()]
+                    else False)
+
+    elif hasattr(sel, "count"):
+        res = []
+        for ct in sel.count():
+            res.append(
+                True if ct in [unlimited()]
+                else False)
+    elif isinstance(sel, slice):
+        res = [True if sel.stop in [unlimited()]
+               else False]
+
+    elif sel in [unlimited()]:
+        res = [True]
+    lsh = len(shape)
+    lct = len(res)
+    ln = max(lsh, lct)
+    if res and any(t is True for t in res):
+        slices = []
+        for ii in range(ln):
+            offset = 0
+            # block = 1
+            # stride = 1
+            if ii < lsh:
+                count = shape[ii]
+            else:
+                count = 1
+            if ii < lct and res[ii]:
+                count = unlimited()
+            # print("Hyperslab %s %s %s %s" % (offset, block, count, stride))
+            slices.append(
+                slice(offset, count, None)
+                # h5py.MultiBlockSlice(
+                #     start=offset, count=count,
+                #     stride=stride, block=block)
+            )
+        return tuple(slices)
+    else:
+        return None
+
+
+def _selection2slice(t, shape):
+    """ converts selection to slice(s)
+
+    :param t: slice tuple
+    :type t: :obj:`tuple`
+    :return shape: field shape
+    :type shape: :obj:`list` < :obj:`int` >
+    :returns: tuple of slices
+    :rtype: :obj:`tuple`<>
+    """
+    if isinstance(t, filewriter.FTHyperslab):
+        offset = list(t.offset or [])
+        block = list(t.block or [])
+        count = list(t.count or [])
+        stride = list(t.stride or [])
+        slices = []
+        for dm, sz in enumerate(shape):
+            if len(offset) > dm:
+                if offset[dm] is None:
+                    offset[dm] = 0
+            else:
+                offset.append(0)
+            if len(block) > dm:
+                if block[dm] is None:
+                    block[dm] = 1
+            else:
+                block.append(1)
+            if len(count) > dm:
+                if count[dm] is None:
+                    count[dm] = sz
+            else:
+                count.append(sz)
+            if len(stride) > dm:
+                if stride[dm] is None:
+                    stride[dm] = 1
+            else:
+                block.append(1)
+            if len(stride) > dm:
+                if stride[dm] is None:
+                    stride[dm] = 1
+            else:
+                stride.append(1)
+            if block[dm] == 1 and count[dm] == 1 and stride[dm] == 1:
+                slices.append(offset[dm])
+            elif stride[dm] == 1:
+                slices.append(slice(
+                    offset[dm], offset[dm] + block[dm] * count[dm], None))
+            elif stride[dm] != 1 and block[dm] == 1:
+                slices.append(slice(offset[dm],
+                                    offset[dm] + count[dm] * stride[dm],
+                                    stride[dm]))
+            elif stride[dm] != 1 and count[dm] == 1:
+                slices.append(slice(offset[dm],
+                                    offset[dm] + block[dm] * stride[dm],
+                                    stride[dm]))
+            else:
+                slices.append(Ellipsis)
+        return tuple(slices)
+    return t
+
+
 def nptype(dtype):
     """ converts to numpy types
 
@@ -79,15 +251,45 @@ def is_vds_supported():
     return h5ver >= 2009
 
 
+def is_mbs_supported():
+    """ provides if MultiBlockSlice are supported
+
+    :retruns: if MultiBlockSlice are supported
+    :rtype: :obj:`bool`
+    """
+    return h5ver >= 3000
+
+
+def is_unlimited_vds_supported():
+    """ provides if unlimited vds are supported
+
+    :retruns: if unlimited vds are supported
+    :rtype: :obj:`bool`
+    """
+    return h5ver >= 3000
+
+
+def is_strings_as_bytes():
+    """ provides if string read to bytes
+
+    :retruns: if string read to bytes
+    :rtype: :obj:`bool`
+    """
+    return h5ver >= 3000
+
+
 def unlimited(parent=None):
     """ return dataspace UNLIMITED variable for the current writer module
 
     :param parent: parent object
     :type parent: :class:`FTObject`
     :returns:  dataspace UNLIMITED variable
-    :rtype: :class:`h5py.UNLIMITED`
+    :rtype: :class:`h5py.h5s.UNLIMITED`
     """
-    return h5py.UNLIMITED
+    try:
+        return h5py.h5s.UNLIMITED
+    except Exception:
+        return h5py.UNLIMITED
 
 
 def load_file(membuffer, filename=None, readonly=False, **pars):
@@ -211,9 +413,9 @@ def data_filter():
 deflate_filter = data_filter
 
 
-def external_field(filename, fieldpath, shape,
-                   dtype=None, maxshape=None):
-    """ create external field for VDS
+def target_field_view(filename, fieldpath, shape,
+                      dtype=None, maxshape=None):
+    """ create target field view for VDS
 
     :param filename: file name
     :type filename: :obj:`str`
@@ -225,18 +427,20 @@ def external_field(filename, fieldpath, shape,
     :type dtype: :obj:`str`
     :param maxshape: shape
     :type maxshape: :obj:`list` < :obj:`int` >
-    :returns: external field object
-    :rtype: :class:`FTExternalField`
+    :returns: target field view object
+    :rtype: :class:`FTTargetFieldView`
     """
     if not is_vds_supported():
         raise Exception("VDS not supported")
-    maxshape = maxshape or [None for _ in shape]
-    return H5PYExternalField(
-        h5py.VirtualSource(filename, fieldpath,
-                           tuple(shape), dtype, tuple(maxshape or [])))
+    if shape:
+        maxshape = maxshape or [None for _ in shape]
+    vs = h5py.VirtualSource(
+        filename, fieldpath,
+        tuple(shape or []), dtype, tuple(maxshape or []))
+    return H5PYTargetFieldView(vs, tuple(shape or []))
 
 
-def virtual_field_layout(shape, dtype=None, maxshape=None):
+def virtual_field_layout(shape, dtype, maxshape=None):
     """ creates a virtual field layout for a VDS file
 
     :param shape: shape
@@ -252,7 +456,9 @@ def virtual_field_layout(shape, dtype=None, maxshape=None):
         raise Exception("VDS not supported")
     maxshape = maxshape or [None for _ in shape]
     return H5PYVirtualFieldLayout(
-        h5py.VirtualLayout(tuple(shape), dtype, tuple(maxshape or [])))
+        h5py.VirtualLayout(tuple(shape), dtype, tuple(maxshape or [])),
+        tuple(shape)
+    )
 
 
 class H5PYFile(filewriter.FTFile):
@@ -519,7 +725,6 @@ class H5PYGroup(filewriter.FTGroup):
         """
         if type_code in ['string', b'string']:
             type_code = h5py.special_dtype(vlen=unicode)
-            # type_code = h5py.special_dtype(vlen=unicode)
             # type_code = h5py.special_dtype(vlen=bytes)
         if type_code == h5py.special_dtype(vlen=unicode) and \
            shape is None and chunk is None:
@@ -698,9 +903,15 @@ class H5PYField(filewriter.FTField):
         """
         fl = self._h5object[...]
         if hasattr(fl, "decode") and not isinstance(fl, unicode):
-            return fl.decode(encoding="utf-8")
-        else:
-            return fl
+            fl = fl.decode(encoding="utf-8")
+        if is_strings_as_bytes() and hasattr(fl, "astype") and \
+           self.dtype in ['string', b'string']:
+            try:
+                fl = fl.astype('str')
+            except Exception:
+                # print(str(e))
+                pass
+        return fl
 
     def write(self, o):
         """ write the field value
@@ -742,9 +953,15 @@ class H5PYField(filewriter.FTField):
         """
         fl = self._h5object.__getitem__(t)
         if hasattr(fl, "decode") and not isinstance(fl, unicode):
-            return fl.decode(encoding="utf-8")
-        else:
-            return fl
+            fl = fl.decode(encoding="utf-8")
+        if is_strings_as_bytes() and hasattr(fl, "astype") and \
+           self.dtype in ['string', b'string']:
+            try:
+                fl = fl.astype('str')
+            except Exception:
+                # print(str(e))
+                pass
+        return fl
 
     @property
     def is_valid(self):
@@ -865,6 +1082,13 @@ class H5PYLink(filewriter.FTLink):
 
     @classmethod
     def getfilename(cls, obj):
+        """ provides a filename from h5 node
+
+        :param obj: h5 node
+        :type obj: :class:`FTObject`
+        :returns: file name
+        :rtype: :obj:`str`
+        """
         filename = ""
         while not filename:
             par = obj.parent
@@ -918,35 +1142,82 @@ class H5PYVirtualFieldLayout(filewriter.FTVirtualFieldLayout):
 
     """ virtual field layout """
 
+    def __init__(self, h5object, shape):
+        """ constructor
+
+        :param h5object: h5 object
+        :type h5object: :obj:`any`
+        :param shape: shape
+        :type shape: :obj:`list` < :obj:`int` >
+        """
+        filewriter.FTVirtualFieldLayout.__init__(self, h5object)
+        #: (:obj:`list` < :obj:`int` >) shape
+        self.shape = shape
+
     def __setitem__(self, key, source):
-        """ add external field to layout
+        """ add target field to layout
 
         :param key: slide
         :type key: :obj:`tuple`
-        :param source: external field
-        :type source: :class:`H5PYExternalField`
+        :param source: target field view
+        :type source: :class:`H5PYTargetFieldView`
         """
+        #: (:obj:`list` < :obj:`int` >) shape
         self._h5object.__setitem__(key, source._h5object)
 
-    def add(self, key, source, sourcekey=None):
-        """ add external field to layout
+    def add(self, key, source, sourcekey=None, shape=None):
+        """ add target field to layout
 
         :param key: slide
         :type key: :obj:`tuple`
-        :param source: external field
-        :type source: :class:`H5PYExternalField`
+        :param source: target field view
+        :type source: :class:`H5PYTargetFieldView`
         :param sourcekey: slide or selection
         :type sourcekey: :obj:`tuple`
+        :param shape: target shape in the layout
+        :type shape: :obj:`tuple`
         """
-        if sourcekey is not None:
+        if shape is None:
+            shape = list(source.shape or [])
+            if hasattr(key, "__len__"):
+                size = len(key)
+                while len(shape) < size:
+                    shape.insert(0, 1)
+        # # if is_mbs_supported():
+        #     key = _slice2selection(key, tuple(shape))
+        # else:
+        key = _selection2slice(key, tuple(shape))
+        if sourcekey is not None and sourcekey != filewriter.FTHyperslab():
+            if is_mbs_supported():
+                sourcekey = _slice2selection(sourcekey, source.shape)
+            else:
+                sourcekey = _selection2slice(sourcekey, source.shape)
             self._h5object.__setitem__(key, source._h5object[sourcekey])
+        elif key is not None:
+            usel = unlimited_selection(key, shape)
+            if usel is not None:
+                self._h5object[key] = source._h5object[usel]
+            else:
+                self._h5object.__setitem__(key, source._h5object)
         else:
             self._h5object.__setitem__(key, source._h5object)
 
 
-class H5PYExternalField(filewriter.FTExternalField):
+class H5PYTargetFieldView(filewriter.FTTargetFieldView):
 
-    """ external field for VDS """
+    """ target field view for VDS """
+
+    def __init__(self, h5object, shape):
+        """ constructor
+
+        :param h5object: h5 object
+        :type h5object: :obj:`any`
+        :param shape: shape
+        :type shape: :obj:`list` < :obj:`int` >
+        """
+        filewriter.FTTargetFieldView.__init__(self, h5object)
+        #: (:obj:`list` < :obj:`int` >) shape
+        self.shape = shape
 
 
 class H5PYDeflate(H5PYDataFilter):
@@ -999,12 +1270,17 @@ class H5PYAttributeManager(filewriter.FTAttributeManager):
                 shape = tuple(shape)
             if dtype in ['string', b'string']:
                 dtype = h5py.special_dtype(vlen=unicode)
+                if is_strings_as_bytes():
+                    etype = 'str'
+                else:
+                    etype = dtype
                 self._h5object.create(
-                    name, np.empty(shape, dtype=dtype),
-                    shape, nptype(dtype))
+                    name, np.empty(shape, dtype=etype),
+                    shape=shape, dtype=nptype(dtype))
             else:
                 self._h5object.create(
-                    name, np.zeros(shape, dtype=dtype), shape, dtype)
+                    name, np.zeros(shape, dtype=dtype),
+                    shape, dtype)
         else:
             if dtype in ['string', b'string']:
                 dtype = h5py.special_dtype(vlen=unicode)

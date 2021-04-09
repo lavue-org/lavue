@@ -2613,5 +2613,5 @@ class TinePropSource(BaseSource):
                     configuration).rsplit("/", 1)
                 self._configuration = configuration
             except Exception as e:
-                print(str(e))
+                # print(str(e))
                 logger.warning(str(e))

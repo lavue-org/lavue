@@ -3819,9 +3819,7 @@ class H5PYWriterTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         if not H5PYWriter.is_vds_supported():
-            self.myAssertRaise(
-                Exception, H5PYWriter.virtual_field_layout, [100])
-            print("Skip the test")
+            print("Skip the test: VDS not supported")
             return
         self._fname = '%s/%s%s.h5' % (
             os.getcwd(), self.__class__.__name__, fun)
@@ -3893,11 +3891,11 @@ class H5PYWriterTest(unittest.TestCase):
             entry = rt.create_group("entry123", "NXentry")
             dt = entry.create_group("data", "NXdata")
 
-            ef1 = H5PYWriter.external_field(
+            ef1 = H5PYWriter.target_field_view(
                 fname1, "/entry1/data/data", [10, 10, 20], "uint32")
-            ef2 = H5PYWriter.external_field(
+            ef2 = H5PYWriter.target_field_view(
                 fname2, "/entry2/data/data", [10, 10, 20], "uint32")
-            ef3 = H5PYWriter.external_field(
+            ef3 = H5PYWriter.target_field_view(
                 fname3, "/entry3/data/data", [10, 10, 20], "uint32")
 
             vfl = H5PYWriter.virtual_field_layout([30, 10, 20], "uint32")
@@ -3925,9 +3923,7 @@ class H5PYWriterTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         if not H5PYWriter.is_vds_supported():
-            self.myAssertRaise(
-                Exception, H5PYWriter.virtual_field_layout, [100])
-            print("Skip the test")
+            print("Skip the test: VDS not supported")
             return
         self._fname = '%s/%s%s.h5' % (
             os.getcwd(), self.__class__.__name__, fun)
@@ -3999,11 +3995,11 @@ class H5PYWriterTest(unittest.TestCase):
             entry = rt.create_group("entry123", "NXentry")
             dt = entry.create_group("data", "NXdata")
 
-            ef1 = H5PYWriter.external_field(
+            ef1 = H5PYWriter.target_field_view(
                 fname1, "/entry1/data/data", [10, 10, 20], "uint32")
-            ef2 = H5PYWriter.external_field(
+            ef2 = H5PYWriter.target_field_view(
                 fname2, "/entry2/data/data", [10, 10, 20], "uint32")
-            ef3 = H5PYWriter.external_field(
+            ef3 = H5PYWriter.target_field_view(
                 fname3, "/entry3/data/data", [10, 10, 20], "uint32")
 
             vfl = H5PYWriter.virtual_field_layout([30, 10, 20], "uint32")
@@ -4031,9 +4027,7 @@ class H5PYWriterTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         if not H5PYWriter.is_vds_supported():
-            self.myAssertRaise(
-                Exception, H5PYWriter.virtual_field_layout, [100])
-            print("Skip the test")
+            print("Skip the test: VDS not supported")
             return
         self._fname = '%s/%s%s.h5' % (
             os.getcwd(), self.__class__.__name__, fun)
@@ -4089,9 +4083,9 @@ class H5PYWriterTest(unittest.TestCase):
             entry = rt.create_group("entry123", "NXentry")
             dt = entry.create_group("data", "NXdata")
 
-            ef1 = H5PYWriter.external_field(
+            ef1 = H5PYWriter.target_field_view(
                 fname1, "/entry1/data/data", [10, 10, 20], "int16")
-            ef3 = H5PYWriter.external_field(
+            ef3 = H5PYWriter.target_field_view(
                 fname3, "/entry3/data/data", [10, 10, 20], "int16")
 
             vfl = H5PYWriter.virtual_field_layout([30, 10, 20], "int16")
@@ -4115,6 +4109,84 @@ class H5PYWriterTest(unittest.TestCase):
         finally:
             os.remove(fname1)
             os.remove(fname3)
+            os.remove(self._fname)
+
+    def test_h5py_vitualfield_image_unlimited(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        if not H5PYWriter.is_unlimited_vds_supported():
+            print("Skip the test: unlimited VDS not supported")
+            return
+        self._fname = '%s/%s%s.h5' % (
+            os.getcwd(), self.__class__.__name__, fun)
+        fname1 = '%s/%s%s_1.h5' % (
+            os.getcwd(), self.__class__.__name__, fun)
+        # fname3 = '%s/%s%s_3.h5' % (
+        #     os.getcwd(), self.__class__.__name__, fun)
+
+        try:
+            vl = [[[self.__rnd.randint(1, 1600) for _ in range(20)]
+                   for _ in range(10)]
+                  for _ in range(30)]
+
+            fl1 = H5PYWriter.create_file(fname1, overwrite=True)
+            rt1 = fl1.root()
+            entry1 = rt1.create_group("entry1", "NXentry")
+            dt1 = entry1.create_group("data", "NXdata")
+            intimage1 = dt1.create_field(
+                "data", "int16", [10, 10, 20], [1, 10, 20])
+            vv = [[[vl[n][j][i] for i in range(20)]
+                   for j in range(10)] for n in range(10)]
+            vv2 = [[[vl[n][j][i]*2 for i in range(20)]
+                   for j in range(10)] for n in range(10)]
+            intimage1[...] = vv
+            rw = intimage1.read()
+            for i in range(10):
+                self.myAssertImage(rw[i], vv[i])
+
+            fl = H5PYWriter.create_file(self._fname, overwrite=True)
+            rt = fl.root()
+            entry = rt.create_group("entry123", "NXentry")
+            dt = entry.create_group("data", "NXdata")
+
+            ef1 = H5PYWriter.target_field_view(
+                fname1, "/entry1/data/data", [10, 10, 20], "int16")
+
+            vfl = H5PYWriter.virtual_field_layout([10, 10, 20], "int16")
+            vfl.add(
+                (slice(None, H5PYWriter.unlimited()),
+                 slice(None), slice(None)),
+                ef1,
+                (slice(None, H5PYWriter.unlimited()),
+                 slice(None), slice(None)))
+
+            intimage = dt.create_virtual_field("data", vfl, fillvalue=-1)
+            rw = intimage.read()
+
+            for i in range(10):
+                self.myAssertImage(rw[i], vl[i])
+
+            intimage1.grow(0, 10)
+
+            intimage1[10:, :, :] = vv2
+            intimage1.close()
+            dt1.close()
+            entry1.close()
+            fl1.close()
+
+            rw2 = intimage.read()
+            for i in range(10):
+                self.myAssertImage(rw2[i], vl[i])
+                for i in range(10):
+                    self.myAssertImage(rw2[i + 10], vv2[i])
+            intimage.close()
+
+            dt.close()
+            entry.close()
+            fl.close()
+
+        finally:
+            os.remove(fname1)
             os.remove(self._fname)
 
 

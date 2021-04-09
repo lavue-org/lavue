@@ -4221,7 +4221,8 @@ class DiffractogramToolWidget(ToolBaseWidget):
                 try:
                     idx = idxs.index(xcrd)
                 except Exception as e:
-                    print(str(e))
+                    logger.warning(str(e))
+                    # print(str(e))
                     idx = 0
                 self.__ui.mainplotComboBox.setCurrentIndex(idx)
             if "buffering" in cnf.keys():
