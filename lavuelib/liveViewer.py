@@ -275,7 +275,8 @@ class PartialData(object):
         :rtype: :obj:`int`
         """
         maxval = None
-        if self.dtype() and issubclass(self.dtype().type, np.integer):
+        if self.dtype() is not None and \
+           issubclass(self.dtype().type, np.integer):
             try:
                 maxval = np.iinfo(self.dtype()).max
             except Exception:

@@ -304,13 +304,13 @@ class FTHyperslab(object):
         """ constructor
 
         :param offset: a list of offsets
-        :type offset: :tuple:`int`
+        :type offset: :obj:`tuple`
         :param block: a list of blocks
-        :type block: :tuple:`int`
+        :type block: :obj:`tuple`
         :param count: a list of counts
-        :type count: :tuple:`int`
+        :type count: :obj:`tuple`
         :param stride: a list of strides
-        :type stride: :tuple:`int`
+        :type stride: :obj:`tuple`
         """
         self.offset = offset
         self.block = block
