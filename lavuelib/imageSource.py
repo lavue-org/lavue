@@ -1044,7 +1044,7 @@ class TangoAttrSource(BaseSource):
                 if sys.version_info > (3,):
                     attr = self.__aproxy.read(
                         extract_as=tango.ExtractAs.ByteArray)
-                    self.__bytearray = True
+                    # self.__bytearray = True
                 else:
                     attr = self.__aproxy.read()
             if str(attr.type) == "DevEncoded":
