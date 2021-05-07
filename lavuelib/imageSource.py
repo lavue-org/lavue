@@ -1888,8 +1888,13 @@ class ASAPOSource(BaseSource):
             with QtCore.QMutexLocker(self.__mutex):
                 if self.__server and self.__beamtime and self.__token:
                     if self.__sourcepath:
-                        hasfs = True
                         sourcepath = self.__sourcepath
+                        if not os.path.isdir(sourcepath) or \
+                           sourcepath.startswith("/asap3/") or \
+                           sourcepath.startswith("/beamline/"):
+                            hasfs = False
+                        else:
+                            hasfs = True
                     else:
                         hasfs = False
                         sourcepath = ""
