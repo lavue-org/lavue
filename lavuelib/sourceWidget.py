@@ -713,6 +713,8 @@ class ASAPOSourceWidget(SourceBaseWidget):
         self.__server = ""
         #: (:obj:`str`>) beamtime id
         self.__beamtime = ""
+        #: (:obj:`str`>) source path
+        self.__sourcepath = ""
         #: (:obj:`str`>) asapo token
         self.__token = ""
 
@@ -774,17 +776,19 @@ class ASAPOSourceWidget(SourceBaseWidget):
         :returns configuration: configuration string
         :rtype configuration: :obj:`str`
         """
-        return "%s,%s,%s,%s,%s" % (
+        return "%s,%s,%s,%s,%s,%s" % (
             self.__server,
             str(self._ui.asapodatasourceComboBox.currentText()),
             str(self._ui.asapostreamComboBox.currentText()),
             self.__beamtime,
+            self.__sourcepath,
             self.__token
         )
 
     def updateMetaData(self, asaposerver=None, asapotoken=None,
                        asapobeamtime=None,
                        asapodatasources=None, asapostreams=None,
+                       asaposourcepath=None,
                        disconnect=True,
                        **kargs):
         """ update source input parameters
@@ -799,6 +803,8 @@ class ASAPOSourceWidget(SourceBaseWidget):
         :type asapodatasources: :obj:`list` <:obj:`str`> >
         :param asapostreams: asapo stream names
         :type asapostreams: :obj:`list` <:obj:`str`> >
+        :param asaposourcepath: source path
+        :type asaposourcepath: :obj:`str`
         :param disconnect: disconnect on update
         :type disconnect: :obj:`bool`
         :param kargs:  source widget input parameter dictionary
@@ -828,6 +834,8 @@ class ASAPOSourceWidget(SourceBaseWidget):
             self.__token = asapotoken
         if asapobeamtime is not None:
             self.__beamtime = asapobeamtime
+        if asaposourcepath is not None:
+            self.__sourcepath = asaposourcepath
         updatecombo = False
         if isinstance(asapostreams, list):
             with QtCore.QMutexLocker(self.__mutex):

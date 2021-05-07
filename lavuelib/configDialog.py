@@ -291,6 +291,8 @@ class ConfigDialog(QtGui.QDialog):
         self.asapotoken = ""
         #: (:obj:`str`) asapo beamtime id
         self.asapobeamtime = ""
+        #: (:obj:`str`) asapo sourcepath
+        self.asaposourcepath = ""
         #: (:obj:`list` < :obj:`str` > ) asapo datasources
         self.asapodatasources = []
 
@@ -475,6 +477,7 @@ class ConfigDialog(QtGui.QDialog):
         self.__ui.asaposerverLineEdit.setText(self.asaposerver)
         self.__ui.asapotokenLineEdit.setText(self.asapotoken)
         self.__ui.asapobeamtimeLineEdit.setText(self.asapobeamtime)
+        self.__ui.asaposourcepathLineEdit.setText(self.asaposourcepath)
         self.__ui.defdetserversCheckBox.setChecked(self.defdetservers)
         self.__ui.autozmqtopicsCheckBox.setChecked(self.autozmqtopics)
         self.__ui.interruptCheckBox.setChecked(self.interruptonerror)
@@ -944,6 +947,8 @@ class ConfigDialog(QtGui.QDialog):
             self.__ui.asapotokenLineEdit.text()).strip()
         self.asapobeamtime = str(
             self.__ui.asapobeamtimeLineEdit.text()).strip()
+        self.asaposourcepath = str(
+            self.__ui.asaposourcepathLineEdit.text()).strip()
         detservers = str(
             self.__ui.detserversLineEdit.text()).strip().split(" ")
         self.detservers = json.dumps([ds for ds in detservers if ds])

@@ -1788,6 +1788,8 @@ class ASAPOSource(BaseSource):
         self.__token = ""
         #: (:obj:`str`) beamtime
         self.__beamtime = ""
+        #: (:obj:`str`) sourcepath
+        self.__sourcepath = ""
         #: (:obj:`str`) asapo server
         self.__server = ""
         #: (:obj:`str`) stream
@@ -1828,7 +1830,7 @@ class ASAPOSource(BaseSource):
         if self._configuration != configuration:
             try:
                 (self.__server, self.__datasource,
-                 self.__stream, self.__beamtime,
+                 self.__stream, self.__beamtime, self.__sourcepath,
                  self.__token) = str(configuration).split(",", 5)
                 self.__lastname = ""
                 self.__lastid = ""
@@ -1885,15 +1887,21 @@ class ASAPOSource(BaseSource):
 
             with QtCore.QMutexLocker(self.__mutex):
                 if self.__server and self.__beamtime and self.__token:
+                    if self.__sourcepath:
+                        hasfs = True
+                        sourcepath = self.__sourcepath
+                    else:
+                        hasfs = False
+                        sourcepath = ""
                     if hasattr(asapo_consumer, "create_server_broker"):
                         self.__broker = asapo_consumer.create_server_broker(
-                            self.__server, "", False, self.__beamtime,
+                            self.__server, sourcepath, hasfs, self.__beamtime,
                             self.__datasource, self.__token,
                             self._timeout or 3000)
                         self.__asapoversion = 'old'
                     else:
                         self.__broker = asapo_consumer.create_consumer(
-                            self.__server, "", False, self.__beamtime,
+                            self.__server, sourcepath, hasfs, self.__beamtime,
                             self.__datasource, self.__token,
                             self._timeout or 3000)
                         self.__asapoversion = 'last'

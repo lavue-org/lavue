@@ -1231,7 +1231,8 @@ class LiveViewer(QtGui.QDialog):
             asaposerver=self.__settings.asaposerver,
             asapotoken=self.__settings.asapotoken,
             asapodatasources=self.__settings.asapodatasources,
-            asapobeamtime=self.__settings.asapobeamtime
+            asapobeamtime=self.__settings.asapobeamtime,
+            asaposourecepath=self.__settings.asaposourcepath
         )
         self._updateSource(-1, -1)
 
@@ -2239,6 +2240,7 @@ class LiveViewer(QtGui.QDialog):
         cnfdlg.asaposerver = self.__settings.asaposerver
         cnfdlg.asapotoken = self.__settings.asapotoken
         cnfdlg.asapobeamtime = self.__settings.asapobeamtime
+        cnfdlg.asaposourcepath = self.__settings.asaposourcepath
         cnfdlg.asapodatasources = self.__settings.asapodatasources
         cnfdlg.detservers = json.dumps(self.__mergeDetServers(
             HIDRASERVERLIST if cnfdlg.defdetservers else {"pool": []},
@@ -2486,6 +2488,9 @@ class LiveViewer(QtGui.QDialog):
             setsrc = True
         if self.__settings.asapobeamtime != dialog.asapobeamtime:
             self.__settings.asapobeamtime = dialog.asapobeamtime
+            setsrc = True
+        if self.__settings.asaposourcepath != dialog.asaposourcepath:
+            self.__settings.asaposourcepath = dialog.asaposourcepath
             setsrc = True
         if self.__settings.autozmqtopics != dialog.autozmqtopics:
             self.__settings.autozmqtopics = dialog.autozmqtopics

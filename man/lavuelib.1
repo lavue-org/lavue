@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "LAVUELIB" "1" "Apr 09, 2021" "2.61" "lavuelib"
+.TH "LAVUELIB" "1" "May 07, 2021" "2.62" "lavuelib"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .
@@ -852,6 +852,11 @@ updates class variables with the form content
 .TP
 .B asaposerver = None
 (\fI\%str\fP) asapo server
+.UNINDENT
+.INDENT 7.0
+.TP
+.B asaposourcepath = None
+(\fI\%str\fP) asapo sourcepath
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -11627,6 +11632,11 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
+.B asaposourcepath = None
+(\fI\%str\fP) asapo sourcepath
+.UNINDENT
+.INDENT 7.0
+.TP
 .B asapotoken = None
 (\fI\%str\fP) asapo token
 .UNINDENT
@@ -14605,7 +14615,7 @@ update slot for Asapo source
 .UNINDENT
 .INDENT 7.0
 .TP
-.B updateMetaData(asaposerver=None, asapotoken=None, asapobeamtime=None, asapodatasources=None, asapostreams=None, disconnect=True, **kargs)
+.B updateMetaData(asaposerver=None, asapotoken=None, asapobeamtime=None, asapodatasources=None, asapostreams=None, asaposourcepath=None, disconnect=True, **kargs)
 update source input parameters
 .sp
 :param asaposervers asapo servers, i.e. host:port
@@ -14618,6 +14628,8 @@ update source input parameters
 :type asapodatasources: \fI\%list\fP <\fI\%str\fP> >
 :param asapostreams: asapo stream names
 :type asapostreams: \fI\%list\fP <\fI\%str\fP> >
+:param asaposourcepath: source path
+:type asaposourcepath: \fI\%str\fP
 :param disconnect: disconnect on update
 :type disconnect: \fI\%bool\fP
 :param kargs:  source widget input parameter dictionary

@@ -203,6 +203,8 @@ class Settings(object):
         self.asapotoken = ""
         #: (:obj:`str`) asapo beamtime id
         self.asapobeamtime = ""
+        #: (:obj:`str`) asapo sourcepath
+        self.asaposourcepath = ""
         #: (:obj:`list` < :obj:`str` > ) asapo datasources
         self.asapodatasources = []
 
@@ -631,23 +633,40 @@ class Settings(object):
             self.asapodatasources = [str(tp) for tp in qstval]
         elif qstval2:
             self.asapodatasources = [str(tp) for tp in qstval2]
+        else:
+            self.asapodatasources = []
 
         qstval = \
             settings.value(
                 "Configuration/ASAPOServer", type=str)
         if qstval:
             self.asaposerver = str(qstval)
+        else:
+            self.asaposerver = ""
 
         qstval = \
             settings.value(
                 "Configuration/ASAPOToken", type=str)
         if qstval:
             self.asapotoken = str(qstval)
+        else:
+            self.asapotoken = ""
+
         qstval = \
             settings.value(
                 "Configuration/ASAPOBeamtime", type=str)
         if qstval:
             self.asapobeamtime = str(qstval)
+        else:
+            self.asapobeamtime = ""
+
+        qstval = \
+            settings.value(
+                "Configuration/ASAPOSourcePath", type=str)
+        if qstval:
+            self.asaposourcepath = str(qstval)
+        else:
+            self.asaposourcepath = ""
 
         qstval = \
             settings.value(
@@ -1038,6 +1057,9 @@ class Settings(object):
         settings.setValue(
             "Configuration/ASAPOBeamtime",
             self.asapobeamtime)
+        settings.setValue(
+            "Configuration/ASAPOSourcePath",
+            self.asaposourcepath)
         settings.setValue(
             "Configuration/HidraDetectorServers",
             self.detservers)
