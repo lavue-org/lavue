@@ -1831,7 +1831,7 @@ class ASAPOSource(BaseSource):
             try:
                 (self.__server, self.__datasource,
                  self.__stream, self.__beamtime, self.__sourcepath,
-                 self.__token) = str(configuration).split(",", 5)
+                 self.__token) = str(configuration).split(",", 6)
                 self.__lastname = ""
                 self.__lastid = ""
                 self.__subcounter = 0
