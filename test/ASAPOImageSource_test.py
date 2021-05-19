@@ -161,6 +161,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
             'ASAPOToken=2asaldskjsalkdjflsakjflksj \n' \
             'ASAPOBeamtime=123124 \n' \
             'ASAPODataSources=detector, \n' \
+            'ASAPOSourcePath=/asap3/petra/gpfs/p21/2021/data/123124\n' \
             'StoreGeometry=true\n' \
             'GeometryFromSource=true'
 
@@ -238,6 +239,14 @@ class ASAPOImageSourceTest(unittest.TestCase):
         status = qtck3.executeChecksAndClose(delay=9000)
 
         self.assertEqual(status, 0)
+        self.assertEqual(asapo_consumer.source_path_cache,
+                         "/asap3/petra/gpfs/p21/2021/data/123124")
+        self.assertEqual(asapo_consumer.beamtime_cache, "123124")
+        self.assertEqual(asapo_consumer.datasource_cache, "detector")
+        self.assertEqual(asapo_consumer.token_cache,
+                         "2asaldskjsalkdjflsakjflksj")
+        self.assertEqual(asapo_consumer.server_cache,
+                         "haso.desy.de:8500")
 
         qtck1.compareResults(
             self, [True, None, None, None, None], mask=[0, 1, 1, 1, 1])

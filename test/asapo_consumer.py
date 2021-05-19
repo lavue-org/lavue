@@ -30,9 +30,10 @@ filename = ""
 streams = ["stream1", "stream2"]
 group_id = "12345678"
 beamtime_cache = ""
-gtoken_cache = ""
+token_cache = ""
 server_cache = ""
 datasource_cache = ""
+source_path_cache = ""
 usermeta = None
 
 
@@ -47,22 +48,26 @@ def create_consumer(server_name, source_path, has_filesystem,
     global token_cache
     global server_cache
     global datasource_cache
+    global source_path_cache
 
     token_cache = token
     beamtime_cache = beamtime_id
     server_cache = server_name
     datasource_cache = data_source
+    source_path_cache = source_path
     return Broker(server_name, beamtime_id, data_source, token)
 
 
 class Broker(object):
     """ mock asapo brocker """
 
-    def __init__(self, server, beamtime, data_source, token):
+    def __init__(self, server, beamtime, data_source, token,
+                 source_path=""):
         print("Broker.__init()")
         self.server = server
         self.beamtime = beamtime
         self.data_source = data_source
+        self.source_path = source_path
         self.token = token
         self.counter = 1
         self.gid = 1
