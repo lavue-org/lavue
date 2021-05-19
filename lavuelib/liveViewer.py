@@ -1232,7 +1232,7 @@ class LiveViewer(QtGui.QDialog):
             asapotoken=self.__settings.asapotoken,
             asapodatasources=self.__settings.asapodatasources,
             asapobeamtime=self.__settings.asapobeamtime,
-            asaposourecepath=self.__settings.asaposourcepath
+            asaposourcepath=self.__settings.asaposourcepath
         )
         self._updateSource(-1, -1)
 
