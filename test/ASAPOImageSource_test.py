@@ -30,7 +30,18 @@ import binascii
 import time
 import logging
 import numpy as np
-import fabio
+try:
+    import fabio
+    #: (:obj:`bool`) fabio can be imported
+    fbmj, fbmn, fbpa = fabio.version.split(".")
+    fmj = int(fbmj)
+    fmn = int(fbmn)
+    if fmj > 0 or fmn > 10:
+        FABIO11 = True
+    else:
+        FABIO11 = False
+except ImportError:
+    FABIO11 = False
 
 try:
     from . import asapo_consumer
@@ -842,6 +853,122 @@ class ASAPOImageSourceTest(unittest.TestCase):
         self.assertTrue(iid > 11000)
         self.assertTrue(iid < 12000)
         self.assertEqual(fnames[0].strip(), "tst_05717_00000.cbf")
+
+    def test_readimage_cbfdefault_32bits(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        if not FABIO11:
+            print("Skip the test: No fabio >= 0.11.0 installed")
+            return
+        lastimage = None
+        self.__tangoimgcounter = 2
+        self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
+        self.__tangofilepattern = "scan05c_%d.cbf"
+        asapo_consumer.filename = ""
+        asapo_consumer.usermeta = None
+        cfg = '[Configuration]\n' \
+            'ASAPOServer="haso.desy.de:8500"\n' \
+            'ASAPOToken=2asaldskjsalkdjflsakjflksj \n' \
+            'ASAPOBeamtime=123124 \n' \
+            'ASAPODataSources=detector, \n' \
+            'StoreGeometry=true\n' \
+            'GeometryFromSource=true'
+
+        if not os.path.exists(self.__cfgfdir):
+            os.makedirs(self.__cfgfdir)
+        with open(self.__cfgfname, "w+") as cf:
+            cf.write(cfg)
+
+        lastimage = None
+
+        options = argparse.Namespace(
+            mode='expert',
+            source='asapo',
+            configuration=None,
+            # % self._fname,
+            start=True,
+            # levels="0,1000",
+            tool='intensity',
+            transformation='none',
+            # log='error',
+            log='debug',
+            instance='unittests',
+            scaling='linear',
+            gradient='spectrum',
+        )
+        logging.basicConfig(
+             format="%(levelname)s: %(message)s")
+        logger = logging.getLogger("lavue")
+        lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+        dialog = lavuelib.liveViewer.MainWindow(options=options)
+        dialog.show()
+
+        qtck1 = QtChecker(app, dialog, True, sleep=100)
+        qtck2 = QtChecker(app, dialog, True, sleep=100)
+        qtck3 = QtChecker(app, dialog, True, sleep=100)
+        qtck1.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__imagename"),
+            ExtCmdCheck(self, "takeNewImage"),
+        ])
+        qtck2.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__imagename"),
+        ])
+        qtck3.setChecks([
+            WrapAttrCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg"
+                "._SourceTabWidget__sourcetabs[],0._ui.pushButton",
+                QtTest.QTest.mouseClick, [QtCore.Qt.LeftButton]),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+        ])
+
+        qtck1.executeChecks(delay=3000)
+        qtck2.executeChecks(delay=6000)
+        status = qtck3.executeChecksAndClose(delay=9000)
+
+        self.assertEqual(status, 0)
+
+        qtck1.compareResults(
+            self, [True, None, None, None, None], mask=[0, 1, 1, 1, 1])
+        qtck2.compareResults(
+            self, [True, None, None, None], mask=[0, 1, 1, 1])
+
+        res1 = qtck1.results()
+        res2 = qtck2.results()
+        self.assertEqual(res1[1], None)
+        self.assertEqual(res1[2], None)
+        self.assertEqual(res1[3], None)
+
+        lastimage = res1[4].T
+        if not np.allclose(res2[1], lastimage):
+            print(res2[1])
+            print(lastimage)
+        self.assertTrue(np.allclose(res2[1], lastimage))
+        self.assertTrue(np.allclose(res2[2], lastimage))
+
+        fnames = res2[3].split("(")
+        self.assertTrue(len(fnames), 2)
+        try:
+            iid = int(fnames[1][:-1])
+        except Exception:
+            iid = -1
+        self.assertTrue(iid > 11000)
+        self.assertTrue(iid < 12000)
+        self.assertEqual(fnames[0].strip(), "scan05c_3.cbf")
 
 
 if __name__ == '__main__':
