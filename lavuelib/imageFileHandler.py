@@ -504,15 +504,22 @@ class CBFLoader(object):
         mdata = {}
         try:
             if hasattr(flbuffer, "tostring"):
-                hspos = flbuffer.tostring().index(headerstart) // \
-                    flbuffer.itemsize
+                try:
+                    hspos = flbuffer.tostring().index(headerstart) // \
+                        flbuffer.itemsize
+                except Exception:
+                    hspos = 0
                 hepos = flbuffer.tostring().index(headerend) // \
                     flbuffer.itemsize
                 flbuffer = flbuffer[hspos:hepos + 1].tostring()
+                print(flbuffer)
         except Exception as e:
             # print(str(e))
             logger.warning(str(e))
-        header = str(flbuffer).strip()
+        try:
+            header = str(flbuffer, "utf8").strip()
+        except Exception:
+            header = str(flbuffer).strip()
         sheader = [hd[2:] for hd in str(header).split("\r\n")
                    if hd.startswith("# ")]
 

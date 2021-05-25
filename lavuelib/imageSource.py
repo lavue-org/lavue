@@ -1440,7 +1440,9 @@ class HTTPSource(BaseSource):
                             try:
                                 fimg = fabio.open(BytesIO(bytes(data)))
                                 img = fimg.data
-                                mdata = json.dumps(fimg.header)
+                                mdata = imageFileHandler.CBFLoader().metadata(
+                                    fimg.header.get(
+                                        "_array_data.header_contents"))
                             except Exception as e:
                                 # print(str(e))
                                 logger.warning(str(e))
@@ -2095,7 +2097,9 @@ class ASAPOSource(BaseSource):
                     try:
                         fimg = fabio.open(BytesIO(bytes(data)))
                         img = fimg.data
-                        mdata = json.dumps(fimg.header)
+                        mdata = imageFileHandler.CBFLoader().metadata(
+                            fimg.header.get(
+                                "_array_data.header_contents"), submeta)
                     except Exception as e:
                         # print(str(e))
                         logger.warning(str(e))
@@ -2358,7 +2362,8 @@ class HiDRASource(BaseSource):
                     try:
                         fimg = fabio.open(BytesIO(bytes(data)))
                         img = fimg.data
-                        mdata = json.dumps(fimg.header)
+                        mdata = imageFileHandler.CBFLoader().metadata(
+                            fimg.header.get("_array_data.header_contents"))
                     except Exception as e:
                         # print(str(e))
                         logger.warning(str(e))
