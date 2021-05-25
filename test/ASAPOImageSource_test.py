@@ -885,7 +885,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
         self.assertEqual(fnames[0].strip(), "tst_05717_00000.cbf")
         lmeta = res2[4]
         me = json.loads(lmeta)
-        self.assertEqual(len(meta), len(me))
+        self.assertEqual(sorted(meta.keys()), sorted(me.keys()))
         self.compareDict(me, meta)
 
     def test_readimage_cbfdefault_32bits(self):
