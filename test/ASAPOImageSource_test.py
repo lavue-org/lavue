@@ -29,6 +29,7 @@ import struct
 import binascii
 import time
 import logging
+import json
 import numpy as np
 try:
     import fabio
@@ -138,6 +139,17 @@ class ASAPOImageSourceTest(unittest.TestCase):
 
     def tearDown(self):
         print("tearing down ...")
+
+    def compareDict(self, state, defstate=None, exclude=None):
+        if defstate is None:
+            defstate = self.__defaultls
+        if exclude is None:
+            exclude = []
+        for ky, vl in defstate.items():
+            if ky not in exclude:
+                if state[ky] != vl:
+                    print("%s: %s %s" % (ky, state[ky], vl))
+                self.assertEqual(state[ky], vl)
 
     def takeNewImage(self):
         global app
@@ -763,6 +775,22 @@ class ASAPOImageSourceTest(unittest.TestCase):
         with open(self.__cfgfname, "w+") as cf:
             cf.write(cfg)
 
+        meta = {"detector": "PILATUS 100K, S/N 1-0009, Desy",
+                "timestamp": "2010-Dec-14T21:43:23.655",
+                "pixel_size": [[0.000172, "m"],
+                               [0.000172, "m"]],
+                "silicon_sensor_thickness": [0.00032, "m"],
+                "exposure_time": [0.097, "s"],
+                "exposure_period": [0.1, "s"],
+                "tau": [3.838e-07, "s"],
+                "count_cutoff": [126367.0, "counts"],
+                "threshold_setting": [4000.0, "eV"],
+                "gain_setting": ["high", "gain", {"vrf": -0.15}],
+                "n_excluded_pixels": 19.0,
+                "excluded_pixels": "badpix_mask.tif",
+                "flat_field": "(nil)",
+                "trim_file": "p100k0009_T4000_vrf_m0p15.bin",
+                "image_path": "/disk2/images/"}
         lastimage = None
 
         options = argparse.Namespace(
@@ -810,6 +838,8 @@ class ASAPOImageSourceTest(unittest.TestCase):
                 "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
             AttrCheck(
                 "_MainWindow__lavue._LiveViewer__imagename"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__metadata"),
         ])
         qtck3.setChecks([
             WrapAttrCheck(
@@ -829,7 +859,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
         qtck1.compareResults(
             self, [True, None, None, None, None], mask=[0, 1, 1, 1, 1])
         qtck2.compareResults(
-            self, [True, None, None, None], mask=[0, 1, 1, 1])
+            self, [True, None, None, None, None], mask=[0, 1, 1, 1, 1])
 
         res1 = qtck1.results()
         res2 = qtck2.results()
@@ -853,6 +883,10 @@ class ASAPOImageSourceTest(unittest.TestCase):
         self.assertTrue(iid > 11000)
         self.assertTrue(iid < 12000)
         self.assertEqual(fnames[0].strip(), "tst_05717_00000.cbf")
+        lmeta = res2[4]
+        me = json.loads(lmeta)
+        self.assertEqual(len(meta), len(me))
+        self.compareDict(me, meta)
 
     def test_readimage_cbfdefault_32bits(self):
         fun = sys._getframe().f_code.co_name
@@ -880,7 +914,6 @@ class ASAPOImageSourceTest(unittest.TestCase):
             cf.write(cfg)
 
         lastimage = None
-
         options = argparse.Namespace(
             mode='expert',
             source='asapo',
@@ -926,6 +959,8 @@ class ASAPOImageSourceTest(unittest.TestCase):
                 "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
             AttrCheck(
                 "_MainWindow__lavue._LiveViewer__imagename"),
+            AttrCheck(
+                "_MainWindow__lavue._LiveViewer__metadata"),
         ])
         qtck3.setChecks([
             WrapAttrCheck(
@@ -945,7 +980,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
         qtck1.compareResults(
             self, [True, None, None, None, None], mask=[0, 1, 1, 1, 1])
         qtck2.compareResults(
-            self, [True, None, None, None], mask=[0, 1, 1, 1])
+            self, [True, None, None, None, None], mask=[0, 1, 1, 1, 1])
 
         res1 = qtck1.results()
         res2 = qtck2.results()
@@ -969,6 +1004,8 @@ class ASAPOImageSourceTest(unittest.TestCase):
         self.assertTrue(iid > 11000)
         self.assertTrue(iid < 12000)
         self.assertEqual(fnames[0].strip(), "scan05c_3.cbf")
+        lmeta = res2[4]
+        self.assertEqual(lmeta, "")
 
 
 if __name__ == '__main__':
