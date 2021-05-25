@@ -38,13 +38,13 @@ from . import filewriter
 if sys.version_info > (3,):
     long = int
 
-
 try:
     import fabio
     #: (:obj:`bool`) fabio can be imported
     FABIO = True
 except ImportError:
     FABIO = False
+
 try:
     import PIL
     import PIL.Image

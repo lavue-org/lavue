@@ -123,6 +123,18 @@ except AttributeError:
     #: (:obj:`bool`) PyTine imported
     PYTINE = False
 
+try:
+    import fabio
+    #: (:obj:`bool`) fabio can be imported
+    fbmj, fbmn, fbpa = fabio.version.split(".")
+    fmj = int(fbmj)
+    fmn = int(fbmn)
+    if fmj > 0 or fmn > 10:
+        FABIO11 = True
+    else:
+        FABIO11 = False
+except ImportError:
+    FABIO11 = False
 
 import socket
 import numpy as np
@@ -1419,21 +1431,34 @@ class HTTPSource(BaseSource):
             try:
                 response = self.__get()
                 if response.ok:
+                    mdata = ""
                     name = self._configuration
                     data = response.content
                     if str(data[:10]) == "###CBF: VE":
                         # print("[cbf source module]::metadata", name)
-                        try:
-                            nimg = np.frombuffer(data[:], dtype=np.uint8)
-                        except Exception:
-                            nimg = np.fromstring(data[:], dtype=np.uint8)
-                        img = imageFileHandler.CBFLoader().load(nimg)
+                        if FABIO11:
+                            try:
+                                fimg = fabio.open(BytesIO(bytes(data)))
+                                img = fimg.data
+                                mdata = json.dumps(fimg.header)
+                            except Exception as e:
+                                # print(str(e))
+                                logger.warning(str(e))
+                                img = None
+                        if img is None:
+                            try:
+                                nimg = np.frombuffer(data[:], dtype=np.uint8)
+                            except Exception:
+                                nimg = np.fromstring(data[:], dtype=np.uint8)
+                            img = imageFileHandler.CBFLoader().load(nimg)
+                            mdata = imageFileHandler.CBFLoader().metadata(nimg)
+
                         if img is None:
                             return None, None, None
                         if hasattr(img, "size") and img.size == 0:
                             return None, None, None
                         return (np.transpose(img),
-                                "%s (%s)" % (name, currenttime()), "")
+                                "%s (%s)" % (name, currenttime()), mdata)
                     else:
                         # print("[tif source module]::metadata", name)
                         if PILLOW and not self.__tiffloader:
@@ -2065,16 +2090,27 @@ class ASAPOSource(BaseSource):
                 logger.info(
                     "ASAPOSource.getData: "
                     "[cbf source module]::metadata %s" % metadata["name"])
-                if type(data).__name__ == "ndarray":
-                    npdata = np.array(data[:], dtype="uint8")
-                else:
+                img = None
+                if FABIO11:
                     try:
-                        npdata = np.frombuffer(data[:], dtype=np.uint8)
-                    except Exception:
-                        npdata = np.fromstring(data[:], dtype=np.uint8)
-                img = imageFileHandler.CBFLoader().load(npdata)
-
-                mdata = imageFileHandler.CBFLoader().metadata(npdata, submeta)
+                        fimg = fabio.open(BytesIO(bytes(data)))
+                        img = fimg.data
+                        mdata = json.dumps(fimg.header)
+                    except Exception as e:
+                        # print(str(e))
+                        logger.warning(str(e))
+                        img = None
+                if img is None:
+                    if type(data).__name__ == "ndarray":
+                        npdata = np.array(data[:], dtype="uint8")
+                    else:
+                        try:
+                            npdata = np.frombuffer(data[:], dtype=np.uint8)
+                        except Exception:
+                            npdata = np.fromstring(data[:], dtype=np.uint8)
+                    img = imageFileHandler.CBFLoader().load(npdata)
+                    mdata = imageFileHandler.CBFLoader().metadata(
+                        npdata, submeta)
 
                 if hasattr(img, "size") and img.size == 0:
                     if jsubmeta:
@@ -2318,16 +2354,25 @@ class HiDRASource(BaseSource):
                 logger.info(
                     "HiDRASource.getData: "
                     "[cbf source module]::metadata %s" % metadata["filename"])
-                if type(data).__name__ == "ndarray":
-                    npdata = np.array(data[:], dtype="uint8")
-                else:
+                if FABIO11:
                     try:
-                        npdata = np.frombuffer(data[:], dtype=np.uint8)
-                    except Exception:
-                        npdata = np.fromstring(data[:], dtype=np.uint8)
-                img = imageFileHandler.CBFLoader().load(npdata)
-
-                mdata = imageFileHandler.CBFLoader().metadata(npdata)
+                        fimg = fabio.open(BytesIO(bytes(data)))
+                        img = fimg.data
+                        mdata = json.dumps(fimg.header)
+                    except Exception as e:
+                        # print(str(e))
+                        logger.warning(str(e))
+                        img = None
+                if img is None:
+                    if type(data).__name__ == "ndarray":
+                        npdata = np.array(data[:], dtype="uint8")
+                    else:
+                        try:
+                            npdata = np.frombuffer(data[:], dtype=np.uint8)
+                        except Exception:
+                            npdata = np.fromstring(data[:], dtype=np.uint8)
+                    img = imageFileHandler.CBFLoader().load(npdata)
+                    mdata = imageFileHandler.CBFLoader().metadata(npdata)
 
                 if hasattr(img, "size") and img.size == 0:
                     return None, None, None
