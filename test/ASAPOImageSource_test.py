@@ -1004,8 +1004,6 @@ class ASAPOImageSourceTest(unittest.TestCase):
         self.assertTrue(iid > 11000)
         self.assertTrue(iid < 12000)
         self.assertEqual(fnames[0].strip(), "scan05c_3.cbf")
-        lmeta = res2[4]
-        self.assertEqual(lmeta, "")
 
 
 if __name__ == '__main__':
