@@ -512,7 +512,6 @@ class CBFLoader(object):
                 hepos = flbuffer.tostring().index(headerend) // \
                     flbuffer.itemsize
                 flbuffer = flbuffer[hspos:hepos + 1].tostring()
-                print(flbuffer)
         except Exception as e:
             # print(str(e))
             logger.warning(str(e))

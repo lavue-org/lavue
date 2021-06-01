@@ -1434,8 +1434,9 @@ class HTTPSource(BaseSource):
                     mdata = ""
                     name = self._configuration
                     data = response.content
-                    if str(data[:10]) == "###CBF: VE":
+                    if str(data[:10]) in ["###CBF: VE", "b'###CBF: VE'"]:
                         # print("[cbf source module]::metadata", name)
+                        img = None
                         if FABIO11:
                             try:
                                 fimg = fabio.open(BytesIO(bytes(data)))
@@ -2353,11 +2354,12 @@ class HiDRASource(BaseSource):
                     else:
                         return (np.transpose(image), imagename, mdata)
                 return None, None, None
-            elif str(data[:10]) == "###CBF: VE":
+            elif str(data[:10]) in  ["###CBF: VE", "b'###CBF: VE'"]:
                 # print("[cbf source module]::metadata", metadata["filename"])
                 logger.info(
                     "HiDRASource.getData: "
                     "[cbf source module]::metadata %s" % metadata["filename"])
+                img = None
                 if FABIO11:
                     try:
                         fimg = fabio.open(BytesIO(bytes(data)))
