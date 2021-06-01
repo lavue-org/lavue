@@ -149,6 +149,7 @@ class HidraImageSourceTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         lastimage = None
+        hidra.filename = ""
         self.__tangoimgcounter = 0
         self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
         self.__tangofilepattern = "%05d.tif"
@@ -257,6 +258,7 @@ class HidraImageSourceTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         lastimage = None
+        hidra.filename = ""
         self.__tangoimgcounter = -1
         self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
         self.__tangofilepattern = "tst_05717_%05d.cbf"
@@ -332,8 +334,6 @@ class HidraImageSourceTest(unittest.TestCase):
         self.assertEqual(res1[2], None)
 
         lastimage = res1[3].T
-        print(res2[0])
-        print(lastimage)
         if not np.allclose(res2[0], lastimage):
             print(res2[0])
             print(lastimage)
