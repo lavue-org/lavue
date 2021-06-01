@@ -294,7 +294,6 @@ class HidraImageSourceTest(unittest.TestCase):
 
         qtck1 = QtChecker(app, dialog, True, sleep=100)
         qtck2 = QtChecker(app, dialog, True, sleep=100)
-        qtck3 = QtChecker(app, dialog, True, sleep=100)
         qtck1.setChecks([
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
@@ -340,8 +339,6 @@ class HidraImageSourceTest(unittest.TestCase):
             print(lastimage)
         self.assertTrue(np.allclose(res2[0], lastimage))
         self.assertTrue(np.allclose(res2[1], lastimage))
-
-
 
 
 if __name__ == '__main__':

@@ -2354,7 +2354,7 @@ class HiDRASource(BaseSource):
                     else:
                         return (np.transpose(image), imagename, mdata)
                 return None, None, None
-            elif str(data[:10]) in  ["###CBF: VE", "b'###CBF: VE'"]:
+            elif str(data[:10]) in ["###CBF: VE", "b'###CBF: VE'"]:
                 # print("[cbf source module]::metadata", metadata["filename"])
                 logger.info(
                     "HiDRASource.getData: "
