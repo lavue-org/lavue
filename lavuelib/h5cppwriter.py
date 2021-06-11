@@ -1407,7 +1407,7 @@ class H5CppVirtualFieldLayout(filewriter.FTVirtualFieldLayout):
         fname = source.filename
         path = h5cpp.Path(source.fieldpath)
         self._h5object.add(h5cpp.property.VirtualDataMap(
-            lview, fname, path, eview))
+            lview, str(fname), path, eview))
 
 
 class H5CppTargetFieldView(filewriter.FTTargetFieldView):
