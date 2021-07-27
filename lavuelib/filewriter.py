@@ -526,7 +526,11 @@ class FTFile(FTObject):
         :rtype: :obj:`str`
         """
         tzone = time.tzname[0]
-        tz = pytz.timezone(tzone)
+        try:
+            tz = pytz.timezone(tzone)
+        except Exception:
+            import tzlocal
+            tz = tzlocal.get_localzone()
         fmt = '%Y-%m-%dT%H:%M:%S.%f%z'
         starttime = tz.localize(datetime.datetime.now())
         return str(starttime.strftime(fmt))

@@ -203,7 +203,11 @@ def currenttime():
     # does not work on py2 and old py3
     # return datetime.datetime.utcnow().astimezone().isoformat()
     tzone = time.tzname[0]
-    tz = pytz.timezone(tzone)
+    try:
+        tz = pytz.timezone(tzone)
+    except Exception:
+        import tzlocal
+        tz = tzlocal.get_localzone()
     fmt = '%Y-%m-%dT%H:%M:%S.%f%z'
     starttime = tz.localize(datetime.datetime.now())
     return str(starttime.strftime(fmt))
