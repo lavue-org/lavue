@@ -110,6 +110,10 @@ def main():
         "-j", "--instance", dest="instance",
         help="LaVue instance with separate configuration")
     parser.add_argument(
+        "--short-instance", dest="shortinstance",
+        help="LaVue instance with separate configuration"
+        " (without a space character in the configuration file name)")
+    parser.add_argument(
         "--organization", dest="organization",
         help="Organization name", default="DESY")
     parser.add_argument(
@@ -120,7 +124,7 @@ def main():
         help="Configuration path")
     parser.add_argument(
         "-f", "--image-file", dest="imagefile",
-        help="image file name to show, e.g." 
+        help="image file name to show, e.g."
         " /tmp/myfile2.nxs://entry/data/pilatus,,-1")
     parser.add_argument(
         "-s", "--source", dest="source",
@@ -255,8 +259,10 @@ def main():
         help="connect the image source")
     parser.add_argument(
         "-u", "--tool", dest="tool",
-        help="utility tool, i.e. intensity, roi, movemotors, meshscan, parameters,\n"
-        "  linecut, projections, 1d-plot, angle/q, q+roi+proj, maxima, diffractogram"
+        help="utility tool, i.e. intensity, roi, "
+        "movemotors, meshscan, parameters,\n"
+        "  linecut, projections, 1d-plot, angle/q, "
+        "q+roi+proj, maxima, diffractogram"
     )
     parser.add_argument(
         "--tool-configuration", dest="toolconfig",
@@ -300,6 +306,8 @@ def main():
     app.setOrganizationDomain(options.domain)
     if options.instance:
         app.setApplicationName("LaVue: %s" % options.instance)
+    elif options.shortinstance:
+        app.setApplicationName("LaVue:%s" % options.instance)
     else:
         app.setApplicationName("LaVue")
     app.setApplicationVersion(lavuelib.__version__)
