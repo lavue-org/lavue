@@ -110,9 +110,10 @@ def main():
         "-j", "--instance", dest="instance",
         help="LaVue instance with separate configuration")
     parser.add_argument(
-        "--short-instance", dest="shortinstance",
-        help="LaVue instance with separate configuration"
-        " (without a space character in the configuration file name)")
+        "-ns", "--no-space", action="store_true", default=False,
+        dest="nospace",
+        help="the configuration file name without a space character"
+        "(in the future major release it will become the default one)")
     parser.add_argument(
         "--organization", dest="organization",
         help="Organization name", default="DESY")
@@ -305,9 +306,10 @@ def main():
     app.setOrganizationName(options.organization)
     app.setOrganizationDomain(options.domain)
     if options.instance:
-        app.setApplicationName("LaVue: %s" % options.instance)
-    elif options.shortinstance:
-        app.setApplicationName("LaVue:%s" % options.instance)
+        if options.nospace:
+            app.setApplicationName("LaVue:%s" % options.instance)
+        else:
+            app.setApplicationName("LaVue: %s" % options.instance)
     else:
         app.setApplicationName("LaVue")
     app.setApplicationVersion(lavuelib.__version__)
