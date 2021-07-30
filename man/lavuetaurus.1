@@ -19,7 +19,7 @@ is a simple implementation of a live viewer front end. It is supposed to show a 
 .\"show program's version number and exit
 .IP "--help, -h"
 show a help message and exit
-.IP "--version, -v"
+.IP "--lavue-version, -v"
 lavue version
 .IP "-m MODE, --mode MODE"
 interface mode, i.e. user, expert
@@ -29,10 +29,18 @@ QT style
 QT style sheet
 .IP "-j INSTANCE, --instance INSTANCE"
 LaVue instance
+.IP "-ns, --no-space-instance"
+the configuration file name without a space character
+.IP "--organization ORGANIZATION"
+Organization name
+.IP "--domain DOMAIN"
+Organization domain name
+.IP "--configuration-path CONFIGPATH"
+Configuration path
 .IP "-f IMAGEFILE, --image-file IMAGEFILE"
-image file name to show
+image file name to show, e.g. /tmp/myfile2.nxs://entry/data/pilatus,,-1
 .IP "-s SOURCE, --source SOURCE"
-image source, i.e. hidra, http, tangoattr, tangofile, zmq, nxsfile, test
+image source, i.e. hidra, http, tangoattr, tangofile, zmq, asapo, nxsfile, test
 multiple-source names is separated by semicolon ';'
 .IP "-c CONFIGURATION, --configuration CONFIGURATION"
 configuration strings for the image source separated by comma, e.g.
@@ -43,6 +51,11 @@ configuration strings for the image source separated by comma, e.g.
   zmq -> '-c haso228:5535,topic'
   doocsprop -> '-c TTF2.FEL/BLFW2.CAM/BL0M1.CAM/IMAGE_EXT'
   nxsfile -> '-c /tmp/myfile.nxs://entry/data/pilatus'
+        or   '-c /tmp/myfile2.nxs://entry/data/pilatus,0,34'
+  tineprop -> '-c /HASYLAB/P00_LM00/Output/Frame'
+  asapo -> '-c pilatus,substream2'
+  epicspv -> '-c '00SIM0:cam1:,[640,480]'
+
 configuration for multiple-sources is separated by semicolon ';
 .IP "--offset OFFSET"
 relative offset x,y[,TRANSFORMATION]
@@ -71,6 +84,12 @@ size of memory buffer in frames
 default channel number or 'sum', 'mean', 'rgb' or RGB channels separated by comma e.g.'0,1,3'
 .IP "-b BKGFILE, --bkg-file BKGFILE"
 background file-name to load
+.IP "-b BKGSCALE, --bkg-scale BKGSCALE"
+background scaling factor
+.IP "--bright-field-file BRIGHTFIELDFILE"
+bright field file-name to load
+.IP "--bright-field-scale BRIGHTFIELDSCALE"
+bright field scaling factor
 .IP "-k MASKFILE, --mask-file MASKFILE"
 mask file-name to load
 .IP "-p MASKHIGHVALUE, --mask-high-value MASKHIGHVALUE"
@@ -95,14 +114,16 @@ viewbox range, i.e. xmin,ymin,xsize,ysize , e.g. -l 5.6,m60.7,543.2,444.11
 connect the image source
 .IP "-u TOOL, --tool TOOL"
 utility tool, i.e. intensity, roi, movemotors, meshscan, linecut, projections, 1d-plot, angle/q, q+roi+proj, maxima, parameters, diffractogram
+.IP "--tool-configuration TOOLCONFIG"
+JSON dictionary with tool configuration, e.g. {"rows_to_plot":"0,1","buffer_size":512}
 .IP "-a TANGODEVICE, --tango-device TANGODEVICE"
 tango device of LavueController to communicated with clients during the run
 .IP "-d DOORDEVICE, --door DOORDEVICE"
 door device to communicated with sardana during the run
 .IP "-n ANALYSISDEVICE, --analysis-device ANALYSISDEVICE"
 tango analysis device of LambdaOnlineAnalysis to communicate with analysis clients during the run
-.IP "--log LOG"
-logging level, i.e. debug, info, warning, error, critical
+\# .IP "--log LOG"
+\# logging level, i.e. debug, info, warning, error, critical
 
 
 .SH SEE ALSO
@@ -110,11 +131,11 @@ https://github.com/syncope/lavue/
 https://github.com/lavue-org/lavue/
 
 .SH COPYRIGHT
-Copyrights (c) 2017, GNU GPL v2, DESY, Christoph Rosemann, Jan Kotanski, Andre Rothkirch
+Copyrights (c) 2017, GNU GPL v2, DESY, Jan Kotanski, Christoph Rosemann, Andre Rothkirch
 
 .SH BUGS
 Please report bugs on the project's mailing list:
 mailto://jankotan@gmail.com
 
 .SH AUTHORS
-Christoph Rosemann <christoph.rosemann@desy.de>, Jan Kotanski <jankotan@gmail.com>, Andre Rothkirch <andre.rothkirch@desy.de>
+Jan Kotanski <jankotan@gmail.com>, Christoph Rosemann <christoph.rosemann@desy.de>, Andre Rothkirch <andre.rothkirch@desy.de>

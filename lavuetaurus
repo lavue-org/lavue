@@ -112,14 +112,29 @@ def main():
         "-j", "--instance", dest="instance",
         help="LaVue instance with separate configuration")
     parser.add_option(
+        "-ns", "--no-space-instance", action="store_true", default=False,
+        dest="nospace",
+        help="the configuration file name without a space character\n"
+        "  (in the future major release it will become the default one)")
+    parser.add_option(
+        "--organization", dest="organization",
+        help="Organization name", default="DESY")
+    parser.add_option(
+        "--domain", dest="domain",
+        help="Organization domain name", default="desy.de")
+    parser.add_option(
+        "--configuration-path", dest="configpath",
+        help="Configuration path")
+    parser.add_option(
         "-f", "--image-file", dest="imagefile",
-        help="image file name to show")
+        help="image file name to show, e.g."
+        " /tmp/myfile2.nxs://entry/data/pilatus,,-1")
     parser.add_option(
         "-s", "--source", dest="source",
         help="image source(s), i.e. hidra, http, tangoattr,\n"
         "    tangoevents, tangofile, doocsprop, tineprop,\n"
-        "    epicspv, zmq, nxsfile, test\n"
-        "multiple-source names can be separated by semicolon ';'")
+        "    epicspv, zmq, asapo, nxsfile, test\n"
+        "multiple-source names is separated by semicolon ';'")
     parser.add_option(
         "-c", "--configuration", dest="configuration",
         help="configuration strings for the image source separated by comma"
@@ -133,18 +148,29 @@ def main():
         "  zmq -> '-c haso228:5535,topic'\n"
         "  doocsprop -> '-c TTF2.FEL/BLFW2.CAM/BL0M1.CAM/IMAGE_EXT'\n"
         "  nxsfile -> '-c /tmp/myfile.nxs://entry/data/pilatus'  \n"
-        "  tineprop -> '-c '/HASYLAB/P00_LM00/Output/Frame'\n"
+        "        or   '-c /tmp/myfile2.nxs://entry/data/pilatus,0,34'  \n"
+        "  tineprop -> '-c /HASYLAB/P00_LM00/Output/Frame'\n"
+        "  asapo -> '-c pilatus,substream2'\n"
         "  epicspv -> '-c '00SIM0:cam1:,[640,480]'\n"
-        "configuration for multiple-source names can be separated"
+        "configuration for multiple-sources is separated"
         " by semicolon ';'"
     )
     parser.add_option(
         "--offset", dest="offset",
-        help="relative x,y offset for multiple-sources to the first source"
-        "separated by semicolon ';'\n"
+        help="relative offset x,y[,TRANSFORMATION]\n"
+        "  where x,y are position of the first pixel "
+        "for a particular image source\n"
+        "  while optional TRANSFORMATION can be:\n"
+        "    flip-up-down, flipud, fud, flip-left-right, "
+        "fliplr, flr, transpose, t,\n"
+        "    rot90, r90, rot180, r180, r270, rot270, rot180+transpose,"
+        " rot180t or r180t\n"
+        "offset for multiple-sources is separated by semicolon ';'\n"
         "   e.g.\n"
         "    ;200,300;,54;121,3\n"
         "    200,300;100,\n"
+        "    200,300;100,200,t\n"
+        "    ;200,300,r45;,52;11,3,r180t\n"
     )
     parser.add_option(
         "-w", "--range-window", dest="rangewindow",
@@ -177,6 +203,18 @@ def main():
     parser.add_option(
         "-b", "--bkg-file", dest="bkgfile",
         help="background file-name to load"
+    )
+    parser.add_option(
+        "--bkg-scale", dest="bkgscale",
+        help="background scaling factor"
+    )
+    parser.add_option(
+        "--bright-field-file", dest="brightfieldfile",
+        help="bright field file-name to load"
+    )
+    parser.add_option(
+        "--bright-field-scale", dest="brightfieldscale",
+        help="bright field scaling factor"
     )
     parser.add_option(
         "-k", "--mask-file", dest="maskfile",
@@ -224,8 +262,15 @@ def main():
         help="connect the image source")
     parser.add_option(
         "-u", "--tool", dest="tool",
-        help="utility tool, i.e. intensity, roi, movemotors, meshscan,\n"
-        "  linecut, projections, 1d-plot, angle/q, q+roi+proj"
+        help="utility tool, i.e. intensity, roi, "
+        "movemotors, meshscan, parameters,\n"
+        "  linecut, projections, 1d-plot, angle/q, "
+        "q+roi+proj, maxima, diffractogram"
+    )
+    parser.add_option(
+        "--tool-configuration", dest="toolconfig",
+        help="JSON dictionary with tool configuration, e.g. "
+        "{\"rows_to_plot\":\"0,1\",\"buffer_size\":512}"
     )
     parser.add_option(
         "-a", "--tango-device", dest="tangodevice",
@@ -255,8 +300,8 @@ def main():
         cmd_line_parser=parser,
         app_name=app_name,
         app_version=lavuelib.__version__,
-        org_domain="desy.de",
-        org_name="DESY")
+        org_domain=options.organization,
+        org_name=options.domain)
 
     if options.style:
         app.setStyle(options.style)
