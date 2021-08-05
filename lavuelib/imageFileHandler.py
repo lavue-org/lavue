@@ -441,6 +441,8 @@ class ImageFileHandler(object):
             if FABIO:
                 self.__image = fabio.open(fname)
                 self.__data = self.__image.data
+                if self.__data is None:
+                    raise Exception("no data")
                 if "_array_data.header_convention" \
                    in self.__image.header.keys():
                     rmeta = self.__image.header["_array_data.header_contents"]

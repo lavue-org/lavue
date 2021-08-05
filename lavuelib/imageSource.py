@@ -158,6 +158,8 @@ else:
     bytes = str
 
 
+globalmutex = QtCore.QMutex()
+
 logger = logging.getLogger("lavue")
 
 #: (:obj:`bool`) PyTango bug #213 flag related to EncodedAttributes in python3
@@ -2642,9 +2644,12 @@ class TinePropSource(BaseSource):
             return "No Tine Property defined", "__ERROR__", None
         try:
             interval = int(dataFetchThread.GLOBALREFRESHRATE*1000)
-            prop = PyTine.get(address=self.__address,
-                              property=self.__prop,
-                              timeout=interval)
+            import copy
+            with QtCore.QMutexLocker(globalmutex):
+                prop = PyTine.get(address=self.__address,
+                                  property=self.__prop,
+                                  timeout=interval)
+                prop = copy.deepcopy(prop)
             rawdata = prop["data"]
 
             if "imageMatrix" in rawdata:
