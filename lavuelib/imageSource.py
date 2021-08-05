@@ -2644,12 +2644,10 @@ class TinePropSource(BaseSource):
             return "No Tine Property defined", "__ERROR__", None
         try:
             interval = int(dataFetchThread.GLOBALREFRESHRATE*1000)
-            import copy
             with QtCore.QMutexLocker(globalmutex):
                 prop = PyTine.get(address=self.__address,
                                   property=self.__prop,
                                   timeout=interval)
-                prop = copy.deepcopy(prop)
             rawdata = prop["data"]
 
             if "imageMatrix" in rawdata:
