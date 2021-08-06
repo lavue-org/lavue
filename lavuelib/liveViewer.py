@@ -3038,7 +3038,15 @@ class LiveViewer(QtGui.QDialog):
         if mdata:
             dmdata = {}
             for md in mdata:
-                dmdata.update(json.loads(mdata))
+                if md:
+                    try:
+                        dmdata.update(json.loads(md))
+                    except Exception as e:
+                        logger.debug(str(e))
+                        logger.debug(
+                            "lavuelib.liveViewer.LiveViewer.__getNewData "
+                            "update metadata %s: (%s)" % (md, type(md)))
+
             metadata = str(json.dumps(dmdata))
         if name:
             ldata = [pdata for pdata in fulldata if pdata.name]
