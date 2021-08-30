@@ -683,7 +683,7 @@ class LiveViewer(QtGui.QDialog):
         self.scroll.setWidgetResizable(True)
         # self.scroll.setWidgetResizable(False)
         self.scroll.setWidget(self.scrollWidget)
-
+        self.scroll.setMinimumWidth(380)
         self.__ui.imageVerticalLayout.addWidget(self.__imagewg)
 
         spacer = QtGui.QSpacerItem(
