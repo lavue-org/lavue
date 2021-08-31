@@ -644,14 +644,6 @@ class LiveViewer(QtGui.QDialog):
 
         # # LAYOUT DEFINITIONS
         self.__ui.confVerticalLayout.addWidget(self.__sourcewg)
-        # self.__ui.confVerticalLayout.addWidget(self.__rangewg)
-        # self.__ui.confVerticalLayout.addWidget(self.__filterswg)
-        # self.__ui.confVerticalLayout.addWidget(self.__mbufferwg)
-        # self.__ui.confVerticalLayout.addWidget(self.__channelwg)
-        # self.__ui.confVerticalLayout.addWidget(self.__prepwg)
-        # self.__ui.confVerticalLayout.addWidget(self.__scalingwg)
-        # self.__ui.confVerticalLayout.addWidget(self.__levelswg)
-        # self.__ui.confVerticalLayout.addWidget(self.__statswg)
 
         self.scroll = QtGui.QScrollArea()
         self.scroll.setSizeAdjustPolicy(self.scroll.AdjustToContents)
@@ -663,8 +655,6 @@ class LiveViewer(QtGui.QDialog):
         self.scrollVerticalLayout.setContentsMargins(0, 0, 0, 0)
 
         self.__ui.confVerticalLayout.addWidget(self.scroll)
-
-        # self.scrollVerticalLayout.addWidget(self.__sourcewg)
 
         self.scrollVerticalLayout.addWidget(self.__rangewg)
         self.scrollVerticalLayout.addWidget(self.__filterswg)
@@ -678,10 +668,8 @@ class LiveViewer(QtGui.QDialog):
         self.scrollWidget.setLayout(self.scrollVerticalLayout)
 
         self.scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        # self.scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.scroll.setWidgetResizable(True)
-        # self.scroll.setWidgetResizable(False)
         self.scroll.setWidget(self.scrollWidget)
         self.scroll.setMinimumWidth(380)
         self.__ui.imageVerticalLayout.addWidget(self.__imagewg)
@@ -691,12 +679,10 @@ class LiveViewer(QtGui.QDialog):
             QtGui.QSizePolicy.Minimum,
             QtGui.QSizePolicy.Expanding
         )
-        # self.__ui.confVerticalLayout.addItem(spacer)
         self.scrollVerticalLayout.addItem(spacer)
 
         self.__ui.splitter.setStretchFactor(0, 1)
-        self.__ui.splitter.setStretchFactor(1, 3)
-        # self.__ui.splitter.setStretchFactor(1, 10)
+        self.__ui.splitter.setStretchFactor(1, 10)
 
         # SIGNAL LOGIC::
 
