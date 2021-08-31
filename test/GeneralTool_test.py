@@ -1740,6 +1740,246 @@ class GeneralToolTest(unittest.TestCase):
             ls, dls,
             ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
 
+    def test_tango_displayparams(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        self.__lcsu.proxy.Init()
+        self.__lavuestate = None
+        filepath = "%s/%s" % (os.path.abspath(path), "test/images")
+        filename = "%05d.tif" % 1
+        imagefile = os.path.join(filepath, filename)
+        image = fabio.open(imagefile)
+        t1 = image.data
+
+        cfg = '[Configuration]\n' \
+            'KeepOriginalCoordinates=false\n' \
+            'GeometryFromSource=false\n' \
+            'SourceDisplayParams=true\n' \
+            '\n' \
+            '[Source_test_lavuecontroller_00_Image]\n' \
+            'autofactor=4\n' \
+            'bkgfile=\n' \
+            'gradient=grey\n' \
+            'maskfile=\n' \
+            'maskhighvalue=\n' \
+            'offset=\n' \
+            'scaling=sqrt\n' \
+            'tool=roi\n' \
+            'toolconfig="{\"rois_number\": 1, \"aliases\": [\"\"]}"\n' \
+            'transformation=transpose\n' \
+            'viewrange="-75.0358508012,' \
+            '-64.4760017023,150.0717016,128.952003405"\n'
+
+        if not os.path.exists(self.__cfgfdir):
+            os.makedirs(self.__cfgfdir)
+        with open(self.__cfgfname, "w+") as cf:
+            cf.write(cfg)
+
+        options = argparse.Namespace(
+            mode='expert',
+            source='tangoattr',
+            configuration='test/lavuecontroller/00/Image',
+            instance='tgtest',
+            tool=None,
+            # transformation='none',
+            # log='debug',
+            log='info',
+            imagefile=imagefile,
+            scaling='linear',
+            # levels='m20,20',
+            gradient='thermal',
+            tangodevice='test/lavuecontroller/00'
+        )
+        logging.basicConfig(
+             format="%(levelname)s: %(message)s")
+        logger = logging.getLogger("lavue")
+        lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+        dialog = lavuelib.liveViewer.MainWindow(options=options)
+        dialog.show()
+
+        qtck1 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck2 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck1.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+        ])
+        qtck2.setChecks([
+            ExtCmdCheck(self, "getLavueStatePar"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData")
+        ])
+
+        print("execute")
+        qtck1.executeChecks(delay=6000)
+        status = qtck2.executeChecksAndClose(delay=12000)
+
+        self.assertEqual(status, 0)
+        qtck1.compareResults(
+            self, [False, None, None], mask=[0, 1, 1])
+
+        res1 = qtck1.results()
+        res2 = qtck2.results()
+
+        lastimage = t1
+        if not np.allclose(res1[2], lastimage, equal_nan=True):
+            print(res1[2])
+            print(lastimage)
+        self.assertTrue(np.allclose(res1[1], lastimage, equal_nan=True))
+        self.assertTrue(np.allclose(res1[2], lastimage, equal_nan=True))
+
+        ls = json.loads(res2[0])
+        dls = dict(self.__defaultls)
+        dls.update(dict(
+            mode='expert',
+            source='tangoattr',
+            configuration='test/lavuecontroller/00/Image',
+            instance='tgtest',
+            tool='roi',
+            transformation='transpose',
+            log='info',
+            # log='debug',
+            scaling='linear',
+            imagefile=imagefile,
+            # levels='-20.0,20.0',
+            gradient='thermal',
+            tangodevice='test/lavuecontroller/00',
+            autofactor='4',
+        ))
+
+        ls = json.loads(res2[0])
+        self.compareStates(
+            ls, dls,
+            ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+
+    def test_tango_displayparams_auto(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        self.__lcsu.proxy.Init()
+        self.__lavuestate = None
+        filepath = "%s/%s" % (os.path.abspath(path), "test/images")
+        filename = "%05d.tif" % 1
+        imagefile = os.path.join(filepath, filename)
+        image = fabio.open(imagefile)
+        t1 = image.data
+
+        cfg = '[Configuration]\n' \
+            'KeepOriginalCoordinates=false\n' \
+            'GeometryFromSource=false\n' \
+            'SourceDisplayParams=true\n' \
+            '\n' \
+            '[Source_test_lavuecontroller_00_Image]\n' \
+            'autofactor=\n' \
+            'bkgfile=\n' \
+            'gradient=grey\n' \
+            'maskfile=\n' \
+            'maskhighvalue=\n' \
+            'offset=\n' \
+            'scaling=sqrt\n' \
+            'tool=roi\n' \
+            'toolconfig="{\"rois_number\": 1, \"aliases\": [\"\"]}"\n' \
+            'transformation=transpose\n' \
+            'viewrange="-75.0358508012,-64.4760017023,' \
+            '150.0717016,128.952003405"\n'
+
+        if not os.path.exists(self.__cfgfdir):
+            os.makedirs(self.__cfgfdir)
+        with open(self.__cfgfname, "w+") as cf:
+            cf.write(cfg)
+
+        options = argparse.Namespace(
+            mode='expert',
+            source='tangoattr',
+            configuration='test/lavuecontroller/00/Image',
+            instance='tgtest',
+            tool=None,
+            # transformation='none',
+            # log='debug',
+            log='info',
+            imagefile=imagefile,
+            scaling='linear',
+            # levels='m20,20',
+            gradient='thermal',
+            tangodevice='test/lavuecontroller/00'
+        )
+        logging.basicConfig(
+             format="%(levelname)s: %(message)s")
+        logger = logging.getLogger("lavue")
+        lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+        dialog = lavuelib.liveViewer.MainWindow(options=options)
+        dialog.show()
+
+        qtck1 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck2 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck1.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+        ])
+        qtck2.setChecks([
+            ExtCmdCheck(self, "getLavueStatePar"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData")
+        ])
+
+        print("execute")
+        qtck1.executeChecks(delay=6000)
+        status = qtck2.executeChecksAndClose(delay=12000)
+
+        self.assertEqual(status, 0)
+        qtck1.compareResults(
+            self, [False, None, None], mask=[0, 1, 1])
+
+        res1 = qtck1.results()
+        res2 = qtck2.results()
+
+        lastimage = t1
+        if not np.allclose(res1[2], lastimage, equal_nan=True):
+            print(res1[2])
+            print(lastimage)
+        self.assertTrue(np.allclose(res1[1], lastimage, equal_nan=True))
+        self.assertTrue(np.allclose(res1[2], lastimage, equal_nan=True))
+
+        ls = json.loads(res2[0])
+        dls = dict(self.__defaultls)
+        dls.update(dict(
+            mode='expert',
+            source='tangoattr',
+            configuration='test/lavuecontroller/00/Image',
+            instance='tgtest',
+            tool='roi',
+            transformation='transpose',
+            log='info',
+            # log='debug',
+            scaling='linear',
+            imagefile=imagefile,
+            # levels='-20.0,20.0',
+            gradient='thermal',
+            tangodevice='test/lavuecontroller/00',
+            autofactor='',
+        ))
+
+        ls = json.loads(res2[0])
+        self.compareStates(
+            ls, dls,
+            ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+
     def test_tango_trans_keeporigin(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
