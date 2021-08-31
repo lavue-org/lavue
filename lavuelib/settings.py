@@ -352,8 +352,10 @@ class Settings(object):
                     values['maskfile'] = None
                 if 'bkgfile' not in values.keys():
                     values['bkgfile'] = None
-                if 'levels' not in values.keys():
-                    values['autofactor'] = True
+                if 'levels' not in values.keys() and \
+                   'autofactor' in values.keys():
+                    if not values['autofactor']:
+                        values['autofactor'] = ''
         return values
 
     def load(self, settings):
