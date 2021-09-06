@@ -38,7 +38,11 @@ from . import memoExportDialog
 
 _VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(".")[:3] \
     if _pg.__version__ else ("0", "9", "0")
-
+try:
+    _NPATCH = int(_VPATCH)
+except Exception:
+    _NPATCH = 0
+_PQGVER = int(_VMAJOR) * 1000 + int(_VMINOR) * 100 + _NPATCH
 
 logger = logging.getLogger("lavue")
 
@@ -209,7 +213,7 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         self.__setaspectlocked = QtGui.QAction(
             "Set Aspect Locked", self.__viewbox.menu)
         self.__setaspectlocked.setCheckable(True)
-        if _VMAJOR == '0' and int(_VMINOR) < 10 and int(_VPATCH) < 9:
+        if _PQGVER < 1009:
             self.__viewbox.menu.axes.insert(0, self.__setaspectlocked)
         self.__viewbox.menu.addAction(self.__setaspectlocked)
 
@@ -217,7 +221,7 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         self.__viewonetoone = QtGui.QAction(
             "View 1:1 pixels", self.__viewbox.menu)
         self.__viewonetoone.triggered.connect(self._oneToOneRange)
-        if _VMAJOR == '0' and int(_VMINOR) < 10 and int(_VPATCH) < 9:
+        if _PQGVER < 1009:
             self.__viewbox.menu.axes.insert(0, self.__viewonetoone)
         self.__viewbox.menu.addAction(self.__viewonetoone)
 
@@ -1107,7 +1111,7 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                 self.__viewbox, tuple(self.__viewbox.state['viewRange'][0]))
             self.__viewbox.sigYRangeChanged.emit(
                 self.__viewbox, tuple(self.__viewbox.state['viewRange'][1]))
-            if _VMAJOR == '0' and int(_VMINOR) < 12:
+            if _PQGVER < 1202:
                 self.__viewbox.sigRangeChanged.emit(
                     self.__viewbox, self.__viewbox.state['viewRange'])
             else:
@@ -1123,7 +1127,7 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                 self.__viewbox, tuple(self.__viewbox.state['viewRange'][0]))
             self.__viewbox.sigYRangeChanged.emit(
                 self.__viewbox, tuple(self.__viewbox.state['viewRange'][1]))
-            if _VMAJOR == '0' and int(_VMINOR) < 12:
+            if _PQGVER < 1202:
                 self.__viewbox.sigRangeChanged.emit(
                     self.__viewbox, self.__viewbox.state['viewRange'])
             else:
