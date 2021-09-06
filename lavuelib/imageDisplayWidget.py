@@ -1107,8 +1107,13 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                 self.__viewbox, tuple(self.__viewbox.state['viewRange'][0]))
             self.__viewbox.sigYRangeChanged.emit(
                 self.__viewbox, tuple(self.__viewbox.state['viewRange'][1]))
-            self.__viewbox.sigRangeChanged.emit(
-                self.__viewbox, self.__viewbox.state['viewRange'])
+            if _VMAJOR == '0' and int(_VMINOR) < 12:
+                self.__viewbox.sigRangeChanged.emit(
+                    self.__viewbox, self.__viewbox.state['viewRange'])
+            else:
+                self.__viewbox.sigRangeChanged.emit(
+                    self.__viewbox, self.__viewbox.state['viewRange'],
+                    [True, True])
 
         if self.__transformations.updownflip != updownflip:
             self.__transformations.updownflip = updownflip
@@ -1118,8 +1123,13 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                 self.__viewbox, tuple(self.__viewbox.state['viewRange'][0]))
             self.__viewbox.sigYRangeChanged.emit(
                 self.__viewbox, tuple(self.__viewbox.state['viewRange'][1]))
-            self.__viewbox.sigRangeChanged.emit(
-                self.__viewbox, self.__viewbox.state['viewRange'])
+            if _VMAJOR == '0' and int(_VMINOR) < 12:
+                self.__viewbox.sigRangeChanged.emit(
+                    self.__viewbox, self.__viewbox.state['viewRange'])
+            else:
+                self.__viewbox.sigRangeChanged.emit(
+                    self.__viewbox, self.__viewbox.state['viewRange'],
+                    [True, True])
 
     def transformations(self):
         """ povides coordinates transformations
