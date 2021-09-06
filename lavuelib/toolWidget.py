@@ -52,7 +52,7 @@ from . import motorWatchThread
 from . import edDictDialog
 from . import edListDialog
 from . import commandThread
-from .sardanaUtils import debugmethod
+from .sardanaUtils import debugmethod, numpyEncoder
 
 try:
     try:
@@ -6275,7 +6275,7 @@ class MaximaToolWidget(ToolBaseWidget):
         results["timestamp"] = time.time()
         results["maxima"] = maxidxs
         self._mainwidget.writeAttribute(
-            "ToolResults", json.dumps(results))
+            "ToolResults", json.dumps(results, cls=numpyEncoder))
 
     @QtCore.pyqtSlot(float, float)
     def _updateCenter(self, xdata, ydata):

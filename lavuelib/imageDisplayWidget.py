@@ -395,12 +395,12 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         self.__image.resetTransform()
         if axes.scale is not None and anyupdate:
             if not self.__transformations.transpose:
-                self.__image.scale(*axes.scale)
+                self._imagescale(*axes.scale)
             else:
-                self.__image.scale(
+                self._imagescale(
                     axes.scale[1], axes.scale[0])
         else:
-            self.__image.scale(1, 1)
+            self._imagescale(1, 1)
         if axes.position is not None and anyupdate:
             if self.__transformations.orgtranspose and wrenabled:
                 self.__image.setPos(
@@ -414,6 +414,21 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
             self.__image.setPos(0, 0)
         if self.sceneObj.rawdata is not None and update:
             self.autoRange()
+
+    def _imagescale(self, x, y):
+        """ set image scale x,y
+
+        :param x: x pixel coordinate
+        :type x: float
+        :param y: y pixel coordinate
+        :type y: float
+        """
+        try:
+            tr = self.__image.transform()
+            tr.scale(x, y)
+            self.__image.setTransform(tr)
+        except Exception:
+            self.__image.scale(x, y)
 
     def setToolScale(self, position=None, scale=None):
         """ set axes scales
@@ -474,7 +489,7 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         if axes.scale is not None or axes.position is not None:
             self.__image.resetTransform()
         if axes.scale is not None:
-            self.__image.scale(1, 1)
+            self._imagescale(1, 1)
         if axes.position is not None:
             self.__image.setPos(0, 0)
         if axes.scale is not None or axes.position is not None:

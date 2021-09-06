@@ -138,7 +138,10 @@ class MainWindow(QtGui.QMainWindow):
         self.__lavue = LiveViewer(options, self)
         self.centralwidget = QtGui.QWidget(self)
         self.gridLayout = QtGui.QGridLayout(self.centralwidget)
-        self.gridLayout.setMargin(0)
+        try:
+            self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        except Exception:
+            self.gridLayout.setMargin(0)
         self.gridLayout.setSpacing(0)
         self.gridLayout.addWidget(self.__lavue, 0, 0, 1, 1)
         self.setCentralWidget(self.centralwidget)

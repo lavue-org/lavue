@@ -31,6 +31,7 @@ import time
 import sys
 import logging
 import functools
+import numpy as np
 
 try:
     try:
@@ -79,6 +80,24 @@ def debugmethod(method):
         return decmethod
     else:
         return method
+
+
+class numpyEncoder(json.JSONEncoder):
+    """ numpy json encoder with list
+    """
+    def default(self, obj):
+        """ default encoder
+
+        :param obj: numpy array object
+        :type obj: :obj:`object` or `any`
+        """
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray) and obj.ndim > 0:
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
 
 
 class SardanaUtils(object):

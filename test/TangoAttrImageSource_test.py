@@ -869,7 +869,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             'test/testimageserver/00/LastImage;'
             'test/testimageserver/00/LastImage',
             instance='tgtest2',
-            tool='roi',
+            tool='maxima',
             # log='debug',
             log='info',
             scaling='log',
@@ -996,6 +996,184 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             scaling='log',
             # levels='',
             channel='0,1,2',
+            #  gradient='thermal',
+            tangodevice='test/lavuecontroller/00',
+            connected=True,
+            autofactor=''
+        ))
+        self.compareStates(ls, dls,
+                           ['viewrange', '__timestamp__', 'doordevice'])
+
+    def test_readimage_maxima_results(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        self.__lcsu.proxy.Init()
+        self.__tisu.proxy.Init()
+        self.__lavuestate = None
+        lastimage = self.__tisu.proxy.LastImage.T
+
+        cfg = '[Configuration]\n' \
+            'ShowSubtraction=false\n' \
+            'ShowTransformations=false\n' \
+            'ImageChannels=true\n' \
+            'SendToolResults=true\n'
+
+        if not os.path.exists(self.__cfgfdir):
+            os.makedirs(self.__cfgfdir)
+        with open(self.__cfgfname, "w+") as cf:
+            cf.write(cfg)
+
+        options = argparse.Namespace(
+            mode='expert',
+            source='tangoattr',
+            offset=';,3;,6',
+            configuration='test/testimageserver/00/LastImage',
+            instance='tgtest2',
+            tool='maxima',
+            toolconfig='{"maxima_number":3}',
+            # log='debug',
+            log='info',
+            scaling='log',
+            # gradient='thermal',
+            # channel='rgb',
+            start=True,
+            tangodevice='test/lavuecontroller/00'
+        )
+        logging.basicConfig(
+             format="%(levelname)s: %(message)s")
+        logger = logging.getLogger("lavue")
+        lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+        dialog = lavuelib.liveViewer.MainWindow(options=options)
+        dialog.show()
+
+        qtck1 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck2 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck3 = QtChecker(app, dialog, True, sleep=100,
+                          withitem=EnsureOmniThread)
+        qtck1.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            ExtCmdCheck(self, "getLavueState"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            ExtCmdCheck(self, "getControllerAttr", ["ToolResults"]),
+            ExtCmdCheck(self, "takeNewImage"),
+        ])
+        qtck2.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            ExtCmdCheck(self, "getControllerAttr", ["ToolResults"]),
+            ExtCmdCheck(self, "takeNewImage"),
+        ])
+        qtck3.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            ExtCmdCheck(self, "getControllerAttr", ["ToolResults"]),
+            WrapAttrCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg"
+                "._SourceTabWidget__sourcetabs[],0._ui.pushButton",
+                QtTest.QTest.mouseClick, [QtCore.Qt.LeftButton]),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+        ])
+
+        print("execute")
+        qtck1.executeChecks(delay=6000)
+        qtck2.executeChecks(delay=12000)
+        status = qtck3.executeChecksAndClose(delay=18000)
+
+        self.assertEqual(status, 0)
+
+        qtck1.compareResults(
+            self, [True, None, None, None, None, None],
+            mask=[0, 0, 1, 1, 1, 1])
+        qtck2.compareResults(
+            self, [True, None, None, None, None], mask=[0, 1, 1, 1, 1])
+        qtck3.compareResults(
+            self, [None, None, None, None, False], mask=[1, 1, 1, 0, 0])
+
+        res1 = qtck1.results()
+        res2 = qtck2.results()
+        res3 = qtck3.results()
+        if not np.allclose(res1[2], lastimage, equal_nan=True):
+            print(res1[2])
+            print(lastimage)
+            print(res1[2] - lastimage)
+        self.assertTrue(np.allclose(res1[2], lastimage, equal_nan=True))
+
+        scaledimage = np.clip(lastimage, 10e-3, np.inf)
+        scaledimage = np.log10(scaledimage)
+        self.assertTrue(np.allclose(res1[3], scaledimage, equal_nan=True))
+
+        rt = json.loads(res1[4])
+        self.assertEqual(rt["tool"], "maxima")
+        self.assertTrue(rt["imagename"].startswith(
+            "test/testimageserver/00/LastImage "))
+        self.assertEqual(rt["maxima"],
+                         [[509, 255, 26009],
+                          [510, 255, 26010],
+                          [511, 255, 26011]])
+        self.assertTrue(rt["timestamp"] > 1530929046)
+
+        l1 = res1[5].T
+        lastimage = l1
+        if not np.allclose(res2[1], lastimage, equal_nan=True):
+            print(res2[1])
+            print(lastimage)
+        self.assertTrue(np.allclose(res2[1], lastimage, equal_nan=True))
+        scaledimage = np.clip(lastimage, 10e-3, np.inf)
+        scaledimage = np.log10(scaledimage)
+        self.assertTrue(np.allclose(res2[2], scaledimage, equal_nan=True))
+
+        rt = json.loads(res2[3])
+        # print(rt)
+        self.assertEqual(rt["tool"], "maxima")
+        self.assertTrue(rt["imagename"].startswith(
+            "test/testimageserver/00/LastImage "))
+        self.assertEqual(len(rt["maxima"]), 3)
+        self.assertTrue(rt["timestamp"] > 1530929046)
+
+        l1 = res2[4].T
+        lastimage = l1
+
+        self.assertTrue(np.allclose(res3[0], lastimage, equal_nan=True))
+        scaledimage = np.clip(lastimage, 10e-3, np.inf)
+        scaledimage = np.log10(scaledimage)
+        self.assertTrue(np.allclose(res3[1], scaledimage, equal_nan=True))
+
+        rt = json.loads(res3[2])
+        # print(rt)
+        self.assertEqual(rt["tool"], "maxima")
+        self.assertTrue(rt["imagename"].startswith(
+            "test/testimageserver/00/LastImage "))
+        self.assertEqual(len(rt["maxima"]), 3)
+        self.assertTrue(rt["timestamp"] > 1530929046)
+
+        ls = json.loads(self.__lavuestate)
+        dls = dict(self.__defaultls)
+        dls.update(dict(
+            mode='expert',
+            source='tangoattr',
+            configuration='test/testimageserver/00/LastImage',
+            offset='',
+            instance='tgtest2',
+            tool='maxima',
+            # log='debug',
+            log='info',
+            scaling='log',
+            # levels='',
+            # channel='0,1,2',
             #  gradient='thermal',
             tangodevice='test/lavuecontroller/00',
             connected=True,
