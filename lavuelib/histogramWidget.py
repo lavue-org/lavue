@@ -35,6 +35,12 @@ import logging
 #:         pg major version, pg minor verion, pg patch version
 _VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(".")[:3] \
     if _pg.__version__ else ("0", "9", "0")
+try:
+    _NPATCH = int(_VPATCH)
+except Exception:
+    _NPATCH = 0
+_PQGVER = int(_VMAJOR) * 1000 + int(_VMINOR) * 100 + _NPATCH
+
 
 _pg.graphicsItems.GradientEditorItem.Gradients['reversegrey'] = {
     'ticks': [(0.0, (255, 255, 255, 255)),
@@ -254,6 +260,63 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         :param expertmode: expert mode flag
         :type expertmode: :obj:`bool`
         """
+        if _PQGVER >= 1202:
+            self.__init_1202(bins, step, image, fillHistogram, expertmode)
+        else:
+            self.__init_old(bins, step, image, fillHistogram, expertmode)
+
+    def __init_1202(self, bins=None, step=None, image=None, fillHistogram=True,
+                    expertmode=False):
+        """ constructor for old pyqtgraph
+
+        :param bins: bins edges algorithm for histogram, default: 'auto'
+        :type bins: :obj:`str`
+        :param step: data step for calculation of histogram levels,
+                     default: 'auto'
+        :type step: :obj:`str` or :obj:`int`
+        :param image: 2d image
+        :type image: :class:`pyqtgraph.ImageItem`
+        :param fillHistogram: histogram will be filled in
+        :type fillHistogram: :obj:`bool`
+        :param expertmode: expert mode flag
+        :type expertmode: :obj:`bool`
+        """
+        _pg.graphicsItems.HistogramLUTItem.HistogramLUTItem.__init__(
+            self, image, fillHistogram, levelMode='mono',
+            gradientPosition='bottom', orientation='horizontal')
+
+        #: (:obj:`bool`) expert mode
+        self.__expertmode = expertmode
+
+        #: (:obj: `bool`) rgb flag
+        self.__rgb = False
+
+        # self.vb.setMaximumHeight(15200)
+
+        #: (:obj:`list`) buffer for removed gradients
+        self.__oldgradient = []
+        self.resetGradient(False)
+
+        self.autolevelfactor = None
+        self.__step = step or 'auto'
+        self.__bins = bins or 'auto'
+
+    def __init_old(self, bins=None, step=None, image=None, fillHistogram=True,
+                   expertmode=False):
+        """ constructor for old pyqtgraph
+
+        :param bins: bins edges algorithm for histogram, default: 'auto'
+        :type bins: :obj:`str`
+        :param step: data step for calculation of histogram levels,
+                     default: 'auto'
+        :type step: :obj:`str` or :obj:`int`
+        :param image: 2d image
+        :type image: :class:`pyqtgraph.ImageItem`
+        :param fillHistogram: histogram will be filled in
+        :type fillHistogram: :obj:`bool`
+        :param expertmode: expert mode flag
+        :type expertmode: :obj:`bool`
+        """
         _pg.graphicsItems.GraphicsWidget.GraphicsWidget.__init__(self)
 
         #: (:obj:`bool`) expert mode
@@ -278,7 +341,7 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         self.layout.setSpacing(0)
 
         #: (:class:`pyqtgraph.graphicsItems.ViewBox.ViewBox`) view box
-        self.vb = _pg.graphicsItems.ViewBox.ViewBox()
+        self.vb = _pg.graphicsItems.ViewBox.ViewBox(parent=self)
         # self.vb.setMaximumHeight(152)
         self.vb.setMinimumHeight(45)
         self.vb.setMouseEnabled(x=True, y=False)
@@ -302,12 +365,13 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
 
         #: (:class:`pyqtgraph.graphicsItems.AxisItem.AxisItem`) axis item
         self.axis = _pg.graphicsItems.AxisItem.AxisItem(
-            'top', linkView=self.vb, maxTickLength=-10, showValues=False)
+            'top', linkView=self.vb, maxTickLength=-10, showValues=False,
+            parent=self)
 
         self.layout.addItem(self.axis, 0, 0)
         self.layout.addItem(self.vb, 1, 0)
         self.layout.addItem(self.gradient, 2, 0)
-        self.range = None
+        # self.range = None
 
         self.autolevelfactor = None
         self.__step = step or 'auto'
@@ -356,15 +420,16 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         else:
             _pg.HistogramLUTItem.gradientChanged(self)
 
-    def resetGradient(self):
+    def resetGradient(self, signal=True):
         """ resets gradient widget
         """
         self.gradient.sigGradientChanged.disconnect(self.gradientChanged)
-        self.gradient.sigNameChanged.disconnect(self._emitSigNameChanged)
-        self.gradient.saveAction.triggered.disconnect(
-            self._emitSaveGradientRequested)
-        self.gradient.removeAction.triggered.disconnect(
-            self._emitRemoveGradientRequested)
+        if signal:
+            self.gradient.sigNameChanged.disconnect(self._emitSigNameChanged)
+            self.gradient.saveAction.triggered.disconnect(
+                self._emitSaveGradientRequested)
+            self.gradient.removeAction.triggered.disconnect(
+                self._emitRemoveGradientRequested)
         self.gradient.hide()
         if hasattr(self.gradient, "prepareGeometryChange"):
             self.gradient.prepareGeometryChange()
@@ -447,6 +512,23 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         :param args: paint argument
         :type args: :obj:`list` < :obj:`any`>
         """
+        if _PQGVER >= 1202:
+            self.__paint_1202(p, *args)
+        else:
+            self.__paint_old(p, *args)
+
+    def __paint_1202(self, p, *args):
+        _pg.graphicsItems.HistogramLUTItem.HistogramLUTItem.paint(
+            self, p, *args)
+
+    def __paint_old(self, p, *args):
+        """ paints the histogram item
+
+        :param p: QPainter painter
+        :type p: :class:`PyQt5.QtGui.QPainter`
+        :param args: paint argument
+        :type args: :obj:`list` < :obj:`any`>
+        """
 
         pen = self.region.lines[0].pen
         rgn = self.getLevels()
@@ -473,8 +555,36 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         :param padding: histogram padding
         :type padding: :obj:`float`
         """
+        if _PQGVER >= 1202:
+            self.__setHistogramRange_1202(self, mn, mx, padding)
+        else:
+            self.__setHistogramRange_old(self, mn, mx, padding)
+
+    def __setHistogramRange_old(self, mn, mx, padding=0.1):
+        """sets the Y range on the histogram plot. This disables auto-scaling.
+
+        :param mn: minimum range level
+        :type mn: :obj:`float`
+        :param mx: maximum range level
+        :type mx: :obj:`float`
+        :param padding: histogram padding
+        :type padding: :obj:`float`
+        """
         self.vb.enableAutoRange(self.vb.XAxis, False)
         self.vb.setYRange(mn, mx, padding)
+
+    def __setHistogramRange_1202(self, mn, mx, padding=0.1):
+        """sets the Y range on the histogram plot. This disables auto-scaling.
+
+        :param mn: minimum range level
+        :type mn: :obj:`float`
+        :param mx: maximum range level
+        :type mx: :obj:`float`
+        :param padding: histogram padding
+        :type padding: :obj:`float`
+        """
+        _pg.graphicsItems.HistogramLUTItem.HistogramLUTItem.setHistogramRange(
+            self, mn, mx, padding)
 
     def __imageItem(self):
         """ provides imageItem independent of the pyqtgraph version
