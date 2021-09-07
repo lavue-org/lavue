@@ -529,6 +529,7 @@ class LiveViewer(QtGui.QDialog):
 
         self.__levelswg.setImageItem(self.__imagewg.image())
         self.__levelswg.showGradient(True)
+        self.__levelswg.showChannels(False)
         self.__channelwg.showGradient(True)
         self.__levelswg.updateHistoImage(autoLevel=True)
 

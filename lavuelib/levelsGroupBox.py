@@ -37,6 +37,16 @@ import math
 import os
 import logging
 
+
+_VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(".")[:3] \
+    if _pg.__version__ else ("0", "9", "0")
+try:
+    _NPATCH = int(_VPATCH)
+except Exception:
+    _NPATCH = 0
+_PQGVER = int(_VMAJOR) * 1000 + int(_VMINOR) * 100 + _NPATCH
+
+
 _formclass, _baseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  "ui", "LevelsGroupBox.ui"))
@@ -510,9 +520,11 @@ class LevelsGroupBox(QtGui.QWidget):
         """
         self.__histogram.setRGB(status)
         self.showGradient(not status)
+        if _PQGVER >= 1202:
+            self.showChannels(status)
 
     def showGradient(self, status=True):
-        """ resets color channel
+        """ show/hide gradient widget
 
         :param status: show gradient flag
         :type status: :obj:`bool`
@@ -526,6 +538,18 @@ class LevelsGroupBox(QtGui.QWidget):
             self.__ui.gradientComboBox.hide()
             self.__ui.gradientLabel.hide()
             self.__histogram.gradient.hide()
+
+    def showChannels(self, status=True):
+        """ show/hide channel widget
+
+        :param status: show channel flag
+        :type status: :obj:`bool`
+        """
+        if status:
+            self.__ui.channelWidget.show()
+        else:
+            self.__ui.channelWidget.hide()
+            # self.__ui.monoRadioButton.setChecked(2)
 
     @QtCore.pyqtSlot(int)
     def setBins(self, index):
