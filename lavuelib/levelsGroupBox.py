@@ -857,7 +857,8 @@ class LevelsGroupBox(QtGui.QWidget):
         if self.__channels is None:
             return "%s,%s" % (lowlim, uplim)
         else:
-            sch = ";".join(["%s,%s" % (ch[0], ch[1]) for ch in self.__channels])
+            sch = ";".join(
+                ["%s,%s" % (ch[0], ch[1]) for ch in self.__channels])
             return "%s,%s;%s" % (lowlim, uplim, sch)
 
     def channelLevels(self):

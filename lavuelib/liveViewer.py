@@ -698,7 +698,8 @@ class LiveViewer(QtGui.QDialog):
         # signal from limit setting widget
         self.__levelswg.minLevelChanged.connect(self._setMinLevelState)
         self.__levelswg.maxLevelChanged.connect(self._setMaxLevelState)
-        self.__levelswg.channelLevelsChanged.connect(self._setChannelLevelState)
+        self.__levelswg.channelLevelsChanged.connect(
+            self._setChannelLevelState)
         self.__levelswg.autoLevelsChanged.connect(self._setAutoLevelsState)
         self.__levelswg.levelsChanged.connect(self._setLevelState)
         self.__levelswg.gradientChanged.connect(
