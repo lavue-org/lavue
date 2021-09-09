@@ -601,13 +601,12 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
             return self.imageItem()
 
     def getFactorRegion(self):
-        """ provides auto levels calculated from autofactor
+        """ provides mono auto levels calculated from autofactor
 
         :returns: minlevel, maxlevel
         :rtype: (float, float)
 
         """
-
         hx = None
         hy = None
         if self.autolevelfactor is not None:
@@ -624,12 +623,57 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
                 if hx.any() and hy.any():
                     hmax = max(hy)
                     hmin = self.autolevelfactor*hmax/100.
-                    mn, mx = self.__imageItem().levels[:2]
+                    # mn, mx = self.__imageItem().levels[:2]
                     indexes = np.where(hy >= hmin)
                     ind1 = indexes[0][0]
                     ind2 = indexes[-1][-1]
                     return hx[ind1], hx[ind2]
         return None, None
+
+    def getChannelFactorRegion(self, ch=None):
+        """ provides mono auto levels calculated from autofactor
+
+        :param ch: histogram channels
+        :type ch:  :obj:
+        :returns: minlevel, maxlevel for channels
+        :rtype: :obj:`list` < (float, float) >
+
+        """
+        channels = []
+        if ch is None:
+            channels = self.imageItem().getHistogram(perChannel=True)
+        if ch[0] is None:
+            return
+        autofactor = False
+        if self.autolevelfactor is not None:
+            for i in range(1, 5):
+                chs = None
+                if len(ch) >= i:
+                    h = ch[i-1]
+                    hx = h[0]
+                    hy = h[1]
+                    print(i, self.autolevelfactor)
+                    if hy is not None and hx is not None and \
+                       hx.any() and hy.any():
+                        if abs(hx[0]) < 1.e-3 or abs(hx[0]+2.) < 1.e-3:
+                            hhx = hx[1:]
+                            hhy = hy[1:]
+                        else:
+                            hhx = hx
+                            hhy = hy
+                        if hhx.any() and hhy.any():
+                            hmax = max(hhy)
+                            hmin = self.autolevelfactor * hmax / 100.
+                            # mn, mx = self.__imageItem().levels[:2]
+                            indexes = np.where(hhy >= hmin)
+                            ind1 = indexes[0][0]
+                            ind2 = indexes[-1][-1]
+                            print("AF", i, [hhx[ind1], hhx[ind2]])
+                            chs = (hhx[ind1], hhx[ind2])
+                            autofactor = True
+                channels.append(chs)
+        if autofactor:
+            return channels
 
     def imageChanged(self, autoLevel=False, autoRange=False):
         """ overload imageChange method
@@ -639,49 +683,71 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         :param autoRange: auto range flag
         :type autoRange: :obj:`bool`
         """
-
-        mn, mx = self.__imageItem().levels[:2]
-        hx = None
-        hy = None
-        if self.autolevelfactor is not None:
+        print(self.levelMode)
+        print("autolv", autoLevel)
+        print("autofc", self.autolevelfactor)
+        if self.levelMode == 'mono':
+            for plt in self.plots[1:]:
+                plt.setVisible(False)
+            self.plots[0].setVisible(True)
+            print(self.__imageItem().levels)
+            print(type(self.__imageItem().levels))
+            hx1, hx2 = self.getFactorRegion()
+            if hx1 is not None:
+                self.region.setRegion([hx1, hx2])
+                _pg.graphicsItems.HistogramLUTItem.HistogramLUTItem.\
+                    imageChanged(
+                        self, autoLevel=False, autoRange=autoRange)
+                return
             try:
-                hx, hy = self.__imageItem().getHistogram(
+                # _pg.graphicsItems.HistogramLUTItem.HistogramLUTItem.\
+                #     imageChanged(
+                #         self, autoLevel=autoLevel, autoRange=autoRange)
+                h = self.imageItem().getHistogram(
                     step=self.__step, bins=self.__bins)
+                if h[0] is None:
+                    return
+                self.plot.setData(*h)
+                if autoLevel:
+                    mn = h[0][0]
+                    mx = h[0][-1]
+                    self.region.setRegion([mn, mx])
             except Exception as e:
                 logger.warning(str(e))
                 # print(str(e))
-            if hy is not None and hx is not None and hx.any() and hy.any():
-                if abs(hx[0]) < 1.e-3 or abs(hx[0]+2.) < 1.e-3:
-                    hhx = hx[1:]
-                    hhy = hy[1:]
-                else:
-                    hhx = hx
-                    hhy = hy
-                if hhx.any() and hhy.any():
-                    hmax = max(hhy)
-                    hmin = self.autolevelfactor * hmax / 100.
-                    mn, mx = self.__imageItem().levels[:2]
-                    indexes = np.where(hhy >= hmin)
-                    ind1 = indexes[0][0]
-                    ind2 = indexes[-1][-1]
-                    self.region.setRegion([hhx[ind1], hhx[ind2]])
-                    _pg.graphicsItems.HistogramLUTItem.HistogramLUTItem.\
-                        imageChanged(
-                            self, autoLevel=False, autoRange=autoRange)
-                    return
-        try:
-            # _pg.graphicsItems.HistogramLUTItem.HistogramLUTItem.\
-            #     imageChanged(
-            #         self, autoLevel=autoLevel, autoRange=autoRange)
-            h = self.imageItem().getHistogram(
-                step=self.__step, bins=self.__bins)
-            if h[0] is None:
+        else:
+            # plot one histogram for each channel
+            self.plots[0].setVisible(False)
+            ch = self.imageItem().getHistogram(perChannel=True)
+            if ch[0] is None:
                 return
-            self.plot.setData(*h)
-            if autoLevel:
-                mn = h[0][0]
-                mx = h[0][-1]
-                self.region.setRegion([mn, mx])
-        except Exception as e:
-            logger.warning(str(e))
-            # print(str(e))
+            for i in range(1, 5):
+                if len(ch) >= i:
+                    h = ch[i-1]
+                    self.plots[i].setVisible(True)
+                    self.plots[i].setData(*h)
+                else:
+                    # hide channels not present in image data
+                    self.plots[i].setVisible(False)
+            autofactor = False
+            channels = self.getChannelFactorRegion(ch)
+            if channels is not None:
+                for i, hxx in enumerate(channels):
+                    if hxx is not None:
+                        self.regions[i + 1].setRegion([hxx[0], hxx[1]])
+                autofactor = True
+            if not autofactor and autoLevel:
+                for i in range(1, 5):
+                    if len(ch) >= i:
+                        h = ch[i-1]
+                        mn = h[0][0]
+                        mx = h[0][-1]
+                        print("AL", i, [mn, mx])
+                        self.regions[i].setRegion([mn, mx])
+            if autofactor:
+                _pg.graphicsItems.HistogramLUTItem.HistogramLUTItem.\
+                    imageChanged(
+                        self, autoLevel=False, autoRange=autoRange)
+
+            # make sure we are displaying the correct number of channels
+            self._showRegions()

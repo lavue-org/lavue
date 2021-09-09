@@ -65,6 +65,8 @@ class LevelsGroupBox(QtGui.QWidget):
     minLevelChanged = QtCore.pyqtSignal(float)
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) maximum level changed signal
     maxLevelChanged = QtCore.pyqtSignal(float)
+    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) channel levels changed signal
+    channelLevelsChanged = QtCore.pyqtSignal()
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) automatic levels changed signal
     autoLevelsChanged = QtCore.pyqtSignal(int)
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) levels changed signal
@@ -111,9 +113,14 @@ class LevelsGroupBox(QtGui.QWidget):
             self._addGradientItem(name)
 
         #: (:obj: `float`) minimum intensity level value
-        self.__minval = 0.1
+        self.__minval = 0.2
         #: (:obj: `float`) maximum intensity level value
-        self.__maxval = 1.
+        self.__maxval = 1.1
+        #: (:obj: `float`) minimum maximum intensity level value
+        #                  for separete channels
+        self.__channels = None
+        #: (:obj: `int`) channel to display
+        self.__dchl = 0
 
         self.__ui.minDoubleSpinBox.setMinimum(-10e20)
         self.__ui.minDoubleSpinBox.setMaximum(10e20)
@@ -141,11 +148,59 @@ class LevelsGroupBox(QtGui.QWidget):
             self._onAutoLevelsChanged)
         self.__ui.stepLineEdit.textChanged.connect(
             self._onStepChanged)
+        self.__ui.monoRadioButton.clicked.connect(
+            self._monoLevelMode)
+        self.__ui.redRadioButton.clicked.connect(
+            self._redLevelMode)
+        self.__ui.blueRadioButton.clicked.connect(
+            self._blueLevelMode)
+        self.__ui.greenRadioButton.clicked.connect(
+            self._greenLevelMode)
         self.__ui.autofactorLineEdit.textChanged.connect(
             self._onAutoFactorChanged)
         self.__connectHistogram()
-        self.updateLevels(self.__minval, self.__maxval)
+        self.updateLevels(0.1, 1.0)
         self.__connectMinMax()
+
+    def _monoLevelMode(self, status):
+        if _PQGVER >= 1202:
+            if status:
+                self.__dchl = 0
+                self.__histogram.setLevelMode('mono')
+                self.updateLevels(self.__minval, self.__maxval)
+
+    def _redLevelMode(self, status):
+        if _PQGVER >= 1202:
+            if status:
+                self.__dchl = 1
+                self.__histogram.setLevelMode('rgba')
+                if self.__channels is not None \
+                   and len(self.channels) > 0:
+                    while len(self.__channels) <= 1:
+                        self.__channels.append((self.__minval, self.__maxval))
+                    self.updateLevels(None, None, self.__channels)
+
+    def _greenLevelMode(self, status):
+        if _PQGVER >= 1202:
+            if status:
+                self.__dchl = 2
+                self.__histogram.setLevelMode('rgba')
+                if self.__channels is not None \
+                   and len(self.channels) > 1:
+                    while len(self.__channels) <= 2:
+                        self.__channels.append((self.__minval, self.__maxval))
+                    self.updateLevels(None, None, self.__channels)
+
+    def _blueLevelMode(self, status):
+        if _PQGVER >= 1202:
+            if status:
+                self.__dchl = 3
+                self.__histogram.setLevelMode('rgba')
+                if self.__channels is not None \
+                   and len(self.channels) > 2:
+                    while len(self.__channels) <= 3:
+                        self.__channels.append((self.__minval, self.__maxval))
+                    self.updateLevels(None, None, self.__channels)
 
     def __connectHistogram(self):
         """ create histogram object and connect its signals
@@ -196,18 +251,43 @@ class LevelsGroupBox(QtGui.QWidget):
         if not self.__auto:
             try:
                 self.__disconnectMinMax()
-                self._checkAndEmit()
+                self._checkLevels()
+                lowlim = self.__ui.minDoubleSpinBox.value()
+                uplim = self.__ui.maxDoubleSpinBox.value()
+                if self.__dchl == 0:
+                    self.__minval = lowlim
+                    self.__maxval = uplim
+                    self.minLevelChanged.emit(self.__minval)
+                    self.maxLevelChanged.emit(self.__maxval)
+                else:
+                    if self.__channels is None:
+                        self.__channels = []
+                    while len(self.__channels) <= self.__dchl:
+                        self.__channels.append((lowlim, uplim))
+                    self.__channels[self.__dchl - 1] = (lowlim, uplim)
+                    self.channelLevelsChanged.emit()
+                self.levelsChanged.emit()
                 if self.__histo:
-                    lowlim = self.__ui.minDoubleSpinBox.value()
-                    uplim = self.__ui.maxDoubleSpinBox.value()
-                    self.__histogram.region.setRegion([lowlim, uplim])
+                    if self.__dchl == 0:
+                        self.__histogram.region.setRegion([lowlim, uplim])
+                    else:
+                        self.__histogram.regions[self.__dchl].setRegion(
+                            [lowlim, uplim])
             finally:
                 self.__connectMinMax()
         else:
             lowlim = self.__ui.minDoubleSpinBox.value()
             uplim = self.__ui.maxDoubleSpinBox.value()
-            self.minLevelChanged.emit(lowlim)
-            self.maxLevelChanged.emit(uplim)
+            if self.__dchl == 0:
+                self.minLevelChanged.emit(lowlim)
+                self.maxLevelChanged.emit(uplim)
+            else:
+                if self.__channels is None:
+                    self.__channels = []
+                    while len(self.__channels) <= self.__dchl:
+                        self.__channels.append((lowlim, uplim))
+                    self.__channels[self.__dchl - 1] = (lowlim, uplim)
+                self.channelLevelsChanged.emit()
 
     def changeView(self, showhistogram=None, showlevels=None,
                    showadd=None):
@@ -374,13 +454,39 @@ class LevelsGroupBox(QtGui.QWidget):
 
         """
         levels = histogram.region.getRegion()
-        lowlim = self.__ui.minDoubleSpinBox.value()
-        uplim = self.__ui.maxDoubleSpinBox.value()
+        lowlim = self.__minval
+        uplim = self.__maxval
         if levels[0] != lowlim or levels[1] != uplim:
+            lowlim = levels[0]
+            uplim = levels[1]
+            # refresh widget
             self.__ui.minDoubleSpinBox.setValue(levels[0])
             self.__ui.maxDoubleSpinBox.setValue(levels[1])
             if not self.__auto:
-                self._checkAndEmit()
+                self._checkLevels()
+                self._emitLevels()
+        # TODO channels
+
+    @QtCore.pyqtSlot()
+    def _checkLevels(self):
+        """ checks if the minimum value is actually smaller than the maximum
+        """
+        minval = self.__ui.minDoubleSpinBox.value()
+        maxval = self.__ui.maxDoubleSpinBox.value()
+        if maxval - minval <= 0:
+            if minval >= 1.:
+                minval = maxval - 1.
+            else:
+                maxval = minval + 1
+
+        self.__ui.minDoubleSpinBox.setValue(minval)
+        self.__ui.maxDoubleSpinBox.setValue(maxval)
+
+    @QtCore.pyqtSlot()
+    def _emitLevels(self):
+        """ checks if the minimum value is actually smaller than the maximum
+        """
+        # TODO send also channels
 
     @QtCore.pyqtSlot()
     def _checkAndEmit(self):
@@ -400,8 +506,9 @@ class LevelsGroupBox(QtGui.QWidget):
         self.minLevelChanged.emit(self.__minval)
         self.maxLevelChanged.emit(self.__maxval)
         self.levelsChanged.emit()
+        # TODO old
 
-    def updateLevels(self, lowlim, uplim):
+    def updateLevels(self, lowlim, uplim, channels=None):
         """ set min/max level spinboxes and histogram from the parameters
 
         :param lowlim: minimum intensity value
@@ -410,19 +517,44 @@ class LevelsGroupBox(QtGui.QWidget):
         :type uplim: :obj:`float`
         """
         if lowlim is not None:
-            self.__ui.minDoubleSpinBox.setValue(lowlim)
+            self.__minval = lowlim
+            if self.__dchl == 0:
+                self.__ui.minDoubleSpinBox.setValue(lowlim)
         else:
-            lowlim = self.__ui.minDoubleSpinBox.value()
+            lowlim = self.__minval
         if uplim is not None:
-            self.__ui.maxDoubleSpinBox.setValue(uplim)
+            self.__maxval = uplim
+            if self.__dchl == 0:
+                self.__ui.maxDoubleSpinBox.setValue(uplim)
         else:
-            uplim = self.__ui.maxDoubleSpinBox.value()
+            uplim = self.__maxval
+        # TODO
+        if channels is not None:
+            self.__channels = channels
+            if self.__dchl != 0 and len(self.__channels) >= self.__dchl:
+                ch = self.__channels[self.__dchl - 1]
+                if ch is not None:
+                    chl, chh = ch
+                self.__ui.minDoubleSpinBox.setValue(chl)
+                self.__ui.maxDoubleSpinBox.setValue(chh)
+
+        self._emitLevels()
         if self.__histo and self.__auto:
             levels = self.__histogram.region.getRegion()
             if levels[0] != lowlim or levels[1] != uplim:
                 self.__histogram.region.setRegion([lowlim, uplim])
+            if channels is not None:
+                for i, ch in enumerate(self.__channels):
+                    if ch is not None:
+                        lowlim, uplim = ch
+                        if lowlim is not None and uplim is not None:
+                            levels = \
+                                self.__histogram.regions[i + 1].getRegion()
+                            if levels[0] != lowlim or levels[1] != uplim:
+                                self.__histogram.regions[i + 1].setRegion(
+                                    [lowlim, uplim])
 
-    def updateAutoLevels(self, lowlim, uplim):
+    def updateAutoLevels(self, lowlim, uplim, channels=None):
         """ set min/max level spinboxes and histogram from the parameters
 
         :param lowlim: minimum intensity value
@@ -430,18 +562,26 @@ class LevelsGroupBox(QtGui.QWidget):
         :param uplim:  maximum intensity value
         :type uplim: :obj:`float`
         """
+        print("UPDATE AL", lowlim, uplim, channels)
+
+        # TODO
+        if channels is not None:
+            self.channels = channels
         try:
             factor = str(self.__ui.autofactorLineEdit.text())
             float(factor)
             llim, ulim = self.__histogram.getFactorRegion()
+            channels = self.__histogram.getChannelFactorRegion()
+            if channels is not None:
+                self.channels = channels
             if llim is not None and ulim is not None:
                 self.updateLevels(llim, ulim)
                 self.minLevelChanged.emit(llim)
                 self.maxLevelChanged.emit(ulim)
             else:
-                self.updateLevels(lowlim, uplim)
+                self.updateLevels(lowlim, uplim, channels)
         except Exception:
-            self.updateLevels(lowlim, uplim)
+            self.updateLevels(lowlim, uplim, channels)
 
     def __hideControls(self):
         """ disables spinboxes
@@ -466,6 +606,8 @@ class LevelsGroupBox(QtGui.QWidget):
         :param scalingtype: scaling type, i.e. log, linear, sqrt
         :type scalingtype: :obj:`str`
         """
+        # TODO channels
+
         lowlim = float(self.__ui.minDoubleSpinBox.value())
         uplim = float(self.__ui.maxDoubleSpinBox.value())
         if scalingtype == "log":
@@ -705,21 +847,63 @@ class LevelsGroupBox(QtGui.QWidget):
     def levels(self):
         """ provides levels from configuration string
 
-        :returns:  configuration string: lowlim,uplim
+        :returns:  configuration string: lowlim,uplim or
+                   lowlim,uplim;c1l,c1u;c2l,c2u;c3l,c3u
         :rtype: :obj:`str`
         """
-        lowlim = self.__ui.minDoubleSpinBox.value()
-        uplim = self.__ui.maxDoubleSpinBox.value()
-        return "%s,%s" % (lowlim, uplim)
+        lowlim = self.__minval
+        uplim = self.__maxval
+        print("CHANNELS", self.__channels)
+        if self.__channels is None:
+            return "%s,%s" % (lowlim, uplim)
+        else:
+            sch = ";".join(["%s,%s" % (ch[0], ch[1]) for ch in self.__channels])
+            return "%s,%s;%s" % (lowlim, uplim, sch)
+
+    def channelLevels(self):
+        """ provides levels from configuration string
+
+        :returns:  channel levels
+        :rtype: :obj:`str`
+        """
+        if self.__channels is None:
+            return list(self.__channels)
 
     def setLevels(self, cnflevels):
         """ set levels from configuration string
 
-        :param cnflevels:  configuration string: lowlim,uplim
+        :param cnflevels:  configuration string: lowlim,uplim   or
+               lowlim,uplim;lowred,upred;lowgreen,upgreen;lowblue,upblue
         :type cnflevels: :obj:`str`
         """
         self.__ui.autoLevelsCheckBox.setChecked(False)
         self._onAutoLevelsChanged(0)
+        channels = None
+        if ";" in cnflevels:
+            clst = cnflevels.split(";")
+            channels = []
+            if clst:
+                for ch in clst[1:]:
+                    llst = cnflevels.split(",")
+                    lmin = None
+                    lmax = None
+                    try:
+                        smin = llst[0]
+                        if smin.startswith("m"):
+                            smin = "-" + smin[1:]
+                        lmin = float(smin)
+                    except Exception:
+                        pass
+                    try:
+                        smax = llst[1]
+                        if smax.startswith("m"):
+                            smax = "-" + smax[1:]
+                        lmax = float(smax)
+                    except Exception:
+                        pass
+                        clst = cnflevels.split(";")
+                    channels.append((lmin, lmax))
+                cnflevels = clst[0]
         llst = cnflevels.split(",")
         lmin = None
         lmax = None
@@ -737,7 +921,7 @@ class LevelsGroupBox(QtGui.QWidget):
             lmax = float(smax)
         except Exception:
             pass
-        self.updateLevels(lmin, lmax)
+        self.updateLevels(lmin, lmax, channels)
 
     def autoFactor(self):
         """ provides factor for automatic levels
