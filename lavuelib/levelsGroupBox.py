@@ -543,16 +543,17 @@ class LevelsGroupBox(QtGui.QWidget):
             levels = self.__histogram.region.getRegion()
             if levels[0] != lowlim or levels[1] != uplim:
                 self.__histogram.region.setRegion([lowlim, uplim])
-            if channels is not None:
-                for i, ch in enumerate(self.__channels):
-                    if ch is not None:
-                        lowlim, uplim = ch
-                        if lowlim is not None and uplim is not None:
-                            levels = \
-                                self.__histogram.regions[i + 1].getRegion()
-                            if levels[0] != lowlim or levels[1] != uplim:
-                                self.__histogram.regions[i + 1].setRegion(
-                                    [lowlim, uplim])
+            if hasattr(self.__histogram, "regions"):
+                if channels is not None:
+                    for i, ch in enumerate(self.__channels):
+                        if ch is not None:
+                            lowlim, uplim = ch
+                            if lowlim is not None and uplim is not None:
+                                levels = \
+                                    self.__histogram.regions[i + 1].getRegion()
+                                if levels[0] != lowlim or levels[1] != uplim:
+                                    self.__histogram.regions[i + 1].setRegion(
+                                        [lowlim, uplim])
 
     def updateAutoLevels(self, lowlim, uplim, channels=None):
         """ set min/max level spinboxes and histogram from the parameters
