@@ -652,7 +652,6 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
                     h = ch[i-1]
                     hx = h[0]
                     hy = h[1]
-                    print(i, self.autolevelfactor)
                     if hy is not None and hx is not None and \
                        hx.any() and hy.any():
                         if abs(hx[0]) < 1.e-3 or abs(hx[0]+2.) < 1.e-3:
@@ -668,7 +667,6 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
                             indexes = np.where(hhy >= hmin)
                             ind1 = indexes[0][0]
                             ind2 = indexes[-1][-1]
-                            print("AF", i, [hhx[ind1], hhx[ind2]])
                             chs = (hhx[ind1], hhx[ind2])
                             autofactor = True
                 channels.append(chs)
@@ -683,15 +681,10 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         :param autoRange: auto range flag
         :type autoRange: :obj:`bool`
         """
-        print(self.levelMode)
-        print("autolv", autoLevel)
-        print("autofc", self.autolevelfactor)
         if self.levelMode == 'mono':
             for plt in self.plots[1:]:
                 plt.setVisible(False)
             self.plots[0].setVisible(True)
-            print(self.__imageItem().levels)
-            print(type(self.__imageItem().levels))
             hx1, hx2 = self.getFactorRegion()
             if hx1 is not None:
                 self.region.setRegion([hx1, hx2])
@@ -742,7 +735,6 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
                         h = ch[i-1]
                         mn = h[0][0]
                         mx = h[0][-1]
-                        print("AL", i, [mn, mx])
                         self.regions[i].setRegion([mn, mx])
             if autofactor:
                 _pg.graphicsItems.HistogramLUTItem.HistogramLUTItem.\
@@ -751,3 +743,18 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
 
             # make sure we are displaying the correct number of channels
             self._showRegions()
+
+    def switchLevelMode(self, mode):
+        """ switch rgba mode
+
+        :param mode: rgba mode i.e. 'mono' or 'rgba'
+        :type mode: :obj:`str`
+        """
+        if mode == self.levelMode or mode not in {'mono', 'rgba'}:
+            return
+
+        self.levelMode = mode
+        self._showRegions()
+        self.imageItem().setLevels(self.getLevels())
+        self.imageChanged()
+        self.update()
