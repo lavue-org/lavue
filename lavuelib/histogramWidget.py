@@ -266,12 +266,12 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         :param expertmode: expert mode flag
         :type expertmode: :obj:`bool`
         """
-        if _PQGVER >= 1202:
-            self.__init_1202(bins, step, image, fillHistogram, expertmode)
+        if _PQGVER >= 1100:
+            self.__init_1100(bins, step, image, fillHistogram, expertmode)
         else:
             self.__init_old(bins, step, image, fillHistogram, expertmode)
 
-    def __init_1202(self, bins=None, step=None, image=None, fillHistogram=True,
+    def __init_1100(self, bins=None, step=None, image=None, fillHistogram=True,
                     expertmode=False):
         """ constructor for old pyqtgraph
 

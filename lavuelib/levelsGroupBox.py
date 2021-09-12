@@ -163,7 +163,7 @@ class LevelsGroupBox(QtGui.QWidget):
         self.__connectMinMax()
 
     def _monoLevelMode(self, status):
-        if _PQGVER >= 1202:
+        if _PQGVER >= 1100:
             if status:
                 self.__dchl = 0
                 # self.__histogram.setLevelMode('mono')
@@ -171,7 +171,7 @@ class LevelsGroupBox(QtGui.QWidget):
                 self.updateLevels(self.__minval, self.__maxval)
 
     def _redLevelMode(self, status):
-        if _PQGVER >= 1202:
+        if _PQGVER >= 1100:
             if status:
                 self.__dchl = 1
                 # self.__histogram.setLevelMode('rgba')
@@ -182,7 +182,7 @@ class LevelsGroupBox(QtGui.QWidget):
                     self.updateLevels(None, None, self.__channels)
 
     def _greenLevelMode(self, status):
-        if _PQGVER >= 1202:
+        if _PQGVER >= 1100:
             if status:
                 self.__dchl = 2
                 self.__histogram.switchLevelMode('rgba')
@@ -193,7 +193,7 @@ class LevelsGroupBox(QtGui.QWidget):
                     self.updateLevels(None, None, self.__channels)
 
     def _blueLevelMode(self, status):
-        if _PQGVER >= 1202:
+        if _PQGVER >= 1100:
             if status:
                 self.__dchl = 3
                 self.__histogram.switchLevelMode('rgba')
@@ -784,7 +784,7 @@ class LevelsGroupBox(QtGui.QWidget):
         """
         self.__histogram.setRGB(status)
         self.showGradient(not status)
-        if _PQGVER >= 1202:
+        if _PQGVER >= 1100:
             self.showChannels(status)
 
     def showGradient(self, status=True):
