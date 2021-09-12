@@ -67,8 +67,6 @@ version = ".".join(release.split(".")[:2])
 UIDIR = os.path.join(NAME, "ui")
 #: (:obj:`str`) .qrc file directory
 QRCDIR = os.path.join(NAME, "qrc")
-#: (:obj:`str`) filter plugins directory
-PLGNSDIR = os.path.join(NAME, "plugins")
 #: (:obj:`list` < :obj:`str` >) executable scripts
 SCRIPTS = ['lavuemonitor', 'lavuezmqstreamfromtango',
            'LavueController', 'lavuezmqstreamtest']

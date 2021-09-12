@@ -31,6 +31,12 @@ from pyqtgraph import QtCore, QtGui
 import numpy as np
 import logging
 
+from .external.pyqtgraph_0_12 import (
+    histogram__init__, histogram_paint, histogram_setHistogramRange,
+    # histogram_setLevels, histogram_fillHistogram
+)
+
+
 #: ( (:obj:`str`,:obj:`str`,:obj:`str`) )
 #:         pg major version, pg minor verion, pg patch version
 _VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(".")[:3] \
@@ -281,9 +287,14 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         :param expertmode: expert mode flag
         :type expertmode: :obj:`bool`
         """
-        _pg.graphicsItems.HistogramLUTItem.HistogramLUTItem.__init__(
-            self, image, fillHistogram, levelMode='mono',
-            gradientPosition='bottom', orientation='horizontal')
+        if _PQGVER >= 1202:
+            _pg.graphicsItems.HistogramLUTItem.HistogramLUTItem.__init__(
+                self, image, fillHistogram, levelMode='mono',
+                gradientPosition='bottom', orientation='horizontal')
+        else:
+            histogram__init__(
+                self, image, fillHistogram, levelMode='mono',
+                gradientPosition='bottom', orientation='horizontal')
 
         #: (:obj:`bool`) expert mode
         self.__expertmode = expertmode
@@ -514,6 +525,8 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         """
         if _PQGVER >= 1202:
             self.__paint_1202(p, *args)
+        elif _PQGVER >= 1100:
+            histogram_paint(self, p, *args)
         else:
             self.__paint_old(p, *args)
 
@@ -557,6 +570,8 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         """
         if _PQGVER >= 1202:
             self.__setHistogramRange_1202(self, mn, mx, padding)
+        if _PQGVER >= 1100:
+            histogram_setHistogramRange(self, mn, mx, padding)
         else:
             self.__setHistogramRange_old(self, mn, mx, padding)
 
