@@ -140,33 +140,6 @@ def histogram__init__(self, image=None, fillHistogram=True, levelMode='mono',
         self.setImageItem(image)
 
 
-def histogram_fillHistogram(
-        self, fill=True, level=0.0, color=(100, 100, 200)):
-    """Control fill of the histogram curve(s).
-
-    Parameters
-    ----------
-    fill : bool, optional
-        Set whether or not the histogram should be filled.
-    level : float, optional
-        Set the fill level. See :meth:`PlotCurveItem.setFillLevel
-        <pyqtgraph.PlotCurveItem.setFillLevel>`. Only used if ``fill`` is True.
-    color : color, optional
-        Color to use for the fill when the histogram
-        ``levelMode == "mono"``. See
-        :meth:`PlotCurveItem.setBrush <pyqtgraph.PlotCurveItem.setBrush>`.
-    """
-    colors = [
-        color,
-        (255, 0, 0, 50), (0, 255, 0, 50), (0, 0, 255, 50), (255, 255, 255, 50)]
-    for color, plot in zip(colors, self.plots):
-        if fill:
-            plot.setFillLevel(level)
-            plot.setBrush(color)
-        else:
-            plot.setFillLevel(None)
-
-
 def histogram_paint(self, p, *args):
     # paint the bounding edges of the region item and gradient item with lines
     # connecting them
@@ -226,29 +199,3 @@ def histogram_setHistogramRange(self, mn, mx, padding=0.1):
     else:
         self.vb.enableAutoRange(self.vb.XAxis, False)
         self.vb.setXRange(mn, mx, padding)
-
-
-def histogram_setLevels(self, min=None, max=None, rgba=None):
-    """Set the min/max (bright and dark) levels.
-
-    Parameters
-    ----------
-    min : float, optional
-        Minimum level.
-    max : float, optional
-        Maximum level.
-    rgba : list, optional
-        Sequence of (min, max) pairs for each channel for 'rgba' mode.
-    """
-    if None in {min, max} and (rgba is None or None in rgba[0]):
-        raise ValueError("Must specify min and max levels")
-
-    if self.levelMode == 'mono':
-        if min is None:
-            min, max = rgba[0]
-        self.region.setRegion((min, max))
-    else:
-        if rgba is None:
-            rgba = 4*[(min, max)]
-        for levels, region in zip(rgba, self.regions[1:]):
-            region.setRegion(levels)
