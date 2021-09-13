@@ -513,7 +513,6 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         :param rawimg: 2d raw image array
         :type rawimg: :class:`numpy.ndarray`
         """
-        print("UPDATE", self.__displaylevels, self.__channellevels)
         try:
             if img is not None and len(img.shape) == 3:
                 self.__image.setLookupTable(None)
