@@ -208,6 +208,8 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         self.__doubleclicklock = False
         #: (:obj:`bool`) rgb on flag
         self.__rgb = False
+        #: (:obj:`str`) levelmode
+        self.__levelmode = 'mono'
         #: (:obj:`dict` < :obj:`str`, :obj:`DisplayExtension` >)
         #          extension dictionary with name keys
         self.__extensions = {}
@@ -511,15 +513,23 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         :param rawimg: 2d raw image array
         :type rawimg: :class:`numpy.ndarray`
         """
+        print("UPDATE", self.__displaylevels, self.__channellevels)
         try:
             if img is not None and len(img.shape) == 3:
                 self.__image.setLookupTable(None)
                 if img.dtype.kind == 'f' and np.isnan(img.min()):
                     img = np.nan_to_num(img)
-                if self.__channellevels:
+                if self.__channellevels and self.levelMode() != 'mono':
+
                     self.__image.setImage(
                         img, lut=None,
                         levels=self.__channellevels,
+                        autoLevels=False)
+                elif self.__displaylevels[0] is not None \
+                        and self.__displaylevels[1] is not None:
+                    self.__image.setImage(
+                        img, lut=None,
+                        levels=self.__displaylevels,
                         autoLevels=False)
                 else:
                     self.__image.setImage(
@@ -1230,3 +1240,19 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         :rtype: :obj:`bool`
         """
         return self.__rgb
+
+    def setLevelMode(self, levelmode=True):
+        """ sets levelmode
+
+        :param levelmode: level mode, i.e. `mono` or `rgba`
+        :type levelmode: :obj:`str`
+        """
+        self.__levelmode = levelmode
+
+    def levelMode(self):
+        """ gets level mode
+
+        :returns: level mode, i.e. `mono` or `rgba`
+        :rtype: :obj:`str`
+        """
+        return self.__levelmode

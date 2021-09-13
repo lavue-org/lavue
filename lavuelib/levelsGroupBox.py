@@ -167,44 +167,41 @@ class LevelsGroupBox(QtGui.QWidget):
             if status:
                 self.__dchl = 0
                 # self.__histogram.setLevelMode('mono')
-                self.__histogram.switchLevelMode('mono')
                 self.updateLevels(self.__minval, self.__maxval)
+                self.__histogram.switchLevelMode('mono')
 
     def _redLevelMode(self, status):
         if _PQGVER >= 1100:
             if status:
                 self.__dchl = 1
                 # self.__histogram.setLevelMode('rgba')
-                self.__histogram.switchLevelMode('rgba')
                 if self.__channels is not None:
                     while len(self.__channels) < 1:
                         self.__channels.append((self.__minval, self.__maxval))
                     self.updateLevels(None, None, self.__channels)
-                    self.channelLevelsChanged.emit()
+                self.__histogram.switchLevelMode('rgba')
 
     def _greenLevelMode(self, status):
         if _PQGVER >= 1100:
             if status:
                 self.__dchl = 2
-                self.__histogram.switchLevelMode('rgba')
                 # self.__histogram.setLevelMode('rgba')
                 if self.__channels is not None:
                     while len(self.__channels) < 2:
                         self.__channels.append((self.__minval, self.__maxval))
                     self.updateLevels(None, None, self.__channels)
-                    self.channelLevelsChanged.emit()
+                self.__histogram.switchLevelMode('rgba')
 
     def _blueLevelMode(self, status):
         if _PQGVER >= 1100:
             if status:
                 self.__dchl = 3
-                self.__histogram.switchLevelMode('rgba')
                 # self.__histogram.setLevelMode('rgba')
                 if self.__channels is not None:
                     while len(self.__channels) < 3:
                         self.__channels.append((self.__minval, self.__maxval))
                     self.updateLevels(None, None, self.__channels)
-                    self.channelLevelsChanged.emit()
+                self.__histogram.switchLevelMode('rgba')
 
     def __connectHistogram(self):
         """ create histogram object and connect its signals
@@ -567,7 +564,6 @@ class LevelsGroupBox(QtGui.QWidget):
                     self.__ui.maxDoubleSpinBox.setValue(uplim)
             else:
                 uplim = self.__maxval
-            # #TODO
             if channels is not None:
                 self.__channels = channels
                 if self.__dchl != 0 and len(self.__channels) >= self.__dchl:
@@ -1071,3 +1067,13 @@ class LevelsGroupBox(QtGui.QWidget):
         if factor:
             self.setAutoLevels(2)
         self._onAutoFactorChanged(factor)
+
+    def levelMode(self):
+        """ return historgram level mode
+
+        :return: level mode
+        :rtype: :obj:`str`
+        """
+        if self.__histogram:
+            return self.__histogram.levelMode
+        return 'mono'

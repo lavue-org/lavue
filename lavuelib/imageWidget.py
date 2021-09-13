@@ -2110,3 +2110,19 @@ class ImageWidget(QtGui.QWidget):
         :rtype: :obj:`float`
         """
         return self.__displaywidget.rangeWindowScale()
+
+    def setLevelMode(self, levelmode=True):
+        """ sets levelmode
+
+        :param levelmode: level mode, i.e. `mono` or `rgba`
+        :type levelmode: :obj:`str`
+        """
+        self.__displaywidget.setLevelMode(levelmode)
+
+    def levelMode(self):
+        """ gets level mode
+
+        :returns: level mode, i.e. `mono` or `rgba`
+        :rtype: :obj:`str`
+        """
+        return self.__displaywidget.levelMode()
