@@ -32,6 +32,7 @@ from __future__ import unicode_literals
 
 import time
 import socket
+import warnings
 import json
 from .qtuic import uic
 import numpy as np
@@ -3905,11 +3906,16 @@ class LiveViewer(QtGui.QDialog):
         channels = None
         if hasattr(self.__scaledimage, "shape") \
            and len(self.__scaledimage.shape) == 3:
-            nch = self.__scaledimage.shape[2]
-            channels = [
-                [np.nanmin(self.__scaledimage[:, :, i]) if flag[3] else 0.0,
-                 np.nanmax(self.__scaledimage[:, :, i]) if flag[5] else 0.0]
-                for i in range(nch)]
+            with warnings.catch_warnings():
+                warnings.filterwarnings(
+                    'ignore', r'All-NaN (slice|axis) encountered')
+                nch = self.__scaledimage.shape[2]
+                channels = [
+                    [np.nanmin(self.__scaledimage[:, :, i])
+                     if flag[3] else 0.0,
+                     np.nanmax(self.__scaledimage[:, :, i])
+                     if flag[5] else 0.0]
+                    for i in range(nch)]
         else:
             channels = None
         return (maxval, meanval, varval, minval, maxrawval,  maxsval, channels)

@@ -180,6 +180,7 @@ class LevelsGroupBox(QtGui.QWidget):
                     while len(self.__channels) < 1:
                         self.__channels.append((self.__minval, self.__maxval))
                     self.updateLevels(None, None, self.__channels)
+                    self.channelLevelsChanged.emit()
 
     def _greenLevelMode(self, status):
         if _PQGVER >= 1100:
@@ -191,6 +192,7 @@ class LevelsGroupBox(QtGui.QWidget):
                     while len(self.__channels) < 2:
                         self.__channels.append((self.__minval, self.__maxval))
                     self.updateLevels(None, None, self.__channels)
+                    self.channelLevelsChanged.emit()
 
     def _blueLevelMode(self, status):
         if _PQGVER >= 1100:
@@ -202,6 +204,7 @@ class LevelsGroupBox(QtGui.QWidget):
                     while len(self.__channels) < 3:
                         self.__channels.append((self.__minval, self.__maxval))
                     self.updateLevels(None, None, self.__channels)
+                    self.channelLevelsChanged.emit()
 
     def __connectHistogram(self):
         """ create histogram object and connect its signals
@@ -514,7 +517,7 @@ class LevelsGroupBox(QtGui.QWidget):
         """
         self.minLevelChanged.emit(self.__minval)
         self.maxLevelChanged.emit(self.__maxval)
-        self.levelsChanged.emit()
+        self.channelLevelsChanged.emit()
 
     @QtCore.pyqtSlot()
     def _updateAndEmit(self):
@@ -783,6 +786,11 @@ class LevelsGroupBox(QtGui.QWidget):
         :type status: :obj:`bool`
         """
         self.__histogram.setRGB(status)
+        if status and self.__dchl:
+            mode = 'rgba'
+        else:
+            mode = 'mono'
+        self.__histogram.switchLevelMode(mode)
         self.showGradient(not status)
         if _PQGVER >= 1100:
             self.showChannels(status)
@@ -988,7 +996,7 @@ class LevelsGroupBox(QtGui.QWidget):
         :returns:  channel levels
         :rtype: :obj:`str`
         """
-        if self.__channels is None:
+        if self.__channels is not None:
             return list(self.__channels)
 
     def setLevels(self, cnflevels):

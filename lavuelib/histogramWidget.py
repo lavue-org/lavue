@@ -270,6 +270,7 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
             self.__init_1100(bins, step, image, fillHistogram, expertmode)
         else:
             self.__init_old(bins, step, image, fillHistogram, expertmode)
+        self.vb.enableAutoRange(self.vb.YAxis, 0.99)
 
     def __init_1100(self, bins=None, step=None, image=None, fillHistogram=True,
                     expertmode=False):
@@ -770,6 +771,17 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
 
         self.levelMode = mode
         self._showRegions()
+
+        if mode == 'mono':
+            levels = self.region.getRegion()
+            self.setLevels(*levels)
+        else:
+            if hasattr(self, "regions"):
+                levels = [self.regions[i].getRegion() for i in range(1, 5)]
+            else:
+                oldLevels = self.region.getRegion()
+                levels = [oldLevels] * 4
+            self.setLevels(rgba=levels)
         self.imageItem().setLevels(self.getLevels())
         self.imageChanged()
         self.update()
