@@ -1610,8 +1610,9 @@ class LiveViewer(QtGui.QDialog):
 
         if hasattr(options, "tool") and options.tool is not None:
             tlname = str(options.tool)
-            if tlname in self.__tlaliasnames.keys() and \
-               not self.__imagewg.rgb():
+            if tlname == 'rgbintensity':
+                tlname = 'intensity'
+            if tlname in self.__tlaliasnames.keys():
                 self.__imagewg.setTool(self.__tlaliasnames[tlname])
 
         if hasattr(options, "toolconfig") and options.toolconfig is not None:
