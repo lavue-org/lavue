@@ -1766,7 +1766,8 @@ class GeneralToolTest(unittest.TestCase):
             'offset=\n' \
             'scaling=sqrt\n' \
             'tool=roi\n' \
-            'toolconfig="{\"rois_number\": 1, \"aliases\": [\"\"]}"\n' \
+            'toolconfig="{\\"rois_number\\": 1, '\
+            '\\"aliases\\": [\\"\\"]}"\n' \
             'transformation=transpose\n' \
             'viewrange="-75.0358508012,' \
             '-64.4760017023,150.0717016,128.952003405"\n'
@@ -1886,7 +1887,8 @@ class GeneralToolTest(unittest.TestCase):
             'offset=\n' \
             'scaling=sqrt\n' \
             'tool=roi\n' \
-            'toolconfig="{\"rois_number\": 1, \"aliases\": [\"\"]}"\n' \
+            'toolconfig="{\\"rois_number\\": 1, ' \
+            '\\"aliases\\": [\\"\\"]}"\n' \
             'transformation=transpose\n' \
             'viewrange="-75.0358508012,-64.4760017023,' \
             '150.0717016,128.952003405"\n'
@@ -2313,7 +2315,7 @@ class GeneralToolTest(unittest.TestCase):
             instance='test3',
             channel='rgb',
             mbuffer=10,
-            tool='rgbintensity',
+            tool='intensity',
             toolconfig='{"crosshair_locker": true, '
             '"xunits":"xpixel", "yunits":"ypixel",'
             '"xtext":"fast", "ytext":"slow",'
@@ -2362,7 +2364,7 @@ class GeneralToolTest(unittest.TestCase):
             configuration='',
             connected=True,
             instance='test3',
-            tool='rgbintensity',
+            tool='intensity',
             toolconfig='{"crosshair_locker": true, '
             '"xunits":"xpixel", "yunits":"ypixel",'
             '"xtext":"fast", "ytext":"slow",'
