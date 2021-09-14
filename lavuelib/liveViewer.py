@@ -440,10 +440,6 @@ class LiveViewer(QtGui.QDialog):
             self.__alltoolaliases, self.__tlaliasnames
         )
 
-        #: (:obj:`list` < :obj:`str` > ) rgb tool class names
-        self.__rgbtooltypes = []
-        self.__rgbtooltypes.append("RGBIntensityToolWidget")
-
         #: (:class:`lavuelib.controllerClient.ControllerClient`)
         #:   tango controller client
         self.__tangoclient = None
@@ -520,8 +516,7 @@ class LiveViewer(QtGui.QDialog):
         #: (:class:`lavuelib.imageWidget.ImageWidget`) image widget
         self.__imagewg = imageWidget.ImageWidget(
             parent=self, tooltypes=self.__tooltypes,
-            settings=self.__settings,
-            rgbtooltypes=self.__rgbtooltypes)
+            settings=self.__settings)
         self.__imagewg.updateToolComboBox(
             [self.__tlaliasnames[twn]
              for twn in json.loads(str(self.__settings.toolwidgets))
@@ -1328,15 +1323,7 @@ class LiveViewer(QtGui.QDialog):
         :type tool: :obj:`str`
         """
         if tool and tool != self.__imagewg.tool():
-            if not self.__imagewg.rgb() and \
-               tool in self.__tlaliasnames.keys():
-                # QtCore.QTimer.singleShot(
-                #   10, self.__imagewg.showCurrentTool)
-                self.__imagewg.showCurrentTool()
-            elif self.__imagewg.rgb():
-                # QtCore.QTimer.singleShot(
-                #     10, self.__imagewg.showCurrentRGBTool)
-                self.__imagewg.showCurrentRGBTool()
+            self.__imagewg.showCurrentTool()
 
     # @debugmethod
     def __applyoptionsfromdict(self, dctcnf):

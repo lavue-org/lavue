@@ -342,24 +342,49 @@ class IntensityToolWidget(ToolBaseWidget):
         ilabel = self._mainwidget.scalingLabel()
         txdata, tydata = self._mainwidget.scaledxy(x, y)
         xunits, yunits = self._mainwidget.axesunits()
-        if txdata is not None:
-            message = "x = %f%s, y = %f%s, %s = %.2f" % (
-                txdata,
-                (" %s" % xunits) if xunits else "",
-                tydata,
-                (" %s" % yunits) if yunits else "",
-                ilabel,
-                intensity
-            )
+        if isinstance(intensity, np.ndarray) and \
+           intensity.size <= 3:
+            itn = [0 if (isinstance(it, float) and np.isnan(it))
+                   else it for it in intensity]
+            if len(itn) >= 3:
+                if txdata is not None:
+                    message = "x = %f%s, y = %f%s, " \
+                              "%s = (%.2f, %.2f, %.2f)" % (
+                                  txdata,
+                                  (" %s" % xunits) if xunits else "",
+                                  tydata,
+                                  (" %s" % yunits) if yunits else "",
+                                  ilabel,
+                                  itn[0], itn[1], itn[2])
+                else:
+                    message = "x = %i%s, y = %i%s, " \
+                              "%s = (%.2f, %.2f, %.2f)" % (
+                                  x,
+                                  (" %s" % xunits) if xunits else "",
+                                  y,
+                                  (" %s" % yunits) if yunits else "",
+                                  ilabel,
+                                  itn[0], itn[1], itn[2])
+                self._mainwidget.setDisplayedText(message)
         else:
-            message = "x = %i%s, y = %i%s, %s = %.2f" % (
-                x,
-                (" %s" % xunits) if xunits else "",
-                y,
-                (" %s" % yunits) if yunits else "",
-                ilabel,
-                intensity)
-        self._mainwidget.setDisplayedText(message)
+            if txdata is not None:
+                message = "x = %f%s, y = %f%s, %s = %.2f" % (
+                    txdata,
+                    (" %s" % xunits) if xunits else "",
+                    tydata,
+                    (" %s" % yunits) if yunits else "",
+                    ilabel,
+                    intensity
+                )
+            else:
+                message = "x = %i%s, y = %i%s, %s = %.2f" % (
+                    x,
+                    (" %s" % xunits) if xunits else "",
+                    y,
+                    (" %s" % yunits) if yunits else "",
+                    ilabel,
+                    intensity)
+            self._mainwidget.setDisplayedText(message)
 
     def afterplot(self):
         """ command after plot
@@ -408,95 +433,15 @@ class IntensityToolWidget(ToolBaseWidget):
         sx, sy = self._mainwidget.scaledxy(x, y)
         xunits, yunits = self._mainwidget.axesunits()
         results = {"tool": self.alias}
-        results["imagename"] = self._mainwidget.imageName()
-        results["timestamp"] = time.time()
-        results["pixel"] = [float(x), float(y)]
-        results["intensity"] = float(intensity)
-        results["scaled_coordiantes"] = [float(sx), float(sy)]
-        results["coordiantes_units"] = [xunits, yunits]
-        results["intensity_scaling"] = scaling
-        self._mainwidget.writeAttribute(
-            "ToolResults", json.dumps(results))
-
-
-class RGBIntensityToolWidget(IntensityToolWidget):
-    """ intensity tool widget
-    """
-
-    #: (:obj:`str`) tool name
-    name = "RGB Intensity"
-    #: (:obj:`str`) tool name alias
-    alias = "rgbintensity"
-    #: (:obj:`tuple` <:obj:`str`>) capitalized required packages
-    requires = ()
-
-    def __init__(self, parent=None):
-        """ constructor
-
-        :param parent: parent object
-        :type parent: :class:`pyqtgraph.QtCore.QObject`
-        """
-        IntensityToolWidget.__init__(self, parent)
-
-        #: (:class:`lavuelib.settings.Settings`) configuration settings
-        self.__settings = self._mainwidget.settings()
-
-    @QtCore.pyqtSlot()
-    def _message(self):
-        """ provides intensity message
-        """
-        x, y, intensity = self._mainwidget.currentIntensity()[:3]
-        ilabel = self._mainwidget.scalingLabel()
-        txdata, tydata = self._mainwidget.scaledxy(x, y)
-        xunits, yunits = self._mainwidget.axesunits()
-        if isinstance(intensity, np.ndarray) and \
-           intensity.size <= 3:
-            itn = [0 if (isinstance(it, float) and np.isnan(it))
-                   else it for it in intensity]
-            if len(itn) >= 3:
-                if txdata is not None:
-                    message = "x = %f%s, y = %f%s, " \
-                              "%s = (%.2f, %.2f, %.2f)" % (
-                                  txdata,
-                                  (" %s" % xunits) if xunits else "",
-                                  tydata,
-                                  (" %s" % yunits) if yunits else "",
-                                  ilabel,
-                                  itn[0], itn[1], itn[2])
-                else:
-                    message = "x = %i%s, y = %i%s, " \
-                              "%s = (%.2f, %.2f, %.2f)" % (
-                                  x,
-                                  (" %s" % xunits) if xunits else "",
-                                  y,
-                                  (" %s" % yunits) if yunits else "",
-                                  ilabel,
-                                  itn[0], itn[1], itn[2])
-                self._mainwidget.setDisplayedText(message)
-
-    def afterplot(self):
-        """ command after plot
-        """
-        if self.__settings.sendresults:
-            self.__sendresults()
-
-    def __sendresults(self):
-        """ send results to LavueController
-        """
-        x, y, intensity = self._mainwidget.currentIntensity()[:3]
-        if isinstance(intensity, float) and np.isnan(intensity):
-            intensity = 0
-        scaling = self._mainwidget.scalingLabel()
-        sx, sy = self._mainwidget.scaledxy(x, y)
-        xunits, yunits = self._mainwidget.axesunits()
         if isinstance(intensity, np.ndarray):
             intensity = [0 if (isinstance(it, float) and np.isnan(it))
                          else float(it) for it in intensity]
-        results = {"tool": self.alias}
+            results["intensity"] = intensity
+        else:
+            results["intensity"] = float(intensity)
         results["imagename"] = self._mainwidget.imageName()
         results["timestamp"] = time.time()
         results["pixel"] = [float(x), float(y)]
-        results["intensity"] = intensity
         results["scaled_coordiantes"] = [float(sx), float(sy)]
         results["coordiantes_units"] = [xunits, yunits]
         results["intensity_scaling"] = scaling
@@ -871,30 +816,55 @@ class MotorsToolWidget(ToolBaseWidget):
     def _message(self):
         """ provides intensity message
         """
-        _, _, intensity, x, y = self._mainwidget.currentIntensity()
+        x, y, intensity = self._mainwidget.currentIntensity()[:3]
         if isinstance(intensity, float) and np.isnan(intensity):
             intensity = 0
         ilabel = self._mainwidget.scalingLabel()
         txdata, tydata = self._mainwidget.scaledxy(x, y)
         xunits, yunits = self._mainwidget.axesunits()
-        if txdata is not None:
-            message = "x = %f%s, y = %f%s, %s = %.2f" % (
-                txdata,
-                (" %s" % xunits) if xunits else "",
-                tydata,
-                (" %s" % yunits) if yunits else "",
-                ilabel,
-                intensity
-            )
+        if isinstance(intensity, np.ndarray) and \
+           intensity.size <= 3:
+            itn = [0 if (isinstance(it, float) and np.isnan(it))
+                   else it for it in intensity]
+            if len(itn) >= 3:
+                if txdata is not None:
+                    message = "x = %f%s, y = %f%s, " \
+                              "%s = (%.2f, %.2f, %.2f)" % (
+                                  txdata,
+                                  (" %s" % xunits) if xunits else "",
+                                  tydata,
+                                  (" %s" % yunits) if yunits else "",
+                                  ilabel,
+                                  itn[0], itn[1], itn[2])
+                else:
+                    message = "x = %i%s, y = %i%s, " \
+                              "%s = (%.2f, %.2f, %.2f)" % (
+                                  x,
+                                  (" %s" % xunits) if xunits else "",
+                                  y,
+                                  (" %s" % yunits) if yunits else "",
+                                  ilabel,
+                                  itn[0], itn[1], itn[2])
+                self._mainwidget.setDisplayedText(message)
         else:
-            message = "x = %f%s, y = %f%s, %s = %.2f" % (
-                x,
-                (" %s" % xunits) if xunits else "",
-                y,
-                (" %s" % yunits) if yunits else "",
-                ilabel,
-                intensity)
-        self._mainwidget.setDisplayedText(message)
+            if txdata is not None:
+                message = "x = %f%s, y = %f%s, %s = %.2f" % (
+                    txdata,
+                    (" %s" % xunits) if xunits else "",
+                    tydata,
+                    (" %s" % yunits) if yunits else "",
+                    ilabel,
+                    intensity
+                )
+            else:
+                message = "x = %i%s, y = %i%s, %s = %.2f" % (
+                    x,
+                    (" %s" % xunits) if xunits else "",
+                    y,
+                    (" %s" % yunits) if yunits else "",
+                    ilabel,
+                    intensity)
+            self._mainwidget.setDisplayedText(message)
 
 
 class WD(Enum):
@@ -1203,6 +1173,10 @@ class ParametersToolWidget(ToolBaseWidget):
         _, _, intensity, x, y = self._mainwidget.currentIntensity()
         if isinstance(intensity, float) and np.isnan(intensity):
             intensity = 0
+        if isinstance(intensity, np.ndarray):
+            intensity = np.nansum(
+                [0 if (isinstance(it, float) and np.isnan(it))
+                 else it for it in intensity])
         ilabel = self._mainwidget.scalingLabel()
         txdata, tydata = self._mainwidget.scaledxy(x, y)
         xunits, yunits = self._mainwidget.axesunits()
@@ -2282,8 +2256,18 @@ class LineCutToolWidget(ToolBaseWidget):
             crds = "[[%.2f, %.2f], [%.2f, %.2f], width=%.2f]" % tuple(crds)
         else:
             crds = "[[0, 0], [0, 0], width=0]"
-        message = "%s, x = %.2f, y = %.2f, %s = %.2f" % (
-            crds, x, y, ilabel, intensity)
+        if isinstance(intensity, np.ndarray) and \
+           intensity.size <= 3:
+            itn = [0 if (isinstance(it, float) and np.isnan(it))
+                   else float(it) for it in intensity]
+            if len(itn) >= 3:
+                message = "%s, x = %.2f, y = %.2f, " \
+                    "%s = (%.2f, %.2f, %.2f)" % (
+                        crds, x, y, ilabel,
+                        itn[0], itn[1], itn[2])
+        else:
+            message = "%s, x = %.2f, y = %.2f, %s = %.2f" % (
+                crds, x, y, ilabel, intensity)
         self._mainwidget.setDisplayedText(message)
 
 
@@ -2555,6 +2539,9 @@ class ProjectionToolWidget(ToolBaseWidget):
         if self._mainwidget.currentTool() == self.name:
             dts = self._mainwidget.rawData()
             if dts is not None:
+                while dts.ndim > 2:
+                    dts = np.nanmean(dts, axis=2)
+            if dts is not None:
                 if self.__funindex:
                     npfun = np.nansum
                 else:
@@ -2690,6 +2677,10 @@ class ProjectionToolWidget(ToolBaseWidget):
         x, y, intensity = self._mainwidget.currentIntensity()[:3]
         if isinstance(intensity, float) and np.isnan(intensity):
             intensity = 0
+        if isinstance(intensity, np.ndarray):
+            intensity = np.nansum(
+                [0 if (isinstance(it, float) and np.isnan(it))
+                 else it for it in intensity])
         ilabel = self._mainwidget.scalingLabel()
         message = "x = %i, y = %i, %s = %.2f" % (
             x, y, ilabel, intensity)
@@ -2831,6 +2822,8 @@ class OneDToolWidget(ToolBaseWidget):
 
         if self.__accumulate:
             dts = rawarray
+            while dts.ndim > 2:
+                dts = np.nanmean(dts, axis=2)
             newrow = np.sum(dts[:, self.__dsrows], axis=1)
             if self.__buffer is not None and \
                self.__buffer.shape[1] == newrow.shape[0]:
@@ -2989,6 +2982,10 @@ class OneDToolWidget(ToolBaseWidget):
                 yl = []
             dts = self._mainwidget.rawData()
             if dts is not None:
+                while dts.ndim > 2:
+                    dts = np.nanmean(dts, axis=2)
+            print(dts)
+            if dts is not None:
                 dtnrpts = dts.shape[1]
                 if self.__dsrows:
                     if self.__dsrows[0] is None:
@@ -3117,6 +3114,10 @@ class OneDToolWidget(ToolBaseWidget):
         x, y, intensity = self._mainwidget.currentIntensity()[:3]
         if isinstance(intensity, float) and np.isnan(intensity):
             intensity = 0
+        if isinstance(intensity, np.ndarray):
+            intensity = np.nansum(
+                [0 if (isinstance(it, float) and np.isnan(it))
+                 else it for it in intensity])
         ilabel = self._mainwidget.scalingLabel()
         message = "x = %i, y = %i, %s = %.2f" % (
             x, y, ilabel, intensity)
@@ -3612,6 +3613,10 @@ class AngleQToolWidget(ToolBaseWidget):
         _, _, intensity, x, y = self._mainwidget.currentIntensity()
         if isinstance(intensity, float) and np.isnan(intensity):
             intensity = 0
+        if isinstance(intensity, np.ndarray):
+            intensity = np.nansum(
+                [0 if (isinstance(it, float) and np.isnan(it))
+                 else it for it in intensity])
         if self._mainwidget.rangeWindowEnabled():
             txdata, tydata = self._mainwidget.scaledxy(
                 x, y, useraxes=False)
@@ -4763,6 +4768,10 @@ class DiffractogramToolWidget(ToolBaseWidget):
             _, _, intensity, x, y = self._mainwidget.currentIntensity()
             if isinstance(intensity, float) and np.isnan(intensity):
                 intensity = 0
+            if isinstance(intensity, np.ndarray):
+                intensity = np.nansum(
+                    [0 if (isinstance(it, float) and np.isnan(it))
+                     else it for it in intensity])
             if self._mainwidget.rangeWindowEnabled():
                 txdata, tydata = self._mainwidget.scaledxy(
                     x, y, useraxes=False)
@@ -4966,6 +4975,9 @@ class DiffractogramToolWidget(ToolBaseWidget):
                                     if colors else self.__defpen
                                 cr.setPen(_pg.mkPen(clr))
                 dts = self._mainwidget.rawData()
+                if dts is not None:
+                    while dts.ndim > 2:
+                        dts = np.nanmean(dts, axis=2)
                 if dts is not None:
                     trans = self._mainwidget.transformations()[0]
                     csa = self.__settings.correctsolidangle
@@ -5464,7 +5476,9 @@ class DiffractogramToolWidget(ToolBaseWidget):
             aistat = self.__settings.ai is not None
         if aistat:
             dts = self._mainwidget.rawData()
-
+            if dts is not None:
+                while dts.ndim > 2:
+                    dts = np.nanmean(dts, axis=2)
             if dts is not None and dts.shape and len(dts.shape) == 2:
                 shape = dts.T.shape
             else:
@@ -5918,6 +5932,9 @@ class DiffractogramToolWidget(ToolBaseWidget):
             aistat = self.__settings.ai is not None
         if aistat:
             dts = self._mainwidget.rawData()
+            if dts is not None:
+                while dts.ndim > 2:
+                    dts = np.nanmean(dts, axis=2)
             if dts is not None and dts.shape and len(dts.shape) == 2:
                 shape = dts.shape
             else:
@@ -6200,6 +6217,8 @@ class MaximaToolWidget(ToolBaseWidget):
         :rtype: (:class:`numpy.ndarray`, :class:`numpy.ndarray`)
         """
         if rawarray is not None and rawarray.any():
+            while rawarray.ndim > 2:
+                rawarray = np.nanmean(rawarray, axis=2)
             nr = self.__ui.numberSpinBox.value()
             nr = min(nr, rawarray.size)
             if nr > 0:
@@ -6314,6 +6333,10 @@ class MaximaToolWidget(ToolBaseWidget):
         _, _, intensity, x, y = self._mainwidget.currentIntensity()
         if isinstance(intensity, float) and np.isnan(intensity):
             intensity = 0
+        if isinstance(intensity, np.ndarray):
+            intensity = np.nansum(
+                [0 if (isinstance(it, float) and np.isnan(it))
+                 else it for it in intensity])
         txdata = None
         if self._mainwidget.rangeWindowEnabled():
             txdata, tydata = self._mainwidget.scaledxy(
@@ -6907,6 +6930,9 @@ class QROIProjToolWidget(ToolBaseWidget):
         if self._mainwidget.currentTool() == self.name:
             dts = self._mainwidget.rawData()
             if dts is not None:
+                while dts.ndim > 2:
+                    dts = np.nanmean(dts, axis=2)
+            if dts is not None:
                 if self.__funindex:
                     npfun = np.nansum
                 else:
@@ -7236,6 +7262,10 @@ class QROIProjToolWidget(ToolBaseWidget):
         _, _, intensity, x, y = self._mainwidget.currentIntensity()
         if isinstance(intensity, float) and np.isnan(intensity):
             intensity = 0
+        if isinstance(intensity, np.ndarray):
+            intensity = np.nansum(
+                [0 if (isinstance(it, float) and np.isnan(it))
+                 else it for it in intensity])
         if self._mainwidget.rangeWindowEnabled():
             txdata, tydata = self._mainwidget.scaledxy(
                 x, y, useraxes=False)

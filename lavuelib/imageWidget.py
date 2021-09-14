@@ -109,8 +109,7 @@ class ImageWidget(QtGui.QWidget):
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) tool configuration changed signal
     toolConfigurationChanged = QtCore.pyqtSignal()
 
-    def __init__(self, parent=None, tooltypes=None, settings=None,
-                 rgbtooltypes=None):
+    def __init__(self, parent=None, tooltypes=None, settings=None):
         """ constructor
 
         :param parent: parent object
@@ -119,8 +118,6 @@ class ImageWidget(QtGui.QWidget):
         :type tooltypes: :obj:`list` <:obj:`str`>
         :param settings: lavue configuration settings
         :type settings: :class:`lavuelib.settings.Settings`
-        :param rgbtooltypes: tool class names
-        :type rgbtooltypes: :obj:`list` <:obj:`str`>
         """
         QtGui.QWidget.__init__(self, parent)
 
@@ -132,15 +129,6 @@ class ImageWidget(QtGui.QWidget):
         #:      :class:`lavuelib.toolWidget.BaseToolWidget` > )
         #:           tool names
         self.__toolwidgets = {}
-
-        #: (:obj:`list` < :obj:`str` > ) rgb tool class names
-        self.__rgbtooltypes = rgbtooltypes or []
-        #: (:obj:`list` < :obj:`str` > ) tool names
-        self.__rgbtoolnames = []
-        #: (:obj:`dict` < :obj:`str`,
-        #:      :class:`lavuelib.toolWidget.BaseToolWidget` > )
-        #:           tool names
-        self.__rgbtoolwidgets = {}
 
         #: (:class:`pyqtgraph.QtCore.QMutex`) mutex lock for CB
         self.__mutex = QtCore.QMutex()
@@ -230,7 +218,6 @@ class ImageWidget(QtGui.QWidget):
         #     self.__bottomplot.setMinimumSize(QtCore.QSize(0, 170))
 
         self.__addToolWidgets()
-        self.__addRGBToolWidgets()
 
         self.__ui.plotSplitter.setStretchFactor(0, 50)
         self.__ui.plotSplitter.setStretchFactor(1, 1)
@@ -241,8 +228,6 @@ class ImageWidget(QtGui.QWidget):
             self.emitCutCoordsChanged)
         self.__ui.toolComboBox.currentIndexChanged.connect(
             self.showCurrentTool)
-        self.__ui.rgbtoolComboBox.currentIndexChanged.connect(
-            self.showCurrentRGBTool)
         self.__displaywidget.aspectLockedToggled.connect(
             self.emitAspectLockedToggled)
         self.__displaywidget.mouseImagePositionChanged.connect(
@@ -559,16 +544,6 @@ class ImageWidget(QtGui.QWidget):
             self.__ui.toolComboBox.addItem(twg.name)
             self.__ui.toolVerticalLayout.addWidget(twg)
 
-    def __addRGBToolWidgets(self):
-        """ add rgb tool subwidgets into grid layout
-        """
-        for tt in self.__rgbtooltypes:
-            twg = getattr(toolWidget, tt)(self)
-            self.__rgbtoolwidgets[twg.name] = twg
-            self.__rgbtoolnames.append(twg.name)
-            self.__ui.rgbtoolComboBox.addItem(twg.name)
-            self.__ui.toolVerticalLayout.addWidget(twg)
-
     def settings(self):
         """ provides settings
 
@@ -684,37 +659,8 @@ class ImageWidget(QtGui.QWidget):
         with QtCore.QMutexLocker(self.__mutex):
             text = self.__ui.toolComboBox.currentText()
             stwg = None
-            self.__ui.rgbtoolComboBox.hide()
             self.__ui.toolComboBox.show()
-            for nm, twg in self.__rgbtoolwidgets.items():
-                twg.hide()
             for nm, twg in self.__toolwidgets.items():
-                if text == nm:
-                    stwg = twg
-                else:
-                    twg.hide()
-            self.disconnecttool()
-            self.__currenttool = stwg
-            if stwg is not None:
-                stwg.show()
-                self.updateinfowidgets(stwg.parameters)
-
-            self.__connecttool()
-            self.currentToolChanged.emit(text)
-
-    @debugmethod
-    @QtCore.pyqtSlot()
-    def showCurrentRGBTool(self):
-        """ shows the current tool
-        """
-        with QtCore.QMutexLocker(self.__mutex):
-            text = self.__ui.rgbtoolComboBox.currentText()
-            stwg = None
-            self.__ui.toolComboBox.hide()
-            self.__ui.rgbtoolComboBox.show()
-            for nm, twg in self.__toolwidgets.items():
-                twg.hide()
-            for nm, twg in self.__rgbtoolwidgets.items():
                 if text == nm:
                     stwg = twg
                 else:
@@ -1797,10 +1743,6 @@ class ImageWidget(QtGui.QWidget):
         if index != -1:
             self.__ui.toolComboBox.setCurrentIndex(index)
             self.showCurrentTool()
-        index = self.__ui.rgbtoolComboBox.findText(tool)
-        if index != -1:
-            self.__ui.rgbtoolComboBox.setCurrentIndex(index)
-            self.showCurrentRGBTool()
 
     @debugmethod
     def setToolConfiguration(self, config):
@@ -2009,10 +1951,7 @@ class ImageWidget(QtGui.QWidget):
         :param status: True for on and False for off
         :type status: :obj:`bool`
         """
-        if status:
-            self.setTool("RGB Intensity")
-        else:
-            self.setTool("Intensity")
+        self.setTool("Intensity")
         self.__displaywidget.setrgb(status)
 
     def rgb(self):

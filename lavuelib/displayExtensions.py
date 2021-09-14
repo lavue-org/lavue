@@ -32,6 +32,7 @@ import math
 import json
 import time
 import logging
+# import warnings
 from pyqtgraph.graphicsItems.ROI import ROI, LineROI, Handle
 from pyqtgraph.graphicsItems.IsocurveItem import IsocurveItem
 
@@ -807,8 +808,11 @@ class CutExtension(DisplayExtension):
                     self._mainwidget.rawData(),
                     self._mainwidget.image(),
                     axes=(0, 1))
-                while dt.ndim > 1:
-                    dt = dt.mean(axis=1)
+                with np.warnings.catch_warnings():
+                    np.warnings.filterwarnings(
+                        'ignore', r'Mean of empty slice')
+                    while dt.ndim > 1:
+                        dt = np.nanmean(dt, axis=1)
                 return dt
         return None
 
