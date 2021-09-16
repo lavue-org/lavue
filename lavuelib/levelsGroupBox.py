@@ -499,6 +499,11 @@ class LevelsGroupBox(QtGui.QWidget):
         """
         minval = self.__ui.minDoubleSpinBox.value()
         maxval = self.__ui.maxDoubleSpinBox.value()
+        if maxval >= 10e+20:
+            maxval = self.__maxval
+        if minval >= 10e+20:
+            minval = self.__minval
+
         if maxval - minval <= 0:
             if minval >= 1.:
                 minval = maxval - 1.
