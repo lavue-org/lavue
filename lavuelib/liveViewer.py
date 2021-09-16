@@ -969,7 +969,7 @@ class LiveViewer(QtGui.QDialog):
         """
         self.__imagewg.setMinLevel(level)
         self.__imagewg.setLevelMode(self.__levelswg.levelMode())
-        self.__setLevelState()
+        self._setLevelState()
 
     @QtCore.pyqtSlot(float)
     def _setMaxLevelState(self, level=None):
@@ -980,7 +980,7 @@ class LiveViewer(QtGui.QDialog):
         """
         self.__imagewg.setMaxLevel(level)
         self.__imagewg.setLevelMode(self.__levelswg.levelMode())
-        self.__setLevelState()
+        self._setLevelState()
 
     @QtCore.pyqtSlot()
     def _setChannelLevelState(self):
@@ -993,7 +993,7 @@ class LiveViewer(QtGui.QDialog):
         if levels is not None:
             self.__imagewg.setLevelMode(self.__levelswg.levelMode())
             self.__imagewg.setChannelLevels(levels)
-            self.__setLevelState()
+            self._setLevelState()
 
     @QtCore.pyqtSlot(int)
     def _setAutoLevelsState(self, autolevels):
@@ -1003,7 +1003,7 @@ class LiveViewer(QtGui.QDialog):
         :type autolevels: :obj:'int`
         """
         self.__imagewg.setAutoLevels(autolevels)
-        self.__setLevelState()
+        self._setLevelState()
 
     @debugmethod
     def setLavueState(self, dct=None):

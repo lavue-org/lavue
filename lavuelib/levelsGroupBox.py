@@ -161,47 +161,60 @@ class LevelsGroupBox(QtGui.QWidget):
         self.__connectHistogram()
         self.updateLevels(0.1, 1.0)
         self.__connectMinMax()
+        self.__levelmode = "mono"
 
     def _monoLevelMode(self, status):
         if _PQGVER >= 1100:
             if status:
                 self.__dchl = 0
-                # self.__histogram.setLevelMode('mono')
+                if not self.__histo:
+                    self.__histogram.switchLevelMode('mono')
+                self.__levelmode = "mono"
                 self.updateLevels(self.__minval, self.__maxval)
-                self.__histogram.switchLevelMode('mono')
+                if self.__histogram:
+                    self.__histogram.switchLevelMode('mono')
 
     def _redLevelMode(self, status):
         if _PQGVER >= 1100:
             if status:
                 self.__dchl = 1
-                # self.__histogram.setLevelMode('rgba')
+                if not self.__histo:
+                    self.__histogram.switchLevelMode('rgba')
+                self.__levelmode = "rgba"
                 if self.__channels is not None:
                     while len(self.__channels) < 1:
                         self.__channels.append((self.__minval, self.__maxval))
                     self.updateLevels(None, None, self.__channels)
-                self.__histogram.switchLevelMode('rgba')
+                if self.__histogram:
+                    self.__histogram.switchLevelMode('rgba')
 
     def _greenLevelMode(self, status):
         if _PQGVER >= 1100:
             if status:
                 self.__dchl = 2
-                # self.__histogram.setLevelMode('rgba')
+                if not self.__histo:
+                    self.__histogram.switchLevelMode('rgba')
+                self.__levelmode = "rgba"
                 if self.__channels is not None:
                     while len(self.__channels) < 2:
                         self.__channels.append((self.__minval, self.__maxval))
                     self.updateLevels(None, None, self.__channels)
-                self.__histogram.switchLevelMode('rgba')
+                if self.__histogram:
+                    self.__histogram.switchLevelMode('rgba')
 
     def _blueLevelMode(self, status):
         if _PQGVER >= 1100:
             if status:
                 self.__dchl = 3
-                # self.__histogram.setLevelMode('rgba')
+                if not self.__histo:
+                    self.__histogram.switchLevelMode('rgba')
+                self.__levelmode = "rgba"
                 if self.__channels is not None:
                     while len(self.__channels) < 3:
                         self.__channels.append((self.__minval, self.__maxval))
                     self.updateLevels(None, None, self.__channels)
-                self.__histogram.switchLevelMode('rgba')
+                if self.__histogram:
+                    self.__histogram.switchLevelMode('rgba')
 
     def __connectHistogram(self):
         """ create histogram object and connect its signals
@@ -596,9 +609,10 @@ class LevelsGroupBox(QtGui.QWidget):
                     self.__disconnectHistogram()
 
                 if levels[0] != lowlim or levels[1] != uplim:
-                    self.__histogram.region.setRegion([lowlim, uplim])
+                    if self.__histo:
+                        self.__histogram.region.setRegion([lowlim, uplim])
                 if hasattr(self.__histogram, "regions"):
-                    if channels is not None:
+                    if channels is not None and self.__histo:
                         for i, ch in enumerate(self.__channels):
                             if ch is not None:
                                 lowlim, uplim = ch
@@ -629,8 +643,12 @@ class LevelsGroupBox(QtGui.QWidget):
         try:
             factor = str(self.__ui.autofactorLineEdit.text())
             float(factor)
-            llim, ulim = self.__histogram.getFactorRegion()
-            channels = self.__histogram.getChannelFactorRegion()
+            channels = None
+            llim = None
+            ulim = None
+            if self.__histo:
+                llim, ulim = self.__histogram.getFactorRegion()
+                channels = self.__histogram.getChannelFactorRegion()
             if channels is not None:
                 self.__channels = channels
             if llim is not None and ulim is not None:
@@ -1087,6 +1105,6 @@ class LevelsGroupBox(QtGui.QWidget):
         :return: level mode
         :rtype: :obj:`str`
         """
-        if self.__histogram:
+        if self.__histogram and self.__histo:
             return self.__histogram.levelMode
-        return 'mono'
+        return self.__levelmode
