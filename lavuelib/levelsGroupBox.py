@@ -206,10 +206,14 @@ class LevelsGroupBox(QtGui.QWidget):
     def __connectHistogram(self):
         """ create histogram object and connect its signals
         """
-        self.__histogram.item.sigLevelsChanged.connect(self._onLevelsChanged)
-        self.__histogram.sigNameChanged.connect(self._changeGradient)
-        self.__histogram.saveGradientRequested.connect(self._saveGradient)
-        self.__histogram.removeGradientRequested.connect(self._removeGradient)
+        self.__histogram.item.sigLevelsChanged.connect(
+            self._onLevelsChanged)
+        self.__histogram.sigNameChanged.connect(
+            self._changeGradient)
+        self.__histogram.saveGradientRequested.connect(
+            self._saveGradient)
+        self.__histogram.removeGradientRequested.connect(
+            self._removeGradient)
 
     def __disconnectHistogram(self):
         """ remove histogram object and disconnect its signals
@@ -252,7 +256,8 @@ class LevelsGroupBox(QtGui.QWidget):
         if not self.__auto:
             try:
                 self.__disconnectMinMax()
-                self.__disconnectHistogram()
+                if self.__histo:
+                    self.__disconnectHistogram()
                 self._checkAndEmit()
                 if self.__histo:
                     lowlim = self.__ui.minDoubleSpinBox.value()
@@ -264,7 +269,8 @@ class LevelsGroupBox(QtGui.QWidget):
                             [lowlim, uplim])
             finally:
                 self.__connectMinMax()
-                self.__connectHistogram()
+                if self.__histo:
+                    self.__connectHistogram()
         else:
             lowlim = self.__ui.minDoubleSpinBox.value()
             uplim = self.__ui.maxDoubleSpinBox.value()
@@ -586,7 +592,8 @@ class LevelsGroupBox(QtGui.QWidget):
             levels = self.__histogram.region.getRegion()
             update = False
             try:
-                self.__disconnectHistogram()
+                if self.__histo:
+                    self.__disconnectHistogram()
 
                 if levels[0] != lowlim or levels[1] != uplim:
                     self.__histogram.region.setRegion([lowlim, uplim])
@@ -603,7 +610,8 @@ class LevelsGroupBox(QtGui.QWidget):
                                         self.__histogram.regions[i + 1].\
                                             setRegion([lowlim, uplim])
             finally:
-                self.__connectHistogram()
+                if self.__histo:
+                    self.__connectHistogram()
             if update:
                 self._onLevelsChanged()
         self._emitLevels()
