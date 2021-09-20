@@ -614,13 +614,18 @@ class LevelsGroupBox(QtGui.QWidget):
         self._checkLevels()
         self._updateAndEmit()
 
-    def updateLevels(self, lowlim, uplim, channels=None, signals=True):
+    def updateLevels(self, lowlim, uplim, channels=None, signals=True,
+                     force=False):
         """ set min/max level spinboxes and histogram from the parameters
 
         :param lowlim: minimum intensity value
         :type lowlim: :obj:`float`
         :param uplim:  maximum intensity value
         :type uplim: :obj:`float`
+        :param signal:  dont disconnect signals
+        :type signal: :obj:`bool`
+        :param force:  force update histogram
+        :type force: :obj:`bool`
         """
         try:
             if not signals:
@@ -644,21 +649,20 @@ class LevelsGroupBox(QtGui.QWidget):
                     ch = self.__channels[self.__dchl - 1]
                     if ch is not None:
                         chl, chh = ch
-
-                    self.__ui.minDoubleSpinBox.setValue(chl)
-                    self.__ui.maxDoubleSpinBox.setValue(chh)
+                        self.__ui.minDoubleSpinBox.setValue(chl)
+                        self.__ui.maxDoubleSpinBox.setValue(chh)
         finally:
             if not signals:
                 self.__connectMinMax()
 
-        if self.__histo and self.__auto:
+        if self.__histo and (self.__auto or force):
             levels = self.__histogram.region.getRegion()
             update = False
             try:
                 if self.__histo:
                     self.__disconnectHistogram()
 
-                if levels[0] != lowlim or levels[1] != uplim:
+                if levels[0] != lowlim or levels[1] != uplim or force:
                     if self.__histo:
                         self.__histogram.region.setRegion([lowlim, uplim])
                 if hasattr(self.__histogram, "regions"):
@@ -670,7 +674,7 @@ class LevelsGroupBox(QtGui.QWidget):
                                     levels = self.__histogram.regions[i + 1]\
                                                              .getRegion()
                                     if levels[0] != lowlim \
-                                       or levels[1] != uplim:
+                                       or levels[1] != uplim or force:
                                         self.__histogram.regions[i + 1].\
                                             setRegion([lowlim, uplim])
             finally:
@@ -1094,7 +1098,7 @@ class LevelsGroupBox(QtGui.QWidget):
             channels = []
             if clst:
                 for ch in clst[1:]:
-                    llst = cnflevels.split(",")
+                    llst = ch.split(",")
                     lmin = None
                     lmax = None
                     try:
@@ -1102,16 +1106,16 @@ class LevelsGroupBox(QtGui.QWidget):
                         if smin.startswith("m"):
                             smin = "-" + smin[1:]
                         lmin = float(smin)
-                    except Exception:
-                        pass
+                    except Exception as e:
+                        logger.warning(str(e))
+                        # print(str(e))
                     try:
                         smax = llst[1]
                         if smax.startswith("m"):
                             smax = "-" + smax[1:]
                         lmax = float(smax)
-                    except Exception:
-                        pass
-                        clst = cnflevels.split(";")
+                    except Exception as e:
+                        logger.warning(str(e))
                     channels.append((lmin, lmax))
                 cnflevels = clst[0]
         llst = cnflevels.split(",")
@@ -1131,7 +1135,7 @@ class LevelsGroupBox(QtGui.QWidget):
             lmax = float(smax)
         except Exception:
             pass
-        self.updateLevels(lmin, lmax, channels)
+        self.updateLevels(lmin, lmax, channels, force=True)
 
     def autoFactor(self):
         """ provides factor for automatic levels
