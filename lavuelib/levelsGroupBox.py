@@ -1092,9 +1092,19 @@ class LevelsGroupBox(QtGui.QWidget):
         """
         self.__ui.autoLevelsCheckBox.setChecked(False)
         self._onAutoLevelsChanged(0)
+        dchl = 0
         channels = None
         if ";" in cnflevels:
             clst = cnflevels.split(";")
+            if clst[-1].startswith("r") or clst[-1].startswith("R"):
+                dchl = 1
+                clst.pop()
+            elif clst[-1].startswith("g") or clst[-1].startswith("G"):
+                dchl = 2
+                clst.pop()
+            elif clst[-1].startswith("b") or clst[-1].startswith("B"):
+                dchl = 3
+                clst.pop()
             channels = []
             if clst:
                 for ch in clst[1:]:
@@ -1135,7 +1145,16 @@ class LevelsGroupBox(QtGui.QWidget):
             lmax = float(smax)
         except Exception:
             pass
+
         self.updateLevels(lmin, lmax, channels, force=True)
+        if dchl == 0 and not self.__ui.monoRadioButton.isChecked():
+            self.__ui.monoRadioButton.click()
+        elif dchl == 1 and not self.__ui.redRadioButton.isChecked():
+            self.__ui.redRadioButton.click()
+        elif dchl == 2 and not self.__ui.greenRadioButton.isChecked():
+            self.__ui.greenRadioButton.click()
+        elif dchl == 3 and not self.__ui.blueRadioButton.isChecked():
+            self.__ui.blueRadioButton.click()
 
     def autoFactor(self):
         """ provides factor for automatic levels
