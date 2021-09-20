@@ -204,7 +204,8 @@ class ChannelGroupBox(QtGui.QWidget):
         """
         if self.__colorchannel != channel or force:
             if channel >= 0 and channel <= self.__numberofchannels + 2:
-                if channel == self.__numberofchannels + 2:
+                if self.__numberofchannels and \
+                        channel == self.__numberofchannels + 2:
                     self.__colorchannel = channel
                     self.showGradient(False)
                     self.rgbChanged.emit(True)

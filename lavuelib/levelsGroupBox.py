@@ -163,10 +163,39 @@ class LevelsGroupBox(QtGui.QWidget):
         self.__connectMinMax()
         self.__levelmode = "mono"
 
+    def _updateLevelLabels(self, dchl=None):
+        """ update level labels
+
+        :param dchl: channel id
+        :type dchl: :obj:`int`
+        """
+        if dchl is None:
+            dchl = self.__dchl
+        if _PQGVER >= 1100:
+            if dchl == 1:
+                self.__ui.minLabel.setText("Red Min. value:")
+                self.__ui.maxLabel.setText("Red Max. value:")
+            elif dchl == 2:
+                self.__ui.minLabel.setText("Green Min. value:")
+                self.__ui.maxLabel.setText("Green Max. value:")
+            elif dchl == 3:
+                self.__ui.minLabel.setText("Blue Min. value:")
+                self.__ui.maxLabel.setText("Blue Max. value:")
+            else:
+                self.__ui.minLabel.setText("Minimum value:")
+                self.__ui.maxLabel.setText("Maximum value:")
+
+    @QtCore.pyqtSlot(bool)
     def _monoLevelMode(self, status):
+        """ update to the mono level mode
+
+        :param status: button status
+        :type status: :obj:`bool`
+        """
         if _PQGVER >= 1100:
             if status:
                 self.__dchl = 0
+                self._updateLevelLabels()
                 if not self.__histo:
                     self.__histogram.switchLevelMode('mono')
                 self.__levelmode = "mono"
@@ -174,10 +203,17 @@ class LevelsGroupBox(QtGui.QWidget):
                 if self.__histogram:
                     self.__histogram.switchLevelMode('mono')
 
+    @QtCore.pyqtSlot(bool)
     def _redLevelMode(self, status):
+        """ update to the red level mode
+
+        :param status: button status
+        :type status: :obj:`bool`
+        """
         if _PQGVER >= 1100:
             if status:
                 self.__dchl = 1
+                self._updateLevelLabels()
                 if not self.__histo:
                     self.__histogram.switchLevelMode('rgba')
                 self.__levelmode = "rgba"
@@ -188,10 +224,17 @@ class LevelsGroupBox(QtGui.QWidget):
                 if self.__histogram:
                     self.__histogram.switchLevelMode('rgba')
 
+    @QtCore.pyqtSlot(bool)
     def _greenLevelMode(self, status):
+        """ update to the green level mode
+
+        :param status: button status
+        :type status: :obj:`bool`
+        """
         if _PQGVER >= 1100:
             if status:
                 self.__dchl = 2
+                self._updateLevelLabels()
                 if not self.__histo:
                     self.__histogram.switchLevelMode('rgba')
                 self.__levelmode = "rgba"
@@ -202,10 +245,17 @@ class LevelsGroupBox(QtGui.QWidget):
                 if self.__histogram:
                     self.__histogram.switchLevelMode('rgba')
 
+    @QtCore.pyqtSlot(bool)
     def _blueLevelMode(self, status):
+        """ update to the blue level mode
+
+        :param status: button status
+        :type status: :obj:`bool`
+        """
         if _PQGVER >= 1100:
             if status:
                 self.__dchl = 3
+                self._updateLevelLabels()
                 if not self.__histo:
                     self.__histogram.switchLevelMode('rgba')
                 self.__levelmode = "rgba"
@@ -815,9 +865,12 @@ class LevelsGroupBox(QtGui.QWidget):
         self.__histogram.setRGB(status)
         if status and self.__dchl:
             mode = 'rgba'
+            dchl = self.__dchl
         else:
             mode = 'mono'
+            dchl = 0
         self.__histogram.switchLevelMode(mode)
+        self._updateLevelLabels(dchl)
         self.showGradient(not status)
         if _PQGVER >= 1100:
             self.showChannels(status)
