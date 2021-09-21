@@ -1071,7 +1071,7 @@ class LevelsGroupBox(QtGui.QWidget):
         main = "%s,%s" % (lowlim, uplim)
         chl = ""
         chw = ""
-        if self.__channels is not None:
+        if self.__channels:
             chl = ";".join(
                 ["%s,%s" % (ch[0], ch[1]) for ch in self.__channels])
             chl = ";%s" % chl
