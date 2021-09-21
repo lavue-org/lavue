@@ -872,6 +872,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             tool='maxima',
             # log='debug',
             log='info',
+            levels='0,5;1,8;0,6;1,7;green',
             scaling='log',
             # gradient='thermal',
             channel='rgb',
@@ -993,13 +994,13 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             tool='intensity',
             # log='debug',
             log='info',
+            levels='0.0,5.0;1.0,8.0;0.0,6.0;1.0,7.0;green',
             scaling='log',
-            # levels='',
             channel='0,1,2',
             #  gradient='thermal',
             tangodevice='test/lavuecontroller/00',
             connected=True,
-            autofactor=''
+            autofactor=None
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])

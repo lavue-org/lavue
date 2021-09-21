@@ -234,8 +234,15 @@ def main():
     )
     parser.add_argument(
         "-l", "--levels", dest="levels",
-        help="intensity display levels e.g. -l m20,20\n"
-        "  where 'm' is '-'"
+        help="min,max intensity display levels e.g. -l m20,20\n"
+        "  where 'm' is '-'\n"
+        " the RGB channel levels can be added separated by ';' e.g.\n"
+        " -l '0,40;1,35;0,30;2,45;green' \n"
+        "    where 0,40 are the main intensity dispay levels\n"
+        "          1,35 are the red channel intensity dispay levels\n"
+        "          0,30 are the green channel intensity dispay levels\n"
+        "          2,45 are the blue channel intensity dispay levels\n"
+        "             and the green channel level widgets are selected"
     )
     parser.add_argument(
         "-q", "--factor", dest="autofactor",

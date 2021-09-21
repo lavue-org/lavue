@@ -1067,12 +1067,17 @@ class LevelsGroupBox(QtGui.QWidget):
         """
         lowlim = self.__minval
         uplim = self.__maxval
-        if self.__channels is None:
-            return "%s,%s" % (lowlim, uplim)
-        else:
-            sch = ";".join(
+
+        main = "%s,%s" % (lowlim, uplim)
+        chl = ""
+        chw = ""
+        if self.__channels is not None:
+            chl = ";".join(
                 ["%s,%s" % (ch[0], ch[1]) for ch in self.__channels])
-            return "%s,%s;%s" % (lowlim, uplim, sch)
+            chl = ";%s" % chl
+        if self.__dchl in [1, 2, 3]:
+            chw = ";%s" % ({1: "red", 2: "green", 3: "blue"}[self.__dchl])
+        return "%s%s%s" % (main, chl, chw)
 
     def channelLevels(self):
         """ provides levels from configuration string
@@ -1090,11 +1095,9 @@ class LevelsGroupBox(QtGui.QWidget):
                lowlim,uplim;lowred,upred;lowgreen,upgreen;lowblue,upblue
         :type cnflevels: :obj:`str`
         """
-        self.__ui.autoLevelsCheckBox.setChecked(False)
-        self._onAutoLevelsChanged(0)
         dchl = 0
         channels = None
-        if ";" in cnflevels:
+        if cnflevels:
             clst = cnflevels.split(";")
             if clst[-1].startswith("r") or clst[-1].startswith("R"):
                 dchl = 1
@@ -1107,6 +1110,8 @@ class LevelsGroupBox(QtGui.QWidget):
                 clst.pop()
             channels = []
             if clst:
+                self.__ui.autoLevelsCheckBox.setChecked(False)
+                self._onAutoLevelsChanged(0)
                 for ch in clst[1:]:
                     llst = ch.split(",")
                     lmin = None
@@ -1127,26 +1132,26 @@ class LevelsGroupBox(QtGui.QWidget):
                     except Exception as e:
                         logger.warning(str(e))
                     channels.append((lmin, lmax))
-                cnflevels = clst[0]
-        llst = cnflevels.split(",")
-        lmin = None
-        lmax = None
-        try:
-            smin = llst[0]
-            if smin.startswith("m"):
-                smin = "-" + smin[1:]
-            lmin = float(smin)
-        except Exception:
-            pass
-        try:
-            smax = llst[1]
-            if smax.startswith("m"):
-                smax = "-" + smax[1:]
-            lmax = float(smax)
-        except Exception:
-            pass
 
-        self.updateLevels(lmin, lmax, channels, force=True)
+                llst = clst[0].split(",")
+                lmin = None
+                lmax = None
+                try:
+                    smin = llst[0]
+                    if smin.startswith("m"):
+                        smin = "-" + smin[1:]
+                    lmin = float(smin)
+                except Exception:
+                    pass
+                try:
+                    smax = llst[1]
+                    if smax.startswith("m"):
+                        smax = "-" + smax[1:]
+                    lmax = float(smax)
+                except Exception:
+                    pass
+
+                self.updateLevels(lmin, lmax, channels, force=True)
         if dchl == 0 and not self.__ui.monoRadioButton.isChecked():
             self.__ui.monoRadioButton.click()
         elif dchl == 1 and not self.__ui.redRadioButton.isChecked():
