@@ -109,3 +109,47 @@ def rot45(image, imagename, metadata, imagewg):
        and np.isnan(image.min()):
         image = np.nan_to_num(image)
     return ndimage.rotate(image, 45)
+
+
+class WeightedSum(object):
+
+    """ Weighted sum of channel images"""
+
+    def __init__(self, configuration=None):
+        """ constructor
+
+        :param configuration: JSON list of channel image weights
+        :type configuration: :obj:`str`
+        """
+        #: (:obj:`list` <:obj: `str`>) list of indexes for gap
+        self.__weights = [
+            wg for wg in json.loads(configuration or "[]")]
+
+    def __call__(self, image, imagename, metadata, imagewg):
+        """ call method
+
+        :param image: numpy array with an image
+        :type image: :class:`numpy.ndarray`
+        :param imagename: image name
+        :type imagename: :obj:`str`
+        :param metadata: JSON dictionary with metadata
+        :type metadata: :obj:`str`
+        :param imagewg: image wigdet
+        :type imagewg: :class:`lavuelib.imageWidget.ImageWidget`
+        :returns: numpy array with an image
+        :rtype: :class:`numpy.ndarray` or `None`
+        """
+        if hasattr(image, "shape") and len(image.shape) == 3:
+
+            weights = np.array(
+                [(self.__weights[i]
+                  if (len(self.__weights) > i and
+                      type(self.__weights[i]) in [int, float])
+                  else 1)
+                 for i in range(image.shape[0])])
+
+            if hasattr(np, "ma"):
+                image_m = np.ma.array(image, mask=np.isnan(image))
+                return np.ma.dot(image_m.T, weights).filled(np.nan).T
+            else:
+                return np.where(np.isnan(image), 0, image).T.dot(weights).T
