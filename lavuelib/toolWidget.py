@@ -509,6 +509,7 @@ class MotorsToolWidget(ToolBaseWidget):
             [self.__ui.axesPushButton.clicked, self._mainwidget.setTicks],
             [self.__ui.takePushButton.clicked, self._setMotors],
             [self.__ui.movePushButton.clicked, self._moveStopMotors],
+            [self.__ui.resetPushButton.clicked, self._resetMotors],
             [self._mainwidget.mouseImageDoubleClicked, self._updateFinal],
             [self._mainwidget.mouseImagePositionChanged, self._message],
             [self.__ui.xLineEdit.textEdited, self._getFinal],
@@ -641,6 +642,25 @@ class MotorsToolWidget(ToolBaseWidget):
         self._mainwidget.emitTCC()
 
     @QtCore.pyqtSlot()
+    def _resetMotors(self):
+        """ reset x,y final to the current motor positions
+        """
+        if self.__xmotordevice is None or self.__ymotordevice is None:
+            if not self._setMotors():
+                return False
+        try:
+            xpos = self.__xmotordevice.position
+            ypos = self.__ymotordevice.position
+            self.__ui.xLineEdit.setText(str(xpos))
+            self.__ui.yLineEdit.setText(str(ypos))
+            self._getFinal()
+        except Exception as e:
+            logger.warning(str(e))
+            # print(str(e))
+            return False
+        self._mainwidget.emitTCC()
+
+    @QtCore.pyqtSlot()
     def _finished(self):
         """ stop motors
         """
@@ -681,6 +701,7 @@ class MotorsToolWidget(ToolBaseWidget):
         self.__ui.ycurLineEdit.hide()
         self.__ui.takePushButton.show()
         self.__ui.axesPushButton.show()
+        self.__ui.resetPushButton.show()
         self.__moving = False
         self.__ui.xLineEdit.setReadOnly(False)
         self.__ui.yLineEdit.setReadOnly(False)
@@ -742,6 +763,7 @@ class MotorsToolWidget(ToolBaseWidget):
         self.__ui.ycurLineEdit.show()
         self.__ui.takePushButton.hide()
         self.__ui.axesPushButton.hide()
+        self.__ui.resetPushButton.hide()
         self.__ui.xLineEdit.setReadOnly(True)
         self.__ui.yLineEdit.setReadOnly(True)
         self.__moving = True
