@@ -221,7 +221,8 @@ class LevelsGroupBox(QtGui.QWidget):
                     self.__levelmode = "rgba"
                     if self.__channels is not None:
                         while len(self.__channels) < 1:
-                            self.__channels.append((self.__minval, self.__maxval))
+                            self.__channels.append(
+                                (self.__minval, self.__maxval))
                         self.updateLevels(None, None, self.__channels)
                     if self.__histogram:
                         self.__histogram.switchLevelMode('rgba')
@@ -243,7 +244,8 @@ class LevelsGroupBox(QtGui.QWidget):
                     self.__levelmode = "rgba"
                     if self.__channels is not None:
                         while len(self.__channels) < 2:
-                            self.__channels.append((self.__minval, self.__maxval))
+                            self.__channels.append(
+                                (self.__minval, self.__maxval))
                         self.updateLevels(None, None, self.__channels)
                     if self.__histogram:
                         self.__histogram.switchLevelMode('rgba')
@@ -265,7 +267,8 @@ class LevelsGroupBox(QtGui.QWidget):
                     self.__levelmode = "rgba"
                     if self.__channels is not None:
                         while len(self.__channels) < 3:
-                            self.__channels.append((self.__minval, self.__maxval))
+                            self.__channels.append(
+                                (self.__minval, self.__maxval))
                         self.updateLevels(None, None, self.__channels)
                     if self.__histogram:
                         self.__histogram.switchLevelMode('rgba')
