@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.toolWidget &#8212; lavuelib 2.59.0 documentation</title>
+    <title>lavuelib.toolWidget &#8212; lavuelib 2.68.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.59</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.68</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -208,7 +208,7 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">edDictDialog</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">edListDialog</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">commandThread</span>
-<span class="kn">from</span> <span class="nn">.sardanaUtils</span> <span class="k">import</span> <span class="n">debugmethod</span>
+<span class="kn">from</span> <span class="nn">.sardanaUtils</span> <span class="k">import</span> <span class="n">debugmethod</span><span class="p">,</span> <span class="n">numpyEncoder</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
@@ -498,24 +498,49 @@
         <span class="n">ilabel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scalingLabel</span><span class="p">()</span>
         <span class="n">txdata</span><span class="p">,</span> <span class="n">tydata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scaledxy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
         <span class="n">xunits</span><span class="p">,</span> <span class="n">yunits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">axesunits</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">txdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;x = </span><span class="si">%f%s</span><span class="s2">, y = </span><span class="si">%f%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
-                <span class="n">txdata</span><span class="p">,</span>
-                <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">xunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">xunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-                <span class="n">tydata</span><span class="p">,</span>
-                <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">yunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">yunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-                <span class="n">ilabel</span><span class="p">,</span>
-                <span class="n">intensity</span>
-            <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> \
+           <span class="n">intensity</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">itn</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">it</span><span class="p">))</span>
+                   <span class="k">else</span> <span class="n">it</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">intensity</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">itn</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">txdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;x = </span><span class="si">%f%s</span><span class="s2">, y = </span><span class="si">%f%s</span><span class="s2">, &quot;</span> \
+                              <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> = (</span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                                  <span class="n">txdata</span><span class="p">,</span>
+                                  <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">xunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">xunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                                  <span class="n">tydata</span><span class="p">,</span>
+                                  <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">yunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">yunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                                  <span class="n">ilabel</span><span class="p">,</span>
+                                  <span class="n">itn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">itn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">itn</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;x = </span><span class="si">%i%s</span><span class="s2">, y = </span><span class="si">%i%s</span><span class="s2">, &quot;</span> \
+                              <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> = (</span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                                  <span class="n">x</span><span class="p">,</span>
+                                  <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">xunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">xunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                                  <span class="n">y</span><span class="p">,</span>
+                                  <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">yunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">yunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                                  <span class="n">ilabel</span><span class="p">,</span>
+                                  <span class="n">itn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">itn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">itn</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;x = </span><span class="si">%i%s</span><span class="s2">, y = </span><span class="si">%i%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
-                <span class="n">x</span><span class="p">,</span>
-                <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">xunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">xunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-                <span class="n">y</span><span class="p">,</span>
-                <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">yunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">yunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-                <span class="n">ilabel</span><span class="p">,</span>
-                <span class="n">intensity</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">txdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;x = </span><span class="si">%f%s</span><span class="s2">, y = </span><span class="si">%f%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">txdata</span><span class="p">,</span>
+                    <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">xunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">xunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">tydata</span><span class="p">,</span>
+                    <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">yunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">yunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">ilabel</span><span class="p">,</span>
+                    <span class="n">intensity</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;x = </span><span class="si">%i%s</span><span class="s2">, y = </span><span class="si">%i%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">x</span><span class="p">,</span>
+                    <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">xunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">xunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">y</span><span class="p">,</span>
+                    <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">yunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">yunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">ilabel</span><span class="p">,</span>
+                    <span class="n">intensity</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
 <div class="viewcode-block" id="IntensityToolWidget.afterplot"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.toolWidget.IntensityToolWidget.afterplot">[docs]</a>    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; command after plot</span>
@@ -564,100 +589,20 @@
         <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scaledxy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
         <span class="n">xunits</span><span class="p">,</span> <span class="n">yunits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">axesunits</span><span class="p">()</span>
         <span class="n">results</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;tool&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">alias</span><span class="p">}</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">intensity</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">it</span><span class="p">))</span>
+                         <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">it</span><span class="p">)</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">intensity</span><span class="p">]</span>
+            <span class="n">results</span><span class="p">[</span><span class="s2">&quot;intensity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">intensity</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">results</span><span class="p">[</span><span class="s2">&quot;intensity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">intensity</span><span class="p">)</span>
         <span class="n">results</span><span class="p">[</span><span class="s2">&quot;imagename&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">imageName</span><span class="p">()</span>
         <span class="n">results</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">results</span><span class="p">[</span><span class="s2">&quot;pixel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">y</span><span class="p">)]</span>
-        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;intensity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">intensity</span><span class="p">)</span>
         <span class="n">results</span><span class="p">[</span><span class="s2">&quot;scaled_coordiantes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">sx</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">sy</span><span class="p">)]</span>
         <span class="n">results</span><span class="p">[</span><span class="s2">&quot;coordiantes_units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">xunits</span><span class="p">,</span> <span class="n">yunits</span><span class="p">]</span>
         <span class="n">results</span><span class="p">[</span><span class="s2">&quot;intensity_scaling&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scaling</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">writeAttribute</span><span class="p">(</span>
             <span class="s2">&quot;ToolResults&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">results</span><span class="p">))</span></div>
-
-
-<span class="k">class</span> <span class="nc">RGBIntensityToolWidget</span><span class="p">(</span><span class="n">IntensityToolWidget</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; intensity tool widget</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1">#: (:obj:`str`) tool name</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;RGB Intensity&quot;</span>
-    <span class="c1">#: (:obj:`str`) tool name alias</span>
-    <span class="n">alias</span> <span class="o">=</span> <span class="s2">&quot;rgbintensity&quot;</span>
-    <span class="c1">#: (:obj:`tuple` &lt;:obj:`str`&gt;) capitalized required packages</span>
-    <span class="n">requires</span> <span class="o">=</span> <span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
-
-<span class="sd">        :param parent: parent object</span>
-<span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">IntensityToolWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
-
-        <span class="c1">#: (:class:`lavuelib.settings.Settings`) configuration settings</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span>
-
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">_message</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides intensity message</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">intensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentIntensity</span><span class="p">()[:</span><span class="mi">3</span><span class="p">]</span>
-        <span class="n">ilabel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scalingLabel</span><span class="p">()</span>
-        <span class="n">txdata</span><span class="p">,</span> <span class="n">tydata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scaledxy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-        <span class="n">xunits</span><span class="p">,</span> <span class="n">yunits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">axesunits</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> \
-           <span class="n">intensity</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="n">itn</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">it</span><span class="p">))</span>
-                   <span class="k">else</span> <span class="n">it</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">intensity</span><span class="p">]</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">itn</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">txdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;x = </span><span class="si">%f%s</span><span class="s2">, y = </span><span class="si">%f%s</span><span class="s2">, &quot;</span> \
-                              <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> = (</span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
-                                  <span class="n">txdata</span><span class="p">,</span>
-                                  <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">xunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">xunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-                                  <span class="n">tydata</span><span class="p">,</span>
-                                  <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">yunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">yunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-                                  <span class="n">ilabel</span><span class="p">,</span>
-                                  <span class="n">itn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">itn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">itn</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;x = </span><span class="si">%i%s</span><span class="s2">, y = </span><span class="si">%i%s</span><span class="s2">, &quot;</span> \
-                              <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> = (</span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
-                                  <span class="n">x</span><span class="p">,</span>
-                                  <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">xunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">xunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-                                  <span class="n">y</span><span class="p">,</span>
-                                  <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">yunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">yunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-                                  <span class="n">ilabel</span><span class="p">,</span>
-                                  <span class="n">itn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">itn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">itn</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; command after plot</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sendresults</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__sendresults</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">__sendresults</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; send results to LavueController</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">intensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentIntensity</span><span class="p">()[:</span><span class="mi">3</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">intensity</span><span class="p">):</span>
-            <span class="n">intensity</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">scaling</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scalingLabel</span><span class="p">()</span>
-        <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scaledxy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-        <span class="n">xunits</span><span class="p">,</span> <span class="n">yunits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">axesunits</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="n">intensity</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">it</span><span class="p">))</span>
-                         <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">it</span><span class="p">)</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">intensity</span><span class="p">]</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;tool&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">alias</span><span class="p">}</span>
-        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;imagename&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">imageName</span><span class="p">()</span>
-        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;pixel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">y</span><span class="p">)]</span>
-        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;intensity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">intensity</span>
-        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;scaled_coordiantes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">sx</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">sy</span><span class="p">)]</span>
-        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;coordiantes_units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">xunits</span><span class="p">,</span> <span class="n">yunits</span><span class="p">]</span>
-        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;intensity_scaling&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scaling</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">writeAttribute</span><span class="p">(</span>
-            <span class="s2">&quot;ToolResults&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">results</span><span class="p">))</span>
 
 
 <div class="viewcode-block" id="MotorsToolWidget"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.toolWidget.MotorsToolWidget">[docs]</a><span class="k">class</span> <span class="nc">MotorsToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
@@ -720,6 +665,7 @@
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">axesPushButton</span><span class="o">.</span><span class="n">clicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setTicks</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">takePushButton</span><span class="o">.</span><span class="n">clicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_setMotors</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">movePushButton</span><span class="o">.</span><span class="n">clicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moveStopMotors</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">resetPushButton</span><span class="o">.</span><span class="n">clicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resetMotors</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">mouseImageDoubleClicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updateFinal</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">mouseImagePositionChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_message</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">xLineEdit</span><span class="o">.</span><span class="n">textEdited</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getFinal</span><span class="p">],</span>
@@ -852,6 +798,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">()</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_resetMotors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; reset x,y final to the current motor positions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xmotordevice</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ymotordevice</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_setMotors</span><span class="p">():</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">xpos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xmotordevice</span><span class="o">.</span><span class="n">position</span>
+            <span class="n">ypos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ymotordevice</span><span class="o">.</span><span class="n">position</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">xLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">xpos</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">yLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ypos</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_getFinal</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="c1"># print(str(e))</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">()</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_finished</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; stop motors</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -892,6 +857,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">ycurLineEdit</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">takePushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">axesPushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">resetPushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__moving</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">xLineEdit</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">yLineEdit</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
@@ -953,6 +919,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">ycurLineEdit</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">takePushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">axesPushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">resetPushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">xLineEdit</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">yLineEdit</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__moving</span> <span class="o">=</span> <span class="kc">True</span>
@@ -1027,30 +994,55 @@
     <span class="k">def</span> <span class="nf">_message</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides intensity message</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">intensity</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentIntensity</span><span class="p">()</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">intensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentIntensity</span><span class="p">()[:</span><span class="mi">3</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">intensity</span><span class="p">):</span>
             <span class="n">intensity</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">ilabel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scalingLabel</span><span class="p">()</span>
         <span class="n">txdata</span><span class="p">,</span> <span class="n">tydata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scaledxy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
         <span class="n">xunits</span><span class="p">,</span> <span class="n">yunits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">axesunits</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">txdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;x = </span><span class="si">%f%s</span><span class="s2">, y = </span><span class="si">%f%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
-                <span class="n">txdata</span><span class="p">,</span>
-                <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">xunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">xunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-                <span class="n">tydata</span><span class="p">,</span>
-                <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">yunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">yunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-                <span class="n">ilabel</span><span class="p">,</span>
-                <span class="n">intensity</span>
-            <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> \
+           <span class="n">intensity</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">itn</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">it</span><span class="p">))</span>
+                   <span class="k">else</span> <span class="n">it</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">intensity</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">itn</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">txdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;x = </span><span class="si">%f%s</span><span class="s2">, y = </span><span class="si">%f%s</span><span class="s2">, &quot;</span> \
+                              <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> = (</span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                                  <span class="n">txdata</span><span class="p">,</span>
+                                  <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">xunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">xunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                                  <span class="n">tydata</span><span class="p">,</span>
+                                  <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">yunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">yunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                                  <span class="n">ilabel</span><span class="p">,</span>
+                                  <span class="n">itn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">itn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">itn</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;x = </span><span class="si">%i%s</span><span class="s2">, y = </span><span class="si">%i%s</span><span class="s2">, &quot;</span> \
+                              <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> = (</span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                                  <span class="n">x</span><span class="p">,</span>
+                                  <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">xunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">xunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                                  <span class="n">y</span><span class="p">,</span>
+                                  <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">yunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">yunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                                  <span class="n">ilabel</span><span class="p">,</span>
+                                  <span class="n">itn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">itn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">itn</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;x = </span><span class="si">%f%s</span><span class="s2">, y = </span><span class="si">%f%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
-                <span class="n">x</span><span class="p">,</span>
-                <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">xunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">xunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-                <span class="n">y</span><span class="p">,</span>
-                <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">yunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">yunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-                <span class="n">ilabel</span><span class="p">,</span>
-                <span class="n">intensity</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
+            <span class="k">if</span> <span class="n">txdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;x = </span><span class="si">%f%s</span><span class="s2">, y = </span><span class="si">%f%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">txdata</span><span class="p">,</span>
+                    <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">xunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">xunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">tydata</span><span class="p">,</span>
+                    <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">yunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">yunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">ilabel</span><span class="p">,</span>
+                    <span class="n">intensity</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;x = </span><span class="si">%i%s</span><span class="s2">, y = </span><span class="si">%i%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">x</span><span class="p">,</span>
+                    <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">xunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">xunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">y</span><span class="p">,</span>
+                    <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">yunits</span><span class="p">)</span> <span class="k">if</span> <span class="n">yunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">ilabel</span><span class="p">,</span>
+                    <span class="n">intensity</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 
 <span class="k">class</span> <span class="nc">WD</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
@@ -1359,6 +1351,10 @@
         <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">intensity</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentIntensity</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">intensity</span><span class="p">):</span>
             <span class="n">intensity</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">it</span><span class="p">))</span>
+                 <span class="k">else</span> <span class="n">it</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">intensity</span><span class="p">])</span>
         <span class="n">ilabel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scalingLabel</span><span class="p">()</span>
         <span class="n">txdata</span><span class="p">,</span> <span class="n">tydata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scaledxy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
         <span class="n">xunits</span><span class="p">,</span> <span class="n">yunits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">axesunits</span><span class="p">()</span>
@@ -2438,8 +2434,18 @@
             <span class="n">crds</span> <span class="o">=</span> <span class="s2">&quot;[[</span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">], [</span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">], width=</span><span class="si">%.2f</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">crds</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">crds</span> <span class="o">=</span> <span class="s2">&quot;[[0, 0], [0, 0], width=0]&quot;</span>
-        <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, x = </span><span class="si">%.2f</span><span class="s2">, y = </span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
-            <span class="n">crds</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ilabel</span><span class="p">,</span> <span class="n">intensity</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> \
+           <span class="n">intensity</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">itn</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">it</span><span class="p">))</span>
+                   <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">it</span><span class="p">)</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">intensity</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">itn</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, x = </span><span class="si">%.2f</span><span class="s2">, y = </span><span class="si">%.2f</span><span class="s2">, &quot;</span> \
+                    <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> = (</span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                        <span class="n">crds</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ilabel</span><span class="p">,</span>
+                        <span class="n">itn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">itn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">itn</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, x = </span><span class="si">%.2f</span><span class="s2">, y = </span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">crds</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ilabel</span><span class="p">,</span> <span class="n">intensity</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 
@@ -2711,6 +2717,9 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentTool</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
             <span class="n">dts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">rawData</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">dts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">while</span> <span class="n">dts</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">dts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">dts</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__funindex</span><span class="p">:</span>
                     <span class="n">npfun</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -2846,6 +2855,10 @@
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">intensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentIntensity</span><span class="p">()[:</span><span class="mi">3</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">intensity</span><span class="p">):</span>
             <span class="n">intensity</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">it</span><span class="p">))</span>
+                 <span class="k">else</span> <span class="n">it</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">intensity</span><span class="p">])</span>
         <span class="n">ilabel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scalingLabel</span><span class="p">()</span>
         <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;x = </span><span class="si">%i</span><span class="s2">, y = </span><span class="si">%i</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
             <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ilabel</span><span class="p">,</span> <span class="n">intensity</span><span class="p">)</span>
@@ -2987,6 +3000,8 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__accumulate</span><span class="p">:</span>
             <span class="n">dts</span> <span class="o">=</span> <span class="n">rawarray</span>
+            <span class="k">while</span> <span class="n">dts</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">dts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">dts</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">newrow</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dts</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dsrows</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
                <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">newrow</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
@@ -3145,6 +3160,10 @@
                 <span class="n">yl</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">dts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">rawData</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">dts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">while</span> <span class="n">dts</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">dts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">dts</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">dts</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">dtnrpts</span> <span class="o">=</span> <span class="n">dts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dsrows</span><span class="p">:</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dsrows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -3273,6 +3292,10 @@
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">intensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentIntensity</span><span class="p">()[:</span><span class="mi">3</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">intensity</span><span class="p">):</span>
             <span class="n">intensity</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">it</span><span class="p">))</span>
+                 <span class="k">else</span> <span class="n">it</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">intensity</span><span class="p">])</span>
         <span class="n">ilabel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scalingLabel</span><span class="p">()</span>
         <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;x = </span><span class="si">%i</span><span class="s2">, y = </span><span class="si">%i</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
             <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ilabel</span><span class="p">,</span> <span class="n">intensity</span><span class="p">)</span>
@@ -3768,6 +3791,10 @@
         <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">intensity</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentIntensity</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">intensity</span><span class="p">):</span>
             <span class="n">intensity</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">it</span><span class="p">))</span>
+                 <span class="k">else</span> <span class="n">it</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">intensity</span><span class="p">])</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">rangeWindowEnabled</span><span class="p">():</span>
             <span class="n">txdata</span><span class="p">,</span> <span class="n">tydata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scaledxy</span><span class="p">(</span>
                 <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">useraxes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -4377,7 +4404,8 @@
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">idx</span> <span class="o">=</span> <span class="n">idxs</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">xcrd</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                    <span class="c1"># print(str(e))</span>
                     <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">mainplotComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
             <span class="k">if</span> <span class="s2">&quot;buffering&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -4918,6 +4946,10 @@
             <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">intensity</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentIntensity</span><span class="p">()</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">intensity</span><span class="p">):</span>
                 <span class="n">intensity</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+                <span class="n">intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                    <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">it</span><span class="p">))</span>
+                     <span class="k">else</span> <span class="n">it</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">intensity</span><span class="p">])</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">rangeWindowEnabled</span><span class="p">():</span>
                 <span class="n">txdata</span><span class="p">,</span> <span class="n">tydata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scaledxy</span><span class="p">(</span>
                     <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">useraxes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -5121,6 +5153,9 @@
                                     <span class="k">if</span> <span class="n">colors</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defpen</span>
                                 <span class="n">cr</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">_pg</span><span class="o">.</span><span class="n">mkPen</span><span class="p">(</span><span class="n">clr</span><span class="p">))</span>
                 <span class="n">dts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">rawData</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">dts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">while</span> <span class="n">dts</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="n">dts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">dts</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">dts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">trans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
                     <span class="n">csa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">correctsolidangle</span>
@@ -5619,7 +5654,9 @@
             <span class="n">aistat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">ai</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">aistat</span><span class="p">:</span>
             <span class="n">dts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">rawData</span><span class="p">()</span>
-
+            <span class="k">if</span> <span class="n">dts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">while</span> <span class="n">dts</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">dts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">dts</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">dts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dts</span><span class="o">.</span><span class="n">shape</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">dts</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                 <span class="n">shape</span> <span class="o">=</span> <span class="n">dts</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">shape</span>
             <span class="k">else</span><span class="p">:</span>
@@ -6073,6 +6110,9 @@
             <span class="n">aistat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">ai</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">aistat</span><span class="p">:</span>
             <span class="n">dts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">rawData</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">dts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">while</span> <span class="n">dts</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">dts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">dts</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">dts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dts</span><span class="o">.</span><span class="n">shape</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">dts</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                 <span class="n">shape</span> <span class="o">=</span> <span class="n">dts</span><span class="o">.</span><span class="n">shape</span>
             <span class="k">else</span><span class="p">:</span>
@@ -6355,6 +6395,8 @@
 <span class="sd">        :rtype: (:class:`numpy.ndarray`, :class:`numpy.ndarray`)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">rawarray</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rawarray</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="k">while</span> <span class="n">rawarray</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">rawarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">rawarray</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">nr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">numberSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
             <span class="n">nr</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">nr</span><span class="p">,</span> <span class="n">rawarray</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">nr</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -6430,7 +6472,7 @@
         <span class="n">results</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">results</span><span class="p">[</span><span class="s2">&quot;maxima&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">maxidxs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">writeAttribute</span><span class="p">(</span>
-            <span class="s2">&quot;ToolResults&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">results</span><span class="p">))</span>
+            <span class="s2">&quot;ToolResults&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">))</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_updateCenter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">):</span>
@@ -6469,6 +6511,10 @@
         <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">intensity</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentIntensity</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">intensity</span><span class="p">):</span>
             <span class="n">intensity</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">it</span><span class="p">))</span>
+                 <span class="k">else</span> <span class="n">it</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">intensity</span><span class="p">])</span>
         <span class="n">txdata</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">rangeWindowEnabled</span><span class="p">():</span>
             <span class="n">txdata</span><span class="p">,</span> <span class="n">tydata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scaledxy</span><span class="p">(</span>
@@ -7062,6 +7108,9 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentTool</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
             <span class="n">dts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">rawData</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">dts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">while</span> <span class="n">dts</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">dts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">dts</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__funindex</span><span class="p">:</span>
                     <span class="n">npfun</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -7391,6 +7440,10 @@
         <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">intensity</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentIntensity</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">intensity</span><span class="p">):</span>
             <span class="n">intensity</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">it</span><span class="p">))</span>
+                 <span class="k">else</span> <span class="n">it</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">intensity</span><span class="p">])</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">rangeWindowEnabled</span><span class="p">():</span>
             <span class="n">txdata</span><span class="p">,</span> <span class="n">tydata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scaledxy</span><span class="p">(</span>
                 <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">useraxes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>

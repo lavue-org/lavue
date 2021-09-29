@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.liveViewer &#8212; lavuelib 2.59.0 documentation</title>
+    <title>lavuelib.liveViewer &#8212; lavuelib 2.68.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.59</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.68</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -188,6 +188,7 @@
 
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">.qtuic</span> <span class="k">import</span> <span class="n">uic</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -239,6 +240,12 @@
 
 <span class="kn">from</span> <span class="nn">.hidraServerList</span> <span class="k">import</span> <span class="n">HIDRASERVERLIST</span>
 
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">numpy.lib.nanfunctions</span> <span class="k">import</span> <span class="n">_replace_nan</span>
+    <span class="kn">from</span> <span class="nn">numpy.lib.nanfunctions</span> <span class="k">import</span> <span class="n">_copyto</span>
+    <span class="n">NPNAN</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="n">NPNAN</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;lavue&quot;</span><span class="p">)</span>
 
@@ -294,7 +301,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__lavue</span> <span class="o">=</span> <span class="n">LiveViewer</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">centralwidget</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gridLayout</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QGridLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">centralwidget</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gridLayout</span><span class="o">.</span><span class="n">setMargin</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gridLayout</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gridLayout</span><span class="o">.</span><span class="n">setMargin</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gridLayout</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gridLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__lavue</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">centralwidget</span><span class="p">)</span>
@@ -424,6 +434,21 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span></div>
 
+<div class="viewcode-block" id="PartialData.intmaxvalue"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.liveViewer.PartialData.intmaxvalue">[docs]</a>    <span class="k">def</span> <span class="nf">intmaxvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides data type maximal value</span>
+
+<span class="sd">        :returns: integer data type maximal value</span>
+<span class="sd">        :rtype: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">maxval</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+           <span class="nb">issubclass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">()</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">maxval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">())</span><span class="o">.</span><span class="n">max</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">maxval</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">maxval</span></div>
+
 <div class="viewcode-block" id="PartialData.data"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.liveViewer.PartialData.data">[docs]</a>    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides transformed data</span>
 
@@ -490,6 +515,27 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rawdata</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">]</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_nansum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; old the numpy nansum</span>
+
+<span class="sd">    :param axis: axis to sum up</span>
+<span class="sd">    :type axis: :obj:`int`</span>
+<span class="sd">    :returns: numpy array with the sum</span>
+<span class="sd">    :rtype: :class:`numpy.ndarray`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">NPNAN</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">_replace_nan</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+    <span class="n">tot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
+        <span class="n">tot</span> <span class="o">=</span> <span class="n">_copyto</span><span class="p">(</span><span class="n">tot</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tot</span>
 
 
 <div class="viewcode-block" id="LiveViewer"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.liveViewer.LiveViewer">[docs]</a><span class="k">class</span> <span class="nc">LiveViewer</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QDialog</span><span class="p">):</span>
@@ -577,10 +623,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__alltoolaliases</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tlaliasnames</span>
         <span class="p">)</span>
 
-        <span class="c1">#: (:obj:`list` &lt; :obj:`str` &gt; ) rgb tool class names</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__rgbtooltypes</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__rgbtooltypes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;RGBIntensityToolWidget&quot;</span><span class="p">)</span>
-
         <span class="c1">#: (:class:`lavuelib.controllerClient.ControllerClient`)</span>
         <span class="c1">#:   tango controller client</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__tangoclient</span> <span class="o">=</span> <span class="kc">None</span>
@@ -657,8 +699,7 @@
         <span class="c1">#: (:class:`lavuelib.imageWidget.ImageWidget`) image widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span> <span class="o">=</span> <span class="n">imageWidget</span><span class="o">.</span><span class="n">ImageWidget</span><span class="p">(</span>
             <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">tooltypes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__tooltypes</span><span class="p">,</span>
-            <span class="n">settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="p">,</span>
-            <span class="n">rgbtooltypes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__rgbtooltypes</span><span class="p">)</span>
+            <span class="n">settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">updateToolComboBox</span><span class="p">(</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__tlaliasnames</span><span class="p">[</span><span class="n">twn</span><span class="p">]</span>
              <span class="k">for</span> <span class="n">twn</span> <span class="ow">in</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">toolwidgets</span><span class="p">))</span>
@@ -667,6 +708,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">setImageItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">image</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">showGradient</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">showChannels</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__channelwg</span><span class="o">.</span><span class="n">showGradient</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">updateHistoImage</span><span class="p">(</span><span class="n">autoLevel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -693,6 +735,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagename</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1">#: (:obj:`str`) last image name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__lastimagename</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`int`) integer max value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__intmaxvalue</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1">#: (:obj:`str`) metadata JSON dictionary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__metadata</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="c1">#: (:obj:`str`) metadata dictionary</span>
@@ -783,21 +827,43 @@
 
         <span class="c1"># # LAYOUT DEFINITIONS</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">confVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sourcewg</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">confVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__rangewg</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">confVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__filterswg</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">confVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mbufferwg</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">confVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__channelwg</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">confVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">confVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__scalingwg</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">confVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">confVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__statswg</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">scroll</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QScrollArea</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scroll</span><span class="o">.</span><span class="n">setSizeAdjustPolicy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scroll</span><span class="o">.</span><span class="n">AdjustToContents</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrollWidget</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scroll</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scroll</span><span class="o">.</span><span class="n">setFrameStyle</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QFrame</span><span class="o">.</span><span class="n">NoFrame</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrollWidget</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">confVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scroll</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__rangewg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__filterswg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mbufferwg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__channelwg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__scalingwg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__statswg</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrollWidget</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">scroll</span><span class="o">.</span><span class="n">setHorizontalScrollBarPolicy</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">ScrollBarAlwaysOff</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scroll</span><span class="o">.</span><span class="n">setVerticalScrollBarPolicy</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">ScrollBarAsNeeded</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scroll</span><span class="o">.</span><span class="n">setWidgetResizable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scroll</span><span class="o">.</span><span class="n">setWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scrollWidget</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scroll</span><span class="o">.</span><span class="n">setMinimumWidth</span><span class="p">(</span><span class="mi">380</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">imageVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="p">)</span>
+
         <span class="n">spacer</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QSpacerItem</span><span class="p">(</span>
             <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
             <span class="n">QtGui</span><span class="o">.</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Minimum</span><span class="p">,</span>
             <span class="n">QtGui</span><span class="o">.</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Expanding</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">confVerticalLayout</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">spacer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">spacer</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">splitter</span><span class="o">.</span><span class="n">setStretchFactor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">splitter</span><span class="o">.</span><span class="n">setStretchFactor</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 
@@ -811,6 +877,8 @@
         <span class="c1"># signal from limit setting widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">minLevelChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_setMinLevelState</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">maxLevelChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_setMaxLevelState</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">channelLevelsChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_setChannelLevelState</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">autoLevelsChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_setAutoLevelsState</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">levelsChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_setLevelState</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">gradientChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
@@ -1083,7 +1151,8 @@
 <span class="sd">        :type level: :obj:`float`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setMinLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__setLevelState</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setLevelMode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">levelMode</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setLevelState</span><span class="p">()</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_setMaxLevelState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -1093,7 +1162,21 @@
 <span class="sd">        :type level: :obj:`float`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setMaxLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__setLevelState</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setLevelMode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">levelMode</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setLevelState</span><span class="p">()</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_setChannelLevelState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets maximum intensity level</span>
+
+<span class="sd">        :param level: json with channel levels</span>
+<span class="sd">        :type level: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">levels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">channelLevels</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">levels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setLevelMode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">levelMode</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setChannelLevels</span><span class="p">(</span><span class="n">levels</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_setLevelState</span><span class="p">()</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_setAutoLevelsState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">autolevels</span><span class="p">):</span>
@@ -1103,7 +1186,7 @@
 <span class="sd">        :type autolevels: :obj:&#39;int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setAutoLevels</span><span class="p">(</span><span class="n">autolevels</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__setLevelState</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setLevelState</span><span class="p">()</span>
 
 <div class="viewcode-block" id="LiveViewer.setLavueState"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.liveViewer.LiveViewer.setLavueState">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setLavueState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dct</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -1370,7 +1453,8 @@
             <span class="n">asaposerver</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asaposerver</span><span class="p">,</span>
             <span class="n">asapotoken</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapotoken</span><span class="p">,</span>
             <span class="n">asapodatasources</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapodatasources</span><span class="p">,</span>
-            <span class="n">asapobeamtime</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapobeamtime</span>
+            <span class="n">asapobeamtime</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapobeamtime</span><span class="p">,</span>
+            <span class="n">asaposourcepath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asaposourcepath</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateSource</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
@@ -1422,15 +1506,7 @@
 <span class="sd">        :type tool: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">tool</span> <span class="ow">and</span> <span class="n">tool</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">tool</span><span class="p">():</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">rgb</span><span class="p">()</span> <span class="ow">and</span> \
-               <span class="n">tool</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tlaliasnames</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="c1"># QtCore.QTimer.singleShot(</span>
-                <span class="c1">#   10, self.__imagewg.showCurrentTool)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">showCurrentTool</span><span class="p">()</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">rgb</span><span class="p">():</span>
-                <span class="c1"># QtCore.QTimer.singleShot(</span>
-                <span class="c1">#     10, self.__imagewg.showCurrentRGBTool)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">showCurrentRGBTool</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">showCurrentTool</span><span class="p">()</span>
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__applyoptionsfromdict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dctcnf</span><span class="p">):</span>
@@ -1717,8 +1793,9 @@
 
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;tool&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">options</span><span class="o">.</span><span class="n">tool</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">tlname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">tool</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">tlname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tlaliasnames</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
-               <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">rgb</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">tlname</span> <span class="o">==</span> <span class="s1">&#39;rgbintensity&#39;</span><span class="p">:</span>
+                <span class="n">tlname</span> <span class="o">=</span> <span class="s1">&#39;intensity&#39;</span>
+            <span class="k">if</span> <span class="n">tlname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tlaliasnames</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setTool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tlaliasnames</span><span class="p">[</span><span class="n">tlname</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;toolconfig&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">options</span><span class="o">.</span><span class="n">toolconfig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -2262,13 +2339,20 @@
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">geometryfromsource</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">updateMetaData</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__mdata</span><span class="p">)</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">updateCenter</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centerx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centery</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centerx</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centery</span><span class="p">)</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">mouseImagePositionChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">geometryChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__mdata</span> <span class="o">=</span> <span class="p">{}</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__imagename</span> <span class="o">=</span> <span class="n">imagename</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__rawimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">newimage</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__intmaxvalue</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">pd</span> <span class="o">=</span> <span class="n">PartialData</span><span class="p">(</span><span class="n">imagename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rawimage</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span>
+                                 <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">imv</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">intmaxvalue</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">imv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__intmaxvalue</span> <span class="o">=</span> <span class="n">imv</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_plot</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">fid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">autoRange</span><span class="p">()</span>
@@ -2323,6 +2407,7 @@
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">secstream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">secstream</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">zeromask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">zeromask</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">nanmask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">nanmask</span>
+        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">negmask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">negmask</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">refreshrate</span> <span class="o">=</span> <span class="n">dataFetchThread</span><span class="o">.</span><span class="n">GLOBALREFRESHRATE</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">toolrefreshtime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">toolrefreshtime</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">toolpollinginterval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">toolpollinginterval</span>
@@ -2370,6 +2455,7 @@
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">asaposerver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asaposerver</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">asapotoken</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapotoken</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">asapobeamtime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapobeamtime</span>
+        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">asaposourcepath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asaposourcepath</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">asapodatasources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapodatasources</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">detservers</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mergeDetServers</span><span class="p">(</span>
             <span class="n">HIDRASERVERLIST</span> <span class="k">if</span> <span class="n">cnfdlg</span><span class="o">.</span><span class="n">defdetservers</span> <span class="k">else</span> <span class="p">{</span><span class="s2">&quot;pool&quot;</span><span class="p">:</span> <span class="p">[]},</span>
@@ -2618,6 +2704,9 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapobeamtime</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">asapobeamtime</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapobeamtime</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">asapobeamtime</span>
             <span class="n">setsrc</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asaposourcepath</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">asaposourcepath</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asaposourcepath</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">asaposourcepath</span>
+            <span class="n">setsrc</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">autozmqtopics</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">autozmqtopics</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">autozmqtopics</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">autozmqtopics</span>
             <span class="n">setsrc</span> <span class="o">=</span> <span class="kc">True</span>
@@ -2661,6 +2750,11 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">nanmask</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">nanmask</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">nanmask</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">nanmask</span>
+            <span class="n">remasking</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">replot</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">negmask</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">negmask</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">negmask</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">negmask</span>
             <span class="n">remasking</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">replot</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -2984,7 +3078,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__scaledimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="n">display</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showstats</span>
         <span class="n">calcvariance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">calcvariance</span>
-        <span class="n">maxval</span><span class="p">,</span> <span class="n">meanval</span><span class="p">,</span> <span class="n">varval</span><span class="p">,</span> <span class="n">minval</span><span class="p">,</span> <span class="n">maxrawval</span><span class="p">,</span> <span class="n">maxsval</span> <span class="o">=</span> \
+        <span class="n">maxval</span><span class="p">,</span> <span class="n">meanval</span><span class="p">,</span> <span class="n">varval</span><span class="p">,</span> <span class="n">minval</span><span class="p">,</span> <span class="n">maxrawval</span><span class="p">,</span> <span class="n">maxsval</span><span class="p">,</span> <span class="n">channels</span> <span class="o">=</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">__calcStats</span><span class="p">(</span>
                 <span class="p">(</span><span class="n">stream</span> <span class="ow">or</span> <span class="n">display</span><span class="p">,</span>
                  <span class="n">stream</span> <span class="ow">or</span> <span class="n">display</span><span class="p">,</span>
@@ -3021,7 +3115,7 @@
 
         <span class="c1"># if needed, update the level display</span>
         <span class="k">if</span> <span class="n">auto</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">updateAutoLevels</span><span class="p">(</span><span class="n">minval</span><span class="p">,</span> <span class="n">maxsval</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">updateAutoLevels</span><span class="p">(</span><span class="n">minval</span><span class="p">,</span> <span class="n">maxsval</span><span class="p">,</span> <span class="n">channels</span><span class="p">)</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">_startPlotting</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -3159,7 +3253,15 @@
         <span class="k">if</span> <span class="n">mdata</span><span class="p">:</span>
             <span class="n">dmdata</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">for</span> <span class="n">md</span> <span class="ow">in</span> <span class="n">mdata</span><span class="p">:</span>
-                <span class="n">dmdata</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">mdata</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">md</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">dmdata</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">md</span><span class="p">))</span>
+                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                            <span class="s2">&quot;lavuelib.liveViewer.LiveViewer.__getNewData &quot;</span>
+                            <span class="s2">&quot;update metadata </span><span class="si">%s</span><span class="s2">: (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">md</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">md</span><span class="p">)))</span>
+
             <span class="n">metadata</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dmdata</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
             <span class="n">ldata</span> <span class="o">=</span> <span class="p">[</span><span class="n">pdata</span> <span class="k">for</span> <span class="n">pdata</span> <span class="ow">in</span> <span class="n">fulldata</span> <span class="k">if</span> <span class="n">pdata</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
@@ -3249,6 +3351,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fulldata</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcewg</span><span class="o">.</span><span class="n">tabCheckBoxStates</span><span class="p">()</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dataFetchers</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">states</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
                 <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
@@ -3279,8 +3382,17 @@
                 <span class="p">)</span>
                 <span class="n">fulldata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="n">PartialData</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">rawimage</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">tr</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__intmaxvalue</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">negmask</span><span class="p">:</span>
+            <span class="n">imvtb</span> <span class="o">=</span> <span class="p">[</span><span class="n">fd</span><span class="o">.</span><span class="n">intmaxvalue</span><span class="p">()</span> <span class="k">for</span> <span class="n">fd</span> <span class="ow">in</span> <span class="n">fulldata</span><span class="p">]</span>
+            <span class="n">imvtb</span> <span class="o">=</span> <span class="p">[</span><span class="n">vl</span> <span class="k">for</span> <span class="n">vl</span> <span class="ow">in</span> <span class="n">imvtb</span> <span class="k">if</span> <span class="n">vl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">imvtb</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__intmaxvalue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">imvtb</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcewg</span><span class="o">.</span><span class="n">isConnected</span><span class="p">():</span>
             <span class="k">return</span>
+
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fulldata</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">name</span><span class="p">,</span> <span class="n">rawimage</span><span class="p">,</span> <span class="n">metadata</span> <span class="o">=</span> <span class="n">fulldata</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[:</span><span class="mi">3</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -3432,16 +3544,17 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__channelwg</span><span class="o">.</span><span class="n">setNumberOfChannels</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__filteredimage</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">ics</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__channelwg</span><span class="o">.</span><span class="n">colorChannel</span><span class="p">():</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgb</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">setrgb</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">showGradient</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">ics</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__filteredimage</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
                 <span class="k">elif</span> <span class="p">(</span><span class="s2">&quot;skipfirst&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mdata</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span>
                       <span class="bp">self</span><span class="o">.</span><span class="n">__mdata</span><span class="p">[</span><span class="s2">&quot;skipfirst&quot;</span><span class="p">]):</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span> <span class="o">=</span> <span class="n">_nansum</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__filteredimage</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__filteredimage</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgb</span><span class="p">():</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">setrgb</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span> <span class="o">=</span> <span class="n">_nansum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__filteredimage</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__filteredimage</span><span class="p">)</span> <span class="o">-</span> <span class="n">ics</span> <span class="o">&gt;=</span> \
@@ -3456,13 +3569,17 @@
                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgb</span><span class="p">():</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">setrgb</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">showGradient</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-                        <span class="k">if</span> <span class="s2">&quot;skipfirst&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mdata</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
-                           <span class="bp">self</span><span class="o">.</span><span class="n">__mdata</span><span class="p">[</span><span class="s2">&quot;skipfirst&quot;</span><span class="p">]:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">__filteredimage</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">)</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">__filteredimage</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+                            <span class="n">np</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
+                                <span class="s1">&#39;ignore&#39;</span><span class="p">,</span>
+                                <span class="sa">r</span><span class="s1">&#39;Mean of empty slice&#39;</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="s2">&quot;skipfirst&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mdata</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
+                               <span class="bp">self</span><span class="o">.</span><span class="n">__mdata</span><span class="p">[</span><span class="s2">&quot;skipfirst&quot;</span><span class="p">]:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__filteredimage</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__filteredimage</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
                     <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__filteredimage</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">ics</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgb</span><span class="p">():</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">setrgb</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -3627,6 +3744,10 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showhighvaluemask</span> <span class="ow">and</span> \
            <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">maskValue</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">maskvalue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">maskValue</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">negmask</span> <span class="ow">and</span> \
+               <span class="n">maskvalue</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__intmaxvalue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">maskvalue</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__intmaxvalue</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">nanmask</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
@@ -3636,13 +3757,13 @@
                         <span class="n">np</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
                             <span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;invalid value encountered in greater&#39;</span><span class="p">)</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setMaskValueIndices</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">maskValue</span><span class="p">())</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">&gt;</span> <span class="n">maskvalue</span><span class="p">)</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span><span class="p">[</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">maskValueIndices</span><span class="p">()]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setMaskValueIndices</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">maskValue</span><span class="p">())</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">&gt;</span> <span class="n">maskvalue</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span><span class="p">[</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">maskValueIndices</span><span class="p">()]</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
@@ -3958,10 +4079,25 @@
             <span class="n">varval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanvar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__scaledimage</span><span class="p">)</span> <span class="k">if</span> <span class="n">flag</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">else</span> <span class="mf">0.0</span>
             <span class="n">maxsval</span> <span class="o">=</span> <span class="n">maxval</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span>
+            <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="kc">None</span>
         <span class="n">maxrawval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span><span class="p">)</span> <span class="k">if</span> <span class="n">flag</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="k">else</span> <span class="mf">0.0</span>
         <span class="n">minval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__scaledimage</span><span class="p">)</span> <span class="k">if</span> <span class="n">flag</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="k">else</span> <span class="mf">0.0</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">maxval</span><span class="p">,</span> <span class="n">meanval</span><span class="p">,</span> <span class="n">varval</span><span class="p">,</span> <span class="n">minval</span><span class="p">,</span> <span class="n">maxrawval</span><span class="p">,</span>  <span class="n">maxsval</span><span class="p">)</span>
+        <span class="n">channels</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__scaledimage</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">)</span> \
+           <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__scaledimage</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
+                    <span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;All-NaN (slice|axis) encountered&#39;</span><span class="p">)</span>
+                <span class="n">nch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scaledimage</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">channels</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__scaledimage</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">])</span>
+                     <span class="k">if</span> <span class="n">flag</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">,</span>
+                     <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__scaledimage</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">])</span>
+                     <span class="k">if</span> <span class="n">flag</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nch</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">channels</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">maxval</span><span class="p">,</span> <span class="n">meanval</span><span class="p">,</span> <span class="n">varval</span><span class="p">,</span> <span class="n">minval</span><span class="p">,</span> <span class="n">maxrawval</span><span class="p">,</span>  <span class="n">maxsval</span><span class="p">,</span> <span class="n">channels</span><span class="p">)</span>
 
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>

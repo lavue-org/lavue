@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.imageWidget &#8212; lavuelib 2.59.0 documentation</title>
+    <title>lavuelib.imageWidget &#8212; lavuelib 2.68.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.59</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.68</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -265,8 +265,7 @@
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) tool configuration changed signal</span>
     <span class="n">toolConfigurationChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tooltypes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">rgbtooltypes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tooltypes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param parent: parent object</span>
@@ -275,8 +274,6 @@
 <span class="sd">        :type tooltypes: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param settings: lavue configuration settings</span>
 <span class="sd">        :type settings: :class:`lavuelib.settings.Settings`</span>
-<span class="sd">        :param rgbtooltypes: tool class names</span>
-<span class="sd">        :type rgbtooltypes: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">QtGui</span><span class="o">.</span><span class="n">QWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
@@ -288,15 +285,6 @@
         <span class="c1">#:      :class:`lavuelib.toolWidget.BaseToolWidget` &gt; )</span>
         <span class="c1">#:           tool names</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__toolwidgets</span> <span class="o">=</span> <span class="p">{}</span>
-
-        <span class="c1">#: (:obj:`list` &lt; :obj:`str` &gt; ) rgb tool class names</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__rgbtooltypes</span> <span class="o">=</span> <span class="n">rgbtooltypes</span> <span class="ow">or</span> <span class="p">[]</span>
-        <span class="c1">#: (:obj:`list` &lt; :obj:`str` &gt; ) tool names</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__rgbtoolnames</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1">#: (:obj:`dict` &lt; :obj:`str`,</span>
-        <span class="c1">#:      :class:`lavuelib.toolWidget.BaseToolWidget` &gt; )</span>
-        <span class="c1">#:           tool names</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__rgbtoolwidgets</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1">#: (:class:`pyqtgraph.QtCore.QMutex`) mutex lock for CB</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutex</span><span class="p">()</span>
@@ -386,7 +374,6 @@
         <span class="c1">#     self.__bottomplot.setMinimumSize(QtCore.QSize(0, 170))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__addToolWidgets</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__addRGBToolWidgets</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">plotSplitter</span><span class="o">.</span><span class="n">setStretchFactor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">plotSplitter</span><span class="o">.</span><span class="n">setStretchFactor</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -397,8 +384,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">emitCutCoordsChanged</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">showCurrentTool</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">rgbtoolComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">showCurrentRGBTool</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">aspectLockedToggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">emitAspectLockedToggled</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">mouseImagePositionChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
@@ -715,16 +700,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolComboBox</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">twg</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">twg</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__addRGBToolWidgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; add rgb tool subwidgets into grid layout</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">tt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rgbtooltypes</span><span class="p">:</span>
-            <span class="n">twg</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">toolWidget</span><span class="p">,</span> <span class="n">tt</span><span class="p">)(</span><span class="bp">self</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__rgbtoolwidgets</span><span class="p">[</span><span class="n">twg</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">twg</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__rgbtoolnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">twg</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">rgbtoolComboBox</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">twg</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">twg</span><span class="p">)</span>
-
 <div class="viewcode-block" id="ImageWidget.settings"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageWidget.ImageWidget.settings">[docs]</a>    <span class="k">def</span> <span class="nf">settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides settings</span>
 
@@ -840,37 +815,8 @@
         <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
             <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
             <span class="n">stwg</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">rgbtoolComboBox</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolComboBox</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">nm</span><span class="p">,</span> <span class="n">twg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rgbtoolwidgets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">twg</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">nm</span><span class="p">,</span> <span class="n">twg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__toolwidgets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="n">nm</span><span class="p">:</span>
-                    <span class="n">stwg</span> <span class="o">=</span> <span class="n">twg</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">twg</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">disconnecttool</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__currenttool</span> <span class="o">=</span> <span class="n">stwg</span>
-            <span class="k">if</span> <span class="n">stwg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">stwg</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">updateinfowidgets</span><span class="p">(</span><span class="n">stwg</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">__connecttool</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">currentToolChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="ImageWidget.showCurrentRGBTool"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageWidget.ImageWidget.showCurrentRGBTool">[docs]</a>    <span class="nd">@debugmethod</span>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">showCurrentRGBTool</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; shows the current tool</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
-            <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">rgbtoolComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
-            <span class="n">stwg</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolComboBox</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">rgbtoolComboBox</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">nm</span><span class="p">,</span> <span class="n">twg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__toolwidgets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">twg</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">nm</span><span class="p">,</span> <span class="n">twg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rgbtoolwidgets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="n">nm</span><span class="p">:</span>
                     <span class="n">stwg</span> <span class="o">=</span> <span class="n">twg</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -1077,6 +1023,15 @@
 <span class="sd">        :type autolevels: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">setAutoDownSample</span><span class="p">(</span><span class="n">autodownsample</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ImageWidget.setChannelLevels"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageWidget.ImageWidget.setChannelLevels">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">setChannelLevels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets minimum intensity levels</span>
+
+<span class="sd">        :param levels: channel intensity levels</span>
+<span class="sd">        :type levels: :obj:`list` &lt; (:obj`float`:, :obj`float`:)&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">setDisplayChannelLevels</span><span class="p">(</span><span class="n">levels</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ImageWidget.setMinLevel"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageWidget.ImageWidget.setMinLevel">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">setMinLevel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -1943,11 +1898,7 @@
         <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolComboBox</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">tool</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">index</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">showCurrentTool</span><span class="p">()</span>
-        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">rgbtoolComboBox</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">tool</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">index</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">rgbtoolComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">showCurrentRGBTool</span><span class="p">()</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">showCurrentTool</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ImageWidget.setToolConfiguration"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageWidget.ImageWidget.setToolConfiguration">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setToolConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
@@ -2156,10 +2107,7 @@
 <span class="sd">        :param status: True for on and False for off</span>
 <span class="sd">        :type status: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">setTool</span><span class="p">(</span><span class="s2">&quot;RGB Intensity&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">setTool</span><span class="p">(</span><span class="s2">&quot;Intensity&quot;</span><span class="p">)</span>
+        <span class="c1"># self.setTool(&quot;Intensity&quot;)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">setrgb</span><span class="p">(</span><span class="n">status</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ImageWidget.rgb"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageWidget.ImageWidget.rgb">[docs]</a>    <span class="k">def</span> <span class="nf">rgb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2256,7 +2204,23 @@
 <span class="sd">        :returns: range window scale</span>
 <span class="sd">        :rtype: :obj:`float`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">rangeWindowScale</span><span class="p">()</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">rangeWindowScale</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ImageWidget.setLevelMode"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageWidget.ImageWidget.setLevelMode">[docs]</a>    <span class="k">def</span> <span class="nf">setLevelMode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">levelmode</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets levelmode</span>
+
+<span class="sd">        :param levelmode: level mode, i.e. `mono` or `rgba`</span>
+<span class="sd">        :type levelmode: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">setLevelMode</span><span class="p">(</span><span class="n">levelmode</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ImageWidget.levelMode"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageWidget.ImageWidget.levelMode">[docs]</a>    <span class="k">def</span> <span class="nf">levelMode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; gets level mode</span>
+
+<span class="sd">        :returns: level mode, i.e. `mono` or `rgba`</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">levelMode</span><span class="p">()</span></div></div>
 </pre></div>
 
     </div>
