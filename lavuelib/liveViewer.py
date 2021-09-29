@@ -84,6 +84,12 @@ from . import settings
 
 from .hidraServerList import HIDRASERVERLIST
 
+try:
+    from numpy.lib.nanfunctions import _replace_nan
+    from numpy.lib.nanfunctions import _copyto
+    NPNAN = True
+except Exception:
+    NPNAN = False
 
 logger = logging.getLogger("lavue")
 
@@ -353,6 +359,27 @@ class PartialData(object):
         """
         return [self.name, self.__rawdata, self.metadata,
                 self.x, self.y, self.sx, self.sy, self.tr]
+
+
+def _nansum(a, axis=None):
+    """ old the numpy nansum
+
+    :param axis: axis to sum up
+    :type axis: :obj:`int`
+    :returns: numpy array with the sum
+    :rtype: :class:`numpy.ndarray`
+    """
+    if not NPNAN:
+        return np.nansum(a, axis)
+    a, mask = _replace_nan(a, 0)
+
+    if mask is None:
+        return np.sum(a, axis=axis)
+    mask = np.all(mask, axis=axis)
+    tot = np.sum(a, axis=axis)
+    if np.any(mask):
+        tot = _copyto(tot, np.nan, mask)
+    return tot
 
 
 class LiveViewer(QtGui.QDialog):
@@ -3361,16 +3388,17 @@ class LiveViewer(QtGui.QDialog):
             self.__channelwg.setNumberOfChannels(
                 self.__filteredimage.shape[0] - ics)
             if not self.__channelwg.colorChannel():
+                if self.rgb():
+                    self.setrgb(False)
+                    self.__levelswg.showGradient(True)
                 if ics:
                     self.__rawgreyimage = self.__filteredimage[-1, :, :]
                 elif ("skipfirst" in self.__mdata.keys() and
                       self.__mdata["skipfirst"]):
-                    self.__rawgreyimage = np.nansum(
+                    self.__rawgreyimage = _nansum(
                         self.__filteredimage[1:, :, :], 0)
                 else:
-                    self.__rawgreyimage = np.nansum(self.__filteredimage, 0)
-                if self.rgb():
-                    self.setrgb(False)
+                    self.__rawgreyimage = _nansum(self.__filteredimage, 0)
             else:
                 try:
                     if len(self.__filteredimage) - ics >= \
@@ -3385,13 +3413,17 @@ class LiveViewer(QtGui.QDialog):
                         if self.rgb():
                             self.setrgb(False)
                             self.__levelswg.showGradient(True)
-                        if "skipfirst" in self.__mdata.keys() and \
-                           self.__mdata["skipfirst"]:
-                            self.__rawgreyimage = np.nanmean(
-                                self.__filteredimage[1:, :, :], 0)
-                        else:
-                            self.__rawgreyimage = np.nanmean(
-                                self.__filteredimage, 0)
+                        with np.warnings.catch_warnings():
+                            np.warnings.filterwarnings(
+                                'ignore',
+                                r'Mean of empty slice')
+                            if "skipfirst" in self.__mdata.keys() and \
+                               self.__mdata["skipfirst"]:
+                                self.__rawgreyimage = np.nanmean(
+                                    self.__filteredimage[1:, :, :], 0)
+                            else:
+                                self.__rawgreyimage = np.nanmean(
+                                    self.__filteredimage, 0)
                     elif self.__filteredimage.shape[0] - ics > 1:
                         if not self.rgb():
                             self.setrgb(True)

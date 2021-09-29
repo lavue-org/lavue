@@ -195,13 +195,14 @@ class LevelsGroupBox(QtGui.QWidget):
         if _PQGVER >= 1100:
             if status:
                 self.__dchl = 0
-                self._updateLevelLabels()
-                if not self.__histo:
-                    self.__histogram.switchLevelMode('mono')
-                self.__levelmode = "mono"
-                self.updateLevels(self.__minval, self.__maxval)
-                if self.__histogram:
-                    self.__histogram.switchLevelMode('mono')
+                if not self.__ui.gradientLabel.isVisible():
+                    self._updateLevelLabels()
+                    if not self.__histo:
+                        self.__histogram.switchLevelMode('mono')
+                    self.__levelmode = "mono"
+                    self.updateLevels(self.__minval, self.__maxval)
+                    if self.__histogram:
+                        self.__histogram.switchLevelMode('mono')
 
     @QtCore.pyqtSlot(bool)
     def _redLevelMode(self, status):
@@ -213,16 +214,17 @@ class LevelsGroupBox(QtGui.QWidget):
         if _PQGVER >= 1100:
             if status:
                 self.__dchl = 1
-                self._updateLevelLabels()
-                if not self.__histo:
-                    self.__histogram.switchLevelMode('rgba')
-                self.__levelmode = "rgba"
-                if self.__channels is not None:
-                    while len(self.__channels) < 1:
-                        self.__channels.append((self.__minval, self.__maxval))
-                    self.updateLevels(None, None, self.__channels)
-                if self.__histogram:
-                    self.__histogram.switchLevelMode('rgba')
+                if self.__ui.gradientLabel.isVisible():
+                    self._updateLevelLabels()
+                    if not self.__histo:
+                        self.__histogram.switchLevelMode('rgba')
+                    self.__levelmode = "rgba"
+                    if self.__channels is not None:
+                        while len(self.__channels) < 1:
+                            self.__channels.append((self.__minval, self.__maxval))
+                        self.updateLevels(None, None, self.__channels)
+                    if self.__histogram:
+                        self.__histogram.switchLevelMode('rgba')
 
     @QtCore.pyqtSlot(bool)
     def _greenLevelMode(self, status):
@@ -234,16 +236,17 @@ class LevelsGroupBox(QtGui.QWidget):
         if _PQGVER >= 1100:
             if status:
                 self.__dchl = 2
-                self._updateLevelLabels()
-                if not self.__histo:
-                    self.__histogram.switchLevelMode('rgba')
-                self.__levelmode = "rgba"
-                if self.__channels is not None:
-                    while len(self.__channels) < 2:
-                        self.__channels.append((self.__minval, self.__maxval))
-                    self.updateLevels(None, None, self.__channels)
-                if self.__histogram:
-                    self.__histogram.switchLevelMode('rgba')
+                if self.__ui.gradientLabel.isVisible():
+                    self._updateLevelLabels()
+                    if not self.__histo:
+                        self.__histogram.switchLevelMode('rgba')
+                    self.__levelmode = "rgba"
+                    if self.__channels is not None:
+                        while len(self.__channels) < 2:
+                            self.__channels.append((self.__minval, self.__maxval))
+                        self.updateLevels(None, None, self.__channels)
+                    if self.__histogram:
+                        self.__histogram.switchLevelMode('rgba')
 
     @QtCore.pyqtSlot(bool)
     def _blueLevelMode(self, status):
@@ -255,16 +258,17 @@ class LevelsGroupBox(QtGui.QWidget):
         if _PQGVER >= 1100:
             if status:
                 self.__dchl = 3
-                self._updateLevelLabels()
-                if not self.__histo:
-                    self.__histogram.switchLevelMode('rgba')
-                self.__levelmode = "rgba"
-                if self.__channels is not None:
-                    while len(self.__channels) < 3:
-                        self.__channels.append((self.__minval, self.__maxval))
-                    self.updateLevels(None, None, self.__channels)
-                if self.__histogram:
-                    self.__histogram.switchLevelMode('rgba')
+                if self.__ui.gradientLabel.isVisible():
+                    self._updateLevelLabels()
+                    if not self.__histo:
+                        self.__histogram.switchLevelMode('rgba')
+                    self.__levelmode = "rgba"
+                    if self.__channels is not None:
+                        while len(self.__channels) < 3:
+                            self.__channels.append((self.__minval, self.__maxval))
+                        self.updateLevels(None, None, self.__channels)
+                    if self.__histogram:
+                        self.__histogram.switchLevelMode('rgba')
 
     def __connectHistogram(self):
         """ create histogram object and connect its signals

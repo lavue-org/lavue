@@ -1951,7 +1951,7 @@ class ImageWidget(QtGui.QWidget):
         :param status: True for on and False for off
         :type status: :obj:`bool`
         """
-        self.setTool("Intensity")
+        # self.setTool("Intensity")
         self.__displaywidget.setrgb(status)
 
     def rgb(self):
