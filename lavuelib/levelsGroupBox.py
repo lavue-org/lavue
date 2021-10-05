@@ -927,7 +927,7 @@ class LevelsGroupBox(QtGui.QWidget):
         :param status: True for on and False for off
         :type status: :obj:`bool`
         """
-        self.__histogram.setRGB(status)
+        self.__histogram.setRGB(status and not self.__gradientcolors)
         if status and self.__dchl and not self.__gradientcolors:
             mode = 'rgba'
             dchl = self.__dchl

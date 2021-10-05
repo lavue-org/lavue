@@ -533,23 +533,23 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                     # if img.dtype.kind == 'f' and np.isnan(img.min()):
                     #     img = np.nan_to_num(img)
                     for iid, image in enumerate(self.__images):
-                        if iid + 1 < img.shape[2]:
+                        if iid < img.shape[2]:
                             image.show()
                             if self.__channellevels and \
                                self.levelMode() != 'mono':
                                 image.setImage(
-                                    img[:, :, iid], lut=None,
+                                    img[:, :, iid],
                                     levels=self.__channellevels[iid],
                                     autoLevels=False)
                             elif self.__displaylevels[0] is not None \
                                     and self.__displaylevels[1] is not None:
                                 image.setImage(
-                                    img[:, :, iid], lut=None,
+                                    img[:, :, iid],
                                     levels=self.__displaylevels,
                                     autoLevels=False)
                             else:
                                 image.setImage(
-                                    img[:, :, iid], lut=None,
+                                    img[:, :, iid],
                                     # levels=[[0,255], [0, 255], [0, 255]],
                                     autoLevels=False)
                 else:
