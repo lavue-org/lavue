@@ -550,7 +550,8 @@ class LiveViewer(QtGui.QDialog):
              if twn in self.__tlaliasnames.keys()]
         )
 
-        self.__levelswg.setImageItem(self.__imagewg.image())
+        for iid in range(3):
+            self.__levelswg.setImageItem(self.__imagewg.image(iid), iid)
         self.__levelswg.showGradient(True)
         self.__levelswg.showChannels(False)
         self.__channelwg.showGradient(True)
@@ -1743,6 +1744,8 @@ class LiveViewer(QtGui.QDialog):
         self.__mbufferwg.changeView(self.__settings.showmbuffer)
 
         self.__scalingwg.changeView(self.__settings.showscale)
+        self.__imagewg.setGradientColors(self.__settings.gradientcolors)
+        self.__levelswg.setGradientColors(self.__settings.gradientcolors)
         self.__levelswg.changeView()
         self.__channelwg.changeView()
         if self.__lazyimageslider != self.__settings.lazyimageslider:
@@ -2247,6 +2250,7 @@ class LiveViewer(QtGui.QDialog):
         cnfdlg.secport = self.__settings.secport
         cnfdlg.hidraport = self.__settings.hidraport
         cnfdlg.maxmbuffersize = self.__settings.maxmbuffersize
+        cnfdlg.gradientcolors = self.__settings.gradientcolors
         cnfdlg.floattype = self.__settings.floattype
         cnfdlg.secstream = self.__settings.secstream
         cnfdlg.zeromask = self.__settings.zeromask
@@ -2461,6 +2465,11 @@ class LiveViewer(QtGui.QDialog):
             self.__settings.accelbuffersum = dialog.accelbuffersum
             self.__mbufferwg.setComputeSum(self.__settings.accelbuffersum)
 
+        if self.__settings.gradientcolors != dialog.gradientcolors:
+            self.__settings.gradientcolors = dialog.gradientcolors
+            self.__imagewg.setGradientColors(dialog.gradientcolors)
+            self.__levelswg.setGradientColors(dialog.gradientcolors)
+            replot = True
         if self.__settings.keepcoords != dialog.keepcoords:
             self.__settings.keepcoords = dialog.keepcoords
             self._assessTransformation(self.__trafoname)

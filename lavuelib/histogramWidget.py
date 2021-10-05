@@ -427,7 +427,7 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         """ gradient changed with rgb
         """
         if self.__rgb:
-            self.lut = None
+            # self.lut = None
             self.sigLookupTableChanged.emit(self)
         else:
             _pg.HistogramLUTItem.gradientChanged(self)

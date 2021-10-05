@@ -181,13 +181,19 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         #: (:class:`numpy.ndarray`) raw data to cut plots
         self.__rawdata = None
 
+        #: (:obj:`list` < :class:`pyqtgraph.ImageItem` >) image item list
+        self.__images = [SafeImageItem(), SafeImageItem(), SafeImageItem()]
         #: (:class:`pyqtgraph.ImageItem`) image item
-        self.__image = SafeImageItem()
+        self.__image = self.__images[0]
 
         #: (:class:`pyqtgraph.ViewBox`) viewbox item
         self.__viewbox = self.__layout.addViewBox(row=0, col=1)
 
-        self.__viewbox.addItem(self.__image)
+        self.__viewbox.addItem(self.__images[0])
+        self.__viewbox.addItem(self.__images[1])
+        self.__viewbox.addItem(self.__images[2])
+        self.__images[1].hide()
+        self.__images[2].hide()
         #: (:obj:`float`) current floar x-position
         self.__xfdata = 0
         #: (:obj:`float`) current floar y-position
@@ -208,6 +214,8 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         self.__doubleclicklock = False
         #: (:obj:`bool`) rgb on flag
         self.__rgb = False
+        #: (:obj:`bool`) gradient colors flag
+        self.__gradientcolors = False
         #: (:obj:`str`) levelmode
         self.__levelmode = 'mono'
         #: (:obj:`dict` < :obj:`str`, :obj:`DisplayExtension` >)
@@ -400,7 +408,8 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         else:
             axes.position = position
             axes.scale = scale
-        self.__image.resetTransform()
+        for image in self.__images:
+            image.resetTransform()
         if axes.scale is not None and anyupdate:
             if not self.__transformations.transpose:
                 self._imagescale(*axes.scale)
@@ -409,17 +418,18 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                     axes.scale[1], axes.scale[0])
         else:
             self._imagescale(1, 1)
-        if axes.position is not None and anyupdate:
-            if self.__transformations.orgtranspose and wrenabled:
-                self.__image.setPos(
-                    axes.position[1], axes.position[0])
-            elif not self.__transformations.transpose:
-                self.__image.setPos(*axes.position)
+        for image in self.__images:
+            if axes.position is not None and anyupdate:
+                if self.__transformations.orgtranspose and wrenabled:
+                    image.setPos(
+                        axes.position[1], axes.position[0])
+                elif not self.__transformations.transpose:
+                    image.setPos(*axes.position)
+                else:
+                    image.setPos(
+                        axes.position[1], axes.position[0])
             else:
-                self.__image.setPos(
-                    axes.position[1], axes.position[0])
-        else:
-            self.__image.setPos(0, 0)
+                image.setPos(0, 0)
         if self.sceneObj.rawdata is not None and update:
             self.autoRange()
 
@@ -431,12 +441,13 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         :param y: y pixel coordinate
         :type y: float
         """
-        try:
-            tr = self.__image.transform()
-            tr.scale(x, y)
-            self.__image.setTransform(tr)
-        except Exception:
-            self.__image.scale(x, y)
+        for image in self.__images:
+            try:
+                tr = image.transform()
+                tr.scale(x, y)
+                image.setTransform(tr)
+            except Exception:
+                image.scale(x, y)
 
     def setToolScale(self, position=None, scale=None):
         """ set axes scales
@@ -494,12 +505,14 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         else:
             axes = self.__wraxes
 
-        if axes.scale is not None or axes.position is not None:
-            self.__image.resetTransform()
+        for image in self.__images:
+            if axes.scale is not None or axes.position is not None:
+                image.resetTransform()
         if axes.scale is not None:
             self._imagescale(1, 1)
-        if axes.position is not None:
-            self.__image.setPos(0, 0)
+        for image in self.__images:
+            if axes.position is not None:
+                image.setPos(0, 0)
         if axes.scale is not None or axes.position is not None:
             if self.sceneObj.rawdata is not None:
                 self.autoRange()
@@ -515,26 +528,51 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         """
         try:
             if img is not None and len(img.shape) == 3:
-                self.__image.setLookupTable(None)
-                if img.dtype.kind == 'f' and np.isnan(img.min()):
-                    img = np.nan_to_num(img)
-                if self.__channellevels and self.levelMode() != 'mono':
-
-                    self.__image.setImage(
-                        img, lut=None,
-                        levels=self.__channellevels,
-                        autoLevels=False)
-                elif self.__displaylevels[0] is not None \
-                        and self.__displaylevels[1] is not None:
-                    self.__image.setImage(
-                        img, lut=None,
-                        levels=self.__displaylevels,
-                        autoLevels=False)
+                if self.__gradientcolors:
+                    # self.__image.setLookupTable(None)
+                    # if img.dtype.kind == 'f' and np.isnan(img.min()):
+                    #     img = np.nan_to_num(img)
+                    for iid, image in enumerate(self.__images):
+                        if iid + 1 < img.shape[2]:
+                            image.show()
+                            if self.__channellevels and \
+                               self.levelMode() != 'mono':
+                                image.setImage(
+                                    img[:, :, iid], lut=None,
+                                    levels=self.__channellevels[iid],
+                                    autoLevels=False)
+                            elif self.__displaylevels[0] is not None \
+                                    and self.__displaylevels[1] is not None:
+                                image.setImage(
+                                    img[:, :, iid], lut=None,
+                                    levels=self.__displaylevels,
+                                    autoLevels=False)
+                            else:
+                                image.setImage(
+                                    img[:, :, iid], lut=None,
+                                    # levels=[[0,255], [0, 255], [0, 255]],
+                                    autoLevels=False)
                 else:
-                    self.__image.setImage(
-                        img, lut=None,
-                        # levels=[[0,255], [0, 255], [0, 255]],
-                        autoLevels=False)
+                    self._hideimages()
+                    self.__image.setLookupTable(None)
+                    if img.dtype.kind == 'f' and np.isnan(img.min()):
+                        img = np.nan_to_num(img)
+                    if self.__channellevels and self.levelMode() != 'mono':
+                        self.__image.setImage(
+                            img, lut=None,
+                            levels=self.__channellevels,
+                            autoLevels=False)
+                    elif self.__displaylevels[0] is not None \
+                            and self.__displaylevels[1] is not None:
+                        self.__image.setImage(
+                            img, lut=None,
+                            levels=self.__displaylevels,
+                            autoLevels=False)
+                    else:
+                        self.__image.setImage(
+                            img, lut=None,
+                            # levels=[[0,255], [0, 255], [0, 255]],
+                            autoLevels=False)
             elif (self.__autodisplaylevels
                   and self.__displaylevels[0] is not None
                   and self.__displaylevels[1] is not None):
@@ -1100,13 +1138,15 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         """
         self.__intensity.dobfsubtraction = state
 
-    def image(self):
+    def image(self, iid=0):
         """ provides imageItem object
 
+        :param iid: image id
+        :type iid: :obj:`int`
         :returns: image object
         :rtype: :class:`pyqtgraph.imageItem.ImageItem`
         """
-        return self.__image
+        return self.__images[iid]
 
     def setTransformations(self, transpose, leftrightflip, updownflip,
                            orgtranspose):
@@ -1239,6 +1279,30 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         :rtype: :obj:`bool`
         """
         return self.__rgb
+
+    def _hideimages(self):
+        """ hides additional images
+        """
+        self.__images[1].hide()
+        self.__images[2].hide()
+
+    def setGradientColors(self, status=True):
+        """ sets gradientcolors on/off
+
+        :param status: True for on and False for off
+        :type status: :obj:`bool`
+        """
+        if not status:
+            self._hideimages()
+        self.__gradientcolors = status
+
+    def gradientColors(self):
+        """ gets gradientcolors on/off
+
+        :returns: True for on and False for off
+        :rtype: :obj:`bool`
+        """
+        return self.__gradientcolors
 
     def setLevelMode(self, levelmode=True):
         """ sets levelmode

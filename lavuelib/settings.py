@@ -101,6 +101,8 @@ class Settings(object):
         self.keepcoords = False
         #: (:obj:`bool`) accelerate buffer sum
         self.accelbuffersum = False
+        #: (:obj:`bool`) image channels shown with gradient colors
+        self.gradientcolors = False
         #: (:obj:`bool`) lazy image slider
         self.lazyimageslider = True
         #: (:obj:`str`) security stream port
@@ -466,6 +468,10 @@ class Settings(object):
             "Configuration/AccelerateBufferSum", type=str))
         if qstval.lower() == "true":
             self.accelbuffersum = True
+        qstval = str(settings.value(
+            "Configuration/ChannelsWithGradientColors", type=str))
+        if qstval.lower() == "true":
+            self.gradientcolors = True
         qstval = str(settings.value(
             "Configuration/LazyImageSlider", type=str))
         if qstval.lower() == "false":
@@ -1017,6 +1023,9 @@ class Settings(object):
         settings.setValue(
             "Configuration/AccelerateBufferSum",
             self.accelbuffersum)
+        settings.setValue(
+            "Configuration/ChannelsWithGradientColors",
+            self.gradientcolors)
         settings.setValue(
             "Configuration/LazyImageSlider",
             self.lazyimageslider)

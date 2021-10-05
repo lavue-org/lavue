@@ -1001,13 +1001,15 @@ class ImageWidget(QtGui.QWidget):
         self.__displaywidget.updateTicks(record)
         self.emitTCC()
 
-    def image(self):
+    def image(self, iid=0):
         """ provides imageItem object
 
+        :param iid: image id
+        :type iid: :obj:`int`
         :returns: image object
         :rtype: :class:`pyqtgraph.ImageItem`
         """
-        return self.__displaywidget.image()
+        return self.__displaywidget.image(iid)
 
     # @debugmethod
     @QtCore.pyqtSlot()
@@ -1961,6 +1963,23 @@ class ImageWidget(QtGui.QWidget):
         :rtype: :obj:`bool`
         """
         return self.__displaywidget.rgb()
+
+    def setGradientColors(self, status=True):
+        """ sets gradientcolors on/off
+
+        :param status: True for on and False for off
+        :type status: :obj:`bool`
+        """
+        # self.setTool("Intensity")
+        self.__displaywidget.setGradientColors(status)
+
+    def gradientColors(self):
+        """ gets gradientcolors on/off
+
+        :returns: True for on and False for off
+        :rtype: :obj:`bool`
+        """
+        return self.__displaywidget.gradientColors()
 
     def applyMask(self):
         """ provides apply mask flag

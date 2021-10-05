@@ -121,6 +121,8 @@ class LevelsGroupBox(QtGui.QWidget):
         self.__channels = None
         #: (:obj: `int`) channel to display
         self.__dchl = 0
+        #: (:obj:`bool`) gradient colors flag
+        self.__gradientcolors = False
 
         self.__ui.minDoubleSpinBox.setMinimum(-10e20)
         self.__ui.minDoubleSpinBox.setMaximum(10e20)
@@ -134,10 +136,18 @@ class LevelsGroupBox(QtGui.QWidget):
                 Gradients.keys():
             self._addGradientItem(name)
 
-        self.__histogram = HistogramHLUTWidget(
-            bins='auto', step='auto',
-            expertmode=expertmode)
-        self.__ui.histogramLayout.addWidget(self.__histogram)
+        self.__histograms = [
+            HistogramHLUTWidget(bins='auto', step='auto',
+                                expertmode=expertmode),
+            HistogramHLUTWidget(bins='auto', step='auto',
+                                expertmode=expertmode),
+            HistogramHLUTWidget(bins='auto', step='auto',
+                                expertmode=expertmode)
+        ]
+        self.__histogram = self.__histograms[0]
+        self.__ui.histogramLayout.addWidget(self.__histograms[0])
+        self.__ui.histogramLayout.addWidget(self.__histograms[1])
+        self.__ui.histogramLayout.addWidget(self.__histograms[2])
 
         self.__ui.gradientComboBox.currentIndexChanged.connect(
             self._updateGradient)
@@ -192,7 +202,18 @@ class LevelsGroupBox(QtGui.QWidget):
         :param status: button status
         :type status: :obj:`bool`
         """
-        if _PQGVER >= 1100:
+        if self.__gradientcolors:
+            if status:
+                self.__dchl = 0
+                if not self.__ui.gradientLabel.isVisible():
+                    self._updateLevelLabels()
+                    if not self.__histo:
+                        self.__histogram.switchLevelMode('mono')
+                    self.__levelmode = "mono"
+                    self.updateLevels(self.__minval, self.__maxval)
+                    if self.__histogram:
+                        self.__histogram.switchLevelMode('mono')
+        elif _PQGVER >= 1100:
             if status:
                 self.__dchl = 0
                 if not self.__ui.gradientLabel.isVisible():
@@ -211,7 +232,18 @@ class LevelsGroupBox(QtGui.QWidget):
         :param status: button status
         :type status: :obj:`bool`
         """
-        if _PQGVER >= 1100:
+        if self.__gradientcolors:
+            if status:
+                self.__dchl = 1
+                if not self.__ui.gradientLabel.isVisible():
+                    self._updateLevelLabels()
+                    if not self.__histo:
+                        self.__histogram.switchLevelMode('mono')
+                    self.__levelmode = "mono"
+                    self.updateLevels(self.__minval, self.__maxval)
+                    if self.__histogram:
+                        self.__histogram.switchLevelMode('mono')
+        elif _PQGVER >= 1100:
             if status:
                 self.__dchl = 1
                 if self.__ui.gradientLabel.isVisible():
@@ -234,7 +266,18 @@ class LevelsGroupBox(QtGui.QWidget):
         :param status: button status
         :type status: :obj:`bool`
         """
-        if _PQGVER >= 1100:
+        if self.__gradientcolors:
+            if status:
+                self.__dchl = 2
+                if not self.__ui.gradientLabel.isVisible():
+                    self._updateLevelLabels()
+                    if not self.__histo:
+                        self.__histogram.switchLevelMode('mono')
+                    self.__levelmode = "mono"
+                    self.updateLevels(self.__minval, self.__maxval)
+                    if self.__histogram:
+                        self.__histogram.switchLevelMode('mono')
+        elif _PQGVER >= 1100:
             if status:
                 self.__dchl = 2
                 if self.__ui.gradientLabel.isVisible():
@@ -257,7 +300,18 @@ class LevelsGroupBox(QtGui.QWidget):
         :param status: button status
         :type status: :obj:`bool`
         """
-        if _PQGVER >= 1100:
+        if self.__gradientcolors:
+            if status:
+                self.__dchl = 3
+                if not self.__ui.gradientLabel.isVisible():
+                    self._updateLevelLabels()
+                    if not self.__histo:
+                        self.__histogram.switchLevelMode('mono')
+                    self.__levelmode = "mono"
+                    self.updateLevels(self.__minval, self.__maxval)
+                    if self.__histogram:
+                        self.__histogram.switchLevelMode('mono')
+        elif _PQGVER >= 1100:
             if status:
                 self.__dchl = 3
                 if self.__ui.gradientLabel.isVisible():
@@ -874,7 +928,7 @@ class LevelsGroupBox(QtGui.QWidget):
         :type status: :obj:`bool`
         """
         self.__histogram.setRGB(status)
-        if status and self.__dchl:
+        if status and self.__dchl and not self.__gradientcolors:
             mode = 'rgba'
             dchl = self.__dchl
         else:
@@ -882,8 +936,8 @@ class LevelsGroupBox(QtGui.QWidget):
             dchl = 0
         self.__histogram.switchLevelMode(mode)
         self._updateLevelLabels(dchl)
-        self.showGradient(not status)
-        if _PQGVER >= 1100:
+        self.showGradient(not status or self.__gradientcolors)
+        if _PQGVER >= 1100 or self.__gradientcolors:
             self.showChannels(status)
 
     def showGradient(self, status=True):
@@ -1025,6 +1079,7 @@ class LevelsGroupBox(QtGui.QWidget):
         if index == -1:
             name = self.__ui.gradientComboBox.currentText()
             index = self.__ui.gradientComboBox.findText(name)
+        print(index)
         self.__histogram.setGradientByName(
             self.__ui.gradientComboBox.itemText(index))
         self.gradientChanged.emit()
@@ -1057,13 +1112,15 @@ class LevelsGroupBox(QtGui.QWidget):
         auto = autoLevel if autoLevel is not None else self.__auto
         self.__histogram.imageChanged(autoLevel=auto)
 
-    def setImageItem(self, image):
+    def setImageItem(self, image, iid=0):
         """ sets histogram image
 
         :param image: histogram image
         :type image: :class:`pyqtgraph.graphicsItems.ImageItem.ImageItem`
+        :param iid: image id
+        :type iid: :obj:`int`
         """
-        self.__histogram.setImageItem(image)
+        self.__histograms[iid].setImageItem(image)
 
     def levels(self):
         """ provides levels from configuration string
@@ -1196,3 +1253,19 @@ class LevelsGroupBox(QtGui.QWidget):
         if self.__histogram and self.__histo:
             return self.__histogram.levelMode
         return self.__levelmode
+
+    def setGradientColors(self, status=True):
+        """ sets gradientcolors on/off
+
+        :param status: True for on and False for off
+        :type status: :obj:`bool`
+        """
+        self.__gradientcolors = status
+
+    def gradientColors(self):
+        """ gets gradientcolors on/off
+
+        :returns: True for on and False for off
+        :rtype: :obj:`bool`
+        """
+        return self.__gradientcolors

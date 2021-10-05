@@ -280,6 +280,8 @@ class ConfigDialog(QtGui.QDialog):
         self.keepcoords = False
         #: (:obj:`bool`) accelerate buffer sum
         self.accelbuffersum = False
+        #: (:obj:`bool`) image channels shown with gradient colors
+        self.gradientcolors = False
         #: (:obj:`bool`) lazy image slider
         self.lazyimageslider = True
         #: (:obj:`bool`) crosshair locker switched on
@@ -437,6 +439,7 @@ class ConfigDialog(QtGui.QDialog):
         self.__ui.downsampleCheckBox.setChecked(self.autodownsample)
         self.__ui.keepCoordsCheckBox.setChecked(self.keepcoords)
         self.__ui.buffersumCheckBox.setChecked(self.accelbuffersum)
+        self.__ui.gradientcolorsCheckBox.setChecked(self.gradientcolors)
         self.__ui.lazyimageCheckBox.setChecked(self.lazyimageslider)
         self.__ui.statsscaleCheckBox.setChecked(not self.statswoscaling)
         self.__ui.sardanaCheckBox.setChecked(self.sardana)
@@ -796,6 +799,7 @@ class ConfigDialog(QtGui.QDialog):
         self.autodownsample = self.__ui.downsampleCheckBox.isChecked()
         self.keepcoords = self.__ui.keepCoordsCheckBox.isChecked()
         self.accelbuffersum = self.__ui.buffersumCheckBox.isChecked()
+        self.gradientcolors = self.__ui.gradientcolorsCheckBox.isChecked()
         self.lazyimageslider = self.__ui.lazyimageCheckBox.isChecked()
         self.statswoscaling = not self.__ui.statsscaleCheckBox.isChecked()
         self.nxsopen = self.__ui.nxsopenCheckBox.isChecked()
