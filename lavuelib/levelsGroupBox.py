@@ -1407,15 +1407,16 @@ class LevelsGroupBox(QtGui.QWidget):
         :param status: True for on and False for off
         :type status: :obj:`bool`
         """
-        self.__gradientcolors = status
-        if status:
-            for iid in range(1, 3):
-                self.__histograms[iid].show()
-                self.__connectHistogram(iid)
-        else:
-            for iid in range(1, 3):
-                self.__histograms[iid].hide()
-                self.__disconnectHistogram(iid)
+        if self.__gradientcolors != status:
+            self.__gradientcolors = status
+            if status:
+                for iid in range(1, 3):
+                    self.__histograms[iid].show()
+                    self.__connectHistogram(iid)
+            else:
+                for iid in range(1, 3):
+                    self.__histograms[iid].hide()
+                    self.__disconnectHistogram(iid)
 
     def gradientColors(self):
         """ gets gradientcolors on/off
