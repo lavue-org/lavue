@@ -170,6 +170,8 @@ class GradientEditorItemWS(
         _pg.graphicsItems.GradientEditorItem.GradientEditorItem.__init__(
             self, *args, **kargs)
         self.__skipupdate = False
+
+        self.name = "highcontrast"
         self.saveAction = QtGui.QAction('Save ...', self)
         self.removeAction = QtGui.QAction('Remove', self)
 
@@ -234,6 +236,7 @@ class GradientEditorItemWS(
         """
         _pg.graphicsItems.GradientEditorItem.GradientEditorItem.loadPreset(
             self, name)
+        self.name = name
         self.sigNameChanged.emit(name)
 
 

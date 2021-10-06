@@ -145,6 +145,28 @@ class LevelsGroupBox(QtGui.QWidget):
                                 expertmode=expertmode)
         ]
         self.__histogram = self.__histograms[0]
+
+        self.__onLevelsSlots = [
+            self._onLevelsChanged,
+            self._onLevelsChanged1,
+            self._onLevelsChanged2
+        ]
+        self.__changeGradientSlots = [
+            self._changeGradient0,
+            self._changeGradient1,
+            self._changeGradient2
+        ]
+        self.__saveGradientSlots = [
+            self._saveGradient,
+            self._saveGradient1,
+            self._saveGradient2
+        ]
+        self.__removeGradientSlots = [
+            self._removeGradient,
+            self._removeGradient1,
+            self._removeGradient2
+        ]
+        self.__rgbstatus = False
         self.__ui.histogramLayout.addWidget(self.__histograms[0])
         self.__ui.histogramLayout.addWidget(self.__histograms[1])
         self.__ui.histogramLayout.addWidget(self.__histograms[2])
@@ -205,14 +227,13 @@ class LevelsGroupBox(QtGui.QWidget):
         if self.__gradientcolors:
             if status:
                 self.__dchl = 0
-                if not self.__ui.gradientLabel.isVisible():
-                    self._updateLevelLabels()
-                    if not self.__histo:
-                        self.__histogram.switchLevelMode('mono')
-                    self.__levelmode = "mono"
-                    self.updateLevels(self.__minval, self.__maxval)
-                    if self.__histogram:
-                        self.__histogram.switchLevelMode('mono')
+                self._updateLevelLabels()
+                if not self.__histo:
+                    self.__histogram.switchLevelMode('mono')
+                self.__levelmode = "mono"
+                self.updateLevels(self.__minval, self.__maxval)
+                if self.__histogram:
+                    self.__histogram.switchLevelMode('mono')
         elif _PQGVER >= 1100:
             if status:
                 self.__dchl = 0
@@ -235,14 +256,14 @@ class LevelsGroupBox(QtGui.QWidget):
         if self.__gradientcolors:
             if status:
                 self.__dchl = 1
-                if not self.__ui.gradientLabel.isVisible():
-                    self._updateLevelLabels()
-                    if not self.__histo:
-                        self.__histogram.switchLevelMode('mono')
-                    self.__levelmode = "mono"
-                    self.updateLevels(self.__minval, self.__maxval)
-                    if self.__histogram:
-                        self.__histogram.switchLevelMode('mono')
+                self._updateLevelLabels()
+                if not self.__histo:
+                    self.__histogram.switchLevelMode('mono')
+                self.__levelmode = "mono"
+                self.updateLevels(self.__minval, self.__maxval)
+                if self.__histogram:
+                    self.__histogram.switchLevelMode('mono')
+                self.setGradient(self.__histograms[0].gradient.name, 0)
         elif _PQGVER >= 1100:
             if status:
                 self.__dchl = 1
@@ -269,19 +290,19 @@ class LevelsGroupBox(QtGui.QWidget):
         if self.__gradientcolors:
             if status:
                 self.__dchl = 2
-                if not self.__ui.gradientLabel.isVisible():
-                    self._updateLevelLabels()
-                    if not self.__histo:
-                        self.__histogram.switchLevelMode('mono')
-                    self.__levelmode = "mono"
-                    self.updateLevels(self.__minval, self.__maxval)
-                    if self.__histogram:
-                        self.__histogram.switchLevelMode('mono')
+                self._updateLevelLabels()
+                if not self.__histo:
+                    self.__histogram.switchLevelMode('mono')
+                self.__levelmode = "mono"
+                self.updateLevels(self.__minval, self.__maxval)
+                if self.__histogram:
+                    self.__histogram.switchLevelMode('mono')
+                self.setGradient(self.__histograms[1].gradient.name, 1)
         elif _PQGVER >= 1100:
             if status:
                 self.__dchl = 2
+                self._updateLevelLabels()
                 if self.__ui.gradientLabel.isVisible():
-                    self._updateLevelLabels()
                     if not self.__histo:
                         self.__histogram.switchLevelMode('rgba')
                     self.__levelmode = "rgba"
@@ -303,14 +324,14 @@ class LevelsGroupBox(QtGui.QWidget):
         if self.__gradientcolors:
             if status:
                 self.__dchl = 3
-                if not self.__ui.gradientLabel.isVisible():
-                    self._updateLevelLabels()
-                    if not self.__histo:
-                        self.__histogram.switchLevelMode('mono')
-                    self.__levelmode = "mono"
-                    self.updateLevels(self.__minval, self.__maxval)
-                    if self.__histogram:
-                        self.__histogram.switchLevelMode('mono')
+                self._updateLevelLabels()
+                if not self.__histo:
+                    self.__histogram.switchLevelMode('mono')
+                self.__levelmode = "mono"
+                self.updateLevels(self.__minval, self.__maxval)
+                if self.__histogram:
+                    self.__histogram.switchLevelMode('mono')
+                self.setGradient(self.__histograms[2].gradient.name, 2)
         elif _PQGVER >= 1100:
             if status:
                 self.__dchl = 3
@@ -327,36 +348,49 @@ class LevelsGroupBox(QtGui.QWidget):
                     if self.__histogram:
                         self.__histogram.switchLevelMode('rgba')
 
-    def __connectHistogram(self):
+    def __connectHistogram(self, iid=0):
         """ create histogram object and connect its signals
         """
-        self.__histogram.item.sigLevelsChanged.connect(
-            self._onLevelsChanged)
-        self.__histogram.sigNameChanged.connect(
-            self._changeGradient)
-        self.__histogram.saveGradientRequested.connect(
-            self._saveGradient)
-        self.__histogram.removeGradientRequested.connect(
-            self._removeGradient)
+        self.__histograms[iid].item.sigLevelsChanged.connect(
+            self.__onLevelsSlots[iid])
+        self.__histograms[iid].sigNameChanged.connect(
+            self.__changeGradientSlots[iid])
+        self.__histograms[iid].saveGradientRequested.connect(
+            self.__saveGradientSlots[iid])
+        self.__histograms[iid].removeGradientRequested.connect(
+            self.__removeGradientSlots[iid])
 
-    def __disconnectHistogram(self):
+    def __disconnectHistogram(self, iid=0):
         """ remove histogram object and disconnect its signals
         """
-        self.__histogram.item.sigLevelsChanged.disconnect(
-            self._onLevelsChanged)
-        self.__histogram.sigNameChanged.disconnect(
-            self._changeGradient)
-        self.__histogram.saveGradientRequested.disconnect(
-            self._saveGradient)
-        self.__histogram.removeGradientRequested.disconnect(
-            self._removeGradient)
+        self.__histograms[iid].item.sigLevelsChanged.disconnect(
+            self.__onLevelsSlots[iid])
+        self.__histograms[iid].sigNameChanged.disconnect(
+            self.__changeGradientSlots[iid])
+        self.__histograms[iid].saveGradientRequested.disconnect(
+            self.__saveGradientSlots[iid])
+        self.__histograms[iid].removeGradientRequested.disconnect(
+            self.__removeGradientSlots[iid])
+
+    def __connectHistograms(self):
+        """ create histogram object and connect its signals
+        """
+        for iid in range(3):
+            self.__connectHistogram(iid)
+
+    def __disconnectHistograms(self):
+        """ remove histogram object and disconnect its signals
+        """
+        for iid in range(3):
+            self.__disconnectHistogram(iid)
 
     def updateCustomGradients(self, gradients):
         self.__customgradients = dict(gradients)
         for name, gradient in self.__customgradients.items():
             _pg.graphicsItems.GradientEditorItem.Gradients[name] = gradient
             self._addGradientItem(name)
-        self.__histogram.resetGradient()
+        for iid in range(3):
+            self.__histograms[iid].resetGradient()
         self._updateGradient()
 
     def __connectMinMax(self):
@@ -564,6 +598,24 @@ class LevelsGroupBox(QtGui.QWidget):
             self.autoLevelsChanged.emit(0)
             self._checkAndEmit()
         self.levelsChanged.emit()
+
+    @QtCore.pyqtSlot(object)
+    def _onLevelsChanged1(self, histogram=None):
+        """ set min/max level spinboxes according to histogram
+
+        :param histogram: intensity histogram object
+        :type histogram: :class: `lavuelib.histogramWidget.HistogramHLUTWidget`
+
+        """
+
+    @QtCore.pyqtSlot(object)
+    def _onLevelsChanged2(self, histogram=None):
+        """ set min/max level spinboxes according to histogram
+
+        :param histogram: intensity histogram object
+        :type histogram: :class: `lavuelib.histogramWidget.HistogramHLUTWidget`
+
+        """
 
     @QtCore.pyqtSlot(object)
     def _onLevelsChanged(self, histogram=None):
@@ -934,9 +986,17 @@ class LevelsGroupBox(QtGui.QWidget):
         else:
             mode = 'mono'
             dchl = 0
+        self.__rgbstatus = status
         self.__histogram.switchLevelMode(mode)
         self._updateLevelLabels(dchl)
         self.showGradient(not status or self.__gradientcolors)
+        if self.__gradientcolors and status:
+            self.__histograms[1].show()
+            self.__histograms[2].show()
+        else:
+            self.__histograms[1].hide()
+            self.__histograms[2].hide()
+
         if _PQGVER >= 1100 or self.__gradientcolors:
             self.showChannels(status)
 
@@ -985,10 +1045,26 @@ class LevelsGroupBox(QtGui.QWidget):
         :returns:  gradient name
         :rtype: :obj:`str`
         """
-        return str(self.__ui.gradientComboBox.currentText())
+        if self.__gradientcolors and self.__rgbstatus:
+            return str(";".join(
+                [his.gradient.name for his in self.__histograms]))
+        else:
+            return str(self.__ui.gradientComboBox.currentText())
 
     @QtCore.pyqtSlot()
-    def _saveGradient(self):
+    def _saveGradient1(self):
+        """ saves the current gradient
+        """
+        self._saveGradient(1)
+
+    @QtCore.pyqtSlot()
+    def _saveGradient2(self):
+        """ saves the current gradient
+        """
+        self._saveGradient(2)
+
+    @QtCore.pyqtSlot()
+    def _saveGradient(self, iid=0):
         """ saves the current gradient
         """
         graddlg = gradientDialog.GradientDialog()
@@ -1000,21 +1076,37 @@ class LevelsGroupBox(QtGui.QWidget):
         if graddlg.exec_():
             if graddlg.name:
                 name = graddlg.name
-                gradient = self.__histogram.gradient.getCurrentGradient()
+                gradient = self.__histograms[iid].gradient.getCurrentGradient()
                 self.__customgradients[name] = gradient
                 _pg.graphicsItems.GradientEditorItem.Gradients[name] = gradient
                 self._addGradientItem(name)
-                self.__histogram.resetGradient()
-                self.setGradient(name)
+                for i, histogram in enumerate(self.__histograms):
+                    lname = histogram.gradient.name
+                    histogram.resetGradient()
+                    if iid == i:
+                        lname = name
+                    self.setGradient(lname, i)
                 self._updateGradient()
                 self.__settings.setCustomGradients(self.__customgradients)
                 self.storeSettingsRequested.emit()
 
     @QtCore.pyqtSlot()
-    def _removeGradient(self):
+    def _removeGradient1(self):
         """ removes the current gradient
         """
-        name = str(self.gradient())
+        self._removeGradient(1)
+
+    @QtCore.pyqtSlot()
+    def _removeGradient2(self):
+        """ removes the current gradient
+        """
+        self._removeGradient(2)
+
+    @QtCore.pyqtSlot()
+    def _removeGradient(self, iid=0):
+        """ removes the current gradient
+        """
+        name = self.__histograms[iid].gradient.name
 
         if name in self.__customgradients:
             if QtGui.QMessageBox.question(
@@ -1027,7 +1119,11 @@ class LevelsGroupBox(QtGui.QWidget):
             self.__customgradients.pop(name)
             _pg.graphicsItems.GradientEditorItem.Gradients.pop(name)
             self._removeGradientItem(name)
-            self.__histogram.resetGradient()
+            for i, histogram in enumerate(self.__histograms):
+                lname = histogram.gradient.name
+                histogram.resetGradient()
+                if name != lname:
+                    self.setGradient(lname, i)
             self.__settings.setCustomGradients(self.__customgradients)
             self.storeSettingsRequested.emit()
         else:
@@ -1061,13 +1157,20 @@ class LevelsGroupBox(QtGui.QWidget):
                 "Error in _removeGradientItem for %s" % name)
             # print("Error %s" % name)
 
-    def setGradient(self, name):
+    def setGradient(self, name, iid=None):
         """ sets gradient
 
         :param name  gradient name
         :type name: :obj:`str`
         """
-        self._changeGradient(name)
+        if iid is not None:
+            self.__changeGradientSlots[iid](name)
+        else:
+            names = name.split(";")
+            for i, nm in enumerate(names):
+                if i > 2:
+                    break
+                self.__changeGradientSlots[iid](nm)
 
     @QtCore.pyqtSlot(int)
     def _updateGradient(self, index=-1):
@@ -1079,13 +1182,48 @@ class LevelsGroupBox(QtGui.QWidget):
         if index == -1:
             name = self.__ui.gradientComboBox.currentText()
             index = self.__ui.gradientComboBox.findText(name)
-        print(index)
-        self.__histogram.setGradientByName(
-            self.__ui.gradientComboBox.itemText(index))
+        if self.__gradientcolors and self.__rgbstatus:
+            if not self.__dchl:
+                for iid in range(3):
+                    self.__histograms[iid].setGradientByName(
+                        self.__ui.gradientComboBox.itemText(index))
+            else:
+                self.__histograms[self.__dchl - 1].setGradientByName(
+                    self.__ui.gradientComboBox.itemText(index))
+        else:
+            self.__histogram.setGradientByName(
+                self.__ui.gradientComboBox.itemText(index))
         self.gradientChanged.emit()
 
     @QtCore.pyqtSlot(str)
-    def _changeGradient(self, name):
+    def _changeGradient0(self, name):
+        """ updates the gradient combobox
+
+        :param name: gradient name
+        :type name: :obj:`str`
+        """
+        self._changeGradient(name, 0)
+
+    @QtCore.pyqtSlot(str)
+    def _changeGradient1(self, name):
+        """ updates the gradient combobox
+
+        :param name: gradient name
+        :type name: :obj:`str`
+        """
+        self._changeGradient(name, 1)
+
+    @QtCore.pyqtSlot(str)
+    def _changeGradient2(self, name):
+        """ updates the gradient combobox
+
+        :param name: gradient name
+        :type name: :obj:`str`
+        """
+        self._changeGradient(name, 2)
+
+    @QtCore.pyqtSlot(str)
+    def _changeGradient(self, name, iid=0):
         """ updates the gradient combobox
 
         :param name: gradient name
@@ -1094,6 +1232,8 @@ class LevelsGroupBox(QtGui.QWidget):
         text = self.__ui.gradientComboBox.currentText()
         if text != name:
             cid = self.__ui.gradientComboBox.findText(name)
+            if self.__gradientcolors and self.__rgbstatus:
+                self.__updateRadio(iid + 1)
             if cid > -1:
                 self.__ui.gradientComboBox.setCurrentIndex(cid)
             else:
@@ -1216,6 +1356,13 @@ class LevelsGroupBox(QtGui.QWidget):
                     pass
 
                 self.updateLevels(lmin, lmax, channels, force=True)
+        self.__updateRadio(dchl)
+
+    def __updateRadio(self, dchl=None):
+        """ update RGB radio button position """
+
+        if dchl is None:
+            dchl = self.__dchl
         if dchl == 0 and not self.__ui.monoRadioButton.isChecked():
             self.__ui.monoRadioButton.click()
         elif dchl == 1 and not self.__ui.redRadioButton.isChecked():
@@ -1261,6 +1408,14 @@ class LevelsGroupBox(QtGui.QWidget):
         :type status: :obj:`bool`
         """
         self.__gradientcolors = status
+        if status:
+            for iid in range(1, 3):
+                self.__histograms[iid].show()
+                self.__connectHistogram(iid)
+        else:
+            for iid in range(1, 3):
+                self.__histograms[iid].hide()
+                self.__disconnectHistogram(iid)
 
     def gradientColors(self):
         """ gets gradientcolors on/off

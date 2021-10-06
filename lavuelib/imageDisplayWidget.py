@@ -534,24 +534,28 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                     #     img = np.nan_to_num(img)
                     for iid, image in enumerate(self.__images):
                         if iid < img.shape[2]:
-                            image.show()
-                            if self.__channellevels and \
-                               self.levelMode() != 'mono':
-                                image.setImage(
-                                    img[:, :, iid],
-                                    levels=self.__channellevels[iid],
-                                    autoLevels=False)
-                            elif self.__displaylevels[0] is not None \
-                                    and self.__displaylevels[1] is not None:
-                                image.setImage(
-                                    img[:, :, iid],
-                                    levels=self.__displaylevels,
-                                    autoLevels=False)
+                            if np.isnan(img[:, :, iid]).all():
+                                image.hide()
                             else:
-                                image.setImage(
-                                    img[:, :, iid],
-                                    # levels=[[0,255], [0, 255], [0, 255]],
-                                    autoLevels=False)
+                                image.show()
+                                if self.__channellevels and \
+                                   self.levelMode() != 'mono':
+                                    image.setImage(
+                                        img[:, :, iid],
+                                        levels=self.__channellevels[iid],
+                                        autoLevels=False)
+                                elif self.__displaylevels[0] is not None \
+                                        and self.__displaylevels[1] \
+                                        is not None:
+                                    image.setImage(
+                                        img[:, :, iid],
+                                        levels=self.__displaylevels,
+                                        autoLevels=False)
+                                else:
+                                    image.setImage(
+                                        img[:, :, iid],
+                                        # levels=[[0,255], [0, 255], [0, 255]],
+                                        autoLevels=False)
                 else:
                     self._hideimages()
                     self.__image.setLookupTable(None)
@@ -576,6 +580,7 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
             elif (self.__autodisplaylevels
                   and self.__displaylevels[0] is not None
                   and self.__displaylevels[1] is not None):
+                self._hideimages()
                 self.__image.setImage(
                     img, autoLevels=False,
                     levels=self.__displaylevels,
@@ -583,10 +588,12 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
             elif (self.__autodisplaylevels
                   or self.__displaylevels[0] is None
                   or self.__displaylevels[1] is None):
+                self._hideimages()
                 self.__image.setImage(
                     img, autoLevels=False,
                     autoDownsample=self.__autodownsample)
             else:
+                self._hideimages()
                 self.__image.setImage(
                     img, autoLevels=False,
                     levels=self.__displaylevels,
