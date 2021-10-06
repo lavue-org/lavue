@@ -1164,13 +1164,13 @@ class LevelsGroupBox(QtGui.QWidget):
         :type name: :obj:`str`
         """
         if iid is not None:
-            self.__changeGradientSlots[iid](name)
+            self.__changeGradientSlots[idd](name)
         else:
             names = name.split(";")
             for i, nm in enumerate(names):
                 if i > 2:
                     break
-                self.__changeGradientSlots[iid](nm)
+                self.__changeGradientSlots[i](nm)
 
     @QtCore.pyqtSlot(int)
     def _updateGradient(self, index=-1):
