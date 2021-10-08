@@ -3,7 +3,7 @@ FROM debian:bullseye
 MAINTAINER DESY, Jan Kotanski <jankotan@gmail.com>
 # RUN /bin/bash -c 'echo "deb http://ftp.de.debian.org/debian bullseye main" > /etc/apt/sources.list.d/debian11de.list'
 RUN apt-get update  
-RUN apt-get install -y base-passwd apt-utils
+RUN apt-get install -y base-passwd apt-utils dialog -y
 RUN apt-get -qq update && apt-get -qq install -y libterm-readline-gnu-perl software-properties-common coreutils gnupg2 procps curl apt-transport-https gnupg2 ca-certificates wget
 RUN curl -s http://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
 RUN chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
