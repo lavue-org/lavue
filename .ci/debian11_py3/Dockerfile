@@ -5,7 +5,7 @@ MAINTAINER DESY, Jan Kotanski <jankotan@gmail.com>
 RUN apt-get update  
 RUN apt-get install -y base-passwd
 RUN apt-get -qq update && apt-get -qq install -y libterm-readline-gnu-perl software-properties-common coreutils gnupg2 procps apt-utils curl apt-transport-https gnupg2 ca-certificates wget
-RUN curl -s http://repos.pni-hdri.de/debian_repo.pub.gpg  | sudo gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
+RUN curl -s http://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
 RUN chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
 # RUN wget --retry-connrefused http://repos.pni-hdri.de/debian_repo.pub.gpg
 # RUN apt-key add debian_repo.pub.gpg
