@@ -942,6 +942,8 @@ class LiveViewer(QtGui.QDialog):
     def _setChannelState(self):
         """ sets gradient state
         """
+        # eself.__levelswg.setScalingLabel(scaling)
+        self.__levelswg.setRGBChannels(self.__channelwg.rgbchannels())
         self.setLavueState({"channel": self.__channelwg.channelLabel()})
         self._plot()
 
@@ -3919,10 +3921,13 @@ class LiveViewer(QtGui.QDialog):
         """
         if self.__settings.statswoscaling and self.__displayimage is not None \
            and self.__displayimage.size > 0:
-            maxval = np.nanmax(self.__displayimage) if flag[0] else 0.0
-            meanval = np.nanmean(self.__displayimage) if flag[1] else 0.0
-            varval = np.nanvar(self.__displayimage) if flag[2] else 0.0
-            maxsval = np.nanmax(self.__scaledimage) if flag[5] else 0.0
+            with warnings.catch_warnings():
+                warnings.filterwarnings(
+                    'ignore', r'All-NaN slice encountered')
+                maxval = np.nanmax(self.__displayimage) if flag[0] else 0.0
+                meanval = np.nanmean(self.__displayimage) if flag[1] else 0.0
+                varval = np.nanvar(self.__displayimage) if flag[2] else 0.0
+                maxsval = np.nanmax(self.__scaledimage) if flag[5] else 0.0
         elif (not self.__settings.statswoscaling
               and self.__scaledimage is not None
               and self.__displayimage.size > 0):
@@ -3933,8 +3938,11 @@ class LiveViewer(QtGui.QDialog):
             maxsval = maxval
         else:
             return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, None
-        maxrawval = np.nanmax(self.__rawgreyimage) if flag[4] else 0.0
-        minval = np.nanmin(self.__scaledimage) if flag[3] else 0.0
+        with warnings.catch_warnings():
+            warnings.filterwarnings(
+                'ignore', r'All-NaN slice encountered')
+            maxrawval = np.nanmax(self.__rawgreyimage) if flag[4] else 0.0
+            minval = np.nanmin(self.__scaledimage) if flag[3] else 0.0
         channels = None
         if hasattr(self.__scaledimage, "shape") \
            and len(self.__scaledimage.shape) == 3:

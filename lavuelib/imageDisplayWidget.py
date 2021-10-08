@@ -558,6 +558,7 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                                         autoLevels=False)
                 else:
                     self._hideimages()
+                    self.__image.show()
                     self.__image.setLookupTable(None)
                     if img.dtype.kind == 'f' and np.isnan(img.min()):
                         img = np.nan_to_num(img)
@@ -581,6 +582,7 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                   and self.__displaylevels[0] is not None
                   and self.__displaylevels[1] is not None):
                 self._hideimages()
+                self.__image.show()
                 self.__image.setImage(
                     img, autoLevels=False,
                     levels=self.__displaylevels,
@@ -589,11 +591,13 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                   or self.__displaylevels[0] is None
                   or self.__displaylevels[1] is None):
                 self._hideimages()
+                self.__image.show()
                 self.__image.setImage(
                     img, autoLevels=False,
                     autoDownsample=self.__autodownsample)
             else:
                 self._hideimages()
+                self.__image.show()
                 self.__image.setImage(
                     img, autoLevels=False,
                     levels=self.__displaylevels,

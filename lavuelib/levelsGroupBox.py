@@ -104,6 +104,8 @@ class LevelsGroupBox(QtGui.QWidget):
         self.__settings = settings
         #: (:obj:`bool`) expert mode
         self.__expertmode = expertmode
+        #: (:obj:`list` <:obj:`int`>) rgb channel indexes
+        self.__rgbchannels = (-1, -1, -1)
 
         #: (:obj:`dict` < :obj:`str`, :obj:`dict` < :obj:`str`,`any`> >
         #                custom gradients
@@ -145,6 +147,7 @@ class LevelsGroupBox(QtGui.QWidget):
                                 expertmode=expertmode)
         ]
         self.__histogram = self.__histograms[0]
+        self.__histconnect = [False, False, False]
 
         self.__onLevelsSlots = [
             self._onLevelsChanged,
@@ -191,6 +194,10 @@ class LevelsGroupBox(QtGui.QWidget):
         self.__ui.autofactorLineEdit.textChanged.connect(
             self._onAutoFactorChanged)
         self.__connectHistogram()
+        self.__histograms[0].show()
+        self.__histograms[1].hide()
+        self.__histograms[2].hide()
+        # print(self.__histogram.isVisible())
         self.updateLevels(0.1, 1.0)
         self.__connectMinMax()
         self.__levelmode = "mono"
@@ -259,8 +266,12 @@ class LevelsGroupBox(QtGui.QWidget):
                 self._updateLevelLabels()
                 if not self.__histo:
                     self.__histogram.switchLevelMode('mono')
-                self.__levelmode = "mono"
-                self.updateLevels(self.__minval, self.__maxval)
+                self.__levelmode = "rgba"
+                if self.__channels is not None:
+                    while len(self.__channels) < 1:
+                        self.__channels.append(
+                            (self.__minval, self.__maxval))
+                    self.updateLevels(None, None, self.__channels)
                 if self.__histogram:
                     self.__histogram.switchLevelMode('mono')
                 self.setGradient(self.__histograms[0].gradient.name, 0)
@@ -293,8 +304,12 @@ class LevelsGroupBox(QtGui.QWidget):
                 self._updateLevelLabels()
                 if not self.__histo:
                     self.__histogram.switchLevelMode('mono')
-                self.__levelmode = "mono"
-                self.updateLevels(self.__minval, self.__maxval)
+                self.__levelmode = "rgba"
+                if self.__channels is not None:
+                    while len(self.__channels) < 2:
+                        self.__channels.append(
+                            (self.__minval, self.__maxval))
+                    self.updateLevels(None, None, self.__channels)
                 if self.__histogram:
                     self.__histogram.switchLevelMode('mono')
                 self.setGradient(self.__histograms[1].gradient.name, 1)
@@ -327,8 +342,12 @@ class LevelsGroupBox(QtGui.QWidget):
                 self._updateLevelLabels()
                 if not self.__histo:
                     self.__histogram.switchLevelMode('mono')
-                self.__levelmode = "mono"
-                self.updateLevels(self.__minval, self.__maxval)
+                self.__levelmode = "rgba"
+                if self.__channels is not None:
+                    while len(self.__channels) < 3:
+                        self.__channels.append(
+                            (self.__minval, self.__maxval))
+                    self.updateLevels(None, None, self.__channels)
                 if self.__histogram:
                     self.__histogram.switchLevelMode('mono')
                 self.setGradient(self.__histograms[2].gradient.name, 2)
@@ -351,38 +370,48 @@ class LevelsGroupBox(QtGui.QWidget):
     def __connectHistogram(self, iid=0):
         """ create histogram object and connect its signals
         """
-        self.__histograms[iid].item.sigLevelsChanged.connect(
-            self.__onLevelsSlots[iid])
-        self.__histograms[iid].sigNameChanged.connect(
-            self.__changeGradientSlots[iid])
-        self.__histograms[iid].saveGradientRequested.connect(
-            self.__saveGradientSlots[iid])
-        self.__histograms[iid].removeGradientRequested.connect(
-            self.__removeGradientSlots[iid])
+        if not self.__histconnect[iid]:
+            self.__histograms[iid].item.sigLevelsChanged.connect(
+                self.__onLevelsSlots[iid])
+            self.__histograms[iid].sigNameChanged.connect(
+                self.__changeGradientSlots[iid])
+            self.__histograms[iid].saveGradientRequested.connect(
+                self.__saveGradientSlots[iid])
+            self.__histograms[iid].removeGradientRequested.connect(
+                self.__removeGradientSlots[iid])
+            self.__histconnect[iid] = True
+        # else:
+        #     print("WARN: trying to connect HIS", iid)
 
     def __disconnectHistogram(self, iid=0):
         """ remove histogram object and disconnect its signals
         """
-        self.__histograms[iid].item.sigLevelsChanged.disconnect(
-            self.__onLevelsSlots[iid])
-        self.__histograms[iid].sigNameChanged.disconnect(
-            self.__changeGradientSlots[iid])
-        self.__histograms[iid].saveGradientRequested.disconnect(
-            self.__saveGradientSlots[iid])
-        self.__histograms[iid].removeGradientRequested.disconnect(
-            self.__removeGradientSlots[iid])
+        if self.__histconnect[iid]:
+            self.__histograms[iid].item.sigLevelsChanged.disconnect(
+                self.__onLevelsSlots[iid])
+            self.__histograms[iid].sigNameChanged.disconnect(
+                self.__changeGradientSlots[iid])
+            self.__histograms[iid].saveGradientRequested.disconnect(
+                self.__saveGradientSlots[iid])
+            self.__histograms[iid].removeGradientRequested.disconnect(
+                self.__removeGradientSlots[iid])
+            self.__histconnect[iid] = False
+        # else:
+        #     print("WARN: trying to disconnect HIS", iid)
 
     def __connectHistograms(self):
         """ create histogram object and connect its signals
         """
         for iid in range(3):
-            self.__connectHistogram(iid)
+            if self.__histograms[iid].isVisible():
+                self.__connectHistogram(iid)
 
     def __disconnectHistograms(self):
         """ remove histogram object and disconnect its signals
         """
         for iid in range(3):
-            self.__disconnectHistogram(iid)
+            if self.__histograms[iid].isVisible():
+                self.__disconnectHistogram(iid)
 
     def updateCustomGradients(self, gradients):
         self.__customgradients = dict(gradients)
@@ -420,11 +449,17 @@ class LevelsGroupBox(QtGui.QWidget):
                 if self.__histo:
                     lowlim = self.__ui.minDoubleSpinBox.value()
                     uplim = self.__ui.maxDoubleSpinBox.value()
-                    if self.__dchl == 0:
-                        self.__histogram.region.setRegion([lowlim, uplim])
+                    if self.__gradientcolors and self.__rgbstatus:
+                        for iid in range(3):
+                            if not self.__dchl or iid + 1 == self.__dchl:
+                                self.__histograms[iid].region.setRegion(
+                                    [lowlim, uplim])
                     else:
-                        self.__histogram.regions[self.__dchl].setRegion(
-                            [lowlim, uplim])
+                        if self.__dchl == 0:
+                            self.__histogram.region.setRegion([lowlim, uplim])
+                        else:
+                            self.__histogram.regions[self.__dchl].setRegion(
+                                [lowlim, uplim])
             finally:
                 self.__connectMinMax()
                 if self.__histo:
@@ -454,15 +489,14 @@ class LevelsGroupBox(QtGui.QWidget):
         :param showadd: if additional histogram should be shown
         :type showadd: :obj:`bool`
         """
-
         if showhistogram is True and self.__histo is False:
-            self.__connectHistogram()
-            self.__histogram.show()
-            self.__histogram.fillHistogram(True)
+            if showhistogram is not None:
+                self.__histo = showhistogram
+            self.showHistograms(True)
         elif showhistogram is False and self.__histo is True:
-            self.__histogram.hide()
-            self.__histogram.fillHistogram(False)
-            self.__disconnectHistogram()
+            if showhistogram is not None:
+                self.__histo = showhistogram
+            self.showHistograms(False)
         if showadd is True:
             self.__ui.binsComboBox.show()
             self.__ui.binsLabel.show()
@@ -499,8 +533,6 @@ class LevelsGroupBox(QtGui.QWidget):
             self.__ui.minLabel.hide()
             self.__ui.scalingLabel.hide()
 
-        if showhistogram is not None:
-            self.__histo = showhistogram
         if showlevels is not None:
             self.__levels = showlevels
 
@@ -540,9 +572,11 @@ class LevelsGroupBox(QtGui.QWidget):
             if fstep <= 0:
                 fstep = None
                 self.__ui.stepLineEdit.setText("")
-            self.__histogram.setStep(fstep)
+            for histogram in self.__histograms:
+                histogram.setStep(fstep)
         except Exception:
-            self.__histogram.setStep(None)
+            for histogram in self.__histograms:
+                histogram.setStep(None)
             self.__ui.stepLineEdit.setText("")
         self.levelsChanged.emit()
 
@@ -561,10 +595,12 @@ class LevelsGroupBox(QtGui.QWidget):
             elif ffactor > 100:
                 ffactor = 100
                 self.__ui.autofactorLineEdit.setText("100")
-            self.__histogram.setAutoFactor(ffactor)
+            for histogram in self.__histograms:
+                histogram.setAutoFactor(ffactor)
             self.autoLevelsChanged.emit(1)
         except Exception:
-            self.__histogram.setAutoFactor(None)
+            for histogram in self.__histograms:
+                histogram.setAutoFactor(None)
             self.autoLevelsChanged.emit(2 if self.__auto else 0)
         self.levelsChanged.emit()
 
@@ -587,12 +623,15 @@ class LevelsGroupBox(QtGui.QWidget):
                 elif ffactor > 100:
                     ffactor = 100
                     self.__ui.autofactorLineEdit.setText("100")
-                self.__histogram.setAutoFactor(ffactor)
+                    for histogram in self.__histograms:
+                        histogram.setAutoFactor(ffactor)
             except Exception:
-                self.__histogram.setAutoFactor(None)
+                for histogram in self.__histograms:
+                    histogram.setAutoFactor(None)
                 self.autoLevelsChanged.emit(2)
         else:
-            self.__histogram.setAutoFactor(None)
+            for histogram in self.__histograms:
+                histogram.setAutoFactor(None)
             self.__auto = False
             self.__showControls()
             self.autoLevelsChanged.emit(0)
@@ -605,8 +644,10 @@ class LevelsGroupBox(QtGui.QWidget):
 
         :param histogram: intensity histogram object
         :type histogram: :class: `lavuelib.histogramWidget.HistogramHLUTWidget`
-
         """
+        if histogram is None:
+            histogram = self.__histograms[1]
+        self._onLevelsChanged(histogram)
 
     @QtCore.pyqtSlot(object)
     def _onLevelsChanged2(self, histogram=None):
@@ -614,8 +655,10 @@ class LevelsGroupBox(QtGui.QWidget):
 
         :param histogram: intensity histogram object
         :type histogram: :class: `lavuelib.histogramWidget.HistogramHLUTWidget`
-
         """
+        if histogram is None:
+            histogram = self.__histograms[2]
+        self._onLevelsChanged(histogram)
 
     @QtCore.pyqtSlot(object)
     def _onLevelsChanged(self, histogram=None):
@@ -645,14 +688,16 @@ class LevelsGroupBox(QtGui.QWidget):
                 if self.__dchl == 0:
                     self.__ui.minDoubleSpinBox.setValue(levels[0])
                     self.__ui.maxDoubleSpinBox.setValue(levels[1])
-            # #TODO channels
             if hasattr(self.__histogram, "regions") and \
                self.__channels is not None:
                 while len(self.__channels) < 3:
                     self.__channels.append((self.__minval, self.__maxval))
                     added = True
                 for i in range(1, 4):
-                    levels = histogram.regions[i].getRegion()
+                    if self.__gradientcolors and self.__rgbstatus:
+                        levels = self.__histograms[i - 1].region.getRegion()
+                    else:
+                        levels = histogram.regions[i].getRegion()
                     lowlim = self.__channels[i - 1][0]
                     uplim = self.__channels[i - 1][1]
                     added = False
@@ -762,8 +807,10 @@ class LevelsGroupBox(QtGui.QWidget):
                     ch = self.__channels[self.__dchl - 1]
                     if ch is not None:
                         chl, chh = ch
-                        self.__ui.minDoubleSpinBox.setValue(chl)
-                        self.__ui.maxDoubleSpinBox.setValue(chh)
+                        if chl is not None:
+                            self.__ui.minDoubleSpinBox.setValue(chl)
+                        if chh is not None:
+                            self.__ui.maxDoubleSpinBox.setValue(chh)
         finally:
             if not signals:
                 self.__connectMinMax()
@@ -773,7 +820,10 @@ class LevelsGroupBox(QtGui.QWidget):
             update = False
             try:
                 if self.__histo:
-                    self.__disconnectHistogram()
+                    if self.__gradientcolors and self.__rgbstatus:
+                        self.__disconnectHistograms()
+                    else:
+                        self.__disconnectHistogram()
 
                 if levels[0] != lowlim or levels[1] != uplim or force:
                     if self.__histo:
@@ -784,15 +834,27 @@ class LevelsGroupBox(QtGui.QWidget):
                             if ch is not None:
                                 lowlim, uplim = ch
                                 if lowlim is not None and uplim is not None:
-                                    levels = self.__histogram.regions[i + 1]\
-                                                             .getRegion()
-                                    if levels[0] != lowlim \
-                                       or levels[1] != uplim or force:
-                                        self.__histogram.regions[i + 1].\
-                                            setRegion([lowlim, uplim])
+                                    if self.__gradientcolors and \
+                                       self.__rgbstatus:
+                                        levels = self.__histograms[i].region\
+                                            .getRegion()
+                                        if levels[0] != lowlim \
+                                           or levels[1] != uplim or force:
+                                            self.__histograms[i].region.\
+                                                setRegion([lowlim, uplim])
+                                    else:
+                                        levels = self.__histogram.\
+                                            regions[i + 1].getRegion()
+                                        if levels[0] != lowlim \
+                                           or levels[1] != uplim or force:
+                                            self.__histogram.regions[i + 1].\
+                                                setRegion([lowlim, uplim])
             finally:
                 if self.__histo:
-                    self.__connectHistogram()
+                    if self.__gradientcolors and self.__rgbstatus:
+                        self.__connectHistograms()
+                    else:
+                        self.__connectHistogram()
             if update:
                 self._onLevelsChanged()
         self._emitLevels()
@@ -815,7 +877,12 @@ class LevelsGroupBox(QtGui.QWidget):
             ulim = None
             if self.__histo:
                 llim, ulim = self.__histogram.getFactorRegion()
-                channels = self.__histogram.getChannelFactorRegion()
+                if self.__gradientcolors and self.__rgbstatus:
+                    channels = [(llim, ulim)]
+                    channels.append(self.__histograms[1].getFactorRegion())
+                    channels.append(self.__histograms[2].getFactorRegion())
+                else:
+                    channels = self.__histogram.getChannelFactorRegion()
             if channels is not None:
                 self.__channels = channels
             if llim is not None and ulim is not None:
@@ -907,14 +974,23 @@ class LevelsGroupBox(QtGui.QWidget):
         return lowlim, uplim
 
     @QtCore.pyqtSlot(str)
+    def setRGBChannels(self, rgbchannels):
+        """ rgb channel indexes
+
+        :param rgbchannels: rgb channel indexes
+        :type rgbchannels: :obj:`tuple` <:obj:`int`>
+        """
+        if self.__rgbchannels != rgbchannels:
+            self.__rgbchannels = rgbchannels
+        self.showHistograms(self.__rgbstatus)
+
+    @QtCore.pyqtSlot(str)
     def setScalingLabel(self, scalingtype):
         """ sets scaling label
 
         :param scalingtype: scaling type, i.e. log, linear, sqrt
         :type scalingtype: :obj:`str`
         """
-        # TODO channels
-
         lowlim = float(self.__ui.minDoubleSpinBox.value())
         uplim = float(self.__ui.maxDoubleSpinBox.value())
         scalefun = {
@@ -982,23 +1058,62 @@ class LevelsGroupBox(QtGui.QWidget):
         self.__histogram.setRGB(status and not self.__gradientcolors)
         if status and self.__dchl and not self.__gradientcolors:
             mode = 'rgba'
+            lmode = 'rgba'
             dchl = self.__dchl
+        elif status and self.__dchl and self.__gradientcolors:
+            mode = 'mono'
+            lmode = 'rgba'
+            dchl = 0
         else:
             mode = 'mono'
+            lmode = 'mono'
             dchl = 0
         self.__rgbstatus = status
         self.__histogram.switchLevelMode(mode)
+        self.__levelmode = lmode
         self._updateLevelLabels(dchl)
         self.showGradient(not status or self.__gradientcolors)
-        if self.__gradientcolors and status:
-            self.__histograms[1].show()
-            self.__histograms[2].show()
-        else:
-            self.__histograms[1].hide()
-            self.__histograms[2].hide()
-
+        self.showHistograms(status)
         if _PQGVER >= 1100 or self.__gradientcolors:
             self.showChannels(status)
+
+    def showHistograms(self, status=True):
+        """ show/hide gradient widget
+
+        :param status: show gradient flag
+        :type status: :obj:`bool`
+        """
+        if self.__gradientcolors and status and self.__histo:
+            for iid in range(0, 3):
+                if self.__rgbchannels[iid] != -1:
+                    if not self.__histograms[iid].isVisible():
+                        self.__connectHistogram(iid)
+                        self.__histograms[iid].show()
+                        self.__histograms[iid].fillHistogram(True)
+                else:
+                    if self.__histograms[iid].isVisible():
+                        self.__histograms[iid].hide()
+                        self.__histograms[iid].fillHistogram(False)
+                        self.__disconnectHistogram(iid)
+        else:
+            if self.__histo:
+                if not self.__histograms[0].isVisible():
+                    self.__connectHistogram()
+                    self.__histograms[0].show()
+                    self.__histograms[0].fillHistogram(True)
+            else:
+                if self.__histograms[0].isVisible():
+                    self.__histograms[0].hide()
+                    self.__histograms[0].fillHistogram(False)
+                    self.__disconnectHistogram()
+            if self.__histograms[1].isVisible():
+                self.__histograms[1].hide()
+                self.__histograms[1].fillHistogram(False)
+                self.__disconnectHistogram(1)
+            if self.__histograms[2].isVisible():
+                self.__histograms[2].hide()
+                self.__histograms[2].fillHistogram(False)
+                self.__disconnectHistogram(2)
 
     def showGradient(self, status=True):
         """ show/hide gradient widget
@@ -1035,8 +1150,9 @@ class LevelsGroupBox(QtGui.QWidget):
         :param index: bins edges algorithm index for histogram
         :type index: :obj:`int`
         """
-        self.__histogram.setBins(
-            self.__ui.binsComboBox.itemText(index))
+        for histogram in self.__histograms:
+            histogram.setBins(
+                self.__ui.binsComboBox.itemText(index))
         self.levelsChanged.emit()
 
     def gradient(self):
@@ -1250,7 +1366,11 @@ class LevelsGroupBox(QtGui.QWidget):
         :type autoLevel: :obj:`bool`
         """
         auto = autoLevel if autoLevel is not None else self.__auto
-        self.__histogram.imageChanged(autoLevel=auto)
+        if self.__gradientcolors and self.__rgbstatus:
+            for histogram in self.__histograms:
+                histogram.imageChanged(autoLevel=auto)
+        else:
+            self.__histogram.imageChanged(autoLevel=auto)
 
     def setImageItem(self, image, iid=0):
         """ sets histogram image
@@ -1397,8 +1517,8 @@ class LevelsGroupBox(QtGui.QWidget):
         :return: level mode
         :rtype: :obj:`str`
         """
-        if self.__histogram and self.__histo:
-            return self.__histogram.levelMode
+        # if self.__histogram and self.__histo:
+        #     return self.__histogram.levelMode
         return self.__levelmode
 
     def setGradientColors(self, status=True):
@@ -1409,14 +1529,7 @@ class LevelsGroupBox(QtGui.QWidget):
         """
         if self.__gradientcolors != status:
             self.__gradientcolors = status
-            if status:
-                for iid in range(1, 3):
-                    self.__histograms[iid].show()
-                    self.__connectHistogram(iid)
-            else:
-                for iid in range(1, 3):
-                    self.__histograms[iid].hide()
-                    self.__disconnectHistogram(iid)
+            self.showHistograms(self.__rgbstatus)
 
     def gradientColors(self):
         """ gets gradientcolors on/off
