@@ -110,6 +110,7 @@ class HistogramHLUTWidget(_pg.widgets.GraphicsView.GraphicsView):
         self.setSizePolicy(
             QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Expanding)
         self.setMinimumWidth(95)
+        self.setMinimumHeight(95)
 
     def sizeHint(self):
         """ sets size hint

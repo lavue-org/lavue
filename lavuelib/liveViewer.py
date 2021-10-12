@@ -1339,7 +1339,6 @@ class LiveViewer(QtGui.QDialog):
                         self.__sourcewg.toggleServerConnection()
                 self.__updateTool(tool)
                 self._plot()
-                # print("SETSTATE")
                 self.setState()
             if not dctcnf or \
                ("__update__" in dctcnf.keys() and dctcnf["__update__"]):
@@ -1617,12 +1616,12 @@ class LiveViewer(QtGui.QDialog):
             self.__scalingwg.setScaling(str(options.scaling))
 
         QtCore.QCoreApplication.processEvents()
-        if hasattr(options, "levels") and options.levels is not None:
+        if hasattr(options, "gradient") and options.gradient is not None:
             if not self.__settings.showlevels:
                 self.__settings.showslevels = True
                 self.__levelswg.changeView(showlevels=True)
                 self.__channelwg.changeView(showlevels=True)
-            self.__levelswg.setLevels(str(options.levels))
+            self.__levelswg.setGradient(str(options.gradient))
 
         if hasattr(options, "autofactor") and options.autofactor is not None:
             if not self.__settings.showlevels:
@@ -1631,12 +1630,12 @@ class LiveViewer(QtGui.QDialog):
                 self.__channelwg.changeView(showlevels=True)
             self.__levelswg.setAutoFactor(str(options.autofactor))
 
-        if hasattr(options, "gradient") and options.gradient is not None:
+        if hasattr(options, "levels") and options.levels is not None:
             if not self.__settings.showlevels:
                 self.__settings.showslevels = True
                 self.__levelswg.changeView(showlevels=True)
                 self.__channelwg.changeView(showlevels=True)
-            self.__levelswg.setGradient(str(options.gradient))
+            self.__levelswg.setLevels(str(options.levels))
 
         if hasattr(options, "tool") and options.tool is not None:
             tlname = str(options.tool)

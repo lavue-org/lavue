@@ -1069,12 +1069,16 @@ class LevelsGroupBox(QtGui.QWidget):
         elif status and self.__dchl and self.__gradientcolors:
             mode = 'mono'
             lmode = 'rgba'
-            dchl = 0
+            dchl = self.__dchl
         else:
             mode = 'mono'
             lmode = 'mono'
             dchl = 0
-        self.__rgbstatus = status
+
+        switch = False
+        if self.__rgbstatus != status:
+            switch = True
+            self.__rgbstatus = status
         self.__histogram.switchLevelMode(mode)
         self.__levelmode = lmode
         self._updateLevelLabels(dchl)
@@ -1082,6 +1086,8 @@ class LevelsGroupBox(QtGui.QWidget):
         self.showHistograms(status)
         if _PQGVER >= 1100 or self.__gradientcolors:
             self.showChannels(status)
+        if switch:
+            self.gradientChanged.emit()
 
     def showHistograms(self, status=True):
         """ show/hide gradient widget
@@ -1127,12 +1133,13 @@ class LevelsGroupBox(QtGui.QWidget):
         :param status: show gradient flag
         :type status: :obj:`bool`
         """
-        if status:
+        if status and not self.__ui.gradientComboBox.isVisible():
             self.__ui.gradientComboBox.show()
             self.__ui.gradientLabel.show()
             self.__histogram.gradient.show()
+            # self.setGradient(self.gradient())
             self._updateGradient()
-        else:
+        elif not status and self.__ui.gradientComboBox.isVisible():
             self.__ui.gradientComboBox.hide()
             self.__ui.gradientLabel.hide()
             self.__histogram.gradient.hide()
@@ -1294,13 +1301,16 @@ class LevelsGroupBox(QtGui.QWidget):
         :type iid: :obj:`int`
         """
         if iid is not None:
+            self.__histograms[iid].setGradientByName(name)
             self.__changeGradientSlots[iid](name)
         else:
             names = name.split(";")
             for i, nm in enumerate(names):
                 if i > 2:
                     break
-                self.__changeGradientSlots[i](nm)
+                self.__histograms[i].setGradientByName(nm)
+                if i + 1 == self.__dchl:
+                    self.__changeGradientSlots[i](nm)
 
     @QtCore.pyqtSlot(int)
     def _updateGradient(self, index=-1):
@@ -1312,6 +1322,7 @@ class LevelsGroupBox(QtGui.QWidget):
         if index == -1:
             name = self.__ui.gradientComboBox.currentText()
             index = self.__ui.gradientComboBox.findText(name)
+        # if self.__gradientcolors and self.__rgbstatus:
         if self.__gradientcolors and self.__rgbstatus:
             if not self.__dchl:
                 for iid in range(3):
@@ -1367,7 +1378,8 @@ class LevelsGroupBox(QtGui.QWidget):
             if self.__gradientcolors and self.__rgbstatus:
                 self.__updateRadio(iid + 1)
             if cid > -1:
-                self.__ui.gradientComboBox.setCurrentIndex(cid)
+                if self.__gradientcolors and self.__rgbstatus or iid == 0:
+                    self.__ui.gradientComboBox.setCurrentIndex(cid)
             else:
                 logger.error(
                     "LevelsGroupBox.changeGradient: "
@@ -1490,7 +1502,6 @@ class LevelsGroupBox(QtGui.QWidget):
                     lmax = float(smax)
                 except Exception:
                     pass
-
                 self.updateLevels(lmin, lmax, channels, force=True)
         self.__updateRadio(dchl)
 
@@ -1500,7 +1511,6 @@ class LevelsGroupBox(QtGui.QWidget):
         :param dchl: channel id
         :type dchl: :obj:`int`
         """
-
         if dchl is None:
             dchl = self.__dchl
         if dchl == 0 and not self.__ui.monoRadioButton.isChecked():
