@@ -464,8 +464,9 @@ class LevelsGroupBox(QtGui.QWidget):
                         if self.__dchl == 0:
                             self.__histogram.region.setRegion([lowlim, uplim])
                         else:
-                            self.__histogram.regions[self.__dchl].setRegion(
-                                [lowlim, uplim])
+                            if hasattr(self.__histogram, "regions"):
+                                self.__histogram.regions[self.__dchl].\
+                                    setRegion([lowlim, uplim])
             finally:
                 self.__connectMinMax()
                 if self.__histo:
