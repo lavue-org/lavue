@@ -1065,7 +1065,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             log='info',
             levels='0,5;1,8;0,6;1,7;green',
             scaling='log',
-            gradient='thermal;plasma;grey',
+            gradient='thermal;flame;grey',
             channel='rgb',
             start=True,
             tangodevice='test/lavuecontroller/00'
@@ -1176,10 +1176,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         ls = json.loads(self.__lavuestate)
         dls = dict(self.__defaultls)
 
-        if _PQGVER >= 1100:
-            lvs = '0.0,5.0;1.0,8.0;0.0,6.0;1.0,7.0;green'
-        else:
-            lvs = '0.0,5.0;1.0,8.0;0.0,6.0;1.0,7.0'
+        lvs = '0.0,5.0;1.0,8.0;0.0,6.0;1.0,7.0;green'
 
         dls.update(dict(
             mode='expert',
@@ -1195,7 +1192,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
             levels=lvs,
             scaling='log',
             channel='0,1,2',
-            gradient='thermal;plasma;grey',
+            gradient='thermal;flame;grey',
             #  gradient='thermal',
             tangodevice='test/lavuecontroller/00',
             connected=True,
