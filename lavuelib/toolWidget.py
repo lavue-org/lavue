@@ -196,8 +196,10 @@ class ToolParameters(object):
         self.crosshairlocker = False
         #: (:obj:`bool`) center lines enabled
         self.centerlines = False
-        #: (:obj:`bool`) position lines enabled
+        #: (:obj:`bool`) mark position lines enabled
         self.marklines = False
+        #: (:obj:`bool`) tracking position lines enabled
+        self.trackinglines = False
         #: (:obj:`str`) infolineedit text
         self.infolineedit = None
         #: (:obj:`str`) infolabel text
@@ -488,6 +490,8 @@ class MotorsToolWidget(ToolBaseWidget):
         self.__motorWatcher = None
         #: (:obj:`bool`) is moving
         self.__moving = False
+        #: (:obj:`bool`) is tracking
+        self.__tracking = False
 
         #: (:class:`Ui_MotorsToolWidget')
         #:        ui_toolwidget object from qtdesigner
@@ -499,6 +503,7 @@ class MotorsToolWidget(ToolBaseWidget):
         #: (:obj:`bool`) position lines enabled
         self.parameters.scale = True
         self.parameters.marklines = True
+        self.parameters.trackinglines = False
         self.parameters.infolineedit = ""
         self.parameters.infotips = \
             "coordinate info display for the mouse pointer"
@@ -509,7 +514,7 @@ class MotorsToolWidget(ToolBaseWidget):
             [self.__ui.axesPushButton.clicked, self._mainwidget.setTicks],
             [self.__ui.takePushButton.clicked, self._setMotors],
             [self.__ui.movePushButton.clicked, self._moveStopMotors],
-            [self.__ui.resetPushButton.clicked, self._resetMotors],
+            [self.__ui.trackPushButton.clicked, self._trackStopMotors],
             [self._mainwidget.mouseImageDoubleClicked, self._updateFinal],
             [self._mainwidget.mouseImagePositionChanged, self._message],
             [self.__ui.xLineEdit.textEdited, self._getFinal],
@@ -562,6 +567,14 @@ class MotorsToolWidget(ToolBaseWidget):
                     self.__ui.yLineEdit.setText(str(cnf["y_position"]))
                 except Exception:
                     pass
+            if "track" in cnf.keys():
+                if cnf["track"]:
+                    if str(self.__ui.trackePushButton.text()) == "Track":
+                        self._trackStopMotors()
+            if "untrack" in cnf.keys():
+                if cnf["untrack"]:
+                    if str(self.__ui.trackePushButton.text()) == "Untrack":
+                        self._trackStopMotors()
             if "move" in cnf.keys():
                 if cnf["move"]:
                     if str(self.__ui.movePushButton.text()) == "Move":
@@ -597,6 +610,10 @@ class MotorsToolWidget(ToolBaseWidget):
             cnf["motor_state"] = "ON"
         else:
             cnf["motor_state"] = "MOVING"
+        if self.__tracking:
+            cnf["tracking"] = True
+        else:
+            cnf["tracking"] = False
 
         return json.dumps(cnf)
 
@@ -642,22 +659,13 @@ class MotorsToolWidget(ToolBaseWidget):
         self._mainwidget.emitTCC()
 
     @QtCore.pyqtSlot()
-    def _resetMotors(self):
-        """ reset x,y final to the current motor positions
+    def _trackStopMotors(self):
+        """ move or stop motors depending on movePushButton
         """
-        if self.__xmotordevice is None or self.__ymotordevice is None:
-            if not self._setMotors():
-                return False
-        try:
-            xpos = self.__xmotordevice.position
-            ypos = self.__ymotordevice.position
-            self.__ui.xLineEdit.setText(str(xpos))
-            self.__ui.yLineEdit.setText(str(ypos))
-            self._getFinal()
-        except Exception as e:
-            logger.warning(str(e))
-            # print(str(e))
-            return False
+        if str(self.__ui.trackPushButton.text()) == "Track":
+            self.__trackMotors()
+        else:
+            self.__hideMotors()
         self._mainwidget.emitTCC()
 
     @QtCore.pyqtSlot()
@@ -695,16 +703,54 @@ class MotorsToolWidget(ToolBaseWidget):
             self.__motorWatcher.stop()
             self.__motorWatcher.wait()
             self.__motorWatcher = None
+        if not self.__tracking:
+            self.parameters.trackinglines = False
+            self._mainwidget.updateinfowidgets(self.parameters)
+
+        self._mainwidget.updateinfowidgets(self.parameters)
         self._mainwidget.setDoubleClickLock(False)
         self.__ui.movePushButton.setText("Move")
         self.__ui.xcurLineEdit.hide()
         self.__ui.ycurLineEdit.hide()
         self.__ui.takePushButton.show()
         self.__ui.axesPushButton.show()
-        self.__ui.resetPushButton.show()
+        self.__ui.trackPushButton.show()
         self.__moving = False
         self.__ui.xLineEdit.setReadOnly(False)
         self.__ui.yLineEdit.setReadOnly(False)
+        self.__ui.xcurLineEdit.setStyleSheet(
+            "color: black; background-color: #90EE90;")
+        self.__ui.ycurLineEdit.setStyleSheet(
+            "color: black; background-color: #90EE90;")
+        if self.__tracking:
+            self.__trackMotors()
+        return True
+
+    def __hideMotors(self, changestatus=True):
+        """ move motors
+
+        :returns: motors stopped
+        :rtype: :obj:`bool`
+        """
+        if self.__motorWatcher:
+            self.__motorWatcher.motorStatusSignal.disconnect(self._showMotors)
+            # self.__motorWatcher.watchingFinished.disconnect(self._hide)
+            self.__motorWatcher.stop()
+            self.__motorWatcher.wait()
+            self.__motorWatcher = None
+        self.parameters.trackinglines = False
+        self._mainwidget.updateinfowidgets(self.parameters)
+        # self._mainwidget.setDoubleClickLock(False)
+        self.__ui.trackPushButton.setText("Track")
+        self.__ui.xcurLineEdit.hide()
+        self.__ui.ycurLineEdit.hide()
+        self.__ui.takePushButton.show()
+        self.__ui.axesPushButton.show()
+        self.__ui.trackPushButton.show()
+        if changestatus:
+            self.__tracking = False
+        # self.__ui.xLineEdit.setReadOnly(False)
+        # self.__ui.yLineEdit.setReadOnly(False)
         self.__ui.xcurLineEdit.setStyleSheet(
             "color: black; background-color: #90EE90;")
         self.__ui.ycurLineEdit.setStyleSheet(
@@ -752,6 +798,10 @@ class MotorsToolWidget(ToolBaseWidget):
         else:
             return False
         # print("%s %s" % (self.__xfinal, self.__yfinal))
+        if self.__tracking:
+            self.__hideMotors(False)
+        self.parameters.trackinglines = True
+        self._mainwidget.updateinfowidgets(self.parameters)
         self.__motorWatcher = motorWatchThread.MotorWatchThread(
             self.__xmotordevice, self.__ymotordevice)
         self.__motorWatcher.motorStatusSignal.connect(self._showMotors)
@@ -763,7 +813,7 @@ class MotorsToolWidget(ToolBaseWidget):
         self.__ui.ycurLineEdit.show()
         self.__ui.takePushButton.hide()
         self.__ui.axesPushButton.hide()
-        self.__ui.resetPushButton.hide()
+        self.__ui.trackPushButton.hide()
         self.__ui.xLineEdit.setReadOnly(True)
         self.__ui.yLineEdit.setReadOnly(True)
         self.__moving = True
@@ -771,11 +821,49 @@ class MotorsToolWidget(ToolBaseWidget):
         self.__statey = None
         return True
 
+    def __trackMotors(self):
+        """ track motors
+
+        :returns: motors tracked
+        :rtype: :obj:`bool`
+        """
+
+        if self.__xmotordevice is None or self.__ymotordevice is None:
+            if not self._setMotors():
+                return False
+        try:
+            self.parameters.trackinglines = True
+            self._mainwidget.updateinfowidgets(self.parameters)
+        except Exception as e:
+            logger.warning(str(e))
+            # print(str(e))
+            return False
+
+        # print("%s %s" % (self.__xfinal, self.__yfinal))
+        self.__motorWatcher = motorWatchThread.MotorWatchThread(
+            self.__xmotordevice, self.__ymotordevice)
+        self.__motorWatcher.motorStatusSignal.connect(self._showMotors)
+        # self.__motorWatcher.watchingFinished.connect(self._hide)
+        self.__motorWatcher.start()
+        self.__ui.trackPushButton.setText("Untrack")
+        self.__ui.xcurLineEdit.show()
+        self.__ui.ycurLineEdit.show()
+        self.__ui.takePushButton.hide()
+        self.__ui.axesPushButton.hide()
+        # self.__ui.trackPushButton.hide()
+        # self.__ui.xLineEdit.setReadOnly(True)
+        # self.__ui.yLineEdit.setReadOnly(True)
+        self.__tracking = True
+        return True
+
     @QtCore.pyqtSlot(float, str, float, str)
     def _showMotors(self, positionx, statex, positiony, statey):
         """ shows motors positions and states
         """
         # print("%s %s %s %s" % (positionx, statex, positiony, statey))
+        self._mainwidget.updatePositionTrackingMark(
+            positionx, positiony, True)
+
         self.__ui.xcurLineEdit.setText(str(positionx))
         self.__ui.ycurLineEdit.setText(str(positiony))
         if self.__statex != statex:

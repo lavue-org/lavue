@@ -185,6 +185,7 @@ class ImageWidget(QtGui.QWidget):
                 displayExtensions.LockerExtension,
                 displayExtensions.CenterExtension,
                 displayExtensions.MarkExtension,
+                displayExtensions.TrackingExtension,
                 displayExtensions.MeshExtension,
                 displayExtensions.MaximaExtension,
                 displayExtensions.VHBoundsExtension,
@@ -1724,6 +1725,20 @@ class ImageWidget(QtGui.QWidget):
         :type scaled: :obj:`bool`
         """
         self.__displaywidget.extension('mark').updatePositionMark(
+            xdata, ydata, scaled)
+
+    @QtCore.pyqtSlot(float, float)
+    def updatePositionTrackingMark(self, xdata, ydata, scaled=False):
+        """ updates the position tracking mark
+
+        :param xdata: x pixel position
+        :type xdata: :obj:`float`
+        :param ydata: y-pixel position
+        :type ydata: :obj:`float`
+        :param scaled: scaled flag
+        :type scaled: :obj:`bool`
+        """
+        self.__displaywidget.extension('tracking').updatePositionMark(
             xdata, ydata, scaled)
 
     def setDoubleClickLock(self, status=True):
