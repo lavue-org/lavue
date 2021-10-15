@@ -1918,7 +1918,7 @@ class TrackingExtension(BaseMarkExtension):
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        MarkExtension.__init__(self, parent)
+        BaseMarkExtension.__init__(self, parent)
 
         #: (:obj:`str`) tool name
         self.name = "tracking"
