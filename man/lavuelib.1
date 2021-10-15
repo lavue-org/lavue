@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "LAVUELIB" "1" "Oct 09, 2021" "2.69" "lavuelib"
+.TH "LAVUELIB" "1" "Oct 15, 2021" "2.70" "lavuelib"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .
@@ -1578,6 +1578,47 @@ create GUI
 image display widget
 .INDENT 0.0
 .TP
+.B class lavuelib.displayExtensions.BaseMarkExtension(parent=None)
+Bases: \fI\%lavuelib.displayExtensions.DisplayExtension\fP
+.sp
+base mark extension
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name
+(\fI\%str\fP) tool name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B transpose()
+transposes Mark Position lines
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updatePositionMark(xdata, ydata, scaled=False)
+updates the position mark
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBxdata\fP (\fI\%float\fP) – x pixel position
+.IP \(bu 2
+\fBydata\fP (\fI\%float\fP) – y\-pixel position
+.IP \(bu 2
+\fBscaled\fP (\fI\%bool\fP) – scaled flag
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
 .B class lavuelib.displayExtensions.CenterExtension(parent=None)
 Bases: \fI\%lavuelib.displayExtensions.DisplayExtension\fP
 .sp
@@ -2026,7 +2067,7 @@ updates the locker position
 .INDENT 0.0
 .TP
 .B class lavuelib.displayExtensions.MarkExtension(parent=None)
-Bases: \fI\%lavuelib.displayExtensions.DisplayExtension\fP
+Bases: \fI\%lavuelib.displayExtensions.BaseMarkExtension\fP
 .sp
 constructor
 .INDENT 7.0
@@ -2079,28 +2120,6 @@ set subwidget properties
 .TP
 .B Parameters
 \fBparameters\fP (\fBlavuelib.toolWidget.ToolParameters\fP) – tool parameters
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B transpose()
-transposes Mark Position lines
-.UNINDENT
-.INDENT 7.0
-.TP
-.B updatePositionMark(xdata, ydata, scaled=False)
-updates the position mark
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBxdata\fP (\fI\%float\fP) – x pixel position
-.IP \(bu 2
-\fBydata\fP (\fI\%float\fP) – y\-pixel position
-.IP \(bu 2
-\fBscaled\fP (\fI\%bool\fP) – scaled flag
-.UNINDENT
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -2595,6 +2614,33 @@ x1, y1, x2, y2 positions of the roi
 .TP
 .B Return type
 [\fI\%float\fP, \fI\%float\fP, \fI\%float\fP, \fI\%float\fP]
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class lavuelib.displayExtensions.TrackingExtension(parent=None)
+Bases: \fI\%lavuelib.displayExtensions.BaseMarkExtension\fP
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name
+(\fI\%str\fP) tool name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B show(parameters)
+set subwidget properties
+.INDENT 7.0
+.TP
+.B Parameters
+\fBparameters\fP (\fBlavuelib.toolWidget.ToolParameters\fP) – tool parameters
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -10027,6 +10073,23 @@ updates the pixel y\-size
 .TP
 .B updatePositionMark(xdata, ydata, scaled=False)
 updates the position mark
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBxdata\fP (\fI\%float\fP) – x pixel position
+.IP \(bu 2
+\fBydata\fP (\fI\%float\fP) – y\-pixel position
+.IP \(bu 2
+\fBscaled\fP (\fI\%bool\fP) – scaled flag
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updatePositionTrackingMark(xdata, ydata, scaled=False)
+updates the position tracking mark
 .INDENT 7.0
 .TP
 .B Parameters

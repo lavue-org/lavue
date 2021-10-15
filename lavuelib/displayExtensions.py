@@ -198,6 +198,7 @@ class DisplayExtension(QtCore.QObject):
         :param parameters: tool parameters
         :type parameters: :class:`lavuelib.toolWidget.ToolParameters`
         """
+
     def transpose(self):
         """ transposes subwidget
         """
@@ -1760,7 +1761,9 @@ class VHBoundsExtension(DisplayExtension):
             self.__centerHLine2.show()
 
 
-class MarkExtension(DisplayExtension):
+class BaseMarkExtension(DisplayExtension):
+
+    """ base mark extension """
 
     def __init__(self, parent=None):
         """ constructor
@@ -1771,7 +1774,7 @@ class MarkExtension(DisplayExtension):
         DisplayExtension.__init__(self, parent)
 
         #: (:obj:`str`) tool name
-        self.name = "mark"
+        self.name = "basemark"
 
         #: ([:obj:`float`, :obj:`float`]) position mark coordinates
         self._markcoordinates = None
@@ -1781,23 +1784,13 @@ class MarkExtension(DisplayExtension):
         #: (:class:`pyqtgraph.InfiniteLine`)
         #:                 vertical mark line of the mouse position
         self._markVLine = _pg.InfiniteLine(
-            angle=90, movable=False, pen=(0, 0, 255))
+            angle=90, movable=False, pen=(255, 255, 255))
         #: (:class:`pyqtgraph.InfiniteLine`)
         #:                   horizontal mark line of the mouse position
         self._markHLine = _pg.InfiniteLine(
-            angle=0, movable=False, pen=(0, 0, 255))
+            angle=0, movable=False, pen=(255, 255, 255))
         self._mainwidget.viewbox().addItem(self._markVLine, ignoreBounds=True)
         self._mainwidget.viewbox().addItem(self._markHLine, ignoreBounds=True)
-
-    def show(self, parameters):
-        """ set subwidget properties
-
-        :param parameters: tool parameters
-        :type parameters: :class:`lavuelib.toolWidget.ToolParameters`
-        """
-        if parameters.marklines is not None:
-            self._showMarkLines(parameters.marklines)
-            self._enabled = parameters.marklines
 
     def _showMarkLines(self, status):
         """ shows or hides HV mark mouse lines
@@ -1811,6 +1804,69 @@ class MarkExtension(DisplayExtension):
         else:
             self._markVLine.hide()
             self._markHLine.hide()
+
+    @QtCore.pyqtSlot(float, float)
+    def updatePositionMark(self, xdata, ydata, scaled=False):
+        """ updates the position mark
+
+        :param xdata: x pixel position
+        :type xdata: :obj:`float`
+        :param ydata: y-pixel position
+        :type ydata: :obj:`float`
+        :param scaled: scaled flag
+        :type scaled: :obj:`bool`
+        """
+        self._markcoordinates = [xdata, ydata]
+        pos0, pos1, scale0, scale1 = self._mainwidget.scale()
+        if pos0 is not None and not scaled:
+            if not self._mainwidget.transformations()[0]:
+                self._markVLine.setPos((xdata) * scale0 + pos0)
+                self._markHLine.setPos((ydata) * scale1 + pos1)
+            else:
+                self._markVLine.setPos((ydata) * scale1 + pos1)
+                self._markHLine.setPos((xdata) * scale0 + pos0)
+        else:
+            if not self._mainwidget.transformations()[0]:
+                self._markVLine.setPos(xdata)
+                self._markHLine.setPos(ydata)
+            else:
+                self._markVLine.setPos(ydata)
+                self._markHLine.setPos(xdata)
+
+    def transpose(self):
+        """ transposes Mark Position lines
+        """
+        v = self._markHLine.getPos()[1]
+        h = self._markVLine.getPos()[0]
+        self._markVLine.setPos(v)
+        self._markHLine.setPos(h)
+
+
+class MarkExtension(BaseMarkExtension):
+
+    def __init__(self, parent=None):
+        """ constructor
+
+        :param parent: parent object
+        :type parent: :class:`pyqtgraph.QtCore.QObject`
+        """
+        BaseMarkExtension.__init__(self, parent)
+
+        #: (:obj:`str`) tool name
+        self.name = "mark"
+
+        self._markVLine.setPen((0, 0, 255))
+        self._markHLine.setPen((0, 0, 255))
+
+    def show(self, parameters):
+        """ set subwidget properties
+
+        :param parameters: tool parameters
+        :type parameters: :class:`lavuelib.toolWidget.ToolParameters`
+        """
+        if parameters.marklines is not None:
+            self._showMarkLines(parameters.marklines)
+            self._enabled = parameters.marklines
 
     def mouse_position(self, x, y):
         """  sets vLine and hLine positions
@@ -1853,44 +1909,8 @@ class MarkExtension(DisplayExtension):
         if not locked:
             self.updatePositionMark(x, y)
 
-    @QtCore.pyqtSlot(float, float)
-    def updatePositionMark(self, xdata, ydata, scaled=False):
-        """ updates the position mark
 
-        :param xdata: x pixel position
-        :type xdata: :obj:`float`
-        :param ydata: y-pixel position
-        :type ydata: :obj:`float`
-        :param scaled: scaled flag
-        :type scaled: :obj:`bool`
-        """
-        self._markcoordinates = [xdata, ydata]
-        pos0, pos1, scale0, scale1 = self._mainwidget.scale()
-        if pos0 is not None and not scaled:
-            if not self._mainwidget.transformations()[0]:
-                self._markVLine.setPos((xdata) * scale0 + pos0)
-                self._markHLine.setPos((ydata) * scale1 + pos1)
-            else:
-                self._markVLine.setPos((ydata) * scale1 + pos1)
-                self._markHLine.setPos((xdata) * scale0 + pos0)
-        else:
-            if not self._mainwidget.transformations()[0]:
-                self._markVLine.setPos(xdata)
-                self._markHLine.setPos(ydata)
-            else:
-                self._markVLine.setPos(ydata)
-                self._markHLine.setPos(xdata)
-
-    def transpose(self):
-        """ transposes Mark Position lines
-        """
-        v = self._markHLine.getPos()[1]
-        h = self._markVLine.getPos()[0]
-        self._markVLine.setPos(v)
-        self._markHLine.setPos(h)
-
-
-class TrackingExtension(MarkExtension):
+class TrackingExtension(BaseMarkExtension):
 
     def __init__(self, parent=None):
         """ constructor
@@ -1915,25 +1935,6 @@ class TrackingExtension(MarkExtension):
         if parameters.trackinglines is not None:
             self._showMarkLines(parameters.trackinglines)
             self._enabled = parameters.trackinglines
-
-    def mouse_doubleclick(self, x, y, locked):
-        """  sets vLine and hLine positions
-
-        :param x: x coordinate
-        :type x: float
-        :param y: y coordinate
-        :type y: float
-        :param locked: double click lock
-        :type locked: bool
-        """
-    def mouse_position(self, x, y):
-        """  sets vLine and hLine positions
-
-        :param x: x coordinate
-        :type x: float
-        :param y: y coordinate
-        :type y: float
-        """
 
 
 class MaximaExtension(DisplayExtension):
