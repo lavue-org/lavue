@@ -662,7 +662,7 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         """
         channels = []
         if ch is None:
-            channels = self.imageItem().getHistogram(perChannel=True)
+            channels = self.__imageItem().getHistogram(perChannel=True)
         if ch[0] is None:
             return
         autofactor = False
@@ -717,7 +717,7 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
                 # _pg.graphicsItems.HistogramLUTItem.HistogramLUTItem.\
                 #     imageChanged(
                 #         self, autoLevel=autoLevel, autoRange=autoRange)
-                h = self.imageItem().getHistogram(
+                h = self.__imageItem().getHistogram(
                     step=self.__step, bins=self.__bins)
                 if h[0] is None:
                     return
@@ -732,7 +732,7 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         else:
             # plot one histogram for each channel
             self.plots[0].setVisible(False)
-            ch = self.imageItem().getHistogram(perChannel=True)
+            ch = self.__imageItem().getHistogram(perChannel=True)
             if ch[0] is None:
                 return
             for i in range(1, 5):
@@ -787,6 +787,6 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
                 oldLevels = self.region.getRegion()
                 levels = [oldLevels] * 4
             self.setLevels(rgba=levels)
-        self.imageItem().setLevels(self.getLevels())
+        self.__imageItem().setLevels(self.getLevels())
         self.imageChanged()
         self.update()
