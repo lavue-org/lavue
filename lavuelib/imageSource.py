@@ -2215,6 +2215,7 @@ class HiDRASource(BaseSource):
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             result = sock.connect_ex(
                 (self.__targetname, int(self.__portnumber)))
+            sock.close()
             if result:
                 self._configuration = configuration
                 self.__target = [
