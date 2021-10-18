@@ -252,6 +252,7 @@ class LevelsGroupBox(QtGui.QWidget):
                 self.updateLevels(self.__minval, self.__maxval)
                 if self.__histogram:
                     self.__histogram.switchLevelMode('mono')
+                self.__histogram.gradient.hide()
 
     @QtCore.pyqtSlot(bool)
     def _redLevelMode(self, status):
@@ -1561,6 +1562,8 @@ class LevelsGroupBox(QtGui.QWidget):
         if self.__gradientcolors != status:
             self.__gradientcolors = status
             self.__updateRadio(0)
+            self.showGradient(
+                not self.__rgbstatus or self.__gradientcolors)
             self.showHistograms(self.__rgbstatus)
 
     def gradientColors(self):
