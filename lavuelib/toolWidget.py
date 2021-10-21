@@ -3094,7 +3094,6 @@ class OneDToolWidget(ToolBaseWidget):
             if dts is not None:
                 while dts.ndim > 2:
                     dts = np.nanmean(dts, axis=2)
-            print(dts)
             if dts is not None:
                 dtnrpts = dts.shape[1]
                 if self.__dsrows:
