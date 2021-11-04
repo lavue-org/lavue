@@ -1811,6 +1811,9 @@ class ROIToolWidget(ToolBaseWidget):
                 except Exception as e:
                     logger.warning(str(e))
                     # print(str(e))
+            if "rois_coords" in cnf.keys():
+                self._mainwidget.updateROIs(
+                    len(cnf["rois_coords"]), cnf["rois_coords"])
             if "apply" in cnf.keys():
                 if cnf["apply"]:
                     self._emitApplyROIPressed()
@@ -1827,6 +1830,7 @@ class ROIToolWidget(ToolBaseWidget):
         cnf = {}
         cnf["aliases"] = str(self.__ui.labelROILineEdit.text()).split(" ")
         cnf["rois_number"] = self.__ui.roiSpinBox.value()
+        cnf["rois_coords"] = self._mainwidget.roiCoords()
         return json.dumps(cnf)
 
     def activate(self):
@@ -6798,6 +6802,9 @@ class QROIProjToolWidget(ToolBaseWidget):
                 except Exception as e:
                     logger.warning(str(e))
                     # print(str(e))
+            if "rois_coords" in cnf.keys():
+                self._mainwidget.updateROIs(
+                    len(cnf["rois_coords"]), cnf["rois_coords"])
             if "aliases" in cnf.keys():
                 aliases = cnf["aliases"]
                 if isinstance(aliases, list):
@@ -6839,6 +6846,7 @@ class QROIProjToolWidget(ToolBaseWidget):
         cnf = {}
         cnf["aliases"] = str(self.__ui.labelROILineEdit.text()).split(" ")
         cnf["rois_number"] = self.__ui.roiSpinBox.value()
+        cnf["rois_coords"] = self._mainwidget.roiCoords()
         cnf["mapping"] = str(
             self.__ui.funComboBox.currentText()).lower()
         cnf["rows"] = self.__ui.rowsliceLineEdit.text()
