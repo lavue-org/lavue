@@ -1606,6 +1606,7 @@ class ImageWidget(QtGui.QWidget):
                                    sh[0] - crds[0] - 1, sh[1] - crds[2] - 1])
                 else:
                     raise Exception("Dead end")
+        return coords
 
     def currentIntensity(self):
         """ provides intensity for current mouse position
