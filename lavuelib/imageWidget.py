@@ -1372,67 +1372,7 @@ class ImageWidget(QtGui.QWidget):
                             self, "lavue: Error in Setting Measurement group",
                             text, str(value))
             if self.__settings.analysisdevice:
-                flatrois = []
-                for crds in roicoords:
-                    if hasattr(self.__rawdata, "shape"):
-                        sh = self.__rawdata.shape
-                    else:
-                        sh = (0, 0)
-                    if self.__settings.keepcoords:
-                        trans, leftright, updown, _ = \
-                            self.__displaywidget.transformations()
-
-                        flatrois.extend(
-                            [crds[1], crds[3] + 1, crds[0], crds[2] + 1])
-                    else:
-                        trans, leftright, updown = self.__selectedtrans
-                        if not trans and not leftright and not updown:
-                            flatrois.extend(
-                                [crds[1], crds[3] + 1,
-                                 crds[0], crds[2] + 1])
-                        elif trans and not leftright and not updown:
-                            flatrois.extend(
-                                [crds[0], crds[2] + 1,
-                                 crds[1], crds[3] + 1])
-                        ###
-                        elif not trans and leftright and not updown:
-                            flatrois.extend(
-                                [crds[1], crds[3] + 1,
-                                 sh[0] - crds[2] - 1, sh[0] - crds[0]])
-                        elif trans and leftright and not updown:
-                            flatrois.extend(
-                                [sh[0] - crds[2] - 1, sh[0] - crds[0],
-                                 crds[1], crds[3] + 1])
-                        ###
-                        elif not trans and not leftright and updown:
-                            flatrois.extend(
-                                [sh[1] - crds[3] - 1, sh[1] - crds[1],
-                                 crds[0], crds[2] + 1])
-                        elif trans and not leftright and updown:
-                            flatrois.extend(
-                                [crds[0], crds[2] + 1,
-                                 sh[1] - crds[3] - 1, sh[1] - crds[1]])
-                        ###
-                        elif not trans and leftright and updown:
-                            flatrois.extend(
-                                [sh[1] - crds[3] - 1, sh[1] - crds[1],
-                                 sh[0] - crds[2] - 1, sh[0] - crds[0]])
-                        elif trans and leftright and updown:
-                            flatrois.extend(
-                                [sh[0] - crds[2] - 1, sh[0] - crds[0],
-                                 sh[1] - crds[3] - 1, sh[1] - crds[1]])
-                        else:
-                            raise Exception("Dead end")
-                    flatrois = [max(cr, 0) for cr in flatrois]
-                    if trans:
-                        sha, shb = sh
-                    else:
-                        shb, sha = sh
-                    for i in range(len(flatrois) // 4):
-                        flatrois[4 * i] = min(flatrois[4 * i], sha)
-                        flatrois[4 * i + 1] = min(flatrois[4 * i + 1], sha)
-                        flatrois[4 * i + 2] = min(flatrois[4 * i + 2], shb)
-                        flatrois[4 * i + 3] = min(flatrois[4 * i + 3], shb)
+                flatrois = self._flattenROIs(roicoords)
                 try:
                     adp = sardanaUtils.SardanaUtils.openProxy(
                         str(self.__settings.analysisdevice))
@@ -1449,6 +1389,78 @@ class ImageWidget(QtGui.QWidget):
             # print("Connection error")
             logger.error("ImageWidget.applyROI: Connection error")
 
+    def _flattenROIs(self, roicoords):
+        """ calculate source rois coordinates from lavue rois coordinates
+
+        :param roicoords: lavue rois coordinates
+        :type roicoords: :obj:`list`
+                < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
+        :returns:  detector rois coordinates
+        :rtype: :obj:`list` < :obj:`float` >
+        """
+        flatrois = []
+        if hasattr(self.__rawdata, "shape"):
+            sh = self.__rawdata.shape
+        else:
+            sh = (0, 0)
+        for crds in roicoords:
+            if self.__settings.keepcoords:
+                trans, leftright, updown, _ = \
+                    self.__displaywidget.transformations()
+
+                flatrois.extend(
+                    [crds[1], crds[3] + 1, crds[0], crds[2] + 1])
+            else:
+                trans, leftright, updown = self.__selectedtrans
+                if not trans and not leftright and not updown:
+                    flatrois.extend(
+                        [crds[1], crds[3] + 1,
+                         crds[0], crds[2] + 1])
+                elif trans and not leftright and not updown:
+                    flatrois.extend(
+                        [crds[0], crds[2] + 1,
+                         crds[1], crds[3] + 1])
+                ###
+                elif not trans and leftright and not updown:
+                    flatrois.extend(
+                        [crds[1], crds[3] + 1,
+                         sh[0] - crds[2] - 1, sh[0] - crds[0]])
+                elif trans and leftright and not updown:
+                    flatrois.extend(
+                        [sh[0] - crds[2] - 1, sh[0] - crds[0],
+                         crds[1], crds[3] + 1])
+                ###
+                elif not trans and not leftright and updown:
+                    flatrois.extend(
+                        [sh[1] - crds[3] - 1, sh[1] - crds[1],
+                         crds[0], crds[2] + 1])
+                elif trans and not leftright and updown:
+                    flatrois.extend(
+                        [crds[0], crds[2] + 1,
+                         sh[1] - crds[3] - 1, sh[1] - crds[1]])
+                ###
+                elif not trans and leftright and updown:
+                    flatrois.extend(
+                        [sh[1] - crds[3] - 1, sh[1] - crds[1],
+                         sh[0] - crds[2] - 1, sh[0] - crds[0]])
+                elif trans and leftright and updown:
+                    flatrois.extend(
+                        [sh[0] - crds[2] - 1, sh[0] - crds[0],
+                         sh[1] - crds[3] - 1, sh[1] - crds[1]])
+                else:
+                    raise Exception("Dead end")
+            flatrois = [max(cr, 0) for cr in flatrois]
+            if trans:
+                sha, shb = sh
+            else:
+                shb, sha = sh
+            for i in range(len(flatrois) // 4):
+                flatrois[4 * i] = min(flatrois[4 * i], sha)
+                flatrois[4 * i + 1] = min(flatrois[4 * i + 1], sha)
+                flatrois[4 * i + 2] = min(flatrois[4 * i + 2], shb)
+                flatrois[4 * i + 3] = min(flatrois[4 * i + 3], shb)
+        return flatrois
+
     @QtCore.pyqtSlot(str)
     def fetchROIs(self, rlabel):
         """ loads ROIs from sardana
@@ -1457,76 +1469,143 @@ class ImageWidget(QtGui.QWidget):
         :type rlabel: :obj:`str`
         """
         if isr.TANGO:
-            if not self.__settings.doorname:
-                self.__settings.doorname = self.__sardana.getDeviceName("Door")
-            try:
-                rois = json.loads(self.__sardana.getScanEnv(
-                    str(self.__settings.doorname),
-                    ["DetectorROIs", "DetectorROIsOrder"]))
-            except Exception:
-                import traceback
-                value = traceback.format_exc()
-                text = messageBox.MessageBox.getText(
-                    "Problems in connecting to Door or MacroServer")
-                messageBox.MessageBox.warning(
-                    self, "lavue: Error in connecting to Door or MacroServer",
-                    text, str(value))
-                return
-            if self.__settings.orderrois and "DetectorROIsOrder" in rois \
-               and isinstance(rois["DetectorROIsOrder"], list):
-                slabel = rois["DetectorROIsOrder"]
-            else:
-                slabel = re.split(';|,| |\n', str(rlabel))
-            slabel = [lb for lb in slabel if lb]
-            detrois = {}
-            if "DetectorROIs" in rois and isinstance(
-                    rois["DetectorROIs"], dict):
-                detrois = rois["DetectorROIs"]
+            if self.__settings.sardana:
+                if not self.__settings.doorname:
+                    self.__settings.doorname = self.__sardana.getDeviceName(
+                        "Door")
+                try:
+                    rois = json.loads(self.__sardana.getScanEnv(
+                        str(self.__settings.doorname),
+                        ["DetectorROIs", "DetectorROIsOrder"]))
+                except Exception:
+                    import traceback
+                    value = traceback.format_exc()
+                    text = messageBox.MessageBox.getText(
+                        "Problems in connecting to Door or MacroServer")
+                    messageBox.MessageBox.warning(
+                        self,
+                        "lavue: Error in connecting to Door or MacroServer",
+                        text, str(value))
+                    return
+                if self.__settings.orderrois and "DetectorROIsOrder" in rois \
+                   and isinstance(rois["DetectorROIsOrder"], list):
+                    slabel = rois["DetectorROIsOrder"]
+                else:
+                    slabel = re.split(';|,| |\n', str(rlabel))
+                slabel = [lb for lb in slabel if lb]
+                detrois = {}
+                if "DetectorROIs" in rois and isinstance(
+                        rois["DetectorROIs"], dict):
+                    detrois = rois["DetectorROIs"]
+                    if slabel:
+                        detrois = dict(
+                            (k, v) for k, v in detrois.items() if k in slabel)
+                coords = []
+                aliases = []
                 if slabel:
-                    detrois = dict(
-                        (k, v) for k, v in detrois.items() if k in slabel)
-            coords = []
-            aliases = []
-            if slabel:
-                for i, lb in enumerate(slabel):
-                    if lb in detrois.keys():
-                        if len(set(slabel[i:])) == 1:
-                            v = detrois.pop(lb)
-                            if isinstance(v, list):
-                                for cr in v:
+                    for i, lb in enumerate(slabel):
+                        if lb in detrois.keys():
+                            if len(set(slabel[i:])) == 1:
+                                v = detrois.pop(lb)
+                                if isinstance(v, list):
+                                    for cr in v:
+                                        if isinstance(cr, list):
+                                            coords.append(cr)
+                                            aliases.append(lb)
+                                    break
+                            else:
+                                v = detrois[lb]
+                                if isinstance(v, list) and v:
+                                    cr = v[0]
                                     if isinstance(cr, list):
                                         coords.append(cr)
                                         aliases.append(lb)
-                                break
-                        else:
-                            v = detrois[lb]
-                            if isinstance(v, list) and v:
-                                cr = v[0]
-                                if isinstance(cr, list):
-                                    coords.append(cr)
-                                    aliases.append(lb)
-                                    detrois[lb] = v[1:]
-                            if not detrois[lb]:
-                                detrois.pop(lb)
-            for k, v in detrois.items():
-                if isinstance(v, list):
-                    for cr in v:
-                        if isinstance(cr, list):
-                            coords.append(cr)
-                            aliases.append(k)
-            slabel = []
-            for i, al in enumerate(aliases):
-                if len(set(aliases[i:])) == 1:
-                    slabel.append(al)
-                    break
-                else:
-                    slabel.append(al)
-            self.roiAliasesChanged.emit(" ".join(slabel))
+                                        detrois[lb] = v[1:]
+                                if not detrois[lb]:
+                                    detrois.pop(lb)
+                for k, v in detrois.items():
+                    if isinstance(v, list):
+                        for cr in v:
+                            if isinstance(cr, list):
+                                coords.append(cr)
+                                aliases.append(k)
+                slabel = []
+                for i, al in enumerate(aliases):
+                    if len(set(aliases[i:])) == 1:
+                        slabel.append(al)
+                        break
+                    else:
+                        slabel.append(al)
+                self.roiAliasesChanged.emit(" ".join(slabel))
 
-            self.updateROIs(len(coords), coords)
+                self.updateROIs(len(coords), coords)
+            elif self.__settings.analysisdevice:
+                try:
+                    adp = sardanaUtils.SardanaUtils.openProxy(
+                        str(self.__settings.analysisdevice))
+                    flatrois = adp.RoIs
+                    coords = self._fromFlatROIs(flatrois)
+                    self.updateROIs(len(coords), coords)
+                except Exception:
+                    import traceback
+                    value = traceback.format_exc()
+                    text = messageBox.MessageBox.getText(
+                        "Problems in setting RoIs for Analysis device")
+                    messageBox.MessageBox.warning(
+                        self, "lavue: Error in Setting Rois",
+                        text, str(value))
+            else:
+                # print("Connection error")
+                logger.error("ImageWidget.fetchROIs: Connection error")
+
+    def _fromFlatROIs(self, flatrois):
+        """ calculate lavue rois coordinates from source rois coordinates
+
+        :param roicoords: lavue rois coordinates
+        :type roicoords: :obj:`list` < :obj:`float` >
+        :returns:  detector rois coordinates
+        :rtype: :obj:`list`
+                < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
+        """
+        coords = []
+        if hasattr(self.__rawdata, "shape"):
+            sh = self.__rawdata.shape
         else:
-            # print("Connection error")
-            logger.error("ImageWidget.fetchROIs: Connection error")
+            sh = (0, 0)
+        for crds in zip(flatrois[::4], flatrois[1::4],
+                        flatrois[2::4], flatrois[3::4]):
+            if self.__settings.keepcoords:
+                trans, leftright, updown, _ = \
+                    self.__displaywidget.transformations()
+                coords.append([crds[2], crds[0], crds[3] - 1, crds[1] - 1])
+            else:
+                trans, leftright, updown = self.__selectedtrans
+                if not trans and not leftright and not updown:
+                    coords.append([crds[2], crds[0], crds[3] - 1, crds[1] - 1])
+                elif trans and not leftright and not updown:
+                    coords.append([crds[0], crds[2], crds[1] - 1, crds[3] - 1])
+                ###
+                elif not trans and leftright and not updown:
+                    coords.append([sh[0] - crds[3], crds[0],
+                                   sh[0] - crds[2] - 1, crds[1] - 1])
+                elif trans and leftright and not updown:
+                    coords.append([sh[0] - crds[1], crds[2],
+                                   sh[0] - crds[0] - 1, crds[3] - 1])
+                elif not trans and not leftright and updown:
+                    coords.append([crds[2], sh[1] - crds[1],
+                                   crds[3] - 1, sh[1] - crds[0] - 1])
+                elif trans and not leftright and updown:
+                    coords.append([crds[0], sh[1] - crds[3],
+                                   crds[1] - 1, sh[1] - crds[2] - 1])
+                ###
+                elif not trans and leftright and updown:
+                    coords.append([sh[0] - crds[3], sh[1] - crds[1],
+                                   sh[0] - crds[2] - 1, sh[1] - crds[0] - 1])
+                elif trans and leftright and updown:
+                    coords.append([sh[0] - crds[1], sh[1] - crds[3],
+                                   sh[0] - crds[0] - 1, sh[1] - crds[2] - 1])
+                else:
+                    raise Exception("Dead end")
 
     def currentIntensity(self):
         """ provides intensity for current mouse position

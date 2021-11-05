@@ -1841,7 +1841,8 @@ class ROIToolWidget(ToolBaseWidget):
         self.__aliases = self._mainwidget.getElementNames("ExpChannelList")
         self.updateROILineEdit(self._mainwidget.roilabels)
         self.__updateCompleter()
-        self.updateROIButton(self.__settings.sardana)
+        self.updateROIButton(
+            self.__settings.sardana or self.__settings.analysisdevice)
 
     def __updateCompleter(self):
         """ updates the labelROI help
@@ -1953,7 +1954,7 @@ class ROIToolWidget(ToolBaseWidget):
         :type enable: :obj:`bool`
         """
         # self.__ui.applyROIPushButton.setEnabled(enabled)
-        self.__ui.fetchROIPushButton.setEnabled(enabled)
+        # self.__ui.fetchROIPushButton.setEnabled(enabled)
 
     @QtCore.pyqtSlot(int)
     def updateApplyTips(self, rid):
@@ -6874,7 +6875,8 @@ class QROIProjToolWidget(ToolBaseWidget):
         self.__aliases = self._mainwidget.getElementNames("ExpChannelList")
         self.updateROILineEdit(self._mainwidget.roilabels)
         self.__updateCompleter()
-        self.updateROIButton(self.__settings.sardana)
+        self.updateROIButton(
+            self.__settings.sardana or self.__settings.analysisdevice)
 
         if self.__bottomplot is None:
             self.__bottomplot = self._mainwidget.onedbarbottomplot()
@@ -7287,7 +7289,7 @@ class QROIProjToolWidget(ToolBaseWidget):
         :type enable: :obj:`bool`
         """
         # self.__ui.applyROIPushButton.setEnabled(enabled)
-        self.__ui.fetchROIPushButton.setEnabled(enabled)
+        # self.__ui.fetchROIPushButton.setEnabled(enabled)
 
     @QtCore.pyqtSlot(int)
     def updateApplyTips(self, rid):
