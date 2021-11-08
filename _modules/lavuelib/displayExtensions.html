@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.displayExtensions &#8212; lavuelib 2.68.0 documentation</title>
+    <title>lavuelib.displayExtensions &#8212; lavuelib 2.71.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.68</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.71</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -354,6 +354,7 @@
 <span class="sd">        :param parameters: tool parameters</span>
 <span class="sd">        :type parameters: :class:`lavuelib.toolWidget.ToolParameters`</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
+
 <div class="viewcode-block" id="DisplayExtension.transpose"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.displayExtensions.DisplayExtension.transpose">[docs]</a>    <span class="k">def</span> <span class="nf">transpose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; transposes subwidget</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
@@ -1916,7 +1917,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__centerHLine2</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="MarkExtension"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.displayExtensions.MarkExtension">[docs]</a><span class="k">class</span> <span class="nc">MarkExtension</span><span class="p">(</span><span class="n">DisplayExtension</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseMarkExtension"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.displayExtensions.BaseMarkExtension">[docs]</a><span class="k">class</span> <span class="nc">BaseMarkExtension</span><span class="p">(</span><span class="n">DisplayExtension</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot; base mark extension &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
@@ -1927,23 +1930,89 @@
         <span class="n">DisplayExtension</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="c1">#: (:obj:`str`) tool name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;mark&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;basemark&quot;</span>
 
         <span class="c1">#: ([:obj:`float`, :obj:`float`]) position mark coordinates</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__markcoordinates</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_markcoordinates</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1">#: (:obj:`float`) last time in s</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__lasttime</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lasttime</span> <span class="o">=</span> <span class="mf">0.</span>
 
         <span class="c1">#: (:class:`pyqtgraph.InfiniteLine`)</span>
         <span class="c1">#:                 vertical mark line of the mouse position</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__markVLine</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">InfiniteLine</span><span class="p">(</span>
-            <span class="n">angle</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">movable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_markVLine</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">InfiniteLine</span><span class="p">(</span>
+            <span class="n">angle</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">movable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
         <span class="c1">#: (:class:`pyqtgraph.InfiniteLine`)</span>
         <span class="c1">#:                   horizontal mark line of the mouse position</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__markHLine</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">InfiniteLine</span><span class="p">(</span>
-            <span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">movable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">viewbox</span><span class="p">()</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__markVLine</span><span class="p">,</span> <span class="n">ignoreBounds</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">viewbox</span><span class="p">()</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__markHLine</span><span class="p">,</span> <span class="n">ignoreBounds</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_markHLine</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">InfiniteLine</span><span class="p">(</span>
+            <span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">movable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">viewbox</span><span class="p">()</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_markVLine</span><span class="p">,</span> <span class="n">ignoreBounds</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">viewbox</span><span class="p">()</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_markHLine</span><span class="p">,</span> <span class="n">ignoreBounds</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_showMarkLines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; shows or hides HV mark mouse lines</span>
+
+<span class="sd">        :param status: will be shown</span>
+<span class="sd">        :type status: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_markVLine</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_markHLine</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_markVLine</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_markHLine</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+
+<div class="viewcode-block" id="BaseMarkExtension.updatePositionMark"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.displayExtensions.BaseMarkExtension.updatePositionMark">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">updatePositionMark</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; updates the position mark</span>
+
+<span class="sd">        :param xdata: x pixel position</span>
+<span class="sd">        :type xdata: :obj:`float`</span>
+<span class="sd">        :param ydata: y-pixel position</span>
+<span class="sd">        :type ydata: :obj:`float`</span>
+<span class="sd">        :param scaled: scaled flag</span>
+<span class="sd">        :type scaled: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_markcoordinates</span> <span class="o">=</span> <span class="p">[</span><span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">]</span>
+        <span class="n">pos0</span><span class="p">,</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">scale0</span><span class="p">,</span> <span class="n">scale1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scale</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">pos0</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">scaled</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">((</span><span class="n">xdata</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale0</span> <span class="o">+</span> <span class="n">pos0</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">((</span><span class="n">ydata</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale1</span> <span class="o">+</span> <span class="n">pos1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">((</span><span class="n">ydata</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale1</span> <span class="o">+</span> <span class="n">pos1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">((</span><span class="n">xdata</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale0</span> <span class="o">+</span> <span class="n">pos0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">xdata</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">ydata</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">ydata</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">xdata</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseMarkExtension.transpose"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.displayExtensions.BaseMarkExtension.transpose">[docs]</a>    <span class="k">def</span> <span class="nf">transpose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; transposes Mark Position lines</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_markHLine</span><span class="o">.</span><span class="n">getPos</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_markVLine</span><span class="o">.</span><span class="n">getPos</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">h</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="MarkExtension"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.displayExtensions.MarkExtension">[docs]</a><span class="k">class</span> <span class="nc">MarkExtension</span><span class="p">(</span><span class="n">BaseMarkExtension</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param parent: parent object</span>
+<span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">BaseMarkExtension</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+
+        <span class="c1">#: (:obj:`str`) tool name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;mark&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_markVLine</span><span class="o">.</span><span class="n">setPen</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_markHLine</span><span class="o">.</span><span class="n">setPen</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
 
 <div class="viewcode-block" id="MarkExtension.show"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.displayExtensions.MarkExtension.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; set subwidget properties</span>
@@ -1952,21 +2021,8 @@
 <span class="sd">        :type parameters: :class:`lavuelib.toolWidget.ToolParameters`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">marklines</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__showMarkLines</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">marklines</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_showMarkLines</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">marklines</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">marklines</span></div>
-
-    <span class="k">def</span> <span class="nf">__showMarkLines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; shows or hides HV mark mouse lines</span>
-
-<span class="sd">        :param status: will be shown</span>
-<span class="sd">        :type status: :obj:`bool`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__markVLine</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__markHLine</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__markVLine</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__markHLine</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
 
 <div class="viewcode-block" id="MarkExtension.mouse_position"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.displayExtensions.MarkExtension.mouse_position">[docs]</a>    <span class="k">def</span> <span class="nf">mouse_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  sets vLine and hLine positions</span>
@@ -1976,25 +2032,25 @@
 <span class="sd">        :param y: y coordinate</span>
 <span class="sd">        :type y: float</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__markcoordinates</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_markcoordinates</span><span class="p">:</span>
             <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">now</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lasttime</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refreshtime</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__lasttime</span> <span class="o">=</span> <span class="n">now</span>
+            <span class="k">if</span> <span class="n">now</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lasttime</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refreshtime</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_lasttime</span> <span class="o">=</span> <span class="n">now</span>
                 <span class="n">pos0</span><span class="p">,</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">scale0</span><span class="p">,</span> <span class="n">scale1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scale</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">pos0</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">((</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale0</span> <span class="o">+</span> <span class="n">pos0</span><span class="p">)</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">((</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale1</span> <span class="o">+</span> <span class="n">pos1</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">((</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale0</span> <span class="o">+</span> <span class="n">pos0</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">((</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale1</span> <span class="o">+</span> <span class="n">pos1</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">((</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale1</span> <span class="o">+</span> <span class="n">pos1</span><span class="p">)</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">((</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale0</span> <span class="o">+</span> <span class="n">pos0</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">((</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale1</span> <span class="o">+</span> <span class="n">pos1</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">((</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale0</span> <span class="o">+</span> <span class="n">pos0</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MarkExtension.mouse_doubleclick"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.displayExtensions.MarkExtension.mouse_doubleclick">[docs]</a>    <span class="k">def</span> <span class="nf">mouse_doubleclick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">locked</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  sets vLine and hLine positions</span>
@@ -2007,43 +2063,34 @@
 <span class="sd">        :type locked: bool</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">locked</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">updatePositionMark</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updatePositionMark</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div></div>
 
-<div class="viewcode-block" id="MarkExtension.updatePositionMark"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.displayExtensions.MarkExtension.updatePositionMark">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">updatePositionMark</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates the position mark</span>
 
-<span class="sd">        :param xdata: x pixel position</span>
-<span class="sd">        :type xdata: :obj:`float`</span>
-<span class="sd">        :param ydata: y-pixel position</span>
-<span class="sd">        :type ydata: :obj:`float`</span>
-<span class="sd">        :param scaled: scaled flag</span>
-<span class="sd">        :type scaled: :obj:`bool`</span>
+<div class="viewcode-block" id="TrackingExtension"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.displayExtensions.TrackingExtension">[docs]</a><span class="k">class</span> <span class="nc">TrackingExtension</span><span class="p">(</span><span class="n">BaseMarkExtension</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param parent: parent object</span>
+<span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__markcoordinates</span> <span class="o">=</span> <span class="p">[</span><span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">]</span>
-        <span class="n">pos0</span><span class="p">,</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">scale0</span><span class="p">,</span> <span class="n">scale1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scale</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">pos0</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">scaled</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">((</span><span class="n">xdata</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale0</span> <span class="o">+</span> <span class="n">pos0</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">((</span><span class="n">ydata</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale1</span> <span class="o">+</span> <span class="n">pos1</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">((</span><span class="n">ydata</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale1</span> <span class="o">+</span> <span class="n">pos1</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">((</span><span class="n">xdata</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale0</span> <span class="o">+</span> <span class="n">pos0</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">xdata</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">ydata</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">ydata</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">xdata</span><span class="p">)</span></div>
+        <span class="n">BaseMarkExtension</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MarkExtension.transpose"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.displayExtensions.MarkExtension.transpose">[docs]</a>    <span class="k">def</span> <span class="nf">transpose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; transposes Mark Position lines</span>
+        <span class="c1">#: (:obj:`str`) tool name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;tracking&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_markVLine</span><span class="o">.</span><span class="n">setPen</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_markHLine</span><span class="o">.</span><span class="n">setPen</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+
+<div class="viewcode-block" id="TrackingExtension.show"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.displayExtensions.TrackingExtension.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; set subwidget properties</span>
+
+<span class="sd">        :param parameters: tool parameters</span>
+<span class="sd">        :type parameters: :class:`lavuelib.toolWidget.ToolParameters`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__markHLine</span><span class="o">.</span><span class="n">getPos</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__markVLine</span><span class="o">.</span><span class="n">getPos</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__markVLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__markHLine</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">h</span><span class="p">)</span></div></div>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">trackinglines</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_showMarkLines</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">trackinglines</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">trackinglines</span></div></div>
 
 
 <div class="viewcode-block" id="MaximaExtension"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.displayExtensions.MaximaExtension">[docs]</a><span class="k">class</span> <span class="nc">MaximaExtension</span><span class="p">(</span><span class="n">DisplayExtension</span><span class="p">):</span>

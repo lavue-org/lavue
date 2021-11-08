@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.toolWidget &#8212; lavuelib 2.68.0 documentation</title>
+    <title>lavuelib.toolWidget &#8212; lavuelib 2.71.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.68</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.71</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -352,8 +352,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">crosshairlocker</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) center lines enabled</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">centerlines</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="c1">#: (:obj:`bool`) position lines enabled</span>
+        <span class="c1">#: (:obj:`bool`) mark position lines enabled</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">marklines</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) tracking position lines enabled</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trackinglines</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`str`) infolineedit text</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">infolineedit</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1">#: (:obj:`str`) infolabel text</span>
@@ -644,6 +646,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__motorWatcher</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1">#: (:obj:`bool`) is moving</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__moving</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) is tracking</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tracking</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1">#: (:class:`Ui_MotorsToolWidget&#39;)</span>
         <span class="c1">#:        ui_toolwidget object from qtdesigner</span>
@@ -655,6 +659,7 @@
         <span class="c1">#: (:obj:`bool`) position lines enabled</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">marklines</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">trackinglines</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">infolineedit</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">infotips</span> <span class="o">=</span> \
             <span class="s2">&quot;coordinate info display for the mouse pointer&quot;</span>
@@ -665,7 +670,7 @@
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">axesPushButton</span><span class="o">.</span><span class="n">clicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setTicks</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">takePushButton</span><span class="o">.</span><span class="n">clicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_setMotors</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">movePushButton</span><span class="o">.</span><span class="n">clicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_moveStopMotors</span><span class="p">],</span>
-            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">resetPushButton</span><span class="o">.</span><span class="n">clicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resetMotors</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">trackPushButton</span><span class="o">.</span><span class="n">clicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trackStopMotors</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">mouseImageDoubleClicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updateFinal</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">mouseImagePositionChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_message</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">xLineEdit</span><span class="o">.</span><span class="n">textEdited</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getFinal</span><span class="p">],</span>
@@ -718,6 +723,14 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">yLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;y_position&quot;</span><span class="p">]))</span>
                 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                     <span class="k">pass</span>
+            <span class="k">if</span> <span class="s2">&quot;track&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;track&quot;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">trackePushButton</span><span class="o">.</span><span class="n">text</span><span class="p">())</span> <span class="o">==</span> <span class="s2">&quot;Track&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_trackStopMotors</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s2">&quot;untrack&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;untrack&quot;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">trackePushButton</span><span class="o">.</span><span class="n">text</span><span class="p">())</span> <span class="o">==</span> <span class="s2">&quot;Untrack&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_trackStopMotors</span><span class="p">()</span>
             <span class="k">if</span> <span class="s2">&quot;move&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;move&quot;</span><span class="p">]:</span>
                     <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">movePushButton</span><span class="o">.</span><span class="n">text</span><span class="p">())</span> <span class="o">==</span> <span class="s2">&quot;Move&quot;</span><span class="p">:</span>
@@ -753,6 +766,10 @@
             <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;motor_state&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ON&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;motor_state&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;MOVING&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tracking</span><span class="p">:</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;tracking&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;tracking&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">)</span></div>
 
@@ -798,22 +815,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">()</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">_resetMotors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; reset x,y final to the current motor positions</span>
+    <span class="k">def</span> <span class="nf">_trackStopMotors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; move or stop motors depending on movePushButton</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xmotordevice</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ymotordevice</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_setMotors</span><span class="p">():</span>
-                <span class="k">return</span> <span class="kc">False</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">xpos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xmotordevice</span><span class="o">.</span><span class="n">position</span>
-            <span class="n">ypos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ymotordevice</span><span class="o">.</span><span class="n">position</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">xLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">xpos</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">yLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ypos</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_getFinal</span><span class="p">()</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-            <span class="c1"># print(str(e))</span>
-            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">trackPushButton</span><span class="o">.</span><span class="n">text</span><span class="p">())</span> <span class="o">==</span> <span class="s2">&quot;Track&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__trackMotors</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__hideMotors</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">()</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
@@ -851,16 +859,54 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__motorWatcher</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__motorWatcher</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__motorWatcher</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tracking</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">trackinglines</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateinfowidgets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateinfowidgets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDoubleClickLock</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">movePushButton</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Move&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">xcurLineEdit</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">ycurLineEdit</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">takePushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">axesPushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">resetPushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">trackPushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__moving</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">xLineEdit</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">yLineEdit</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">xcurLineEdit</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s2">&quot;color: black; background-color: #90EE90;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">ycurLineEdit</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s2">&quot;color: black; background-color: #90EE90;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tracking</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__trackMotors</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">__hideMotors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">changestatus</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; move motors</span>
+
+<span class="sd">        :returns: motors stopped</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__motorWatcher</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__motorWatcher</span><span class="o">.</span><span class="n">motorStatusSignal</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_showMotors</span><span class="p">)</span>
+            <span class="c1"># self.__motorWatcher.watchingFinished.disconnect(self._hide)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__motorWatcher</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__motorWatcher</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__motorWatcher</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">trackinglines</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateinfowidgets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="c1"># self._mainwidget.setDoubleClickLock(False)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">trackPushButton</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Track&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">xcurLineEdit</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">ycurLineEdit</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">takePushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">axesPushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">trackPushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">changestatus</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__tracking</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># self.__ui.xLineEdit.setReadOnly(False)</span>
+        <span class="c1"># self.__ui.yLineEdit.setReadOnly(False)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">xcurLineEdit</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
             <span class="s2">&quot;color: black; background-color: #90EE90;&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">ycurLineEdit</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
@@ -908,6 +954,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="c1"># print(&quot;%s %s&quot; % (self.__xfinal, self.__yfinal))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tracking</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__hideMotors</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">trackinglines</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateinfowidgets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__motorWatcher</span> <span class="o">=</span> <span class="n">motorWatchThread</span><span class="o">.</span><span class="n">MotorWatchThread</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__xmotordevice</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ymotordevice</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__motorWatcher</span><span class="o">.</span><span class="n">motorStatusSignal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_showMotors</span><span class="p">)</span>
@@ -919,7 +969,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">ycurLineEdit</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">takePushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">axesPushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">resetPushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">trackPushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">xLineEdit</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">yLineEdit</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__moving</span> <span class="o">=</span> <span class="kc">True</span>
@@ -927,11 +977,49 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__statey</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="kc">True</span>
 
+    <span class="k">def</span> <span class="nf">__trackMotors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; track motors</span>
+
+<span class="sd">        :returns: motors tracked</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xmotordevice</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ymotordevice</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_setMotors</span><span class="p">():</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">trackinglines</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateinfowidgets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="c1"># print(str(e))</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># print(&quot;%s %s&quot; % (self.__xfinal, self.__yfinal))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__motorWatcher</span> <span class="o">=</span> <span class="n">motorWatchThread</span><span class="o">.</span><span class="n">MotorWatchThread</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__xmotordevice</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ymotordevice</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__motorWatcher</span><span class="o">.</span><span class="n">motorStatusSignal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_showMotors</span><span class="p">)</span>
+        <span class="c1"># self.__motorWatcher.watchingFinished.connect(self._hide)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__motorWatcher</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">trackPushButton</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Untrack&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">xcurLineEdit</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">ycurLineEdit</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">takePushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">axesPushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="c1"># self.__ui.trackPushButton.hide()</span>
+        <span class="c1"># self.__ui.xLineEdit.setReadOnly(True)</span>
+        <span class="c1"># self.__ui.yLineEdit.setReadOnly(True)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tracking</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_showMotors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">positionx</span><span class="p">,</span> <span class="n">statex</span><span class="p">,</span> <span class="n">positiony</span><span class="p">,</span> <span class="n">statey</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; shows motors positions and states</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># print(&quot;%s %s %s %s&quot; % (positionx, statex, positiony, statey))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updatePositionTrackingMark</span><span class="p">(</span>
+            <span class="n">positionx</span><span class="p">,</span> <span class="n">positiony</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">xcurLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">positionx</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">ycurLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">positiony</span><span class="p">))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__statex</span> <span class="o">!=</span> <span class="n">statex</span><span class="p">:</span>
@@ -1856,7 +1944,7 @@
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roiAliasesChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">updateROILineEdit</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roiValueChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">updateROIDisplayText</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roiNumberChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">setROIsNumber</span><span class="p">],</span>
-            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">sardanaEnabled</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">updateROIButton</span><span class="p">],</span>
+            <span class="c1"># [self._mainwidget.sardanaEnabled, self.updateROIButton],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">mouseImagePositionChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_message</span><span class="p">],</span>
         <span class="p">]</span>
 
@@ -1879,6 +1967,9 @@
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                     <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
                     <span class="c1"># print(str(e))</span>
+            <span class="k">if</span> <span class="s2">&quot;rois_coords&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateROIs</span><span class="p">(</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_coords&quot;</span><span class="p">]),</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_coords&quot;</span><span class="p">])</span>
             <span class="k">if</span> <span class="s2">&quot;apply&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;apply&quot;</span><span class="p">]:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_emitApplyROIPressed</span><span class="p">()</span>
@@ -1895,6 +1986,7 @@
         <span class="n">cnf</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;aliases&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">labelROILineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">())</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">roiSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_coords&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roiCoords</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ROIToolWidget.activate"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.toolWidget.ROIToolWidget.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1904,8 +1996,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">setROIsNumber</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roiCoords</span><span class="p">()))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__aliases</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">(</span><span class="s2">&quot;ExpChannelList&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">updateROILineEdit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roilabels</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__updateCompleter</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">updateROIButton</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sardana</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updateCompleter</span><span class="p">()</span></div>
+        <span class="c1"># self.updateROIButton(</span>
+        <span class="c1">#     self.__settings.sardana or bool(self.__settings.analysisdevice))</span>
 
     <span class="k">def</span> <span class="nf">__updateCompleter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; updates the labelROI help</span>
@@ -2015,9 +2108,9 @@
 
 <span class="sd">        :param enable: buttons enabled</span>
 <span class="sd">        :type enable: :obj:`bool`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
         <span class="c1"># self.__ui.applyROIPushButton.setEnabled(enabled)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">fetchROIPushButton</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">enabled</span><span class="p">)</span></div>
+        <span class="c1"># self.__ui.fetchROIPushButton.setEnabled(enabled)</span>
 
 <div class="viewcode-block" id="ROIToolWidget.updateApplyTips"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.toolWidget.ROIToolWidget.updateApplyTips">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">updateApplyTips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rid</span><span class="p">):</span>
@@ -3162,7 +3255,6 @@
             <span class="k">if</span> <span class="n">dts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">while</span> <span class="n">dts</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
                     <span class="n">dts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">dts</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">dts</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">dts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">dtnrpts</span> <span class="o">=</span> <span class="n">dts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dsrows</span><span class="p">:</span>
@@ -6833,7 +6925,7 @@
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roiAliasesChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">updateROILineEdit</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roiValueChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">updateROIDisplayText</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roiNumberChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">setROIsNumber</span><span class="p">],</span>
-            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">sardanaEnabled</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">updateROIButton</span><span class="p">],</span>
+            <span class="c1"># [self._mainwidget.sardanaEnabled, self.updateROIButton],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">mouseImagePositionChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roimessage</span><span class="p">],</span>
 
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">funComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="p">,</span>
@@ -6867,6 +6959,9 @@
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                     <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
                     <span class="c1"># print(str(e))</span>
+            <span class="k">if</span> <span class="s2">&quot;rois_coords&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateROIs</span><span class="p">(</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_coords&quot;</span><span class="p">]),</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_coords&quot;</span><span class="p">])</span>
             <span class="k">if</span> <span class="s2">&quot;aliases&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">aliases</span> <span class="o">=</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;aliases&quot;</span><span class="p">]</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aliases</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -6908,6 +7003,7 @@
         <span class="n">cnf</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;aliases&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">labelROILineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">())</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">roiSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_coords&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roiCoords</span><span class="p">()</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;mapping&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">funComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rows&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">rowsliceLineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
@@ -6935,7 +7031,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__aliases</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">(</span><span class="s2">&quot;ExpChannelList&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">updateROILineEdit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roilabels</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateCompleter</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">updateROIButton</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sardana</span><span class="p">)</span>
+        <span class="c1"># self.updateROIButton(</span>
+        <span class="c1">#     self.__settings.sardana or bool(self.__settings.analysisdevice))</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bottomplot</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__bottomplot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">onedbarbottomplot</span><span class="p">()</span>
@@ -7346,9 +7443,9 @@
 
 <span class="sd">        :param enable: buttons enabled</span>
 <span class="sd">        :type enable: :obj:`bool`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
         <span class="c1"># self.__ui.applyROIPushButton.setEnabled(enabled)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">fetchROIPushButton</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">enabled</span><span class="p">)</span></div>
+        <span class="c1"># self.__ui.fetchROIPushButton.setEnabled(enabled)</span>
 
 <div class="viewcode-block" id="QROIProjToolWidget.updateApplyTips"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.updateApplyTips">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">updateApplyTips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rid</span><span class="p">):</span>

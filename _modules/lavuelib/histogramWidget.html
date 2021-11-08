@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.histogramWidget &#8212; lavuelib 2.68.0 documentation</title>
+    <title>lavuelib.histogramWidget &#8212; lavuelib 2.71.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.68</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.71</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -266,6 +266,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span>
             <span class="n">QtGui</span><span class="o">.</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Preferred</span><span class="p">,</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Expanding</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setMinimumWidth</span><span class="p">(</span><span class="mi">95</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setMinimumHeight</span><span class="p">(</span><span class="mi">95</span><span class="p">)</span>
 
 <div class="viewcode-block" id="HistogramHLUTWidget.sizeHint"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.histogramWidget.HistogramHLUTWidget.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets size hint</span>
@@ -326,13 +327,16 @@
         <span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__skipupdate</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`str`) color gradient name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;highcontrast&quot;</span>
+        <span class="c1">#: (:class:`pyqtgrath.QtGui.QAction`) save gradient action</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">saveAction</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;Save ...&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="c1">#: (:obj:`pyqtgrath.QtGui.QAction`) remove gradient action</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">removeAction</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;Remove&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">addMenuActions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add save/remove actions</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">saveAction</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">removeAction</span><span class="p">)</span>
 
@@ -390,6 +394,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_pg</span><span class="o">.</span><span class="n">graphicsItems</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span><span class="n">GradientEditorItem</span><span class="o">.</span><span class="n">loadPreset</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sigNameChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
 
@@ -813,7 +818,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">channels</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">ch</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">channels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imageItem</span><span class="p">()</span><span class="o">.</span><span class="n">getHistogram</span><span class="p">(</span><span class="n">perChannel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">channels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imageItem</span><span class="p">()</span><span class="o">.</span><span class="n">getHistogram</span><span class="p">(</span><span class="n">perChannel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="n">autofactor</span> <span class="o">=</span> <span class="kc">False</span>
@@ -868,7 +873,7 @@
                 <span class="c1"># _pg.graphicsItems.HistogramLUTItem.HistogramLUTItem.\</span>
                 <span class="c1">#     imageChanged(</span>
                 <span class="c1">#         self, autoLevel=autoLevel, autoRange=autoRange)</span>
-                <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imageItem</span><span class="p">()</span><span class="o">.</span><span class="n">getHistogram</span><span class="p">(</span>
+                <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imageItem</span><span class="p">()</span><span class="o">.</span><span class="n">getHistogram</span><span class="p">(</span>
                     <span class="n">step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__step</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__bins</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">h</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="k">return</span>
@@ -883,7 +888,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># plot one histogram for each channel</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-            <span class="n">ch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imageItem</span><span class="p">()</span><span class="o">.</span><span class="n">getHistogram</span><span class="p">(</span><span class="n">perChannel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">ch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imageItem</span><span class="p">()</span><span class="o">.</span><span class="n">getHistogram</span><span class="p">(</span><span class="n">perChannel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">ch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
@@ -938,7 +943,7 @@
                 <span class="n">oldLevels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">getRegion</span><span class="p">()</span>
                 <span class="n">levels</span> <span class="o">=</span> <span class="p">[</span><span class="n">oldLevels</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">setLevels</span><span class="p">(</span><span class="n">rgba</span><span class="o">=</span><span class="n">levels</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">imageItem</span><span class="p">()</span><span class="o">.</span><span class="n">setLevels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getLevels</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__imageItem</span><span class="p">()</span><span class="o">.</span><span class="n">setLevels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getLevels</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">imageChanged</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 </pre></div>

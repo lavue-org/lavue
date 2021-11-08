@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.imageDisplayWidget &#8212; lavuelib 2.68.0 documentation</title>
+    <title>lavuelib.imageDisplayWidget &#8212; lavuelib 2.71.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.68</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.71</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -337,13 +337,19 @@
         <span class="c1">#: (:class:`numpy.ndarray`) raw data to cut plots</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__rawdata</span> <span class="o">=</span> <span class="kc">None</span>
 
+        <span class="c1">#: (:obj:`list` &lt; :class:`pyqtgraph.ImageItem` &gt;) image item list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__images</span> <span class="o">=</span> <span class="p">[</span><span class="n">SafeImageItem</span><span class="p">(),</span> <span class="n">SafeImageItem</span><span class="p">(),</span> <span class="n">SafeImageItem</span><span class="p">()]</span>
         <span class="c1">#: (:class:`pyqtgraph.ImageItem`) image item</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__image</span> <span class="o">=</span> <span class="n">SafeImageItem</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1">#: (:class:`pyqtgraph.ViewBox`) viewbox item</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__layout</span><span class="o">.</span><span class="n">addViewBox</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="c1">#: (:obj:`float`) current floar x-position</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__xfdata</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1">#: (:obj:`float`) current floar y-position</span>
@@ -364,6 +370,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__doubleclicklock</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) rgb on flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__rgb</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) gradient colors flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__gradientcolors</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`str`) levelmode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__levelmode</span> <span class="o">=</span> <span class="s1">&#39;mono&#39;</span>
         <span class="c1">#: (:obj:`dict` &lt; :obj:`str`, :obj:`DisplayExtension` &gt;)</span>
@@ -556,7 +564,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">axes</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
             <span class="n">axes</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">resetTransform</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">:</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">resetTransform</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">axes</span><span class="o">.</span><span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">anyupdate</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__transformations</span><span class="o">.</span><span class="n">transpose</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_imagescale</span><span class="p">(</span><span class="o">*</span><span class="n">axes</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span>
@@ -565,17 +574,18 @@
                     <span class="n">axes</span><span class="o">.</span><span class="n">scale</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">axes</span><span class="o">.</span><span class="n">scale</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_imagescale</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">axes</span><span class="o">.</span><span class="n">position</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">anyupdate</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__transformations</span><span class="o">.</span><span class="n">orgtranspose</span> <span class="ow">and</span> <span class="n">wrenabled</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span>
-                    <span class="n">axes</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">axes</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__transformations</span><span class="o">.</span><span class="n">transpose</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="o">*</span><span class="n">axes</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">axes</span><span class="o">.</span><span class="n">position</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">anyupdate</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__transformations</span><span class="o">.</span><span class="n">orgtranspose</span> <span class="ow">and</span> <span class="n">wrenabled</span><span class="p">:</span>
+                    <span class="n">image</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span>
+                        <span class="n">axes</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">axes</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__transformations</span><span class="o">.</span><span class="n">transpose</span><span class="p">:</span>
+                    <span class="n">image</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="o">*</span><span class="n">axes</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">image</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span>
+                        <span class="n">axes</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">axes</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span>
-                    <span class="n">axes</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">axes</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">image</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sceneObj</span><span class="o">.</span><span class="n">rawdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">update</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">autoRange</span><span class="p">()</span>
 
@@ -587,12 +597,13 @@
 <span class="sd">        :param y: y pixel coordinate</span>
 <span class="sd">        :type y: float</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">tr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">transform</span><span class="p">()</span>
-            <span class="n">tr</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">setTransform</span><span class="p">(</span><span class="n">tr</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">tr</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">transform</span><span class="p">()</span>
+                <span class="n">tr</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+                <span class="n">image</span><span class="o">.</span><span class="n">setTransform</span><span class="p">(</span><span class="n">tr</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">image</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ImageDisplayWidget.setToolScale"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setToolScale">[docs]</a>    <span class="k">def</span> <span class="nf">setToolScale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; set axes scales</span>
@@ -650,12 +661,14 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__wraxes</span>
 
-        <span class="k">if</span> <span class="n">axes</span><span class="o">.</span><span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">axes</span><span class="o">.</span><span class="n">position</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">resetTransform</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">axes</span><span class="o">.</span><span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">axes</span><span class="o">.</span><span class="n">position</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">image</span><span class="o">.</span><span class="n">resetTransform</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">axes</span><span class="o">.</span><span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_imagescale</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">axes</span><span class="o">.</span><span class="n">position</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">axes</span><span class="o">.</span><span class="n">position</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">image</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">axes</span><span class="o">.</span><span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">axes</span><span class="o">.</span><span class="n">position</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sceneObj</span><span class="o">.</span><span class="n">rawdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">autoRange</span><span class="p">()</span>
@@ -671,29 +684,65 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">setLookupTable</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;f&#39;</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">min</span><span class="p">()):</span>
-                    <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__channellevels</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">levelMode</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;mono&#39;</span><span class="p">:</span>
-
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
-                        <span class="n">img</span><span class="p">,</span> <span class="n">lut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">levels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__channellevels</span><span class="p">,</span>
-                        <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaylevels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
-                        <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaylevels</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
-                        <span class="n">img</span><span class="p">,</span> <span class="n">lut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">levels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__displaylevels</span><span class="p">,</span>
-                        <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__gradientcolors</span><span class="p">:</span>
+                    <span class="c1"># self.__image.setLookupTable(None)</span>
+                    <span class="c1"># if img.dtype.kind == &#39;f&#39; and np.isnan(img.min()):</span>
+                    <span class="c1">#     img = np.nan_to_num(img)</span>
+                    <span class="k">for</span> <span class="n">iid</span><span class="p">,</span> <span class="n">image</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">iid</span> <span class="o">&lt;</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+                            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">img</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">iid</span><span class="p">])</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                                <span class="n">image</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">image</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+                                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__channellevels</span> <span class="ow">and</span> \
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">levelMode</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;mono&#39;</span><span class="p">:</span>
+                                    <span class="n">image</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
+                                        <span class="n">img</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">iid</span><span class="p">],</span>
+                                        <span class="n">levels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__channellevels</span><span class="p">[</span><span class="n">iid</span><span class="p">],</span>
+                                        <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaylevels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
+                                        <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaylevels</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> \
+                                        <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                                    <span class="n">image</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
+                                        <span class="n">img</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">iid</span><span class="p">],</span>
+                                        <span class="n">levels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__displaylevels</span><span class="p">,</span>
+                                        <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="n">image</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
+                                        <span class="n">img</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">iid</span><span class="p">],</span>
+                                        <span class="c1"># levels=[[0,255], [0, 255], [0, 255]],</span>
+                                        <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
-                        <span class="n">img</span><span class="p">,</span> <span class="n">lut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="c1"># levels=[[0,255], [0, 255], [0, 255]],</span>
-                        <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_hideimages</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+                    <span class="c1"># if uncomented the gradientColors does not work</span>
+                    <span class="c1"># self.__image.setLookupTable(None)</span>
+                    <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;f&#39;</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">min</span><span class="p">()):</span>
+                        <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__channellevels</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">levelMode</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;mono&#39;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
+                            <span class="n">img</span><span class="p">,</span>
+                            <span class="c1"># lut=None,</span>
+                            <span class="n">levels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__channellevels</span><span class="p">,</span>
+                            <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaylevels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
+                            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaylevels</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
+                            <span class="n">img</span><span class="p">,</span>
+                            <span class="c1"># lut=None,</span>
+                            <span class="n">levels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__displaylevels</span><span class="p">,</span>
+                            <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
+                            <span class="n">img</span><span class="p">,</span>
+                            <span class="c1"># lut=None,</span>
+                            <span class="c1"># levels=[[0,255], [0, 255], [0, 255]],</span>
+                            <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__autodisplaylevels</span>
                   <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaylevels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
                   <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaylevels</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_hideimages</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
                     <span class="n">img</span><span class="p">,</span> <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                     <span class="n">levels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__displaylevels</span><span class="p">,</span>
@@ -701,10 +750,14 @@
             <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__autodisplaylevels</span>
                   <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaylevels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span>
                   <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaylevels</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_hideimages</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
                     <span class="n">img</span><span class="p">,</span> <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                     <span class="n">autoDownsample</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__autodownsample</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_hideimages</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__image</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
                     <span class="n">img</span><span class="p">,</span> <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                     <span class="n">levels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__displaylevels</span><span class="p">,</span>
@@ -1256,13 +1309,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__intensity</span><span class="o">.</span><span class="n">dobfsubtraction</span> <span class="o">=</span> <span class="n">state</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.image"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.image">[docs]</a>    <span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.image"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.image">[docs]</a>    <span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iid</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides imageItem object</span>
 
+<span class="sd">        :param iid: image id</span>
+<span class="sd">        :type iid: :obj:`int`</span>
 <span class="sd">        :returns: image object</span>
 <span class="sd">        :rtype: :class:`pyqtgraph.imageItem.ImageItem`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__image</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">[</span><span class="n">iid</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="ImageDisplayWidget.setTransformations"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setTransformations">[docs]</a>    <span class="k">def</span> <span class="nf">setTransformations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transpose</span><span class="p">,</span> <span class="n">leftrightflip</span><span class="p">,</span> <span class="n">updownflip</span><span class="p">,</span>
                            <span class="n">orgtranspose</span><span class="p">):</span>
@@ -1395,6 +1450,30 @@
 <span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rgb</span></div>
+
+    <span class="k">def</span> <span class="nf">_hideimages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; hides additional images</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ImageDisplayWidget.setGradientColors"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setGradientColors">[docs]</a>    <span class="k">def</span> <span class="nf">setGradientColors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets gradientcolors on/off</span>
+
+<span class="sd">        :param status: True for on and False for off</span>
+<span class="sd">        :type status: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hideimages</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__gradientcolors</span> <span class="o">=</span> <span class="n">status</span></div>
+
+<div class="viewcode-block" id="ImageDisplayWidget.gradientColors"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.gradientColors">[docs]</a>    <span class="k">def</span> <span class="nf">gradientColors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; gets gradientcolors on/off</span>
+
+<span class="sd">        :returns: True for on and False for off</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__gradientcolors</span></div>
 
 <div class="viewcode-block" id="ImageDisplayWidget.setLevelMode"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setLevelMode">[docs]</a>    <span class="k">def</span> <span class="nf">setLevelMode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">levelmode</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets levelmode</span>

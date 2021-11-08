@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>LaVue - Live Image Viewer &#8212; lavuelib 2.68.0 documentation</title>
+    <title>LaVue - Live Image Viewer &#8212; lavuelib 2.71.0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         </button>
         <a class="navbar-brand" href="#">
           lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.68</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.71</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -203,10 +203,11 @@ e.g. <code class="docutils literal notranslate"><span class="pre">Pilatus</span>
 </div>
 <div class="section" id="debian-packages">
 <h3>Debian packages<a class="headerlink" href="#debian-packages" title="Permalink to this headline">¶</a></h3>
-<p>Debian <cite>buster</cite> and <cite>stretch</cite> or Ubuntu  <cite>focal</cite>, <cite>eoan</cite>, <cite>bionic</cite> packages can be found in the HDRI repository.</p>
+<p>Debian <cite>bullseye</cite>, <cite>buster</cite> and <cite>stretch</cite> or Ubuntu  <cite>impish</cite>, <cite>hirsute</cite>, <cite>focal</cite>, <cite>bionic</cite> packages can be found in the HDRI repository.</p>
 <p>To install the debian packages, add the PGP repository key</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo su
-<span class="gp">$</span> wget -q -O - http://repos.pni-hdri.de/debian_repo.pub.gpg <span class="p">|</span> apt-key add -
+<span class="gp">$</span> curl -s http://repos.pni-hdri.de/debian_repo.pub.gpg  <span class="p">|</span> gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
+<span class="gp">$</span> chmod <span class="m">644</span> /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
 </pre></div>
 </div>
 <p>and then download the corresponding source list, e.g.</p>
@@ -214,11 +215,11 @@ e.g. <code class="docutils literal notranslate"><span class="pre">Pilatus</span>
 </pre></div>
 </div>
 <p>and</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wget http://repos.pni-hdri.de/buster-pni-hdri.list
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wget http://repos.pni-hdri.de/bullseye-pni-hdri.list
 </pre></div>
 </div>
 <p>or</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wget http://repos.pni-hdri.de/stretch-pni-hdri.list
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wget http://repos.pni-hdri.de/buster-pni-hdri.list
 </pre></div>
 </div>
 <p>or</p>
@@ -228,16 +229,15 @@ e.g. <code class="docutils literal notranslate"><span class="pre">Pilatus</span>
 <p>respectively.</p>
 <p>Finally,</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> apt-get update
-<span class="gp">$</span> apt-get install python-lavue
+<span class="gp">$</span> apt-get install python3-lavue
 <span class="gp">$</span> apt-get install lavue-controller
 </pre></div>
 </div>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> apt-get update
-<span class="gp">$</span> apt-get install python3-lavue
-<span class="gp">$</span> apt-get install lavue-controller3
+<p>or</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> apt-get install lavue-controller3
 </pre></div>
 </div>
-<p>for python 3 version. Please notice that <a class="reference external" href="https://confluence.desy.de/display/hidra">HiDRA</a> is not available for python 3 yet.</p>
+<p>for python 3 version (for older debian/ubuntu releases).</p>
 </div>
 <div class="section" id="from-pip">
 <h3>From pip<a class="headerlink" href="#from-pip" title="Permalink to this headline">¶</a></h3>
@@ -272,14 +272,14 @@ e.g. <code class="docutils literal notranslate"><span class="pre">Pilatus</span>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> lavue
 </pre></div>
 </div>
-<p>for python 2.7 or</p>
+<p>or</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> lavue3
 </pre></div>
 </div>
-<p>for python 3.</p>
+<p>for python 3 version (for older debian/ubuntu releases).</p>
 <div class="section" id="start-the-viewer-in-the-expert-mode">
 <h3>Start the Viewer in the expert mode<a class="headerlink" href="#start-the-viewer-in-the-expert-mode" title="Permalink to this headline">¶</a></h3>
-<p>Changing LaVue  settings is available in the expert mode, i.e.</p>
+<p>Changing LaVue settings is available in the expert mode, i.e.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> lavue -m expert
 </pre></div>
 </div>
