@@ -37,14 +37,15 @@ The ``setup.py`` script may need: ``setuptools  sphinx  numpy  pytest`` python p
 Debian packages
 """""""""""""""
 
-Debian `buster` and `stretch` or Ubuntu  `focal`, `eoan`, `bionic` packages can be found in the HDRI repository.
+Debian `bullseye`, `buster` and `stretch` or Ubuntu  `impish`, `hirsute`, `focal`, `bionic` packages can be found in the HDRI repository.
 
 To install the debian packages, add the PGP repository key
 
 .. code-block:: console
 
    $ sudo su
-   $ wget -q -O - http://repos.pni-hdri.de/debian_repo.pub.gpg | apt-key add -
+   $ curl -s http://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
+   $ chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
 
 and then download the corresponding source list, e.g.
 
@@ -56,13 +57,13 @@ and
 
 .. code-block:: console
 
-   $ wget http://repos.pni-hdri.de/buster-pni-hdri.list
+   $ wget http://repos.pni-hdri.de/bullseye-pni-hdri.list
 
 or
 
 .. code-block:: console
 
-   $ wget http://repos.pni-hdri.de/stretch-pni-hdri.list
+   $ wget http://repos.pni-hdri.de/buster-pni-hdri.list
 
 or
 
@@ -77,17 +78,16 @@ Finally,
 .. code-block:: console
 
    $ apt-get update
-   $ apt-get install python-lavue
+   $ apt-get install python3-lavue
    $ apt-get install lavue-controller
+
+or
 
 .. code-block:: console
 
-   $ apt-get update
-   $ apt-get install python3-lavue
    $ apt-get install lavue-controller3
-
-for python 3 version. Please notice that `HiDRA
-<https://confluence.desy.de/display/hidra>`_ is not available for python 3 yet.
+   
+for python 3 version (for older debian/ubuntu releases).
 
 From pip
 """"""""
@@ -133,18 +133,18 @@ To start LaVue
 
    $ lavue
 
-for python 2.7 or
+or
 
 .. code-block:: console
 
    $ lavue3
 
-for python 3.
+for python 3 version (for older debian/ubuntu releases).
 
 Start the Viewer in the expert mode
 """""""""""""""""""""""""""""""""""
 
-Changing LaVue  settings is available in the expert mode, i.e.
+Changing LaVue settings is available in the expert mode, i.e.
 
 .. code-block:: console
 
