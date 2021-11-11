@@ -423,7 +423,7 @@ class IntensityToolWidget(ToolBaseWidget):
         cnf["xtext"], cnf["ytext"] = self._mainwidget.axestext()
         cnf["position"] = [xpos, ypos]
         cnf["scale"] = [xsc, ysc]
-        return json.dumps(cnf)
+        return json.dumps(cnf, cls=numpyEncoder)
 
     def __sendresults(self):
         """ send results to LavueController
@@ -448,7 +448,7 @@ class IntensityToolWidget(ToolBaseWidget):
         results["coordiantes_units"] = [xunits, yunits]
         results["intensity_scaling"] = scaling
         self._mainwidget.writeAttribute(
-            "ToolResults", json.dumps(results))
+            "ToolResults", json.dumps(results, cls=numpyEncoder))
 
 
 class MotorsToolWidget(ToolBaseWidget):
@@ -615,7 +615,7 @@ class MotorsToolWidget(ToolBaseWidget):
         else:
             cnf["tracking"] = False
 
-        return json.dumps(cnf)
+        return json.dumps(cnf, cls=numpyEncoder)
 
     def activate(self):
         """ activates tool widget
@@ -1063,8 +1063,10 @@ class ParametersToolWidget(ToolBaseWidget):
             cnf = json.loads(configuration)
             if "tango_det_attrs" in cnf.keys():
                 record = cnf["tango_det_attrs"]
-                if self.__settings.tangodetattrs != str(json.dumps(record)):
-                    self.__settings.tangodetattrs = str(json.dumps(record))
+                if self.__settings.tangodetattrs != \
+                   str(json.dumps(record, cls=numpyEncoder)):
+                    self.__settings.tangodetattrs = \
+                        str(json.dumps(record, cls=numpyEncoder))
                 self.__updateParams()
 
     @debugmethod
@@ -1079,7 +1081,7 @@ class ParametersToolWidget(ToolBaseWidget):
             cnf["tango_det_attrs"] = json.loads(self.__settings.tangodetattrs)
         except Exception as e:
             logger.warning(str(e))
-        return json.dumps(cnf)
+        return json.dumps(cnf, cls=numpyEncoder)
 
     def _applypars(self, wid):
         """ apply the parameter with the given widget id
@@ -1265,8 +1267,10 @@ class ParametersToolWidget(ToolBaseWidget):
             for key in list(record.keys()):
                 if not str(key).strip():
                     record.pop(key)
-            if self.__settings.tangodetattrs != str(json.dumps(record)):
-                self.__settings.tangodetattrs = str(json.dumps(record))
+            if self.__settings.tangodetattrs != \
+               str(json.dumps(record, cls=numpyEncoder)):
+                self.__settings.tangodetattrs = \
+                    str(json.dumps(record, cls=numpyEncoder))
                 self.__updateParams()
 
     def __updateParams(self):
@@ -1466,7 +1470,7 @@ class MeshToolWidget(ToolBaseWidget):
         else:
             cnf["motor_state"] = "MOVING"
 
-        return json.dumps(cnf)
+        return json.dumps(cnf, cls=numpyEncoder)
 
     def activate(self):
         """ activates tool widget
@@ -1831,7 +1835,7 @@ class ROIToolWidget(ToolBaseWidget):
         cnf["aliases"] = str(self.__ui.labelROILineEdit.text()).split(" ")
         cnf["rois_number"] = self.__ui.roiSpinBox.value()
         cnf["rois_coords"] = self._mainwidget.roiCoords()
-        return json.dumps(cnf)
+        return json.dumps(cnf, cls=numpyEncoder)
 
     def activate(self):
         """ activates tool widget
@@ -2113,7 +2117,7 @@ class LineCutToolWidget(ToolBaseWidget):
             self.__ui.xcoordsComboBox.currentText()).lower()
         cnf["all_cuts"] = self.__ui.allcutsCheckBox.isChecked()
         cnf["cuts_number"] = self.__ui.cutSpinBox.value()
-        return json.dumps(cnf)
+        return json.dumps(cnf, cls=numpyEncoder)
 
     @QtCore.pyqtSlot()
     def _freezeplot(self):
@@ -2346,7 +2350,7 @@ class LineCutToolWidget(ToolBaseWidget):
             results["linecut_%s" % (i + 1)] = [xl[i], yl[i]]
         results["unit"] = ["point", "x-pixel", "y-pixel"][self.__xindex]
         self._mainwidget.writeAttribute(
-            "ToolResults", json.dumps(results))
+            "ToolResults", json.dumps(results, cls=numpyEncoder))
 
     @QtCore.pyqtSlot(int)
     def _setCutsNumber(self, cid):
@@ -2487,7 +2491,7 @@ class ProjectionToolWidget(ToolBaseWidget):
             self.__ui.funComboBox.currentText()).lower()
         cnf["rows"] = self.__ui.rowsliceLineEdit.text()
         cnf["columns"] = self.__ui.columnsliceLineEdit.text()
-        return json.dumps(cnf)
+        return json.dumps(cnf, cls=numpyEncoder)
 
     def __updateslice(self, text, dx=None, ds=None):
         """ create slices from the text
@@ -2783,7 +2787,7 @@ class ProjectionToolWidget(ToolBaseWidget):
         results["yslice"] = yslice
         results["function"] = fun
         self._mainwidget.writeAttribute(
-            "ToolResults", json.dumps(results))
+            "ToolResults", json.dumps(results, cls=numpyEncoder))
 
     @QtCore.pyqtSlot()
     def _message(self):
@@ -2917,7 +2921,7 @@ class OneDToolWidget(ToolBaseWidget):
         cnf["collect"] = self.__accumulate
         cnf["xrow"] = self.__ui.xCheckBox.isChecked()
         cnf["labels"] = self.__labels
-        return json.dumps(cnf)
+        return json.dumps(cnf, cls=numpyEncoder)
 
     def afterplot(self):
         """ command after plot
@@ -3219,7 +3223,7 @@ class OneDToolWidget(ToolBaseWidget):
         for i in range(npl):
             results["onedplot_%s" % (i + 1)] = [xl[i], yl[i]]
         self._mainwidget.writeAttribute(
-            "ToolResults", json.dumps(results))
+            "ToolResults", json.dumps(results, cls=numpyEncoder))
 
     @QtCore.pyqtSlot()
     def _message(self):
@@ -3423,7 +3427,7 @@ class AngleQToolWidget(ToolBaseWidget):
             "pixelsizey": self.__settings.pixelsizey,
             "detdistance": self.__settings.detdistance,
         }
-        return json.dumps(cnf)
+        return json.dumps(cnf, cls=numpyEncoder)
 
     # @debugmethod
     def activate(self):
@@ -4388,7 +4392,7 @@ class DiffractogramToolWidget(ToolBaseWidget):
         cnf["show_diff"] = self.__showdiff
         cnf["main_plot"] = str(
             self.__ui.mainplotComboBox.currentText()).lower()
-        return json.dumps(cnf)
+        return json.dumps(cnf, cls=numpyEncoder)
 
     # @debugmethod
     @QtCore.pyqtSlot()
@@ -5234,7 +5238,7 @@ class DiffractogramToolWidget(ToolBaseWidget):
                     results["peaks_%s_error" % (i + 1)] = pel[i]
         results["unit"] = self.__units[self.__unitindex]
         self._mainwidget.writeAttribute(
-            "ToolResults", json.dumps(results))
+            "ToolResults", json.dumps(results, cls=numpyEncoder))
 
     def __findpeaks(self, x, y, nr=20):
         """ find peaks from diffractogram
@@ -6307,7 +6311,7 @@ class MaximaToolWidget(ToolBaseWidget):
             "pixelsizey": self.__settings.pixelsizey,
             "detdistance": self.__settings.detdistance,
         }
-        return json.dumps(cnf)
+        return json.dumps(cnf, cls=numpyEncoder)
 
     def activate(self):
         """ activates tool widget
@@ -6862,7 +6866,7 @@ class QROIProjToolWidget(ToolBaseWidget):
             "pixelsizey": self.__settings.pixelsizey,
             "detdistance": self.__settings.detdistance,
         }
-        return json.dumps(cnf)
+        return json.dumps(cnf, cls=numpyEncoder)
 
     def activate(self):
         """ activates tool widget
@@ -7178,7 +7182,7 @@ class QROIProjToolWidget(ToolBaseWidget):
         results["yslice"] = yslice
         results["function"] = fun
         self._mainwidget.writeAttribute(
-            "ToolResults", json.dumps(results))
+            "ToolResults", json.dumps(results, cls=numpyEncoder))
 
     def __updateCompleter(self):
         """ updates the labelROI help
