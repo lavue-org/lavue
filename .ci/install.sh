@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 
+echo "restart mysql"
+# workaround for a bug in debian9, i.e. starting mysql hangs
+if [ "$1" = "debian11" ]; then
+    docker exec --user root ndts service mariadb restart
+else
+    docker exec --user root ndts service mysql stop
+    if [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "ubuntu21.04" ] || [ "$1" = "ubuntu21.10" ]; then
+       # docker exec --user root ndts /bin/bash -c 'mkdir -p /var/lib/mysql'
+       # docker exec --user root ndts /bin/bash -c 'chown mysql:mysql /var/lib/mysql'
+       docker exec --user root ndts /bin/bash -c 'usermod -d /var/lib/mysql/ mysql'
+    fi
+    docker exec  --user root ndts /bin/bash -c '$(service mysql start &) && sleep 30'
+fi
+
 
 echo "install tango-db tango-common"
 docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq install -y tango-db tango-common; sleep 10'
