@@ -38,7 +38,7 @@ jobs:
         run: docker build -t ndts .ci/${OS}_py3
       - name: Run the docker
         run: docker run  --name  ndts -d -it -v `pwd`:/home/tango    ndts
-      - name: install tango
+      - name: install tango and lavue
         env:
           OS: ${{ matrix.os }}
         run: .ci/install.sh ${OS} 3
@@ -77,7 +77,7 @@ jobs:
         run: docker build -t ndts .ci/${OS}_py2
       - name: Run the docker
         run: docker run  --name  ndts -d -it -v `pwd`:/home/tango ndts
-      - name: install tango
+      - name: install tango and lavue
         env:
           OS: ${{ matrix.os }}
         run: .ci/install.sh ${OS} 2
