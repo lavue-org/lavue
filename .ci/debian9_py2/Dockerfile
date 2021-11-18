@@ -1,18 +1,22 @@
 FROM debian:stretch
 
 MAINTAINER DESY, Jan Kotanski <jankotan@gmail.com>
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# add the HDRI repository
 RUN /bin/bash -c 'echo "deb http://ftp.de.debian.org/debian stretch main" > /etc/apt/sources.list.d/debian9de.list'
 RUN apt-get -qq update && apt-get -qq install -y libterm-readline-gnu-perl software-properties-common coreutils gnupg2 procps apt-utils curl apt-transport-https gnupg2 ca-certificates wget
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 RUN curl -s http://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
 RUN chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
-# RUN wget --retry-connrefused http://repos.pni-hdri.de/debian_repo.pub.gpg
-# RUN apt-key add debian_repo.pub.gpg
 RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian stretch main" -y
+
+# install packages
 RUN apt-get -qq update && apt-get -qq -y dist-upgrade
-RUN apt-get -qq update && apt-get -qq install -y default-mysql-client  python-h5py  python-sphinx  apt-utils debconf-utils net-tools  omniidl libomniorb4-dev libcos4-dev libomnithread3-dev libzmq3-dev python-pninexus python-mysqldb python-pyqt5 python-pyqt5.qtsvg python-enum34 python-qtchecker python-pyfai qt4-qtconfig libqt4-dev-bin python-requests
-# RUN apt-get -qq install -y  python-pni
-RUN apt-get -qq install -y hdf5-plugin-bshuf hdf5-plugin-bz2 hdf5-plugin-lz4
+RUN apt-get -qq update && apt-get -qq install -y default-mysql-client  python-h5py  python-sphinx  apt-utils debconf-utils net-tools  omniidl libomniorb4-dev libcos4-dev libomnithread3-dev libzmq3-dev python-pninexus python-mysqldb python-pyqt5 python-pyqt5.qtsvg python-enum34 python-qtchecker python-pyfai qt4-qtconfig libqt4-dev-bin python-requests xvfb  libxcb1 libx11-xcb1 libxcb-keysyms1 libxcb-image0 libxcb-icccm4 libxcb-render-util0 xkb-data liblog4j1.2-java pyqt5-dev-tools git python-tz python-pyqtgraph python-setuptools python-zmq python-scipy  hdf5-plugin-bshuf hdf5-plugin-bz2 hdf5-plugin-lz4
+
+# set db configuration
 RUN useradd -ms /bin/bash tango
 RUN  /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections <<< "mysql-server mysql-server/root_password password rootpw"'
 RUN  /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections <<< "mysql-server mysql-server/root_password_again password rootpw"'

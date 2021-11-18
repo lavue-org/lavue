@@ -2,16 +2,20 @@ FROM ubuntu:18.04
 
 MAINTAINER DESY, Jan Kotanski <jankotan@gmail.com>
 
+ENV DEBIAN_FRONTEND=noninteractive
+
+# add the HDRI repository
 RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get -qq install -y software-properties-common curl wget
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 RUN curl -s http://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
 RUN chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
-# RUN wget --retry-connrefused http://repos.pni-hdri.de/debian_repo.pub.gpg
-# RUN apt-key add debian_repo.pub.gpg
 RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian bionic main" -y
+
+# install packages
 RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get -qq dist-upgrade
-RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y mysql-client mysql-client python-h5py python-sphinx apt-utils debconf-utils net-tools  omniidl libomniorb4-dev libcos4-dev libzmq3-dev  python-pninexus python-pyqt5 python-pyqt5.qtsvg python-qtchecker python-pyfai qt4-qtconfig libqt4-dev-bin python-requests
-# RUN export DEBIAN_FRONTEND=noninteractive && apt-get -qq install -y  python-pni
+RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y mysql-client mysql-client python-h5py python-sphinx apt-utils debconf-utils net-tools  omniidl libomniorb4-dev libcos4-dev libzmq3-dev  python-pninexus python-pyqt5 python-pyqt5.qtsvg python-qtchecker python-pyfai qt4-qtconfig libqt4-dev-bin python-requests xvfb  libxcb1 libx11-xcb1 libxcb-keysyms1 libxcb-image0 libxcb-icccm4 libxcb-render-util0 xkb-data liblog4j1.2-java pyqt5-dev-tools git  python-tz python-pyqtgraph python-setuptools python-zmq python-scipy 
+
+# set db configuration
 RUN useradd -ms /bin/bash tango
 RUN  /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections <<< "mysql-server mysql-server/root_password password rootpw"'
 RUN  /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections <<< "mysql-server mysql-server/root_password_again password rootpw"'

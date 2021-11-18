@@ -10,4 +10,4 @@ else
 fi
 echo "$command"
 docker exec ndts bash -c "$command"
-if [ "$?" -ne "0" ]; then exit -1; fi
+if [ "$?" != "0" ]; then exit -1; fi
