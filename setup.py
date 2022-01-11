@@ -56,6 +56,8 @@ def read(fname):
 
 #: (:obj:`str`) package name
 NAME = 'lavuelib'
+#: (:obj:`str`) project name
+project = 'LaVue'
 #: (:obj:`module`) package name
 lavuepackage = __import__(NAME)
 #: (:obj:`str`) full release version
@@ -243,7 +245,7 @@ SETUPDATA = dict(
     },
     command_options={
         'build_sphinx': {
-            'project': ('setup.py', NAME),
+            'project': ('setup.py', project),
             'version': ('setup.py', version),
             'release': ('setup.py', release)}},
 )

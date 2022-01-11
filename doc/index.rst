@@ -5,14 +5,26 @@
 
   .. default-domain:: py
 		       
-.. include:: ../README.rst
+LaVue - Live Image Viewer
+=========================
+
+This is a simple implementation of a live viewer front end.
+It is supposed to show a live image view from xray-detectors at PETRA3 @ desy.de,
+e.g. ``Pilatus``, ``Lambda``, ``Eiger``, ``PerkinElmer``, ``PCO``, ``LimaCCD``, and others.
+
+.. image:: https://github.com/lavue-org/lavue/blob/develop/doc/_images/lavue.png?raw=true
+
+Authors: Christoph Rosemann <christoph.rosemann at desy.de>, Jan Kotański <jan.kotanski at desy.de>, André Rothkirch <andre.rothkirch at desy.de>
+
 				 
 Contents
 ========
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
 
+   installation
+   start
    lavuelib
 
 
