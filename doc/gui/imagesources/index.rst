@@ -32,9 +32,6 @@ the user  can **combine images** from different sources, i.e. different detector
 
 **Start**/ **Stop** button is only at the first source but it applies to all image sources.
 
-List of Image Sources
-=====================
-
 .. toctree::
    :maxdepth: 2
 
