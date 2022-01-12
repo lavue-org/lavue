@@ -5,15 +5,15 @@
 
   .. default-domain:: py
 		       
-LaVue - Live Image Viewer
-=========================
+Live Image Viewer
+=================
 
-This is a simple implementation of a live viewer front end.
+LaVue is a simple implementation of a live viewer front end.
 It is supposed to show a live image view from xray-detectors at PETRA3 @ desy.de,
 e.g. ``Pilatus``, ``Lambda``, ``Eiger``, ``PerkinElmer``, ``PCO``, ``LimaCCD``, and others.
 
-.. image:: https://github.com/lavue-org/lavue/blob/develop/doc/_images/lavue.png?raw=true
-
+.. figure:: _images/lavue.png
+	   
 Authors: Christoph Rosemann <christoph.rosemann at desy.de>, Jan Kotański <jan.kotanski at desy.de>, André Rothkirch <andre.rothkirch at desy.de>
 
 				 
@@ -25,9 +25,13 @@ Contents
 
    installation
    start
+   gui/index
+   lavuecontroller
+   lavuemonitor
+   zmqstream
+   filterplugins
    lavuelib
-
-
+ 
 Indices and tables
 ==================
 
@@ -35,3 +39,13 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+
+   
+Further reading
+===============
+
+More information can be found at: `LaVue
+<https://confluence.desy.de/display/FSEC/LaVue+-+Live+Image+Viewer>`_
+
+| ``lavuelib`` module API: https://lavue-org.github.io/lavue
+| ``LavueController`` Tango Server API: https://lavue-org.github.io/lavue/doc_html

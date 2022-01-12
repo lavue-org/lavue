@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- Coding: utf-8 -*-
 #
 # lavuelib documentation build configuration file, created by
 # sphinx-quickstart on Thu Jan 25 15:05:39 2018.
@@ -120,13 +120,13 @@ html_theme_options = {
     # # python docs options
     # 'root_name': "LaVue",
     # 'root_url': "https://www.github.com/lavue-org/lavue",
-    # 'root_icon': "doc/_images/lavue.png", 
+    # 'root_icon': "doc/_images/lavue.png",
     # 'root_include_title': True,
 
     # # bootstrap docs options
     # Navigation bar title. (Default: ``project`` value)
     # 'navbar_title': "Demo",
-    
+
     # Tab name for entire site. (Default: "Site")
     # 'navbar_site_name': "Site",
 
@@ -169,7 +169,7 @@ html_theme_options = {
     # For black navbar, do "navbar navbar-inverse"
     # 'navbar_class': "navbar navbar-inverse",
     # 'navbar_class': "navbar navbar-light",
-    
+
     # Fix navigation bar to top of page?
     # Values: "true" (default) or "false"
     # 'navbar_fixed_top': "true",
@@ -246,6 +246,18 @@ html_static_path = ['_static']
 
 # Custom sidebar templates, maps document names to template names.
 # html_sidebars = {'**': ['localtoc.html', 'sourcelink.html', 'searchbox.html']}
+html_sidebars = {
+    '**': [
+        'localtoc.html',
+        'relations.html',
+        'searchbox.html',
+        # located at _templates/
+        'versions.html',
+    ]
+}
+html_context = {
+    "docs_versions" : ["v2.71.1"]
+}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
