@@ -6,6 +6,7 @@ Graphical Interface
 .. figure:: ../_images/lavue2.png
 
 *    **Image Source(s)** is(are) in the corner of the main window top left side where a lavue user chooses  a detector image source.
+
 ..
 
 *    Below it  the **Range Window and Down-Sampling**  group allows for selecting a displayed image part and down-sampling it  with a given reduction function
@@ -26,15 +27,13 @@ Graphical Interface
 *    At the bottom of the right side the user selects **Specialized Image Tools** which provide a simple analysis of the detector image.
 
 
-Contents
-========
 
 .. toctree::
    :maxdepth: 2
 
    imagesources/index
    rangewindow
-   fileters
+   filters
    memorybuffer
    imagepreparation
    scaling

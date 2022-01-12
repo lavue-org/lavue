@@ -41,7 +41,7 @@ Moreover the user can **read** from the LaVue GUI:
 
 Finally, the user can change state of lavue by writing to
 
-*    **LavueState**: `JSON <https://www.json.org/json-en.html>`_ dictionary with lavue configuration with parameters corresponding to command-line parameters of lavue  (to display them: lavue -h). The currently supported commands are:  *source*, *configuration*, *start*, *stop*, *imagefile*, *offset*, *rangewindow*, *dsfactor*, *dsreduction*, *filters*, *mbuffer*, *maskfile*, *maskhighvalue*, *transformation*, *scaling*, *levels*, *autofactor*, *gradient*, *viewrange*, *tool*, *toolconfig*, *tangodevice*, *doordevice*, *analysisdevice*, *log*.
+*    **LavueState**: `JSON <https://www.json.org/json-en.html>`_ dictionary with lavue configuration with parameters corresponding to command-line parameters of lavue  (to display them: *lavue -h*). The currently supported commands are:  *source*, *configuration*, *start*, *stop*, *imagefile*, *offset*, *rangewindow*, *dsfactor*, *dsreduction*, *filters*, *mbuffer*, *maskfile*, *maskhighvalue*, *transformation*, *scaling*, *levels*, *autofactor*, *gradient*, *viewrange*, *tool*, *toolconfig*, *tangodevice*, *doordevice*, *analysisdevice*, *log*.
 
 e.g.
 

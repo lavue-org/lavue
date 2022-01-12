@@ -28,7 +28,7 @@ Contents
    gui/index
    lavuecontroller
    lavuemonitor
-   zmqstream
+   zmqserver
    filterplugins
    lavuelib
  

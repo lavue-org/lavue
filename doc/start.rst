@@ -67,7 +67,7 @@ To get all possible command-line parameters
 			   image file name to show, e.g. /tmp/myfile2.nxs://entry/data/pilatus,,-1
      -s SOURCE, --source SOURCE
 			   image source, i.e. hidra, http, tangoattr,
-			       tangoevents, tangofile, doocsprop, tineprop, 
+			       tangoevents, tangofile, doocsprop, tineprop,
 			       epicspv, zmq, asapo, nxsfile, test
 			   multiple-source names is separated by semicolon ';'
      -c CONFIGURATION, --configuration CONFIGURATION
@@ -117,7 +117,7 @@ To get all possible command-line parameters
      -k MASKFILE, --mask-file MASKFILE
 			mask file-name to load
      -p MASKHIGHVALUE, --mask-high-value MASKHIGHVALUE
-			   highest pixel value to show  
+			   highest pixel value to show
      -t TRANSFORMATION, --transformation TRANSFORMATION
 			   image transformation, i.e.
 			     flip-up-down, flip-left-right, transpose,
@@ -153,8 +153,6 @@ To get all possible command-line parameters
 			   tango device of LavueController to communicated with clients during the run
      -d DOORDEVICE, --door DOORDEVICE
 			   door device to communicated with sardana during the run
-     -n ANALYSISDEVICE, --analysis-device ANALYSISDEVICE 
+     -n ANALYSISDEVICE, --analysis-device ANALYSISDEVICE
 			   tango analysis device of LambdaOnlineAnalysis to communicate with analysis clients during the run
      --log LOG logging level, i.e. debug, info, warning, error, critical
-
-
