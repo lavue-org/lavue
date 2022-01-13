@@ -20,12 +20,13 @@ In the bottom-right corner `ComboBox` the user selects one of the **Specialized 
 .. toctree::
    :maxdepth: 2
 
-   intencity
+   intensity
    roi
    linecut
+   angleq
    movemotor
    meshscan
-   onddplot
+   onedplot
    projections
    qroiproj
    maxima
