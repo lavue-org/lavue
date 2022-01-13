@@ -9,7 +9,7 @@ Q+ROI+Proj Tool
 
 Projections:
 
-*    **Row/Column slice** e.g. `9:10` or `100:120:2`, `<empty>` for all
+*    **Row/Column slice** e.g. ``9:10`` or ``100:120:2``, ``<empty>`` for all
 *    **Mapping:** mean or sum
 
 ROI:
@@ -24,9 +24,9 @@ Geometry:
 *    **theta angles** or **q-space** selects the radial transformation
 *    **Pixel intensity** pointed by mouse and its position
 
-The **configuration** of the tool can be set with a JSON dictionary passed in the  `--tool-configuration`  option in command line or a toolconfig variable of `LavueController.LavueState` with the following keys:
+The **configuration** of the tool can be set with a JSON dictionary passed in the  ``--tool-configuration``  option in command line or a toolconfig variable of ``LavueController.LavueState`` with the following keys:
 
-`aliases` (list of strings), `rois_number` (integer), `mapping` (`sum` or `mean` string), `rows` (string with a python slice), `columns` (string with a python slice), `units` (`angles`  or `q-spaces` string), `geometry` (string:float dictionary with the  `centerx`, `centery`, `energy`, `pixelsizex`, `pixelsizey`, `detdistance` keywords)
+``aliases`` (list of strings), ``rois_number`` (integer), ``mapping`` (``sum`` or ``mean`` string), ``rows`` (string with a python slice), ``columns`` (string with a python slice), ``units`` (``angles``  or ``q-spaces`` string), ``geometry`` (string:float dictionary with the  ``centerx``, ``centery``, ``energy``, ``pixelsizex``, ``pixelsizey``, ``detdistance`` keywords)
 
 e.g.
 

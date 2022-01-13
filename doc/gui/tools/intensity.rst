@@ -11,9 +11,9 @@ Intensity Tool
 *    **Axes Labels** and **Scales:** also changeable from ZMQ Source
 *    **Crosshair locker:** show red horizontal and vertical lines denoting a selected point
 
-The **configuration** of the tool can be set with a JSON dictionary passed in the  `--tool-configuration`  option in command line or a toolconfig variable of `LavueController.LavueState` with the following keys:
+The **configuration** of the tool can be set with a JSON dictionary passed in the  ``--tool-configuration``  option in command line or a ``toolconfig`` variable of ``LavueController.LavueState`` with the following keys:
 
-`crosshair_locker` (boolean), `xunits` (string), `yunits` (string), `xtext` (string), `ytext` (string), `position` ([float, float]), `scale` ([float, float])
+``crosshair_locker`` (boolean), ``xunits`` (string), ``yunits`` (string), ``xtext`` (string), ``ytext`` (string), ``position`` ([float, float]), ``scale`` ([float, float])
 
 e.g.
 

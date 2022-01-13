@@ -11,9 +11,9 @@ Projections Tool
 *    **Mapping:** mean or sum
 *    **Pixel intensity** pointed by mouse and its position
 
-The **configuration** of the tool can be set with a JSON dictionary passed in the  `--tool-configuration`  option in command line or a toolconfig variable of `LavueController.LavueState` with the following keys:
+The **configuration** of the tool can be set with a JSON dictionary passed in the  ``--tool-configuration``  option in command line or a toolconfig variable of ``LavueController.LavueState`` with the following keys:
 
-`mapping` (`sum`  or `mean` string), `rows` (string with a python slice), `columns` (string with a python slice)
+``mapping`` (``sum``  or ``mean`` string), ``rows`` (string with a python slice), ``columns`` (string with a python slice)
 
 e.g.
 

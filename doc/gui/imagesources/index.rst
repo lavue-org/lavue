@@ -29,7 +29,7 @@ the user  can **combine images** from different sources, i.e. different detector
 
 .. figure:: ../../_images/lavue-multiplesources.png
 
-*    **Offset**: `x,y[,TRANSFORMATION]`  where `x`, `y` are position of the first pixel for a particular image source while optional `TRANSFORMATION` can be  `flip-up-down`, `flipud`, `fud`, `flip-left-right`, `fliplr`, `flr`, `transpose`, `t`, `rot90`, `r90`, `rot180`, `r180`, `r270`, `rot270`, `rot180+transpose`, `rot180t` or `r180t`
+*    **Offset**: ``x,y[,TRANSFORMATION]``  where ``x``, ``y`` are position of the first pixel for a particular image source while optional ``TRANSFORMATION`` can be  ``flip-up-down``, ``flipud``, ``fud``, ``flip-left-right``, ``fliplr``, ``flr``, ``transpose``, ``t``, ``rot90``, ``r90``, ``rot180``, ``r180``, ``r270``, ``rot270``, ``rot180+transpose``, ``rot180t`` or ``r180t``
 *    **Checkbox** in the tag widget allows for switch on/off the corresponding image source
 
 **Start**/ **Stop** button is only at the first source but it applies to all image sources.

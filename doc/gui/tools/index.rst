@@ -19,6 +19,18 @@ In the bottom-right corner `ComboBox` the user selects one of the **Specialized 
 *    :ref:`Parameters <parameters>` - reads and writes tango attributes to change detector settings
 *    :ref:`Diffractogram <diffractogram>` - shows a result of azimuth integration on 1d plot
 
+The **configuration** of tools can be set with a JSON dictionary passed in the  ``--tool-configuration``  option in command line or as a ``toolconfig`` variable in the ``LavueState`` attribute of :ref:`lavuecontroller`, e.g.
+
+.. code-block:: python
+
+
+         import tango
+         import json
+
+         lc = tango.DeviceProxy("p09/lavuecontroller/1")
+
+	 lc.LavueState = json.dumps({"tool":"intensity", "toolconfig":'{"crosshair_locker":true}'})
+
 .. toctree::
    :caption: Table of Contents
    :maxdepth: 2

@@ -1,3 +1,5 @@
+.. _lavuecontroller:
+
 LaVueController server
 ----------------------
 

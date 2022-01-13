@@ -14,9 +14,9 @@ Angle/Q Tool
 
 The radial center can be selected on Cartesian 2D-plot with a mouse double-click.
 
-The **configuration** of the tool can be set with a JSON dictionary passed in the  `--tool-configuration`  option in command line or a toolconfig variable of `LavueController.LavueState` with the following keys:
+The **configuration** of the tool can be set with a JSON dictionary passed in the  ``--tool-configuration``  option in command line or a toolconfig variable of ``LavueController.LavueState`` with the following keys:
 
-`plot_type` (pixels, polar-th  or polar-q string), `units` (angles  or q-spaces string), `plot_range` ( (start, end, size) for polar, theta and q coordinates  i.e.  a list of  [float, float, float]), `geometry` (string:float dictionary with the  `centerx`, `centery`, `energy`, `pixelsizex`, `pixelsizey`, `detdistance` keywords)
+``plot_type`` (pixels, polar-th  or polar-q string), ``units`` (angles  or q-spaces string), ``plot_range`` ( (start, end, size) for polar, theta and q coordinates  i.e.  a list of  [float, float, float]), ``geometry`` (string:float dictionary with the  ``centerx``, ``centery``, ``energy``, ``pixelsizex``, ``pixelsizey``, ``detdistance`` keywords)
 
 .. code-block:: console
 

@@ -25,9 +25,9 @@ After adding ROIs to sardana  the following environment variables are created or
 *    **DetectorROIsOrder**: `JSON <https://www.json.org/json-en.html>`_ list of ROI aliases representing they order, e.g.
      |br| `["pilatus_roi1", "pilatus_roi2"]`
 
-The **configuration** of the tool can be set with a `JSON <https://www.json.org/json-en.html>`_ dictionary passed in the  `--tool-configuration`  option in command line or a toolconfig variable of `LavueController.LavueState` with the following keys:
+The **configuration** of the tool can be set with a `JSON <https://www.json.org/json-en.html>`_ dictionary passed in the  ``--tool-configuration``  option in command line or a toolconfig variable of ``LavueController.LavueState`` with the following keys:
 
-`aliases` (list of strings), `rois_number` (integer)
+``aliases`` (list of strings), ``rois_number`` (integer)
 
 e.g.
 

@@ -15,9 +15,9 @@ MoveMotor Tool
 *    **Pixel intensity** pointed by mouse and its position
 *    **Axes Labels and Scales:** also changeable from ZMQ Source
 
-The **configuration** of the tool can be set with a JSON dictionary passed in the  `--tool-configuration` option in command line or a toolconfig variable of `LavueController.LavueState` with the following keys:
+The **configuration** of the tool can be set with a JSON dictionary passed in the  ``--tool-configuration`` option in command line or a toolconfig variable of ``LavueController.LavueState`` with the following keys:
 
-`motors` ([string, string]), `x_position` (float), `y_position` (float), `xunits` (string), `yunits` (string), `xtext` (string), `ytext` (string), `position` ([float, float]), `scale` ([float, float]), `move` (boolean), `stop` (boolean),
+``motors`` ([string, string]), ``x_position`` (float), ``y_position`` (float), ``xunits`` (string), ``yunits`` (string), ``xtext`` (string), ``ytext`` (string), ``position`` ([float, float]), ``scale`` ([float, float]), ``move`` (boolean), ``stop`` (boolean),
 
 e.g.
 

@@ -7,7 +7,7 @@
 
 .. figure:: ../../_images/1dplotlavue.png
 
-*    **Rows to plot:** e.g. `1,2,9:10` or `100:120:2`, `ALL` for all rows
+*    **Rows to plot:** e.g. ``1,2,9:10`` or ``100:120:2``, ``ALL`` for all rows
 *    **Labels:** rename labels of the 1d-plot curves
 *    **X in the first row:** tread the first row as 1d X-axis
 *    **Buffer size:** size of the buffer to collect one curve data in time
@@ -16,9 +16,9 @@
 
 It works for **MCAs**.
 
-The ***configuration** of the tool can be set with a JSON dictionary passed in the `--tool-configuration` option in command line or a toolconfig variable of `LavueController.LavueState` with the following keys:
+The ***configuration** of the tool can be set with a JSON dictionary passed in the ``--tool-configuration`` option in command line or a toolconfig variable of ``LavueController.LavueState`` with the following keys:
 
-`rows_to_plot` (string), `labels` (list of strings), `buffer_size` (integer), `collect` (boolean), `reset` (boolean), `1d_stretch` (integer)
+``rows_to_plot`` (string), ``labels`` (list of strings), ``buffer_size`` (integer), ``collect`` (boolean), ``reset`` (boolean), ``1d_stretch`` (integer)
 
 e.g.
 

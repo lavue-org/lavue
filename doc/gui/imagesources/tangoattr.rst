@@ -10,7 +10,7 @@ Images from a tango attribute, e.g. `Lambda`, `PCO`, `AGIPD`, `Jungfrau` or `Lim
 The **Tango Attribute** image source frame contains the following fields:
 
 *    **Attribute:** selects the tango attributes of the detector last image, |br|
-     e.g. sys/tg_test/1/double_image_ro  or haslambda02:10000/petra3/lambda/01/LiveLastImageData. |br| The possible attributes can be preselected in the configuration dialog.
+     e.g. `sys/tg_test/1/double_image_ro`  or `haslambda02:10000/petra3/lambda/01/LiveLastImageData`. |br| The possible attributes can be preselected in the configuration dialog.
 *    **Status:** shows the connection status. It also displays a port of ZMQ security stream if it is enabled.
 *    **Start/Stop** button to launch or interrupt image querying
 

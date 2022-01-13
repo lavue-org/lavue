@@ -402,6 +402,7 @@ class IntensityToolWidget(ToolBaseWidget):
         """
         if configuration:
             cnf = json.loads(configuration)
+            print(cnf)
             if "crosshair_locker" in cnf.keys():
                 crosshairlocker = cnf["crosshair_locker"]
                 self.__ui.crosshairCheckBox.setChecked(crosshairlocker)

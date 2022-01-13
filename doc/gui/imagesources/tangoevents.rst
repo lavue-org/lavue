@@ -3,7 +3,7 @@
 Tango Events
 ============
 
-Images from a tango attribute passed via `Tango::CHANGE_EVENT` or `Tango::DATA_READY_EVENT`, e.g. `LimaCCDs` detectors.
+Images from a tango attribute passed via ``Tango::CHANGE_EVENT`` or ``Tango::DATA_READY_EVENT``, e.g. `LimaCCDs` detectors.
 
 .. figure:: ../../_images/lavue_tangoevents.png
 

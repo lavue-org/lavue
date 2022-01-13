@@ -12,9 +12,9 @@ Parameters Tool
 
 **Read values** of parameters are displayed in the corresponding green widgets.
 
-The configuration of the tool can be set with a JSON dictionary passed in the  `--tool-configuration`  option in command line or a toolconfig variable of `LavueController.LavueState` with the following keys:
+The configuration of the tool can be set with a JSON dictionary passed in the  ``--tool-configuration``  option in command line or a toolconfig variable of ``LavueController.LavueState`` with the following keys:
 
-`tango_det_attrs` (string:string dictonary)
+``tango_det_attrs`` (string:string dictonary)
 
 e.g.
 
