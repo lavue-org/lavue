@@ -35,7 +35,7 @@ A **filter plugin** defined by a **class** it should have defined **__call__** m
 This **__call__** function returns `new_numpy_image` or `None` or *tuple*  (`new_numpy_image`, `filtermetadata_dict`) .
 
 Moreover, the class *constructor* has one configuration string argument initialized by an initialization parameter, e.g.
-   
+
 .. code-block:: python
 
    import numpy as np

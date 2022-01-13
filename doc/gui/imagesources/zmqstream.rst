@@ -1,3 +1,5 @@
+.. _zmq-stream:
+
 ZMQ stream
 ==========
 

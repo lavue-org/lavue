@@ -1,23 +1,26 @@
+.. _special-tools:
+
 Specialized Tools
 =================
 
 
 In the bottom-right corner `ComboBox` the user selects one of the **Specialized Image Tools**:
 
-*    **Intensity** - shows intensity of the selected pixels
-*    **ROI** - selects Regions Of Interest and culculates a sum of their pixel intensities
-*    **LineCut** - selects Line Cuts and shows their 1d intensity plots
-*    **Angle/Q** - shows pixel coordinates in q-space or theta-angles
-*    **MoveMotor** - moves the selected motors to the position pointed by mouse
-*    **MeshScan** - performs sardana mesh scan on the selected ROI region
-*    **1d-Plot** - plots 1d-plots of the selected image rows
-*    **Projections** - plots horizontal and vertical projections of the current image
-*    **Q+ROI+Proj** - combines **Angle/Q, ROI** and Projections
-*    **Maxima** - points pixels with the highest intensity
-*    **Parameters** - reads and writes tango attributes to change detector settings
-*    **Diffractogram** - shows a result of azimuth integration on 1d plot
+*    :ref:`Intensity <intensity>` - shows intensity of the selected pixels
+*    :ref:`ROI <roi>` - selects Regions Of Interest and culculates a sum of their pixel intensities
+*    :ref:`LineCut <linecut>` - selects Line Cuts and shows their 1d intensity plots
+*    :ref:`Angle/Q <angleq>` - shows pixel coordinates in q-space or theta-angles
+*    :ref:`MoveMotor <move-motor>` - moves the selected motors to the position pointed by mouse
+*    :ref:`MeshScan <mesh-scan>` - performs sardana mesh scan on the selected ROI region
+*    :ref:`1d-Plot <1d-plot>` - plots 1d-plots of the selected image rows
+*    :ref:`Projections <projections>` - plots horizontal and vertical projections of the current image
+*    :ref:`Q+ROI+Proj <q-roi-proj>` - combines :ref:`Angle/Q <angleq>`, :ref:`ROI <roi>` and :ref:`Projections <projections>`
+*    :ref:`Maxima <maxima>` - points pixels with the highest intensity
+*    :ref:`Parameters <parameters>` - reads and writes tango attributes to change detector settings
+*    :ref:`Diffractogram <diffractogram>` - shows a result of azimuth integration on 1d plot
 
 .. toctree::
+   :caption: Table of Contents
    :maxdepth: 2
 
    intensity

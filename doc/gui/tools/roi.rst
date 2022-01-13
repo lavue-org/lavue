@@ -1,3 +1,5 @@
+.. _roi:
+
 ROI Tool
 ========
 
@@ -30,7 +32,7 @@ The **configuration** of the tool can be set with a `JSON <https://www.json.org/
 e.g.
 
 .. code-block:: console
-		
+
    lavue -u roi --tool-configuration \{\"rois_number\":2,\"aliases\":[\"pilatus_roi1\",\"polatus_roi2\"]}
 
 .. |br| raw:: html

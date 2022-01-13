@@ -1,3 +1,5 @@
+.. _diffractogram:
+
 Diffractogram Tool
 ==================
 
@@ -12,7 +14,7 @@ Diffractogram Tool
 *    **Next** - (re-)computes a diffractogram for the current image
 *    combobox with a **Number** of diffractograms corresponding to different ranges
 
-Ranges and 1d plots **colors** can be changed in the lavue Configuration by setting **Ranges and ROIs Colors**. 
+Ranges and 1d plots **colors** can be changed in the lavue Configuration by setting **Ranges and ROIs Colors**.
 
 Also in the Configuration the user can change
 

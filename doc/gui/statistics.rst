@@ -1,3 +1,5 @@
+.. _statistics:
+
 Image Statistics
 ================
 

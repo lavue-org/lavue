@@ -1,3 +1,5 @@
+.. _tango-events:
+
 Tango Events
 ============
 

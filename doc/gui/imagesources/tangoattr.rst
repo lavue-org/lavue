@@ -1,3 +1,5 @@
+.. _tango-attr:
+
 Tango Attribute
 ===============
 

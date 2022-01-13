@@ -1,3 +1,5 @@
+.. _maxima:
+
 Maxima Tool
 ===========
 
@@ -13,7 +15,7 @@ Maxima Tool
 The **configuration** of the tool can be set with a JSON dictionary passed in the  `--tool-configuration`  option in command line or a toolconfig variable of `LavueController.LavueState` with the following keys:
 
 `maxima_number`  (integer), `current_maximum`  (integer), `units` (`angles`  or `q-spaces` string), `geometry` (string:float dictionary with the `centerx`, `centery`, `energy`, `pixelsizex`, `pixelsizey`, `detdistance` keywords)
-	    
+
 e.g.
 
 .. code-block:: console

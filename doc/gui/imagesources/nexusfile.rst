@@ -1,3 +1,5 @@
+.. _nexus-file:
+
 NeXus File
 ==========
 

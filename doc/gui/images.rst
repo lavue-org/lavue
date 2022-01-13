@@ -1,3 +1,5 @@
+.. _images:
+
 Images from FileSystem
 ======================
 

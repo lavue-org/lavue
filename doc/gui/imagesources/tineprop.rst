@@ -1,3 +1,5 @@
+.. _tine-prop:
+
 Tine Property
 =============
 

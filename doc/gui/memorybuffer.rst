@@ -1,7 +1,7 @@
+.. _memory-buffer:
+
 Memory Buffer
 =============
-
-.. _memory-buffer:
 
 
 .. figure:: ../_images/memorybuffer.png

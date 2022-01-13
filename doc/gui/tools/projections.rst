@@ -1,3 +1,5 @@
+.. _projections:
+
 Projections Tool
 ================
 
@@ -12,7 +14,7 @@ Projections Tool
 The **configuration** of the tool can be set with a JSON dictionary passed in the  `--tool-configuration`  option in command line or a toolconfig variable of `LavueController.LavueState` with the following keys:
 
 `mapping` (`sum`  or `mean` string), `rows` (string with a python slice), `columns` (string with a python slice)
-	    
+
 e.g.
 
 .. code-block:: console

@@ -1,3 +1,5 @@
+.. _scaling:
+
 Scaling and Display Levels
 ==========================
 

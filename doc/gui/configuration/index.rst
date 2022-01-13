@@ -1,3 +1,5 @@
+.. _configuration:
+
 Configuration
 =============
 
@@ -14,6 +16,7 @@ It opens the configuration dialog where the user select matching LaVue **setting
 *    The settings are **loaded** back from: `$HOME/.config/DESY/LaVue.conf`  when the user starts LaVue.
 
 .. toctree::
+   :caption: Table of Contents
    :maxdepth: 2
 
    general

@@ -1,3 +1,5 @@
+.. _image-preparation:
+
 Image Preparation
 =================
 

@@ -1,3 +1,5 @@
+.. _doocs-prop:
+
 DOOCS property
 ==============
 

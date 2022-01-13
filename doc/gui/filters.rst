@@ -1,8 +1,7 @@
-LaVue Filters
-=============
-
 .. _lavue-filters:
 
+LaVue Filters
+=============
 
 .. figure:: ../_images/lavuefilters.png
 

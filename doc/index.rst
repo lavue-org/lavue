@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
   .. default-domain:: py
-		       
+
 Live Image Viewer
 =================
 
@@ -13,10 +13,10 @@ It is supposed to show a live image view from xray-detectors at PETRA3 @ desy.de
 e.g. ``Pilatus``, ``Lambda``, ``Eiger``, ``PerkinElmer``, ``PCO``, ``LimaCCD``, and others.
 
 .. figure:: _images/lavue.png
-	   
+
 Authors: Christoph Rosemann <christoph.rosemann at desy.de>, Jan Kotański <jan.kotanski at desy.de>, André Rothkirch <andre.rothkirch at desy.de>
 
-				 
+
 Contents
 ========
 
@@ -30,8 +30,8 @@ Contents
    lavuemonitor
    zmqserver
    filterplugins
-   lavuelib/index
- 
+   develop/index
+
 Indices and tables
 ==================
 
@@ -40,7 +40,7 @@ Indices and tables
 * :ref:`search`
 
 
-   
+
 Further reading
 ===============
 

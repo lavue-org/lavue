@@ -1,3 +1,5 @@
+.. _q-roi-proj:
+
 Q+ROI+Proj Tool
 ===============
 

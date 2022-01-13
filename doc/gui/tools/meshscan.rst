@@ -1,3 +1,5 @@
+.. _mesh-scan:
+
 MeshScan Tool
 =============
 

@@ -1,3 +1,5 @@
+.. _angleq:
+
 Angle/Q Tool
 ============
 

@@ -2,9 +2,9 @@
 Installation
 ------------
 
-LaVue requires the following python packages: ``qt5/qt4  pyqtgraph  numpy  zmq  scipy``
+LaVue requires the following python packages: ``qt5/qt4``  ``pyqtgraph``  ``numpy``  ``zmq``  ``scipy``
 
-It is also recommended to install: ``pytango  hidra  pil  fabio  requests  h5py  pni  nxstools``
+It is also recommended to install: ``pytango``  ``hidra``  ``pil``  ``fabio``  ``requests``  ``h5py``  ``pninexus``  ``nxstools``
 
 
 From sources
@@ -18,7 +18,7 @@ Extract sources and run
 
    $ python setup.py install
 
-The ``setup.py`` script may need: ``setuptools  sphinx  numpy  pytest`` python packages as well as ``qtbase5-dev-tools`` or ``libqt4-dev-bin``.
+The ``setup.py`` script may need: ``setuptools``  ``sphinx``  ``numpy``  ``pytest`` python packages as well as ``qtbase5-dev-tools`` or ``libqt4-dev-bin``.
 
 Debian packages
 """""""""""""""
@@ -72,7 +72,7 @@ or
 .. code-block:: console
 
    $ apt-get install lavue-controller3
-   
+
 for python 3 version (for older debian/ubuntu releases).
 
 From pip
@@ -109,4 +109,3 @@ Moreover it is also good to install the following python packages:
    $ pip install pyFAI
    $ pip install lavuefilters
    $ pip install pytango
-

@@ -35,7 +35,7 @@ It allows for the user to adjust image sources and their dialogs.
 
 *    **PV Names:** `JSON <https://www.json.org/json-en.html>`_ dictionary assigning labels to image `Epics <https://epics-controls.org/>`_ device process variables
 *    **PV Shapes:** `JSON <https://www.json.org/json-en.html>`_ dictionary assigning labels to image `Epics <https://epics-controls.org/>`_ device process variable shapes
-     
+
 .. |br| raw:: html
 
      <br>

@@ -1,3 +1,5 @@
+.. _range-window:
+
 Range Window and Down-Sampling
 ==============================
 
