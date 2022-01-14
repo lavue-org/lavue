@@ -28,13 +28,27 @@ import os
 
 
 uic = None
+QWebView = None
 qt_api = os.getenv("QT_API", os.getenv('DEFAULT_QT_API', 'pyqt5'))
 if qt_api != 'pyqt4':
     try:
         from PyQt5 import uic
+        # from PyQt5.QtWebKitWidgets import QWebView
+        QWebView = __import__(
+            'PyQt5.QtWebKitWidgets', globals(), locals(),
+            ['QWebView'], 0).QWebView
     except Exception:
         from PyQt4 import uic
+        # from PyQt4.QtWebKitWidgets import QWebView
+        QWebView = __import__(
+            'PyQt4.QtWebKitWidgets', globals(), locals(),
+            ['QWebView'], 0).QWebView
 else:
     from PyQt4 import uic
+    # from PyQt4.QtWebKitWidgets import QWebView
+    QWebView = __import__(
+        'PyQt4.QtWebKitWidgets', globals(), locals(),
+        ['QWebView'], 0).QWebView
 
-__all__ = ['uic']
+
+__all__ = ['uic', 'QWebView']

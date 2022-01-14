@@ -1055,7 +1055,7 @@ class LiveViewer(QtGui.QDialog):
     def _showhelp(self):
         """ shows the detail help
         """
-        form = helpForm.HelpForm("index.html", self)
+        form = helpForm.HelpForm("qrc:/help/index.html", self)
         form.show()
 
     @debugmethod

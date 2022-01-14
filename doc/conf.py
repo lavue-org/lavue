@@ -252,9 +252,11 @@ html_sidebars = {
         'relations.html',
         'searchbox.html',
         # located at _templates/
-        'versions.html',
     ]
 }
+if os.getenv("LAVUE_HIDE_VERSIONS") != 'TRUE':
+    html_sidebars['**'].append('versions.html')
+
 html_context = {
     "docs_versions" : ["v2.71.1"]
 }

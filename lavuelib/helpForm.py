@@ -26,6 +26,7 @@
 
 
 from pyqtgraph import QtCore, QtGui
+from .qtuic import QWebView
 
 
 # detail help
@@ -62,16 +63,14 @@ class HelpForm(QtGui.QDialog):
         #: help tool bar
         self.__toolBar = QtGui.QToolBar(self)
         #: help text Browser
-        self.__textBrowser = QtGui.QTextBrowser(self)
+        self.__textBrowser = QWebView(self)
 
         layout = QtGui.QVBoxLayout(self)
         layout.addWidget(self.__toolBar)
         layout.addWidget(self.__textBrowser, 1)
 
         self.setLayout(layout)
-        self.__textBrowser.setSearchPaths([":/help"])
-        self.__textBrowser.setOpenExternalLinks(True)
-        self.__textBrowser.setSource(QtCore.QUrl(self._page))
+        self._start()
 
         self.resize(1500, 700)
         self.setWindowTitle("%s Help" % (
@@ -106,7 +105,7 @@ class HelpForm(QtGui.QDialog):
         self.__toolBar.addWidget(self.__pageLabel)
 
         try:
-            backAction.triggered.disconnect(self.__textBrowser.backward)
+            backAction.triggered.disconnect(self.__textBrowser.back)
         except Exception:
             pass
         try:
@@ -114,22 +113,27 @@ class HelpForm(QtGui.QDialog):
         except Exception:
             pass
         try:
-            homeAction.triggered.disconnect(self.__textBrowser.home)
+            homeAction.triggered.disconnect(self._home)
         except Exception:
             pass
         try:
-            self.__textBrowser.sourceChanged.disconnect(
+            self.__textBrowser.loadFinished.disconnect(
                         self.updatePageTitle)
         except Exception:
             pass
 
-        backAction.triggered.connect(self.__textBrowser.backward)
+        backAction.triggered.connect(self.__textBrowser.back)
         forwardAction.triggered.connect(self.__textBrowser.forward)
-        homeAction.triggered.connect(self.__textBrowser.home)
-        self.__textBrowser.sourceChanged.connect(
+        homeAction.triggered.connect(self._start)
+        self.__textBrowser.loadFinished.connect(
                     self.updatePageTitle)
 
         self.updatePageTitle()
+
+    def _start(self):
+        """ got to the home page
+        """
+        self.__textBrowser.load(QtCore.QUrl(self._page))
 
     def updatePageTitle(self):
         """ resets the __pageLabel withg the document title
@@ -137,6 +141,6 @@ class HelpForm(QtGui.QDialog):
 
         self.__pageLabel.setText(
             "<p><b><font color='#0066ee' font size = 4>" +
-            "&nbsp;&nbsp;" + self.__textBrowser.documentTitle()
+            "&nbsp;&nbsp;" + self.__textBrowser.title()
             + "</b></p></br>"
         )
