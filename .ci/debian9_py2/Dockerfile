@@ -14,7 +14,7 @@ RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian stretch main" -y
 
 # install packages
 RUN apt-get -qq update && apt-get -qq -y dist-upgrade
-RUN apt-get -qq update && apt-get -qq install -y default-mysql-client  python-h5py  python-sphinx  apt-utils debconf-utils net-tools  omniidl libomniorb4-dev libcos4-dev libomnithread3-dev libzmq3-dev python-pninexus python-mysqldb python-pyqt5 python-pyqt5.qtsvg python-enum34 python-qtchecker python-pyfai qt4-qtconfig libqt4-dev-bin python-requests xvfb  libxcb1 libx11-xcb1 libxcb-keysyms1 libxcb-image0 libxcb-icccm4 libxcb-render-util0 xkb-data liblog4j1.2-java pyqt5-dev-tools git python-tz python-pyqtgraph python-setuptools python-zmq python-scipy  hdf5-plugin-bshuf hdf5-plugin-bz2 hdf5-plugin-lz4
+RUN apt-get -qq update && apt-get -qq install -y default-mysql-client  python-h5py  python-sphinx  apt-utils debconf-utils net-tools  omniidl libomniorb4-dev libcos4-dev libomnithread3-dev libzmq3-dev python-pninexus python-mysqldb python-pyqt5 python-pyqt5.qtsvg python-enum34 python-qtchecker python-pyfai qt4-qtconfig libqt4-dev-bin python-requests xvfb  libxcb1 libx11-xcb1 libxcb-keysyms1 libxcb-image0 libxcb-icccm4 libxcb-render-util0 xkb-data liblog4j1.2-java pyqt5-dev-tools git python-tz python-pyqtgraph python-setuptools python-zmq python-scipy  hdf5-plugin-bshuf hdf5-plugin-bz2 hdf5-plugin-lz4 python-pyqt5.qtwebkit
 
 # set db configuration
 RUN useradd -ms /bin/bash tango

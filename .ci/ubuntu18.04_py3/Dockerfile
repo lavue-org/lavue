@@ -13,7 +13,7 @@ RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian bionic main" -y
 
 # install packages
 RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get -qq dist-upgrade
-RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y mysql-client mysql-client python3-h5py python3-sphinx apt-utils debconf-utils net-tools  omniidl libomniorb4-dev libcos4-dev libzmq3-dev python3-distutils python3-pninexus python3-pyqt5 python3-pyqt5.qtsvg python3-qtchecker python3-pyfai qt4-qtconfig libqt4-dev-bin python3-requests  xvfb  libxcb1 libx11-xcb1 libxcb-keysyms1 libxcb-image0 libxcb-icccm4 libxcb-render-util0 xkb-data liblog4j1.2-java pyqt5-dev-tools git python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy
+RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y mysql-client mysql-client python3-h5py python3-sphinx apt-utils debconf-utils net-tools  omniidl libomniorb4-dev libcos4-dev libzmq3-dev python3-distutils python3-pninexus python3-pyqt5 python3-pyqt5.qtsvg python3-qtchecker python3-pyfai qt4-qtconfig libqt4-dev-bin python3-requests  xvfb  libxcb1 libx11-xcb1 libxcb-keysyms1 libxcb-image0 libxcb-icccm4 libxcb-render-util0 xkb-data liblog4j1.2-java pyqt5-dev-tools git python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy python3-pyqt5.qtwebkit
 
 # set db configuration
 RUN useradd -ms /bin/bash tango
