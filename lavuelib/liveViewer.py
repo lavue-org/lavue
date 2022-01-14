@@ -1645,7 +1645,14 @@ class LiveViewer(QtGui.QDialog):
                 self.__imagewg.setTool(self.__tlaliasnames[tlname])
 
         if hasattr(options, "toolconfig") and options.toolconfig is not None:
-            tlconfig = str(options.toolconfig)
+            if isinstance(options.toolconfig, dict):
+                try:
+                    tlconfig = str(json.dumps(options.toolconfig))
+                except Exception as e:
+                    logger.warning(str(e))
+                    tlconfig = str(options.toolconfig)
+            else:
+                tlconfig = str(options.toolconfig)
             self.__imagewg.setToolConfiguration(tlconfig)
 
         if hasattr(options, "tangodevice") and \
