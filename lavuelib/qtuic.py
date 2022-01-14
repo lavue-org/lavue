@@ -41,13 +41,13 @@ if qt_api != 'pyqt4':
         from PyQt4 import uic
         # from PyQt4.QtWebKitWidgets import QWebView
         QWebView = __import__(
-            'PyQt4.QtWebKitWidgets', globals(), locals(),
+            'PyQt4.QtWebKit', globals(), locals(),
             ['QWebView'], 0).QWebView
 else:
     from PyQt4 import uic
     # from PyQt4.QtWebKitWidgets import QWebView
     QWebView = __import__(
-        'PyQt4.QtWebKitWidgets', globals(), locals(),
+        'PyQt4.QtWebKit', globals(), locals(),
         ['QWebView'], 0).QWebView
 
 
