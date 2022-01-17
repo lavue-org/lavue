@@ -1,0 +1,222 @@
+
+
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LaVueController server &#8212; LaVue 2.71.1 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="LaVue Monitor" href="lavuemonitor.html" />
+    <link rel="prev" title="Filter plugins settings" href="gui/configuration/filtersettings.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="lavuemonitor.html" title="LaVue Monitor"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="gui/configuration/filtersettings.html" title="Filter plugins settings"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LaVue 2.71.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">LaVueController server</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="lavuecontroller-server">
+<span id="lavuecontroller"></span><h1>LaVueController server<a class="headerlink" href="#lavuecontroller-server" title="Permalink to this headline">¶</a></h1>
+<p><strong>LavueController</strong> server allows for communication with LaVue GUI via tango interface, e.g. with user scripts or macros</p>
+<div class="figure align-default">
+<img alt="_images/lavuecontrollerpogo.png" src="_images/lavuecontrollerpogo.png" />
+</div>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<p>The user can <strong>pass to</strong> and <strong>read back</strong> from the LaVue GUI  the following attributes:</p>
+<ul class="simple">
+<li><p><strong>BeamCenterX</strong>: x-coordinate of the beam center in pixels, e.g. used in <em>Angle/Q Tool</em></p></li>
+<li><p><strong>BeamCenterY</strong>: y-coordinate of the beam center in pixels, e.g. used in <em>Angle/Q Tool</em></p></li>
+<li><p><strong>PixelSizeX</strong>: x-size of the detector pixel  in micrometers, e.g. used in <em>Angle/Q Tool</em></p></li>
+<li><p><strong>PixelSizeY</strong>: y-size of the detector pixel  in micrometers, e.g. used in <em>Angle/Q Tool</em></p></li>
+<li><p><strong>DetectorDistance</strong>: detector distance from the sample in mm, e.g. used in <em>Angle/Q Tool</em></p></li>
+<li><p><strong>Energy</strong>:  beam energy in <em>eV</em>, e.g. used in <em>Angle/Q Tool</em></p></li>
+<li><p><strong>DetectorROIs</strong>: <a class="reference external" href="https://www.json.org/json-en.html">JSON</a> dictionary with  Regions Of Interests ranges, e.g.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;pilatusrois&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">67</span><span class="p">,</span> <span class="mi">131</span><span class="p">,</span> <span class="mi">124</span><span class="p">,</span> <span class="mi">153</span><span class="p">],</span> <span class="p">[</span><span class="mi">67</span><span class="p">,</span> <span class="mi">69</span><span class="p">,</span> <span class="mi">117</span><span class="p">,</span> <span class="mi">119</span><span class="p">],</span> <span class="p">[</span><span class="mi">134</span><span class="p">,</span> <span class="mi">129</span><span class="p">,</span> <span class="mi">184</span><span class="p">,</span> <span class="mi">179</span><span class="p">]]}</span>
+</pre></div>
+</div>
+<p>Moreover the user can <strong>read</strong> from the LaVue GUI:</p>
+<ul class="simple">
+<li><p><strong>DetectorROIsValues</strong>: <a class="reference external" href="https://www.json.org/json-en.html">JSON</a> dictionary with Regions Of Interests sums, e.g.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;pilatusrois&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">8167.0</span><span class="p">,</span> <span class="mf">2262.0</span><span class="p">,</span> <span class="mf">478.0</span><span class="p">,</span> <span class="mf">1069.0</span><span class="p">]}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>DetectorROIsParams</strong>: <a class="reference external" href="https://www.json.org/json-en.html">JSON</a> list of image transformations performed by lavue, e.g.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;transpose&quot;</span><span class="p">,</span> <span class="s2">&quot;flip-left-right&quot;</span><span class="p">,</span> <span class="s2">&quot;flip-up-down&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>ToolResults</strong>: <a class="reference external" href="https://www.json.org/json-en.html">JSON</a> dictionary with tool results, i.e. 1d diffractogram plot or position of peaks</p></li>
+</ul>
+<p>Finally, the user can change state of lavue by writing to</p>
+<ul class="simple">
+<li><p><strong>LavueState</strong>: <a class="reference external" href="https://www.json.org/json-en.html">JSON</a> dictionary with lavue configuration with parameters corresponding to command-line parameters of lavue  (to display them: <em>lavue -h</em>). The currently supported commands are:  <em>source</em>, <em>configuration</em>, <em>start</em>, <em>stop</em>, <em>imagefile</em>, <em>offset</em>, <em>rangewindow</em>, <em>dsfactor</em>, <em>dsreduction</em>, <em>filters</em>, <em>mbuffer</em>, <em>maskfile</em>, <em>maskhighvalue</em>, <em>transformation</em>, <em>scaling</em>, <em>levels</em>, <em>autofactor</em>, <em>gradient</em>, <em>viewrange</em>, <em>tool</em>, <em>toolconfig</em>, <em>tangodevice</em>, <em>doordevice</em>, <em>analysisdevice</em>, <em>log</em>.</p></li>
+</ul>
+<p>e.g.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tango</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">lc</span> <span class="o">=</span> <span class="n">tango</span><span class="o">.</span><span class="n">DeviceProxy</span><span class="p">(</span><span class="s2">&quot;p09/lavuecontroller/1&quot;</span><span class="p">)</span>
+
+<span class="c1"># start the Test source</span>
+<span class="n">lc</span><span class="o">.</span><span class="n">LavueState</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+
+<span class="c1"># stop an image source</span>
+<span class="n">lc</span><span class="o">.</span><span class="n">LavueState</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;stop&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">})</span>
+
+<span class="c1"># set the hidra source with a server configured</span>
+<span class="n">lc</span><span class="o">.</span><span class="n">LavueState</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;hidra&quot;</span><span class="p">,</span> <span class="s2">&quot;configuration&quot;</span><span class="p">:</span> <span class="s2">&quot;haspilatus1m.desy.de&quot;</span><span class="p">})</span>
+
+<span class="c1"># start Tango Attribute image source with a tango attribute from TangoTest server</span>
+<span class="c1"># lc.LavueState = json.dumps({&quot;source&quot;: &quot;tangoattr&quot;, &quot;configuration&quot;: &quot;sys/tg_test/1/double_image_ro&quot;, &quot;start&quot;: True})</span>
+
+<span class="c1"># set ROI tool in the tool combobox</span>
+<span class="n">lc</span><span class="o">.</span><span class="n">LavueState</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;tool&quot;</span><span class="p">:</span> <span class="s2">&quot;roi&quot;</span><span class="p">})</span>
+
+<span class="c1"># set display intensity levels</span>
+<span class="n">lc</span><span class="o">.</span><span class="n">LavueState</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;m20,20&quot;</span><span class="p">})</span>
+
+<span class="c1"># set level auto factor</span>
+<span class="n">lc</span><span class="o">.</span><span class="n">LavueState</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;autofactor&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+
+<span class="c1"># set auto levels</span>
+<span class="n">lc</span><span class="o">.</span><span class="n">LavueState</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;autofactor&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">})</span>
+
+<span class="c1"># set mask values above</span>
+<span class="n">lc</span><span class="o">.</span><span class="n">LavueState</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;maskhighvalue&quot;</span><span class="p">:</span> <span class="mi">30000</span><span class="p">})</span>
+
+<span class="c1"># set flip-up-down transformation</span>
+<span class="n">lc</span><span class="o">.</span><span class="n">LavueState</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;transformation&quot;</span><span class="p">:</span> <span class="s2">&quot;flip-up-down&quot;</span><span class="p">})</span>
+
+<span class="c1"># set log intensity scaling</span>
+<span class="n">lc</span><span class="o">.</span><span class="n">LavueState</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;scaling&quot;</span><span class="p">:</span> <span class="s2">&quot;log&quot;</span><span class="p">})</span>
+
+<span class="c1"># set eiger image source with configuration defined by alias &quot;eiger&quot;</span>
+<span class="c1">#   (otherwise you have to set as configuration the whole URL string)</span>
+<span class="n">lc</span><span class="o">.</span><span class="n">LavueState</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;source&quot;</span><span class="p">:</span><span class="s2">&quot;http&quot;</span><span class="p">,</span> <span class="s2">&quot;configuration&quot;</span><span class="p">:</span><span class="s2">&quot;eiger&quot;</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>You can <strong>read</strong> the current LaVue state via <code class="docutils literal notranslate"><span class="pre">LavueState</span></code>. To update the <code class="docutils literal notranslate"><span class="pre">viewrange</span></code> parameter write  to <code class="docutils literal notranslate"><span class="pre">LavueState</span></code>  an empty <a class="reference external" href="https://www.json.org/json-en.html">JSON</a> dictionary or <code class="docutils literal notranslate"><span class="pre">{&quot;__update__&quot;:</span> <span class="pre">true}</span></code>.</p>
+</div>
+<div class="section" id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>DynamicROIsValues</strong> device property can be set to true or false. When it is true dynamic attributes with ROIs sums are added.</p>
+<p>They names are defined by ROIs aliases from Lavue GUI.</p>
+<p>The <strong>DynamicROIs</strong> device property can be set to true or false. When it is true dynamic attributes with ROIs bounds are added.</p>
+<p>They names are defined by ROIs aliases from Lavue GUI.</p>
+<p>The <strong>ROIAttributesNames</strong> device property contains names of dynamic attributes which will be created event if the corresponding ROIs aliases in Lavue GUI are missing.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">LaVueController server</a><ul>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#properties">Properties</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="gui/configuration/filtersettings.html"
+                        title="previous chapter">Filter plugins settings</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="lavuemonitor.html"
+                        title="next chapter">LaVue Monitor</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="index/../../v2.71.1/index.html">v2.71.1</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="lavuemonitor.html" title="LaVue Monitor"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="gui/configuration/filtersettings.html" title="Filter plugins settings"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LaVue 2.71.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">LaVueController server</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+
+GNU GENERAL PUBLIC LICENSE, version 2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>
