@@ -29,26 +29,49 @@ import os
 
 uic = None
 QWebView = None
+qwebview_error = ""
+qwebview_traceback = ""
+
 qt_api = os.getenv("QT_API", os.getenv('DEFAULT_QT_API', 'pyqt5'))
 if qt_api != 'pyqt4':
     try:
         from PyQt5 import uic
         # from PyQt5.QtWebKitWidgets import QWebView
-        QWebView = __import__(
-            'PyQt5.QtWebKitWidgets', globals(), locals(),
-            ['QWebView'], 0).QWebView
+        try:
+            QWebView = __import__(
+                'PyQt5.QtWebKitWidgets', globals(), locals(),
+                ['QWebView'], 0).QWebView
+        except Exception as e:
+            import traceback
+            value = traceback.format_exc()
+            qwebview_traceback = str(value)
+            qwebview_error = str(e)
+            QWebView = None
     except Exception:
         from PyQt4 import uic
         # from PyQt4.QtWebKitWidgets import QWebView
-        QWebView = __import__(
-            'PyQt4.QtWebKit', globals(), locals(),
-            ['QWebView'], 0).QWebView
+        try:
+            QWebView = __import__(
+                'PyQt4.QtWebKit', globals(), locals(),
+                ['QWebView'], 0).QWebView
+        except Exception as e:
+            import traceback
+            value = traceback.format_exc()
+            qwebview_traceback = str(value)
+            qwebview_error = str(e)
+            QWebView = None
 else:
     from PyQt4 import uic
     # from PyQt4.QtWebKitWidgets import QWebView
-    QWebView = __import__(
-        'PyQt4.QtWebKit', globals(), locals(),
-        ['QWebView'], 0).QWebView
+    try:
+        QWebView = __import__(
+            'PyQt4.QtWebKit', globals(), locals(),
+            ['QWebView'], 0).QWebView
+    except Exception as e:
+        import traceback
+        value = traceback.format_exc()
+        qwebview_traceback = str(value)
+        qwebview_error = str(e)
+        QWebView = None
 
-
-__all__ = ['uic', 'QWebView']
+__all__ = ['uic', 'QWebView', 'qwebview_error', 'qwebview_traceback']

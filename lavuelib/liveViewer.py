@@ -35,6 +35,9 @@ import socket
 import warnings
 import json
 from .qtuic import uic
+from .qtuic import QWebView
+from .qtuic import qwebview_error
+from .qtuic import qwebview_traceback
 import numpy as np
 import pyqtgraph as _pg
 from pyqtgraph import QtCore, QtGui
@@ -1055,8 +1058,17 @@ class LiveViewer(QtGui.QDialog):
     def _showhelp(self):
         """ shows the detail help
         """
-        form = helpForm.HelpForm("qrc:/help/index.html", self)
-        form.show()
+        if QWebView is None:
+            messageBox.MessageBox.warning(
+                self, "lavue: "
+                "Help cannot be display because "
+                "QtWebKitWigets or QtWebKit module is not installed",
+                str(qwebview_error),
+                str(qwebview_traceback),
+            )
+        else:
+            form = helpForm.HelpForm("qrc:/help/index.html", self)
+            form.show()
 
     @debugmethod
     def _translations(self):
