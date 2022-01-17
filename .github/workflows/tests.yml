@@ -31,11 +31,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
 
-      - name: Update bash files
-        run: |
-          chmod +x .ci/run.sh
-          chmod +x .ci/install.sh
-
       - name: Build the docker
         env:
           OS: ${{ matrix.os }}
@@ -126,10 +121,6 @@ jobs:
   #   steps:
   #     - uses: actions/checkout@v2
   #     - uses: actions/setup-python@v2
-  #     - name: Update bash files
-  #       run: |
-  #         chmod +x .ci/run.sh
-  #         chmod +x .ci/install.sh
   #     - name: Build the docker
   #       env:
   #         OS: ${{ matrix.os }}
