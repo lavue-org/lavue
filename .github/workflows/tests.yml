@@ -100,11 +100,11 @@ jobs:
              docker  exec  --user root  ndts /bin/bash -c "rm -rf build test lavuelib"
 
       - name: Deploy documentation
-        if: (github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/docs_'))  &&  matrix.os == 'debian11'
+        if: (github.ref == 'refs/heads/issue_627' || startsWith(github.ref, 'refs/heads/docs_'))  &&  matrix.os == 'debian11'
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self
-          BRANCH: gh-pages
+          BRANCH: gh-pages-test
           FOLDER: .
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MESSAGE: "Build: ({sha}) {msg}"
