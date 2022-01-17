@@ -49,9 +49,15 @@ if [ "$2" = "2" ]; then
     echo "install python-lavue"
     docker exec  --user root ndts python setup.py build
     docker exec  --user root ndts python setup.py install
+    echo "build python-lavue docs"
+    docker exec ndts python setup.py  build_sphinx
+
 else
     echo "install python3-lavue"
     docker exec  --user root ndts python3 setup.py build
     docker exec  --user root ndts python3 setup.py install
+    echo "build python3-lavue docs"
+    docker exec ndts python3 setup.py  build_sphinx
+
 fi
 if [ "$?" != "0" ]; then exit -1; fi
