@@ -95,7 +95,7 @@ jobs:
              docker  exec ndts /bin/bash -c "mv -f build/sphinx/html/* ./${{ steps.extract_docver.outputs.docver }}"
              docker  exec ndts /bin/bash -c "mkdir -p ./${{ steps.extract_docver.outputs.docver }}/doc_html"
              docker  exec ndts /bin/bash -c "mv -f build/doc_html/* ./${{ steps.extract_docver.outputs.docver }}/doc_html/"
-             docker  exec  --user root  ndts /bin/bash -c "rm -rf build test lavuelib"
+             docker  exec --user root ndts /bin/bash -c "rm -rf build test lavuelib  dist  lavue.egg-info"
 
       - name: Deploy documentation
         if: (github.ref == 'refs/heads/issue_627' || startsWith(github.ref, 'refs/heads/docs_'))  &&  matrix.os == 'debian11'
