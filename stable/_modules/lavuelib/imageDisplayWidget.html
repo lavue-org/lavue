@@ -1,158 +1,47 @@
-<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!doctype html>
+
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.imageDisplayWidget &#8212; lavuelib 2.71.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lavuelib.imageDisplayWidget &#8212; lavuelib 2.71.1 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-<meta charset='utf-8'>
-<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
-<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
-<meta name="apple-mobile-web-app-capable" content="yes">
-
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
   </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">lavuelib 2.71.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lavuelib.imageDisplayWidget</a></li> 
+      </ul>
+    </div>  
 
-  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="../../index.html">
-          lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.71</b></span>
-      </div>
-
-        <div class="collapse navbar-collapse nav-collapse">
-          <ul class="nav navbar-nav">
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
             
-            
-              <li class="dropdown globaltoc-container">
-  <a role="button"
-     id="dLabelGlobalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="../../index.html">Site <b class="caret"></b></a>
-  <ul class="dropdown-menu globaltoc"
-      role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
-<li class="toctree-l1"><a class="reference internal" href="../../lavuelib.html">lavuelib package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#subpackages">Subpackages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.axesDialog">lavuelib.axesDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.bkgSubtractionWidget">lavuelib.bkgSubtractionWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.channelGroupBox">lavuelib.channelGroupBox module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.commandThread">lavuelib.commandThread module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.configDialog">lavuelib.configDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.controllerClient">lavuelib.controllerClient module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.dataFetchThread">lavuelib.dataFetchThread module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.diffRangeDialog">lavuelib.diffRangeDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.displayExtensions">lavuelib.displayExtensions module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.edDictDialog">lavuelib.edDictDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.edListDialog">lavuelib.edListDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.filewriter">lavuelib.filewriter module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.filters">lavuelib.filters module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.filtersGroupBox">lavuelib.filtersGroupBox module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.geometryDialog">lavuelib.geometryDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.gradientDialog">lavuelib.gradientDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.h5cppwriter">lavuelib.h5cppwriter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.h5pywriter">lavuelib.h5pywriter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.helpForm">lavuelib.helpForm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.hidraServerList">lavuelib.hidraServerList module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.highValueMaskWidget">lavuelib.highValueMaskWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.histogramWidget">lavuelib.histogramWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageDisplayWidget">lavuelib.imageDisplayWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageField">lavuelib.imageField</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageFileHandler">lavuelib.imageFileHandler module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageNexusExporter">lavuelib.imageNexusExporter module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageSource">lavuelib.imageSource module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageWidget">lavuelib.imageWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.intervalsDialog">lavuelib.intervalsDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.levelsGroupBox">lavuelib.levelsGroupBox module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.liveViewer">lavuelib.liveViewer module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.maskWidget">lavuelib.maskWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.memoExportDialog">lavuelib.memoExportDialog</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.memoryBufferGroupBox">lavuelib.memoryBufferGroupBox</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.messageBox">lavuelib.messageBox module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.motorWatchThread">lavuelib.motorWatchThread module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.omniQThread">lavuelib.omniQThread module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.preparationGroupBox">lavuelib.preparationGroupBox module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.qtuic">lavuelib.qtuic module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.rangeDialog">lavuelib.rangeDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.rangeWindowGroupBox">lavuelib.rangeWindowGroupBox module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.release">lavuelib.release module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.sardanaUtils">lavuelib.sardanaUtils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.scalingGroupBox">lavuelib.scalingGroupBox module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.settings">lavuelib.settings module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.sourceTabWidget">lavuelib.sourceTabWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.sourceWidget">lavuelib.sourceWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.statisticsGroupBox">lavuelib.statisticsGroupBox module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.takeMotorsDialog">lavuelib.takeMotorsDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.toolWidget">lavuelib.toolWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.transformationsWidget">lavuelib.transformationsWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</ul>
-</li>
-              
-                <li class="dropdown">
-  <a role="button"
-     id="dLabelLocalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="#">Page <b class="caret"></b></a>
-  <ul class="dropdown-menu localtoc"
-      role="menu"
-      aria-labelledby="dLabelLocalToc"></ul>
-</li>
-              
-            
-            
-              
-                
-              
-            
-            
-            
-            
-          </ul>
-
-          
-            
-<form class="navbar-form navbar-right" action="../../search.html" method="get">
- <div class="form-group">
-  <input type="text" name="q" class="form-control" placeholder="Search" />
- </div>
-  <input type="hidden" name="check_keywords" value="yes" />
-  <input type="hidden" name="area" value="default" />
-</form>
-          
-        </div>
-    </div>
-  </div>
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-12 content">
-      
   <h1>Source code for lavuelib.imageDisplayWidget</h1><div class="highlight"><pre>
 <span></span><span class="c1"># Copyright (C) 2017  DESY, Christoph Rosemann, Notkestr. 85, D-22607 Hamburg</span>
 <span class="c1">#</span>
@@ -183,13 +72,13 @@
 
 <span class="kn">import</span> <span class="nn">pyqtgraph</span> <span class="k">as</span> <span class="nn">_pg</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="k">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtGui</span>
+<span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtGui</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">axesDialog</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">memoExportDialog</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">axesDialog</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">memoExportDialog</span>
 
 
 <span class="n">_VMAJOR</span><span class="p">,</span> <span class="n">_VMINOR</span><span class="p">,</span> <span class="n">_VPATCH</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">__version__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span> \
@@ -203,11 +92,11 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;lavue&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="SafeImageItem"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.SafeImageItem">[docs]</a><span class="k">class</span> <span class="nc">SafeImageItem</span><span class="p">(</span><span class="n">_pg</span><span class="o">.</span><span class="n">ImageItem</span><span class="p">):</span>
+<div class="viewcode-block" id="SafeImageItem"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.SafeImageItem">[docs]</a><span class="k">class</span> <span class="nc">SafeImageItem</span><span class="p">(</span><span class="n">_pg</span><span class="o">.</span><span class="n">ImageItem</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot; Image item which caught exceptions in paint&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param args: ImageItem parameters list</span>
@@ -217,7 +106,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_pg</span><span class="o">.</span><span class="n">ImageItem</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SafeImageItem.paint"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.SafeImageItem.paint">[docs]</a>    <span class="k">def</span> <span class="nf">paint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="SafeImageItem.paint"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.SafeImageItem.paint">[docs]</a>    <span class="k">def</span> <span class="nf">paint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; safe paint method</span>
 
 <span class="sd">        :param p: painter</span>
@@ -235,11 +124,11 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div></div>
 
 
-<div class="viewcode-block" id="AxesParameters"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.AxesParameters">[docs]</a><span class="k">class</span> <span class="nc">AxesParameters</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="AxesParameters"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.AxesParameters">[docs]</a><span class="k">class</span> <span class="nc">AxesParameters</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; axes parameters</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -260,11 +149,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">yunits</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="IntensityParameters"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.IntensityParameters">[docs]</a><span class="k">class</span> <span class="nc">IntensityParameters</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="IntensityParameters"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.IntensityParameters">[docs]</a><span class="k">class</span> <span class="nc">IntensityParameters</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; intensity parameters</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#: (:obj:`bool`) do background substraction</span>
@@ -277,11 +166,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">scaling</span> <span class="o">=</span> <span class="s2">&quot;sqrt&quot;</span></div>
 
 
-<div class="viewcode-block" id="TransformationParameters"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.TransformationParameters">[docs]</a><span class="k">class</span> <span class="nc">TransformationParameters</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="TransformationParameters"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.TransformationParameters">[docs]</a><span class="k">class</span> <span class="nc">TransformationParameters</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; transformation parameters</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#: (:obj:`bool`) transpose coordinates flag</span>
@@ -294,7 +183,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">orgtranspose</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="ImageDisplayWidget"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget">[docs]</a><span class="k">class</span> <span class="nc">ImageDisplayWidget</span><span class="p">(</span><span class="n">_pg</span><span class="o">.</span><span class="n">GraphicsLayoutWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget">[docs]</a><span class="k">class</span> <span class="nc">ImageDisplayWidget</span><span class="p">(</span><span class="n">_pg</span><span class="o">.</span><span class="n">GraphicsLayoutWidget</span><span class="p">):</span>
 
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) aspect locked toggled signal</span>
     <span class="n">aspectLockedToggled</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
@@ -305,7 +194,7 @@
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) mouse single clicked</span>
     <span class="n">mouseImageSingleClicked</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param parent: parent object</span>
@@ -417,14 +306,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sceneObj</span><span class="o">.</span><span class="n">rawdata</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setCursor</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QCursor</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">CrossCursor</span><span class="p">))</span>
 
-<div class="viewcode-block" id="ImageDisplayWidget.viewbox"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.viewbox">[docs]</a>    <span class="k">def</span> <span class="nf">viewbox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.viewbox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.viewbox">[docs]</a>    <span class="k">def</span> <span class="nf">viewbox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;provides viewbox</span>
 <span class="sd">        :rtype: :class:`pyqtgraph.ViewBox`</span>
 <span class="sd">        :returns: viewbox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.addExtensions"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.addExtensions">[docs]</a>    <span class="k">def</span> <span class="nf">addExtensions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extlist</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.addExtensions"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.addExtensions">[docs]</a>    <span class="k">def</span> <span class="nf">addExtensions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extlist</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;provides viewbox</span>
 <span class="sd">        :param extlist: extension list</span>
 <span class="sd">        :type extlist: :obj:`list` &lt; :class:`DisplayExtension` &gt;</span>
@@ -433,7 +322,7 @@
             <span class="n">ext</span> <span class="o">=</span> <span class="n">excls</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__extensions</span><span class="p">[</span><span class="n">ext</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ext</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.extension"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.extension">[docs]</a>    <span class="k">def</span> <span class="nf">extension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.extension"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.extension">[docs]</a>    <span class="k">def</span> <span class="nf">extension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;provides viewbox</span>
 <span class="sd">        :param name: extension name</span>
 <span class="sd">        :type name: :obj:`str`</span>
@@ -442,7 +331,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__extensions</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.extensions"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.extensions">[docs]</a>    <span class="k">def</span> <span class="nf">extensions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.extensions"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.extensions">[docs]</a>    <span class="k">def</span> <span class="nf">extensions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;provides extension names</span>
 
 <span class="sd">        :rtype: :obj:`list`</span>
@@ -450,7 +339,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__extensions</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setAspectLocked"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setAspectLocked">[docs]</a>    <span class="k">def</span> <span class="nf">setAspectLocked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flag</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setAspectLocked"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setAspectLocked">[docs]</a>    <span class="k">def</span> <span class="nf">setAspectLocked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flag</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;sets aspectLocked</span>
 
 <span class="sd">        :param status: state to set</span>
@@ -492,7 +381,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__setaspectlocked</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__setaspectlocked</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setViewRange"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setViewRange">[docs]</a>    <span class="k">def</span> <span class="nf">setViewRange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rangelist</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setViewRange"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setViewRange">[docs]</a>    <span class="k">def</span> <span class="nf">setViewRange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rangelist</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; set view range values</span>
 
 <span class="sd">        :param rangelist: xmin,ymin,xsize,ysize</span>
@@ -503,7 +392,7 @@
             <span class="n">fl</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">lm</span> <span class="ow">in</span> <span class="n">lims</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QRectF</span><span class="p">(</span><span class="o">*</span><span class="n">fl</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.viewRange"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.viewRange">[docs]</a>    <span class="k">def</span> <span class="nf">viewRange</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.viewRange"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.viewRange">[docs]</a>    <span class="k">def</span> <span class="nf">viewRange</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get view range values</span>
 
 <span class="sd">        :returns: xmin,ymin,xsize,ysize</span>
@@ -605,7 +494,7 @@
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="n">image</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setToolScale"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setToolScale">[docs]</a>    <span class="k">def</span> <span class="nf">setToolScale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setToolScale"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setToolScale">[docs]</a>    <span class="k">def</span> <span class="nf">setToolScale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; set axes scales</span>
 
 <span class="sd">        :param position: start position of axes</span>
@@ -618,7 +507,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__toolaxes</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__toolaxes</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.scale"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.scale">[docs]</a>    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">useraxes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">noNone</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.scale"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.scale">[docs]</a>    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">useraxes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">noNone</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides scale and position of the axes</span>
 
 <span class="sd">        :param useraxes: use user scaling</span>
@@ -674,7 +563,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">autoRange</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__setLabels</span><span class="p">()</span>
 
-<div class="viewcode-block" id="ImageDisplayWidget.updateImage"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.updateImage">[docs]</a>    <span class="k">def</span> <span class="nf">updateImage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rawimg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.updateImage"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.updateImage">[docs]</a>    <span class="k">def</span> <span class="nf">updateImage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rawimg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; updates the image to display</span>
 
 <span class="sd">        :param img: 2d image array</span>
@@ -769,7 +658,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sceneObj</span><span class="o">.</span><span class="n">rawdata</span> <span class="o">=</span> <span class="n">rawimg</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mouse_position</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.currentIntensity"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.currentIntensity">[docs]</a>    <span class="k">def</span> <span class="nf">currentIntensity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.currentIntensity"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.currentIntensity">[docs]</a>    <span class="k">def</span> <span class="nf">currentIntensity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides intensity for current mouse position</span>
 
 <span class="sd">        :returns: (x position, y position, pixel intensity,</span>
@@ -807,7 +696,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">xfdata</span><span class="p">,</span> <span class="n">yfdata</span><span class="p">,</span> <span class="n">intensity</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__xdata</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ydata</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.scalingLabel"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.scalingLabel">[docs]</a>    <span class="k">def</span> <span class="nf">scalingLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.scalingLabel"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.scalingLabel">[docs]</a>    <span class="k">def</span> <span class="nf">scalingLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides scaling label</span>
 
 <span class="sd">        :returns:  scaling label</span>
@@ -839,7 +728,7 @@
                     <span class="n">ilabel</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">(intensity)&quot;</span> <span class="o">%</span> <span class="n">scaling</span>
         <span class="k">return</span> <span class="n">ilabel</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.scaling"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.scaling">[docs]</a>    <span class="k">def</span> <span class="nf">scaling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.scaling"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.scaling">[docs]</a>    <span class="k">def</span> <span class="nf">scaling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides scaling type</span>
 
 <span class="sd">        :returns:  scaling type</span>
@@ -847,21 +736,21 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__intensity</span><span class="o">.</span><span class="n">scaling</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.axesunits"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.axesunits">[docs]</a>    <span class="k">def</span> <span class="nf">axesunits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.axesunits"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.axesunits">[docs]</a>    <span class="k">def</span> <span class="nf">axesunits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; return axes units</span>
 <span class="sd">        :returns: x,y units</span>
 <span class="sd">        :rtype: (:obj:`str`, :obj:`str`)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__axes</span><span class="o">.</span><span class="n">xunits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__axes</span><span class="o">.</span><span class="n">yunits</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.axestext"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.axestext">[docs]</a>    <span class="k">def</span> <span class="nf">axestext</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.axestext"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.axestext">[docs]</a>    <span class="k">def</span> <span class="nf">axestext</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; return axes text</span>
 <span class="sd">        :returns: x,y text</span>
 <span class="sd">        :rtype: (:obj:`str`, :obj:`str`)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__axes</span><span class="o">.</span><span class="n">xtext</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__axes</span><span class="o">.</span><span class="n">ytext</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.scaledxy"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.scaledxy">[docs]</a>    <span class="k">def</span> <span class="nf">scaledxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">useraxes</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.scaledxy"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.scaledxy">[docs]</a>    <span class="k">def</span> <span class="nf">scaledxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">useraxes</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides scaled x,y positions</span>
 
 <span class="sd">        :param x: x pixel coordinate</span>
@@ -893,7 +782,7 @@
             <span class="n">tydata</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">axes</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">txdata</span><span class="p">,</span> <span class="n">tydata</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.descaledxy"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.descaledxy">[docs]</a>    <span class="k">def</span> <span class="nf">descaledxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">useraxes</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.descaledxy"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.descaledxy">[docs]</a>    <span class="k">def</span> <span class="nf">descaledxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">useraxes</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides scaled x,y positions</span>
 
 <span class="sd">        :param x: x pixel coordinate</span>
@@ -926,7 +815,7 @@
 
         <span class="k">return</span> <span class="p">(</span><span class="n">txdata</span><span class="p">,</span> <span class="n">tydata</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.mouse_position"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.mouse_position">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<div class="viewcode-block" id="ImageDisplayWidget.mouse_position"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.mouse_position">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">mouse_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; updates image widget after mouse position change</span>
 
@@ -989,7 +878,7 @@
             <span class="k">if</span> <span class="n">xtext</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__leftaxis</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ImageDisplayWidget.mouse_click"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.mouse_click">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<div class="viewcode-block" id="ImageDisplayWidget.mouse_click"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.mouse_click">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">mouse_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; updates image widget after mouse click</span>
 
@@ -1021,7 +910,7 @@
                     <span class="n">ext</span><span class="o">.</span><span class="n">mouse_click</span><span class="p">(</span><span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mouseImageSingleClicked</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setAutoLevels"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setAutoLevels">[docs]</a>    <span class="k">def</span> <span class="nf">setAutoLevels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">autolevels</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setAutoLevels"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setAutoLevels">[docs]</a>    <span class="k">def</span> <span class="nf">setAutoLevels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">autolevels</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets auto levels</span>
 
 <span class="sd">        :param autolevels: auto levels enabled</span>
@@ -1032,7 +921,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__autodisplaylevels</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setAutoDownSample"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setAutoDownSample">[docs]</a>    <span class="k">def</span> <span class="nf">setAutoDownSample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">autodownsample</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setAutoDownSample"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setAutoDownSample">[docs]</a>    <span class="k">def</span> <span class="nf">setAutoDownSample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">autodownsample</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets auto levels</span>
 
 <span class="sd">        :param autolevels: auto down sample enabled</span>
@@ -1043,7 +932,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__autodownsample</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setDisplayMinLevel"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setDisplayMinLevel">[docs]</a>    <span class="k">def</span> <span class="nf">setDisplayMinLevel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setDisplayMinLevel"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setDisplayMinLevel">[docs]</a>    <span class="k">def</span> <span class="nf">setDisplayMinLevel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets minimum intensity level</span>
 
 <span class="sd">        :param level: minimum intensity</span>
@@ -1052,7 +941,7 @@
         <span class="k">if</span> <span class="n">level</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__displaylevels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">level</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setDisplayMaxLevel"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setDisplayMaxLevel">[docs]</a>    <span class="k">def</span> <span class="nf">setDisplayMaxLevel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setDisplayMaxLevel"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setDisplayMaxLevel">[docs]</a>    <span class="k">def</span> <span class="nf">setDisplayMaxLevel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets maximum intensity level</span>
 
 <span class="sd">        :param level: maximum intensity</span>
@@ -1061,7 +950,7 @@
         <span class="k">if</span> <span class="n">level</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__displaylevels</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">level</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setDisplayChannelLevels"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setDisplayChannelLevels">[docs]</a>    <span class="k">def</span> <span class="nf">setDisplayChannelLevels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setDisplayChannelLevels"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setDisplayChannelLevels">[docs]</a>    <span class="k">def</span> <span class="nf">setDisplayChannelLevels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets maximum intensity levels</span>
 
 <span class="sd">        :param levels: channel intensity levels</span>
@@ -1070,14 +959,14 @@
         <span class="k">if</span> <span class="n">levels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__channellevels</span> <span class="o">=</span> <span class="n">levels</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setDoubleClickLock"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setDoubleClickLock">[docs]</a>    <span class="k">def</span> <span class="nf">setDoubleClickLock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setDoubleClickLock"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setDoubleClickLock">[docs]</a>    <span class="k">def</span> <span class="nf">setDoubleClickLock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets double click lock</span>
 <span class="sd">        :param status: status flag</span>
 <span class="sd">        :type status: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__doubleclicklock</span> <span class="o">=</span> <span class="n">status</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setSubWidgets"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setSubWidgets">[docs]</a>    <span class="k">def</span> <span class="nf">setSubWidgets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setSubWidgets"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setSubWidgets">[docs]</a>    <span class="k">def</span> <span class="nf">setSubWidgets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; set subwidget properties</span>
 
 <span class="sd">        :param parameters: tool parameters</span>
@@ -1112,7 +1001,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__setScale</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__toolaxes</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__toolaxes</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.emitAspectLockedToggled"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.emitAspectLockedToggled">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+<div class="viewcode-block" id="ImageDisplayWidget.emitAspectLockedToggled"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.emitAspectLockedToggled">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">emitAspectLockedToggled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; emits aspectLockedToggled</span>
 
@@ -1121,7 +1010,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">aspectLockedToggled</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">status</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setTicks"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setTicks">[docs]</a>    <span class="k">def</span> <span class="nf">setTicks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setTicks"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setTicks">[docs]</a>    <span class="k">def</span> <span class="nf">setTicks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; launch axes widget</span>
 
 <span class="sd">        :returns: apply status</span>
@@ -1169,7 +1058,7 @@
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.updateTicks"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.updateTicks">[docs]</a>    <span class="k">def</span> <span class="nf">updateTicks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.updateTicks"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.updateTicks">[docs]</a>    <span class="k">def</span> <span class="nf">updateTicks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update Ticks values</span>
 
 <span class="sd">        :param record: dict record with the tick parameters:</span>
@@ -1215,7 +1104,7 @@
         <span class="k">if</span> <span class="n">update</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateImage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sceneObj</span><span class="o">.</span><span class="n">rawdata</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.rawData"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.rawData">[docs]</a>    <span class="k">def</span> <span class="nf">rawData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.rawData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.rawData">[docs]</a>    <span class="k">def</span> <span class="nf">rawData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides the raw data</span>
 
 <span class="sd">        :returns: current raw data</span>
@@ -1223,7 +1112,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sceneObj</span><span class="o">.</span><span class="n">rawdata</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.currentData"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.currentData">[docs]</a>    <span class="k">def</span> <span class="nf">currentData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.currentData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.currentData">[docs]</a>    <span class="k">def</span> <span class="nf">currentData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides the data</span>
 
 <span class="sd">        :returns: current data</span>
@@ -1231,7 +1120,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.updateMetaData"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.updateMetaData">[docs]</a>    <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axisscales</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axislabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="ImageDisplayWidget.updateMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.updateMetaData">[docs]</a>    <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axisscales</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axislabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">rescale</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update Metadata informations</span>
 
@@ -1272,7 +1161,7 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">__axes</span><span class="o">.</span><span class="n">enabled</span><span class="p">,</span>
                         <span class="n">wrenabled</span><span class="o">=</span><span class="n">rescale</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setStatsWOScaling"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setStatsWOScaling">[docs]</a>    <span class="k">def</span> <span class="nf">setStatsWOScaling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setStatsWOScaling"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setStatsWOScaling">[docs]</a>    <span class="k">def</span> <span class="nf">setStatsWOScaling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets statistics without scaling flag</span>
 
 <span class="sd">        :param status: statistics without scaling flag</span>
@@ -1285,7 +1174,7 @@
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setScalingType"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setScalingType">[docs]</a>    <span class="k">def</span> <span class="nf">setScalingType</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalingtype</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setScalingType"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setScalingType">[docs]</a>    <span class="k">def</span> <span class="nf">setScalingType</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalingtype</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets intensity scaling types</span>
 
 <span class="sd">        :param scalingtype: intensity scaling type</span>
@@ -1293,7 +1182,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__intensity</span><span class="o">.</span><span class="n">scaling</span> <span class="o">=</span> <span class="n">scalingtype</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setDoBkgSubtraction"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setDoBkgSubtraction">[docs]</a>    <span class="k">def</span> <span class="nf">setDoBkgSubtraction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setDoBkgSubtraction"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setDoBkgSubtraction">[docs]</a>    <span class="k">def</span> <span class="nf">setDoBkgSubtraction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets do background subtraction flag</span>
 
 <span class="sd">        :param status: do background subtraction flag</span>
@@ -1301,7 +1190,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__intensity</span><span class="o">.</span><span class="n">dobkgsubtraction</span> <span class="o">=</span> <span class="n">state</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setDoBFSubtraction"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setDoBFSubtraction">[docs]</a>    <span class="k">def</span> <span class="nf">setDoBFSubtraction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setDoBFSubtraction"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setDoBFSubtraction">[docs]</a>    <span class="k">def</span> <span class="nf">setDoBFSubtraction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets do brightfield subtraction flag</span>
 
 <span class="sd">        :param status: do brightfield subtraction flag</span>
@@ -1309,7 +1198,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__intensity</span><span class="o">.</span><span class="n">dobfsubtraction</span> <span class="o">=</span> <span class="n">state</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.image"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.image">[docs]</a>    <span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iid</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.image"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.image">[docs]</a>    <span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iid</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides imageItem object</span>
 
 <span class="sd">        :param iid: image id</span>
@@ -1319,7 +1208,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">[</span><span class="n">iid</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setTransformations"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setTransformations">[docs]</a>    <span class="k">def</span> <span class="nf">setTransformations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transpose</span><span class="p">,</span> <span class="n">leftrightflip</span><span class="p">,</span> <span class="n">updownflip</span><span class="p">,</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setTransformations"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setTransformations">[docs]</a>    <span class="k">def</span> <span class="nf">setTransformations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transpose</span><span class="p">,</span> <span class="n">leftrightflip</span><span class="p">,</span> <span class="n">updownflip</span><span class="p">,</span>
                            <span class="n">orgtranspose</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets coordinate transformations</span>
 
@@ -1372,7 +1261,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="s1">&#39;viewRange&#39;</span><span class="p">],</span>
                     <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.transformations"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.transformations">[docs]</a>    <span class="k">def</span> <span class="nf">transformations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.transformations"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.transformations">[docs]</a>    <span class="k">def</span> <span class="nf">transformations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; povides coordinates transformations</span>
 
 <span class="sd">        :returns: transpose, leftrightflip, updownflip flags,</span>
@@ -1405,7 +1294,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__setScale</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__toolaxes</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__toolaxes</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ImageDisplayWidget.autoRange"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.autoRange">[docs]</a>    <span class="k">def</span> <span class="nf">autoRange</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.autoRange"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.autoRange">[docs]</a>    <span class="k">def</span> <span class="nf">autoRange</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets auto range</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1415,7 +1304,7 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
             <span class="c1"># print(str(e))</span>
 
-<div class="viewcode-block" id="ImageDisplayWidget.rangeWindowEnabled"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.rangeWindowEnabled">[docs]</a>    <span class="k">def</span> <span class="nf">rangeWindowEnabled</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.rangeWindowEnabled"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.rangeWindowEnabled">[docs]</a>    <span class="k">def</span> <span class="nf">rangeWindowEnabled</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provide info if range window enabled</span>
 
 <span class="sd">        :returns: range window enabled</span>
@@ -1423,7 +1312,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__wraxes</span><span class="o">.</span><span class="n">enabled</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.rangeWindowScale"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.rangeWindowScale">[docs]</a>    <span class="k">def</span> <span class="nf">rangeWindowScale</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.rangeWindowScale"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.rangeWindowScale">[docs]</a>    <span class="k">def</span> <span class="nf">rangeWindowScale</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provide info about range window sclae</span>
 
 <span class="sd">        :returns: range window scale</span>
@@ -1435,7 +1324,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">1.0</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setrgb"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setrgb">[docs]</a>    <span class="k">def</span> <span class="nf">setrgb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setrgb"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setrgb">[docs]</a>    <span class="k">def</span> <span class="nf">setrgb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets RGB on/off</span>
 
 <span class="sd">        :param status: True for on and False for off</span>
@@ -1443,7 +1332,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__rgb</span> <span class="o">=</span> <span class="n">status</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.rgb"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.rgb">[docs]</a>    <span class="k">def</span> <span class="nf">rgb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.rgb"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.rgb">[docs]</a>    <span class="k">def</span> <span class="nf">rgb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gets RGB on/off</span>
 
 <span class="sd">        :returns: True for on and False for off</span>
@@ -1457,7 +1346,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__images</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setGradientColors"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setGradientColors">[docs]</a>    <span class="k">def</span> <span class="nf">setGradientColors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setGradientColors"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setGradientColors">[docs]</a>    <span class="k">def</span> <span class="nf">setGradientColors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets gradientcolors on/off</span>
 
 <span class="sd">        :param status: True for on and False for off</span>
@@ -1467,7 +1356,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_hideimages</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__gradientcolors</span> <span class="o">=</span> <span class="n">status</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.gradientColors"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.gradientColors">[docs]</a>    <span class="k">def</span> <span class="nf">gradientColors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.gradientColors"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.gradientColors">[docs]</a>    <span class="k">def</span> <span class="nf">gradientColors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gets gradientcolors on/off</span>
 
 <span class="sd">        :returns: True for on and False for off</span>
@@ -1475,7 +1364,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__gradientcolors</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setLevelMode"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setLevelMode">[docs]</a>    <span class="k">def</span> <span class="nf">setLevelMode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">levelmode</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setLevelMode"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setLevelMode">[docs]</a>    <span class="k">def</span> <span class="nf">setLevelMode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">levelmode</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets levelmode</span>
 
 <span class="sd">        :param levelmode: level mode, i.e. `mono` or `rgba`</span>
@@ -1483,7 +1372,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__levelmode</span> <span class="o">=</span> <span class="n">levelmode</span></div>
 
-<div class="viewcode-block" id="ImageDisplayWidget.levelMode"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.levelMode">[docs]</a>    <span class="k">def</span> <span class="nf">levelMode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.levelMode"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.levelMode">[docs]</a>    <span class="k">def</span> <span class="nf">levelMode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gets level mode</span>
 
 <span class="sd">        :returns: level mode, i.e. `mono` or `rgba`</span>
@@ -1492,23 +1381,56 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__levelmode</span></div></div>
 </pre></div>
 
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
     </div>
-      
-  </div>
 </div>
-<footer class="footer">
-  <div class="container">
-    <p class="pull-right">
-      <a href="#">Back to top</a>
+<script>$('#searchbox').show(0);</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
-    </p>
-    <p>
-        &copy; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+      <li><a class="reference external" href="../../index/../../v2.71.1/index.html">v2.71.1</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">lavuelib 2.71.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lavuelib.imageDisplayWidget</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
-GNU GENERAL PUBLIC LICENSE, version 2.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.<br/>
-    </p>
-  </div>
-</footer>
+GNU GENERAL PUBLIC LICENSE, version 2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
   </body>
 </html>

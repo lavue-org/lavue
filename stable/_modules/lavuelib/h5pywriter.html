@@ -1,158 +1,47 @@
-<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!doctype html>
+
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.h5pywriter &#8212; lavuelib 2.71.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lavuelib.h5pywriter &#8212; lavuelib 2.71.1 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-<meta charset='utf-8'>
-<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
-<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
-<meta name="apple-mobile-web-app-capable" content="yes">
-
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
   </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">lavuelib 2.71.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lavuelib.h5pywriter</a></li> 
+      </ul>
+    </div>  
 
-  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="../../index.html">
-          lavuelib</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.71</b></span>
-      </div>
-
-        <div class="collapse navbar-collapse nav-collapse">
-          <ul class="nav navbar-nav">
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
             
-            
-              <li class="dropdown globaltoc-container">
-  <a role="button"
-     id="dLabelGlobalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="../../index.html">Site <b class="caret"></b></a>
-  <ul class="dropdown-menu globaltoc"
-      role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
-<li class="toctree-l1"><a class="reference internal" href="../../lavuelib.html">lavuelib package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#subpackages">Subpackages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.axesDialog">lavuelib.axesDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.bkgSubtractionWidget">lavuelib.bkgSubtractionWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.channelGroupBox">lavuelib.channelGroupBox module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.commandThread">lavuelib.commandThread module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.configDialog">lavuelib.configDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.controllerClient">lavuelib.controllerClient module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.dataFetchThread">lavuelib.dataFetchThread module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.diffRangeDialog">lavuelib.diffRangeDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.displayExtensions">lavuelib.displayExtensions module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.edDictDialog">lavuelib.edDictDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.edListDialog">lavuelib.edListDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.filewriter">lavuelib.filewriter module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.filters">lavuelib.filters module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.filtersGroupBox">lavuelib.filtersGroupBox module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.geometryDialog">lavuelib.geometryDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.gradientDialog">lavuelib.gradientDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.h5cppwriter">lavuelib.h5cppwriter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.h5pywriter">lavuelib.h5pywriter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.helpForm">lavuelib.helpForm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.hidraServerList">lavuelib.hidraServerList module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.highValueMaskWidget">lavuelib.highValueMaskWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.histogramWidget">lavuelib.histogramWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageDisplayWidget">lavuelib.imageDisplayWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageField">lavuelib.imageField</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageFileHandler">lavuelib.imageFileHandler module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageNexusExporter">lavuelib.imageNexusExporter module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageSource">lavuelib.imageSource module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.imageWidget">lavuelib.imageWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.intervalsDialog">lavuelib.intervalsDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.levelsGroupBox">lavuelib.levelsGroupBox module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.liveViewer">lavuelib.liveViewer module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.maskWidget">lavuelib.maskWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.memoExportDialog">lavuelib.memoExportDialog</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.memoryBufferGroupBox">lavuelib.memoryBufferGroupBox</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.messageBox">lavuelib.messageBox module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.motorWatchThread">lavuelib.motorWatchThread module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.omniQThread">lavuelib.omniQThread module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.preparationGroupBox">lavuelib.preparationGroupBox module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.qtuic">lavuelib.qtuic module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.rangeDialog">lavuelib.rangeDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.rangeWindowGroupBox">lavuelib.rangeWindowGroupBox module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.release">lavuelib.release module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.sardanaUtils">lavuelib.sardanaUtils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.scalingGroupBox">lavuelib.scalingGroupBox module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.settings">lavuelib.settings module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.sourceTabWidget">lavuelib.sourceTabWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.sourceWidget">lavuelib.sourceWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.statisticsGroupBox">lavuelib.statisticsGroupBox module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.takeMotorsDialog">lavuelib.takeMotorsDialog module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.toolWidget">lavuelib.toolWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib.transformationsWidget">lavuelib.transformationsWidget module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../lavuelib.html#module-lavuelib">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</ul>
-</li>
-              
-                <li class="dropdown">
-  <a role="button"
-     id="dLabelLocalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="#">Page <b class="caret"></b></a>
-  <ul class="dropdown-menu localtoc"
-      role="menu"
-      aria-labelledby="dLabelLocalToc"></ul>
-</li>
-              
-            
-            
-              
-                
-              
-            
-            
-            
-            
-          </ul>
-
-          
-            
-<form class="navbar-form navbar-right" action="../../search.html" method="get">
- <div class="form-group">
-  <input type="text" name="q" class="form-control" placeholder="Search" />
- </div>
-  <input type="hidden" name="check_keywords" value="yes" />
-  <input type="hidden" name="area" value="default" />
-</form>
-          
-        </div>
-    </div>
-  </div>
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-12 content">
-      
   <h1>Source code for lavuelib.h5pywriter</h1><div class="highlight"><pre>
 <span></span><span class="c1"># Copyright (C) 2017  DESY, Notkestr. 85, D-22607 Hamburg</span>
 <span class="c1">#</span>
@@ -186,7 +75,7 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">io</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">filewriter</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">filewriter</span>
 <span class="c1"># from .Types import nptype</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -249,7 +138,7 @@
     <span class="k">return</span> <span class="n">t</span>
 
 
-<div class="viewcode-block" id="unlimited_selection"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.unlimited_selection">[docs]</a><span class="k">def</span> <span class="nf">unlimited_selection</span><span class="p">(</span><span class="n">sel</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+<div class="viewcode-block" id="unlimited_selection"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.unlimited_selection">[docs]</a><span class="k">def</span> <span class="nf">unlimited_selection</span><span class="p">(</span><span class="n">sel</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; checks if hyperslab is unlimited</span>
 
 <span class="sd">    :param sel: hyperslab selection</span>
@@ -376,7 +265,7 @@
     <span class="k">return</span> <span class="n">t</span>
 
 
-<div class="viewcode-block" id="nptype"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.nptype">[docs]</a><span class="k">def</span> <span class="nf">nptype</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
+<div class="viewcode-block" id="nptype"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.nptype">[docs]</a><span class="k">def</span> <span class="nf">nptype</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; converts to numpy types</span>
 
 <span class="sd">    :param dtype: h5 writer type type</span>
@@ -389,7 +278,7 @@
     <span class="k">return</span> <span class="n">dtype</span></div>
 
 
-<div class="viewcode-block" id="is_image_file_supported"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.is_image_file_supported">[docs]</a><span class="k">def</span> <span class="nf">is_image_file_supported</span><span class="p">():</span>
+<div class="viewcode-block" id="is_image_file_supported"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.is_image_file_supported">[docs]</a><span class="k">def</span> <span class="nf">is_image_file_supported</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; provides if loading of image files are supported</span>
 
 <span class="sd">    :retruns: if loading of image files are supported</span>
@@ -398,7 +287,7 @@
     <span class="k">return</span> <span class="n">h5ver</span> <span class="o">&gt;=</span> <span class="mi">2009</span></div>
 
 
-<div class="viewcode-block" id="is_vds_supported"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.is_vds_supported">[docs]</a><span class="k">def</span> <span class="nf">is_vds_supported</span><span class="p">():</span>
+<div class="viewcode-block" id="is_vds_supported"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.is_vds_supported">[docs]</a><span class="k">def</span> <span class="nf">is_vds_supported</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; provides if VDS are supported</span>
 
 <span class="sd">    :retruns: if VDS are supported</span>
@@ -407,7 +296,7 @@
     <span class="k">return</span> <span class="n">h5ver</span> <span class="o">&gt;=</span> <span class="mi">2009</span></div>
 
 
-<div class="viewcode-block" id="is_mbs_supported"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.is_mbs_supported">[docs]</a><span class="k">def</span> <span class="nf">is_mbs_supported</span><span class="p">():</span>
+<div class="viewcode-block" id="is_mbs_supported"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.is_mbs_supported">[docs]</a><span class="k">def</span> <span class="nf">is_mbs_supported</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; provides if MultiBlockSlice are supported</span>
 
 <span class="sd">    :retruns: if MultiBlockSlice are supported</span>
@@ -416,7 +305,7 @@
     <span class="k">return</span> <span class="n">h5ver</span> <span class="o">&gt;=</span> <span class="mi">3000</span></div>
 
 
-<div class="viewcode-block" id="is_unlimited_vds_supported"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.is_unlimited_vds_supported">[docs]</a><span class="k">def</span> <span class="nf">is_unlimited_vds_supported</span><span class="p">():</span>
+<div class="viewcode-block" id="is_unlimited_vds_supported"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.is_unlimited_vds_supported">[docs]</a><span class="k">def</span> <span class="nf">is_unlimited_vds_supported</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; provides if unlimited vds are supported</span>
 
 <span class="sd">    :retruns: if unlimited vds are supported</span>
@@ -425,7 +314,7 @@
     <span class="k">return</span> <span class="n">h5ver</span> <span class="o">&gt;=</span> <span class="mi">3000</span></div>
 
 
-<div class="viewcode-block" id="is_strings_as_bytes"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.is_strings_as_bytes">[docs]</a><span class="k">def</span> <span class="nf">is_strings_as_bytes</span><span class="p">():</span>
+<div class="viewcode-block" id="is_strings_as_bytes"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.is_strings_as_bytes">[docs]</a><span class="k">def</span> <span class="nf">is_strings_as_bytes</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; provides if string read to bytes</span>
 
 <span class="sd">    :retruns: if string read to bytes</span>
@@ -434,7 +323,7 @@
     <span class="k">return</span> <span class="n">h5ver</span> <span class="o">&gt;=</span> <span class="mi">3000</span></div>
 
 
-<div class="viewcode-block" id="unlimited"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.unlimited">[docs]</a><span class="k">def</span> <span class="nf">unlimited</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="unlimited"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.unlimited">[docs]</a><span class="k">def</span> <span class="nf">unlimited</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; return dataspace UNLIMITED variable for the current writer module</span>
 
 <span class="sd">    :param parent: parent object</span>
@@ -448,7 +337,7 @@
         <span class="k">return</span> <span class="n">h5py</span><span class="o">.</span><span class="n">UNLIMITED</span></div>
 
 
-<div class="viewcode-block" id="load_file"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.load_file">[docs]</a><span class="k">def</span> <span class="nf">load_file</span><span class="p">(</span><span class="n">membuffer</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">):</span>
+<div class="viewcode-block" id="load_file"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.load_file">[docs]</a><span class="k">def</span> <span class="nf">load_file</span><span class="p">(</span><span class="n">membuffer</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; load a file from memory byte buffer</span>
 
 <span class="sd">    :param membuffer: memory buffer</span>
@@ -475,7 +364,7 @@
     <span class="k">return</span> <span class="n">H5PYFile</span><span class="p">(</span><span class="n">fobj</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="open_file"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.open_file">[docs]</a><span class="k">def</span> <span class="nf">open_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">):</span>
+<div class="viewcode-block" id="open_file"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.open_file">[docs]</a><span class="k">def</span> <span class="nf">open_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; open the new file</span>
 
 <span class="sd">    :param filename: file name</span>
@@ -493,7 +382,7 @@
         <span class="k">return</span> <span class="n">H5PYFile</span><span class="p">(</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r+&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">),</span> <span class="n">filename</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="create_file"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.create_file">[docs]</a><span class="k">def</span> <span class="nf">create_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">):</span>
+<div class="viewcode-block" id="create_file"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.create_file">[docs]</a><span class="k">def</span> <span class="nf">create_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; create a new file</span>
 
 <span class="sd">    :param filename: file name</span>
@@ -515,7 +404,7 @@
     <span class="k">return</span> <span class="n">H5PYFile</span><span class="p">(</span><span class="n">fl</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="link"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.link">[docs]</a><span class="k">def</span> <span class="nf">link</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="link"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.link">[docs]</a><span class="k">def</span> <span class="nf">link</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; create link</span>
 
 <span class="sd">    :param target: file name</span>
@@ -542,7 +431,7 @@
         <span class="n">parent</span><span class="o">.</span><span class="n">h5object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">getlink</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">parent</span><span class="p">)</span><span class="o">.</span><span class="n">setname</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_links"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.get_links">[docs]</a><span class="k">def</span> <span class="nf">get_links</span><span class="p">(</span><span class="n">parent</span><span class="p">):</span>
+<div class="viewcode-block" id="get_links"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.get_links">[docs]</a><span class="k">def</span> <span class="nf">get_links</span><span class="p">(</span><span class="n">parent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; get links</span>
 
 <span class="sd">    :param parent: parent object</span>
@@ -557,7 +446,7 @@
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">parent</span><span class="o">.</span><span class="n">names</span><span class="p">()]</span></div>
 
 
-<div class="viewcode-block" id="data_filter"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.data_filter">[docs]</a><span class="k">def</span> <span class="nf">data_filter</span><span class="p">():</span>
+<div class="viewcode-block" id="data_filter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.data_filter">[docs]</a><span class="k">def</span> <span class="nf">data_filter</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; create deflate filter</span>
 
 <span class="sd">    :returns: deflate filter object</span>
@@ -569,7 +458,7 @@
 <span class="n">deflate_filter</span> <span class="o">=</span> <span class="n">data_filter</span>
 
 
-<div class="viewcode-block" id="target_field_view"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.target_field_view">[docs]</a><span class="k">def</span> <span class="nf">target_field_view</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fieldpath</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span>
+<div class="viewcode-block" id="target_field_view"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.target_field_view">[docs]</a><span class="k">def</span> <span class="nf">target_field_view</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fieldpath</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span>
                       <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; create target field view for VDS</span>
 
@@ -596,7 +485,7 @@
     <span class="k">return</span> <span class="n">H5PYTargetFieldView</span><span class="p">(</span><span class="n">vs</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">shape</span> <span class="ow">or</span> <span class="p">[]))</span></div>
 
 
-<div class="viewcode-block" id="virtual_field_layout"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.virtual_field_layout">[docs]</a><span class="k">def</span> <span class="nf">virtual_field_layout</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="virtual_field_layout"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.virtual_field_layout">[docs]</a><span class="k">def</span> <span class="nf">virtual_field_layout</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; creates a virtual field layout for a VDS file</span>
 
 <span class="sd">    :param shape: shape</span>
@@ -617,12 +506,12 @@
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="H5PYFile"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYFile">[docs]</a><span class="k">class</span> <span class="nc">H5PYFile</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTFile</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYFile"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYFile">[docs]</a><span class="k">class</span> <span class="nc">H5PYFile</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTFile</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot; file tree file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param h5object: h5 object</span>
@@ -634,7 +523,7 @@
         <span class="c1">#: (:obj:`str`) object nexus path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="H5PYFile.root"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYFile.root">[docs]</a>    <span class="k">def</span> <span class="nf">root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYFile.root"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYFile.root">[docs]</a>    <span class="k">def</span> <span class="nf">root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; root object</span>
 
 <span class="sd">        :returns: parent object</span>
@@ -645,7 +534,7 @@
         <span class="n">g</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;/&quot;</span>
         <span class="k">return</span> <span class="n">g</span></div>
 
-<div class="viewcode-block" id="H5PYFile.flush"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYFile.flush">[docs]</a>    <span class="k">def</span> <span class="nf">flush</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYFile.flush"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYFile.flush">[docs]</a>    <span class="k">def</span> <span class="nf">flush</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; flash the data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;r+&quot;</span><span class="p">]:</span>
@@ -653,7 +542,7 @@
                 <span class="n">unicode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">currenttime</span><span class="p">())</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="H5PYFile.close"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYFile.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYFile.close"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYFile.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; close file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">filewriter</span><span class="o">.</span><span class="n">FTFile</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -681,7 +570,7 @@
         <span class="n">isvalid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_valid</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;r&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">isvalid</span> <span class="k">else</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="H5PYFile.reopen"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYFile.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">swmr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">libver</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYFile.reopen"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYFile.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">swmr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">libver</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reopen file</span>
 
 <span class="sd">        :param readonly: readonly flag</span>
@@ -707,7 +596,7 @@
         <span class="k">elif</span> <span class="n">swmr</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;SWMR not supported&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="H5PYFile.hasswmr"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYFile.hasswmr">[docs]</a>    <span class="k">def</span> <span class="nf">hasswmr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYFile.hasswmr"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYFile.hasswmr">[docs]</a>    <span class="k">def</span> <span class="nf">hasswmr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; if has swmr_mode</span>
 
 <span class="sd">        :returns: has swmr_mode</span>
@@ -716,12 +605,12 @@
         <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="p">,</span> <span class="s2">&quot;swmr_mode&quot;</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="H5PYGroup"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYGroup">[docs]</a><span class="k">class</span> <span class="nc">H5PYGroup</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTGroup</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYGroup"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYGroup">[docs]</a><span class="k">class</span> <span class="nc">H5PYGroup</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTGroup</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot; file tree group</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param h5object: h5 object</span>
@@ -748,7 +637,7 @@
                 <span class="k">if</span> <span class="n">clss</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+=</span> <span class="sa">u</span><span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">clss</span><span class="p">)</span>
 
-<div class="viewcode-block" id="H5PYGroup.open"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYGroup.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYGroup.open"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYGroup.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; open a file tree element</span>
 
 <span class="sd">        :param name: element name</span>
@@ -772,7 +661,7 @@
             <span class="n">el</span> <span class="o">=</span> <span class="n">H5PYLink</span><span class="p">(</span><span class="n">itm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setname</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">el</span></div>
 
-<div class="viewcode-block" id="H5PYGroup.open_link"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYGroup.open_link">[docs]</a>    <span class="k">def</span> <span class="nf">open_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYGroup.open_link"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYGroup.open_link">[docs]</a>    <span class="k">def</span> <span class="nf">open_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; open a file tree element as link</span>
 
 <span class="sd">        :param name: element name</span>
@@ -783,9 +672,9 @@
         <span class="n">itm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">getlink</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">H5PYLink</span><span class="p">(</span><span class="n">itm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setname</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="H5PYGroup.H5PYGroupIter"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYGroup.H5PYGroupIter">[docs]</a>    <span class="k">class</span> <span class="nc">H5PYGroupIter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYGroup.H5PYGroupIter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYGroup.H5PYGroupIter">[docs]</a>    <span class="k">class</span> <span class="nc">H5PYGroupIter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">            :param group: group object</span>
@@ -795,7 +684,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__group</span> <span class="o">=</span> <span class="n">group</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__names</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__group</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="ow">or</span> <span class="p">[]</span>
 
-        <span class="k">def</span> <span class="nf">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; the next attribute</span>
 
 <span class="sd">            :returns: attribute object</span>
@@ -808,7 +697,7 @@
 
         <span class="nb">next</span> <span class="o">=</span> <span class="fm">__next__</span>
 
-        <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; attribute iterator</span>
 
 <span class="sd">            :returns: attribute iterator</span>
@@ -816,7 +705,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="bp">self</span></div>
 
-    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; attribute iterator</span>
 
 <span class="sd">        :returns: attribute iterator</span>
@@ -824,13 +713,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">H5PYGroupIter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-<div class="viewcode-block" id="H5PYGroup.close"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYGroup.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYGroup.close"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYGroup.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; close group</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">filewriter</span><span class="o">.</span><span class="n">FTGroup</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span> <span class="o">=</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="H5PYGroup.create_group"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYGroup.create_group">[docs]</a>    <span class="k">def</span> <span class="nf">create_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">nxclass</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYGroup.create_group"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYGroup.create_group">[docs]</a>    <span class="k">def</span> <span class="nf">create_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">nxclass</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; open a file tree element</span>
 
 <span class="sd">        :param n: group name</span>
@@ -845,7 +734,7 @@
             <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;NX_class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">nxclass</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">H5PYGroup</span><span class="p">(</span><span class="n">grp</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="H5PYGroup.create_virtual_field"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYGroup.create_virtual_field">[docs]</a>    <span class="k">def</span> <span class="nf">create_virtual_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">layout</span><span class="p">,</span> <span class="n">fillvalue</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYGroup.create_virtual_field"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYGroup.create_virtual_field">[docs]</a>    <span class="k">def</span> <span class="nf">create_virtual_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">layout</span><span class="p">,</span> <span class="n">fillvalue</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; creates a virtual filed tres element</span>
 
 <span class="sd">        :param name: group name</span>
@@ -862,7 +751,7 @@
                 <span class="n">name</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">_h5object</span><span class="p">,</span> <span class="n">fillvalue</span><span class="p">),</span>
             <span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="H5PYGroup.create_field"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYGroup.create_field">[docs]</a>    <span class="k">def</span> <span class="nf">create_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type_code</span><span class="p">,</span>
+<div class="viewcode-block" id="H5PYGroup.create_field"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYGroup.create_field">[docs]</a>    <span class="k">def</span> <span class="nf">create_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type_code</span><span class="p">,</span>
                      <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chunk</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dfilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; creates a field tree element</span>
 
@@ -944,7 +833,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 
-<div class="viewcode-block" id="H5PYGroup.exists"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYGroup.exists">[docs]</a>    <span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYGroup.exists"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYGroup.exists">[docs]</a>    <span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; if child exists</span>
 
 <span class="sd">        :param name: child name</span>
@@ -954,7 +843,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="H5PYGroup.names"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYGroup.names">[docs]</a>    <span class="k">def</span> <span class="nf">names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYGroup.names"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYGroup.names">[docs]</a>    <span class="k">def</span> <span class="nf">names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; read the child names</span>
 
 <span class="sd">        :returns: h5 object</span>
@@ -974,7 +863,7 @@
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
 
-<div class="viewcode-block" id="H5PYGroup.reopen"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYGroup.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYGroup.reopen"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYGroup.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reopen file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tparent</span><span class="p">,</span> <span class="n">H5PYFile</span><span class="p">):</span>
@@ -984,12 +873,12 @@
         <span class="n">filewriter</span><span class="o">.</span><span class="n">FTGroup</span><span class="o">.</span><span class="n">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="H5PYField"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYField">[docs]</a><span class="k">class</span> <span class="nc">H5PYField</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTField</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYField"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYField">[docs]</a><span class="k">class</span> <span class="nc">H5PYField</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTField</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot; file writer field</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param h5object: h5 object</span>
@@ -1018,13 +907,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">H5PYAttributeManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">attrs</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
 
-<div class="viewcode-block" id="H5PYField.reopen"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYField.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYField.reopen"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYField.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reopen field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tparent</span><span class="o">.</span><span class="n">h5object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="n">filewriter</span><span class="o">.</span><span class="n">FTField</span><span class="o">.</span><span class="n">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="H5PYField.refresh"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYField.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYField.refresh"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYField.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; refresh the field</span>
 
 <span class="sd">        :returns: refreshed</span>
@@ -1036,7 +925,7 @@
                 <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="H5PYField.grow"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYField.grow">[docs]</a>    <span class="k">def</span> <span class="nf">grow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYField.grow"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYField.grow">[docs]</a>    <span class="k">def</span> <span class="nf">grow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; grow the field</span>
 
 <span class="sd">        :param dim: growing dimension</span>
@@ -1051,7 +940,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span></div>
 
-<div class="viewcode-block" id="H5PYField.read"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYField.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYField.read"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYField.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; read the field value</span>
 
 <span class="sd">        :returns: h5 object</span>
@@ -1069,7 +958,7 @@
                 <span class="k">pass</span>
         <span class="k">return</span> <span class="n">fl</span></div>
 
-<div class="viewcode-block" id="H5PYField.write"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYField.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYField.write"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYField.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; write the field value</span>
 
 <span class="sd">        :param o: h5 object</span>
@@ -1077,7 +966,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">o</span></div>
 
-    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; set value</span>
 
 <span class="sd">        :param t: slice tuple</span>
@@ -1099,7 +988,7 @@
                 <span class="n">o</span> <span class="o">=</span> <span class="n">o</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get value</span>
 
 <span class="sd">        :param t: slice tuple</span>
@@ -1131,7 +1020,7 @@
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
 
-<div class="viewcode-block" id="H5PYField.close"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYField.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYField.close"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYField.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; close field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">filewriter</span><span class="o">.</span><span class="n">FTField</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -1169,12 +1058,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">size</span></div>
 
 
-<div class="viewcode-block" id="H5PYLink"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYLink">[docs]</a><span class="k">class</span> <span class="nc">H5PYLink</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTLink</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYLink"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYLink">[docs]</a><span class="k">class</span> <span class="nc">H5PYLink</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTLink</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot; file tree link</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param h5object: h5 object</span>
@@ -1190,7 +1079,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+=</span> <span class="s2">&quot;/&quot;</span>
 
-<div class="viewcode-block" id="H5PYLink.setname"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYLink.setname">[docs]</a>    <span class="k">def</span> <span class="nf">setname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYLink.setname"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYLink.setname">[docs]</a>    <span class="k">def</span> <span class="nf">setname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
         <span class="k">return</span> <span class="bp">self</span></div>
@@ -1212,7 +1101,7 @@
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
 
-<div class="viewcode-block" id="H5PYLink.refresh"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYLink.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYLink.refresh"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYLink.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; refresh the field</span>
 
 <span class="sd">        :returns: refreshed</span>
@@ -1224,7 +1113,7 @@
                 <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="H5PYLink.read"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYLink.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYLink.read"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYLink.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; read object value</span>
 
 <span class="sd">        :returns: valid flag</span>
@@ -1236,7 +1125,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">fl</span></div>
 
-<div class="viewcode-block" id="H5PYLink.getfilename"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYLink.getfilename">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="H5PYLink.getfilename"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYLink.getfilename">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getfilename</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides a filename from h5 node</span>
 
@@ -1275,30 +1164,30 @@
             <span class="n">path</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;:/&quot;</span> <span class="o">+</span> <span class="n">path</span>
         <span class="k">return</span> <span class="n">path</span>
 
-<div class="viewcode-block" id="H5PYLink.reopen"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYLink.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYLink.reopen"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYLink.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reopen field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tparent</span><span class="o">.</span><span class="n">h5object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">getlink</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">filewriter</span><span class="o">.</span><span class="n">FTLink</span><span class="o">.</span><span class="n">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="H5PYLink.close"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYLink.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYLink.close"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYLink.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; close group</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">filewriter</span><span class="o">.</span><span class="n">FTLink</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span> <span class="o">=</span> <span class="kc">None</span></div></div>
 
 
-<div class="viewcode-block" id="H5PYDataFilter"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYDataFilter">[docs]</a><span class="k">class</span> <span class="nc">H5PYDataFilter</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTDataFilter</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYDataFilter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYDataFilter">[docs]</a><span class="k">class</span> <span class="nc">H5PYDataFilter</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTDataFilter</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot; file tree data filter</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="H5PYVirtualFieldLayout"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYVirtualFieldLayout">[docs]</a><span class="k">class</span> <span class="nc">H5PYVirtualFieldLayout</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTVirtualFieldLayout</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYVirtualFieldLayout"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYVirtualFieldLayout">[docs]</a><span class="k">class</span> <span class="nc">H5PYVirtualFieldLayout</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTVirtualFieldLayout</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot; virtual field layout &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param h5object: h5 object</span>
@@ -1310,7 +1199,7 @@
         <span class="c1">#: (:obj:`list` &lt; :obj:`int` &gt;) shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span>
 
-    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add target field to layout</span>
 
 <span class="sd">        :param key: slide</span>
@@ -1321,7 +1210,7 @@
         <span class="c1">#: (:obj:`list` &lt; :obj:`int` &gt;) shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">_h5object</span><span class="p">)</span>
 
-<div class="viewcode-block" id="H5PYVirtualFieldLayout.add"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYVirtualFieldLayout.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">sourcekey</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYVirtualFieldLayout.add"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYVirtualFieldLayout.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">sourcekey</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add target field to layout</span>
 
 <span class="sd">        :param key: slide</span>
@@ -1359,11 +1248,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">_h5object</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="H5PYTargetFieldView"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYTargetFieldView">[docs]</a><span class="k">class</span> <span class="nc">H5PYTargetFieldView</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTTargetFieldView</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYTargetFieldView"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYTargetFieldView">[docs]</a><span class="k">class</span> <span class="nc">H5PYTargetFieldView</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTTargetFieldView</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot; target field view for VDS &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param h5object: h5 object</span>
@@ -1376,16 +1265,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span></div>
 
 
-<div class="viewcode-block" id="H5PYDeflate"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYDeflate">[docs]</a><span class="k">class</span> <span class="nc">H5PYDeflate</span><span class="p">(</span><span class="n">H5PYDataFilter</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYDeflate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYDeflate">[docs]</a><span class="k">class</span> <span class="nc">H5PYDeflate</span><span class="p">(</span><span class="n">H5PYDataFilter</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="H5PYAttributeManager"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYAttributeManager">[docs]</a><span class="k">class</span> <span class="nc">H5PYAttributeManager</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTAttributeManager</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYAttributeManager"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYAttributeManager">[docs]</a><span class="k">class</span> <span class="nc">H5PYAttributeManager</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTAttributeManager</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot; file tree attribute</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param h5object: h5 object</span>
@@ -1402,7 +1291,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">h5object</span><span class="o">.</span><span class="n">name</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-<div class="viewcode-block" id="H5PYAttributeManager.create"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYAttributeManager.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYAttributeManager.create"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYAttributeManager.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a new attribute</span>
 
 <span class="sd">        :param name: attribute name</span>
@@ -1449,7 +1338,7 @@
         <span class="n">at</span> <span class="o">=</span> <span class="n">H5PYAttribute</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">at</span></div>
 
-    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; number of attributes</span>
 
 <span class="sd">        :returns: number of attributes</span>
@@ -1457,9 +1346,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 
-<div class="viewcode-block" id="H5PYAttributeManager.H5PYAttrIter"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYAttributeManager.H5PYAttrIter">[docs]</a>    <span class="k">class</span> <span class="nc">H5PYAttrIter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYAttributeManager.H5PYAttrIter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYAttributeManager.H5PYAttrIter">[docs]</a>    <span class="k">class</span> <span class="nc">H5PYAttrIter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">            :param manager: attribute manager</span>
@@ -1469,7 +1358,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__manager</span> <span class="o">=</span> <span class="n">manager</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__iter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__manager</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()</span>
 
-        <span class="k">def</span> <span class="nf">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; the next attribute</span>
 
 <span class="sd">            :returns: attribute object</span>
@@ -1483,7 +1372,7 @@
 
         <span class="nb">next</span> <span class="o">=</span> <span class="fm">__next__</span>
 
-        <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; attribute iterator</span>
 
 <span class="sd">            :returns: attribute iterator</span>
@@ -1491,7 +1380,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="bp">self</span></div>
 
-    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; attribute iterator</span>
 
 <span class="sd">        :returns: attribute iterator</span>
@@ -1499,7 +1388,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">H5PYAttrIter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get value</span>
 
 <span class="sd">        :param name: attribute name</span>
@@ -1509,7 +1398,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">H5PYAttribute</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
 
-<div class="viewcode-block" id="H5PYAttributeManager.names"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYAttributeManager.names">[docs]</a>    <span class="k">def</span> <span class="nf">names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYAttributeManager.names"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYAttributeManager.names">[docs]</a>    <span class="k">def</span> <span class="nf">names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; key values</span>
 
 <span class="sd">        :returns: attribute names</span>
@@ -1517,13 +1406,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="H5PYAttributeManager.reopen"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYAttributeManager.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYAttributeManager.reopen"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYAttributeManager.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reopen field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tparent</span><span class="o">.</span><span class="n">h5object</span><span class="o">.</span><span class="n">attrs</span>
         <span class="n">filewriter</span><span class="o">.</span><span class="n">FTAttributeManager</span><span class="o">.</span><span class="n">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="H5PYAttributeManager.close"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYAttributeManager.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYAttributeManager.close"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYAttributeManager.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; close attribure manager</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">filewriter</span><span class="o">.</span><span class="n">FTAttributeManager</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
@@ -1538,12 +1427,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">is_valid</span></div>
 
 
-<div class="viewcode-block" id="H5PYAttribute"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYAttribute">[docs]</a><span class="k">class</span> <span class="nc">H5PYAttribute</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTAttribute</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYAttribute"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYAttribute">[docs]</a><span class="k">class</span> <span class="nc">H5PYAttribute</span><span class="p">(</span><span class="n">filewriter</span><span class="o">.</span><span class="n">FTAttribute</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot; file tree attribute</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param h5object: h5 object</span>
@@ -1557,7 +1446,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">tparent</span><span class="o">.</span><span class="n">path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+=</span> <span class="s2">&quot;@</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 
-<div class="viewcode-block" id="H5PYAttribute.read"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYAttribute.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYAttribute.read"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYAttribute.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; read attribute value</span>
 
 <span class="sd">        :returns: python object</span>
@@ -1569,7 +1458,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">at</span></div>
 
-<div class="viewcode-block" id="H5PYAttribute.write"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYAttribute.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYAttribute.write"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYAttribute.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; write attribute value</span>
 
 <span class="sd">        :param o: python object</span>
@@ -1584,7 +1473,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; write attribute value</span>
 
 <span class="sd">        :param t: slice tuple</span>
@@ -1643,7 +1532,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; read attribute value</span>
 
 <span class="sd">        :param t: slice tuple</span>
@@ -1711,36 +1600,69 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">()</span>
 
-<div class="viewcode-block" id="H5PYAttribute.reopen"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYAttribute.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYAttribute.reopen"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYAttribute.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reopen attribute</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tparent</span><span class="o">.</span><span class="n">h5object</span><span class="o">.</span><span class="n">attrs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="n">filewriter</span><span class="o">.</span><span class="n">FTAttribute</span><span class="o">.</span><span class="n">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="H5PYAttribute.close"><a class="viewcode-back" href="../../lavuelib.html#lavuelib.h5pywriter.H5PYAttribute.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="H5PYAttribute.close"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYAttribute.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; close attribute</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">filewriter</span><span class="o">.</span><span class="n">FTAttribute</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span> <span class="o">=</span> <span class="kc">None</span></div></div>
 </pre></div>
 
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
     </div>
-      
-  </div>
 </div>
-<footer class="footer">
-  <div class="container">
-    <p class="pull-right">
-      <a href="#">Back to top</a>
+<script>$('#searchbox').show(0);</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
-    </p>
-    <p>
-        &copy; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+      <li><a class="reference external" href="../../index/../../v2.71.1/index.html">v2.71.1</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">lavuelib 2.71.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lavuelib.h5pywriter</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
-GNU GENERAL PUBLIC LICENSE, version 2.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.<br/>
-    </p>
-  </div>
-</footer>
+GNU GENERAL PUBLIC LICENSE, version 2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
   </body>
 </html>
