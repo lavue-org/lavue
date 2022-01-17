@@ -164,8 +164,7 @@ To get all possible command-line parameters
 Further reading
 ---------------
 
-More information can be found at: `LaVue
-<https://confluence.desy.de/display/FSEC/LaVue+-+Live+Image+Viewer>`_
+More information can be found at: `LaVue <https://lavue-org.github.io/lavue>`_
 
-| ``lavuelib`` module API: https://lavue-org.github.io/lavue
-| ``LavueController`` Tango Server API: https://lavue-org.github.io/lavue/doc_html
+| ``Conflunce`` page: https://confluence.desy.de/display/FSEC/LaVue+-+Live+Image+Viewer
+| ``LavueController`` Tango Server API: https://lavue-org.github.io/lavue/stable/doc_html

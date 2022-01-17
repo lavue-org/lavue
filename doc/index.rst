@@ -44,8 +44,6 @@ Indices and tables
 Further reading
 ===============
 
-More information can be found at: `LaVue
-<https://confluence.desy.de/display/FSEC/LaVue+-+Live+Image+Viewer>`_
-
-| ``lavuelib`` module API: https://lavue-org.github.io/lavue
-| ``LavueController`` Tango Server API: https://lavue-org.github.io/lavue/doc_html
+| ``LaVue Documentation``:  `LaVue <https://lavue-org.github.io/lavue>`_
+| ``LavueController`` Tango Server API: `LaVueController documentation <./doc_html/index.html>`_
+| ``Conflunce`` page: https://confluence.desy.de/display/FSEC/LaVue+-+Live+Image+Viewer

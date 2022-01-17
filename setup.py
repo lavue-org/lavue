@@ -65,6 +65,11 @@ release = lavuepackage.__version__
 #: (:obj:`str`) package version
 version = ".".join(release.split(".")[:2])
 
+if release.count(".") == 1:
+    docs_release = '(latest)'
+else:
+    docs_release = release
+
 #: (:obj:`str`) .ui file directory
 UIDIR = os.path.join(NAME, "ui")
 #: (:obj:`str`) .qrc file directory
@@ -247,7 +252,7 @@ SETUPDATA = dict(
         'build_sphinx': {
             'project': ('setup.py', project),
             'version': ('setup.py', version),
-            'release': ('setup.py', release)}},
+            'release': ('setup.py', docs_release)}},
 )
 
 
