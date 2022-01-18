@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.helpForm &#8212; LaVue 2.71.1 documentation</title>
+    <title>lavuelib.helpForm &#8212; LaVue 2.72.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.71.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.72.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.helpForm</a></li> 
       </ul>
@@ -73,6 +73,7 @@
 <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtGui</span>
 <span class="kn">from</span> <span class="nn">.qtuic</span> <span class="kn">import</span> <span class="n">QWebView</span>
 
+
 <span class="c1"># detail help</span>
 <div class="viewcode-block" id="HelpForm"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.helpForm.HelpForm">[docs]</a><span class="k">class</span> <span class="nc">HelpForm</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QDialog</span><span class="p">):</span>
 
@@ -108,18 +109,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__toolBar</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QToolBar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="c1">#: help text Browser</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span> <span class="o">=</span> <span class="n">QWebView</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="c1">#     self.__textBrowser = QtGui.QTextBrowser(self)</span>
 
         <span class="n">layout</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__toolBar</span><span class="p">)</span>
         <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">layout</span><span class="p">)</span>
-        <span class="c1">#        self.__textBrowser.setSearchPaths([&quot;:/help&quot;])</span>
-        <span class="c1"># self.__textBrowser.load(QtCore.QUrl.fromLocalFile(&quot;:/home/jkotan/ndts/lavue-doc/html/index.html&quot;))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_start</span><span class="p">()</span>
-        <span class="c1"># self.__textBrowser.setOpenExternalLinks(True)</span>
-        <span class="c1"># self.__textBrowser.setSource(QtCore.QUrl(self._page))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">1500</span><span class="p">,</span> <span class="mi">700</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> Help&quot;</span> <span class="o">%</span> <span class="p">(</span>
@@ -154,7 +150,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__toolBar</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pageLabel</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="c1"># backAction.triggered.disconnect(self.__textBrowser.backward)</span>
             <span class="n">backAction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">back</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">pass</span>
@@ -179,10 +174,12 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">updatePageTitle</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">updatePageTitle</span><span class="p">()</span></div>
-        
+
     <span class="k">def</span> <span class="nf">_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; got to the home page</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QUrl</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_page</span><span class="p">))</span>
-        
+
 <div class="viewcode-block" id="HelpForm.updatePageTitle"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.helpForm.HelpForm.updatePageTitle">[docs]</a>    <span class="k">def</span> <span class="nf">updatePageTitle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; resets the __pageLabel withg the document title</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -223,7 +220,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.71.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.72.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.helpForm</a></li> 
       </ul>

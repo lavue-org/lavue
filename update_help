@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+export LAVUE_HIDE_VERSIONS=TRUE
+rm -rf build/sphinx/html/
+python3 setup.py build_sphinx
+unset LAVUE_HIDE_VERSIONS
+
+cp -r build/sphinx/html/* lavuelib/help
+rm lavuelib/help/objects.inv
