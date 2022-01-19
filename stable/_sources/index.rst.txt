@@ -47,3 +47,4 @@ Further reading
 | ``LaVue Documentation``:  `LaVue <https://lavue-org.github.io/lavue>`_
 | ``LavueController`` Tango Server API: `LaVueController documentation <./doc_html/index.html>`_
 | ``Conflunce`` page: https://confluence.desy.de/display/FSEC/LaVue+-+Live+Image+Viewer
+| ``Github`` repository: https://github.com/lavue-org/lavue

@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.helpForm &#8212; lavuelib 2.71.1 documentation</title>
+    <title>lavuelib.helpForm &#8212; LaVue 2.72.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">lavuelib 2.71.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.72.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.helpForm</a></li> 
       </ul>
@@ -71,6 +71,7 @@
 
 
 <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtGui</span>
+<span class="kn">from</span> <span class="nn">.qtuic</span> <span class="kn">import</span> <span class="n">QWebView</span>
 
 
 <span class="c1"># detail help</span>
@@ -107,16 +108,14 @@
         <span class="c1">#: help tool bar</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__toolBar</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QToolBar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="c1">#: help text Browser</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QTextBrowser</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span> <span class="o">=</span> <span class="n">QWebView</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="n">layout</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__toolBar</span><span class="p">)</span>
         <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">layout</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">setSearchPaths</span><span class="p">([</span><span class="s2">&quot;:/help&quot;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">setOpenExternalLinks</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">setSource</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QUrl</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_page</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">1500</span><span class="p">,</span> <span class="mi">700</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> Help&quot;</span> <span class="o">%</span> <span class="p">(</span>
@@ -151,7 +150,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__toolBar</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pageLabel</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">backAction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">backward</span><span class="p">)</span>
+            <span class="n">backAction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">back</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">pass</span>
         <span class="k">try</span><span class="p">:</span>
@@ -159,22 +158,27 @@
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">pass</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">homeAction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">home</span><span class="p">)</span>
+            <span class="n">homeAction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_home</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">pass</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">sourceChanged</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">loadFinished</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">updatePageTitle</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">pass</span>
 
-        <span class="n">backAction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">backward</span><span class="p">)</span>
+        <span class="n">backAction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">back</span><span class="p">)</span>
         <span class="n">forwardAction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">forward</span><span class="p">)</span>
-        <span class="n">homeAction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">home</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">sourceChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+        <span class="n">homeAction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_start</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">loadFinished</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">updatePageTitle</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">updatePageTitle</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; got to the home page</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QUrl</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_page</span><span class="p">))</span>
 
 <div class="viewcode-block" id="HelpForm.updatePageTitle"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.helpForm.HelpForm.updatePageTitle">[docs]</a>    <span class="k">def</span> <span class="nf">updatePageTitle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; resets the __pageLabel withg the document title</span>
@@ -182,7 +186,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__pageLabel</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
             <span class="s2">&quot;&lt;p&gt;&lt;b&gt;&lt;font color=&#39;#0066ee&#39; font size = 4&gt;&quot;</span> <span class="o">+</span>
-            <span class="s2">&quot;&amp;nbsp;&amp;nbsp;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">documentTitle</span><span class="p">()</span>
+            <span class="s2">&quot;&amp;nbsp;&amp;nbsp;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
             <span class="o">+</span> <span class="s2">&quot;&lt;/b&gt;&lt;/p&gt;&lt;/br&gt;&quot;</span>
         <span class="p">)</span></div></div>
 </pre></div>
@@ -209,6 +213,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.72.0/index.html">v2.72.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.71.1/index.html">v2.71.1</a></li>
       
     </ul>
@@ -227,7 +232,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">lavuelib 2.71.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.72.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.helpForm</a></li> 
       </ul>
