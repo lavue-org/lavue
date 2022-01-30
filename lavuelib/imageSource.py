@@ -619,6 +619,11 @@ class TangoFileSource(BaseSource):
                         filename = filename[(len(sm) + 1):]
                         scheme = "h5file"
                         break
+            if not scheme:
+                for sm in ("http://", "https://"):
+                    if filename.startswith(sm):
+                        scheme = "httplink"
+                        break
             if self.__dproxy:
                 dattr = self.__dproxy.read().value
                 filename = "%s/%s" % (dattr, filename)
@@ -688,7 +693,10 @@ class TangoFileSource(BaseSource):
                         self.__nxsfile, self.__nxsfield, self.__frame)
                     self.__frame += 1
                     return (np.transpose(image), '%s' % (filename), metadata)
-
+            elif scheme in ["httplink"]:
+                httpSource = HTTPSource()
+                httpSource.setConfiguration(filename)
+                return httpSource.getData()
             else:
                 self.__resetnexus()
                 fh = imageFileHandler.ImageFileHandler(str(filename))
