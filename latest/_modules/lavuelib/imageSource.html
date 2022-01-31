@@ -664,6 +664,11 @@
                         <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[(</span><span class="nb">len</span><span class="p">(</span><span class="n">sm</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):]</span>
                         <span class="n">scheme</span> <span class="o">=</span> <span class="s2">&quot;h5file&quot;</span>
                         <span class="k">break</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">scheme</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">sm</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">sm</span><span class="p">):</span>
+                        <span class="n">scheme</span> <span class="o">=</span> <span class="s2">&quot;httplink&quot;</span>
+                        <span class="k">break</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dproxy</span><span class="p">:</span>
                 <span class="n">dattr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dproxy</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">value</span>
                 <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dattr</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
@@ -733,7 +738,10 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">__nxsfile</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nxsfield</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__frame</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__frame</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">image</span><span class="p">),</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">metadata</span><span class="p">)</span>
-
+            <span class="k">elif</span> <span class="n">scheme</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;httplink&quot;</span><span class="p">]:</span>
+                <span class="n">httpSource</span> <span class="o">=</span> <span class="n">HTTPSource</span><span class="p">()</span>
+                <span class="n">httpSource</span><span class="o">.</span><span class="n">setConfiguration</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">httpSource</span><span class="o">.</span><span class="n">getData</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__resetnexus</span><span class="p">()</span>
                 <span class="n">fh</span> <span class="o">=</span> <span class="n">imageFileHandler</span><span class="o">.</span><span class="n">ImageFileHandler</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
