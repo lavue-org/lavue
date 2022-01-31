@@ -619,14 +619,25 @@ class TangoFileSource(BaseSource):
                         filename = filename[(len(sm) + 1):]
                         scheme = "h5file"
                         break
+            if self.__dproxy:
+                dattr = self.__dproxy.read().value
+                filename = "%s/%s" % (dattr, filename)
+            for sm in self.__schema:
+                if filename.startswith(sm):
+                    filename = filename[(len(sm) - 1):]
+                    scheme = "file"
+                    break
+            if not scheme:
+                for sm in self.__schema:
+                    if filename.startswith("h5" + sm):
+                        filename = filename[(len(sm) + 1):]
+                        scheme = "h5file"
+                        break
             if not scheme:
                 for sm in ("http://", "https://"):
                     if filename.startswith(sm):
                         scheme = "httplink"
                         break
-            if self.__dproxy:
-                dattr = self.__dproxy.read().value
-                filename = "%s/%s" % (dattr, filename)
             for key, val in self.__dirtrans.items():
                 filename = filename.replace(key, val)
             if str(filename) in ["", "/"]:

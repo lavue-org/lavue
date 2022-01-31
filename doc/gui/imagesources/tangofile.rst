@@ -20,7 +20,9 @@ The **Tango File** image source frame contains the following fields:
 *    **Status:** shows the connection status. It also displays a port of ZMQ security stream if it is enabled.
 *    **Start/Stop** button to launch or interrupt image querying
 
-Tango File attribute contains a string with the file name in a raw format or `file:/` or `h5file:/` scheme.
+The Tango File attribute and Tango Dir attribute contains a string with the file name and its directory in a raw format or `file:/` , `h5file:/`
+or `http:/`, `https:/` scheme.
+
 
 .. |br| raw:: html
 

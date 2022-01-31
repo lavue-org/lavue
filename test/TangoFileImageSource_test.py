@@ -31,6 +31,8 @@ import time
 import logging
 import json
 import fabio
+import threading
+from shutil import copyfile, rmtree
 import numpy as np
 import lavuelib.h5cppwriter as h5cppWriter
 
@@ -108,6 +110,37 @@ if sys.version_info > (3,):
         pass
 
 
+# Path
+path = os.path.join(os.path.dirname(__file__), os.pardir)
+sys.path.insert(0, os.path.abspath(path))
+
+#: python3 running
+PY3 = (sys.version_info > (3,))
+if PY3:
+    from http.server import SimpleHTTPRequestHandler
+    from socketserver import TCPServer
+else:
+    from SimpleHTTPServer import SimpleHTTPRequestHandler
+    from SocketServer import TCPServer
+
+
+class TestHTTPServer(TCPServer):
+
+    stopped = False
+    allow_reuse_address = True
+
+    def __init__(self, *args, **kw):
+        TCPServer.__init__(self, *args, **kw)
+
+    def run(self):
+        try:
+            self.serve_forever()
+        except KeyboardInterrupt:
+            pass
+        finally:
+            self.server_close()
+
+
 # test fixture
 class TangoFileImageSourceTest(unittest.TestCase):
 
@@ -143,6 +176,10 @@ class TangoFileImageSourceTest(unittest.TestCase):
         self.__tangoimgcounter = 0
         self.__tangofilepattern = "%05d.tif"
         self.__tangofilepath = ""
+        
+        self.__server = None
+        self.__thread = None
+        self.__directory = "monitor/api/1.5.0/images"
 
         self.__defaultls = {
             '__timestamp__': 0.0,
@@ -204,6 +241,23 @@ class TangoFileImageSourceTest(unittest.TestCase):
         print("tearing down ...")
         self.__lcsu.tearDown()
         self.__tisu.tearDown()
+
+    def starthttpserver(self):
+        import os
+        if not os.path.exists(self.__directory):
+            os.makedirs(self.__directory)
+        self.__server = TestHTTPServer(("", 8082), SimpleHTTPRequestHandler)
+
+        self.__thread = threading.Thread(None, self.__server.run)
+        self.__thread.start()
+
+    def stophttpserver(self):
+        if self.__server is not None:
+            self.__server.shutdown()
+        if self.__thread is not None:
+            self.__thread.join()
+        if self.__directory:
+            rmtree(self.__directory.split("/")[0])
 
     def closedetfile(self):
         if self.__datamn is not None:
@@ -330,6 +384,25 @@ class TangoFileImageSourceTest(unittest.TestCase):
             (self.__tangofilepattern % self.__tangoimgcounter))
         self.__tisu.proxy.LastImagePath = ""
         self.__tisu.proxy.LastImageTaken = "file://%s" % fname
+        image = fabio.open(fname)
+        li = image.data
+        app.sendPostedEvents()
+        # yieldCurrentThread()
+        return li
+
+    def takeNewTangoFileHTTPImage(self):
+        global app
+        self.__tangoimgcounter += 1
+        ipath = self.__tangofilepath
+        iname = \
+            self.__tangofilepattern % self.__tangoimgcounter
+        fname = os.path.join(ipath, iname)
+        copyfile(fname, os.path.join(self.__directory, "monitor"))
+        fname = "%s/%s" % (
+            self.__tangofilepath,
+            (self.__tangofilepattern % self.__tangoimgcounter))
+        self.__tisu.proxy.LastImagePath = ""
+        self.__tisu.proxy.LastImageTaken = "http://localhost:8082/%s/monitor" % (self.__directory)
         image = fabio.open(fname)
         li = image.data
         app.sendPostedEvents()
@@ -488,6 +561,155 @@ class TangoFileImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+
+    def test_readtangofilehttpimage(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        self.starthttpserver()
+        try:
+            self.__lcsu.proxy.Init()
+            self.__tisu.proxy.Init()
+            self.__lavuestate = None
+            # lastimage = self.__tisu.proxy.ReadyEventImage.T
+            lastimage = None
+            self.__tangoimgcounter = 0
+            self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
+            self.__tangofilepattern = "%05d.tif"
+
+            cfg = '[Configuration]\n' \
+                'StoreGeometry=true\n' \
+                'InterruptOnError=false\n'\
+                'GeometryFromSource=true'
+
+            if not os.path.exists(self.__cfgfdir):
+                os.makedirs(self.__cfgfdir)
+            with open(self.__cfgfname, "w+") as cf:
+                cf.write(cfg)
+
+            options = argparse.Namespace(
+                mode='expert',
+                source='tangofile',
+                configuration='test/testimageserver/00/LastImageTaken',
+                instance='tgtest',
+                tool='roi',
+                # log='debug',
+                log='info',
+                scaling='log',
+                levels='m20,20',
+                gradient='thermal',
+                start=True,
+                tangodevice='test/lavuecontroller/00'
+            )
+            logging.basicConfig(
+                 format="%(levelname)s: %(message)s")
+            logger = logging.getLogger("lavue")
+            lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+            dialog = lavuelib.liveViewer.MainWindow(options=options)
+            dialog.show()
+
+            qtck1 = QtChecker(app, dialog, True, sleep=100,
+                              withitem=EnsureOmniThread)
+            qtck2 = QtChecker(app, dialog, True, sleep=100,
+                              withitem=EnsureOmniThread)
+            qtck3 = QtChecker(app, dialog, True, sleep=100,
+                              withitem=EnsureOmniThread)
+            qtck1.setChecks([
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+                ExtCmdCheck(self, "getLavueState"),
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+                ExtCmdCheck(self, "takeNewTangoFileHTTPImage"),
+            ])
+            qtck2.setChecks([
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+                ExtCmdCheck(self, "takeNewTangoFileHTTPImage"),
+            ])
+            qtck3.setChecks([
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+                WrapAttrCheck(
+                    "_MainWindow__lavue._LiveViewer__sourcewg"
+                    "._SourceTabWidget__sourcetabs[],0._ui.pushButton",
+                    QtTest.QTest.mouseClick, [QtCore.Qt.LeftButton]),
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            ])
+
+            print("execute")
+            qtck1.executeChecks(delay=6000)
+            qtck2.executeChecks(delay=12000)
+            status = qtck3.executeChecksAndClose(delay=18000)
+
+            self.assertEqual(status, 0)
+
+            qtck1.compareResults(
+                self, [True, None, None, None, None], mask=[0, 0, 1, 1, 1])
+            qtck2.compareResults(
+                self, [True, None, None, None], mask=[0, 1, 1, 1])
+            qtck3.compareResults(
+                self, [None, None, None, False], mask=[1, 1, 0, 0])
+
+            res1 = qtck1.results()
+            res2 = qtck2.results()
+            res3 = qtck3.results()
+            self.assertEqual(res1[2], None)
+            self.assertEqual(res1[3], None)
+            # self.assertTrue(np.allclose(res1[2], lastimage))
+
+            # scaledimage = np.clip(lastimage, 10e-3, np.inf)
+            # scaledimage = np.log10(scaledimage)
+            # self.assertTrue(np.allclose(res1[3], scaledimage))
+
+            lastimage = res1[4].T
+            if not np.allclose(res2[1], lastimage):
+                print(res2[1])
+                print(lastimage)
+            self.assertTrue(np.allclose(res2[1], lastimage))
+            scaledimage = np.clip(lastimage, 10e-3, np.inf)
+            scaledimage = np.log10(scaledimage)
+            self.assertTrue(np.allclose(res2[2], scaledimage))
+
+            lastimage = res2[3].T
+            self.assertTrue(np.allclose(res3[0], lastimage))
+            scaledimage = np.clip(lastimage, 10e-3, np.inf)
+            scaledimage = np.log10(scaledimage)
+            self.assertTrue(np.allclose(res3[1], scaledimage))
+
+            ls = json.loads(self.__lavuestate)
+            dls = dict(self.__defaultls)
+            dls.update(dict(
+                mode='expert',
+                source='tangofile',
+                configuration='test/testimageserver/00/LastImageTaken,'
+                ',{"/ramdisk/": "/gpfs/"}'
+                ',False,False',
+                instance='tgtest',
+                tool='roi',
+                # log='debug',
+                log='info',
+                scaling='log',
+                levels='-20.0,20.0',
+                gradient='thermal',
+                tangodevice='test/lavuecontroller/00',
+                connected=True,
+                autofactor=None
+            ))
+            self.compareStates(
+                ls, dls,
+                ['viewrange', '__timestamp__', 'doordevice'])
+        finally:
+            self.stophttpserver()
 
     def test_readtangofile_urlimage(self):
         fun = sys._getframe().f_code.co_name
