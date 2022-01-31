@@ -664,14 +664,25 @@
                         <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[(</span><span class="nb">len</span><span class="p">(</span><span class="n">sm</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):]</span>
                         <span class="n">scheme</span> <span class="o">=</span> <span class="s2">&quot;h5file&quot;</span>
                         <span class="k">break</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dproxy</span><span class="p">:</span>
+                <span class="n">dattr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dproxy</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dattr</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">sm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__schema</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">sm</span><span class="p">):</span>
+                    <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[(</span><span class="nb">len</span><span class="p">(</span><span class="n">sm</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):]</span>
+                    <span class="n">scheme</span> <span class="o">=</span> <span class="s2">&quot;file&quot;</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">scheme</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">sm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__schema</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;h5&quot;</span> <span class="o">+</span> <span class="n">sm</span><span class="p">):</span>
+                        <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[(</span><span class="nb">len</span><span class="p">(</span><span class="n">sm</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):]</span>
+                        <span class="n">scheme</span> <span class="o">=</span> <span class="s2">&quot;h5file&quot;</span>
+                        <span class="k">break</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">scheme</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">sm</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">):</span>
                     <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">sm</span><span class="p">):</span>
                         <span class="n">scheme</span> <span class="o">=</span> <span class="s2">&quot;httplink&quot;</span>
                         <span class="k">break</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dproxy</span><span class="p">:</span>
-                <span class="n">dattr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dproxy</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">value</span>
-                <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dattr</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dirtrans</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">]:</span>
