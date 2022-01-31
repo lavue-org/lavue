@@ -176,7 +176,7 @@ class TangoFileImageSourceTest(unittest.TestCase):
         self.__tangoimgcounter = 0
         self.__tangofilepattern = "%05d.tif"
         self.__tangofilepath = ""
-        
+
         self.__server = None
         self.__thread = None
         self.__directory = "monitor/api/1.5.0/images"
@@ -402,7 +402,8 @@ class TangoFileImageSourceTest(unittest.TestCase):
             self.__tangofilepath,
             (self.__tangofilepattern % self.__tangoimgcounter))
         self.__tisu.proxy.LastImagePath = ""
-        self.__tisu.proxy.LastImageTaken = "http://localhost:8082/%s/monitor" % (self.__directory)
+        self.__tisu.proxy.LastImageTaken = \
+            "http://localhost:8082/%s/monitor" % (self.__directory)
         image = fabio.open(fname)
         li = image.data
         app.sendPostedEvents()
@@ -574,7 +575,8 @@ class TangoFileImageSourceTest(unittest.TestCase):
             # lastimage = self.__tisu.proxy.ReadyEventImage.T
             lastimage = None
             self.__tangoimgcounter = 0
-            self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
+            self.__tangofilepath = "%s/%s" % (
+                os.path.abspath(path), "test/images")
             self.__tangofilepattern = "%05d.tif"
 
             cfg = '[Configuration]\n' \
