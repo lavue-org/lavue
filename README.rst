@@ -1,9 +1,8 @@
 LaVue - Live Image Viewer
 =========================
 
-![github workflow](https://github.com/lavue-org/lavue/actions/workflows/tests.yml/badge.svg)
 
-|github workflow|docs|
+|github workflow| |docs|
 
 .. |github workflow| image:: https://github.com/lavue-org/lavue/actions/workflows/tests.yml/badge.svg
 
