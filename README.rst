@@ -1,14 +1,25 @@
 LaVue - Live Image Viewer
 =========================
 
-
-|github workflow| |docs|
+|github workflow|
+|docs|
+|Pypi Version|
+|Python Versions|
 
 .. |github workflow| image:: https://github.com/lavue-org/lavue/actions/workflows/tests.yml/badge.svg
 
 .. |docs| image:: https://img.shields.io/badge/Documentation-webpages-ADD8E6.svg
    :target: https://lavue-org.github.io/lavue/index.html
+   :alt:
 
+.. |Pypi Version| image:: https://img.shields.io/pypi/v/lavue.svg
+                  :target: https://pypi.python.org/pypi/lavue
+                  :alt:
+
+.. |Python Versions| image:: https://img.shields.io/pypi/pyversions/lavue.svg
+                     :target: https://pypi.python.org/pypi/lavue/
+                     :alt:
+	    
 Authors: Christoph Rosemann <christoph.rosemann at desy.de>, Jan Kotański <jan.kotanski at desy.de>, André Rothkirch <andre.rothkirch at desy.de>
 
 Introduction
