@@ -2245,10 +2245,11 @@ class HiDRASource(BaseSource):
         """ it bumps the hidra port by source id """
         try:
             if self._sourceid:
-                self.__portnumber = str(int(self.__portnumber) + self._sourceid)
-        except Exception:
+                self.__portnumber = str(
+                    int(self.__portnumber) + self._sourceid)
+        except Exception as e:
             logger.warning(str(e))
-        
+
     # @debugmethod
     def setConfiguration(self, configuration):
         """ set configuration
