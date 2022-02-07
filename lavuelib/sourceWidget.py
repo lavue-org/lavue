@@ -578,7 +578,7 @@ class HidraSourceWidget(SourceBaseWidget):
 
         self._detachWidgets()
 
-        self._ui.cur.setText(
+        self._ui.currenthostLabel.setText(
             "%s:%s" % (self.__targetname, self.__portnumber))
 
         self._connectComboBox(self._ui.serverComboBox)

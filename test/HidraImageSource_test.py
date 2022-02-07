@@ -114,6 +114,9 @@ class HidraImageSourceTest(unittest.TestCase):
         self.__tangoimgcounter = 0
         self.__tangofilepattern = "%05d.tif"
         self.__tangofilepath = ""
+        self.__tangoimgcounter2 = 0
+        self.__tangofilepattern2 = "%05d.tif"
+        self.__tangofilepath2 = ""
         print("Hidra faked: %s" % hidrafake.faked)
 
     def setUp(self):
@@ -139,8 +142,30 @@ class HidraImageSourceTest(unittest.TestCase):
         fname = os.path.join(ipath, iname)
         hidra.filename = fname
         print("SET: %s" % hidra.filename)
-        image = fabio.open(fname)
-        li = image.data
+        try:
+            image = fabio.open(fname)
+            li = image.data
+        except Exception:
+            li = None
+        app.sendPostedEvents()
+        return li
+
+    def takeNewImage2(self):
+        global app
+        self.__counter += 1
+
+        self.__tangoimgcounter2 += 1
+        ipath = self.__tangofilepath2
+        iname = \
+            self.__tangofilepattern2 % self.__tangoimgcounter2
+        fname = os.path.join(ipath, iname)
+        hidra.filename2 = fname
+        print("SET2: %s" % hidra.filename2)
+        try:
+            image = fabio.open(fname)
+            li = image.data
+        except Exception:
+            li = None
         app.sendPostedEvents()
         return li
 
@@ -345,10 +370,16 @@ class HidraImageSourceTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         lastimage = None
+        lastimage2 = None
         hidra.filename = ""
         self.__tangoimgcounter = 0
-        self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
+        self.__tangofilepath = "%s/%s" % (
+            os.path.abspath(path), "test/images")
         self.__tangofilepattern = "%05d.tif"
+        self.__tangoimgcounter2 = -1
+        self.__tangofilepath2 = "%s/%s" % (
+            os.path.abspath(path), "test/images")
+        self.__tangofilepattern2 = "tst_05717_%05d.cbf"
         cfg = '[Configuration]\n' \
             'StoreGeometry=true\n' \
             'GeometryFromSource=true'
@@ -359,12 +390,12 @@ class HidraImageSourceTest(unittest.TestCase):
             cf.write(cfg)
 
         lastimage = None
+        lastimage2 = None
 
         options = argparse.Namespace(
             mode='expert',
             source='hidra;hidra',
-            # configuration='%s://entry/instrument/detector/data'
-            # % self._fname,
+            configuration='has1pilatus100k.desy.de;has2pilatus100k.desy.de',
             start=True,
             # levels="0,1000",
             tool='intensity',
@@ -392,6 +423,7 @@ class HidraImageSourceTest(unittest.TestCase):
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
             ExtCmdCheck(self, "takeNewImage"),
+            ExtCmdCheck(self, "takeNewImage2"),
         ])
         qtck2.setChecks([
             CmdCheck(
@@ -401,6 +433,7 @@ class HidraImageSourceTest(unittest.TestCase):
             CmdCheck(
                 "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
             ExtCmdCheck(self, "takeNewImage"),
+            ExtCmdCheck(self, "takeNewImage2"),
         ])
         qtck3.setChecks([
             CmdCheck(
@@ -422,9 +455,9 @@ class HidraImageSourceTest(unittest.TestCase):
         self.assertEqual(status, 0)
 
         qtck1.compareResults(
-            self, [True, None, None, None], mask=[0, 1, 1, 1])
+            self, [True, None, None, None, None], mask=[0, 1, 1, 1, 1])
         qtck2.compareResults(
-            self, [True, None, None, None], mask=[0, 1, 1, 1])
+            self, [True, None, None, None, None], mask=[0, 1, 1, 1, 1])
         qtck3.compareResults(
             self, [None, None, None, False], mask=[1, 1, 0, 0])
 
@@ -434,7 +467,9 @@ class HidraImageSourceTest(unittest.TestCase):
         self.assertEqual(res1[1], None)
         self.assertEqual(res1[2], None)
 
-        lastimage = res1[3].T
+        lastimage1 = res1[3].T
+        lastimage2 = res1[4].T
+        lastimage = np.hstack((lastimage1, lastimage2))
         if not np.allclose(res2[1], lastimage):
             print(res2[1])
             print(lastimage)

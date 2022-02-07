@@ -24,6 +24,8 @@
 
 #: (:obj:`str`) file name
 filename = ""
+#: (:obj:`str`) file name2
+filename2 = ""
 
 
 class Transfer(object):
@@ -31,7 +33,7 @@ class Transfer(object):
     def __init__(self, query, hostname):
         self.query = query
         self.hostname = hostname
-        self.target = ""
+        self.target = []
         self.state = "ON"
         self.timeout = None
         self.filename = ""
@@ -46,15 +48,29 @@ class Transfer(object):
 
     def get(self, timeout):
         global filename
+        global filename2
         self.timeout = timeout
         self.data = None
-        if filename:
-            with open(filename, 'rb') as ifile:
-                self.data = ifile.read()
-        self.filename = filename.split("/")[-1]
-        # print("FILENAME: %s" % filename)
-        # print(self.data)
-        metadata = {"filename": self.filename}
+        metadata = None
+        try:
+            if len(self.target) > 3 and int(self.target[1]) % 2 == 0:
+                if filename2:
+                    with open(filename2, 'rb') as ifile:
+                        self.data = ifile.read()
+                        self.filename = filename2.split("/")[-1]
+                        # print("FILENAME: %s" % filename)
+                        # print(self.data)
+                        metadata = {"filename": self.filename}
+            else:
+                if filename:
+                    with open(filename, 'rb') as ifile:
+                        self.data = ifile.read()
+                        self.filename = filename.split("/")[-1]
+                        # print("FILENAME: %s" % filename)
+                        # print(self.data)
+                        metadata = {"filename": self.filename}
+        except Exception as e:
+            print(str(e))
         return metadata, self.data
 
     def stop(self):
