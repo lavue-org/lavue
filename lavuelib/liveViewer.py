@@ -442,8 +442,8 @@ class LiveViewer(QtGui.QDialog):
         self.__lavuestate = LavueState()
 
         # (:class:`lavuelib.imageSource.BaseSource`) data source object
-        self.__datasources = [isr.BaseSource()
-                              for _ in range(self.__settings.nrsources)]
+        self.__datasources = [isr.BaseSource(None, i)
+                              for i in range(self.__settings.nrsources)]
 
         #: (:obj:`list` < :obj:`str` > ) source class names
         self.__sourcetypes = []
@@ -2659,7 +2659,7 @@ class LiveViewer(QtGui.QDialog):
                 self.__exchangelists.pop()
         elif len(self.__dataFetchers) < nrsources:
             for i in reversed(range(len(self.__dataFetchers), nrsources)):
-                self.__datasources.append(isr.BaseSource())
+                self.__datasources.append(isr.BaseSource(None, i))
                 self.__exchangelists.append(dataFetchThread.ExchangeList())
                 dft = dataFetchThread.DataFetchThread(
                     self.__datasources[-1], self.__exchangelists[-1])
@@ -2815,7 +2815,7 @@ class LiveViewer(QtGui.QDialog):
             if lstatus[i]:
                 if ds != str(type(self.__datasources[i]).__name__):
                     self.__datasources[i] = getattr(
-                        isr, ds)(self.__settings.timeout)
+                        isr, ds)(i, self.__settings.timeout)
         self._setSourceConfiguration()
         for i, ds in enumerate(dss):
             self.__sourcewg.updateSourceMetaData(
