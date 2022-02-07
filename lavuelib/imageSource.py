@@ -236,18 +236,14 @@ class BaseSource(object):
     """ source base class"""
 
     @debugmethod
-    def __init__(self, timeout=None, sourceid=0):
+    def __init__(self, timeout=None):
         """ constructor
 
         :param timeout: timeout for setting connection in ms
         :type timeout: :obj:`int`
-        :param sourceid: source id
-        :type sourceid: :obj:`int`
         """
         #: (:obj:`int`) timeout in ms
         self._timeout = timeout
-        #: (:obj:`int`) source id
-        self._sourceid = sourceid
         #: (:obj:`str`) configuration string
         self._configuration = None
         #: (:obj:`bool`) connection initiated  flag
@@ -340,15 +336,13 @@ class FixTestSource(BaseSource):
         an image file name and its directory"""
 
     @debugmethod
-    def __init__(self, timeout=None, sourceid=0):
+    def __init__(self, timeout=None):
         """ constructor
 
         :param timeout: timeout for setting connection in ms
         :type timeout: :obj:`int`
-        :param sourceid: source id
-        :type sourceid: :obj:`int`
         """
-        BaseSource.__init__(self, timeout, sourceid)
+        BaseSource.__init__(self, timeout)
         #: (:obj:`int`) internal counter
         self.__counter = 0
 
@@ -399,15 +393,13 @@ class NXSFileSource(BaseSource):
         an image file name and its directory"""
 
     @debugmethod
-    def __init__(self, timeout=None, sourceid=0):
+    def __init__(self, timeout=None):
         """ constructor
 
         :param timeout: timeout for setting connection in ms
         :type timeout: :obj:`int`
-        :param sourceid: source id
-        :type sourceid: :obj:`int`
         """
-        BaseSource.__init__(self, timeout, sourceid)
+        BaseSource.__init__(self, timeout)
 
         #: (:obj:`str`) nexus file name with the full path
         self.__nxsfile = None
@@ -564,15 +556,13 @@ class TangoFileSource(BaseSource):
         an image file name and its directory"""
 
     @debugmethod
-    def __init__(self, timeout=None, sourceid=0):
+    def __init__(self, timeout=None):
         """ constructor
 
         :param timeout: timeout for setting connection in ms
         :type timeout: :obj:`int`
-        :param sourceid: source id
-        :type sourceid: :obj:`int`
         """
-        BaseSource.__init__(self, timeout, sourceid)
+        BaseSource.__init__(self, timeout)
         #: (:class`tango.AttributeProxy`:)
         #:       device proxy for the image file name
         self.__fproxy = None
@@ -1042,15 +1032,13 @@ class TangoAttrSource(BaseSource):
     """
 
     @debugmethod
-    def __init__(self, timeout=None, sourceid=0):
+    def __init__(self, timeout=None):
         """ constructor
 
         :param timeout: timeout for setting connection in ms
         :type timeout: :obj:`int`
-        :param sourceid: source id
-        :type sourceid: :obj:`int`
         """
-        BaseSource.__init__(self, timeout, sourceid)
+        BaseSource.__init__(self, timeout)
         #: (:class`tango.AttributeProxy`:)
         #:      device proxy for the image attribute
         self.__aproxy = None
@@ -1278,15 +1266,13 @@ class TangoEventsSource(BaseSource):
     """
 
     @debugmethod
-    def __init__(self, timeout=None, sourceid=0):
+    def __init__(self, timeout=None):
         """ constructor
 
         :param timeout: timeout for setting connection in ms
         :type timeout: :obj:`int`
-        :param sourceid: source id
-        :type sourceid: :obj:`int`
         """
-        BaseSource.__init__(self, timeout, sourceid)
+        BaseSource.__init__(self, timeout)
         #: (:obj:`bool`) reading flag
         self.reading = False
         #: (:obj:`bool`) fresh attribute flag
@@ -1447,15 +1433,13 @@ class HTTPSource(BaseSource):
     """
 
     @debugmethod
-    def __init__(self, timeout=None, sourceid=0):
+    def __init__(self, timeout=None):
         """ constructor
 
         :param timeout: timeout for setting connection in ms
         :type timeout: :obj:`int`
-        :param sourceid: source id
-        :type sourceid: :obj:`int`
         """
-        BaseSource.__init__(self, timeout, sourceid)
+        BaseSource.__init__(self, timeout)
         #: (:obj:`bool`) use tiff loader
         self.__tiffloader = True
         #: (:obj:`dict` <:obj:`str`, :obj:`any` > ) HTTP header data
@@ -1607,15 +1591,13 @@ class ZMQSource(BaseSource):
     """ image source as ZMQ stream"""
 
     @debugmethod
-    def __init__(self, timeout=None, sourceid=0):
+    def __init__(self, timeout=None):
         """ constructor
 
         :param timeout: timeout for setting connection in ms
         :type timeout: :obj:`int`
-        :param sourceid: source id
-        :type sourceid: :obj:`int`
         """
-        BaseSource.__init__(self, timeout, sourceid)
+        BaseSource.__init__(self, timeout)
 
         #: (:class:`zmq.Context`) zmq context
         self.__context = zmq.Context()
@@ -1847,16 +1829,14 @@ class ASAPOSource(BaseSource):
     """ asapo image source"""
 
     @debugmethod
-    def __init__(self, timeout=None, sourceid=0):
+    def __init__(self, timeout=None):
         """ constructor
 
         :param timeout: timeout for setting connection in ms
         :type timeout: :obj:`int`
-        :param sourceid: source id
-        :type sourceid: :obj:`int`
         """
 
-        BaseSource.__init__(self, timeout, sourceid)
+        BaseSource.__init__(self, timeout)
         #: (:obj:`str`) asapo token
         self.__token = ""
         #: (:obj:`str`) beamtime
@@ -2209,19 +2189,16 @@ class HiDRASource(BaseSource):
     """ hidra image source"""
 
     @debugmethod
-    def __init__(self, timeout=None, sourceid=0):
+    def __init__(self, timeout=None):
         """ constructor
 
         :param timeout: timeout for setting connection in ms
         :type timeout: :obj:`int`
-        :param sourceid: source id
-        :type sourceid: :obj:`int`
         """
 
-        BaseSource.__init__(self, timeout, sourceid)
+        BaseSource.__init__(self, timeout)
         #: (:obj:`str`) hidra port number
         self.__portnumber = "50001"
-        self._bumptheport()
         #: (:obj:`str`) hidra client server
         self.__targetname = socket.getfqdn()
         #: (:obj:`str`) server host
@@ -2241,15 +2218,6 @@ class HiDRASource(BaseSource):
         self.__schema = ["file:/localhost//", "file:////", "file:///",
                          "file://", "file:/"]
 
-    def _bumptheport(self):
-        """ it bumps the hidra port by source id """
-        try:
-            if self._sourceid:
-                self.__portnumber = str(
-                    int(self.__portnumber) + self._sourceid)
-        except Exception as e:
-            logger.warning(str(e))
-
     # @debugmethod
     def setConfiguration(self, configuration):
         """ set configuration
@@ -2261,7 +2229,6 @@ class HiDRASource(BaseSource):
             try:
                 self.__shost, self.__targetname, self.__portnumber \
                     = str(configuration).split(",")
-                self._bumptheport()
             except Exception:
                 self._initiated = False
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -2489,15 +2456,13 @@ class DOOCSPropSource(BaseSource):
     """
 
     @debugmethod
-    def __init__(self, timeout=None, sourceid=0):
+    def __init__(self, timeout=None):
         """ constructor
 
         :param timeout: timeout for setting connection in ms
         :type timeout: :obj:`int`
-        :param sourceid: source id
-        :type sourceid: :obj:`int`
         """
-        BaseSource.__init__(self, timeout, sourceid)
+        BaseSource.__init__(self, timeout)
 
     @debugmethod
     def getData(self):
@@ -2534,15 +2499,13 @@ class EpicsPVSource(BaseSource):
     """ image source as Epics Process variable"""
 
     @debugmethod
-    def __init__(self, timeout=None, sourceid=0):
+    def __init__(self, timeout=None):
         """ constructor
 
         :param timeout: timeout for setting connection in ms
         :type timeout: :obj:`int`
-        :param sourceid: source id
-        :type sourceid: :obj:`int`
         """
-        BaseSource.__init__(self, timeout, sourceid)
+        BaseSource.__init__(self, timeout)
         #: (:class:`epics.PV`)
         #:       epics process variable
         self.__pv = None
@@ -2610,15 +2573,13 @@ class TinePropSource(BaseSource):
     """ image source as Tine Property """
 
     @debugmethod
-    def __init__(self, timeout=None, sourceid=0):
+    def __init__(self, timeout=None):
         """ constructor
 
         :param timeout: timeout for setting connection in ms
         :type timeout: :obj:`int`
-        :param sourceid: source id
-        :type sourceid: :obj:`int`
         """
-        BaseSource.__init__(self, timeout, sourceid)
+        BaseSource.__init__(self, timeout)
         #: (:obj:`str`)
         #:       tine device address name
         self.__address = None

@@ -129,14 +129,18 @@ class SourceBaseWidget(QtGui.QWidget):
     #: (:obj:`str`) datasource class name
     datasource = "BaseSource"
 
-    def __init__(self, parent=None):
+    def __init__(self, sourceid=0, parent=None):
         """ constructor
 
+        :param sourceid: source id
+        :type sourceid: :obj:`int`
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
         QtGui.QWidget.__init__(self, parent)
 
+        #: (:obj:`int`) source id
+        self._sourceid = sourceid
         #: (:obj:`list` <:obj:`str`>) subwidget object names
         self.widgetnames = []
         #: (:obj:`list` <:class:`PyQt5.QtGui.QWidget`>) subwidget objects
@@ -329,13 +333,15 @@ class TestSourceWidget(SourceBaseWidget):
 
     """ test source widget """
 
-    def __init__(self, parent=None):
+    def __init__(self, sourceid=0, parent=None):
         """ constructor
 
+        :param sourceid: source id
+        :type sourceid: :obj:`int`
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        SourceBaseWidget.__init__(self, parent)
+        SourceBaseWidget.__init__(self, sourceid, parent)
 
         self._ui = _testformclass()
         self._ui.setupUi(self)
@@ -354,13 +360,15 @@ class FixTestSourceWidget(SourceBaseWidget):
     #: (:obj:`str`) source alias
     alias = "fixtest"
 
-    def __init__(self, parent=None):
+    def __init__(self, sourceid=0, parent=None):
         """ constructor
 
+        :param sourceid: source id
+        :type sourceid: :obj:`int`
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        SourceBaseWidget.__init__(self, parent)
+        SourceBaseWidget.__init__(self, sourceid, parent)
 
         self._ui = _testformclass()
         self._ui.setupUi(self)
@@ -381,13 +389,15 @@ class HTTPSourceWidget(SourceBaseWidget):
     #: (:obj:`str`) source alias
     alias = "http"
 
-    def __init__(self, parent=None):
+    def __init__(self, sourceid=0, parent=None):
         """ constructor
 
+        :param sourceid: source id
+        :type sourceid: :obj:`int`
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        SourceBaseWidget.__init__(self, parent)
+        SourceBaseWidget.__init__(self, sourceid, parent)
 
         self._ui = _httpformclass()
         self._ui.setupUi(self)
@@ -536,13 +546,15 @@ class HidraSourceWidget(SourceBaseWidget):
     #: (:obj:`str`) datasource class name
     datasource = "HiDRASource"
 
-    def __init__(self, parent=None):
+    def __init__(self, sourceid=0, parent=None):
         """ constructor
 
+        :param sourceid: source id
+        :type sourceid: :obj:`int`
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        SourceBaseWidget.__init__(self, parent)
+        SourceBaseWidget.__init__(self, sourceid, parent)
 
         self._ui = _hidraformclass()
         self._ui.setupUi(self)
@@ -557,6 +569,7 @@ class HidraSourceWidget(SourceBaseWidget):
         self.__serverdict = {}
         #: (:obj:`str`) hidra port number
         self.__portnumber = "50001"
+        self._bumptheport()
         #: (:obj:`str`) hidra client server
         self.__targetname = socket.getfqdn()
 
@@ -565,10 +578,19 @@ class HidraSourceWidget(SourceBaseWidget):
 
         self._detachWidgets()
 
-        self._ui.currenthostLabel.setText(
+        self._ui.cur.setText(
             "%s:%s" % (self.__targetname, self.__portnumber))
 
         self._connectComboBox(self._ui.serverComboBox)
+
+    def _bumptheport(self):
+        """ it bumps the hidra port by source id """
+        try:
+            if self._sourceid:
+                self.__portnumber = str(
+                    int(self.__portnumber) + self._sourceid)
+        except Exception as e:
+            logger.warning(str(e))
 
     @QtCore.pyqtSlot()
     def updateButton(self):
@@ -617,6 +639,7 @@ class HidraSourceWidget(SourceBaseWidget):
             self._ui.serverComboBox.setCurrentIndex(0)
         if hidraport:
             self.__portnumber = hidraport
+            self._bumptheport()
             self._ui.currenthostLabel.setText(
                 "%s:%s" % (self.__targetname, self.__portnumber))
         self.sourceLabelChanged.emit()
@@ -692,13 +715,15 @@ class ASAPOSourceWidget(SourceBaseWidget):
     #: (:obj:`str`) datasource class name
     datasource = "ASAPOSource"
 
-    def __init__(self, parent=None):
+    def __init__(self, sourceid=0, parent=None):
         """ constructor
 
+        :param sourceid: source id
+        :type sourceid: :obj:`int`
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        SourceBaseWidget.__init__(self, parent)
+        SourceBaseWidget.__init__(self, sourceid, parent)
 
         self._ui = _asapoformclass()
         self._ui.setupUi(self)
@@ -945,13 +970,15 @@ class TangoAttrSourceWidget(SourceBaseWidget):
     #: (:obj:`str`) datasource class name
     datasource = "TangoAttrSource"
 
-    def __init__(self, parent=None):
+    def __init__(self, sourceid=0, parent=None):
         """ constructor
 
+        :param sourceid: source id
+        :type sourceid: :obj:`int`
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        SourceBaseWidget.__init__(self, parent)
+        SourceBaseWidget.__init__(self, sourceid, parent)
 
         self._ui = _tangoattrformclass()
         self._ui.setupUi(self)
@@ -1097,13 +1124,15 @@ class TinePropSourceWidget(SourceBaseWidget):
     #: (:obj:`str`) datasource class name
     datasource = "TinePropSource"
 
-    def __init__(self, parent=None):
+    def __init__(self, sourceid=0, parent=None):
         """ constructor
 
+        :param sourceid: source id
+        :type sourceid: :obj:`int`
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        SourceBaseWidget.__init__(self, parent)
+        SourceBaseWidget.__init__(self, sourceid, parent)
 
         self._ui = _tinepropformclass()
         self._ui.setupUi(self)
@@ -1253,13 +1282,15 @@ class TangoEventsSourceWidget(SourceBaseWidget):
     #: (:obj:`str`) datasource class name
     datasource = "TangoEventsSource"
 
-    def __init__(self, parent=None):
+    def __init__(self, sourceid=0, parent=None):
         """ constructor
 
+        :param sourceid: source id
+        :type sourceid: :obj:`int`
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        SourceBaseWidget.__init__(self, parent)
+        SourceBaseWidget.__init__(self, sourceid, parent)
 
         self._ui = _tangoeventsformclass()
         self._ui.setupUi(self)
@@ -1405,13 +1436,15 @@ class TangoFileSourceWidget(SourceBaseWidget):
     #: (:obj:`str`) datasource class name
     datasource = "TangoFileSource"
 
-    def __init__(self, parent=None):
+    def __init__(self, sourceid=0, parent=None):
         """ constructor
 
+        :param sourceid: source id
+        :type sourceid: :obj:`int`
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        SourceBaseWidget.__init__(self, parent)
+        SourceBaseWidget.__init__(self, sourceid, parent)
 
         self._ui = _tangofileformclass()
         self._ui.setupUi(self)
@@ -1649,13 +1682,15 @@ class EpicsPVSourceWidget(SourceBaseWidget):
     #: (:obj:`str`) datasource class name
     datasource = "EpicsPVSource"
 
-    def __init__(self, parent=None):
+    def __init__(self, sourceid=0, parent=None):
         """ constructor
 
+        :param sourceid: source id
+        :type sourceid: :obj:`int`
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        SourceBaseWidget.__init__(self, parent)
+        SourceBaseWidget.__init__(self, sourceid, parent)
 
         self._ui = _epicspvformclass()
         self._ui.setupUi(self)
@@ -1872,13 +1907,15 @@ class NXSFileSourceWidget(SourceBaseWidget):
     #: (:obj:`str`) datasource class name
     datasource = "NXSFileSource"
 
-    def __init__(self, parent=None):
+    def __init__(self, sourceid=0, parent=None):
         """ constructor
 
+        :param sourceid: source id
+        :type sourceid: :obj:`int`
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        SourceBaseWidget.__init__(self, parent)
+        SourceBaseWidget.__init__(self, sourceid, parent)
 
         self._ui = _nxsfileformclass()
         self._ui.setupUi(self)
@@ -2097,13 +2134,15 @@ class ZMQSourceWidget(SourceBaseWidget):
     #: (:obj:`str`) datasource class name
     datasource = "ZMQSource"
 
-    def __init__(self, parent=None):
+    def __init__(self, sourceid=0, parent=None):
         """ constructor
 
+        :param sourceid: source id
+        :type sourceid: :obj:`int`
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        SourceBaseWidget.__init__(self, parent)
+        SourceBaseWidget.__init__(self, sourceid, parent)
 
         self._ui = _zmqformclass()
         self._ui.setupUi(self)
@@ -2376,13 +2415,15 @@ class DOOCSPropSourceWidget(SourceBaseWidget):
     #: (:obj:`str`) datasource class name
     datasource = "DOOCSPropSource"
 
-    def __init__(self, parent=None):
+    def __init__(self, sourceid=0, parent=None):
         """ constructor
 
+        :param sourceid: source id
+        :type sourceid: :obj:`int`
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        SourceBaseWidget.__init__(self, parent)
+        SourceBaseWidget.__init__(self, sourceid, parent)
 
         self._ui = _doocspropformclass()
         self._ui.setupUi(self)

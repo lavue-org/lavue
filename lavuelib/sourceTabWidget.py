@@ -260,7 +260,7 @@ class SourceForm(QtGui.QWidget):
         :type expertmode: :obj:`bool`
         """
         layout = self.gridLayout()
-        swg = getattr(swgm, st)()
+        swg = getattr(swgm, st)(self.__sourceid)
         swg.expertmode = expertmode
         self.__sourcewidgets[swg.name] = swg
         if swg.name not in self.__sourcenames:

@@ -340,6 +340,115 @@ class HidraImageSourceTest(unittest.TestCase):
         self.assertTrue(np.allclose(res2[0], lastimage))
         self.assertTrue(np.allclose(res2[1], lastimage))
 
+    def test_readimage_multi_fromstart(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        lastimage = None
+        hidra.filename = ""
+        self.__tangoimgcounter = 0
+        self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
+        self.__tangofilepattern = "%05d.tif"
+        cfg = '[Configuration]\n' \
+            'StoreGeometry=true\n' \
+            'GeometryFromSource=true'
+
+        if not os.path.exists(self.__cfgfdir):
+            os.makedirs(self.__cfgfdir)
+        with open(self.__cfgfname, "w+") as cf:
+            cf.write(cfg)
+
+        lastimage = None
+
+        options = argparse.Namespace(
+            mode='expert',
+            source='hidra;hidra',
+            # configuration='%s://entry/instrument/detector/data'
+            # % self._fname,
+            start=True,
+            # levels="0,1000",
+            tool='intensity',
+            transformation='none',
+            log='debug',
+            instance='unittests',
+            scaling='linear',
+            gradient='spectrum',
+        )
+        logging.basicConfig(
+             format="%(levelname)s: %(message)s")
+        logger = logging.getLogger("lavue")
+        lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+        dialog = lavuelib.liveViewer.MainWindow(options=options)
+        dialog.show()
+
+        qtck1 = QtChecker(app, dialog, True, sleep=100)
+        qtck2 = QtChecker(app, dialog, True, sleep=100)
+        qtck3 = QtChecker(app, dialog, True, sleep=100)
+        qtck1.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            ExtCmdCheck(self, "takeNewImage"),
+        ])
+        qtck2.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            ExtCmdCheck(self, "takeNewImage"),
+        ])
+        qtck3.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.rawData"),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__imagewg.currentData"),
+            WrapAttrCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg"
+                "._SourceTabWidget__sourcetabs[],0._ui.pushButton",
+                QtTest.QTest.mouseClick, [QtCore.Qt.LeftButton]),
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+        ])
+
+        qtck1.executeChecks(delay=3000)
+        qtck2.executeChecks(delay=6000)
+        status = qtck3.executeChecksAndClose(delay=9000)
+
+        self.assertEqual(status, 0)
+
+        qtck1.compareResults(
+            self, [True, None, None, None], mask=[0, 1, 1, 1])
+        qtck2.compareResults(
+            self, [True, None, None, None], mask=[0, 1, 1, 1])
+        qtck3.compareResults(
+            self, [None, None, None, False], mask=[1, 1, 0, 0])
+
+        res1 = qtck1.results()
+        res2 = qtck2.results()
+        res3 = qtck3.results()
+        self.assertEqual(res1[1], None)
+        self.assertEqual(res1[2], None)
+
+        lastimage = res1[3].T
+        if not np.allclose(res2[1], lastimage):
+            print(res2[1])
+            print(lastimage)
+        self.assertTrue(np.allclose(res2[1], lastimage))
+        self.assertTrue(np.allclose(res2[2], lastimage))
+
+        lastimage = res2[3].T
+
+        if not np.allclose(res3[0], lastimage):
+            print(res3[0])
+            print(lastimage)
+        self.assertTrue(np.allclose(res3[0], lastimage))
+        self.assertTrue(np.allclose(res3[1], lastimage))
+
 
 if __name__ == '__main__':
     if app is None:
