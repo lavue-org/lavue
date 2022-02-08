@@ -626,6 +626,8 @@ class HidraSourceWidget(SourceBaseWidget):
 
         :param serverdict: server dictionary
         :type serverdict: :obj:`dict` < :obj:`str`, :obj:`list` <:obj:`str`> >
+        :param hidaraport: list of hidra ports
+        :type hidraport: :obj:`list` < :obj:`str` >
         :param kargs:  source widget input parameter dictionary
         :type kargs: :obj:`dict` < :obj:`str`, :obj:`any`>
         """
@@ -642,10 +644,20 @@ class HidraSourceWidget(SourceBaseWidget):
                 self.updateButton)
             self._ui.serverComboBox.setCurrentIndex(0)
         if hidraport:
-            self.__portnumber = hidraport
-            self._bumptheport()
-            self._ui.currenthostLabel.setText(
-                "%s:%s" % (self.__targetname, self.__portnumber))
+            try:
+                hports = json.loads(hidraport)
+                if len(hports) > self._sourceid:
+                    self.__portnumber = hports[self._sourceid]
+                    self._ui.currenthostLabel.setText(
+                        "%s:%s" % (self.__targetname, self.__portnumber))
+                elif len(hports) > 0:
+                    self.__portnumber = hports[0]
+                    self._bumptheport()
+                    self._ui.currenthostLabel.setText(
+                        "%s:%s" % (self.__targetname, self.__portnumber))
+            except Exception as e:
+                logger.warning(str(e))
+
         self.sourceLabelChanged.emit()
 
     def __sortServerList(self, name):

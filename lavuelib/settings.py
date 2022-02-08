@@ -108,7 +108,7 @@ class Settings(object):
         #: (:obj:`str`) security stream port
         self.secport = "5657"
         #: (:obj:`str`) hidra data port
-        self.hidraport = "50001"
+        self.hidraport = '["50001"]'
         #: (:obj:`str`) maximal number of images in memory buffer
         self.maxmbuffersize = "1000"
         #: (:obj:`int`) number of image sources
@@ -501,12 +501,25 @@ class Settings(object):
             self.secport = str(qstval)
         except Exception:
             pass
+
         qstval = str(settings.value("Configuration/HidraDataPort", type=str))
-        try:
-            int(qstval)
-            self.hidraport = str(qstval)
-        except Exception:
-            pass
+        if qstval.startswith("["):
+            try:
+                ports = json.loads(qstval)
+                for port in ports:
+                    int(port)
+                self.hirdaport = qstval
+            except Exception:
+                for port in qstval:
+                    int(port)
+                self.hidraport = json.dumps([str(tp) for tp in qstval])
+        else:
+            try:
+                int(qstval)
+                self.hidraport = json.dumps([str(qstval)])
+            except Exception:
+                pass
+
         qstval = str(settings.value("Configuration/MaxBufferSize", type=str))
         try:
             self.maxmbuffersize = str(qstval)

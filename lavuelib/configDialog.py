@@ -213,7 +213,7 @@ class ConfigDialog(QtGui.QDialog):
         #: (:obj:`str`) security stream port
         self.secport = "5657"
         #: (:obj:`str`) hidra data port
-        self.hidraport = "50001"
+        self.hidraport = '["50001"]'
         #: (:obj:`bool`) find security stream port automatically
         self.secautoport = True
         #: (:obj:`float`) refresh rate
@@ -454,6 +454,8 @@ class ConfigDialog(QtGui.QDialog):
         self.__ui.secautoportCheckBox.setChecked(self.secautoport)
         self.__ui.secportLineEdit.setText(self.secport)
         self.__ui.hidraportLineEdit.setText(self.hidraport)
+        self.__ui.hidraportLineEdit.setText(
+            " ".join(json.loads(self.hidraport)))
         self.__ui.mbufsizeLineEdit.setText(self.maxmbuffersize)
         self.__ui.showhistoCheckBox.setChecked(self.showhisto)
         self.__ui.showaddhistoCheckBox.setChecked(self.showaddhisto)
@@ -970,8 +972,11 @@ class ConfigDialog(QtGui.QDialog):
             self.__ui.secportLineEdit.setFocus(True)
             return
         try:
-            self.hidraport = str(self.__ui.hidraportLineEdit.text()).strip()
-            int(self.hidraport)
+            hidraport = str(
+                self.__ui.hidraportLineEdit.text()).strip().split(" ")
+            for pt in hidraport:
+                int(pt)
+            self.hidraport = json.dumps([pt for pt in hidraport if pt])
         except Exception:
             self.__ui.tabWidget.setCurrentIndex(2)
             self.__ui.hidraportLineEdit.setFocus(True)
