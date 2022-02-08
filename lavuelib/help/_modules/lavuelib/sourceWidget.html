@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.sourceWidget &#8212; LaVue 2.73.0 documentation</title>
+    <title>lavuelib.sourceWidget &#8212; LaVue 2.74.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.73.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.74.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.sourceWidget</a></li> 
       </ul>
@@ -174,14 +174,18 @@
     <span class="c1">#: (:obj:`str`) datasource class name</span>
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;BaseSource&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
+<span class="sd">        :param sourceid: source id</span>
+<span class="sd">        :type sourceid: :obj:`int`</span>
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">QtGui</span><span class="o">.</span><span class="n">QWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
+        <span class="c1">#: (:obj:`int`) source id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sourceid</span> <span class="o">=</span> <span class="n">sourceid</span>
         <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) subwidget object names</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">widgetnames</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1">#: (:obj:`list` &lt;:class:`PyQt5.QtGui.QWidget`&gt;) subwidget objects</span>
@@ -374,13 +378,15 @@
 
     <span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
+<span class="sd">        :param sourceid: source id</span>
+<span class="sd">        :type sourceid: :obj:`int`</span>
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span> <span class="o">=</span> <span class="n">_testformclass</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -399,13 +405,15 @@
     <span class="c1">#: (:obj:`str`) source alias</span>
     <span class="n">alias</span> <span class="o">=</span> <span class="s2">&quot;fixtest&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
+<span class="sd">        :param sourceid: source id</span>
+<span class="sd">        :type sourceid: :obj:`int`</span>
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span> <span class="o">=</span> <span class="n">_testformclass</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -426,13 +434,15 @@
     <span class="c1">#: (:obj:`str`) source alias</span>
     <span class="n">alias</span> <span class="o">=</span> <span class="s2">&quot;http&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
+<span class="sd">        :param sourceid: source id</span>
+<span class="sd">        :type sourceid: :obj:`int`</span>
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span> <span class="o">=</span> <span class="n">_httpformclass</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -581,13 +591,15 @@
     <span class="c1">#: (:obj:`str`) datasource class name</span>
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;HiDRASource&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
+<span class="sd">        :param sourceid: source id</span>
+<span class="sd">        :type sourceid: :obj:`int`</span>
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span> <span class="o">=</span> <span class="n">_hidraformclass</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -602,6 +614,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__serverdict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1">#: (:obj:`str`) hidra port number</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__portnumber</span> <span class="o">=</span> <span class="s2">&quot;50001&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bumptheport</span><span class="p">()</span>
         <span class="c1">#: (:obj:`str`) hidra client server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__targetname</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">getfqdn</span><span class="p">()</span>
 
@@ -614,6 +627,19 @@
             <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__targetname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__portnumber</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_connectComboBox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">serverComboBox</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_bumptheport</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">portgap</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; it bumps the hidra port by source id</span>
+
+<span class="sd">        :param offset: port gap for multi image sources</span>
+<span class="sd">        :type name: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sourceid</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__portnumber</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__portnumber</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sourceid</span> <span class="o">*</span> <span class="n">portgap</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 
 <div class="viewcode-block" id="HidraSourceWidget.updateButton"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HidraSourceWidget.updateButton">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -645,6 +671,8 @@
 
 <span class="sd">        :param serverdict: server dictionary</span>
 <span class="sd">        :type serverdict: :obj:`dict` &lt; :obj:`str`, :obj:`list` &lt;:obj:`str`&gt; &gt;</span>
+<span class="sd">        :param hidaraport: list of hidra ports</span>
+<span class="sd">        :type hidraport: :obj:`list` &lt; :obj:`str` &gt;</span>
 <span class="sd">        :param kargs:  source widget input parameter dictionary</span>
 <span class="sd">        :type kargs: :obj:`dict` &lt; :obj:`str`, :obj:`any`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -661,9 +689,20 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">updateButton</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">serverComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">hidraport</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__portnumber</span> <span class="o">=</span> <span class="n">hidraport</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">currenthostLabel</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
-                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__targetname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__portnumber</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">hports</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">hidraport</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hports</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sourceid</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__portnumber</span> <span class="o">=</span> <span class="n">hports</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_sourceid</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">currenthostLabel</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__targetname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__portnumber</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">hports</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__portnumber</span> <span class="o">=</span> <span class="n">hports</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_bumptheport</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">currenthostLabel</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__targetname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__portnumber</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">sourceLabelChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">__sortServerList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
@@ -737,13 +776,15 @@
     <span class="c1">#: (:obj:`str`) datasource class name</span>
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;ASAPOSource&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
+<span class="sd">        :param sourceid: source id</span>
+<span class="sd">        :type sourceid: :obj:`int`</span>
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span> <span class="o">=</span> <span class="n">_asapoformclass</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -990,13 +1031,15 @@
     <span class="c1">#: (:obj:`str`) datasource class name</span>
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;TangoAttrSource&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
+<span class="sd">        :param sourceid: source id</span>
+<span class="sd">        :type sourceid: :obj:`int`</span>
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span> <span class="o">=</span> <span class="n">_tangoattrformclass</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -1142,13 +1185,15 @@
     <span class="c1">#: (:obj:`str`) datasource class name</span>
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;TinePropSource&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
+<span class="sd">        :param sourceid: source id</span>
+<span class="sd">        :type sourceid: :obj:`int`</span>
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span> <span class="o">=</span> <span class="n">_tinepropformclass</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -1298,13 +1343,15 @@
     <span class="c1">#: (:obj:`str`) datasource class name</span>
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;TangoEventsSource&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
+<span class="sd">        :param sourceid: source id</span>
+<span class="sd">        :type sourceid: :obj:`int`</span>
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span> <span class="o">=</span> <span class="n">_tangoeventsformclass</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -1450,13 +1497,15 @@
     <span class="c1">#: (:obj:`str`) datasource class name</span>
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;TangoFileSource&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
+<span class="sd">        :param sourceid: source id</span>
+<span class="sd">        :type sourceid: :obj:`int`</span>
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span> <span class="o">=</span> <span class="n">_tangofileformclass</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -1694,13 +1743,15 @@
     <span class="c1">#: (:obj:`str`) datasource class name</span>
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;EpicsPVSource&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
+<span class="sd">        :param sourceid: source id</span>
+<span class="sd">        :type sourceid: :obj:`int`</span>
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span> <span class="o">=</span> <span class="n">_epicspvformclass</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -1917,13 +1968,15 @@
     <span class="c1">#: (:obj:`str`) datasource class name</span>
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;NXSFileSource&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
+<span class="sd">        :param sourceid: source id</span>
+<span class="sd">        :type sourceid: :obj:`int`</span>
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span> <span class="o">=</span> <span class="n">_nxsfileformclass</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -2142,13 +2195,15 @@
     <span class="c1">#: (:obj:`str`) datasource class name</span>
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;ZMQSource&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
+<span class="sd">        :param sourceid: source id</span>
+<span class="sd">        :type sourceid: :obj:`int`</span>
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span> <span class="o">=</span> <span class="n">_zmqformclass</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -2421,13 +2476,15 @@
     <span class="c1">#: (:obj:`str`) datasource class name</span>
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;DOOCSPropSource&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
+<span class="sd">        :param sourceid: source id</span>
+<span class="sd">        :type sourceid: :obj:`int`</span>
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">SourceBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span> <span class="o">=</span> <span class="n">_doocspropformclass</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -2604,7 +2661,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.73.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.74.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.sourceWidget</a></li> 
       </ul>

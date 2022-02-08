@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.configDialog &#8212; LaVue 2.73.0 documentation</title>
+    <title>lavuelib.configDialog &#8212; LaVue 2.74.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.73.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.74.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.configDialog</a></li> 
       </ul>
@@ -258,7 +258,7 @@
         <span class="c1">#: (:obj:`str`) security stream port</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">secport</span> <span class="o">=</span> <span class="s2">&quot;5657&quot;</span>
         <span class="c1">#: (:obj:`str`) hidra data port</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hidraport</span> <span class="o">=</span> <span class="s2">&quot;50001&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidraport</span> <span class="o">=</span> <span class="s1">&#39;[&quot;50001&quot;]&#39;</span>
         <span class="c1">#: (:obj:`bool`) find security stream port automatically</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">secautoport</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1">#: (:obj:`float`) refresh rate</span>
@@ -499,6 +499,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">secautoportCheckBox</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">secautoport</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">secportLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">secport</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">hidraportLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidraport</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">hidraportLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+            <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidraport</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">mbufsizeLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maxmbuffersize</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">showhistoCheckBox</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showhisto</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">showaddhistoCheckBox</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showaddhisto</span><span class="p">)</span>
@@ -1015,8 +1017,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">secportLineEdit</span><span class="o">.</span><span class="n">setFocus</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">return</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">hidraport</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">hidraportLineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">())</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-            <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidraport</span><span class="p">)</span>
+            <span class="n">hidraport</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">hidraportLineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">())</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">hidraport</span><span class="p">:</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hidraport</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="n">pt</span> <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">hidraport</span> <span class="k">if</span> <span class="n">pt</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">tabWidget</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">hidraportLineEdit</span><span class="o">.</span><span class="n">setFocus</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -1067,7 +1072,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.73.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.74.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.configDialog</a></li> 
       </ul>

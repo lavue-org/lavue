@@ -508,7 +508,7 @@ class Settings(object):
                 ports = json.loads(qstval)
                 for port in ports:
                     int(port)
-                self.hirdaport = qstval
+                self.hidraport = qstval
             except Exception:
                 for port in qstval:
                     int(port)
