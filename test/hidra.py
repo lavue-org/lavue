@@ -53,7 +53,7 @@ class Transfer(object):
         self.data = None
         metadata = None
         try:
-            if len(self.target) > 3 and int(self.target[1]) % 2 == 0:
+            if len(self.target) > 3 and int(self.target[1]) > 50100:
                 if filename2:
                     with open(filename2, 'rb') as ifile:
                         self.data = ifile.read()

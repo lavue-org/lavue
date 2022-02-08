@@ -583,12 +583,16 @@ class HidraSourceWidget(SourceBaseWidget):
 
         self._connectComboBox(self._ui.serverComboBox)
 
-    def _bumptheport(self):
-        """ it bumps the hidra port by source id """
+    def _bumptheport(self, portgap=200):
+        """ it bumps the hidra port by source id
+
+        :param offset: port gap for multi image sources
+        :type name: :obj:`int`
+        """
         try:
             if self._sourceid:
                 self.__portnumber = str(
-                    int(self.__portnumber) + self._sourceid)
+                    int(self.__portnumber) + self._sourceid * portgap)
         except Exception as e:
             logger.warning(str(e))
 
