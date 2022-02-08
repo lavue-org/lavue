@@ -154,7 +154,7 @@ class HidraImageSourceTest(unittest.TestCase):
         global app
         self.__counter += 1
 
-        self.__tangoimgcounter2 += 1
+        # self.__tangoimgcounter2 += 1
         ipath = self.__tangofilepath2
         iname = \
             self.__tangofilepattern2 % self.__tangoimgcounter2
@@ -175,6 +175,7 @@ class HidraImageSourceTest(unittest.TestCase):
 
         lastimage = None
         hidra.filename = ""
+        hidra.filename2 = ""
         self.__tangoimgcounter = 0
         self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
         self.__tangofilepattern = "%05d.tif"
@@ -284,6 +285,7 @@ class HidraImageSourceTest(unittest.TestCase):
 
         lastimage = None
         hidra.filename = ""
+        hidra.filename2 = ""
         self.__tangoimgcounter = -1
         self.__tangofilepath = "%s/%s" % (os.path.abspath(path), "test/images")
         self.__tangofilepattern = "tst_05717_%05d.cbf"
@@ -372,11 +374,12 @@ class HidraImageSourceTest(unittest.TestCase):
         lastimage = None
         lastimage2 = None
         hidra.filename = ""
+        hidra.filename2 = ""
         self.__tangoimgcounter = 0
         self.__tangofilepath = "%s/%s" % (
             os.path.abspath(path), "test/images")
         self.__tangofilepattern = "%05d.tif"
-        self.__tangoimgcounter2 = -1
+        self.__tangoimgcounter2 = 0
         self.__tangofilepath2 = "%s/%s" % (
             os.path.abspath(path), "test/images")
         self.__tangofilepattern2 = "tst_05717_%05d.cbf"
@@ -476,8 +479,10 @@ class HidraImageSourceTest(unittest.TestCase):
         self.assertTrue(np.allclose(res2[1], lastimage))
         self.assertTrue(np.allclose(res2[2], lastimage))
 
-        lastimage = res2[3].T
+        lastimage1 = res2[3].T
+        lastimage2 = res1[4].T
 
+        lastimage = np.hstack((lastimage1, lastimage2))
         if not np.allclose(res3[0], lastimage):
             print(res3[0])
             print(lastimage)
@@ -491,11 +496,12 @@ class HidraImageSourceTest(unittest.TestCase):
         lastimage = None
         lastimage2 = None
         hidra.filename = ""
+        hidra.filename2 = ""
         self.__tangoimgcounter = 0
         self.__tangofilepath = "%s/%s" % (
             os.path.abspath(path), "test/images")
         self.__tangofilepattern = "%05d.tif"
-        self.__tangoimgcounter2 = -1
+        self.__tangoimgcounter2 = 0
         self.__tangofilepath2 = "%s/%s" % (
             os.path.abspath(path), "test/images")
         self.__tangofilepattern2 = "tst_05717_%05d.cbf"
@@ -569,9 +575,9 @@ class HidraImageSourceTest(unittest.TestCase):
                 "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
         ])
 
-        qtck1.executeChecks(delay=3000)
-        qtck2.executeChecks(delay=6000)
-        status = qtck3.executeChecksAndClose(delay=9000)
+        qtck1.executeChecks(delay=6000)
+        qtck2.executeChecks(delay=12000)
+        status = qtck3.executeChecksAndClose(delay=18000)
 
         self.assertEqual(status, 0)
 
@@ -604,8 +610,9 @@ class HidraImageSourceTest(unittest.TestCase):
         lastimage = np.hstack((lastimage2, lastimage1))
 
         if not np.allclose(res3[0], lastimage):
-            print(res3[0])
-            print(lastimage)
+            print(res3[0][0])
+            print(lastimage[0])
+
         self.assertTrue(np.allclose(res3[0], lastimage))
         self.assertTrue(np.allclose(res3[1], lastimage))
 

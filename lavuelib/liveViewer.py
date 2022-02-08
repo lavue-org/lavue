@@ -1458,6 +1458,9 @@ class LiveViewer(QtGui.QDialog):
                         i, self.__srcaliasnames[srcname])
             sourcechanged = True
 
+        if sourcechanged:
+            self.__updateSource()
+
         QtCore.QCoreApplication.processEvents()
         if hasattr(options, "configuration") and \
            options.configuration is not None:
@@ -1467,7 +1470,6 @@ class LiveViewer(QtGui.QDialog):
                     self.__sourcewg.configure(i, str(cnf))
         if sourcechanged:
             self._setSourceConfiguration()
-            self.__updateSource()
 
         QtCore.QCoreApplication.processEvents()
 
