@@ -10,7 +10,7 @@ It allows for the user to adjust image sources and their dialogs.
 **Hidra**
 
 *    **Detector servers:**  possible hidra detector hosts separated by spaces
-*    **Data port:** hidra data port. Each instance of lavue on the same host should use a different data port
+*    **Data port:** hidra data port or ports separated by spaces (for the multi image source mode). The default port gap in the multi image source mode is 200. Each instance of lavue on the same host should use a different data port.
 *    **Use default detector servers:** add default detector server names from the DESY pool
 
 **HTTP response**
