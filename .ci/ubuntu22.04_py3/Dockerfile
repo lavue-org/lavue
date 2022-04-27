@@ -23,7 +23,9 @@ RUN  /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections
      && /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections <<< "mariadb-server mysql-server/root_password_again password rootpw"' \
      && /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-get-selections |grep mysql '
 
-RUN apt-get -qq install -y  python3-mysqldb default-mysql-server mysql-server adduser && /bin/bash -c 'sleep 10'
+ENV RUNLEVEL=1
+# RUN apt-get -qq install -y  python3-mysqldb default-mysql-server adduser && /bin/bash -c 'sleep 10'
+RUN apt-get -qq install -y  python3-mysqldb  mysql-server adduser && /bin/bash -c 'sleep 10'
 
 RUN /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections <<< "tango-db tango-db/db/app-user string tango"' \
     && /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections <<< "tango-db tango-db/mysql/app-pass password rootpw"' \
