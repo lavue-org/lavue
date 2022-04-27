@@ -11,7 +11,7 @@ else
        # docker exec --user root ndts /bin/bash -c 'chown mysql:mysql /var/lib/mysql'
        docker exec --user root ndts /bin/bash -c 'usermod -d /var/lib/mysql/ mysql'
     fi
-    docker exec  --user root ndts /bin/bash -c 'service mysql start & && sleep 30'
+    docker exec  --user root ndts /bin/bash -c '$(service mysql start &) && sleep 30'
 fi
 
 if  [ "$1" = "ubuntu22.04" ]; then
@@ -44,7 +44,7 @@ if [ "$?" != "0" ]; then exit -1; fi
 
 # restart services
 if  [ "$1" = "ubuntu22.04" ]; then
-    docker exec  ndts /bin/bash -c '/usr/lib/tango/DataBaseds 2 -ORBendPoint giop:tcp::10000 &'
+    docker exec  ndts /bin/bash -c '$(/usr/lib/tango/DataBaseds 2 -ORBendPoint giop:tcp::10000 &)'
 else
     docker exec  --user root ndts service tango-db restart
 fi
