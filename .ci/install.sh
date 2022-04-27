@@ -15,9 +15,9 @@ else
 fi
 
 if  [ "$1" = "ubuntu22.04" ]; then
-    docker exec  --user root ndts /bin/bash -c 'echo -e "[client]\nuser=root\npassword=rootpw" > /root/.my.cnf'
+    # docker exec  --user root ndts /bin/bash -c 'echo -e "[client]\nuser=root\npassword=rootpw" > /root/.my.cnf'
     # docker exec  --user root ndts /bin/bash -c 'echo -e "[client]\nuser=root\nhost=127.0.0.1\npassword=rootpw\nsocket = /var/run/mysqld/mysqld.sock" > /root/.my.cnf'
-    docker exec  --user root  ndts /bin/bash -c 'echo -e "[client]\nuser=tango\nhost=127.0.0.1\npassword=rootpw\nsocket = /var/run/mysqld/mysqld.sock" > /home/tango/.my.cnf'
+    # docker exec  --user root  ndts /bin/bash -c 'echo -e "[client]\nuser=tango\nhost=127.0.0.1\npassword=rootpw\nsocket = /var/run/mysqld/mysqld.sock" > /home/tango/.my.cnf'
 fi
 
 echo "install tango-db tango-common"
