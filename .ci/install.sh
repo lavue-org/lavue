@@ -14,6 +14,9 @@ else
     docker exec  --user root ndts /bin/bash -c 'service mysql start & && sleep 30'
 fi
 
+if  [ "$1" = "ubuntu22.04" ]; then
+    docker exec  ndts /bin/bash -c 'echo -e "[client]\nuser=tango\nhost=127.0.0.1\npassword=rootpw\nsocket = /var/run/mysqld/mysqld.sock" > /home/tango/.my.cnf'
+fi
 
 echo "install tango-db tango-common"
 docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq install -y tango-db tango-common; sleep 10'
