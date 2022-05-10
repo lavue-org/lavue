@@ -436,7 +436,7 @@ class ImageWidget(QtGui.QWidget):
         """ moves the lower plot splitter
         """
         self.__disconnectsplitters()
-        self.__ui.lowerPlotSplitter.moveSplitter(int(pos), index)
+        self.__ui.lowerPlotSplitter.moveSplitter(pos, index)
         self.__connectsplitters()
 
     @QtCore.pyqtSlot(int, int)
@@ -444,7 +444,7 @@ class ImageWidget(QtGui.QWidget):
         """ moves the upper plot splitter
         """
         self.__disconnectsplitters()
-        self.__ui.upperPlotSplitter.moveSplitter(int(pos), index)
+        self.__ui.upperPlotSplitter.moveSplitter(pos, index)
         self.__connectsplitters()
 
     def onedbottomplot(self, clear=False, name=None):
@@ -740,8 +740,8 @@ class ImageWidget(QtGui.QWidget):
             self.__ui.cornerWidget.show()
             self.__ui.oneDRightWidget.show()
             smin, smax = self.__ui.upperPlotSplitter.getRange(1)
-            self._moveUpperPlotSplitter((smax-smin)*4/5., 1)
-            self._moveLowerPlotSplitter((smax-smin)*4/5., 1)
+            self._moveUpperPlotSplitter(int((smax-smin)*4/5.), 1)
+            self._moveLowerPlotSplitter(int((smax-smin)*4/5.), 1)
         elif parameters.rightplot is False:
             self.__rightplot.hide()
             self.__ui.cornerWidget.hide()
