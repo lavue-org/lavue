@@ -418,17 +418,25 @@ class ImageWidget(QtGui.QWidget):
     def __disconnectsplitters(self):
         """ disconnects splitters  signals
         """
-        self.__ui.lowerPlotSplitter.splitterMoved.disconnect(
-            self._moveUpperPlotSplitter)
-        self.__ui.upperPlotSplitter.splitterMoved.disconnect(
-            self._moveLowerPlotSplitter)
+        try:
+            self.__ui.lowerPlotSplitter.splitterMoved.disconnect(
+                self._moveUpperPlotSplitter)
+        except Exception as e:
+            # print(str(e))
+            logger.warning(str(e))
+        try:
+            self.__ui.upperPlotSplitter.splitterMoved.disconnect(
+                self._moveLowerPlotSplitter)
+        except Exception as e:
+            # print(str(e))
+            logger.warning(str(e))
 
     @QtCore.pyqtSlot(int, int)
     def _moveLowerPlotSplitter(self, pos, index):
         """ moves the lower plot splitter
         """
         self.__disconnectsplitters()
-        self.__ui.lowerPlotSplitter.moveSplitter(pos, index)
+        self.__ui.lowerPlotSplitter.moveSplitter(int(pos), index)
         self.__connectsplitters()
 
     @QtCore.pyqtSlot(int, int)
@@ -436,7 +444,7 @@ class ImageWidget(QtGui.QWidget):
         """ moves the upper plot splitter
         """
         self.__disconnectsplitters()
-        self.__ui.upperPlotSplitter.moveSplitter(pos, index)
+        self.__ui.upperPlotSplitter.moveSplitter(int(pos), index)
         self.__connectsplitters()
 
     def onedbottomplot(self, clear=False, name=None):

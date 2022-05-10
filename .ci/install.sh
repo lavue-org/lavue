@@ -23,7 +23,8 @@ docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq inst
 if [ "$?" != "0" ]; then exit -1; fi
 
 if [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "ubuntu21.04" ] || [ "$1" = "ubuntu21.10" ] || [ "$1" = "ubuntu22.04" ]; then
-    docker exec  --user tango ndts /bin/bash -c '/usr/lib/tango/DataBaseds 2 -ORBendPoint giop:tcp::10000  &'
+    # docker exec  --user tango ndts /bin/bash -c '/usr/lib/tango/DataBaseds 2 -ORBendPoint giop:tcp::10000  &'
+    docker exec  --user root ndts /etc/init.d/tango-db  restart
 else
     docker exec  --user root ndts service tango-db restart
 fi
