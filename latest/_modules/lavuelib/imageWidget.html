@@ -463,17 +463,25 @@
     <span class="k">def</span> <span class="nf">__disconnectsplitters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; disconnects splitters  signals</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">lowerPlotSplitter</span><span class="o">.</span><span class="n">splitterMoved</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_moveUpperPlotSplitter</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">upperPlotSplitter</span><span class="o">.</span><span class="n">splitterMoved</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_moveLowerPlotSplitter</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">lowerPlotSplitter</span><span class="o">.</span><span class="n">splitterMoved</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_moveUpperPlotSplitter</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># print(str(e))</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">upperPlotSplitter</span><span class="o">.</span><span class="n">splitterMoved</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_moveLowerPlotSplitter</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># print(str(e))</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_moveLowerPlotSplitter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; moves the lower plot splitter</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__disconnectsplitters</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">lowerPlotSplitter</span><span class="o">.</span><span class="n">moveSplitter</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">lowerPlotSplitter</span><span class="o">.</span><span class="n">moveSplitter</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">pos</span><span class="p">),</span> <span class="n">index</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__connectsplitters</span><span class="p">()</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
@@ -481,7 +489,7 @@
         <span class="sd">&quot;&quot;&quot; moves the upper plot splitter</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__disconnectsplitters</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">upperPlotSplitter</span><span class="o">.</span><span class="n">moveSplitter</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">upperPlotSplitter</span><span class="o">.</span><span class="n">moveSplitter</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">pos</span><span class="p">),</span> <span class="n">index</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__connectsplitters</span><span class="p">()</span>
 
 <div class="viewcode-block" id="ImageWidget.onedbottomplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.onedbottomplot">[docs]</a>    <span class="k">def</span> <span class="nf">onedbottomplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
