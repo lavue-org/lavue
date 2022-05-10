@@ -39,6 +39,7 @@ RUN  sed -i "s/\[mysql\]/\[mysqld\]\nsql_mode = NO_ZERO_IN_DATE,NO_ENGINE_SUBSTI
 
 ENV PKG_CONFIG_PATH=/home/tango/lib/pkgconfig
 ENV HDF5_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/hdf5/plugins
+ENV MYSQL_HOST=127.0.0.1
 USER tango
 WORKDIR /home/tango
 

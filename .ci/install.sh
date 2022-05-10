@@ -7,11 +7,13 @@ if [ "$1" = "debian11" ]; then
 else
     docker exec --user root ndts service mysql stop
     if [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "ubuntu21.04" ] || [ "$1" = "ubuntu21.10" ] || [ "$1" = "ubuntu22.04" ]; then
+	sudo docker exec  --user root  ndts /bin/bash -c 'echo -e "[client]\nuser=tango\nhost=127.0.0.1\npassword=rootpw" > /home/tango/.my.cnf'
        # docker exec --user root ndts /bin/bash -c 'mkdir -p /var/lib/mysql'
        # docker exec --user root ndts /bin/bash -c 'chown mysql:mysql /var/lib/mysql'
        docker exec --user root ndts /bin/bash -c 'usermod -d /var/lib/mysql/ mysql'
     fi
-    docker exec  --user root ndts /bin/bash -c '$(service mysql start &) && sleep 30'
+    docker exec --user root ndts service mysql start
+    # docker exec  --user root ndts /bin/bash -c '$(service mysql start &) && sleep 30'
 fi
 
 
@@ -39,17 +41,10 @@ else
 fi
 if [ "$?" != "0" ]; then exit -1; fi
 
-# restart services
-if  [ "$1" = "ubuntu22.04" ]; then
-    docker exec  ndts /bin/bash -c '$(/usr/lib/tango/DataBaseds 2 -ORBendPoint giop:tcp::10000 &)'
-else
-    docker exec  --user root ndts service tango-db restart
-fi
+docker exec  --user root ndts service tango-db restart
 if [ "$?" != "0" ]; then exit -1; fi
-
-
-# docker exec  --user root ndts service tango-db restart
 docker exec  --user root ndts service tango-starter restart
+if [ "$?" != "0" ]; then exit -1; fi
 
 docker exec  --user root ndts chown -R tango:tango .
 
