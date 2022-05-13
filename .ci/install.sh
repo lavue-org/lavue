@@ -7,10 +7,6 @@ if [ "$1" = "debian11" ]; then
 else
     docker exec --user root ndts service mysql stop
     if [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "ubuntu21.04" ] || [ "$1" = "ubuntu21.10" ] || [ "$1" = "ubuntu22.04" ]; then
-	sudo docker exec  --user root ndts /bin/bash -c 'echo -e "[client]\nuser=tango\nhost=127.0.0.1\npassword=rootpw" > /home/tango/.my.cnf'
-	sudo docker exec  --user root ndts /bin/bash -c 'echo -e "[client]\nuser=root\npassword=rootpw" > /root/.my.cnf'
-       # docker exec --user root ndts /bin/bash -c 'mkdir -p /var/lib/mysql'
-       # docker exec --user root ndts /bin/bash -c 'chown mysql:mysql /var/lib/mysql'
        docker exec --user root ndts /bin/bash -c 'usermod -d /var/lib/mysql/ mysql'
     fi
     docker exec --user root ndts service mysql start
@@ -20,22 +16,21 @@ fi
 
 echo "install tango-db tango-common"
 docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq install -y tango-db tango-common; sleep 10'
-if [ "$?" != "0" ]; then exit -1; fi
+if [ "$?" != "0" ]; then exit 255; fi
 
 if [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "ubuntu21.04" ] || [ "$1" = "ubuntu21.10" ] || [ "$1" = "ubuntu22.04" ]; then
-    # docker exec  --user tango ndts /bin/bash -c '/usr/lib/tango/DataBaseds 2 -ORBendPoint giop:tcp::10000  &'
-    docker exec  --user root ndts /etc/init.d/tango-db  restart
+    docker exec  --user root ndts /bin/bash -c 'echo -e "[client]\nuser=root\npassword=rootpw" > /root/.my.cnf'
 else
-    docker exec  --user root ndts service tango-db restart
 fi
-if [ "$?" != "0" ]; then exit -1; fi
+docker exec  --user root ndts service tango-db restart
+if [ "$?" != "0" ]; then exit 255; fi
 
 docker exec  --user root ndts mkdir -p /tmp/runtime-tango
 docker exec  --user root ndts chown -R tango:tango /tmp/runtime-tango
 
 echo "start Xvfb :99 -screen 0 1024x768x24 &"
 docker exec  --user root ndts /bin/bash -c 'export DISPLAY=":99.0"; Xvfb :99 -screen 0 1024x768x24 &'
-if [ "$?" != "0" ]; then exit -1; fi
+if [ "$?" != "0" ]; then exit 255; fi
 
 echo "install tango-starter tango-test and pytango"
 if [ "$2" = "2" ]; then
@@ -47,10 +42,10 @@ else
 	docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq install -y  python3-pytango tango-starter'
     fi
 fi
-if [ "$?" != "0" ]; then exit -1; fi
+if [ "$?" != "0" ]; then exit 255; fi
 
 docker exec  --user root ndts service tango-starter restart
-if [ "$?" != "0" ]; then exit -1; fi
+if [ "$?" != "0" ]; then exit 255; fi
 
 docker exec  --user root ndts chown -R tango:tango .
 
@@ -71,4 +66,4 @@ else
     docker exec ndts python3 setup.py  build_sphinx
 
 fi
-if [ "$?" != "0" ]; then exit -1; fi
+if [ "$?" != "0" ]; then exit 255; fi
