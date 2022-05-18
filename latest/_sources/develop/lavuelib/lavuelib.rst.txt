@@ -300,6 +300,14 @@ lavuelib.motorWatchThread module
     :undoc-members:
     :show-inheritance:
 
+lavuelib.normalizationWidget module
+===================================
+
+.. automodule:: lavuelib.normalizationWidget
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 lavuelib.omniQThread module
 ===========================
 
