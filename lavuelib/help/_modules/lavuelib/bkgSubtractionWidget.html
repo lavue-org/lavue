@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.bkgSubtractionWidget &#8212; LaVue 2.74.0 documentation</title>
+    <title>lavuelib.bkgSubtractionWidget &#8212; LaVue 2.75.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.74.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.75.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.bkgSubtractionWidget</a></li> 
       </ul>
@@ -68,7 +68,7 @@
 <span class="c1">#     Jan Kotanski &lt;jan.kotanski@desy.de&gt;</span>
 <span class="c1">#</span>
 
-<span class="sd">&quot;&quot;&quot; background subtreaction widget &quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot; background subtraction widget &quot;&quot;&quot;</span>
 
 
 <span class="kn">from</span> <span class="nn">.qtuic</span> <span class="kn">import</span> <span class="n">uic</span>
@@ -93,14 +93,6 @@
     <span class="n">useCurrentImageAsBkg</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) apply state change signal</span>
     <span class="n">applyStateChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) BF file selected signal</span>
-    <span class="n">bfFileSelected</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
-    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) use current image signal</span>
-    <span class="n">useCurrentImageAsBF</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
-    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) apply state change signal</span>
-    <span class="n">applyBFStateChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) BF scaling factor change signal</span>
-    <span class="n">bfScalingFactorChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) bkg scaling factor change signal</span>
     <span class="n">bkgScalingFactorChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
 
@@ -133,23 +125,11 @@
             <span class="n">icon</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QIcon</span><span class="o">.</span><span class="n">fromTheme</span><span class="p">(</span><span class="s2">&quot;document-open&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectPushButton</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">icon</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectBFPushButton</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_showBFImageSelection</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectCurrentBFPushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectCurrentBFPushButton</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_useCurrentBF</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectBFFilePushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectBFFilePushButton</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_showBFFileDialog</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">applyBFCheckBox</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_emitApplyBFStateChanged</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">dfsfLineEdit</span><span class="o">.</span><span class="n">textChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_emitBkgScalingFactorChanged</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">bfsfLineEdit</span><span class="o">.</span><span class="n">textChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_emitBFScalingFactorChanged</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QIcon</span><span class="o">.</span><span class="n">hasThemeIcon</span><span class="p">(</span><span class="s2">&quot;document-open&quot;</span><span class="p">):</span>
             <span class="n">icon</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QIcon</span><span class="o">.</span><span class="n">fromTheme</span><span class="p">(</span><span class="s2">&quot;document-open&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectBFPushButton</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">icon</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectPushButton</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">icon</span><span class="p">)</span>
 
 <div class="viewcode-block" id="BkgSubtractionWidget.setBkgScalingFactor"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.bkgSubtractionWidget.BkgSubtractionWidget.setBkgScalingFactor">[docs]</a>    <span class="k">def</span> <span class="nf">setBkgScalingFactor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets the background scaling factor</span>
@@ -158,14 +138,6 @@
 <span class="sd">        :type scale: :obj:`float` or :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">dfsfLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">scale</span> <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">))</span></div>
-
-<div class="viewcode-block" id="BkgSubtractionWidget.setBFScalingFactor"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.bkgSubtractionWidget.BkgSubtractionWidget.setBFScalingFactor">[docs]</a>    <span class="k">def</span> <span class="nf">setBFScalingFactor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets the bright field scaling factor</span>
-
-<span class="sd">        :param scale: bright field scaling factor</span>
-<span class="sd">        :type scale: :obj:`float` or :obj:`str`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">bfsfLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">scale</span> <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="BkgSubtractionWidget.bkgScalingFactor"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.bkgSubtractionWidget.BkgSubtractionWidget.bkgScalingFactor">[docs]</a>    <span class="k">def</span> <span class="nf">bkgScalingFactor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides background scaling factor</span>
@@ -179,29 +151,11 @@
             <span class="n">scale</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="n">scale</span></div>
 
-<div class="viewcode-block" id="BkgSubtractionWidget.bfScalingFactor"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.bkgSubtractionWidget.BkgSubtractionWidget.bfScalingFactor">[docs]</a>    <span class="k">def</span> <span class="nf">bfScalingFactor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides bright field scaling factor</span>
-
-<span class="sd">        :returns: bright field scaling factor</span>
-<span class="sd">        :rtype: :obj:`float`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">scale</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">bfsfLineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="n">scale</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">scale</span></div>
-
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_emitBkgScalingFactorChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; emits bkg scaling factor chnaged</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bkgScalingFactorChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
-
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">_emitBFScalingFactorChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; emits BF scaling factor chnaged</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bfScalingFactorChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_emitApplyStateChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
@@ -211,15 +165,6 @@
 <span class="sd">        :type state: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">applyStateChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
-
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">_emitApplyBFStateChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; emits state of apply brightfield button</span>
-
-<span class="sd">        :param state: apply button state</span>
-<span class="sd">        :type state: :obj:`bool`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">applyBFStateChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_showFileDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -239,24 +184,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">bkgFileSelected</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">bkgimagename</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__hideImageSelection</span><span class="p">()</span>
 
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">_showBFFileDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; shows file dialog and select the file name</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">fileDialog</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QFileDialog</span><span class="p">()</span>
-
-        <span class="n">fileout</span> <span class="o">=</span> <span class="n">fileDialog</span><span class="o">.</span><span class="n">getOpenFileName</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Open file&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">bfimagename</span> <span class="ow">or</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fileout</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-            <span class="n">fileName</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">fileout</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">fileName</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">fileout</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">fileName</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">bfimagename</span> <span class="o">=</span> <span class="n">fileName</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">setDisplayedBFName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">bfimagename</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">bfFileSelected</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">bfimagename</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__hideBFImageSelection</span><span class="p">()</span>
-
 <div class="viewcode-block" id="BkgSubtractionWidget.setBackground"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.bkgSubtractionWidget.BkgSubtractionWidget.setBackground">[docs]</a>    <span class="k">def</span> <span class="nf">setBackground</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets the image background</span>
 
@@ -269,31 +196,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">applyBkgCheckBox</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">applyStateChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BkgSubtractionWidget.setBrightField"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.bkgSubtractionWidget.BkgSubtractionWidget.setBrightField">[docs]</a>    <span class="k">def</span> <span class="nf">setBrightField</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets the image background</span>
-
-<span class="sd">        :param fname: file name</span>
-<span class="sd">        :type fname: :obj:`str`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">bfimagename</span> <span class="o">=</span> <span class="n">fname</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">setDisplayedBFName</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bfFileSelected</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">applyBFCheckBox</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">applyBFStateChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></div>
-
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_useCurrent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; emits useCurrentImageAsBkg and hides image selection</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">useCurrentImageAsBkg</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__hideImageSelection</span><span class="p">()</span>
-
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">_useCurrentBF</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; emits useCurrentImageAsBF and hides image selection</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">useCurrentImageAsBF</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__hideBFImageSelection</span><span class="p">()</span>
 
 <div class="viewcode-block" id="BkgSubtractionWidget.setDisplayedName"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.bkgSubtractionWidget.BkgSubtractionWidget.setDisplayedName">[docs]</a>    <span class="k">def</span> <span class="nf">setDisplayedName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets displayed file name</span>
@@ -308,19 +216,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">fileLabel</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;...&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)[</span><span class="o">-</span><span class="mi">24</span><span class="p">:])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">applyBkgCheckBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BkgSubtractionWidget.setDisplayedBFName"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.bkgSubtractionWidget.BkgSubtractionWidget.setDisplayedBFName">[docs]</a>    <span class="k">def</span> <span class="nf">setDisplayedBFName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets displayed file name</span>
-
-<span class="sd">        :param name: file name</span>
-<span class="sd">        :type name: :obj:`str`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">bfFileLabel</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;no Image selected&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">applyBFCheckBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">bfFileLabel</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;...&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)[</span><span class="o">-</span><span class="mi">24</span><span class="p">:])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">applyBFCheckBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
-
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_showImageSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; shows image selection</span>
@@ -329,21 +224,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectFilePushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectPushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
 
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">_showBFImageSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; shows image selection</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectCurrentBFPushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectBFFilePushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectBFPushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
-
 <div class="viewcode-block" id="BkgSubtractionWidget.showScalingFactors"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.bkgSubtractionWidget.BkgSubtractionWidget.showScalingFactors">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">showScalingFactors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">bfsfWidget</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">dfsfWidget</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">bfsfWidget</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">dfsfWidget</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">__hideImageSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -352,24 +237,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectCurrentPushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectFilePushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectPushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">__hideBFImageSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; hides image selection</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectCurrentBFPushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectBFFilePushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectBFPushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<div class="viewcode-block" id="BkgSubtractionWidget.checkBFSubtraction"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.bkgSubtractionWidget.BkgSubtractionWidget.checkBFSubtraction">[docs]</a>    <span class="k">def</span> <span class="nf">checkBFSubtraction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; unchecks apply CheckBox if state is 1 and it is checked</span>
-<span class="sd">        and reset the display</span>
-
-<span class="sd">        :param state: checkbox state</span>
-<span class="sd">        :type state:  :obj:`int`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">state</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">applyBFCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">applyBFCheckBox</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">setDisplayedBFName</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BkgSubtractionWidget.checkBkgSubtraction"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.bkgSubtractionWidget.BkgSubtractionWidget.checkBkgSubtraction">[docs]</a>    <span class="k">def</span> <span class="nf">checkBkgSubtraction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; unchecks apply CheckBox if state is 1 and it is checked</span>
@@ -387,14 +254,7 @@
 <span class="sd">        :returns: apply status</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">applyBkgCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="BkgSubtractionWidget.isBFSubApplied"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.bkgSubtractionWidget.BkgSubtractionWidget.isBFSubApplied">[docs]</a>    <span class="k">def</span> <span class="nf">isBFSubApplied</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; if brightfield correction applied</span>
-<span class="sd">        :returns: apply status</span>
-<span class="sd">        :rtype: :obj:`bool`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">applyBFCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">applyBkgCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span></div></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
@@ -435,7 +295,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.74.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.75.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.bkgSubtractionWidget</a></li> 
       </ul>

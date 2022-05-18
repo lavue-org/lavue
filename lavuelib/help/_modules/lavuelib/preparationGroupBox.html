@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.preparationGroupBox &#8212; LaVue 2.74.0 documentation</title>
+    <title>lavuelib.preparationGroupBox &#8212; LaVue 2.75.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.74.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.75.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.preparationGroupBox</a></li> 
       </ul>
@@ -76,6 +76,7 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">maskWidget</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">highValueMaskWidget</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">bkgSubtractionWidget</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">normalizationWidget</span>
 
 
 <div class="viewcode-block" id="QHLine"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.preparationGroupBox.QHLine">[docs]</a><span class="k">class</span> <span class="nc">QHLine</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QFrame</span><span class="p">):</span>
@@ -112,10 +113,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__highvaluemask</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1">#: (:obj:`bool`) show background subtraction widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsub</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1">#: (:obj:`bool`) show normalization widget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__norm</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1">#: (:obj:`bool`) show transformations widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__trans</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="c1">#: (:obj:`bool`) show scalar factors</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_subsf</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) show subtraction scalar factors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__subsf</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) show norm scalar factors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__normsf</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1">#: (:class:`lavuelib.maskWidget.Maskwidget`) mask widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">maskWidget</span> <span class="o">=</span> <span class="n">maskWidget</span><span class="o">.</span><span class="n">MaskWidget</span><span class="p">(</span>
@@ -127,6 +132,10 @@
         <span class="c1">#  background subtrantion widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bkgSubWidget</span> <span class="o">=</span> <span class="n">bkgSubtractionWidget</span><span class="o">.</span><span class="n">BkgSubtractionWidget</span><span class="p">(</span>
             <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">)</span>
+        <span class="c1">#: (:class:`lavuelib.bkgSubtractionWidget.BkgSubtractionWidget`)</span>
+        <span class="c1">#  background subtrantion widget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">normWidget</span> <span class="o">=</span> <span class="n">normalizationWidget</span><span class="o">.</span><span class="n">NormalizationWidget</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__hline</span> <span class="o">=</span> <span class="n">QHLine</span><span class="p">()</span>
         <span class="c1">#: (:class:`lavuelib.transformationsWidget.TransformationsWidget`)</span>
         <span class="c1">#  transformations widget</span>
@@ -135,6 +144,7 @@
 
         <span class="n">vlayout</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">()</span>
         <span class="n">vlayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bkgSubWidget</span><span class="p">)</span>
+        <span class="n">vlayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">normWidget</span><span class="p">)</span>
         <span class="n">vlayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maskWidget</span><span class="p">)</span>
         <span class="n">vlayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">highValueMaskWidget</span><span class="p">)</span>
         <span class="n">vlayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__hline</span><span class="p">)</span>
@@ -143,7 +153,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">vlayout</span><span class="p">)</span>
 
 <div class="viewcode-block" id="PreparationGroupBox.changeView"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.preparationGroupBox.PreparationGroupBox.changeView">[docs]</a>    <span class="k">def</span> <span class="nf">changeView</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">showmask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">showsub</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">showtrans</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                   <span class="n">showhighvaluemask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">showsubsf</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                   <span class="n">showhighvaluemask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">showsubsf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">shownorm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shownormsf</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show or hide widgets in the preparation colection</span>
 
 <span class="sd">        :param showmask: mask widget shown</span>
@@ -154,8 +165,12 @@
 <span class="sd">        :type showtrans: :obj:`bool`</span>
 <span class="sd">        :param showhighvaluemask: mask widget shown</span>
 <span class="sd">        :type showhighvaluemask: :obj:`bool`</span>
-<span class="sd">        :param showsub: subtraction scaling widget shown</span>
-<span class="sd">        :type showsub: :obj:`bool`</span>
+<span class="sd">        :param showsubsf: subtraction scaling widget shown</span>
+<span class="sd">        :type showsubsf: :obj:`bool`</span>
+<span class="sd">        :param shownorm: normalization widget shown</span>
+<span class="sd">        :type shownorm: :obj:`bool`</span>
+<span class="sd">        :param shownormsf: normalization scaling widget shown</span>
+<span class="sd">        :type shownormsf: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">showmask</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
@@ -178,6 +193,20 @@
 
         <span class="k">elif</span> <span class="n">showsubsf</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bkgSubWidget</span><span class="o">.</span><span class="n">showScalingFactors</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">shownorm</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__norm</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">normWidget</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">shownorm</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__norm</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">normWidget</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">shownormsf</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">shownorm</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__normsf</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">normWidget</span><span class="o">.</span><span class="n">showScalingFactors</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">shownormsf</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">normWidget</span><span class="o">.</span><span class="n">showScalingFactors</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">showtrans</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__trans</span> <span class="o">=</span> <span class="kc">True</span>
@@ -235,7 +264,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.74.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.75.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.preparationGroupBox</a></li> 
       </ul>

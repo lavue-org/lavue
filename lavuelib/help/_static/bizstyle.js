@@ -36,6 +36,6 @@ $(window).resize(function(){
         $("li.nav-item-0 a").text("Top");
     }
     else {
-        $("li.nav-item-0 a").text("LaVue 2.74.0 documentation");
+        $("li.nav-item-0 a").text("LaVue 2.75.0 documentation");
     }
 });

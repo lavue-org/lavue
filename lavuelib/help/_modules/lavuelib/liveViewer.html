@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.liveViewer &#8212; LaVue 2.74.0 documentation</title>
+    <title>lavuelib.liveViewer &#8212; LaVue 2.75.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.74.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.75.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.liveViewer</a></li> 
       </ul>
@@ -613,6 +613,9 @@
         <span class="c1">#: (:class:`lavuelib.bkgSubtractionWidget.BkgSubtractionWidget`)</span>
         <span class="c1">#:    background subtraction widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="o">.</span><span class="n">bkgSubWidget</span>
+        <span class="c1">#: (:class:`lavuelib.normalizationWidget.NormalizationWidget`)</span>
+        <span class="c1">#:    background subtraction widget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__normwg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="o">.</span><span class="n">normWidget</span>
         <span class="c1">#: (:class:`lavuelib.transformationsWidget.TransformationsWidget`)</span>
         <span class="c1">#:    transformations widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__trafowg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="o">.</span><span class="n">trafoWidget</span>
@@ -841,11 +844,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_setCurrentImageAsBkg</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">applyStateChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_checkBkgSubtraction</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">bkgScalingFactorChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_updateBkgScale</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">bfFileSelected</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prepareBFSubtraction</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">useCurrentImageAsBF</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__normwg</span><span class="o">.</span><span class="n">bfFileSelected</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prepareBFSubtraction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__normwg</span><span class="o">.</span><span class="n">useCurrentImageAsBF</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_setCurrentImageAsBF</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">applyBFStateChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_checkBFSubtraction</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">bfScalingFactorChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_updateBFScale</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__normwg</span><span class="o">.</span><span class="n">applyBFStateChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_checkBFSubtraction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__normwg</span><span class="o">.</span><span class="n">bfScalingFactorChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_updateBFScale</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__maskwg</span><span class="o">.</span><span class="n">maskFileSelected</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prepareMasking</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__maskwg</span><span class="o">.</span><span class="n">applyStateChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_checkMasking</span><span class="p">)</span>
@@ -927,7 +930,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">bkgimagename</span><span class="p">:</span>
                 <span class="n">bkgfile</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">bkgimagename</span><span class="p">)</span>
         <span class="n">bffile</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">isBFSubApplied</span><span class="p">():</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__normwg</span><span class="o">.</span><span class="n">isBFSubApplied</span><span class="p">():</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">bfimagename</span><span class="p">:</span>
                 <span class="n">bffile</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">bfimagename</span><span class="p">)</span>
         <span class="n">maskfile</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -940,7 +943,7 @@
         <span class="n">bkgscale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backgroundscale</span> \
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsubsf</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="n">bfscale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__brightfieldscale</span> \
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsubsf</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownormsf</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setLavueState</span><span class="p">(</span>
             <span class="p">{</span>
                 <span class="s2">&quot;connected&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcewg</span><span class="o">.</span><span class="n">isConnected</span><span class="p">(),</span>
@@ -1594,12 +1597,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">setBkgScalingFactor</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_updateBkgScale</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;brightfieldfile&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">options</span><span class="o">.</span><span class="n">brightfieldfile</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsub</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsub</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="o">.</span><span class="n">changeView</span><span class="p">(</span><span class="n">showsub</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">setBrightField</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">brightfieldfile</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownorm</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownorm</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="o">.</span><span class="n">changeView</span><span class="p">(</span><span class="n">shownorm</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__normwg</span><span class="o">.</span><span class="n">setBrightField</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">brightfieldfile</span><span class="p">))</span>
         <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;brightfieldfile&quot;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">checkBFSubtraction</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__normwg</span><span class="o">.</span><span class="n">checkBFSubtraction</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__dobfsubtraction</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">bfimagename</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__bfmdfimage</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1607,16 +1610,16 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__scbrightfieldimage</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;brightfieldscale&quot;</span><span class="p">)</span> <span class="ow">and</span> \
            <span class="n">options</span><span class="o">.</span><span class="n">brightfieldscale</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsubsf</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsub</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsubsf</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="o">.</span><span class="n">changeView</span><span class="p">(</span><span class="n">showsub</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">showsubsf</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">setBFScalingFactor</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">brightfieldscale</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownormsf</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownorm</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownormsf</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="o">.</span><span class="n">changeView</span><span class="p">(</span><span class="n">shownorm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">shownormsf</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__normwg</span><span class="o">.</span><span class="n">setBFScalingFactor</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">brightfieldscale</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_updateBFScale</span><span class="p">()</span>
 
         <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;brightfieldscale&quot;</span><span class="p">)</span> <span class="ow">and</span> \
                 <span class="n">options</span><span class="o">.</span><span class="n">brightfieldscale</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">setBFScalingFactor</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__normwg</span><span class="o">.</span><span class="n">setBFScalingFactor</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_updateBFScale</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;channel&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">options</span><span class="o">.</span><span class="n">channel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1803,6 +1806,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showtrans</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showhighvaluemask</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsubsf</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownorm</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownormsf</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateBkgScale</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateBFScale</span><span class="p">()</span>
@@ -2299,6 +2304,8 @@
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">imagechannels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">imagechannels</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">showsub</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsub</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">showsubsf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsubsf</span>
+        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">shownorm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownorm</span>
+        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">shownormsf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownormsf</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">showtrans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showtrans</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">showscale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showscale</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">showlevels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showlevels</span>
@@ -2400,6 +2407,9 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsub</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">showsub</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="o">.</span><span class="n">changeView</span><span class="p">(</span><span class="n">showsub</span><span class="o">=</span><span class="n">dialog</span><span class="o">.</span><span class="n">showsub</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsub</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">showsub</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownorm</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">shownorm</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="o">.</span><span class="n">changeView</span><span class="p">(</span><span class="n">shownorm</span><span class="o">=</span><span class="n">dialog</span><span class="o">.</span><span class="n">shownorm</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownorm</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">shownorm</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsubsf</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">showsubsf</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">dialog</span><span class="o">.</span><span class="n">showsubsf</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsub</span> <span class="o">=</span> <span class="kc">True</span>
@@ -2409,6 +2419,14 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="o">.</span><span class="n">changeView</span><span class="p">(</span><span class="n">showsubsf</span><span class="o">=</span><span class="n">dialog</span><span class="o">.</span><span class="n">showsubsf</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsubsf</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">showsubsf</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_updateBkgScale</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownormsf</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">shownormsf</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">dialog</span><span class="o">.</span><span class="n">shownormsf</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownorm</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="o">.</span><span class="n">changeView</span><span class="p">(</span><span class="n">shownorm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                         <span class="n">shownormsf</span><span class="o">=</span><span class="n">dialog</span><span class="o">.</span><span class="n">shownormsf</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="o">.</span><span class="n">changeView</span><span class="p">(</span><span class="n">shownormsf</span><span class="o">=</span><span class="n">dialog</span><span class="o">.</span><span class="n">shownormsf</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownormsf</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">shownormsf</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_updateBFScale</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showtrans</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">showtrans</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="o">.</span><span class="n">changeView</span><span class="p">(</span><span class="n">showtrans</span><span class="o">=</span><span class="n">dialog</span><span class="o">.</span><span class="n">showtrans</span><span class="p">)</span>
@@ -2813,7 +2831,7 @@
                 <span class="n">values</span><span class="p">[</span><span class="s2">&quot;bkgfile&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">bkgimagename</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">values</span><span class="p">[</span><span class="s2">&quot;bkgfile&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">isBFSubApplied</span><span class="p">()</span> \
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__normwg</span><span class="o">.</span><span class="n">isBFSubApplied</span><span class="p">()</span> \
                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">bfimagename</span><span class="p">:</span>
                 <span class="n">values</span><span class="p">[</span><span class="s2">&quot;brightfieldfile&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">bfimagename</span><span class="p">)</span>
@@ -2822,7 +2840,7 @@
             <span class="n">bkgscale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backgroundscale</span> \
                 <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsubsf</span> <span class="k">else</span> <span class="kc">None</span>
             <span class="n">bfscale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__brightfieldscale</span> \
-                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsubsf</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownormsf</span> <span class="k">else</span> <span class="kc">None</span>
             <span class="n">values</span><span class="p">[</span><span class="s2">&quot;bfscale&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bfscale</span>
             <span class="n">values</span><span class="p">[</span><span class="s2">&quot;bkgscale&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bkgscale</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskwg</span><span class="o">.</span><span class="n">isMaskApplied</span><span class="p">()</span> <span class="ow">and</span> \
@@ -4141,12 +4159,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dobfsubtraction</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dobfsubtraction</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scbrightfieldimage</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">setDisplayedBFName</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__normwg</span><span class="o">.</span><span class="n">setDisplayedBFName</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">checkBFSubtraction</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__normwg</span><span class="o">.</span><span class="n">checkBFSubtraction</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setDoBFSubtraction</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
         <span class="n">bffile</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">isBFSubApplied</span><span class="p">()</span> <span class="ow">and</span> \
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__normwg</span><span class="o">.</span><span class="n">isBFSubApplied</span><span class="p">()</span> <span class="ow">and</span> \
            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">bfimagename</span><span class="p">:</span>
             <span class="n">bffile</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">bfimagename</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setLavueState</span><span class="p">({</span><span class="s2">&quot;brightfieldfile&quot;</span><span class="p">:</span> <span class="n">bffile</span><span class="p">})</span>
@@ -4275,11 +4293,11 @@
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_updateBFScale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fetchscale</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">fetchscale</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__brightfieldscale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">bfScalingFactor</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__brightfieldscale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__normwg</span><span class="o">.</span><span class="n">bfScalingFactor</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__brightfieldimage</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__scbrightfieldimage</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__brightfieldscale</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> \
-                <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsubsf</span><span class="p">:</span>
+                <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownormsf</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__scbrightfieldimage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__brightfieldimage</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__scbrightfieldimage</span> <span class="o">=</span> \
@@ -4294,9 +4312,9 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__brightfieldimage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_updateBFScale</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">setDisplayedBFName</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__imagename</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__normw</span><span class="o">.</span><span class="n">setDisplayedBFName</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__imagename</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__bkgsubwg</span><span class="o">.</span><span class="n">setDisplayedBFName</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__normwg</span><span class="o">.</span><span class="n">setDisplayedBFName</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__updatebfmdf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets brightfield - darkfield image</span>
@@ -4464,7 +4482,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.74.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.75.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.liveViewer</a></li> 
       </ul>

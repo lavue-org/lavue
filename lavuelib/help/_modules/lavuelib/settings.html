@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.settings &#8212; LaVue 2.74.0 documentation</title>
+    <title>lavuelib.settings &#8212; LaVue 2.75.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.74.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.75.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.settings</a></li> 
       </ul>
@@ -122,8 +122,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">calcvariance</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) show bakcground subtraction widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">showsub</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="c1">#: (:obj:`bool`) show bakcground subtraction scaling widget</span>
+        <span class="c1">#: (:obj:`bool`) show image normalization widget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shownorm</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1">#: (:obj:`bool`) show bakcground subtraction scaling factor widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">showsubsf</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) show image normalization scaling factor widget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shownormsf</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) show transformation widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">showtrans</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1">#: (:obj:`bool`) show memory buffer widget</span>
@@ -441,9 +445,17 @@
         <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;false&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">showsub</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+            <span class="s2">&quot;Configuration/ShowNormalization&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;false&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shownorm</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/ShowSubtractionScaling&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">showsubsf</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+            <span class="s2">&quot;Configuration/ShowNormalizationScaling&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shownormsf</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/ShowTransformations&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;false&quot;</span><span class="p">:</span>
@@ -974,8 +986,14 @@
             <span class="s2">&quot;Configuration/ShowSubtraction&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">showsub</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
+            <span class="s2">&quot;Configuration/ShowNormalization&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shownorm</span><span class="p">)</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/ShowSubtractionScaling&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">showsubsf</span><span class="p">)</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
+            <span class="s2">&quot;Configuration/ShowNormalizationScaling&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shownormsf</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/ShowTransformations&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">showtrans</span><span class="p">)</span>
@@ -1748,7 +1766,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.74.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.75.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.settings</a></li> 
       </ul>
