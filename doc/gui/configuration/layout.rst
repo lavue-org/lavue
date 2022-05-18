@@ -10,8 +10,10 @@ The second tab of the configuration dialog contains **Layout** options. It allow
 
 *    **Filters:** shows the filter widget
 *    **Memory buffer:** shows the memory buffer widget
-*    **Subtraction:** shows the background subtraction  and bright field image sub-group
-*    **Subtraction scaling:** multiplicative scaling factors for background and bright field image
+*    **Subtraction:** shows the background subtraction sub-group
+*    **Subtraction factor:** multiplicative scaling factors for background
+*    **Normalization:** shows the bright field image sub-group
+*    **Normalization factor:** multiplicative scaling factors for bright field image
 *    **Mask:** shows mask the image widget
 *    **Mask high values:** shows mask high value widget
 *    **Transforms:** shows the transformation widget
