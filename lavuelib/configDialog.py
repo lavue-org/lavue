@@ -249,8 +249,12 @@ class ConfigDialog(QtGui.QDialog):
 
         #: (:obj:`bool`) show bakcground subtraction widget
         self.showsub = True
-        #: (:obj:`bool`) show bakcground subtraction scaling widget
+        #: (:obj:`bool`) show bakcground subtraction scaling factor widget
         self.showsubsf = False
+        #: (:obj:`bool`) show image normalization widget
+        self.shownorm = True
+        #: (:obj:`bool`) show image normalization scaling factor widget
+        self.shownormsf = False
         #: (:obj:`bool`) show transformation widget
         self.showtrans = True
         #: (:obj:`bool`) show memory buffer widget
@@ -465,7 +469,9 @@ class ConfigDialog(QtGui.QDialog):
         self.__ui.showstepsCheckBox.setChecked(self.showsteps)
         self.__ui.calcvarianceCheckBox.setChecked(self.calcvariance)
         self.__ui.showsubCheckBox.setChecked(self.showsub)
+        self.__ui.shownormCheckBox.setChecked(self.shownorm)
         self.__ui.showsubsfCheckBox.setChecked(self.showsubsf)
+        self.__ui.shownormsfCheckBox.setChecked(self.shownormsf)
         self.__ui.showtransCheckBox.setChecked(self.showtrans)
         self.__ui.showmbufferCheckBox.setChecked(self.showmbuffer)
         self.__ui.showrangeCheckBox.setChecked(self.showrange)
@@ -782,7 +788,9 @@ class ConfigDialog(QtGui.QDialog):
         self.diffnpt = int(
             self.__ui.diffsizeSpinBox.value())
         self.showsub = self.__ui.showsubCheckBox.isChecked()
+        self.shownorm = self.__ui.shownormCheckBox.isChecked()
         self.showsubsf = self.__ui.showsubsfCheckBox.isChecked()
+        self.shownormsf = self.__ui.shownormsfCheckBox.isChecked()
         self.showtrans = self.__ui.showtransCheckBox.isChecked()
         self.showmbuffer = self.__ui.showmbufferCheckBox.isChecked()
         self.showrange = self.__ui.showrangeCheckBox.isChecked()

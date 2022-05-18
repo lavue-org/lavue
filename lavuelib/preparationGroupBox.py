@@ -31,6 +31,7 @@ from . import transformationsWidget
 from . import maskWidget
 from . import highValueMaskWidget
 from . import bkgSubtractionWidget
+from . import normalizationWidget
 
 
 class QHLine(QtGui.QFrame):
@@ -67,10 +68,14 @@ class PreparationGroupBox(QtGui.QGroupBox):
         self.__highvaluemask = True
         #: (:obj:`bool`) show background subtraction widget
         self.__bkgsub = True
+        #: (:obj:`bool`) show normalization widget
+        self.__norm = True
         #: (:obj:`bool`) show transformations widget
         self.__trans = True
-        #: (:obj:`bool`) show scalar factors
-        self._subsf = False
+        #: (:obj:`bool`) show subtraction scalar factors
+        self.__subsf = False
+        #: (:obj:`bool`) show norm scalar factors
+        self.__normsf = False
 
         #: (:class:`lavuelib.maskWidget.Maskwidget`) mask widget
         self.maskWidget = maskWidget.MaskWidget(
@@ -82,6 +87,10 @@ class PreparationGroupBox(QtGui.QGroupBox):
         #  background subtrantion widget
         self.bkgSubWidget = bkgSubtractionWidget.BkgSubtractionWidget(
             parent=self, settings=settings)
+        #: (:class:`lavuelib.bkgSubtractionWidget.BkgSubtractionWidget`)
+        #  background subtrantion widget
+        self.normWidget = normalizationWidget.NormalizationWidget(
+            parent=self, settings=settings)
         self.__hline = QHLine()
         #: (:class:`lavuelib.transformationsWidget.TransformationsWidget`)
         #  transformations widget
@@ -90,6 +99,7 @@ class PreparationGroupBox(QtGui.QGroupBox):
 
         vlayout = QtGui.QVBoxLayout()
         vlayout.addWidget(self.bkgSubWidget)
+        vlayout.addWidget(self.normWidget)
         vlayout.addWidget(self.maskWidget)
         vlayout.addWidget(self.highValueMaskWidget)
         vlayout.addWidget(self.__hline)
@@ -98,7 +108,8 @@ class PreparationGroupBox(QtGui.QGroupBox):
         self.setLayout(vlayout)
 
     def changeView(self, showmask=None, showsub=None, showtrans=None,
-                   showhighvaluemask=None, showsubsf=None):
+                   showhighvaluemask=None, showsubsf=None,
+                   shownorm=None, shownormsf=None):
         """ show or hide widgets in the preparation colection
 
         :param showmask: mask widget shown
@@ -109,8 +120,12 @@ class PreparationGroupBox(QtGui.QGroupBox):
         :type showtrans: :obj:`bool`
         :param showhighvaluemask: mask widget shown
         :type showhighvaluemask: :obj:`bool`
-        :param showsub: subtraction scaling widget shown
-        :type showsub: :obj:`bool`
+        :param showsubsf: subtraction scaling widget shown
+        :type showsubsf: :obj:`bool`
+        :param shownorm: normalization widget shown
+        :type shownorm: :obj:`bool`
+        :param shownormsf: normalization scaling widget shown
+        :type shownormsf: :obj:`bool`
         """
 
         if showmask is True:
@@ -133,6 +148,20 @@ class PreparationGroupBox(QtGui.QGroupBox):
 
         elif showsubsf is False:
             self.bkgSubWidget.showScalingFactors(False)
+
+        if shownorm is True:
+            self.__norm = True
+            self.normWidget.show()
+        elif shownorm is False:
+            self.__norm = False
+            self.normWidget.hide()
+
+        if shownormsf is True and shownorm is True:
+            self.__normsf = True
+            self.normWidget.showScalingFactors(True)
+
+        elif shownormsf is False:
+            self.normWidget.showScalingFactors(False)
 
         if showtrans is True:
             self.__trans = True

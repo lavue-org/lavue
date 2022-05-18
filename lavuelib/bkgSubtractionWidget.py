@@ -23,7 +23,7 @@
 #     Jan Kotanski <jan.kotanski@desy.de>
 #
 
-""" background subtreaction widget """
+""" background subtraction widget """
 
 
 from .qtuic import uic
@@ -48,14 +48,6 @@ class BkgSubtractionWidget(QtGui.QWidget):
     useCurrentImageAsBkg = QtCore.pyqtSignal()
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) apply state change signal
     applyStateChanged = QtCore.pyqtSignal(int)
-    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) BF file selected signal
-    bfFileSelected = QtCore.pyqtSignal(str)
-    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) use current image signal
-    useCurrentImageAsBF = QtCore.pyqtSignal()
-    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) apply state change signal
-    applyBFStateChanged = QtCore.pyqtSignal(int)
-    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) BF scaling factor change signal
-    bfScalingFactorChanged = QtCore.pyqtSignal()
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) bkg scaling factor change signal
     bkgScalingFactorChanged = QtCore.pyqtSignal()
 
@@ -88,23 +80,11 @@ class BkgSubtractionWidget(QtGui.QWidget):
             icon = QtGui.QIcon.fromTheme("document-open")
             self.__ui.selectPushButton.setIcon(icon)
 
-        self.__ui.selectBFPushButton.clicked.connect(
-            self._showBFImageSelection)
-        self.__ui.selectCurrentBFPushButton.hide()
-        self.__ui.selectCurrentBFPushButton.clicked.connect(self._useCurrentBF)
-
-        self.__ui.selectBFFilePushButton.hide()
-        self.__ui.selectBFFilePushButton.clicked.connect(
-            self._showBFFileDialog)
-        self.__ui.applyBFCheckBox.clicked.connect(
-            self._emitApplyBFStateChanged)
         self.__ui.dfsfLineEdit.textChanged.connect(
             self._emitBkgScalingFactorChanged)
-        self.__ui.bfsfLineEdit.textChanged.connect(
-            self._emitBFScalingFactorChanged)
         if QtGui.QIcon.hasThemeIcon("document-open"):
             icon = QtGui.QIcon.fromTheme("document-open")
-            self.__ui.selectBFPushButton.setIcon(icon)
+            self.__ui.selectPushButton.setIcon(icon)
 
     def setBkgScalingFactor(self, scale):
         """ sets the background scaling factor
@@ -113,14 +93,6 @@ class BkgSubtractionWidget(QtGui.QWidget):
         :type scale: :obj:`float` or :obj:`str`
         """
         self.__ui.dfsfLineEdit.setText(str(scale if scale is not None else ""))
-
-    def setBFScalingFactor(self, scale):
-        """ sets the bright field scaling factor
-
-        :param scale: bright field scaling factor
-        :type scale: :obj:`float` or :obj:`str`
-        """
-        self.__ui.bfsfLineEdit.setText(str(scale if scale is not None else ""))
 
     def bkgScalingFactor(self):
         """ provides background scaling factor
@@ -134,29 +106,11 @@ class BkgSubtractionWidget(QtGui.QWidget):
             scale = None
         return scale
 
-    def bfScalingFactor(self):
-        """ provides bright field scaling factor
-
-        :returns: bright field scaling factor
-        :rtype: :obj:`float`
-        """
-        try:
-            scale = float(self.__ui.bfsfLineEdit.text())
-        except Exception:
-            scale = None
-        return scale
-
     @QtCore.pyqtSlot()
     def _emitBkgScalingFactorChanged(self):
         """ emits bkg scaling factor chnaged
         """
         self.bkgScalingFactorChanged.emit()
-
-    @QtCore.pyqtSlot()
-    def _emitBFScalingFactorChanged(self):
-        """ emits BF scaling factor chnaged
-        """
-        self.bfScalingFactorChanged.emit()
 
     @QtCore.pyqtSlot(bool)
     def _emitApplyStateChanged(self, state):
@@ -166,15 +120,6 @@ class BkgSubtractionWidget(QtGui.QWidget):
         :type state: :obj:`bool`
         """
         self.applyStateChanged.emit(int(state))
-
-    @QtCore.pyqtSlot(bool)
-    def _emitApplyBFStateChanged(self, state):
-        """ emits state of apply brightfield button
-
-        :param state: apply button state
-        :type state: :obj:`bool`
-        """
-        self.applyBFStateChanged.emit(int(state))
 
     @QtCore.pyqtSlot()
     def _showFileDialog(self):
@@ -194,24 +139,6 @@ class BkgSubtractionWidget(QtGui.QWidget):
             self.bkgFileSelected.emit(self.__settings.bkgimagename)
             self.__hideImageSelection()
 
-    @QtCore.pyqtSlot()
-    def _showBFFileDialog(self):
-        """ shows file dialog and select the file name
-        """
-        fileDialog = QtGui.QFileDialog()
-
-        fileout = fileDialog.getOpenFileName(
-            self, 'Open file', self.__settings.bfimagename or '.')
-        if isinstance(fileout, tuple):
-            fileName = str(fileout[0])
-        else:
-            fileName = str(fileout)
-        if fileName:
-            self.__settings.bfimagename = fileName
-            self.setDisplayedBFName(self.__settings.bfimagename)
-            self.bfFileSelected.emit(self.__settings.bfimagename)
-            self.__hideBFImageSelection()
-
     def setBackground(self, fname):
         """ sets the image background
 
@@ -224,31 +151,12 @@ class BkgSubtractionWidget(QtGui.QWidget):
         self.__ui.applyBkgCheckBox.setChecked(True)
         self.applyStateChanged.emit(2)
 
-    def setBrightField(self, fname):
-        """ sets the image background
-
-        :param fname: file name
-        :type fname: :obj:`str`
-        """
-        self.__settings.bfimagename = fname
-        self.setDisplayedBFName(fname)
-        self.bfFileSelected.emit(fname)
-        self.__ui.applyBFCheckBox.setChecked(True)
-        self.applyBFStateChanged.emit(2)
-
     @QtCore.pyqtSlot()
     def _useCurrent(self):
         """ emits useCurrentImageAsBkg and hides image selection
         """
         self.useCurrentImageAsBkg.emit()
         self.__hideImageSelection()
-
-    @QtCore.pyqtSlot()
-    def _useCurrentBF(self):
-        """ emits useCurrentImageAsBF and hides image selection
-        """
-        self.useCurrentImageAsBF.emit()
-        self.__hideBFImageSelection()
 
     def setDisplayedName(self, name):
         """ sets displayed file name
@@ -263,19 +171,6 @@ class BkgSubtractionWidget(QtGui.QWidget):
             self.__ui.fileLabel.setText("..." + str(name)[-24:])
             self.__ui.applyBkgCheckBox.setEnabled(True)
 
-    def setDisplayedBFName(self, name):
-        """ sets displayed file name
-
-        :param name: file name
-        :type name: :obj:`str`
-        """
-        if name == "":
-            self.__ui.bfFileLabel.setText("no Image selected")
-            self.__ui.applyBFCheckBox.setEnabled(False)
-        else:
-            self.__ui.bfFileLabel.setText("..." + str(name)[-24:])
-            self.__ui.applyBFCheckBox.setEnabled(True)
-
     @QtCore.pyqtSlot()
     def _showImageSelection(self):
         """ shows image selection
@@ -285,20 +180,10 @@ class BkgSubtractionWidget(QtGui.QWidget):
         self.__ui.selectPushButton.hide()
 
     @QtCore.pyqtSlot()
-    def _showBFImageSelection(self):
-        """ shows image selection
-        """
-        self.__ui.selectCurrentBFPushButton.show()
-        self.__ui.selectBFFilePushButton.show()
-        self.__ui.selectBFPushButton.hide()
-
-    @QtCore.pyqtSlot()
     def showScalingFactors(self, show=True):
         if show:
-            self.__ui.bfsfWidget.show()
             self.__ui.dfsfWidget.show()
         else:
-            self.__ui.bfsfWidget.hide()
             self.__ui.dfsfWidget.hide()
 
     def __hideImageSelection(self):
@@ -307,24 +192,6 @@ class BkgSubtractionWidget(QtGui.QWidget):
         self.__ui.selectCurrentPushButton.hide()
         self.__ui.selectFilePushButton.hide()
         self.__ui.selectPushButton.show()
-
-    def __hideBFImageSelection(self):
-        """ hides image selection
-        """
-        self.__ui.selectCurrentBFPushButton.hide()
-        self.__ui.selectBFFilePushButton.hide()
-        self.__ui.selectBFPushButton.show()
-
-    def checkBFSubtraction(self, state):
-        """ unchecks apply CheckBox if state is 1 and it is checked
-        and reset the display
-
-        :param state: checkbox state
-        :type state:  :obj:`int`
-        """
-        if not state and self.__ui.applyBFCheckBox.isChecked():
-            self.__ui.applyBFCheckBox.setChecked(False)
-            self.setDisplayedBFName("")
 
     def checkBkgSubtraction(self, state):
         """ unchecks apply CheckBox if state is 1 and it is checked
@@ -343,13 +210,6 @@ class BkgSubtractionWidget(QtGui.QWidget):
         :rtype: :obj:`bool`
         """
         return self.__ui.applyBkgCheckBox.isChecked()
-
-    def isBFSubApplied(self):
-        """ if brightfield correction applied
-        :returns: apply status
-        :rtype: :obj:`bool`
-        """
-        return self.__ui.applyBFCheckBox.isChecked()
 
 
 if __name__ == "__main__":
