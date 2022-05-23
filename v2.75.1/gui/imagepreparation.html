@@ -1,0 +1,140 @@
+
+
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Preparation &#8212; LaVue 2.75.1 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Scaling and Display Levels" href="scaling.html" />
+    <link rel="prev" title="Memory Buffer" href="memorybuffer.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="scaling.html" title="Scaling and Display Levels"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="memorybuffer.html" title="Memory Buffer"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LaVue 2.75.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">GUI User Guide</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Image Preparation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="image-preparation">
+<span id="id1"></span><h1>Image Preparation<a class="headerlink" href="#image-preparation" title="Permalink to this headline">¶</a></h1>
+<div class="figure align-default">
+<img alt="../_images/lavuepreparation.png" src="../_images/lavuepreparation.png" />
+</div>
+<ul class="simple">
+<li><p><strong>Background/DarkField image:</strong> subtract background or dark field image from a file or from an image source</p></li>
+<li><p><strong>Normalization/BrightField image:</strong> apply normalization or bright field image correction from a file or from an image source, i.e. <cite>(image - DF) / (BF - DF)</cite></p></li>
+<li><p><strong>DF scaling factor:</strong> multiplicative correction to the background or dark field image</p></li>
+<li><p><strong>BF scaling factor:</strong> multiplicative correction to the brightfield  image</p></li>
+<li><p><strong>Mask image:</strong> mask plotted image with respect to a file.
+Convention of zero mask pixels can be set in the configuration,  by default none-zero masks pixel to zero.</p></li>
+<li><p><strong>Mask values above:</strong> mask image pixels which have intensity above the given value</p></li>
+<li><p><strong>Transformation:</strong> all 8 possible. Whether axes are changing with transformations or not can be set in the configuration.</p></li>
+</ul>
+<p>Background image and mask image can be loaded from the file formats supported by <a class="reference external" href="https://pypi.org/project/fabio/">fabio</a> or a <a class="reference external" href="https://www.nexusformat.org/">NeXus file</a>.</p>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="memorybuffer.html"
+                        title="previous chapter">Memory Buffer</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scaling.html"
+                        title="next chapter">Scaling and Display Levels</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../index/../../v2.75.1/index.html">v2.75.1</a></li>
+      <li><a class="reference external" href="../index/../../v2.74.0/index.html">v2.74.0</a></li>
+      <li><a class="reference external" href="../index/../../v2.73.0/index.html">v2.73.0</a></li>
+      <li><a class="reference external" href="../index/../../v2.72.0/index.html">v2.72.0</a></li>
+      <li><a class="reference external" href="../index/../../v2.71.1/index.html">v2.71.1</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="scaling.html" title="Scaling and Display Levels"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="memorybuffer.html" title="Memory Buffer"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LaVue 2.75.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >GUI User Guide</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Image Preparation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+
+GNU GENERAL PUBLIC LICENSE, version 2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>
