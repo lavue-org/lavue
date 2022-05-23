@@ -1008,8 +1008,8 @@ class LevelsGroupBox(QtGui.QWidget):
         }
         scalelabel = {
             "log": "log scale!",
-            "linear": "log linear!",
-            "sqrt": "log sqrt!",
+            "linear": "linear scale!",
+            "sqrt": "sqrt scale!",
         }
         if scalingtype in scalefun.keys():
             sfun = scalefun[scalingtype]
