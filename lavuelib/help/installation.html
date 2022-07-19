@@ -5,12 +5,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Installation &#8212; LaVue 2.75.1 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Installation &#8212; LaVue 2.75.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
     
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -39,7 +40,7 @@
         <li class="right" >
           <a href="index.html" title="Live Image Viewer"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">LaVue 2.75.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LaVue 2.75.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Installation</a></li> 
       </ul>
     </div>  
@@ -49,84 +50,84 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="installation">
+  <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <p>LaVue requires the following python packages: <code class="docutils literal notranslate"><span class="pre">qt5/qt4</span></code>  <code class="docutils literal notranslate"><span class="pre">pyqtgraph</span></code>  <code class="docutils literal notranslate"><span class="pre">numpy</span></code>  <code class="docutils literal notranslate"><span class="pre">zmq</span></code>  <code class="docutils literal notranslate"><span class="pre">scipy</span></code></p>
 <p>It is also recommended to install: <code class="docutils literal notranslate"><span class="pre">pytango</span></code>  <code class="docutils literal notranslate"><span class="pre">hidra</span></code>  <code class="docutils literal notranslate"><span class="pre">pil</span></code>  <code class="docutils literal notranslate"><span class="pre">fabio</span></code>  <code class="docutils literal notranslate"><span class="pre">requests</span></code>  <code class="docutils literal notranslate"><span class="pre">h5py</span></code>  <code class="docutils literal notranslate"><span class="pre">pninexus</span></code>  <code class="docutils literal notranslate"><span class="pre">nxstools</span></code></p>
-<div class="section" id="from-sources">
+<section id="from-sources">
 <h2>From sources<a class="headerlink" href="#from-sources" title="Permalink to this headline">¶</a></h2>
 <p>Download the latest LaVue version from <a class="reference external" href="https://github.com/lavue-org/lavue">https://github.com/lavue-org/lavue</a></p>
 <p>Extract sources and run</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> python setup.py install
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python setup.py install
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> script may need: <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>  <code class="docutils literal notranslate"><span class="pre">sphinx</span></code>  <code class="docutils literal notranslate"><span class="pre">numpy</span></code>  <code class="docutils literal notranslate"><span class="pre">pytest</span></code> python packages as well as <code class="docutils literal notranslate"><span class="pre">qtbase5-dev-tools</span></code> or <code class="docutils literal notranslate"><span class="pre">libqt4-dev-bin</span></code>.</p>
-</div>
-<div class="section" id="debian-packages">
+</section>
+<section id="debian-packages">
 <h2>Debian packages<a class="headerlink" href="#debian-packages" title="Permalink to this headline">¶</a></h2>
 <p>Debian <cite>bullseye</cite>, <cite>buster</cite> and <cite>stretch</cite> or Ubuntu  <cite>impish</cite>, <cite>hirsute</cite>, <cite>focal</cite>, <cite>bionic</cite> packages can be found in the HDRI repository.</p>
 <p>To install the debian packages, add the PGP repository key</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo su
-<span class="gp">$</span> curl -s http://repos.pni-hdri.de/debian_repo.pub.gpg  <span class="p">|</span> gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
-<span class="gp">$</span> chmod <span class="m">644</span> /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo su
+<span class="gp">$ </span>curl -s http://repos.pni-hdri.de/debian_repo.pub.gpg  <span class="p">|</span> gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
+<span class="gp">$ </span>chmod <span class="m">644</span> /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
 </pre></div>
 </div>
 <p>and then download the corresponding source list, e.g.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> /etc/apt/sources.list.d
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span> /etc/apt/sources.list.d
 </pre></div>
 </div>
 <p>and</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wget http://repos.pni-hdri.de/bullseye-pni-hdri.list
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>wget http://repos.pni-hdri.de/bullseye-pni-hdri.list
 </pre></div>
 </div>
 <p>or</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wget http://repos.pni-hdri.de/buster-pni-hdri.list
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>wget http://repos.pni-hdri.de/buster-pni-hdri.list
 </pre></div>
 </div>
 <p>or</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wget http://repos.pni-hdri.de/focal-pni-hdri.list
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>wget http://repos.pni-hdri.de/focal-pni-hdri.list
 </pre></div>
 </div>
 <p>respectively.</p>
 <p>Finally,</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> apt-get update
-<span class="gp">$</span> apt-get install python3-lavue
-<span class="gp">$</span> apt-get install lavue-controller
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>apt-get update
+<span class="gp">$ </span>apt-get install python3-lavue
+<span class="gp">$ </span>apt-get install lavue-controller
 </pre></div>
 </div>
 <p>or</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> apt-get install lavue-controller3
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>apt-get install lavue-controller3
 </pre></div>
 </div>
 <p>for python 3 version (for older debian/ubuntu releases).</p>
-</div>
-<div class="section" id="from-pip">
+</section>
+<section id="from-pip">
 <h2>From pip<a class="headerlink" href="#from-pip" title="Permalink to this headline">¶</a></h2>
 <p>To install it from pip you need to install pyqt5 in advance, e.g.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> python3 -m venv myvenv
-<span class="gp">$</span> . myvenv/bin/activate
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3 -m venv myvenv
+<span class="gp">$ </span>. myvenv/bin/activate
 
-<span class="gp">$</span> pip install pyqt5
+<span class="gp">$ </span>pip install pyqt5
 </pre></div>
 </div>
 <p>or</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install <span class="nv">PyQt5</span><span class="o">==</span><span class="m">5</span>.14
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip install <span class="nv">PyQt5</span><span class="o">==</span><span class="m">5</span>.14
 </pre></div>
 </div>
 <p>and then</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install lavue
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip install lavue
 </pre></div>
 </div>
 <p>Moreover it is also good to install the following python packages:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install fabio
-<span class="gp">$</span> pip install pillow
-<span class="gp">$</span> pip install pyFAI
-<span class="gp">$</span> pip install lavuefilters
-<span class="gp">$</span> pip install pytango
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip install fabio
+<span class="gp">$ </span>pip install pillow
+<span class="gp">$ </span>pip install pyFAI
+<span class="gp">$ </span>pip install lavuefilters
+<span class="gp">$ </span>pip install pytango
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -180,7 +181,7 @@
         <li class="right" >
           <a href="index.html" title="Live Image Viewer"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">LaVue 2.75.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LaVue 2.75.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Installation</a></li> 
       </ul>
     </div>
@@ -188,7 +189,7 @@
         &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.3.
     </div>
   </body>
 </html>

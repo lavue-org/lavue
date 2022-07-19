@@ -5117,13 +5117,21 @@ class DiffractogramToolWidget(ToolBaseWidget):
                        self._mainwidget.maskValueIndices() is not None:
                         if mask is None:
                             mask = np.zeros(dts.shape)
-                        mask[self._mainwidget.maskValueIndices().T] = 1
+                        try:
+                            mask[self._mainwidget.maskValueIndices().T] = 1
+                        except Exception as e:
+                            logger.warning(str(e))
+                            return xl, yl, timestamp
                     if self.__settings.showmask and \
                        self._mainwidget.applyMask() and \
                        self._mainwidget.maskIndices() is not None:
                         if mask is None:
                             mask = np.zeros(dts.shape)
-                        mask[self._mainwidget.maskIndices().T] = 1
+                        try:
+                            mask[self._mainwidget.maskIndices().T] = 1
+                        except Exception as e:
+                            logger.warning(str(e))
+                            return xl, yl, timestamp
                     for i in range(nrplots):
                         try:
                             with QtCore.QMutexLocker(self.__settings.aimutex):
@@ -5233,9 +5241,10 @@ class DiffractogramToolWidget(ToolBaseWidget):
                 if len(self.__azrange) > i else None
             results["diff_%s" % (i + 1)] = [xl[i], yl[i]]
             if pxl is not None and pyl is not None:
-                results["peaks_%s" % (i + 1)] = [pxl[i], pyl[i]]
-                if pel is not None:
-                    results["peaks_%s_error" % (i + 1)] = pel[i]
+                if len(pxl) > i and len(pyl) > i:
+                    results["peaks_%s" % (i + 1)] = [pxl[i], pyl[i]]
+                    if pel is not None:
+                        results["peaks_%s_error" % (i + 1)] = pel[i]
         results["unit"] = self.__units[self.__unitindex]
         self._mainwidget.writeAttribute(
             "ToolResults", json.dumps(results, cls=numpyEncoder))

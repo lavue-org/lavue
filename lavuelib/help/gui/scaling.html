@@ -5,12 +5,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Scaling and Display Levels &#8212; LaVue 2.75.1 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Scaling and Display Levels &#8212; LaVue 2.75.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -39,7 +40,7 @@
         <li class="right" >
           <a href="imagepreparation.html" title="Image Preparation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">LaVue 2.75.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LaVue 2.75.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">GUI User Guide</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Scaling and Display Levels</a></li> 
       </ul>
@@ -50,12 +51,12 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="scaling-and-display-levels">
+  <section id="scaling-and-display-levels">
 <span id="scaling"></span><h1>Scaling and Display Levels<a class="headerlink" href="#scaling-and-display-levels" title="Permalink to this headline">¶</a></h1>
 <p>In <strong>Display levels and colors</strong> user sets mapping between image pixel intensities and displayed colors on the 2D plot.</p>
-<div class="figure align-default">
+<figure class="align-default">
 <img alt="../_images/autolevels_lavue.png" src="../_images/autolevels_lavue.png" />
-</div>
+</figure>
 <ul class="simple">
 <li><p><strong>scaling:</strong> <cite>sqrt</cite>, <cite>linear</cite> or <cite>log</cite> – basic intensity scale for 2D images
 applied to <cite>Image Statistics/1D plot</cite> or not  – depending on <em>Configuration</em></p></li>
@@ -69,20 +70,20 @@ applied to <cite>Image Statistics/1D plot</cite> or not  – depending on <em>Co
 <p>By clicking the right-mouse-button on the color gradient bar you can <strong>save</strong> or <strong>remove</strong> your current <strong>customize color gradient</strong> into the local configuration (only in the expert mode).</p>
 <p>For multi-channel images user can select a separate color channel, a sum or mean of all color channels or an RGB view.</p>
 <p>With Map images to color channels in  <em>Configuration/General</em> checked on the user can adjust intensity display levels for each image sources separately on <strong>RGB histogram</strong>, e.g.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> lavue -s test<span class="se">\;</span>tangoattr -c <span class="se">\;</span>sys/tg_test/1/double_image_ro -i linear --channel rgb -l green -x
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>lavue -s test<span class="se">\;</span>tangoattr -c <span class="se">\;</span>sys/tg_test/1/double_image_ro -i linear --channel rgb -l green -x
 </pre></div>
 </div>
 <p>lunches lavue with two image sources: test and sys/tg_test/1/double_image_ro tango attribute</p>
-<div class="figure align-default">
+<figure class="align-default">
 <img alt="../_images/lavue_rgbhistogram.png" src="../_images/lavue_rgbhistogram.png" />
-</div>
+</figure>
 <p>The test image source in the red channel has the intensity maximal value ~30 times larger than the tango image source image.  With the RGB histogram lavue adjusts the intensity levels separately for the each color channel so both images are visible in one time.</p>
 <p>To display RGB image channels with the <strong>gradient color maps</strong> set <strong>Configuration -&gt; General -&gt; Image Display -&gt; Image channels with gradient colors</strong> i.e.</p>
-<div class="figure align-default">
+<figure class="align-default">
 <img alt="../_images/lavue_multigradientcolors.png" src="../_images/lavue_multigradientcolors.png" />
-</div>
+</figure>
 <p>Other option to make both image visible is to use the <strong>WeightedSum</strong> filter from lavuelib.plugins.filters which performs the weighted sum of all channel images.</p>
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -126,7 +127,7 @@ applied to <cite>Image Statistics/1D plot</cite> or not  – depending on <em>Co
         <li class="right" >
           <a href="imagepreparation.html" title="Image Preparation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">LaVue 2.75.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LaVue 2.75.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >GUI User Guide</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Scaling and Display Levels</a></li> 
       </ul>
@@ -135,7 +136,7 @@ applied to <cite>Image Statistics/1D plot</cite> or not  – depending on <em>Co
         &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.3.
     </div>
   </body>
 </html>
