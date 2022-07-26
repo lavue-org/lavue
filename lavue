@@ -35,6 +35,7 @@ from argparse import RawTextHelpFormatter
 
 import lavuelib
 import lavuelib.liveViewer
+import pyqtgraph
 from pyqtgraph import QtCore, QtGui
 
 dialog = None
@@ -305,7 +306,10 @@ def main():
     logger = logging.getLogger("lavue")
     lavuelib.liveViewer.setLoggerLevel(logger, options.log)
 
-    app = QtGui.QApplication(['LaVue'])
+    try:
+        app = pyqtgraph.QtWidgets.QApplication(['LaVue'])
+    except Exception:
+        app = QtGui.QApplication(['LaVue'])
     setupHandler()
     if options.style:
         app.setStyle(options.style)
