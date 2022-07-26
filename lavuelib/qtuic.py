@@ -38,9 +38,14 @@ if qt_api != 'pyqt4':
         from PyQt5 import uic
         # from PyQt5.QtWebKitWidgets import QWebView
         try:
-            QWebView = __import__(
-                'PyQt5.QtWebKitWidgets', globals(), locals(),
-                ['QWebView'], 0).QWebView
+            try:
+                QWebView = __import__(
+                    'PyQt5.QtWebKitWidgets', globals(), locals(),
+                    ['QWebView'], 0).QWebView
+            except Exception:
+                QWebView = __import__(
+                    'PyQt5.QtWebEngineWidgets', globals(), locals(),
+                    ['QWebEngineView'], 0).QWebEngineView
         except Exception as e:
             import traceback
             value = traceback.format_exc()
