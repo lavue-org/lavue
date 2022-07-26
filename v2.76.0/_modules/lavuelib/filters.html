@@ -1,0 +1,253 @@
+
+
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lavuelib.filters &#8212; LaVue 2.76.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.76.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lavuelib.filters</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for lavuelib.filters</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (C) 2017  DESY, Notkestr. 85, D-22607 Hamburg</span>
+<span class="c1">#</span>
+<span class="c1"># lavue is an image viewing program for photon science imaging detectors.</span>
+<span class="c1"># Its usual application is as a live viewer using hidra as data source.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is free software; you can redistribute it and/or</span>
+<span class="c1"># modify it under the terms of the GNU General Public License</span>
+<span class="c1"># as published by the Free Software Foundation in  version 2</span>
+<span class="c1"># of the License.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with this program; if not, write to the Free Software</span>
+<span class="c1"># Foundation, Inc., 51 Franklin Street, Fifth Floor,</span>
+<span class="c1"># Boston, MA  02110-1301, USA.</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:</span>
+<span class="c1">#     Jan Kotanski &lt;jan.kotanski@desy.de&gt;</span>
+<span class="c1">#</span>
+
+<span class="sd">&quot;&quot;&quot; set of image sources &quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+
+<span class="k">def</span> <span class="nf">_tostr</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; converts text  to str type</span>
+
+<span class="sd">    :param text: text</span>
+<span class="sd">    :type text: :obj:`bytes` or :obj:`unicode`</span>
+<span class="sd">    :returns: text in str type</span>
+<span class="sd">    :rtype: :obj:`str`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">text</span>
+    <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="BaseFilter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filters.BaseFilter">[docs]</a><span class="k">class</span> <span class="nc">BaseFilter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot; filter base class&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param name: image name</span>
+<span class="sd">        :type metadata: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#: (:obj:`str`) configuration string</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__configuration</span> <span class="o">=</span> <span class="n">configuration</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">imagename</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">imagewg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get metadata</span>
+
+<span class="sd">        :param image: numpy array with an image</span>
+<span class="sd">        :type image: :class:`numpy.ndarray`</span>
+<span class="sd">        :param imagename: image name</span>
+<span class="sd">        :type imagename: :obj:`str`</span>
+<span class="sd">        :param metadata: JSON dictionary with metadata</span>
+<span class="sd">        :type metadata: :obj:`str`</span>
+<span class="sd">        :param imagewg: image wigdet</span>
+<span class="sd">        :type imagewg: :class:`lavuelib.imageWidget.ImageWidget`</span>
+<span class="sd">        :returns: numpy array with an image</span>
+<span class="sd">        :rtype: :class:`numpy.ndarray` or `None`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="BaseFilter.initialize"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filters.BaseFilter.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; initialize the filter</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="BaseFilter.terminate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filters.BaseFilter.terminate">[docs]</a>    <span class="k">def</span> <span class="nf">terminate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; stop filter</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="FilterList"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filters.FilterList">[docs]</a><span class="k">class</span> <span class="nc">FilterList</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot; Filter list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configlist</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param configlist: list with filter configuration</span>
+<span class="sd">        :type configlist: \</span>
+<span class="sd">        :    :obj:`list` &lt; [:obj:`str` , :obj:`str`] &gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">list</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">configlist</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">appendFilter</span><span class="p">(</span><span class="n">configlist</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FilterList.reset"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filters.FilterList.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configlist</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; reset filters</span>
+
+<span class="sd">        :param configlist: list with filter configuration</span>
+<span class="sd">        :type configlist: \</span>
+<span class="sd">        :    :obj:`list` &lt; [:obj:`str` , :obj:`str`] &gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">appendFilters</span><span class="p">(</span><span class="n">configlist</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FilterList.appendFilters"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filters.FilterList.appendFilters">[docs]</a>    <span class="k">def</span> <span class="nf">appendFilters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configlist</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; appends filters</span>
+
+<span class="sd">        :param configlist: list with filter configuration</span>
+<span class="sd">        :type configlist: \</span>
+<span class="sd">        :    :obj:`list` &lt; [:obj:`str` , :obj:`str`] &gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">modulename</span><span class="p">,</span> <span class="n">params</span> <span class="ow">in</span> <span class="n">configlist</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">modulename</span><span class="p">:</span>
+                <span class="n">pkl</span> <span class="o">=</span> <span class="n">_tostr</span><span class="p">(</span><span class="n">modulename</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+                <span class="n">pkg</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pkl</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">pkg</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">pdec</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">pkg</span><span class="p">]</span>
+                    <span class="n">dec</span> <span class="o">=</span> <span class="n">pdec</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">dec</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">globals</span><span class="p">(),</span>
+                                     <span class="nb">locals</span><span class="p">(),</span> <span class="n">pkl</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__append</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">dec</span><span class="p">,</span> <span class="n">pkl</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">params</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imgfilter</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; adds additional imgfilter</span>
+
+<span class="sd">        :param imgfilter: imgfilter class or function</span>
+<span class="sd">        :type imgfilter: :class:`BaseFilter`</span>
+<span class="sd">        :param params:  constructor parameters</span>
+<span class="sd">        :type params: :obj:`str`</span>
+<span class="sd">        :returns: name of imgfilter</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">imgfilter</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">:</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="n">imgfilter</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="n">imgfilter</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="s1">&#39;__call__&#39;</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v2.76.0/index.html">v2.76.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.75.3/index.html">v2.75.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.75.1/index.html">v2.75.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.74.0/index.html">v2.74.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.73.0/index.html">v2.73.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.72.0/index.html">v2.72.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.71.1/index.html">v2.71.1</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.76.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lavuelib.filters</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+
+GNU GENERAL PUBLIC LICENSE, version 2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>
