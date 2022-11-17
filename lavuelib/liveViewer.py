@@ -785,7 +785,8 @@ class LiveViewer(QtGui.QDialog):
         #:    data fetch thread
         self.__dataFetchers = []
         for i, ds in enumerate(self.__datasources):
-            dft = dataFetchThread.DataFetchThread(ds, self.__exchangelists[i])
+            dft = dataFetchThread.DataFetchThread(
+                ds, self.__exchangelists[i], i)
             self.__dataFetchers.append(dft)
             self._stateUpdated.connect(dft.changeStatus)
         self.__dataFetchers[0].newDataNameFetched.connect(self._getNewData)
@@ -2683,7 +2684,8 @@ class LiveViewer(QtGui.QDialog):
                 self.__datasources.append(isr.BaseSource())
                 self.__exchangelists.append(dataFetchThread.ExchangeList())
                 dft = dataFetchThread.DataFetchThread(
-                    self.__datasources[-1], self.__exchangelists[-1])
+                    self.__datasources[-1], self.__exchangelists[-1],
+                    len(self.__exchangelists) - 1)
                 self.__dataFetchers.append(dft)
                 self._stateUpdated.connect(dft.changeStatus)
         self.__sourcewg.setNumberOfSources(nrsources)
@@ -3255,6 +3257,7 @@ class LiveViewer(QtGui.QDialog):
                     time.sleep(self.__settings.refreshrate/100.)
                     cnt += 1
                 if cnt < 100:
+                    # print("READ", i, time.time())
                     name, rawimage, metadata = \
                         self.__exchangelists[i].readData()
                 else:
@@ -3369,8 +3372,13 @@ class LiveViewer(QtGui.QDialog):
 
         self._plot()
         QtCore.QCoreApplication.processEvents()
-        for dft in self.__dataFetchers:
+
+        if len(self.__dataFetchers) > 1:
+            tm = self.__dataFetchers[0].getTimeStamp()
+        for idf, dft in enumerate(self.__dataFetchers):
             dft.ready()
+            if idf:
+                dft.setTimeStamp(tm)
 
     # @debugmethod
     def __updateframeview(self, status=False, slider=False):

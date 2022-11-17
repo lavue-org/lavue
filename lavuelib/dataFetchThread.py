@@ -81,7 +81,7 @@ class DataFetchThread(OmniQThread):
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) new data name signal
     newDataNameFetched = QtCore.pyqtSignal(str, str)
 
-    def __init__(self, datasource, alist):
+    def __init__(self, datasource, alist, tid=0):
         """ constructor
 
         :param datasource: image source
@@ -100,14 +100,22 @@ class DataFetchThread(OmniQThread):
         self.__loop = False
         #: (:obj:`bool`) ready flag
         self.__ready = True
+        #: (:obj:`int`) thread id
+        self.__tid = tid
         #: (:class:`pyqtgraph.QtCore.QMutex`) thread mutex
         self.__mutex = QtCore.QMutex()
+        #: (:obj:`int`) current timestamp
+        self.__tm = time.time()
+        #: (:obj:`int`) current timestamp
+        self.__tm2 = time.time()
+        #: (:obj:`int`) current timestamp
+        self.__dt = 0
 
     def _run(self):
         """ run function of the fetching thread
         """
         self.__loop = True
-        dt = 0
+        self.__dt = 0
         skip = False
         while self.__loop:
             if not self.__isConnected:
@@ -115,8 +123,14 @@ class DataFetchThread(OmniQThread):
             if skip:
                 self.msleep(int(100*GLOBALREFRESHRATE))
             else:
-                self.msleep(max(int(1000*GLOBALREFRESHRATE - dt), 0))
-            t1 = time.time()
+                for _ in range(3):
+                    self.msleep(
+                        max(int((1000*GLOBALREFRESHRATE - self.__dt)/4.), 0))
+            self.msleep(
+                max(int(
+                    1000*GLOBALREFRESHRATE
+                    - (time.time() - self.__tm) * 1000.), 0))
+            self.__tm = time.time()
             if self.__isConnected and self.__ready:
                 try:
                     with QtCore.QMutexLocker(self.__mutex):
@@ -128,13 +142,16 @@ class DataFetchThread(OmniQThread):
                 if name is not None:
                     self.__list.addData(name, img, metadata)
                     self.__ready = False
+                    # print(self.__tid, "ADDED", time.time())
                     self.newDataNameFetched.emit(name, metadata)
                 else:
                     self.__ready = True
                 skip = False
             else:
                 skip = True
-            dt = (time.time() - t1) * 1000.
+            self.__tm2 = time.time()
+            self.__dt = (self.__tm2 - self.__tm) * 1000.
+            # print("END", self.__tid, self.__dt)
 
     @QtCore.pyqtSlot(bool)
     def changeStatus(self, status):
@@ -145,6 +162,23 @@ class DataFetchThread(OmniQThread):
         """
         self.__isConnected = status
         self.__ready = True
+
+    def setTimeStamp(self, tmstamp):
+        """ set time stamp
+
+        :param tmstamp: set timestamp
+        :type tmstamp: :obj:`int`
+        """
+        self.__tm = tmstamp
+        self.__dt = (self.__tm2 - self.__tm+0.0010) * 1000.
+
+    def getTimeStamp(self):
+        """ get time stamp
+
+        :returns: time stamp
+        :rtype: :obj:`int`
+        """
+        return self.__tm
 
     def setDataSource(self, datasource):
         """ sets datasource
