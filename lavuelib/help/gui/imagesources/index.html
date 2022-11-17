@@ -2,26 +2,27 @@
 
 <!doctype html>
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Image Sources and stitching images &#8212; LaVue 2.76.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Image Sources and stitching images &#8212; LaVue 2.77.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/bizstyle.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Hirda" href="hidra.html" />
     <link rel="prev" title="GUI User Guide" href="../index.html" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
-    <script src="_static/css3-mediaqueries.js"></script>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -39,11 +40,32 @@
         <li class="right" >
           <a href="../index.html" title="GUI User Guide"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.76.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">GUI User Guide</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Image Sources and stitching images</a></li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.77.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">GUI User Guide</a> &#187;</li> 
       </ul>
-    </div>  
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">GUI User Guide</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="hidra.html"
+                        title="next chapter">Hirda</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
 
     <div class="document">
       <div class="documentwrapper">
@@ -54,30 +76,30 @@
 <span id="image-sources"></span><h1>Image Sources and stitching images<a class="headerlink" href="#image-sources-and-stitching-images" title="Permalink to this headline">¶</a></h1>
 <p>The user can select in the <strong>IMAGE SOURCES</strong> combo-box  the following source types:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="hidra.html#hidra"><span class="std std-ref">Hidra</span></a> - image from a Hidra server, e.g. Pilatus, Perkin Elmer</p></li>
-<li><p><a class="reference internal" href="http.html#http"><span class="std std-ref">HTTP response</span></a> - image from an http response, e.g. Eiger</p></li>
-<li><p><a class="reference internal" href="tangoattr.html#tango-attr"><span class="std std-ref">Tango Attribute</span></a> - image from a tango attribute, e.g. Lambda, PCO, AGIPD, Jungfrau or LimaCCDs detectors</p></li>
-<li><p><a class="reference internal" href="tangoevents.html#tango-events"><span class="std std-ref">Tango Events</span></a> - image from a tango attribute passed via tango events, e.g. LimaCCDs detectors</p></li>
-<li><p><a class="reference internal" href="tangofile.html#tango-file"><span class="std std-ref">Tango File</span></a> - image defined by file and directory tango attributes, e.g. Pilatus w/o Hidra</p></li>
-<li><p><a class="reference internal" href="doocsprop.html#doocs-prop"><span class="std std-ref">DOOCS Property</span></a> - image from a doocs property, e.g.  FLASH detectors</p></li>
-<li><p><a class="reference internal" href="zmqstream.html#zmq-stream"><span class="std std-ref">ZMQ Stream</span></a> - image from a simple ZMQ server, e.g. lavuezmqstreamfromtango SERVER</p></li>
-<li><p><a class="reference internal" href="nexusfile.html#nexus-file"><span class="std std-ref">Nexus File</span></a> - image from a Nexus/Hdf5 file, e.g. written with SWMR</p></li>
-<li><p><a class="reference internal" href="tineprop.html#tine-prop"><span class="std std-ref">Tine Property</span></a> - image from a tine property, e.g. bpm camera</p></li>
-<li><p><a class="reference internal" href="epicspv.html#epics-pv"><span class="std std-ref">Epics PV</span></a> - image from a Epics Process Variables</p></li>
-<li><p><a class="reference internal" href="asapo.html#asapo"><span class="std std-ref">ASAPO</span></a> - images from a ASAPO server, e.g. data from detectors or postprocessed data</p></li>
-<li><p><a class="reference internal" href="test.html#test"><span class="std std-ref">Test</span></a> - random test image</p></li>
+<li><a class="reference internal" href="hidra.html#hidra"><span class="std std-ref">Hidra</span></a> - image from a Hidra server, e.g. Pilatus, Perkin Elmer</li>
+<li><a class="reference internal" href="http.html#http"><span class="std std-ref">HTTP response</span></a> - image from an http response, e.g. Eiger</li>
+<li><a class="reference internal" href="tangoattr.html#tango-attr"><span class="std std-ref">Tango Attribute</span></a> - image from a tango attribute, e.g. Lambda, PCO, AGIPD, Jungfrau or LimaCCDs detectors</li>
+<li><a class="reference internal" href="tangoevents.html#tango-events"><span class="std std-ref">Tango Events</span></a> - image from a tango attribute passed via tango events, e.g. LimaCCDs detectors</li>
+<li><a class="reference internal" href="tangofile.html#tango-file"><span class="std std-ref">Tango File</span></a> - image defined by file and directory tango attributes, e.g. Pilatus w/o Hidra</li>
+<li><a class="reference internal" href="doocsprop.html#doocs-prop"><span class="std std-ref">DOOCS Property</span></a> - image from a doocs property, e.g.  FLASH detectors</li>
+<li><a class="reference internal" href="zmqstream.html#zmq-stream"><span class="std std-ref">ZMQ Stream</span></a> - image from a simple ZMQ server, e.g. lavuezmqstreamfromtango SERVER</li>
+<li><a class="reference internal" href="nexusfile.html#nexus-file"><span class="std std-ref">Nexus File</span></a> - image from a Nexus/Hdf5 file, e.g. written with SWMR</li>
+<li><a class="reference internal" href="tineprop.html#tine-prop"><span class="std std-ref">Tine Property</span></a> - image from a tine property, e.g. bpm camera</li>
+<li><a class="reference internal" href="epicspv.html#epics-pv"><span class="std std-ref">Epics PV</span></a> - image from a Epics Process Variables</li>
+<li><a class="reference internal" href="asapo.html#asapo"><span class="std std-ref">ASAPO</span></a> - images from a ASAPO server, e.g. data from detectors or postprocessed data</li>
+<li><a class="reference internal" href="test.html#test"><span class="std std-ref">Test</span></a> - random test image</li>
 </ul>
 <p>By enlarging a number of image sources in  the <em>expert</em> mode:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Configuration -&gt; General -&gt; Number of image sources</span>
 </pre></div>
 </div>
 <p>the user  can <strong>combine images</strong> from different sources, i.e. different detectors or detector modules.</p>
-<div class="figure align-default">
+<div class="figure">
 <img alt="../../_images/lavue-multiplesources.png" src="../../_images/lavue-multiplesources.png" />
 </div>
 <ul class="simple">
-<li><p><strong>Offset</strong>: <code class="docutils literal notranslate"><span class="pre">x,y[,TRANSFORMATION]</span></code>  where <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code> are position of the first pixel for a particular image source while optional <code class="docutils literal notranslate"><span class="pre">TRANSFORMATION</span></code> can be  <code class="docutils literal notranslate"><span class="pre">flip-up-down</span></code>, <code class="docutils literal notranslate"><span class="pre">flipud</span></code>, <code class="docutils literal notranslate"><span class="pre">fud</span></code>, <code class="docutils literal notranslate"><span class="pre">flip-left-right</span></code>, <code class="docutils literal notranslate"><span class="pre">fliplr</span></code>, <code class="docutils literal notranslate"><span class="pre">flr</span></code>, <code class="docutils literal notranslate"><span class="pre">transpose</span></code>, <code class="docutils literal notranslate"><span class="pre">t</span></code>, <code class="docutils literal notranslate"><span class="pre">rot90</span></code>, <code class="docutils literal notranslate"><span class="pre">r90</span></code>, <code class="docutils literal notranslate"><span class="pre">rot180</span></code>, <code class="docutils literal notranslate"><span class="pre">r180</span></code>, <code class="docutils literal notranslate"><span class="pre">r270</span></code>, <code class="docutils literal notranslate"><span class="pre">rot270</span></code>, <code class="docutils literal notranslate"><span class="pre">rot180+transpose</span></code>, <code class="docutils literal notranslate"><span class="pre">rot180t</span></code> or <code class="docutils literal notranslate"><span class="pre">r180t</span></code></p></li>
-<li><p><strong>Checkbox</strong> in the tag widget allows for switch on/off the corresponding image source</p></li>
+<li><strong>Offset</strong>: <code class="docutils literal notranslate"><span class="pre">x,y[,TRANSFORMATION]</span></code>  where <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code> are position of the first pixel for a particular image source while optional <code class="docutils literal notranslate"><span class="pre">TRANSFORMATION</span></code> can be  <code class="docutils literal notranslate"><span class="pre">flip-up-down</span></code>, <code class="docutils literal notranslate"><span class="pre">flipud</span></code>, <code class="docutils literal notranslate"><span class="pre">fud</span></code>, <code class="docutils literal notranslate"><span class="pre">flip-left-right</span></code>, <code class="docutils literal notranslate"><span class="pre">fliplr</span></code>, <code class="docutils literal notranslate"><span class="pre">flr</span></code>, <code class="docutils literal notranslate"><span class="pre">transpose</span></code>, <code class="docutils literal notranslate"><span class="pre">t</span></code>, <code class="docutils literal notranslate"><span class="pre">rot90</span></code>, <code class="docutils literal notranslate"><span class="pre">r90</span></code>, <code class="docutils literal notranslate"><span class="pre">rot180</span></code>, <code class="docutils literal notranslate"><span class="pre">r180</span></code>, <code class="docutils literal notranslate"><span class="pre">r270</span></code>, <code class="docutils literal notranslate"><span class="pre">rot270</span></code>, <code class="docutils literal notranslate"><span class="pre">rot180+transpose</span></code>, <code class="docutils literal notranslate"><span class="pre">rot180t</span></code> or <code class="docutils literal notranslate"><span class="pre">r180t</span></code></li>
+<li><strong>Checkbox</strong> in the tag widget allows for switch on/off the corresponding image source</li>
 </ul>
 <p><strong>Start</strong>/ <strong>Stop</strong> button is only at the first source but it applies to all image sources.</p>
 <div class="toctree-wrapper compound">
@@ -100,28 +122,7 @@
 </div>
 
 
-            <div class="clearer"></div>
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../index.html"
-                        title="previous chapter">GUI User Guide</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="hidra.html"
-                        title="next chapter">Hirda</a></p>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -141,16 +142,15 @@
         <li class="right" >
           <a href="../index.html" title="GUI User Guide"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.76.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >GUI User Guide</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Image Sources and stitching images</a></li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.77.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >GUI User Guide</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
     </div>
   </body>
 </html>

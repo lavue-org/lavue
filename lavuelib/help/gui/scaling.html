@@ -2,26 +2,27 @@
 
 <!doctype html>
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Scaling and Display Levels &#8212; LaVue 2.76.0 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Scaling and Display Levels &#8212; LaVue 2.77.0 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/bizstyle.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Image Statistics" href="statistics.html" />
     <link rel="prev" title="Image Preparation" href="imagepreparation.html" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
-    <script src="_static/css3-mediaqueries.js"></script>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -39,56 +40,10 @@
         <li class="right" >
           <a href="imagepreparation.html" title="Image Preparation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">LaVue 2.76.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">GUI User Guide</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Scaling and Display Levels</a></li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">LaVue 2.77.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">GUI User Guide</a> &#187;</li> 
       </ul>
-    </div>  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <div class="section" id="scaling-and-display-levels">
-<span id="scaling"></span><h1>Scaling and Display Levels<a class="headerlink" href="#scaling-and-display-levels" title="Permalink to this headline">¶</a></h1>
-<p>In <strong>Display levels and colors</strong> user sets mapping between image pixel intensities and displayed colors on the 2D plot.</p>
-<div class="figure align-default">
-<img alt="../_images/autolevels_lavue.png" src="../_images/autolevels_lavue.png" />
-</div>
-<ul class="simple">
-<li><p><strong>scaling:</strong> <cite>sqrt</cite>, <cite>linear</cite> or <cite>log</cite> – basic intensity scale for 2D images
-applied to <cite>Image Statistics/1D plot</cite> or not  – depending on <em>Configuration</em></p></li>
-<li><p><strong>Levels:</strong> maximum and minimum intensity displayed. It can be automatic or set by user</p></li>
-<li><p><strong>Auto levels %:</strong> switch to automatic levels settings. You can provide the levels as a cut factor in % of the highest pick.</p></li>
-<li><p><strong>Bin edges</strong>: bin edges algorithm for finding histogram levels</p></li>
-<li><p><strong>Step</strong>: step parameter for the bin edges algorithm for finding histogram levels</p></li>
-<li><p><strong>Histogram</strong>: set intensity levels and color gradients on histogram plot</p></li>
-<li><p><strong>Color gradients</strong>: 12 various basic settings with possibility to adjust with ticks</p></li>
-</ul>
-<p>By clicking the right-mouse-button on the color gradient bar you can <strong>save</strong> or <strong>remove</strong> your current <strong>customize color gradient</strong> into the local configuration (only in the expert mode).</p>
-<p>For multi-channel images user can select a separate color channel, a sum or mean of all color channels or an RGB view.</p>
-<p>With Map images to color channels in  <em>Configuration/General</em> checked on the user can adjust intensity display levels for each image sources separately on <strong>RGB histogram</strong>, e.g.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> lavue -s test<span class="se">\;</span>tangoattr -c <span class="se">\;</span>sys/tg_test/1/double_image_ro -i linear --channel rgb -l green -x
-</pre></div>
-</div>
-<p>lunches lavue with two image sources: test and sys/tg_test/1/double_image_ro tango attribute</p>
-<div class="figure align-default">
-<img alt="../_images/lavue_rgbhistogram.png" src="../_images/lavue_rgbhistogram.png" />
-</div>
-<p>The test image source in the red channel has the intensity maximal value ~30 times larger than the tango image source image.  With the RGB histogram lavue adjusts the intensity levels separately for the each color channel so both images are visible in one time.</p>
-<p>To display RGB image channels with the <strong>gradient color maps</strong> set <strong>Configuration -&gt; General -&gt; Image Display -&gt; Image channels with gradient colors</strong> i.e.</p>
-<div class="figure align-default">
-<img alt="../_images/lavue_multigradientcolors.png" src="../_images/lavue_multigradientcolors.png" />
-</div>
-<p>Other option to make both image visible is to use the <strong>WeightedSum</strong> filter from lavuelib.plugins.filters which performs the weighted sum of all channel images.</p>
-</div>
-
-
-            <div class="clearer"></div>
-          </div>
-        </div>
-      </div>
+    </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
@@ -98,15 +53,61 @@ applied to <cite>Image Statistics/1D plot</cite> or not  – depending on <em>Co
   <p class="topless"><a href="statistics.html"
                         title="next chapter">Image Statistics</a></p>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="scaling-and-display-levels">
+<span id="scaling"></span><h1>Scaling and Display Levels<a class="headerlink" href="#scaling-and-display-levels" title="Permalink to this headline">¶</a></h1>
+<p>In <strong>Display levels and colors</strong> user sets mapping between image pixel intensities and displayed colors on the 2D plot.</p>
+<div class="figure">
+<img alt="../_images/autolevels_lavue.png" src="../_images/autolevels_lavue.png" />
+</div>
+<ul class="simple">
+<li><strong>scaling:</strong> <cite>sqrt</cite>, <cite>linear</cite> or <cite>log</cite> – basic intensity scale for 2D images
+applied to <cite>Image Statistics/1D plot</cite> or not  – depending on <em>Configuration</em></li>
+<li><strong>Levels:</strong> maximum and minimum intensity displayed. It can be automatic or set by user</li>
+<li><strong>Auto levels %:</strong> switch to automatic levels settings. You can provide the levels as a cut factor in % of the highest pick.</li>
+<li><strong>Bin edges</strong>: bin edges algorithm for finding histogram levels</li>
+<li><strong>Step</strong>: step parameter for the bin edges algorithm for finding histogram levels</li>
+<li><strong>Histogram</strong>: set intensity levels and color gradients on histogram plot</li>
+<li><strong>Color gradients</strong>: 12 various basic settings with possibility to adjust with ticks</li>
+</ul>
+<p>By clicking the right-mouse-button on the color gradient bar you can <strong>save</strong> or <strong>remove</strong> your current <strong>customize color gradient</strong> into the local configuration (only in the expert mode).</p>
+<p>For multi-channel images user can select a separate color channel, a sum or mean of all color channels or an RGB view.</p>
+<p>With Map images to color channels in  <em>Configuration/General</em> checked on the user can adjust intensity display levels for each image sources separately on <strong>RGB histogram</strong>, e.g.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> lavue -s test<span class="se">\;</span>tangoattr -c <span class="se">\;</span>sys/tg_test/1/double_image_ro -i linear --channel rgb -l green -x
+</pre></div>
+</div>
+<p>lunches lavue with two image sources: test and sys/tg_test/1/double_image_ro tango attribute</p>
+<div class="figure">
+<img alt="../_images/lavue_rgbhistogram.png" src="../_images/lavue_rgbhistogram.png" />
+</div>
+<p>The test image source in the red channel has the intensity maximal value ~30 times larger than the tango image source image.  With the RGB histogram lavue adjusts the intensity levels separately for the each color channel so both images are visible in one time.</p>
+<p>To display RGB image channels with the <strong>gradient color maps</strong> set <strong>Configuration -&gt; General -&gt; Image Display -&gt; Image channels with gradient colors</strong> i.e.</p>
+<div class="figure">
+<img alt="../_images/lavue_multigradientcolors.png" src="../_images/lavue_multigradientcolors.png" />
+</div>
+<p>Other option to make both image visible is to use the <strong>WeightedSum</strong> filter from lavuelib.plugins.filters which performs the weighted sum of all channel images.</p>
+</div>
+
+
+          </div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -126,16 +127,15 @@ applied to <cite>Image Statistics/1D plot</cite> or not  – depending on <em>Co
         <li class="right" >
           <a href="imagepreparation.html" title="Image Preparation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">LaVue 2.76.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >GUI User Guide</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Scaling and Display Levels</a></li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">LaVue 2.77.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >GUI User Guide</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
     </div>
   </body>
 </html>

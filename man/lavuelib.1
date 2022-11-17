@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "LAVUELIB" "1" "Feb 02, 2022" "2.73" "LaVue"
+.TH "LAVUELIB" "1" "Nov 17, 2022" "2.77" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .
@@ -1642,9 +1642,13 @@ The second tab of the configuration dialog contains \fBLayout\fP options. It all
 .IP \(bu 2
 \fBMemory buffer:\fP shows the memory buffer widget
 .IP \(bu 2
-\fBSubtraction:\fP shows the background subtraction  and bright field image sub\-group
+\fBSubtraction:\fP shows the background subtraction sub\-group
 .IP \(bu 2
-\fBSubtraction scaling:\fP multiplicative scaling factors for background and bright field image
+\fBSubtraction factor:\fP multiplicative scaling factors for background
+.IP \(bu 2
+\fBNormalization:\fP shows the bright field image sub\-group
+.IP \(bu 2
+\fBNormalization factor:\fP multiplicative scaling factors for bright field image
 .IP \(bu 2
 \fBMask:\fP shows mask the image widget
 .IP \(bu 2
@@ -1689,7 +1693,7 @@ It allows for the user to adjust image sources and their dialogs.
 .IP \(bu 2
 \fBDetector servers:\fP  possible hidra detector hosts separated by spaces
 .IP \(bu 2
-\fBData port:\fP hidra data port. Each instance of lavue on the same host should use a different data port
+\fBData port:\fP hidra data port or ports separated by spaces (for the multi image source mode). The default port gap in the multi image source mode is 200. Each instance of lavue on the same host should use a different data port.
 .IP \(bu 2
 \fBUse default detector servers:\fP add default detector server names from the DESY pool
 .UNINDENT
@@ -2294,48 +2298,48 @@ create GUI
 .UNINDENT
 .INDENT 7.0
 .TP
-.B xposition
+.B xposition = None
 (\fI\%float\fP) x\-coordinates of the first pixel
 .UNINDENT
 .INDENT 7.0
 .TP
-.B xscale
+.B xscale = None
 (\fI\%float\fP) x\-scale of pixels
 .UNINDENT
 .INDENT 7.0
 .TP
-.B xtext
+.B xtext = None
 (\fI\%str\fP) text of x\-axis
 .UNINDENT
 .INDENT 7.0
 .TP
-.B xunits
+.B xunits = None
 (\fI\%str\fP) units of x\-axis
 .UNINDENT
 .INDENT 7.0
 .TP
-.B yposition
+.B yposition = None
 (\fI\%float\fP) y\-coordinates of the first pixel
 .UNINDENT
 .INDENT 7.0
 .TP
-.B yscale
+.B yscale = None
 (\fI\%float\fP) y\-scale of pixels
 .UNINDENT
 .INDENT 7.0
 .TP
-.B ytext
+.B ytext = None
 (\fI\%str\fP) text of y\-axis
 .UNINDENT
 .INDENT 7.0
 .TP
-.B yunits
+.B yunits = None
 (\fI\%str\fP) units of y\-axis
 .UNINDENT
 .UNINDENT
 .SS lavuelib.bkgSubtractionWidget module
 .sp
-background subtreaction widget
+background subtraction widget
 .INDENT 0.0
 .TP
 .B class lavuelib.bkgSubtractionWidget.BkgSubtractionWidget(parent=None, settings=None)
@@ -2356,36 +2360,8 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B applyBFStateChanged
-(\fBpyqtgraph.QtCore.pyqtSignal\fP) apply state change signal
-.UNINDENT
-.INDENT 7.0
-.TP
 .B applyStateChanged
 (\fBpyqtgraph.QtCore.pyqtSignal\fP) apply state change signal
-.UNINDENT
-.INDENT 7.0
-.TP
-.B bfFileSelected
-(\fBpyqtgraph.QtCore.pyqtSignal\fP) BF file selected signal
-.UNINDENT
-.INDENT 7.0
-.TP
-.B bfScalingFactor()
-provides bright field scaling factor
-.INDENT 7.0
-.TP
-.B Returns
-bright field scaling factor
-.TP
-.B Return type
-\fI\%float\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B bfScalingFactorChanged
-(\fBpyqtgraph.QtCore.pyqtSignal\fP) BF scaling factor change signal
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2412,17 +2388,6 @@ background scaling factor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B checkBFSubtraction(state)
-unchecks apply CheckBox if state is 1 and it is checked
-and reset the display
-.INDENT 7.0
-.TP
-.B Parameters
-\fBstate\fP (\fI\%int\fP) – checkbox state
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
 .B checkBkgSubtraction(state)
 unchecks apply CheckBox if state is 1 and it is checked
 and reset the display
@@ -2434,27 +2399,10 @@ and reset the display
 .UNINDENT
 .INDENT 7.0
 .TP
-.B isBFSubApplied()
-if brightfield correction applied
-:returns: apply status
-:rtype: \fI\%bool\fP
-.UNINDENT
-.INDENT 7.0
-.TP
 .B isBkgSubApplied()
 if background subtraction applied
 :returns: apply status
 :rtype: \fI\%bool\fP
-.UNINDENT
-.INDENT 7.0
-.TP
-.B setBFScalingFactor(scale)
-sets the bright field scaling factor
-.INDENT 7.0
-.TP
-.B Parameters
-\fBscale\fP (\fI\%float\fP or \fI\%str\fP) – bright field scaling factor
-.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2478,26 +2426,6 @@ sets the background scaling factor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B setBrightField(fname)
-sets the image background
-.INDENT 7.0
-.TP
-.B Parameters
-\fBfname\fP (\fI\%str\fP) – file name
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B setDisplayedBFName(name)
-sets displayed file name
-.INDENT 7.0
-.TP
-.B Parameters
-\fBname\fP (\fI\%str\fP) – file name
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
 .B setDisplayedName(name)
 sets displayed file name
 .INDENT 7.0
@@ -2509,11 +2437,6 @@ sets displayed file name
 .INDENT 7.0
 .TP
 .B showScalingFactors(show=True)
-.UNINDENT
-.INDENT 7.0
-.TP
-.B useCurrentImageAsBF
-(\fBpyqtgraph.QtCore.pyqtSignal\fP) use current image signal
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2718,12 +2641,12 @@ thread contructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B commands
+.B commands = None
 (\fI\%list\fP <\fI\%str\fP>) a list of commands
 .UNINDENT
 .INDENT 7.0
 .TP
-.B error
+.B error = None
 (\fI\%Exception\fP) error thrown by the executed command
 .UNINDENT
 .INDENT 7.0
@@ -2733,7 +2656,7 @@ thread contructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B instance
+.B instance = None
 (\fBinstanceobj\fP or \fI\%type\fP) command instance
 .UNINDENT
 .UNINDENT
@@ -2758,7 +2681,7 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B accelbuffersum
+.B accelbuffersum = None
 (\fI\%bool\fP) accelerate buffer sum
 .UNINDENT
 .INDENT 7.0
@@ -2768,67 +2691,67 @@ updates class variables with the form content
 .UNINDENT
 .INDENT 7.0
 .TP
-.B addrois
+.B addrois = None
 (\fI\%bool\fP) add rois enabled
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asapobeamtime
+.B asapobeamtime = None
 (\fI\%str\fP) asapo beamtime id
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asapodatasources
+.B asapodatasources = None
 (\fI\%list\fP < \fI\%str\fP > ) asapo datasources
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asaposerver
+.B asaposerver = None
 (\fI\%str\fP) asapo server
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asaposourcepath
+.B asaposourcepath = None
 (\fI\%str\fP) asapo sourcepath
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asapotoken
+.B asapotoken = None
 (\fI\%str\fP) asapo token
 .UNINDENT
 .INDENT 7.0
 .TP
-.B aspectlocked
+.B aspectlocked = None
 (\fI\%bool\fP) aspect ratio locked
 .UNINDENT
 .INDENT 7.0
 .TP
-.B autodownsample
+.B autodownsample = None
 (\fI\%bool\fP) auto down sample
 .UNINDENT
 .INDENT 7.0
 .TP
-.B autozmqtopics
+.B autozmqtopics = None
 (\fI\%bool\fP) topics for ZMQ stream source fetched from the stream
 .UNINDENT
 .INDENT 7.0
 .TP
-.B availimagesources
+.B availimagesources = None
 (\fI\%str\fP) list with available image source widget names
 .UNINDENT
 .INDENT 7.0
 .TP
-.B availtoolwidgets
+.B availtoolwidgets = None
 (\fI\%str\fP)  list with available tool widget names
 .UNINDENT
 .INDENT 7.0
 .TP
-.B calcvariance
+.B calcvariance = None
 (\fI\%bool\fP) calculate variance
 .UNINDENT
 .INDENT 7.0
 .TP
-.B correctsolidangle
+.B correctsolidangle = None
 (\fI\%bool\fP) correct solid angle flag
 .UNINDENT
 .INDENT 7.0
@@ -2838,27 +2761,27 @@ create GUI
 .UNINDENT
 .INDENT 7.0
 .TP
-.B crosshairlocker
+.B crosshairlocker = None
 (\fI\%bool\fP) crosshair locker switched on
 .UNINDENT
 .INDENT 7.0
 .TP
-.B defdetservers
+.B defdetservers = None
 (\fI\%bool\fP) use default detector servers
 .UNINDENT
 .INDENT 7.0
 .TP
-.B detservers
+.B detservers = None
 (\fI\%str\fP) json hidra detector server list
 .UNINDENT
 .INDENT 7.0
 .TP
-.B diffnpt
+.B diffnpt = None
 (\fI\%int\fP) number of points for diffractogram
 .UNINDENT
 .INDENT 7.0
 .TP
-.B door
+.B door = None
 (\fI\%str\fP) device name of sardana door
 .UNINDENT
 .INDENT 7.0
@@ -2884,257 +2807,267 @@ status flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B filters
+.B filters = None
 (\fI\%str\fP) json list with filters
 .UNINDENT
 .INDENT 7.0
 .TP
-.B floattype
+.B floattype = None
 (\fI\%str\fP) float type for pixel intensity
 .UNINDENT
 .INDENT 7.0
 .TP
-.B geometryfromsource
+.B geometryfromsource = None
 (\fI\%bool\fP) fetch geometry from source
 .UNINDENT
 .INDENT 7.0
 .TP
-.B gradientcolors
+.B gradientcolors = None
 (\fI\%bool\fP) image channels shown with gradient colors
 .UNINDENT
 .INDENT 7.0
 .TP
-.B hidraport
+.B hidraport = None
 (\fI\%str\fP) hidra data port
 .UNINDENT
 .INDENT 7.0
 .TP
-.B imagechannels
+.B imagechannels = None
 (\fI\%bool\fP) map image sources to color channels
 .UNINDENT
 .INDENT 7.0
 .TP
-.B imagesources
+.B imagesources = None
 (\fI\%str\fP) json list with image source widget names
 .UNINDENT
 .INDENT 7.0
 .TP
-.B interruptonerror
+.B interruptonerror = None
 (\fI\%bool\fP) interrupt on error
 .UNINDENT
 .INDENT 7.0
 .TP
-.B keepcoords
+.B keepcoords = None
 (\fI\%bool\fP) keep original coordinates
 .UNINDENT
 .INDENT 7.0
 .TP
-.B lazyimageslider
+.B lazyimageslider = None
 (\fI\%bool\fP) lazy image slider
 .UNINDENT
 .INDENT 7.0
 .TP
-.B maxmbuffersize
+.B maxmbuffersize = None
 (\fI\%str\fP) maximal number of images in memory buffer
 .UNINDENT
 .INDENT 7.0
 .TP
-.B nanmask
+.B nanmask = None
 (\fI\%bool\fP) nan mask enabled
 .UNINDENT
 .INDENT 7.0
 .TP
-.B negmask
+.B negmask = None
 (\fI\%bool\fP) adding maximal type value to negative high value mask
 .UNINDENT
 .INDENT 7.0
 .TP
-.B nrsources
+.B nrsources = None
 (\fI\%int\fP) number of image sources
 .UNINDENT
 .INDENT 7.0
 .TP
-.B nxslast
+.B nxslast = None
 (\fI\%bool\fP) nexus file source starts from the last image
 .UNINDENT
 .INDENT 7.0
 .TP
-.B nxsopen
+.B nxsopen = None
 (\fI\%bool\fP) nexus file source keeps the file open
 .UNINDENT
 .INDENT 7.0
 .TP
-.B orderrois
+.B orderrois = None
 (\fI\%bool\fP) fetch rois order enabled
 .UNINDENT
 .INDENT 7.0
 .TP
-.B refreshrate
+.B refreshrate = None
 (\fI\%float\fP) refresh rate
 .UNINDENT
 .INDENT 7.0
 .TP
-.B roiscolors
+.B roiscolors = None
 (\fI\%str\fP) json list with rois colors
 .UNINDENT
 .INDENT 7.0
 .TP
-.B sardana
+.B sardana = None
 (\fI\%bool\fP) sardana enabled
 .UNINDENT
 .INDENT 7.0
 .TP
-.B secautoport
+.B secautoport = None
 (\fI\%bool\fP) find security stream port automatically
 .UNINDENT
 .INDENT 7.0
 .TP
-.B secport
+.B secport = None
 (\fI\%str\fP) security stream port
 .UNINDENT
 .INDENT 7.0
 .TP
-.B secstream
+.B secstream = None
 (\fI\%bool\fP) security stream enabled
 .UNINDENT
 .INDENT 7.0
 .TP
-.B sendresults
+.B sendresults = None
 (\fI\%bool\fP) send results to LavueController flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B sendrois
+.B sendrois = None
 (\fI\%bool\fP) send rois to LavueController flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showaddhisto
+.B showaddhisto = None
 (\fI\%bool\fP) show color distribution additional histogram widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showallrois
+.B showallrois = None
 (\fI\%bool\fP) show all rois flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showfilters
+.B showfilters = None
 (\fI\%bool\fP) show filter widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showframerate
+.B showframerate = None
 (\fI\%bool\fP) show frame rate widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showhighvaluemask
+.B showhighvaluemask = None
 (\fI\%bool\fP) show high value mask widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showhisto
+.B showhisto = None
 (\fI\%bool\fP) show color distribution histogram widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showlevels
+.B showlevels = None
 (\fI\%bool\fP) show intensity levels widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showmask
+.B showmask = None
 (\fI\%bool\fP) show mask widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showmbuffer
+.B showmbuffer = None
 (\fI\%bool\fP) show memory buffer widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showrange
+.B shownorm = None
+(\fI\%bool\fP) show image normalization widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B shownormsf = None
+(\fI\%bool\fP) show image normalization scaling factor widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B showrange = None
 (\fI\%bool\fP) show range window widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showscale
+.B showscale = None
 (\fI\%bool\fP) show intensity scale widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showstats
+.B showstats = None
 (\fI\%bool\fP) show statistics widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showsteps
+.B showsteps = None
 (\fI\%bool\fP) show image step widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showsub
+.B showsub = None
 (\fI\%bool\fP) show bakcground subtraction widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showsubsf
-(\fI\%bool\fP) show bakcground subtraction scaling widget
+.B showsubsf = None
+(\fI\%bool\fP) show bakcground subtraction scaling factor widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showtrans
+.B showtrans = None
 (\fI\%bool\fP) show transformation widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B singlerois
+.B singlerois = None
 (\fI\%bool\fP) set roi1, roi2, roi3, … when alias names are missing
 .UNINDENT
 .INDENT 7.0
 .TP
-.B sourcedisplay
+.B sourcedisplay = None
 (\fI\%bool\fP) store display parameters for specific sources
 .UNINDENT
 .INDENT 7.0
 .TP
-.B statswoscaling
+.B statswoscaling = None
 (\fI\%bool\fP) statistics without intensity scaling
 .UNINDENT
 .INDENT 7.0
 .TP
-.B storegeometry
+.B storegeometry = None
 (\fI\%bool\fP) store detector geometry
 .UNINDENT
 .INDENT 7.0
 .TP
-.B timeout
+.B timeout = None
 (\fI\%int\fP) image source timeout in ms
 .UNINDENT
 .INDENT 7.0
 .TP
-.B toolpollinginterval
+.B toolpollinginterval = None
 (\fI\%float\fP) tool polling interval is s
 .UNINDENT
 .INDENT 7.0
 .TP
-.B toolrefreshtime
+.B toolrefreshtime = None
 (\fI\%float\fP) tool refresh rate time is s
 .UNINDENT
 .INDENT 7.0
 .TP
-.B toolwidgets
+.B toolwidgets = None
 (\fI\%str\fP)  json list with tool widget names
 .UNINDENT
 .INDENT 7.0
 .TP
-.B zeromask
+.B zeromask = None
 (\fI\%bool\fP) zero mask enabled
 .UNINDENT
 .INDENT 7.0
 .TP
-.B zmqtopics
+.B zmqtopics = None
 (\fI\%list\fP < \fI\%str\fP>) list of topics for ZMQ stream source
 .UNINDENT
 .UNINDENT
@@ -3326,7 +3259,7 @@ callback method receiving the event
 data fetch thread
 .INDENT 0.0
 .TP
-.B class lavuelib.dataFetchThread.DataFetchThread(datasource, alist)
+.B class lavuelib.dataFetchThread.DataFetchThread(datasource, alist, tid=0)
 Bases: \fI\%lavuelib.omniQThread.OmniQThread\fP
 .sp
 constructor
@@ -3357,6 +3290,19 @@ provides read flag
 .UNINDENT
 .INDENT 7.0
 .TP
+.B getTimeStamp()
+get time stamp
+.INDENT 7.0
+.TP
+.B Returns
+time stamp
+.TP
+.B Return type
+\fI\%int\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B isFetching()
 is datasource source connected
 .INDENT 7.0
@@ -3384,6 +3330,16 @@ continue acquisition
 sets datasource
 :param datasource: datasource object
 :type datasource: \fI\%lavuelib.imageSource.BaseSource\fP
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setTimeStamp(tmstamp)
+set time stamp
+.INDENT 7.0
+.TP
+.B Parameters
+\fBtmstamp\fP (\fI\%int\fP) – set timestamp
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -3458,12 +3414,12 @@ updates class variables with the form content
 .UNINDENT
 .INDENT 7.0
 .TP
-.B azend
+.B azend = None
 (\fI\%float\fP) end position of azimuth angle
 .UNINDENT
 .INDENT 7.0
 .TP
-.B azstart
+.B azstart = None
 (\fI\%float\fP) start position of azimuth angle
 .UNINDENT
 .INDENT 7.0
@@ -3473,22 +3429,22 @@ create GUI
 .UNINDENT
 .INDENT 7.0
 .TP
-.B radend
+.B radend = None
 (\fI\%float\fP) end position of radial coordinate
 .UNINDENT
 .INDENT 7.0
 .TP
-.B radstart
+.B radstart = None
 (\fI\%float\fP) start position of radial coordinate
 .UNINDENT
 .INDENT 7.0
 .TP
-.B radunitindex
+.B radunitindex = None
 (\fI\%int\fP) radial angle index
 .UNINDENT
 .INDENT 7.0
 .TP
-.B radunits
+.B radunits = None
 (\fI\%list\fP <\fBunicode\fP>) list of units
 .UNINDENT
 .UNINDENT
@@ -3510,7 +3466,7 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) tool name
 .UNINDENT
 .INDENT 7.0
@@ -3581,7 +3537,7 @@ sets vLine and hLine positions
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) tool name
 .UNINDENT
 .INDENT 7.0
@@ -3694,7 +3650,7 @@ cut enabled flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) tool name
 .UNINDENT
 .INDENT 7.0
@@ -3808,7 +3764,7 @@ sets vLine and hLine positions
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) extension name
 .UNINDENT
 .INDENT 7.0
@@ -3880,7 +3836,7 @@ constructor
 .IP \(bu 2
 \fBcenter\fP (\fI[\fP\fI\%float\fP\fI, \fP\fI\%float\fP\fI]\fP) – center of handle
 .IP \(bu 2
-\fBparent\fP (\fBpyqtgraph.graphicsItems.ROI.ROI\fP) – roi object
+\fBparent\fP (\fI\%pyqtgraph.graphicsItems.ROI.ROI\fP) – roi object
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3949,7 +3905,7 @@ sets vLine and hLine positions
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) tool name
 .UNINDENT
 .INDENT 7.0
@@ -4028,7 +3984,7 @@ sets vLine and hLine positions
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) tool name
 .UNINDENT
 .INDENT 7.0
@@ -4055,7 +4011,7 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) tool name
 .UNINDENT
 .INDENT 7.0
@@ -4133,7 +4089,7 @@ roi enabled flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) tool name
 .UNINDENT
 .INDENT 7.0
@@ -4270,7 +4226,7 @@ roi enabled flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) tool name
 .UNINDENT
 .INDENT 7.0
@@ -4356,7 +4312,7 @@ update ROIs
 .INDENT 0.0
 .TP
 .B class lavuelib.displayExtensions.RegionItem(points=None, pen=\(aqw\(aq, **args)
-Bases: \fBpyqtgraph.graphicsItems.IsocurveItem.IsocurveItem\fP
+Bases: \fI\%pyqtgraph.graphicsItems.IsocurveItem.IsocurveItem\fP
 .sp
 constructor
 .INDENT 7.0
@@ -4416,7 +4372,7 @@ region enabled flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) tool name
 .UNINDENT
 .INDENT 7.0
@@ -4502,7 +4458,7 @@ update Regions
 .INDENT 0.0
 .TP
 .B class lavuelib.displayExtensions.SimpleLineROI(pos1, pos2, width=1e\-05, **args)
-Bases: \fBpyqtgraph.graphicsItems.ROI.LineROI\fP
+Bases: \fI\%pyqtgraph.graphicsItems.ROI.LineROI\fP
 .sp
 simple line roi
 .sp
@@ -4549,7 +4505,7 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) tool name
 .UNINDENT
 .INDENT 7.0
@@ -4576,7 +4532,7 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) tool name
 .UNINDENT
 .INDENT 7.0
@@ -4648,27 +4604,27 @@ creates widget GUI
 .UNINDENT
 .INDENT 7.0
 .TP
-.B dirty
+.B dirty = None
 (\fI\%bool\fP) dirty flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B headers
+.B headers = None
 (\fI\%list\fP <\fI\%str\fP>) table headers
 .UNINDENT
 .INDENT 7.0
 .TP
-.B newvalues
+.B newvalues = None
 (\fI\%list\fP <\fI\%str\fP>) table headers
 .UNINDENT
 .INDENT 7.0
 .TP
-.B record
+.B record = None
 (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) data (name, value) dictionary
 .UNINDENT
 .INDENT 7.0
 .TP
-.B title
+.B title = None
 (\fI\%str\fP) dialog title
 .UNINDENT
 .UNINDENT
@@ -4705,22 +4661,22 @@ creates widget GUI
 .UNINDENT
 .INDENT 7.0
 .TP
-.B dirty
+.B dirty = None
 (\fI\%bool\fP) dirty flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B headers
+.B headers = None
 (\fI\%list\fP <\fI\%str\fP>) table headers
 .UNINDENT
 .INDENT 7.0
 .TP
-.B record
+.B record = None
 (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) data (name, value) dictionary
 .UNINDENT
 .INDENT 7.0
 .TP
-.B title
+.B title = None
 (\fI\%str\fP) dialog title
 .UNINDENT
 .UNINDENT
@@ -4752,7 +4708,7 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property dtype
+.B dtype
 attribute data type
 .INDENT 7.0
 .TP
@@ -4783,7 +4739,7 @@ reopen attribute
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property shape
+.B shape
 attribute shape
 .INDENT 7.0
 .TP
@@ -4887,7 +4843,7 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property filterid
+.B filterid
 getter for compression filter id
 .INDENT 7.0
 .TP
@@ -4900,7 +4856,7 @@ compression rate
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property options
+.B options
 getter for compression options
 .INDENT 7.0
 .TP
@@ -4913,7 +4869,7 @@ compression options
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property rate
+.B rate
 getter for compression rate
 .INDENT 7.0
 .TP
@@ -4931,7 +4887,7 @@ reopen attribute
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property shuffle
+.B shuffle
 getter for compression shuffle
 .INDENT 7.0
 .TP
@@ -4980,7 +4936,7 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property attributes
+.B attributes
 return the attribute manager
 .INDENT 7.0
 .TP
@@ -4993,7 +4949,7 @@ attribute manager
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property dtype
+.B dtype
 field data type
 .INDENT 7.0
 .TP
@@ -5052,7 +5008,7 @@ reopen attribute
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property shape
+.B shape
 field shape
 .INDENT 7.0
 .TP
@@ -5065,7 +5021,7 @@ field shape
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property size
+.B size
 field size
 .INDENT 7.0
 .TP
@@ -5153,12 +5109,12 @@ has swmr_mode
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) file name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property readonly
+.B readonly
 check if file is readonly
 .INDENT 7.0
 .TP
@@ -5220,7 +5176,7 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property attributes
+.B attributes
 return the attribute manager
 .INDENT 7.0
 .TP
@@ -5364,7 +5320,7 @@ reopen attribute
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property size
+.B size
 group size
 .INDENT 7.0
 .TP
@@ -5377,7 +5333,7 @@ group size
 .UNINDENT
 .INDENT 7.0
 .TP
-.B stepsperfile
+.B stepsperfile = None
 (\fI\%int\fP) steps per file
 .UNINDENT
 .UNINDENT
@@ -5442,7 +5398,7 @@ reopen attribute
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property target_path
+.B target_path
 target path
 .INDENT 7.0
 .TP
@@ -5489,7 +5445,7 @@ close element
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property h5object
+.B h5object
 provide object of native library
 .INDENT 7.0
 .TP
@@ -5502,7 +5458,7 @@ h5 object
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property is_valid
+.B is_valid
 check if attribute is valid
 .INDENT 7.0
 .TP
@@ -5515,7 +5471,7 @@ valid flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property parent
+.B parent
 return the parent object
 .INDENT 7.0
 .TP
@@ -5968,12 +5924,12 @@ updates class variables with the form content
 .UNINDENT
 .INDENT 7.0
 .TP
-.B centerx
+.B centerx = None
 (\fI\%float\fP) x\-coordinates of the center of the image
 .UNINDENT
 .INDENT 7.0
 .TP
-.B centery
+.B centery = None
 (\fI\%float\fP) y\-coordinates of the center of the image
 .UNINDENT
 .INDENT 7.0
@@ -5983,22 +5939,22 @@ create GUI
 .UNINDENT
 .INDENT 7.0
 .TP
-.B detdistance
+.B detdistance = None
 (\fI\%float\fP) detector distance in mm
 .UNINDENT
 .INDENT 7.0
 .TP
-.B energy
+.B energy = None
 (\fI\%float\fP) energy in eV
 .UNINDENT
 .INDENT 7.0
 .TP
-.B pixelsizex
+.B pixelsizex = None
 (\fI\%float\fP) pixel x\-size in um
 .UNINDENT
 .INDENT 7.0
 .TP
-.B pixelsizey
+.B pixelsizey = None
 (\fI\%float\fP) pixel y\-size in um
 .UNINDENT
 .UNINDENT
@@ -6030,7 +5986,7 @@ create GUI
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%int\fP) gradient name
 .UNINDENT
 .UNINDENT
@@ -6062,7 +6018,7 @@ close attribute
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property dtype
+.B dtype
 field data type
 .INDENT 7.0
 .TP
@@ -6075,7 +6031,7 @@ field data type
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property is_valid
+.B is_valid
 check if attribute is valid
 .INDENT 7.0
 .TP
@@ -6088,12 +6044,12 @@ valid flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) object name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B path
+.B path = None
 (\fI\%str\fP) object nexus path
 .UNINDENT
 .INDENT 7.0
@@ -6116,7 +6072,7 @@ reopen attribute
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property shape
+.B shape
 attribute shape
 .INDENT 7.0
 .TP
@@ -6188,7 +6144,7 @@ attribute object
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property is_valid
+.B is_valid
 check if link is valid
 .INDENT 7.0
 .TP
@@ -6201,7 +6157,7 @@ valid flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) object name
 .UNINDENT
 .INDENT 7.0
@@ -6219,7 +6175,7 @@ attribute names
 .UNINDENT
 .INDENT 7.0
 .TP
-.B path
+.B path = None
 (\fI\%str\fP) object nexus path
 .UNINDENT
 .INDENT 7.0
@@ -6286,7 +6242,7 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property attributes
+.B attributes
 return the attribute manager
 .INDENT 7.0
 .TP
@@ -6304,7 +6260,7 @@ close field
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property dtype
+.B dtype
 field data type
 .INDENT 7.0
 .TP
@@ -6332,7 +6288,7 @@ grow the field
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property is_valid
+.B is_valid
 check if field is valid
 .INDENT 7.0
 .TP
@@ -6345,12 +6301,12 @@ valid flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) object name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B path
+.B path = None
 (\fI\%str\fP) object nexus path
 .UNINDENT
 .INDENT 7.0
@@ -6386,7 +6342,7 @@ reopen field
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property shape
+.B shape
 field shape
 .INDENT 7.0
 .TP
@@ -6399,7 +6355,7 @@ field shape
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property size
+.B size
 field size
 .INDENT 7.0
 .TP
@@ -6451,7 +6407,7 @@ flash the data
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property is_valid
+.B is_valid
 check if file is valid
 .INDENT 7.0
 .TP
@@ -6464,12 +6420,12 @@ valid flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B path
+.B path = None
 (\fI\%str\fP) object nexus path
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property readonly
+.B readonly
 check if file is readonly
 .INDENT 7.0
 .TP
@@ -6556,7 +6512,7 @@ attribute object
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property attributes
+.B attributes
 return the attribute manager
 .INDENT 7.0
 .TP
@@ -6655,7 +6611,7 @@ existing flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property is_valid
+.B is_valid
 check if field is valid
 .INDENT 7.0
 .TP
@@ -6668,7 +6624,7 @@ valid flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) object name
 .UNINDENT
 .INDENT 7.0
@@ -6718,7 +6674,7 @@ file tree object
 .UNINDENT
 .INDENT 7.0
 .TP
-.B path
+.B path = None
 (\fI\%str\fP) object nexus path
 .UNINDENT
 .INDENT 7.0
@@ -6728,7 +6684,7 @@ reopen group
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property size
+.B size
 group size
 .INDENT 7.0
 .TP
@@ -6781,7 +6737,7 @@ file name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property is_valid
+.B is_valid
 check if link is valid
 .INDENT 7.0
 .TP
@@ -6794,12 +6750,12 @@ valid flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) object name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B path
+.B path = None
 (\fI\%str\fP) object nexus path
 .UNINDENT
 .INDENT 7.0
@@ -6822,7 +6778,7 @@ reopen field
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property target_path
+.B target_path
 target path
 .INDENT 7.0
 .TP
@@ -6860,22 +6816,22 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B fieldpath
+.B fieldpath = None
 (\fI\%str\fP) nexus field path
 .UNINDENT
 .INDENT 7.0
 .TP
-.B filename
+.B filename = None
 (\fI\%str\fP) directory and file name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B maxshape
+.B maxshape = None
 (\fI\%list\fP < \fI\%int\fP >) maximal shape
 .UNINDENT
 .INDENT 7.0
 .TP
-.B shape
+.B shape = None
 (\fI\%list\fP < \fI\%int\fP >) shape
 .UNINDENT
 .UNINDENT
@@ -6922,12 +6878,12 @@ add target field to layout
 .UNINDENT
 .INDENT 7.0
 .TP
-.B maxshape
+.B maxshape = None
 (\fI\%list\fP < \fI\%int\fP >) maximal shape
 .UNINDENT
 .INDENT 7.0
 .TP
-.B shape
+.B shape = None
 (\fI\%list\fP < \fI\%int\fP >) shape
 .UNINDENT
 .UNINDENT
@@ -7245,7 +7201,7 @@ close attribute
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property dtype
+.B dtype
 attribute data type
 .INDENT 7.0
 .TP
@@ -7258,7 +7214,7 @@ attribute data type
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property is_valid
+.B is_valid
 check if field is valid
 .INDENT 7.0
 .TP
@@ -7289,7 +7245,7 @@ reopen attribute
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property shape
+.B shape
 attribute shape
 .INDENT 7.0
 .TP
@@ -7386,7 +7342,7 @@ attribute object
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property is_valid
+.B is_valid
 check if link is valid
 .INDENT 7.0
 .TP
@@ -7399,7 +7355,7 @@ valid flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) object name
 .UNINDENT
 .INDENT 7.0
@@ -7417,7 +7373,7 @@ attribute names
 .UNINDENT
 .INDENT 7.0
 .TP
-.B path
+.B path = None
 (\fI\%str\fP) object nexus path
 .UNINDENT
 .INDENT 7.0
@@ -7482,7 +7438,7 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property attributes
+.B attributes
 return the attribute manager
 .INDENT 7.0
 .TP
@@ -7500,7 +7456,7 @@ close field
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property dtype
+.B dtype
 field data type
 .INDENT 7.0
 .TP
@@ -7528,7 +7484,7 @@ grow the field
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property is_valid
+.B is_valid
 check if group is valid
 .INDENT 7.0
 .TP
@@ -7572,7 +7528,7 @@ reopen field
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property shape
+.B shape
 field shape
 .INDENT 7.0
 .TP
@@ -7585,7 +7541,7 @@ field shape
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property size
+.B size
 field size
 .INDENT 7.0
 .TP
@@ -7650,7 +7606,7 @@ has swmr_mode
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property is_valid
+.B is_valid
 check if group is valid
 .INDENT 7.0
 .TP
@@ -7663,12 +7619,12 @@ valid flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B path
+.B path = None
 (\fI\%str\fP) object nexus path
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property readonly
+.B readonly
 check if file is readonly
 .INDENT 7.0
 .TP
@@ -7755,7 +7711,7 @@ attribute object
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property attributes
+.B attributes
 return the attribute manager
 .INDENT 7.0
 .TP
@@ -7854,7 +7810,7 @@ existing flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property is_valid
+.B is_valid
 check if group is valid
 .INDENT 7.0
 .TP
@@ -7917,7 +7873,7 @@ reopen file
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property size
+.B size
 group size
 .INDENT 7.0
 .TP
@@ -7970,7 +7926,7 @@ file name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property is_valid
+.B is_valid
 check if link is valid
 .INDENT 7.0
 .TP
@@ -8018,7 +7974,7 @@ reopen field
 .UNINDENT
 .INDENT 7.0
 .TP
-.B property target_path
+.B target_path
 target path
 .INDENT 7.0
 .TP
@@ -8050,7 +8006,7 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B shape
+.B shape = None
 (\fI\%list\fP < \fI\%int\fP >) shape
 .UNINDENT
 .UNINDENT
@@ -8093,7 +8049,7 @@ add target field to layout
 .UNINDENT
 .INDENT 7.0
 .TP
-.B shape
+.B shape = None
 (\fI\%list\fP < \fI\%int\fP >) shape
 .UNINDENT
 .UNINDENT
@@ -8449,7 +8405,7 @@ resets the __pageLabel withg the document title
 A list of possible hidra servers. Take your pick.
 .INDENT 0.0
 .TP
-.B lavuelib.hidraServerList.HIDRASERVERLIST = {\(aqp03\(aq: [\(aqhaspp03pilatus.desy.de\(aq], \(aqp08\(aq: [\(aqhaspp08pil100.desy.de\(aq, \(aqhaspp08perk01.desy.de\(aq], \(aqp09\(aq: [\(aqhaspp09pilatus.desy.de\(aq], \(aqp10\(aq: [\(aqhaspp10pilatus.desy.de\(aq], \(aqp11\(aq: [\(aqhaspp11pilatus.desy.de\(aq], \(aqpool\(aq: [\(aqhaspilatus300k.desy.de\(aq, \(aqhaspilatus1m.desy.de\(aq, \(aqhaspilatus100k.desy.de\(aq]}
+.B lavuelib.hidraServerList.HIDRASERVERLIST = {\(aqp08\(aq: [\(aqhaspp08pil100.desy.de\(aq, \(aqhaspp08perk01.desy.de\(aq], \(aqp09\(aq: [\(aqhaspp09pilatus.desy.de\(aq], \(aqp10\(aq: [\(aqhaspp10pilatus.desy.de\(aq], \(aqp11\(aq: [\(aqhaspp11pilatus.desy.de\(aq], \(aqpool\(aq: [\(aqhaspilatus100k.desy.de\(aq]}
 (\fI\%dict\fP < \fI\%str\fP, \fI\%list\fP <\fI\%str\fP> >)
 server dictionary
 .UNINDENT
@@ -8529,7 +8485,7 @@ Horizontal HistogramWidget
 .INDENT 0.0
 .TP
 .B class lavuelib.histogramWidget.HistogramHLUTWidget(parent=None, bins=None, step=None, *args, **kargs)
-Bases: \fBpyqtgraph.widgets.GraphicsView.GraphicsView\fP
+Bases: \fI\%pyqtgraph.widgets.GraphicsView.GraphicsView\fP
 .sp
 Horizontal HistogramWidget
 .sp
@@ -8553,7 +8509,7 @@ default: ‘auto’
 .UNINDENT
 .INDENT 7.0
 .TP
-.B item
+.B item = None
 (\fBHistogramHLUTItem\fP) histogram item
 .UNINDENT
 .INDENT 7.0
@@ -8605,39 +8561,39 @@ axes parameters
 constructor
 .INDENT 7.0
 .TP
-.B enabled
+.B enabled = None
 (\fI\%bool\fP) enabled flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B scale
+.B scale = None
 (\fI\%tuple\fP <\fI\%float\fP, \fI\%float\fP> ) image scale (x,y)
 .UNINDENT
 .INDENT 7.0
 .TP
-.B xtext
+.B xtext = None
 (\fI\%str\fP) label of x\-axis
 .UNINDENT
 .INDENT 7.0
 .TP
-.B xunits
+.B xunits = None
 (\fI\%str\fP) units of x\-axis
 .UNINDENT
 .INDENT 7.0
 .TP
-.B ytext
+.B ytext = None
 (\fI\%str\fP) label of y\-axis
 .UNINDENT
 .INDENT 7.0
 .TP
-.B yunits
+.B yunits = None
 (\fI\%str\fP) units of y\-axis
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
 .B class lavuelib.imageDisplayWidget.ImageDisplayWidget(parent=None)
-Bases: \fBpyqtgraph.widgets.GraphicsLayoutWidget.GraphicsLayoutWidget\fP
+Bases: \fI\%pyqtgraph.widgets.GraphicsLayoutWidget.GraphicsLayoutWidget\fP
 .sp
 constructor
 .INDENT 7.0
@@ -9254,7 +9210,7 @@ xmin,ymin,xsize,ysize
 .TP
 .B viewbox()
 provides viewbox
-:rtype: \fBpyqtgraph.ViewBox\fP
+:rtype: \fI\%pyqtgraph.ViewBox\fP
 :returns: viewbox
 .UNINDENT
 .UNINDENT
@@ -9268,29 +9224,29 @@ intensity parameters
 constructor
 .INDENT 7.0
 .TP
-.B dobfsubtraction
+.B dobfsubtraction = None
 (\fI\%bool\fP) do brightfield substraction
 .UNINDENT
 .INDENT 7.0
 .TP
-.B dobkgsubtraction
+.B dobkgsubtraction = None
 (\fI\%bool\fP) do background substraction
 .UNINDENT
 .INDENT 7.0
 .TP
-.B scaling
+.B scaling = None
 (\fI\%str\fP) intensity scaling
 .UNINDENT
 .INDENT 7.0
 .TP
-.B statswoscaling
+.B statswoscaling = None
 (\fI\%bool\fP) calculate statistics without scaling
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
 .B class lavuelib.imageDisplayWidget.SafeImageItem(*args, **kargs)
-Bases: \fBpyqtgraph.graphicsItems.ImageItem.ImageItem\fP
+Bases: \fI\%pyqtgraph.graphicsItems.ImageItem.ImageItem\fP
 .sp
 Image item which caught exceptions in paint
 .sp
@@ -9331,22 +9287,22 @@ transformation parameters
 constructor
 .INDENT 7.0
 .TP
-.B leftrightflip
+.B leftrightflip = None
 (\fI\%bool\fP) left\-right flip coordinates flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B orgtranspose
+.B orgtranspose = None
 (\fI\%bool\fP) transpose coordinates flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B transpose
+.B transpose = None
 (\fI\%bool\fP) transpose coordinates flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B updownflip
+.B updownflip = None
 (\fI\%bool\fP)  up\-down flip coordinates flag
 .UNINDENT
 .UNINDENT
@@ -9376,23 +9332,23 @@ create GUI
 .UNINDENT
 .INDENT 7.0
 .TP
-.B field
+.B field = None
 (\fI\%str\fP) selected field
 .UNINDENT
 .INDENT 7.0
 .TP
-.B fields
+.B fields = None
 (\fI\%dict\fP <\fI\%str\fP,  \fI\%dict\fP <\fI\%str\fP, \fI\%any\fP>>)
 image field dictionary
 .UNINDENT
 .INDENT 7.0
 .TP
-.B frame
+.B frame = None
 (\fI\%int\fP) frame
 .UNINDENT
 .INDENT 7.0
 .TP
-.B growing
+.B growing = None
 (\fI\%int\fP) growing dimension
 .UNINDENT
 .UNINDENT
@@ -9568,7 +9524,7 @@ a number of frames
 .UNINDENT
 .INDENT 7.0
 .TP
-.B classmethod getImage(node, frame=\- 1, growing=0, refresh=True)
+.B classmethod getImage(node, frame=\-1, growing=0, refresh=True)
 parses the field and add it into the description list
 .INDENT 7.0
 .TP
@@ -9703,13 +9659,13 @@ export data image to NeXus file
 exporter parameters
 .TP
 .B Return type
-\fBpyqtgraph.parametertree.Parameter\fP
+\fI\%pyqtgraph.parametertree.Parameter\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
-.B params
-(\fBpyqtgraph.parametertree.Parameter\fP) exporter parameters
+.B params = None
+(\fI\%pyqtgraph.parametertree.Parameter\fP) exporter parameters
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -9721,7 +9677,7 @@ exporter parameters
 set of image sources
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.ASAPO = False
+.B lavuelib.imageSource.ASAPO = True
 (\fI\%bool\fP) asapo imported
 .UNINDENT
 .INDENT 0.0
@@ -9809,7 +9765,7 @@ disconnects the source
 .UNINDENT
 .INDENT 7.0
 .TP
-.B errormessage
+.B errormessage = None
 (\fI\%str\fP) errormessage
 .UNINDENT
 .INDENT 7.0
@@ -9887,12 +9843,12 @@ the decoded data if data was loaded
 .UNINDENT
 .INDENT 7.0
 .TP
-.B dtype
+.B dtype = None
 (\fI\%str\fP) data type
 .UNINDENT
 .INDENT 7.0
 .TP
-.B format
+.B format = None
 (\fI\%str\fP) decoder format
 .UNINDENT
 .INDENT 7.0
@@ -9912,7 +9868,7 @@ loads encoded data
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) decoder name
 .UNINDENT
 .INDENT 7.0
@@ -10046,7 +10002,7 @@ image name, image data, json dictionary with metadata
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.HIDRA = False
+.B lavuelib.imageSource.HIDRA = True
 (\fI\%bool\fP) hidra imported
 .UNINDENT
 .INDENT 0.0
@@ -10203,6 +10159,11 @@ set configuration
 .UNINDENT
 .INDENT 0.0
 .TP
+.B lavuelib.imageSource.PYTINE = True
+(\fI\%bool\fP) PyTine imported
+.UNINDENT
+.INDENT 0.0
+.TP
 .B lavuelib.imageSource.REQUESTS = True
 (\fI\%bool\fP) requests imported
 .UNINDENT
@@ -10294,7 +10255,7 @@ disconnects the source
 .UNINDENT
 .INDENT 7.0
 .TP
-.B fresh
+.B fresh = None
 (\fI\%bool\fP) fresh attribute flag
 .UNINDENT
 .INDENT 7.0
@@ -10312,7 +10273,7 @@ image name, image data, json dictionary with metadata
 .UNINDENT
 .INDENT 7.0
 .TP
-.B reading
+.B reading = None
 (\fI\%bool\fP) reading flag
 .UNINDENT
 .UNINDENT
@@ -10445,12 +10406,12 @@ the decoded data if data was loaded
 .UNINDENT
 .INDENT 7.0
 .TP
-.B dtype
+.B dtype = None
 (\fI\%str\fP) data type
 .UNINDENT
 .INDENT 7.0
 .TP
-.B format
+.B format = None
 (\fI\%str\fP) decoder format
 .UNINDENT
 .INDENT 7.0
@@ -10478,7 +10439,7 @@ loads encoded data
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) decoder name
 .UNINDENT
 .INDENT 7.0
@@ -10998,7 +10959,7 @@ provides imageItem object
 image object
 .TP
 .B Return type
-\fBpyqtgraph.ImageItem\fP
+\fI\%pyqtgraph.ImageItem\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -11114,7 +11075,7 @@ creates 1d bottom bar plot
 1d bottom bar plot
 .TP
 .B Return type
-\fBpyqtgraph.BarGraphItem\fP
+\fI\%pyqtgraph.BarGraphItem\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -11127,7 +11088,7 @@ creates 1d right bar plot
 1d right bar plot
 .TP
 .B Return type
-\fBpyqtgraph.BarGraphItem\fP
+\fI\%pyqtgraph.BarGraphItem\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -11143,7 +11104,7 @@ creates 1d bottom plot
 1d bottom plot
 .TP
 .B Return type
-\fBpyqtgraph.PlotDataItem\fP
+\fI\%pyqtgraph.PlotDataItem\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -11159,7 +11120,7 @@ creates 1d right plot
 1d right plot
 .TP
 .B Return type
-\fBpyqtgraph.PlotDataItem\fP
+\fI\%pyqtgraph.PlotDataItem\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -11175,7 +11136,7 @@ shows/hides 1d bottom plot legend
 1d bottom plot
 .TP
 .B Return type
-\fBpyqtgraph.PlotDataItem\fP
+\fI\%pyqtgraph.PlotDataItem\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -11241,7 +11202,7 @@ removes bottom plot
 .INDENT 7.0
 .TP
 .B Parameters
-\fBplot\fP (\fBpyqtgraph.PlotItem\fP) – right plot item
+\fBplot\fP (\fI\%pyqtgraph.PlotItem\fP) – right plot item
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -11251,7 +11212,7 @@ removes right plot
 .INDENT 7.0
 .TP
 .B Parameters
-\fBplot\fP (\fBpyqtgraph.PlotItem\fP) – right plot item
+\fBplot\fP (\fI\%pyqtgraph.PlotItem\fP) – right plot item
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -11313,7 +11274,7 @@ rois coordinates
 .UNINDENT
 .INDENT 7.0
 .TP
-.B roilabels
+.B roilabels = None
 (obj\(gastr\(ga) roi labels
 .UNINDENT
 .INDENT 7.0
@@ -12181,17 +12142,17 @@ create GUI
 .UNINDENT
 .INDENT 7.0
 .TP
-.B itime
+.B itime = None
 (\fI\%float\fP) integration time in seconds
 .UNINDENT
 .INDENT 7.0
 .TP
-.B xintervals
+.B xintervals = None
 (\fI\%int\fP) number of x intervals
 .UNINDENT
 .INDENT 7.0
 .TP
-.B yintervals
+.B yintervals = None
 (\fI\%int\fP) number of y intervals
 .UNINDENT
 .UNINDENT
@@ -12416,7 +12377,7 @@ sets histogram image
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBimage\fP (\fBpyqtgraph.graphicsItems.ImageItem.ImageItem\fP) – histogram image
+\fBimage\fP (\fI\%pyqtgraph.graphicsItems.ImageItem.ImageItem\fP) – histogram image
 .IP \(bu 2
 \fBiid\fP (\fI\%int\fP) – image id
 .UNINDENT
@@ -12754,27 +12715,27 @@ integer data type maximal value
 .UNINDENT
 .INDENT 7.0
 .TP
-.B metadata
+.B metadata = None
 (\fI\%str\fP) json dictionary with metadata
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) data name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B scc
+.B scc = None
 (\fI\%int\fP) color channel size
 .UNINDENT
 .INDENT 7.0
 .TP
-.B sx
+.B sx = None
 (\fI\%int\fP) x size
 .UNINDENT
 .INDENT 7.0
 .TP
-.B sy
+.B sy = None
 (\fI\%int\fP) y size
 .UNINDENT
 .INDENT 7.0
@@ -12797,17 +12758,17 @@ a list: [name, rawdata, metadata, x, y, sx, sy, tr]
 .UNINDENT
 .INDENT 7.0
 .TP
-.B tr
+.B tr = None
 (\fI\%str\fP) transformation
 .UNINDENT
 .INDENT 7.0
 .TP
-.B x
+.B x = None
 (\fI\%int\fP) x translation
 .UNINDENT
 .INDENT 7.0
 .TP
-.B y
+.B y = None
 (\fI\%int\fP) y translation
 .UNINDENT
 .UNINDENT
@@ -12901,14 +12862,9 @@ ExportDialog with bookkeeping  parameters
 .INDENT 0.0
 .TP
 .B class lavuelib.memoExportDialog.MemoPlotWidget(parent=None, background=\(aqdefault\(aq, **kargs)
-Bases: \fBpyqtgraph.widgets.PlotWidget.PlotWidget\fP
+Bases: \fI\%pyqtgraph.widgets.PlotWidget.PlotWidget\fP
 .sp
 Plot Widget with improved Export Dialog
-.sp
-When initializing PlotWidget, \fIparent\fP and \fIbackground\fP are passed to 
-\fBGraphicsWidget.__init__()\fP
-and all others are passed
-to \fBPlotItem.__init__()\fP\&.
 .INDENT 7.0
 .TP
 .B clearClicked
@@ -13229,6 +13185,112 @@ stops loop
 .B lavuelib.motorWatchThread.POLLINGINTERVAL = 1.0
 (\fI\%float\fP) polling inverval in seconds
 .UNINDENT
+.SS lavuelib.normalizationWidget module
+.sp
+normalization widget
+.INDENT 0.0
+.TP
+.B class lavuelib.normalizationWidget.NormalizationWidget(parent=None, settings=None)
+Bases: \fBPyQt5.QtWidgets.QWidget\fP
+.sp
+Define bkg image and subtract from displayed image.
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.IP \(bu 2
+\fBsettings\fP (\fI\%lavuelib.settings.Settings\fP) – lavue configuration settings
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B applyBFStateChanged
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) apply state change signal
+.UNINDENT
+.INDENT 7.0
+.TP
+.B bfFileSelected
+.UNINDENT
+.INDENT 7.0
+.TP
+.B bfScalingFactor()
+provides bright field scaling factor
+.INDENT 7.0
+.TP
+.B Returns
+bright field scaling factor
+.TP
+.B Return type
+\fI\%float\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B bfScalingFactorChanged
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) BF scaling factor change signal
+.UNINDENT
+.INDENT 7.0
+.TP
+.B checkBFSubtraction(state)
+unchecks apply CheckBox if state is 1 and it is checked
+and reset the display
+.INDENT 7.0
+.TP
+.B Parameters
+\fBstate\fP (\fI\%int\fP) – checkbox state
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B isBFSubApplied()
+if brightfield correction applied
+:returns: apply status
+:rtype: \fI\%bool\fP
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setBFScalingFactor(scale)
+sets the bright field scaling factor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBscale\fP (\fI\%float\fP or \fI\%str\fP) – bright field scaling factor
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setBrightField(fname)
+sets the image background
+.INDENT 7.0
+.TP
+.B Parameters
+\fBfname\fP (\fI\%str\fP) – file name
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setDisplayedBFName(name)
+sets displayed file name
+.INDENT 7.0
+.TP
+.B Parameters
+\fBname\fP (\fI\%str\fP) – file name
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B showScalingFactors(show=True)
+.UNINDENT
+.INDENT 7.0
+.TP
+.B useCurrentImageAsBF
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) use current image signal
+.UNINDENT
+.UNINDENT
 .SS lavuelib.omniQThread module
 .sp
 omni qt thread
@@ -13272,7 +13334,7 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B changeView(showmask=None, showsub=None, showtrans=None, showhighvaluemask=None, showsubsf=None)
+.B changeView(showmask=None, showsub=None, showtrans=None, showhighvaluemask=None, showsubsf=None, shownorm=None, shownormsf=None)
 show or hide widgets in the preparation colection
 .INDENT 7.0
 .TP
@@ -13287,18 +13349,22 @@ show or hide widgets in the preparation colection
 .IP \(bu 2
 \fBshowhighvaluemask\fP (\fI\%bool\fP) – mask widget shown
 .IP \(bu 2
-\fBshowsub\fP – subtraction scaling widget shown
+\fBshowsubsf\fP (\fI\%bool\fP) – subtraction scaling widget shown
+.IP \(bu 2
+\fBshownorm\fP (\fI\%bool\fP) – normalization widget shown
+.IP \(bu 2
+\fBshownormsf\fP (\fI\%bool\fP) – normalization scaling widget shown
 .UNINDENT
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
-.B highValueMaskWidget
+.B highValueMaskWidget = None
 (\fBlavuelib.maskWidget.Maskwidget\fP) mask widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B maskWidget
+.B maskWidget = None
 (\fBlavuelib.maskWidget.Maskwidget\fP) mask widget
 .UNINDENT
 .UNINDENT
@@ -13352,11 +13418,11 @@ Bases: \fBPyQt5.QtWidgets.QWidget\fP
 .UNINDENT
 .INDENT 7.0
 .TP
-.B event(self, QEvent) -> \fI\%bool\fP
+.B event(self, QEvent) -> bool
 .UNINDENT
 .INDENT 7.0
 .TP
-.B findText(self, str, options: QWebPage.FindFlags = 0) -> \fI\%bool\fP
+.B findText(self, str, options: QWebPage.FindFlags = 0) -> bool
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -13364,7 +13430,7 @@ Bases: \fBPyQt5.QtWidgets.QWidget\fP
 .UNINDENT
 .INDENT 7.0
 .TP
-.B focusNextPrevChild(self, bool) -> \fI\%bool\fP
+.B focusNextPrevChild(self, bool) -> bool
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -13376,7 +13442,7 @@ Bases: \fBPyQt5.QtWidgets.QWidget\fP
 .UNINDENT
 .INDENT 7.0
 .TP
-.B hasSelection(self) -> \fI\%bool\fP
+.B hasSelection(self) -> bool
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -13401,7 +13467,7 @@ iconChanged(self) [signal]
 .UNINDENT
 .INDENT 7.0
 .TP
-.B isModified(self) -> \fI\%bool\fP
+.B isModified(self) -> bool
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -13486,11 +13552,11 @@ loadStarted(self) [signal]
 .UNINDENT
 .INDENT 7.0
 .TP
-.B selectedHtml(self) -> \fI\%str\fP
+.B selectedHtml(self) -> str
 .UNINDENT
 .INDENT 7.0
 .TP
-.B selectedText(self) -> \fI\%str\fP
+.B selectedText(self) -> str
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -13544,7 +13610,7 @@ statusBarMessage(self, str) [signal]
 .UNINDENT
 .INDENT 7.0
 .TP
-.B title(self) -> \fI\%str\fP
+.B title(self) -> str
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -13570,7 +13636,7 @@ urlChanged(self, QUrl) [signal]
 .UNINDENT
 .INDENT 7.0
 .TP
-.B zoomFactor(self) -> \fI\%float\fP
+.B zoomFactor(self) -> float
 .UNINDENT
 .UNINDENT
 .SS lavuelib.rangeDialog module
@@ -13601,47 +13667,47 @@ create GUI
 .UNINDENT
 .INDENT 7.0
 .TP
-.B polend
+.B polend = None
 (\fI\%float\fP) end position of polar angle
 .UNINDENT
 .INDENT 7.0
 .TP
-.B polsize
+.B polsize = None
 (\fI\%int\fP) grid size of polar angle
 .UNINDENT
 .INDENT 7.0
 .TP
-.B polstart
+.B polstart = None
 (\fI\%float\fP) start position of polar angle
 .UNINDENT
 .INDENT 7.0
 .TP
-.B radqend
+.B radqend = None
 (\fI\%float\fP) end position of radial coordinate
 .UNINDENT
 .INDENT 7.0
 .TP
-.B radqsize
+.B radqsize = None
 (\fI\%int\fP) grid size of radial coordinate
 .UNINDENT
 .INDENT 7.0
 .TP
-.B radqstart
+.B radqstart = None
 (\fI\%float\fP) start position of radial coordinate
 .UNINDENT
 .INDENT 7.0
 .TP
-.B radthend
+.B radthend = None
 (\fI\%float\fP) end position of radial coordinate
 .UNINDENT
 .INDENT 7.0
 .TP
-.B radthsize
+.B radthsize = None
 (\fI\%int\fP) grid size of radial coordinate
 .UNINDENT
 .INDENT 7.0
 .TP
-.B radthstart
+.B radthstart = None
 (\fI\%float\fP) start position of radial coordinate
 .UNINDENT
 .UNINDENT
@@ -14135,102 +14201,102 @@ lavue configuration settings
 constructor
 .INDENT 7.0
 .TP
-.B accelbuffersum
+.B accelbuffersum = None
 (\fI\%bool\fP) accelerate buffer sum
 .UNINDENT
 .INDENT 7.0
 .TP
-.B addrois
+.B addrois = None
 (\fI\%bool\fP) add rois to sardana
 .UNINDENT
 .INDENT 7.0
 .TP
-.B aimutex
+.B aimutex = None
 (\fBpyqtgraph.QtCore.QMutex\fP) ai mutex
 .UNINDENT
 .INDENT 7.0
 .TP
-.B analysisdevice
+.B analysisdevice = None
 (\fI\%str\fP) analysis device name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asapobeamtime
+.B asapobeamtime = None
 (\fI\%str\fP) asapo beamtime id
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asapodatasources
+.B asapodatasources = None
 (\fI\%list\fP < \fI\%str\fP > ) asapo datasources
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asaposerver
+.B asaposerver = None
 (\fI\%str\fP) asapo server
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asaposourcepath
+.B asaposourcepath = None
 (\fI\%str\fP) asapo sourcepath
 .UNINDENT
 .INDENT 7.0
 .TP
-.B asapotoken
+.B asapotoken = None
 (\fI\%str\fP) asapo token
 .UNINDENT
 .INDENT 7.0
 .TP
-.B aspectlocked
+.B aspectlocked = None
 (\fI\%bool\fP) image aspect ratio locked
 .UNINDENT
 .INDENT 7.0
 .TP
-.B autodownsample
+.B autodownsample = None
 (\fI\%bool\fP) auto down sample
 .UNINDENT
 .INDENT 7.0
 .TP
-.B autozmqtopics
+.B autozmqtopics = None
 (\fI\%bool\fP) automatic zmq source topics
 .UNINDENT
 .INDENT 7.0
 .TP
-.B bfimagename
+.B bfimagename = None
 (\fI\%str\fP) last brightfield image file name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B bkgimagename
+.B bkgimagename = None
 (\fI\%str\fP) last background/darkfield image file name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B calcvariance
+.B calcvariance = None
 (\fI\%bool\fP) calculate variance
 .UNINDENT
 .INDENT 7.0
 .TP
-.B calibrationfilename
+.B calibrationfilename = None
 (\fI\%str\fP) calibration file name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B centerx
+.B centerx = None
 (\fI\%float\fP) x\-coordinates of the center of the image
 .UNINDENT
 .INDENT 7.0
 .TP
-.B centery
+.B centery = None
 (\fI\%float\fP) y\-coordinates of the center of the image
 .UNINDENT
 .INDENT 7.0
 .TP
-.B correctsolidangle
+.B correctsolidangle = None
 (\fI\%bool\fP) correct solid angle flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B crosshairlocker
+.B crosshairlocker = None
 (\fI\%bool\fP) crosshair locker switched on
 .UNINDENT
 .INDENT 7.0
@@ -14248,62 +14314,62 @@ custom gradients
 .UNINDENT
 .INDENT 7.0
 .TP
-.B defdetservers
+.B defdetservers = None
 (\fI\%bool\fP) use default detector servers
 .UNINDENT
 .INDENT 7.0
 .TP
-.B detdistance
+.B detdistance = None
 (\fI\%float\fP) detector distance in mm
 .UNINDENT
 .INDENT 7.0
 .TP
-.B detname
+.B detname = None
 (\fI\%str\fP) detector name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B detponi1
+.B detponi1 = None
 (\fI\%float\fP) poni1 parameter in m
 .UNINDENT
 .INDENT 7.0
 .TP
-.B detponi2
+.B detponi2 = None
 (\fI\%float\fP) poni2 parameter in m
 .UNINDENT
 .INDENT 7.0
 .TP
-.B detrot1
+.B detrot1 = None
 (\fI\%float\fP) rot1 parameter in rad
 .UNINDENT
 .INDENT 7.0
 .TP
-.B detrot2
+.B detrot2 = None
 (\fI\%float\fP) rot2 parameter in rad
 .UNINDENT
 .INDENT 7.0
 .TP
-.B detrot3
+.B detrot3 = None
 (\fI\%float\fP) rot3 parameter in rad
 .UNINDENT
 .INDENT 7.0
 .TP
-.B detservers
+.B detservers = None
 (\fI\%list\fP < \fI\%str\fP>) hidra detector server list
 .UNINDENT
 .INDENT 7.0
 .TP
-.B detsplinefile
+.B detsplinefile = None
 (\fI\%str\fP) detector splineFile
 .UNINDENT
 .INDENT 7.0
 .TP
-.B diffnpt
+.B diffnpt = None
 (\fI\%int\fP) number of points for diffractogram
 .UNINDENT
 .INDENT 7.0
 .TP
-.B dirtrans
+.B dirtrans = None
 (\fI\%str\fP) file name translation json dictionary
 .UNINDENT
 .INDENT 7.0
@@ -14377,12 +14443,12 @@ distance in um
 .UNINDENT
 .INDENT 7.0
 .TP
-.B doorname
+.B doorname = None
 (\fI\%str\fP) door device name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B energy
+.B energy = None
 (\fI\%float\fP) energy in eV
 .UNINDENT
 .INDENT 7.0
@@ -14403,57 +14469,57 @@ length in m
 .UNINDENT
 .INDENT 7.0
 .TP
-.B filters
+.B filters = None
 (\fI\%str\fP) json list with filters
 .UNINDENT
 .INDENT 7.0
 .TP
-.B floattype
+.B floattype = None
 (\fI\%str\fP) float type for pixel intensity
 .UNINDENT
 .INDENT 7.0
 .TP
-.B geometryfromsource
+.B geometryfromsource = None
 (\fI\%bool\fP) fetch geometry from source
 .UNINDENT
 .INDENT 7.0
 .TP
-.B gradientcolors
+.B gradientcolors = None
 (\fI\%bool\fP) image channels shown with gradient colors
 .UNINDENT
 .INDENT 7.0
 .TP
-.B hidraport
+.B hidraport = None
 (\fI\%str\fP) hidra data port
 .UNINDENT
 .INDENT 7.0
 .TP
-.B imagechannels
+.B imagechannels = None
 (\fI\%bool\fP) map image sources to color channels
 .UNINDENT
 .INDENT 7.0
 .TP
-.B imagename
+.B imagename = None
 (\fI\%str\fP) last image file name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B imagesources
+.B imagesources = None
 (\fI\%str\fP) json list with image source widget names
 .UNINDENT
 .INDENT 7.0
 .TP
-.B interruptonerror
+.B interruptonerror = None
 (\fI\%bool\fP) interrupt on error
 .UNINDENT
 .INDENT 7.0
 .TP
-.B keepcoords
+.B keepcoords = None
 (\fI\%bool\fP) keep original coordinates
 .UNINDENT
 .INDENT 7.0
 .TP
-.B lazyimageslider
+.B lazyimageslider = None
 (\fI\%bool\fP) lazy image slider
 .UNINDENT
 .INDENT 7.0
@@ -14490,42 +14556,42 @@ error messages list
 .UNINDENT
 .INDENT 7.0
 .TP
-.B maskimagename
+.B maskimagename = None
 (\fI\%str\fP) last mask image file name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B maxmbuffersize
+.B maxmbuffersize = None
 (\fI\%str\fP) maximal number of images in memory buffer
 .UNINDENT
 .INDENT 7.0
 .TP
-.B nanmask
+.B nanmask = None
 (\fI\%bool\fP) nan mask enabled
 .UNINDENT
 .INDENT 7.0
 .TP
-.B negmask
+.B negmask = None
 (\fI\%bool\fP) adding maximal type value to negative high value mask
 .UNINDENT
 .INDENT 7.0
 .TP
-.B nrsources
+.B nrsources = None
 (\fI\%int\fP) number of image sources
 .UNINDENT
 .INDENT 7.0
 .TP
-.B nxslast
+.B nxslast = None
 (\fI\%bool\fP) nexus file source starts from the last image
 .UNINDENT
 .INDENT 7.0
 .TP
-.B nxsopen
+.B nxsopen = None
 (\fI\%bool\fP) nexus file source keeps the file open
 .UNINDENT
 .INDENT 7.0
 .TP
-.B orderrois
+.B orderrois = None
 (\fI\%bool\fP) fetch rois order enabled
 .UNINDENT
 .INDENT 7.0
@@ -14547,67 +14613,67 @@ pixelsize in  um
 .UNINDENT
 .INDENT 7.0
 .TP
-.B pixelsizex
+.B pixelsizex = None
 (\fI\%float\fP) pixel x\-size in um
 .UNINDENT
 .INDENT 7.0
 .TP
-.B pixelsizey
+.B pixelsizey = None
 (\fI\%float\fP) pixel y\-size in um
 .UNINDENT
 .INDENT 7.0
 .TP
-.B refreshrate
+.B refreshrate = None
 (\fI\%float\fP) refresh rate is s
 .UNINDENT
 .INDENT 7.0
 .TP
-.B roiscolors
+.B roiscolors = None
 (\fI\%str\fP) json list with roi colors
 .UNINDENT
 .INDENT 7.0
 .TP
-.B sardana
+.B sardana = None
 (\fI\%bool\fP) sardana enabled
 .UNINDENT
 .INDENT 7.0
 .TP
-.B secautoport
+.B secautoport = None
 (\fI\%bool\fP) search for security stream port automatically
 .UNINDENT
 .INDENT 7.0
 .TP
-.B seccontext
-(\fBzmq.Context\fP) zmq context
+.B seccontext = None
+(\fI\%zmq.Context\fP) zmq context
 .UNINDENT
 .INDENT 7.0
 .TP
-.B secport
+.B secport = None
 (\fI\%str\fP) security stream port
 .UNINDENT
 .INDENT 7.0
 .TP
-.B secsocket
-(\fBzmq.Socket\fP) zmq security stream socket
+.B secsocket = None
+(\fI\%zmq.Socket\fP) zmq security stream socket
 .UNINDENT
 .INDENT 7.0
 .TP
-.B secsockopt
+.B secsockopt = None
 (\fI\%bool\fP) security stream options
 .UNINDENT
 .INDENT 7.0
 .TP
-.B secstream
+.B secstream = None
 (\fI\%bool\fP) security stream enabled
 .UNINDENT
 .INDENT 7.0
 .TP
-.B sendresults
+.B sendresults = None
 (\fI\%bool\fP) send results to LavueController flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B sendrois
+.B sendrois = None
 (\fI\%bool\fP) send rois to LavueController flag
 .UNINDENT
 .INDENT 7.0
@@ -14637,87 +14703,97 @@ sets source display parameters
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showaddhisto
+.B showaddhisto = None
 (\fI\%bool\fP) show intensity hostogram
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showallrois
+.B showallrois = None
 (\fI\%bool\fP) show all rois flag
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showfilters
+.B showfilters = None
 (\fI\%bool\fP) show filter widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showframerate
+.B showframerate = None
 (\fI\%bool\fP) show frame rate widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showhighvaluemask
+.B showhighvaluemask = None
 (\fI\%bool\fP) show high mask value  widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showhisto
+.B showhisto = None
 (\fI\%bool\fP) show intensity hostogram
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showlevels
+.B showlevels = None
 (\fI\%bool\fP) show intensity levels widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showmask
+.B showmask = None
 (\fI\%bool\fP) show mask widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showmbuffer
+.B showmbuffer = None
 (\fI\%bool\fP) show memory buffer widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showrange
+.B shownorm = None
+(\fI\%bool\fP) show image normalization widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B shownormsf = None
+(\fI\%bool\fP) show image normalization scaling factor widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B showrange = None
 (\fI\%bool\fP) show range window widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showscale
+.B showscale = None
 (\fI\%bool\fP) show intensity scale widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showstats
+.B showstats = None
 (\fI\%bool\fP) show statistics widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showsteps
+.B showsteps = None
 (\fI\%bool\fP) show image step widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showsub
+.B showsub = None
 (\fI\%bool\fP) show bakcground subtraction widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showsubsf
-(\fI\%bool\fP) show bakcground subtraction scaling widget
+.B showsubsf = None
+(\fI\%bool\fP) show bakcground subtraction scaling factor widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B showtrans
+.B showtrans = None
 (\fI\%bool\fP) show transformation widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B singlerois
+.B singlerois = None
 (\fI\%bool\fP) single rois flag
 .UNINDENT
 .INDENT 7.0
@@ -14738,12 +14814,12 @@ display parameter dictionary
 .UNINDENT
 .INDENT 7.0
 .TP
-.B sourcedisplay
+.B sourcedisplay = None
 (\fI\%bool\fP) store display parameters for specific sources
 .UNINDENT
 .INDENT 7.0
 .TP
-.B statswoscaling
+.B statswoscaling = None
 (\fI\%bool\fP) statistics without scaling
 .UNINDENT
 .INDENT 7.0
@@ -14758,27 +14834,27 @@ Stores settings in QSettings object
 .UNINDENT
 .INDENT 7.0
 .TP
-.B storegeometry
+.B storegeometry = None
 (\fI\%bool\fP) store detector geometry
 .UNINDENT
 .INDENT 7.0
 .TP
-.B timeout
+.B timeout = None
 (\fI\%int\fP) image source timeout for connection
 .UNINDENT
 .INDENT 7.0
 .TP
-.B toolpollinginterval
+.B toolpollinginterval = None
 (\fI\%float\fP) tool polling interval is s
 .UNINDENT
 .INDENT 7.0
 .TP
-.B toolrefreshtime
+.B toolrefreshtime = None
 (\fI\%float\fP) tool refresh rate time is s
 .UNINDENT
 .INDENT 7.0
 .TP
-.B toolwidgets
+.B toolwidgets = None
 (\fI\%str\fP)  json list with tool widget names
 .UNINDENT
 .INDENT 7.0
@@ -14820,12 +14896,12 @@ xy\-position in  pixels
 .UNINDENT
 .INDENT 7.0
 .TP
-.B zeromask
+.B zeromask = None
 (\fI\%bool\fP) zero mask enabled
 .UNINDENT
 .INDENT 7.0
 .TP
-.B zmqtopics
+.B zmqtopics = None
 (\fI\%list\fP < \fI\%str\fP > ) zmq source topics
 .UNINDENT
 .UNINDENT
@@ -15221,7 +15297,7 @@ set source by changing combobox
 .UNINDENT
 .INDENT 7.0
 .TP
-.B widgetnames
+.B widgetnames = None
 (\fI\%list\fP <\fI\%str\fP>) subwidget object names
 .UNINDENT
 .UNINDENT
@@ -15598,21 +15674,41 @@ update source input parameters
 image source selection
 .INDENT 0.0
 .TP
-.B class lavuelib.sourceWidget.ASAPOSourceWidget(parent=None)
-Bases: \fI\%lavuelib.sourceWidget.SourceBaseWidget\fP
+.B class lavuelib.sourceWidget.SourceBaseWidget(sourceid=0, parent=None)
+Bases: \fBPyQt5.QtWidgets.QWidget\fP
 .sp
-test source widget
+general source widget
 .sp
 constructor
 .INDENT 7.0
 .TP
 .B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBsourceid\fP (\fI\%int\fP) – source id
+.IP \(bu 2
 \fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
-.B alias = \(aqasapo\(aq
+.B active = None
+(\fI\%bool\fP) source widget active
+.UNINDENT
+.INDENT 7.0
+.TP
+.B addIconClicked
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) add Icon Clicked
+.UNINDENT
+.INDENT 7.0
+.TP
+.B alias = \(aqtest\(aq
 (\fI\%str\fP) source alias
+.UNINDENT
+.INDENT 7.0
+.TP
+.B buttonEnabled
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) push button enabled signal
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -15644,7 +15740,7 @@ connects widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B datasource = \(aqASAPOSource\(aq
+.B datasource = \(aqBaseSource\(aq
 (\fI\%str\fP) datasource class name
 .UNINDENT
 .INDENT 7.0
@@ -15654,119 +15750,7 @@ disconnects widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B label()
-return a label of the current detector
-.INDENT 7.0
-.TP
-.B Returns
-label of the current detector
-.TP
-.B Return type
-\fI\%str\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B name = \(aqASAPO\(aq
-(\fI\%str\fP) source name
-.UNINDENT
-.INDENT 7.0
-.TP
-.B requires = (\(aqASAPO\(aq,)
-(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
-.UNINDENT
-.INDENT 7.0
-.TP
-.B updateButton(disconnect=True)
-update slot for Asapo source
-.UNINDENT
-.INDENT 7.0
-.TP
-.B updateMetaData(asaposerver=None, asapotoken=None, asapobeamtime=None, asapodatasources=None, asapostreams=None, asaposourcepath=None, disconnect=True, **kargs)
-update source input parameters
-.sp
-:param asaposervers asapo servers, i.e. host:port
-:type asaposervers: \fI\%str\fP
-:param asapotoken: asapo token
-:type asapotoken: \fI\%str\fP
-:param asapobeamtime: beamtime id
-:type asapobeamtime: \fI\%str\fP
-:param asapodatasources: asapo datasource names
-:type asapodatasources: \fI\%list\fP <\fI\%str\fP> >
-:param asapostreams: asapo stream names
-:type asapostreams: \fI\%list\fP <\fI\%str\fP> >
-:param asaposourcepath: source path
-:type asaposourcepath: \fI\%str\fP
-:param disconnect: disconnect on update
-:type disconnect: \fI\%bool\fP
-:param kargs:  source widget input parameter dictionary
-:type kargs: \fI\%dict\fP < \fI\%str\fP, \fI\%any\fP>
-.UNINDENT
-.INDENT 7.0
-.TP
-.B widgetnames
-(\fI\%list\fP <\fI\%str\fP>) subwidget object names
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.TP
-.B class lavuelib.sourceWidget.DOOCSPropSourceWidget(parent=None)
-Bases: \fI\%lavuelib.sourceWidget.SourceBaseWidget\fP
-.sp
-test source widget
-.sp
-constructor
-.INDENT 7.0
-.TP
-.B Parameters
-\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
-.UNINDENT
-.INDENT 7.0
-.TP
-.B alias = \(aqdoocsprop\(aq
-(\fI\%str\fP) source alias
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configuration()
-provides configuration for the current image source
-.INDENT 7.0
-.TP
-.B Returns configuration
-configuration string
-.TP
-.B Rtype configuration
-\fI\%str\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configure(configuration)
-set configuration for the current image source
-.INDENT 7.0
-.TP
-.B Parameters
-\fBconfiguration\fP (\fI\%str\fP) – configuration string
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B connectWidget()
-connects widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B datasource = \(aqDOOCSPropSource\(aq
-(\fI\%str\fP) datasource class name
-.UNINDENT
-.INDENT 7.0
-.TP
-.B disconnectWidget()
-disconnects widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B eventFilter(obj, event)
+.B eventObjectFilter(event, combobox, varname, atdict, atlist)
 event filter
 .INDENT 7.0
 .TP
@@ -15787,6 +15771,11 @@ status flag
 .UNINDENT
 .INDENT 7.0
 .TP
+.B expertmode = None
+(\fI\%bool\fP) expertmode flag
+.UNINDENT
+.INDENT 7.0
+.TP
 .B label()
 return a label of the current detector
 .INDENT 7.0
@@ -15800,49 +15789,73 @@ label of the current detector
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name = \(aqDOOCS Property\(aq
+.B name = \(aqTest\(aq
 (\fI\%str\fP) source name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B requires = (\(aqPYDOOCS\(aq,)
+.B removeIconClicked
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) remove Icon Clicked
+.UNINDENT
+.INDENT 7.0
+.TP
+.B requires = ()
 (\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
 .UNINDENT
 .INDENT 7.0
 .TP
+.B setActive(active=True)
+set active flag
+.INDENT 7.0
+.TP
+.B Parameters
+\fBactive\fP (\fI\%bool\fP) – active flag
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B sourceLabelChanged
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) source label name signal
+.UNINDENT
+.INDENT 7.0
+.TP
+.B sourceStateChanged
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) source state signal
+.UNINDENT
+.INDENT 7.0
+.TP
 .B updateButton()
-update slot for Doocs attribute source
+update slot for test source
 .UNINDENT
 .INDENT 7.0
 .TP
 .B updateComboBox()
-updates ComboBox
+abstract updateComboBox
 .UNINDENT
 .INDENT 7.0
 .TP
-.B updateMetaData(doocsprops=None, **kargs)
+.B updateMetaData(**kargs)
 update source input parameters
 .INDENT 7.0
 .TP
 .B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBdoocsprops\fP (\fI\%str\fP) – json dictionary with
-(label, doocs attribute) items
-.IP \(bu 2
 \fBkargs\fP (\fI\%dict\fP < \fI\%str\fP, \fI\%any\fP>) – source widget input parameter dictionary
-.UNINDENT
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
-.B widgetnames
+.B widgetnames = None
 (\fI\%list\fP <\fI\%str\fP>) subwidget object names
+.UNINDENT
+.INDENT 7.0
+.TP
+.B widgets = None
+(\fI\%list\fP <\fBPyQt5.QtGui.QWidget\fP>) subwidget objects
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class lavuelib.sourceWidget.EpicsPVSourceWidget(parent=None)
+.B class lavuelib.sourceWidget.HidraSourceWidget(sourceid=0, parent=None)
 Bases: \fI\%lavuelib.sourceWidget.SourceBaseWidget\fP
 .sp
 test source widget
@@ -15851,11 +15864,16 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBsourceid\fP (\fI\%int\fP) – source id
+.IP \(bu 2
 \fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
-.B alias = \(aqepicspv\(aq
+.B alias = \(aqhidra\(aq
 (\fI\%str\fP) source alias
 .UNINDENT
 .INDENT 7.0
@@ -15888,34 +15906,13 @@ connects widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B datasource = \(aqEpicsPVSource\(aq
+.B datasource = \(aqHiDRASource\(aq
 (\fI\%str\fP) datasource class name
 .UNINDENT
 .INDENT 7.0
 .TP
 .B disconnectWidget()
 disconnects widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B eventFilter(obj, event)
-event filter
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBobj\fP – qt object
-.IP \(bu 2
-\fBevent\fP – qt event
-.UNINDENT
-.TP
-.B Returns
-status flag
-.TP
-.B Return type
-\fI\%bool\fP
-.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -15932,38 +15929,31 @@ label of the current detector
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name = \(aqEpics PV\(aq
+.B name = \(aqHidra\(aq
 (\fI\%str\fP) source name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B requires = (\(aqPYEPICS\(aq,)
+.B requires = (\(aqHIDRA\(aq,)
 (\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
 .UNINDENT
 .INDENT 7.0
 .TP
 .B updateButton()
-update slot for Epics file source
+update slot for Hidra source
 .UNINDENT
 .INDENT 7.0
 .TP
-.B updateComboBox()
-updates ComboBox
-.UNINDENT
-.INDENT 7.0
-.TP
-.B updateMetaData(epicspvnames=None, epicspvshapes=None, **kargs)
+.B updateMetaData(serverdict=None, hidraport=None, **kargs)
 update source input parameters
 .INDENT 7.0
 .TP
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBepicspvnames\fP (\fI\%str\fP) – json dictionary with
-(label, file epics attribute) items
+\fBserverdict\fP (\fI\%dict\fP < \fI\%str\fP, \fI\%list\fP <\fI\%str\fP> >) – server dictionary
 .IP \(bu 2
-\fBepicspvshapes\fP (\fI\%str\fP) – json dictionary with
-(label, dir epics attribute) items
+\fBhidaraport\fP – list of hidra ports
 .IP \(bu 2
 \fBkargs\fP (\fI\%dict\fP < \fI\%str\fP, \fI\%any\fP>) – source widget input parameter dictionary
 .UNINDENT
@@ -15971,13 +15961,13 @@ update source input parameters
 .UNINDENT
 .INDENT 7.0
 .TP
-.B widgetnames
+.B widgetnames = None
 (\fI\%list\fP <\fI\%str\fP>) subwidget object names
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class lavuelib.sourceWidget.HTTPSourceWidget(parent=None)
+.B class lavuelib.sourceWidget.HTTPSourceWidget(sourceid=0, parent=None)
 Bases: \fI\%lavuelib.sourceWidget.SourceBaseWidget\fP
 .sp
 test source widget
@@ -15986,7 +15976,12 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBsourceid\fP (\fI\%int\fP) – source id
+.IP \(bu 2
 \fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -16103,13 +16098,13 @@ update source input parameters
 .UNINDENT
 .INDENT 7.0
 .TP
-.B widgetnames
+.B widgetnames = None
 (\fI\%list\fP <\fI\%str\fP>) subwidget object names
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class lavuelib.sourceWidget.HidraSourceWidget(parent=None)
+.B class lavuelib.sourceWidget.TangoAttrSourceWidget(sourceid=0, parent=None)
 Bases: \fI\%lavuelib.sourceWidget.SourceBaseWidget\fP
 .sp
 test source widget
@@ -16118,411 +16113,12 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBsourceid\fP (\fI\%int\fP) – source id
+.IP \(bu 2
 \fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
 .UNINDENT
-.INDENT 7.0
-.TP
-.B alias = \(aqhidra\(aq
-(\fI\%str\fP) source alias
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configuration()
-provides configuration for the current image source
-.INDENT 7.0
-.TP
-.B Returns configuration
-configuration string
-.TP
-.B Rtype configuration
-\fI\%str\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configure(configuration)
-set configuration for the current image source
-.INDENT 7.0
-.TP
-.B Parameters
-\fBconfiguration\fP (\fI\%str\fP) – configuration string
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B connectWidget()
-connects widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B datasource = \(aqHiDRASource\(aq
-(\fI\%str\fP) datasource class name
-.UNINDENT
-.INDENT 7.0
-.TP
-.B disconnectWidget()
-disconnects widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B label()
-return a label of the current detector
-.INDENT 7.0
-.TP
-.B Returns
-label of the current detector
-.TP
-.B Return type
-\fI\%str\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B name = \(aqHidra\(aq
-(\fI\%str\fP) source name
-.UNINDENT
-.INDENT 7.0
-.TP
-.B requires = (\(aqHIDRA\(aq,)
-(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
-.UNINDENT
-.INDENT 7.0
-.TP
-.B updateButton()
-update slot for Hidra source
-.UNINDENT
-.INDENT 7.0
-.TP
-.B updateMetaData(serverdict=None, hidraport=None, **kargs)
-update source input parameters
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBserverdict\fP (\fI\%dict\fP < \fI\%str\fP, \fI\%list\fP <\fI\%str\fP> >) – server dictionary
-.IP \(bu 2
-\fBkargs\fP (\fI\%dict\fP < \fI\%str\fP, \fI\%any\fP>) – source widget input parameter dictionary
-.UNINDENT
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B widgetnames
-(\fI\%list\fP <\fI\%str\fP>) subwidget object names
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.TP
-.B class lavuelib.sourceWidget.NXSFileSourceWidget(parent=None)
-Bases: \fI\%lavuelib.sourceWidget.SourceBaseWidget\fP
-.sp
-test source widget
-.sp
-constructor
-.INDENT 7.0
-.TP
-.B Parameters
-\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
-.UNINDENT
-.INDENT 7.0
-.TP
-.B alias = \(aqnxsfile\(aq
-(\fI\%str\fP) source alias
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configuration()
-provides configuration for the current image source
-.INDENT 7.0
-.TP
-.B Returns configuration
-configuration string
-.TP
-.B Rtype configuration
-\fI\%str\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configure(configuration)
-set configuration for the current image source
-.INDENT 7.0
-.TP
-.B Parameters
-\fBconfiguration\fP (\fI\%str\fP) – configuration string
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B connectWidget()
-connects widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B datasource = \(aqNXSFileSource\(aq
-(\fI\%str\fP) datasource class name
-.UNINDENT
-.INDENT 7.0
-.TP
-.B disconnectWidget()
-disconnects widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B eventFilter(obj, event)
-event filter
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBobj\fP – qt object
-.IP \(bu 2
-\fBevent\fP – qt event
-.UNINDENT
-.TP
-.B Returns
-status flag
-.TP
-.B Return type
-\fI\%bool\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B label()
-return a label of the current detector
-.INDENT 7.0
-.TP
-.B Returns
-label of the current detector
-.TP
-.B Return type
-\fI\%str\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B name = \(aqNeXus File\(aq
-(\fI\%str\fP) source name
-.UNINDENT
-.INDENT 7.0
-.TP
-.B updateButton()
-update slot for nexus file source
-.UNINDENT
-.INDENT 7.0
-.TP
-.B updateMetaData(nxsopen=None, nxslast=None, **kargs)
-update source input parameters
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBnxsopen\fP (\fI\%bool\fP) – nexus file source keeps the file open
-.IP \(bu 2
-\fBnxslast\fP (\fI\%bool\fP) – nexus file source starts from the last image
-.IP \(bu 2
-\fBkargs\fP (\fI\%dict\fP < \fI\%str\fP, \fI\%any\fP>) – source widget input parameter dictionary
-.UNINDENT
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B widgetnames
-(\fI\%list\fP <\fI\%str\fP>) subwidget object names
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.TP
-.B class lavuelib.sourceWidget.SourceBaseWidget(parent=None)
-Bases: \fBPyQt5.QtWidgets.QWidget\fP
-.sp
-general source widget
-.sp
-constructor
-.INDENT 7.0
-.TP
-.B Parameters
-\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
-.UNINDENT
-.INDENT 7.0
-.TP
-.B active
-(\fI\%bool\fP) source widget active
-.UNINDENT
-.INDENT 7.0
-.TP
-.B addIconClicked
-(\fBpyqtgraph.QtCore.pyqtSignal\fP) add Icon Clicked
-.UNINDENT
-.INDENT 7.0
-.TP
-.B alias = \(aqtest\(aq
-(\fI\%str\fP) source alias
-.UNINDENT
-.INDENT 7.0
-.TP
-.B buttonEnabled
-(\fBpyqtgraph.QtCore.pyqtSignal\fP) push button enabled signal
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configuration()
-provides configuration for the current image source
-.INDENT 7.0
-.TP
-.B Returns configuration
-configuration string
-.TP
-.B Rtype configuration
-\fI\%str\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configure(configuration)
-set configuration for the current image source
-.INDENT 7.0
-.TP
-.B Parameters
-\fBconfiguration\fP (\fI\%str\fP) – configuration string
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B connectWidget()
-connects widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B datasource = \(aqBaseSource\(aq
-(\fI\%str\fP) datasource class name
-.UNINDENT
-.INDENT 7.0
-.TP
-.B disconnectWidget()
-disconnects widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B eventObjectFilter(event, combobox, varname, atdict, atlist)
-event filter
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBobj\fP – qt object
-.IP \(bu 2
-\fBevent\fP – qt event
-.UNINDENT
-.TP
-.B Returns
-status flag
-.TP
-.B Return type
-\fI\%bool\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B expertmode
-(\fI\%bool\fP) expertmode flag
-.UNINDENT
-.INDENT 7.0
-.TP
-.B label()
-return a label of the current detector
-.INDENT 7.0
-.TP
-.B Returns
-label of the current detector
-.TP
-.B Return type
-\fI\%str\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B name = \(aqTest\(aq
-(\fI\%str\fP) source name
-.UNINDENT
-.INDENT 7.0
-.TP
-.B removeIconClicked
-(\fBpyqtgraph.QtCore.pyqtSignal\fP) remove Icon Clicked
-.UNINDENT
-.INDENT 7.0
-.TP
-.B requires = ()
-(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
-.UNINDENT
-.INDENT 7.0
-.TP
-.B setActive(active=True)
-set active flag
-.INDENT 7.0
-.TP
-.B Parameters
-\fBactive\fP (\fI\%bool\fP) – active flag
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B sourceLabelChanged
-(\fBpyqtgraph.QtCore.pyqtSignal\fP) source label name signal
-.UNINDENT
-.INDENT 7.0
-.TP
-.B sourceStateChanged
-(\fBpyqtgraph.QtCore.pyqtSignal\fP) source state signal
-.UNINDENT
-.INDENT 7.0
-.TP
-.B updateButton()
-update slot for test source
-.UNINDENT
-.INDENT 7.0
-.TP
-.B updateComboBox()
-abstract updateComboBox
-.UNINDENT
-.INDENT 7.0
-.TP
-.B updateMetaData(**kargs)
-update source input parameters
-.INDENT 7.0
-.TP
-.B Parameters
-\fBkargs\fP (\fI\%dict\fP < \fI\%str\fP, \fI\%any\fP>) – source widget input parameter dictionary
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B widgetnames
-(\fI\%list\fP <\fI\%str\fP>) subwidget object names
-.UNINDENT
-.INDENT 7.0
-.TP
-.B widgets
-(\fI\%list\fP <\fBPyQt5.QtGui.QWidget\fP>) subwidget objects
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.TP
-.B class lavuelib.sourceWidget.TangoAttrSourceWidget(parent=None)
-Bases: \fI\%lavuelib.sourceWidget.SourceBaseWidget\fP
-.sp
-test source widget
-.sp
-constructor
-.INDENT 7.0
-.TP
-.B Parameters
-\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -16639,13 +16235,13 @@ update source input parameters
 .UNINDENT
 .INDENT 7.0
 .TP
-.B widgetnames
+.B widgetnames = None
 (\fI\%list\fP <\fI\%str\fP>) subwidget object names
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class lavuelib.sourceWidget.TangoEventsSourceWidget(parent=None)
+.B class lavuelib.sourceWidget.TangoEventsSourceWidget(sourceid=0, parent=None)
 Bases: \fI\%lavuelib.sourceWidget.SourceBaseWidget\fP
 .sp
 test source widget
@@ -16654,7 +16250,12 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBsourceid\fP (\fI\%int\fP) – source id
+.IP \(bu 2
 \fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -16771,13 +16372,13 @@ update source input parameters
 .UNINDENT
 .INDENT 7.0
 .TP
-.B widgetnames
+.B widgetnames = None
 (\fI\%list\fP <\fI\%str\fP>) subwidget object names
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class lavuelib.sourceWidget.TangoFileSourceWidget(parent=None)
+.B class lavuelib.sourceWidget.TangoFileSourceWidget(sourceid=0, parent=None)
 Bases: \fI\%lavuelib.sourceWidget.SourceBaseWidget\fP
 .sp
 test source widget
@@ -16786,7 +16387,12 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBsourceid\fP (\fI\%int\fP) – source id
+.IP \(bu 2
 \fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -16913,13 +16519,13 @@ and file name translation
 .UNINDENT
 .INDENT 7.0
 .TP
-.B widgetnames
+.B widgetnames = None
 (\fI\%list\fP <\fI\%str\fP>) subwidget object names
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class lavuelib.sourceWidget.TestSourceWidget(parent=None)
+.B class lavuelib.sourceWidget.DOOCSPropSourceWidget(sourceid=0, parent=None)
 Bases: \fI\%lavuelib.sourceWidget.SourceBaseWidget\fP
 .sp
 test source widget
@@ -16928,25 +16534,16 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBsourceid\fP (\fI\%int\fP) – source id
+.IP \(bu 2
 \fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
 .UNINDENT
 .UNINDENT
-.INDENT 0.0
-.TP
-.B class lavuelib.sourceWidget.TinePropSourceWidget(parent=None)
-Bases: \fI\%lavuelib.sourceWidget.SourceBaseWidget\fP
-.sp
-test source widget
-.sp
-constructor
 .INDENT 7.0
 .TP
-.B Parameters
-\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
-.UNINDENT
-.INDENT 7.0
-.TP
-.B alias = \(aqtineprop\(aq
+.B alias = \(aqdoocsprop\(aq
 (\fI\%str\fP) source alias
 .UNINDENT
 .INDENT 7.0
@@ -16955,10 +16552,10 @@ constructor
 provides configuration for the current image source
 .INDENT 7.0
 .TP
-.B Returns
+.B Returns configuration
 configuration string
 .TP
-.B Return type
+.B Rtype configuration
 \fI\%str\fP
 .UNINDENT
 .UNINDENT
@@ -16979,7 +16576,7 @@ connects widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B datasource = \(aqTinePropSource\(aq
+.B datasource = \(aqDOOCSPropSource\(aq
 (\fI\%str\fP) datasource class name
 .UNINDENT
 .INDENT 7.0
@@ -17023,18 +16620,18 @@ label of the current detector
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name = \(aqTine Property\(aq
+.B name = \(aqDOOCS Property\(aq
 (\fI\%str\fP) source name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B requires = (\(aqPYTINE\(aq,)
+.B requires = (\(aqPYDOOCS\(aq,)
 (\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
 .UNINDENT
 .INDENT 7.0
 .TP
 .B updateButton()
-update slot for Tine property source
+update slot for Doocs attribute source
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -17043,15 +16640,15 @@ updates ComboBox
 .UNINDENT
 .INDENT 7.0
 .TP
-.B updateMetaData(tineprops=None, **kargs)
+.B updateMetaData(doocsprops=None, **kargs)
 update source input parameters
 .INDENT 7.0
 .TP
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBtineprops\fP (\fI\%str\fP) – json dictionary with
-(label, tine property) items
+\fBdoocsprops\fP (\fI\%str\fP) – json dictionary with
+(label, doocs attribute) items
 .IP \(bu 2
 \fBkargs\fP (\fI\%dict\fP < \fI\%str\fP, \fI\%any\fP>) – source widget input parameter dictionary
 .UNINDENT
@@ -17059,13 +16656,13 @@ update source input parameters
 .UNINDENT
 .INDENT 7.0
 .TP
-.B widgetnames
+.B widgetnames = None
 (\fI\%list\fP <\fI\%str\fP>) subwidget object names
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class lavuelib.sourceWidget.ZMQSourceWidget(parent=None)
+.B class lavuelib.sourceWidget.ZMQSourceWidget(sourceid=0, parent=None)
 Bases: \fI\%lavuelib.sourceWidget.SourceBaseWidget\fP
 .sp
 test source widget
@@ -17074,7 +16671,12 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBsourceid\fP (\fI\%int\fP) – source id
+.IP \(bu 2
 \fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -17194,8 +16796,549 @@ update source input parameters
 .UNINDENT
 .INDENT 7.0
 .TP
-.B widgetnames
+.B widgetnames = None
 (\fI\%list\fP <\fI\%str\fP>) subwidget object names
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class lavuelib.sourceWidget.NXSFileSourceWidget(sourceid=0, parent=None)
+Bases: \fI\%lavuelib.sourceWidget.SourceBaseWidget\fP
+.sp
+test source widget
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBsourceid\fP (\fI\%int\fP) – source id
+.IP \(bu 2
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B alias = \(aqnxsfile\(aq
+(\fI\%str\fP) source alias
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configuration()
+provides configuration for the current image source
+.INDENT 7.0
+.TP
+.B Returns configuration
+configuration string
+.TP
+.B Rtype configuration
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configure(configuration)
+set configuration for the current image source
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – configuration string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B connectWidget()
+connects widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B datasource = \(aqNXSFileSource\(aq
+(\fI\%str\fP) datasource class name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B disconnectWidget()
+disconnects widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B eventFilter(obj, event)
+event filter
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBobj\fP – qt object
+.IP \(bu 2
+\fBevent\fP – qt event
+.UNINDENT
+.TP
+.B Returns
+status flag
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B label()
+return a label of the current detector
+.INDENT 7.0
+.TP
+.B Returns
+label of the current detector
+.TP
+.B Return type
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name = \(aqNeXus File\(aq
+(\fI\%str\fP) source name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateButton()
+update slot for nexus file source
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateMetaData(nxsopen=None, nxslast=None, **kargs)
+update source input parameters
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnxsopen\fP (\fI\%bool\fP) – nexus file source keeps the file open
+.IP \(bu 2
+\fBnxslast\fP (\fI\%bool\fP) – nexus file source starts from the last image
+.IP \(bu 2
+\fBkargs\fP (\fI\%dict\fP < \fI\%str\fP, \fI\%any\fP>) – source widget input parameter dictionary
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B widgetnames = None
+(\fI\%list\fP <\fI\%str\fP>) subwidget object names
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class lavuelib.sourceWidget.TinePropSourceWidget(sourceid=0, parent=None)
+Bases: \fI\%lavuelib.sourceWidget.SourceBaseWidget\fP
+.sp
+test source widget
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBsourceid\fP (\fI\%int\fP) – source id
+.IP \(bu 2
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B alias = \(aqtineprop\(aq
+(\fI\%str\fP) source alias
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configuration()
+provides configuration for the current image source
+.INDENT 7.0
+.TP
+.B Returns
+configuration string
+.TP
+.B Return type
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configure(configuration)
+set configuration for the current image source
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – configuration string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B connectWidget()
+connects widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B datasource = \(aqTinePropSource\(aq
+(\fI\%str\fP) datasource class name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B disconnectWidget()
+disconnects widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B eventFilter(obj, event)
+event filter
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBobj\fP – qt object
+.IP \(bu 2
+\fBevent\fP – qt event
+.UNINDENT
+.TP
+.B Returns
+status flag
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B label()
+return a label of the current detector
+.INDENT 7.0
+.TP
+.B Returns
+label of the current detector
+.TP
+.B Return type
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name = \(aqTine Property\(aq
+(\fI\%str\fP) source name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B requires = (\(aqPYTINE\(aq,)
+(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateButton()
+update slot for Tine property source
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateComboBox()
+updates ComboBox
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateMetaData(tineprops=None, **kargs)
+update source input parameters
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBtineprops\fP (\fI\%str\fP) – json dictionary with
+(label, tine property) items
+.IP \(bu 2
+\fBkargs\fP (\fI\%dict\fP < \fI\%str\fP, \fI\%any\fP>) – source widget input parameter dictionary
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B widgetnames = None
+(\fI\%list\fP <\fI\%str\fP>) subwidget object names
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class lavuelib.sourceWidget.EpicsPVSourceWidget(sourceid=0, parent=None)
+Bases: \fI\%lavuelib.sourceWidget.SourceBaseWidget\fP
+.sp
+test source widget
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBsourceid\fP (\fI\%int\fP) – source id
+.IP \(bu 2
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B alias = \(aqepicspv\(aq
+(\fI\%str\fP) source alias
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configuration()
+provides configuration for the current image source
+.INDENT 7.0
+.TP
+.B Returns configuration
+configuration string
+.TP
+.B Rtype configuration
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configure(configuration)
+set configuration for the current image source
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – configuration string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B connectWidget()
+connects widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B datasource = \(aqEpicsPVSource\(aq
+(\fI\%str\fP) datasource class name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B disconnectWidget()
+disconnects widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B eventFilter(obj, event)
+event filter
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBobj\fP – qt object
+.IP \(bu 2
+\fBevent\fP – qt event
+.UNINDENT
+.TP
+.B Returns
+status flag
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B label()
+return a label of the current detector
+.INDENT 7.0
+.TP
+.B Returns
+label of the current detector
+.TP
+.B Return type
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name = \(aqEpics PV\(aq
+(\fI\%str\fP) source name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B requires = (\(aqPYEPICS\(aq,)
+(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateButton()
+update slot for Epics file source
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateComboBox()
+updates ComboBox
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateMetaData(epicspvnames=None, epicspvshapes=None, **kargs)
+update source input parameters
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBepicspvnames\fP (\fI\%str\fP) – json dictionary with
+(label, file epics attribute) items
+.IP \(bu 2
+\fBepicspvshapes\fP (\fI\%str\fP) – json dictionary with
+(label, dir epics attribute) items
+.IP \(bu 2
+\fBkargs\fP (\fI\%dict\fP < \fI\%str\fP, \fI\%any\fP>) – source widget input parameter dictionary
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B widgetnames = None
+(\fI\%list\fP <\fI\%str\fP>) subwidget object names
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class lavuelib.sourceWidget.ASAPOSourceWidget(sourceid=0, parent=None)
+Bases: \fI\%lavuelib.sourceWidget.SourceBaseWidget\fP
+.sp
+test source widget
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBsourceid\fP (\fI\%int\fP) – source id
+.IP \(bu 2
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B alias = \(aqasapo\(aq
+(\fI\%str\fP) source alias
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configuration()
+provides configuration for the current image source
+.INDENT 7.0
+.TP
+.B Returns configuration
+configuration string
+.TP
+.B Rtype configuration
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configure(configuration)
+set configuration for the current image source
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – configuration string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B connectWidget()
+connects widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B datasource = \(aqASAPOSource\(aq
+(\fI\%str\fP) datasource class name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B disconnectWidget()
+disconnects widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B label()
+return a label of the current detector
+.INDENT 7.0
+.TP
+.B Returns
+label of the current detector
+.TP
+.B Return type
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name = \(aqASAPO\(aq
+(\fI\%str\fP) source name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B requires = (\(aqASAPO\(aq,)
+(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateButton(disconnect=True)
+update slot for Asapo source
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateMetaData(asaposerver=None, asapotoken=None, asapobeamtime=None, asapodatasources=None, asapostreams=None, asaposourcepath=None, disconnect=True, **kargs)
+update source input parameters
+.sp
+:param asaposervers asapo servers, i.e. host:port
+:type asaposervers: \fI\%str\fP
+:param asapotoken: asapo token
+:type asapotoken: \fI\%str\fP
+:param asapobeamtime: beamtime id
+:type asapobeamtime: \fI\%str\fP
+:param asapodatasources: asapo datasource names
+:type asapodatasources: \fI\%list\fP <\fI\%str\fP> >
+:param asapostreams: asapo stream names
+:type asapostreams: \fI\%list\fP <\fI\%str\fP> >
+:param asaposourcepath: source path
+:type asaposourcepath: \fI\%str\fP
+:param disconnect: disconnect on update
+:type disconnect: \fI\%bool\fP
+:param kargs:  source widget input parameter dictionary
+:type kargs: \fI\%dict\fP < \fI\%str\fP, \fI\%any\fP>
+.UNINDENT
+.INDENT 7.0
+.TP
+.B widgetnames = None
+(\fI\%list\fP <\fI\%str\fP>) subwidget object names
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class lavuelib.sourceWidget.TestSourceWidget(sourceid=0, parent=None)
+Bases: \fI\%lavuelib.sourceWidget.SourceBaseWidget\fP
+.sp
+test source widget
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBsourceid\fP (\fI\%int\fP) – source id
+.IP \(bu 2
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -17273,38 +17416,314 @@ create GUI
 .UNINDENT
 .INDENT 7.0
 .TP
-.B motortips
+.B motortips = None
 (\fBlist\(ga<:obj:\(gastr\fP>) motortips list
 .UNINDENT
 .INDENT 7.0
 .TP
-.B title
+.B title = None
 (\fI\%str\fP) group title
 .UNINDENT
 .INDENT 7.0
 .TP
-.B xmotordevice
+.B xmotordevice = None
 (\fI\%tango.DeviceProxy\fP) x motor device
 .UNINDENT
 .INDENT 7.0
 .TP
-.B xmotorname
+.B xmotorname = None
 (\fI\%str\fP) x motor name
 .UNINDENT
 .INDENT 7.0
 .TP
-.B ymotordevice
+.B ymotordevice = None
 (\fI\%tango.DeviceProxy\fP) y motor device
 .UNINDENT
 .INDENT 7.0
 .TP
-.B ymotorname
+.B ymotorname = None
 (\fI\%str\fP) y motor name
 .UNINDENT
 .UNINDENT
 .SS lavuelib.toolWidget module
 .sp
 image widget
+.INDENT 0.0
+.TP
+.B class lavuelib.toolWidget.IntensityToolWidget(parent=None)
+Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
+.sp
+intensity tool widget
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.INDENT 7.0
+.TP
+.B afterplot()
+command after plot
+.UNINDENT
+.INDENT 7.0
+.TP
+.B alias = \(aqintensity\(aq
+(\fI\%str\fP) tool name alias
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configuration()
+provides configuration for the current tool
+.INDENT 7.0
+.TP
+.B Returns configuration
+configuration string
+.TP
+.B Rtype configuration
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configure(configuration)
+set configuration for the current tool
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – configuration string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name = \(aqIntensity\(aq
+(\fI\%str\fP) tool name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B requires = ()
+(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
+.UNINDENT
+.INDENT 7.0
+.TP
+.B signal2slot = None
+(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
+list of [signal, slot] object to connect
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class lavuelib.toolWidget.ROIToolWidget(parent=None)
+Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
+.sp
+roi tool widget
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.INDENT 7.0
+.TP
+.B activate()
+activates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B alias = \(aqroi\(aq
+(\fI\%str\fP) tool name alias
+.UNINDENT
+.INDENT 7.0
+.TP
+.B applyROIPressed
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) apply ROI pressed signal
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configuration()
+provides configuration for the current tool
+.INDENT 7.0
+.TP
+.B Returns configuration
+configuration string
+.TP
+.B Rtype configuration
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configure(configuration)
+set configuration for the current tool
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – configuration string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B deactivate()
+deactivates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B fetchROIPressed
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) fetch ROI pressed signal
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name = \(aqROI\(aq
+(\fI\%str\fP) tool name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B requires = ()
+(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
+.UNINDENT
+.INDENT 7.0
+.TP
+.B roiInfoChanged
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) roi info Changed signal
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setROIsNumber(rid)
+sets a number of rois
+.INDENT 7.0
+.TP
+.B Parameters
+\fBrid\fP (\fI\%int\fP) – number of rois
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B signal2slot = None
+(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
+list of [signal, slot] object to connect
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateApplyTips(rid)
+updates apply tips
+.INDENT 7.0
+.TP
+.B Parameters
+\fBrid\fP (\fI\%int\fP) – current roi id
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateROIButton(enabled)
+enables/disables ROI buttons
+.INDENT 7.0
+.TP
+.B Parameters
+\fBenable\fP (\fI\%bool\fP) – buttons enabled
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateROIDisplayText(text, currentroi, roiVal)
+updates ROI display text
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBtext\fP (\fI\%str\fP) – standard display text
+.IP \(bu 2
+\fBcurrentroi\fP (\fI\%str\fP) – current roi label
+.IP \(bu 2
+\fBtext\fP – roi sum value
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateROILineEdit(text)
+updates ROI line edit text
+.INDENT 7.0
+.TP
+.B Parameters
+\fBtext\fP (\fI\%str\fP) – text to update
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class lavuelib.toolWidget.LineCutToolWidget(parent=None)
+Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
+.sp
+line\-cut tool widget
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.INDENT 7.0
+.TP
+.B activate()
+activates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B afterplot()
+command after plot
+.UNINDENT
+.INDENT 7.0
+.TP
+.B alias = \(aqlinecut\(aq
+(\fI\%str\fP) tool name alias
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configuration()
+provides configuration for the current tool
+.INDENT 7.0
+.TP
+.B Returns configuration
+configuration string
+.TP
+.B Rtype configuration
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configure(configuration)
+set configuration for the current tool
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – configuration string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B deactivate()
+activates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name = \(aqLineCut\(aq
+(\fI\%str\fP) tool name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B requires = ()
+(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
+.UNINDENT
+.INDENT 7.0
+.TP
+.B signal2slot = None
+(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
+list of [signal, slot] object to connect
+.UNINDENT
+.UNINDENT
 .INDENT 0.0
 .TP
 .B class lavuelib.toolWidget.AngleQToolWidget(parent=None)
@@ -17389,7 +17808,7 @@ deactivates tool widget
 .UNINDENT
 .INDENT 7.0
 .TP
-.B signal2slot
+.B signal2slot = None
 (\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
 list of [signal, slot] object to connect
 .UNINDENT
@@ -17402,6 +17821,493 @@ update geometry tips
 .TP
 .B updateRangeTip()
 update geometry tips
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class lavuelib.toolWidget.MotorsToolWidget(parent=None)
+Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
+.sp
+motors tool widget
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.INDENT 7.0
+.TP
+.B activate()
+activates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B alias = \(aqmovemotors\(aq
+(\fI\%str\fP) tool name alias
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configuration()
+provides configuration for the current tool
+.INDENT 7.0
+.TP
+.B Returns configuration
+configuration string
+.TP
+.B Rtype configuration
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configure(configuration)
+set configuration for the current tool
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – configuration string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name = \(aqMoveMotors\(aq
+(\fI\%str\fP) tool name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B requires = (\(aqTANGO\(aq,)
+(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
+.UNINDENT
+.INDENT 7.0
+.TP
+.B signal2slot = None
+(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
+list of [signal, slot] object to connect
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class lavuelib.toolWidget.MeshToolWidget(parent=None)
+Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
+.sp
+mesh tool widget
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.INDENT 7.0
+.TP
+.B activate()
+activates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B alias = \(aqmeshscan\(aq
+(\fI\%str\fP) tool name alias
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configuration()
+provides configuration for the current tool
+.INDENT 7.0
+.TP
+.B Returns configuration
+configuration string
+.TP
+.B Rtype configuration
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configure(configuration)
+set configuration for the current tool
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – configuration string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B deactivate()
+deactivates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name = \(aqMeshScan\(aq
+(\fI\%str\fP) tool name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B requires = (\(aqTANGO\(aq,)
+(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
+.UNINDENT
+.INDENT 7.0
+.TP
+.B roiInfoChanged
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) roi info Changed signal
+.UNINDENT
+.INDENT 7.0
+.TP
+.B signal2slot = None
+(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
+list of [signal, slot] object to connect
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateROIDisplayText(text, currentroi, roiVal)
+updates ROI display text
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBtext\fP (\fI\%str\fP) – standard display text
+.IP \(bu 2
+\fBcurrentroi\fP (\fI\%str\fP) – current roi label
+.IP \(bu 2
+\fBtext\fP – roi sum value
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class lavuelib.toolWidget.OneDToolWidget(parent=None)
+Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
+.sp
+1d plot tool widget
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.INDENT 7.0
+.TP
+.B activate()
+activates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B afterplot()
+command after plot
+.UNINDENT
+.INDENT 7.0
+.TP
+.B alias = \(aq1d\-plot\(aq
+(\fI\%str\fP) tool name alias
+.UNINDENT
+.INDENT 7.0
+.TP
+.B beforeplot(array, rawarray)
+command  before plot
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBarray\fP (\fI\%numpy.ndarray\fP) – 2d image array
+.IP \(bu 2
+\fBrawarray\fP (\fI\%numpy.ndarray\fP) – 2d raw image array
+.UNINDENT
+.TP
+.B Returns
+2d image array and raw image
+.TP
+.B Return type
+(\fI\%numpy.ndarray\fP, \fI\%numpy.ndarray\fP)
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configuration()
+provides configuration for the current tool
+.INDENT 7.0
+.TP
+.B Returns configuration
+configuration string
+.TP
+.B Rtype configuration
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configure(configuration)
+set configuration for the current tool
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – configuration string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B deactivate()
+activates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name = \(aq1d\-Plot\(aq
+(\fI\%str\fP) tool name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B requires = ()
+(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
+.UNINDENT
+.INDENT 7.0
+.TP
+.B signal2slot = None
+(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
+list of [signal, slot] object to connect
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class lavuelib.toolWidget.ProjectionToolWidget(parent=None)
+Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
+.sp
+Projections tool widget
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.INDENT 7.0
+.TP
+.B activate()
+activates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B afterplot()
+command after plot
+.UNINDENT
+.INDENT 7.0
+.TP
+.B alias = \(aqprojections\(aq
+(\fI\%str\fP) tool name alias
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configuration()
+provides configuration for the current tool
+.INDENT 7.0
+.TP
+.B Returns configuration
+configuration string
+.TP
+.B Rtype configuration
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configure(configuration)
+set configuration for the current tool
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – configuration string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B deactivate()
+activates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name = \(aqProjections\(aq
+(\fI\%str\fP) tool name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B requires = ()
+(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
+.UNINDENT
+.INDENT 7.0
+.TP
+.B signal2slot = None
+(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
+list of [signal, slot] object to connect
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class lavuelib.toolWidget.MaximaToolWidget(parent=None)
+Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
+.sp
+maxima tool widget
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.INDENT 7.0
+.TP
+.B activate()
+activates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B alias = \(aqmaxima\(aq
+(\fI\%str\fP) tool name alias
+.UNINDENT
+.INDENT 7.0
+.TP
+.B beforeplot(array, rawarray)
+command  before plot
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBarray\fP (\fI\%numpy.ndarray\fP) – 2d image array
+.IP \(bu 2
+\fBrawarray\fP (\fI\%numpy.ndarray\fP) – 2d raw image array
+.UNINDENT
+.TP
+.B Returns
+2d image array and raw image
+.TP
+.B Return type
+(\fI\%numpy.ndarray\fP, \fI\%numpy.ndarray\fP)
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configuration()
+provides configuration for the current tool
+.INDENT 7.0
+.TP
+.B Returns configuration
+configuration string
+.TP
+.B Rtype configuration
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configure(configuration)
+set configuration for the current tool
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – configuration string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B deactivate()
+deactivates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name = \(aqMaxima\(aq
+(\fI\%str\fP) tool name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B requires = ()
+(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
+.UNINDENT
+.INDENT 7.0
+.TP
+.B signal2slot = None
+(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
+list of [signal, slot] object to connect
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateGeometryTip()
+update geometry tips
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class lavuelib.toolWidget.ParametersToolWidget(parent=None)
+Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
+.sp
+motors tool widget
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.INDENT 7.0
+.TP
+.B activate()
+activates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B alias = \(aqparameters\(aq
+(\fI\%str\fP) tool name alias
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configuration()
+provides configuration for the current tool
+.INDENT 7.0
+.TP
+.B Returns configuration
+configuration string
+.TP
+.B Rtype configuration
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configure(configuration)
+set configuration for the current tool
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – configuration string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B convert = {\(aqbool\(aq: <bound method Converters.toBool of <class \(aqlavuelib.toolWidget.Converters\(aq>>, \(aqfloat\(aq: <class \(aqfloat\(aq>, \(aqfloat16\(aq: <class \(aqfloat\(aq>, \(aqfloat32\(aq: <class \(aqfloat\(aq>, \(aqfloat64\(aq: <class \(aqfloat\(aq>, \(aqint\(aq: <class \(aqint\(aq>, \(aqint16\(aq: <class \(aqint\(aq>, \(aqint32\(aq: <class \(aqint\(aq>, \(aqint64\(aq: <class \(aqint\(aq>, \(aqint8\(aq: <class \(aqint\(aq>, \(aqstr\(aq: <class \(aqstr\(aq>, \(aqstring\(aq: <class \(aqstr\(aq>, \(aquint\(aq: <class \(aqint\(aq>, \(aquint16\(aq: <class \(aqint\(aq>, \(aquint32\(aq: <class \(aqint\(aq>, \(aquint64\(aq: <class \(aqint\(aq>, \(aquint8\(aq: <class \(aqint\(aq>}
+(\fI\%dict\fP <\fI\%str\fP , \fI\%type\fP or \fI\%types.MethodType\fP >) map of type : converting function
+.UNINDENT
+.INDENT 7.0
+.TP
+.B deactivate()
+activates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name = \(aqParameters\(aq
+(\fI\%str\fP) tool name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B requires = (\(aqTANGO\(aq,)
+(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
+.UNINDENT
+.INDENT 7.0
+.TP
+.B signal2slot = None
+(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
+list of [signal, slot] object to connect
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -17531,7 +18437,7 @@ change status
 .UNINDENT
 .INDENT 7.0
 .TP
-.B signal2slot
+.B signal2slot = None
 (\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
 list of [signal, slot] object to connect
 .UNINDENT
@@ -17549,629 +18455,6 @@ update geometry tips
 .TP
 .B waitForThread()
 waits for running thread
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.TP
-.B class lavuelib.toolWidget.IntensityToolWidget(parent=None)
-Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
-.sp
-intensity tool widget
-.sp
-constructor
-.INDENT 7.0
-.TP
-.B Parameters
-\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
-.UNINDENT
-.INDENT 7.0
-.TP
-.B afterplot()
-command after plot
-.UNINDENT
-.INDENT 7.0
-.TP
-.B alias = \(aqintensity\(aq
-(\fI\%str\fP) tool name alias
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configuration()
-provides configuration for the current tool
-.INDENT 7.0
-.TP
-.B Returns configuration
-configuration string
-.TP
-.B Rtype configuration
-\fI\%str\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configure(configuration)
-set configuration for the current tool
-.INDENT 7.0
-.TP
-.B Parameters
-\fBconfiguration\fP (\fI\%str\fP) – configuration string
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B name = \(aqIntensity\(aq
-(\fI\%str\fP) tool name
-.UNINDENT
-.INDENT 7.0
-.TP
-.B requires = ()
-(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
-.UNINDENT
-.INDENT 7.0
-.TP
-.B signal2slot
-(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
-list of [signal, slot] object to connect
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.TP
-.B class lavuelib.toolWidget.LineCutToolWidget(parent=None)
-Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
-.sp
-line\-cut tool widget
-.sp
-constructor
-.INDENT 7.0
-.TP
-.B Parameters
-\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
-.UNINDENT
-.INDENT 7.0
-.TP
-.B activate()
-activates tool widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B afterplot()
-command after plot
-.UNINDENT
-.INDENT 7.0
-.TP
-.B alias = \(aqlinecut\(aq
-(\fI\%str\fP) tool name alias
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configuration()
-provides configuration for the current tool
-.INDENT 7.0
-.TP
-.B Returns configuration
-configuration string
-.TP
-.B Rtype configuration
-\fI\%str\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configure(configuration)
-set configuration for the current tool
-.INDENT 7.0
-.TP
-.B Parameters
-\fBconfiguration\fP (\fI\%str\fP) – configuration string
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B deactivate()
-activates tool widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B name = \(aqLineCut\(aq
-(\fI\%str\fP) tool name
-.UNINDENT
-.INDENT 7.0
-.TP
-.B requires = ()
-(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
-.UNINDENT
-.INDENT 7.0
-.TP
-.B signal2slot
-(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
-list of [signal, slot] object to connect
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.TP
-.B class lavuelib.toolWidget.MaximaToolWidget(parent=None)
-Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
-.sp
-maxima tool widget
-.sp
-constructor
-.INDENT 7.0
-.TP
-.B Parameters
-\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
-.UNINDENT
-.INDENT 7.0
-.TP
-.B activate()
-activates tool widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B alias = \(aqmaxima\(aq
-(\fI\%str\fP) tool name alias
-.UNINDENT
-.INDENT 7.0
-.TP
-.B beforeplot(array, rawarray)
-command  before plot
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBarray\fP (\fI\%numpy.ndarray\fP) – 2d image array
-.IP \(bu 2
-\fBrawarray\fP (\fI\%numpy.ndarray\fP) – 2d raw image array
-.UNINDENT
-.TP
-.B Returns
-2d image array and raw image
-.TP
-.B Return type
-(\fI\%numpy.ndarray\fP, \fI\%numpy.ndarray\fP)
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configuration()
-provides configuration for the current tool
-.INDENT 7.0
-.TP
-.B Returns configuration
-configuration string
-.TP
-.B Rtype configuration
-\fI\%str\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configure(configuration)
-set configuration for the current tool
-.INDENT 7.0
-.TP
-.B Parameters
-\fBconfiguration\fP (\fI\%str\fP) – configuration string
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B deactivate()
-deactivates tool widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B name = \(aqMaxima\(aq
-(\fI\%str\fP) tool name
-.UNINDENT
-.INDENT 7.0
-.TP
-.B requires = ()
-(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
-.UNINDENT
-.INDENT 7.0
-.TP
-.B signal2slot
-(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
-list of [signal, slot] object to connect
-.UNINDENT
-.INDENT 7.0
-.TP
-.B updateGeometryTip()
-update geometry tips
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.TP
-.B class lavuelib.toolWidget.MeshToolWidget(parent=None)
-Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
-.sp
-mesh tool widget
-.sp
-constructor
-.INDENT 7.0
-.TP
-.B Parameters
-\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
-.UNINDENT
-.INDENT 7.0
-.TP
-.B activate()
-activates tool widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B alias = \(aqmeshscan\(aq
-(\fI\%str\fP) tool name alias
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configuration()
-provides configuration for the current tool
-.INDENT 7.0
-.TP
-.B Returns configuration
-configuration string
-.TP
-.B Rtype configuration
-\fI\%str\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configure(configuration)
-set configuration for the current tool
-.INDENT 7.0
-.TP
-.B Parameters
-\fBconfiguration\fP (\fI\%str\fP) – configuration string
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B deactivate()
-deactivates tool widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B name = \(aqMeshScan\(aq
-(\fI\%str\fP) tool name
-.UNINDENT
-.INDENT 7.0
-.TP
-.B requires = (\(aqTANGO\(aq,)
-(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
-.UNINDENT
-.INDENT 7.0
-.TP
-.B roiInfoChanged
-(\fBpyqtgraph.QtCore.pyqtSignal\fP) roi info Changed signal
-.UNINDENT
-.INDENT 7.0
-.TP
-.B signal2slot
-(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
-list of [signal, slot] object to connect
-.UNINDENT
-.INDENT 7.0
-.TP
-.B updateROIDisplayText(text, currentroi, roiVal)
-updates ROI display text
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBtext\fP (\fI\%str\fP) – standard display text
-.IP \(bu 2
-\fBcurrentroi\fP (\fI\%str\fP) – current roi label
-.IP \(bu 2
-\fBtext\fP – roi sum value
-.UNINDENT
-.UNINDENT
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.TP
-.B class lavuelib.toolWidget.MotorsToolWidget(parent=None)
-Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
-.sp
-motors tool widget
-.sp
-constructor
-.INDENT 7.0
-.TP
-.B Parameters
-\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
-.UNINDENT
-.INDENT 7.0
-.TP
-.B activate()
-activates tool widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B alias = \(aqmovemotors\(aq
-(\fI\%str\fP) tool name alias
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configuration()
-provides configuration for the current tool
-.INDENT 7.0
-.TP
-.B Returns configuration
-configuration string
-.TP
-.B Rtype configuration
-\fI\%str\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configure(configuration)
-set configuration for the current tool
-.INDENT 7.0
-.TP
-.B Parameters
-\fBconfiguration\fP (\fI\%str\fP) – configuration string
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B name = \(aqMoveMotors\(aq
-(\fI\%str\fP) tool name
-.UNINDENT
-.INDENT 7.0
-.TP
-.B requires = (\(aqTANGO\(aq,)
-(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
-.UNINDENT
-.INDENT 7.0
-.TP
-.B signal2slot
-(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
-list of [signal, slot] object to connect
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.TP
-.B class lavuelib.toolWidget.OneDToolWidget(parent=None)
-Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
-.sp
-1d plot tool widget
-.sp
-constructor
-.INDENT 7.0
-.TP
-.B Parameters
-\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
-.UNINDENT
-.INDENT 7.0
-.TP
-.B activate()
-activates tool widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B afterplot()
-command after plot
-.UNINDENT
-.INDENT 7.0
-.TP
-.B alias = \(aq1d\-plot\(aq
-(\fI\%str\fP) tool name alias
-.UNINDENT
-.INDENT 7.0
-.TP
-.B beforeplot(array, rawarray)
-command  before plot
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBarray\fP (\fI\%numpy.ndarray\fP) – 2d image array
-.IP \(bu 2
-\fBrawarray\fP (\fI\%numpy.ndarray\fP) – 2d raw image array
-.UNINDENT
-.TP
-.B Returns
-2d image array and raw image
-.TP
-.B Return type
-(\fI\%numpy.ndarray\fP, \fI\%numpy.ndarray\fP)
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configuration()
-provides configuration for the current tool
-.INDENT 7.0
-.TP
-.B Returns configuration
-configuration string
-.TP
-.B Rtype configuration
-\fI\%str\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configure(configuration)
-set configuration for the current tool
-.INDENT 7.0
-.TP
-.B Parameters
-\fBconfiguration\fP (\fI\%str\fP) – configuration string
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B deactivate()
-activates tool widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B name = \(aq1d\-Plot\(aq
-(\fI\%str\fP) tool name
-.UNINDENT
-.INDENT 7.0
-.TP
-.B requires = ()
-(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
-.UNINDENT
-.INDENT 7.0
-.TP
-.B signal2slot
-(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
-list of [signal, slot] object to connect
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.TP
-.B class lavuelib.toolWidget.ParametersToolWidget(parent=None)
-Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
-.sp
-motors tool widget
-.sp
-constructor
-.INDENT 7.0
-.TP
-.B Parameters
-\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
-.UNINDENT
-.INDENT 7.0
-.TP
-.B activate()
-activates tool widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B alias = \(aqparameters\(aq
-(\fI\%str\fP) tool name alias
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configuration()
-provides configuration for the current tool
-.INDENT 7.0
-.TP
-.B Returns configuration
-configuration string
-.TP
-.B Rtype configuration
-\fI\%str\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configure(configuration)
-set configuration for the current tool
-.INDENT 7.0
-.TP
-.B Parameters
-\fBconfiguration\fP (\fI\%str\fP) – configuration string
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B convert = {\(aqbool\(aq: <bound method Converters.toBool of <class \(aqlavuelib.toolWidget.Converters\(aq>>, \(aqfloat\(aq: <class \(aqfloat\(aq>, \(aqfloat16\(aq: <class \(aqfloat\(aq>, \(aqfloat32\(aq: <class \(aqfloat\(aq>, \(aqfloat64\(aq: <class \(aqfloat\(aq>, \(aqint\(aq: <class \(aqint\(aq>, \(aqint16\(aq: <class \(aqint\(aq>, \(aqint32\(aq: <class \(aqint\(aq>, \(aqint64\(aq: <class \(aqint\(aq>, \(aqint8\(aq: <class \(aqint\(aq>, \(aqstr\(aq: <class \(aqstr\(aq>, \(aqstring\(aq: <class \(aqstr\(aq>, \(aquint\(aq: <class \(aqint\(aq>, \(aquint16\(aq: <class \(aqint\(aq>, \(aquint32\(aq: <class \(aqint\(aq>, \(aquint64\(aq: <class \(aqint\(aq>, \(aquint8\(aq: <class \(aqint\(aq>}
-(\fI\%dict\fP <\fI\%str\fP , \fI\%type\fP or \fI\%types.MethodType\fP >) map of type : converting function
-.UNINDENT
-.INDENT 7.0
-.TP
-.B deactivate()
-activates tool widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B name = \(aqParameters\(aq
-(\fI\%str\fP) tool name
-.UNINDENT
-.INDENT 7.0
-.TP
-.B requires = (\(aqTANGO\(aq,)
-(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
-.UNINDENT
-.INDENT 7.0
-.TP
-.B signal2slot
-(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
-list of [signal, slot] object to connect
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.TP
-.B class lavuelib.toolWidget.ProjectionToolWidget(parent=None)
-Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
-.sp
-Projections tool widget
-.sp
-constructor
-.INDENT 7.0
-.TP
-.B Parameters
-\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
-.UNINDENT
-.INDENT 7.0
-.TP
-.B activate()
-activates tool widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B afterplot()
-command after plot
-.UNINDENT
-.INDENT 7.0
-.TP
-.B alias = \(aqprojections\(aq
-(\fI\%str\fP) tool name alias
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configuration()
-provides configuration for the current tool
-.INDENT 7.0
-.TP
-.B Returns configuration
-configuration string
-.TP
-.B Rtype configuration
-\fI\%str\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configure(configuration)
-set configuration for the current tool
-.INDENT 7.0
-.TP
-.B Parameters
-\fBconfiguration\fP (\fI\%str\fP) – configuration string
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B deactivate()
-activates tool widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B name = \(aqProjections\(aq
-(\fI\%str\fP) tool name
-.UNINDENT
-.INDENT 7.0
-.TP
-.B requires = ()
-(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
-.UNINDENT
-.INDENT 7.0
-.TP
-.B signal2slot
-(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
-list of [signal, slot] object to connect
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -18267,7 +18550,7 @@ sets a number of rois
 .UNINDENT
 .INDENT 7.0
 .TP
-.B signal2slot
+.B signal2slot = None
 (\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
 list of [signal, slot] object to connect
 .UNINDENT
@@ -18285,146 +18568,6 @@ updates apply tips
 .TP
 .B updateGeometryTip()
 update geometry tips
-.UNINDENT
-.INDENT 7.0
-.TP
-.B updateROIButton(enabled)
-enables/disables ROI buttons
-.INDENT 7.0
-.TP
-.B Parameters
-\fBenable\fP (\fI\%bool\fP) – buttons enabled
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B updateROIDisplayText(text, currentroi, roiVal)
-updates ROI display text
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBtext\fP (\fI\%str\fP) – standard display text
-.IP \(bu 2
-\fBcurrentroi\fP (\fI\%str\fP) – current roi label
-.IP \(bu 2
-\fBtext\fP – roi sum value
-.UNINDENT
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B updateROILineEdit(text)
-updates ROI line edit text
-.INDENT 7.0
-.TP
-.B Parameters
-\fBtext\fP (\fI\%str\fP) – text to update
-.UNINDENT
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.TP
-.B class lavuelib.toolWidget.ROIToolWidget(parent=None)
-Bases: \fBlavuelib.toolWidget.ToolBaseWidget\fP
-.sp
-roi tool widget
-.sp
-constructor
-.INDENT 7.0
-.TP
-.B Parameters
-\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
-.UNINDENT
-.INDENT 7.0
-.TP
-.B activate()
-activates tool widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B alias = \(aqroi\(aq
-(\fI\%str\fP) tool name alias
-.UNINDENT
-.INDENT 7.0
-.TP
-.B applyROIPressed
-(\fBpyqtgraph.QtCore.pyqtSignal\fP) apply ROI pressed signal
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configuration()
-provides configuration for the current tool
-.INDENT 7.0
-.TP
-.B Returns configuration
-configuration string
-.TP
-.B Rtype configuration
-\fI\%str\fP
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B configure(configuration)
-set configuration for the current tool
-.INDENT 7.0
-.TP
-.B Parameters
-\fBconfiguration\fP (\fI\%str\fP) – configuration string
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B deactivate()
-deactivates tool widget
-.UNINDENT
-.INDENT 7.0
-.TP
-.B fetchROIPressed
-(\fBpyqtgraph.QtCore.pyqtSignal\fP) fetch ROI pressed signal
-.UNINDENT
-.INDENT 7.0
-.TP
-.B name = \(aqROI\(aq
-(\fI\%str\fP) tool name
-.UNINDENT
-.INDENT 7.0
-.TP
-.B requires = ()
-(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
-.UNINDENT
-.INDENT 7.0
-.TP
-.B roiInfoChanged
-(\fBpyqtgraph.QtCore.pyqtSignal\fP) roi info Changed signal
-.UNINDENT
-.INDENT 7.0
-.TP
-.B setROIsNumber(rid)
-sets a number of rois
-.INDENT 7.0
-.TP
-.B Parameters
-\fBrid\fP (\fI\%int\fP) – number of rois
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B signal2slot
-(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
-list of [signal, slot] object to connect
-.UNINDENT
-.INDENT 7.0
-.TP
-.B updateApplyTips(rid)
-updates apply tips
-.INDENT 7.0
-.TP
-.B Parameters
-\fBrid\fP (\fI\%int\fP) – current roi id
-.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
