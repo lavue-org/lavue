@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.dataFetchThread &#8212; LaVue 2.76.1 documentation</title>
+    <title>lavuelib.dataFetchThread &#8212; LaVue 2.77.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.76.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.77.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.dataFetchThread</a></li> 
       </ul>
@@ -126,7 +126,7 @@
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) new data name signal</span>
     <span class="n">newDataNameFetched</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasource</span><span class="p">,</span> <span class="n">alist</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasource</span><span class="p">,</span> <span class="n">alist</span><span class="p">,</span> <span class="n">tid</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param datasource: image source</span>
@@ -145,14 +145,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) ready flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ready</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1">#: (:obj:`int`) thread id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tid</span> <span class="o">=</span> <span class="n">tid</span>
         <span class="c1">#: (:class:`pyqtgraph.QtCore.QMutex`) thread mutex</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutex</span><span class="p">()</span>
+        <span class="c1">#: (:obj:`int`) current timestamp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="c1">#: (:obj:`int`) current timestamp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tm2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="c1">#: (:obj:`int`) current timestamp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dt</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">def</span> <span class="nf">_run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; run function of the fetching thread</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">dt</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dt</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">skip</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__isConnected</span><span class="p">:</span>
@@ -160,8 +168,14 @@
             <span class="k">if</span> <span class="n">skip</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">msleep</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="n">GLOBALREFRESHRATE</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">msleep</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mi">1000</span><span class="o">*</span><span class="n">GLOBALREFRESHRATE</span> <span class="o">-</span> <span class="n">dt</span><span class="p">),</span> <span class="mi">0</span><span class="p">))</span>
-            <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">msleep</span><span class="p">(</span>
+                        <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="mi">1000</span><span class="o">*</span><span class="n">GLOBALREFRESHRATE</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dt</span><span class="p">)</span><span class="o">/</span><span class="mf">4.</span><span class="p">),</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msleep</span><span class="p">(</span>
+                <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span>
+                    <span class="mi">1000</span><span class="o">*</span><span class="n">GLOBALREFRESHRATE</span>
+                    <span class="o">-</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.</span><span class="p">),</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__isConnected</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ready</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
@@ -173,13 +187,16 @@
                 <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__list</span><span class="o">.</span><span class="n">addData</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__ready</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="c1"># print(self.__tid, &quot;ADDED&quot;, time.time())</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">newDataNameFetched</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__ready</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="n">skip</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">skip</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">dt</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__tm2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__dt</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tm2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.</span>
+            <span class="c1"># print(&quot;END&quot;, self.__tid, self.__dt)</span>
 
 <div class="viewcode-block" id="DataFetchThread.changeStatus"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.changeStatus">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">changeStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
@@ -190,6 +207,23 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__isConnected</span> <span class="o">=</span> <span class="n">status</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ready</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="DataFetchThread.setTimeStamp"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.setTimeStamp">[docs]</a>    <span class="k">def</span> <span class="nf">setTimeStamp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmstamp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; set time stamp</span>
+
+<span class="sd">        :param tmstamp: set timestamp</span>
+<span class="sd">        :type tmstamp: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span> <span class="o">=</span> <span class="n">tmstamp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dt</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tm2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span><span class="o">+</span><span class="mf">0.0010</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.</span></div>
+
+<div class="viewcode-block" id="DataFetchThread.getTimeStamp"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.getTimeStamp">[docs]</a>    <span class="k">def</span> <span class="nf">getTimeStamp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get time stamp</span>
+
+<span class="sd">        :returns: time stamp</span>
+<span class="sd">        :rtype: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span></div>
 
 <div class="viewcode-block" id="DataFetchThread.setDataSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.setDataSource">[docs]</a>    <span class="k">def</span> <span class="nf">setDataSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasource</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets datasource</span>
@@ -247,6 +281,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.0/index.html">v2.76.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.75.3/index.html">v2.75.3</a></li>
@@ -272,7 +307,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.76.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.77.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.dataFetchThread</a></li> 
       </ul>
