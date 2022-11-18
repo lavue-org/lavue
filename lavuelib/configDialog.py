@@ -27,10 +27,15 @@
 
 from .qtuic import uic
 import pyqtgraph as _pg
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
 import os
 import json
 import logging
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 from . import edDictDialog
 
@@ -41,7 +46,7 @@ _formclass, _baseclass = uic.loadUiType(
 logger = logging.getLogger("lavue")
 
 
-class TableWidgetDragCheckBoxes(QtGui.QTableWidget):
+class TableWidgetDragCheckBoxes(QtWidgets.QTableWidget):
     """ TableWidget with drag and drop checkboxes """
 
     def __init__(self, parent):
@@ -50,7 +55,7 @@ class TableWidgetDragCheckBoxes(QtGui.QTableWidget):
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        QtGui.QTableWidget.__init__(self, parent)
+        QtWidgets.QTableWidget.__init__(self, parent)
 
         #: (:obj:`list` < [ :obj:`str`, :obj:`bool` ] > ) checkbox item list
         self.__checkboxdata = []
@@ -64,11 +69,11 @@ class TableWidgetDragCheckBoxes(QtGui.QTableWidget):
         self.setDragDropOverwriteMode(False)
 
         self.setDragDropMode(
-            QtGui.QAbstractItemView.InternalMove)
+            QtWidgets.QAbstractItemView.InternalMove)
         self.setSelectionMode(
-            QtGui.QAbstractItemView.ExtendedSelection)
+            QtWidgets.QAbstractItemView.ExtendedSelection)
         self.setSelectionBehavior(
-            QtGui.QAbstractItemView.SelectRows)
+            QtWidgets.QAbstractItemView.SelectRows)
         self.setColumnCount(1)
         self.horizontalHeader().hide()
         self.verticalHeader().hide()
@@ -102,7 +107,7 @@ class TableWidgetDragCheckBoxes(QtGui.QTableWidget):
         for i, (name, checked) in enumerate(self.__checkboxdata):
             nm = str(name)
             iname = itemnames[nm] if nm in itemnames else nm
-            item = QtGui.QTableWidgetItem(iname)
+            item = QtWidgets.QTableWidgetItem(iname)
             item.setFlags(item.flags() ^ QtCore.Qt.ItemIsEditable)
             item.setCheckState(QtCore.Qt.Checked
                                if checked else QtCore.Qt.Unchecked)
@@ -147,7 +152,7 @@ class TableWidgetDragCheckBoxes(QtGui.QTableWidget):
                 selrows = sorted(
                     set(item.row() for item in self.selectedItems()))
                 tomove = [
-                    QtGui.QTableWidgetItem(self.item(idx, 0))
+                    QtWidgets.QTableWidgetItem(self.item(idx, 0))
                     for idx in selrows
                 ]
                 for idx in reversed(selrows):
@@ -160,7 +165,7 @@ class TableWidgetDragCheckBoxes(QtGui.QTableWidget):
                     self.insertRow(idx)
                     self.setItem(idx, 0, data)
                 event.accept()
-        QtGui.QTableWidget.dropEvent(self, event)
+        QtWidgets.QTableWidget.dropEvent(self, event)
 
     def _target_row(self, event):
         """ provides target row index to drop
@@ -176,7 +181,7 @@ class TableWidgetDragCheckBoxes(QtGui.QTableWidget):
         return idx.row()
 
 
-class ConfigDialog(QtGui.QDialog):
+class ConfigDialog(QtWidgets.QDialog):
 
     def __init__(self, parent=None):
         """ constructor
@@ -184,16 +189,16 @@ class ConfigDialog(QtGui.QDialog):
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
 
         #: (:class:`Ui_ConfigDialog') ui_dialog object from qtdesigner
         self.__ui = _formclass()
         self.__ui.setupUi(self)
-        self.__ui.isLayout = QtGui.QGridLayout(self.__ui.isWidget)
+        self.__ui.isLayout = QtWidgets.QGridLayout(self.__ui.isWidget)
         self.__ui.isLayout.setContentsMargins(0, 0, 0, 0)
         self.__ui.isTable = TableWidgetDragCheckBoxes(self)
         self.__ui.isLayout.addWidget(self.__ui.isTable)
-        self.__ui.twLayout = QtGui.QGridLayout(self.__ui.twWidget)
+        self.__ui.twLayout = QtWidgets.QGridLayout(self.__ui.twWidget)
         self.__ui.twLayout.setContentsMargins(0, 0, 0, 0)
         self.__ui.twTable = TableWidgetDragCheckBoxes(self)
         self.__ui.twLayout.addWidget(self.__ui.twTable)
@@ -570,11 +575,11 @@ class ConfigDialog(QtGui.QDialog):
         """ updates filter tab  widget
         """
         self.__ui.addupPushButton = self.__ui.filterButtonBox.addButton(
-            "Insert Row &Above", QtGui.QDialogButtonBox.ActionRole)
+            "Insert Row &Above", QtWidgets.QDialogButtonBox.ActionRole)
         self.__ui.adddownPushButton = self.__ui.filterButtonBox.addButton(
-            "Insert Row &Below", QtGui.QDialogButtonBox.ActionRole)
+            "Insert Row &Below", QtWidgets.QDialogButtonBox.ActionRole)
         self.__ui.removePushButton = self.__ui.filterButtonBox.addButton(
-            "&Delete Row", QtGui.QDialogButtonBox.ActionRole)
+            "&Delete Row", QtWidgets.QDialogButtonBox.ActionRole)
         self.__populateTable(0)
         self.__ui.addupPushButton.clicked.connect(self.__addup)
         self.__ui.adddownPushButton.clicked.connect(self.__adddown)
@@ -611,7 +616,7 @@ class ConfigDialog(QtGui.QDialog):
         """ changes the current value of the variable
 
         :param item: current item
-        :type item: :class:`QtGui.QTableWidgetItem`
+        :type item: :class:`QtWidgets.QTableWidgetItem`
         """
         self.__updateRecord()
 
@@ -654,11 +659,11 @@ class ConfigDialog(QtGui.QDialog):
         if row >= 0 and row < len(fltlist):
 
             flt, params = fltlist[row]
-            if QtGui.QMessageBox.question(
+            if QtWidgets.QMessageBox.question(
                     self, "Removing Filter",
                     'Would you like  to remove "%s": "%s" ?' % (flt, params),
-                    QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
-                    QtGui.QMessageBox.Yes) == QtGui.QMessageBox.No:
+                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                    QtWidgets.QMessageBox.Yes) == QtWidgets.QMessageBox.No:
                 return
             fltlist.pop(row)
             self.filters = json.dumps(fltlist)
@@ -682,25 +687,25 @@ class ConfigDialog(QtGui.QDialog):
         self.__ui.filterTableWidget.setHorizontalHeaderLabels(headers)
         for row, fltparams in enumerate(fltlist):
             flt, params = fltparams
-            item = QtGui.QTableWidgetItem(flt or "")
+            item = QtWidgets.QTableWidgetItem(flt or "")
             item.setData(QtCore.Qt.EditRole, (flt or ""))
             self.__ui.filterTableWidget.setItem(row, 0, item)
 
-            item2 = QtGui.QTableWidgetItem(params or "")
+            item2 = QtWidgets.QTableWidgetItem(params or "")
             item2.setData(QtCore.Qt.EditRole, (params or ""))
             self.__ui.filterTableWidget.setItem(row, 1, item2)
         self.__ui.filterTableWidget.resizeColumnsToContents()
         self.__ui.filterTableWidget.setSelectionMode(
-            QtGui.QAbstractItemView.SingleSelection)
+            QtWidgets.QAbstractItemView.SingleSelection)
         # self.__ui.filterTableWidget.horizontalHeader(
         # ).setStretchLastSection(True)
         if hasattr(self.__ui.filterTableWidget.horizontalHeader(),
                    "setSectionResizeMode"):
             self.__ui.filterTableWidget.horizontalHeader().\
-                setSectionResizeMode(1, QtGui.QHeaderView.Stretch)
+                setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
         else:
             self.__ui.filterTableWidget.horizontalHeader().\
-                setResizeMode(1, QtGui.QHeaderView.Stretch)
+                setResizeMode(1, QtWidgets.QHeaderView.Stretch)
         if sitem is not None:
             sitem.setSelected(True)
             self.__ui.filterTableWidget.setCurrentItem(sitem)
@@ -1003,4 +1008,4 @@ class ConfigDialog(QtGui.QDialog):
         self.toolwidgets = json.dumps(
             self.__ui.twTable.getChecks(self.availtoolwidgets))
 
-        QtGui.QDialog.accept(self)
+        QtWidgets.QDialog.accept(self)

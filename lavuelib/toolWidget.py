@@ -43,6 +43,11 @@ import json
 from pyqtgraph import QtCore, QtGui, functions
 from enum import Enum
 
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
+
 from . import geometryDialog
 from . import rangeDialog
 from . import diffRangeDialog
@@ -214,7 +219,7 @@ class ToolParameters(object):
         self.regions = False
 
 
-class ToolBaseWidget(QtGui.QWidget):
+class ToolBaseWidget(QtWidgets.QWidget):
     """ tool widget
     """
 
@@ -231,7 +236,7 @@ class ToolBaseWidget(QtGui.QWidget):
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         #: (:class:`pyqtgraph.QtCore.QObject`) mainwidget
         self._mainwidget = parent
         #: (:class:`Ui_ToolBaseWidget')
@@ -1175,10 +1180,10 @@ class ParametersToolWidget(ToolBaseWidget):
         while len(self.__detparams) > len(self.__widgets):
             self.__widgets.append(
                 [
-                    QtGui.QLabel(parent=self._mainwidget),
-                    QtGui.QLineEdit(parent=self._mainwidget),
-                    QtGui.QLineEdit(parent=self._mainwidget),
-                    QtGui.QPushButton("Apply", parent=self._mainwidget),
+                    QtWidgets.QLabel(parent=self._mainwidget),
+                    QtWidgets.QLineEdit(parent=self._mainwidget),
+                    QtWidgets.QLineEdit(parent=self._mainwidget),
+                    QtWidgets.QPushButton("Apply", parent=self._mainwidget),
                 ]
             )
             last = len(self.__widgets)
@@ -1867,7 +1872,7 @@ class ROIToolWidget(ToolBaseWidget):
                 hints = [stext]
         else:
             hints = self.__aliases or []
-        completer = QtGui.QCompleter(hints, self)
+        completer = QtWidgets.QCompleter(hints, self)
         self.__ui.labelROILineEdit.setCompleter(completer)
 
     def deactivate(self):
@@ -4204,7 +4209,7 @@ class DiffractogramToolWidget(ToolBaseWidget):
 
         #: (:obj:`bool`) progressbar is running
         self.__progressFlag = False
-        #: (:class:`pyqtgraph.QtGui.QProgressDialog`) progress bar
+        #: (:class:`pyqtgraph.QtWidgets.QProgressDialog`) progress bar
         self.__progress = None
         #: (:obj:`list` <:class:`lavuelib.commandThread.CommandThread`>) \
         #:     command thread
@@ -4520,7 +4525,7 @@ class DiffractogramToolWidget(ToolBaseWidget):
         self.__commandthread.finished.connect(
             oncloseaction, QtCore.Qt.QueuedConnection)
         self.__progress = None
-        self.__progress = QtGui.QProgressDialog(
+        self.__progress = QtWidgets.QProgressDialog(
             text, "Cancel", 0, 0, self)
         self.__progress.setWindowModality(QtCore.Qt.WindowModal)
         self.__progress.setCancelButton(None)
@@ -4818,7 +4823,7 @@ class DiffractogramToolWidget(ToolBaseWidget):
         """ load calibration file
         """
         if fileName is None:
-            fileDialog = QtGui.QFileDialog()
+            fileDialog = QtWidgets.QFileDialog()
             fileout = fileDialog.getOpenFileName(
                 self._mainwidget, 'Open calibration file',
                 self.__settings.calibrationfilename or '/ramdisk/',
@@ -7212,7 +7217,7 @@ class QROIProjToolWidget(ToolBaseWidget):
                 hints = [stext]
         else:
             hints = self.__aliases or []
-        completer = QtGui.QCompleter(hints, self)
+        completer = QtWidgets.QCompleter(hints, self)
         self.__ui.labelROILineEdit.setCompleter(completer)
 
     @QtCore.pyqtSlot()

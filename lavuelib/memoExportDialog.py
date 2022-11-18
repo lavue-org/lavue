@@ -26,9 +26,14 @@
 """ image display widget """
 
 import pyqtgraph as _pg
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
 import types
 from pyqtgraph.GraphicsScene import exportDialog
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 
 class MemoPlotWidget(_pg.PlotWidget):
@@ -51,11 +56,11 @@ class MemoPlotWidget(_pg.PlotWidget):
 
         self.__menu = self.plotItem.vb.menu
         self.__separator = self.__menu.addSeparator()
-        self.__freezeaction = QtGui.QAction(
+        self.__freezeaction = QtWidgets.QAction(
             "Freeze", self.__menu)
         self.__menu.addAction(self.__freezeaction)
         self.__freezeaction.triggered.connect(self._freeze)
-        self.__clearaction = QtGui.QAction(
+        self.__clearaction = QtWidgets.QAction(
             "Clear", self.__menu)
         self.__menu.addAction(self.__clearaction)
         self.__clearaction.triggered.connect(self._clear)

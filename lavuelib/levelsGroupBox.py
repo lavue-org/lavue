@@ -27,10 +27,16 @@
 
 from .qtuic import uic
 import pyqtgraph as _pg
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
 from .histogramWidget import HistogramHLUTWidget
 from . import messageBox
 from . import gradientDialog
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
+
 
 # from .histogramWidget import HistogramHLUTItem
 import math
@@ -55,7 +61,7 @@ _formclass, _baseclass = uic.loadUiType(
 logger = logging.getLogger("lavue")
 
 
-class LevelsGroupBox(QtGui.QWidget):
+class LevelsGroupBox(QtWidgets.QWidget):
 
     """
     Set minimum and maximum displayed values and its color.
@@ -86,7 +92,7 @@ class LevelsGroupBox(QtGui.QWidget):
         :param expertmode: expert mode flag
         :type expertmode: :obj:`bool`
         """
-        QtGui.QGroupBox.__init__(self, parent)
+        QtWidgets.QGroupBox.__init__(self, parent)
 
         #: (:class:`Ui_LevelsGroupBox') ui_groupbox object from qtdesigner
         self.__ui = _formclass()
@@ -1246,12 +1252,12 @@ class LevelsGroupBox(QtGui.QWidget):
         name = self.__histograms[iid].gradient.name
 
         if name in self.__customgradients:
-            if QtGui.QMessageBox.question(
+            if QtWidgets.QMessageBox.question(
                     self, "Removing Label",
                     'Would you like  to remove "%s"" ?' %
                     (name),
-                    QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
-                    QtGui.QMessageBox.Yes) == QtGui.QMessageBox.No:
+                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                    QtWidgets.QMessageBox.Yes) == QtWidgets.QMessageBox.No:
                 return False
             self.__customgradients.pop(name)
             _pg.graphicsItems.GradientEditorItem.Gradients.pop(name)

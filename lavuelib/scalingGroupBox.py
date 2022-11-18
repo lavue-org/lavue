@@ -26,15 +26,20 @@
 """ scalingGroupBox """
 
 from .qtuic import uic
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
 import os
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 _formclass, _baseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  "ui", "ScalingGroupBox.ui"))
 
 
-class ScalingGroupBox(QtGui.QGroupBox):
+class ScalingGroupBox(QtWidgets.QGroupBox):
 
     """
     Select how the image intensity is supposed to be scaled.
@@ -50,7 +55,7 @@ class ScalingGroupBox(QtGui.QGroupBox):
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        QtGui.QGroupBox.__init__(self, parent)
+        QtWidgets.QGroupBox.__init__(self, parent)
 
         #: (:class:`Ui_ScalingGroupBox') ui_groupbox object from qtdesigner
         self.__ui = _formclass()

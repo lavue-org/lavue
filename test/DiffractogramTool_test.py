@@ -36,9 +36,13 @@ import json
 import argparse
 import lavuelib
 import lavuelib.liveViewer
-from pyqtgraph import QtGui
 from pyqtgraph import QtCore
 from pyqtgraph.Qt import QtTest
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 
 from qtchecker.qtChecker import (
@@ -98,7 +102,7 @@ class DiffractogramToolTest(unittest.TestCase):
         unittest.TestCase.__init__(self, methodName)
         global app
         if app is None:
-            app = QtGui.QApplication([])
+            app = QtWidgets.QApplication([])
         app.setOrganizationName("DESY")
         app.setApplicationName("LaVue: unittests")
         app.setOrganizationDomain("desy.de")
@@ -553,5 +557,5 @@ class DiffractogramToolTest(unittest.TestCase):
 
 if __name__ == '__main__':
     if app is None:
-        app = QtGui.QApplication([])
+        app = QtWidgets.QApplication([])
     unittest.main()

@@ -29,6 +29,11 @@
 from .qtuic import uic
 from pyqtgraph import QtCore, QtGui
 
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
+
 import os
 
 _formclass, _baseclass = uic.loadUiType(
@@ -36,7 +41,7 @@ _formclass, _baseclass = uic.loadUiType(
                  "ui", "NormalizationWidget.ui"))
 
 
-class NormalizationWidget(QtGui.QWidget):
+class NormalizationWidget(QtWidgets.QWidget):
 
     """
     Define bkg image and subtract from displayed image.
@@ -58,7 +63,7 @@ class NormalizationWidget(QtGui.QWidget):
         :param settings: lavue configuration settings
         :type settings: :class:`lavuelib.settings.Settings`
         """
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         #: (:class:`Ui_NormalizationkWidget') ui_widget object from qtdesigner
         self.__ui = _formclass()
@@ -122,7 +127,7 @@ class NormalizationWidget(QtGui.QWidget):
     def _showBFFileDialog(self):
         """ shows file dialog and select the file name
         """
-        fileDialog = QtGui.QFileDialog()
+        fileDialog = QtWidgets.QFileDialog()
 
         fileout = fileDialog.getOpenFileName(
             self, 'Open file', self.__settings.bfimagename or '.')
@@ -212,7 +217,7 @@ class NormalizationWidget(QtGui.QWidget):
 if __name__ == "__main__":
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     myapp = NormalizationWidget()
     myapp.show()
     sys.exit(app.exec_())

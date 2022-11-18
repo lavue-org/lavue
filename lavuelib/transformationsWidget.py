@@ -27,15 +27,20 @@
 
 
 from .qtuic import uic
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
 import os
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 _formclass, _baseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  "ui", "TransformationsWidget.ui"))
 
 
-class TransformationsWidget(QtGui.QWidget):
+class TransformationsWidget(QtWidgets.QWidget):
     """
     Select how an image should be transformed.
     """
@@ -49,7 +54,7 @@ class TransformationsWidget(QtGui.QWidget):
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         #: (:class:`Ui_TransformationsWidget') ui_widget object from qtdesigner
         self.__ui = _formclass()

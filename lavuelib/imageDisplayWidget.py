@@ -32,6 +32,12 @@ import math
 import types
 import logging
 
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
+
+
 from . import axesDialog
 from . import memoExportDialog
 
@@ -156,7 +162,7 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
         _pg.GraphicsLayoutWidget.__init__(self, parent)
-        #: (:class:`PyQt5.QtGui.QLayout`) the main layout
+        #: (:class:`PyQt5.QtWidgets.QLayout`) the main layout
         self.__layout = self.ci
 
         #: (:class:`lavuelib.imageDisplayWidget.AxesParameters`)
@@ -221,16 +227,16 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         #: (:obj:`dict` < :obj:`str`, :obj:`DisplayExtension` >)
         #          extension dictionary with name keys
         self.__extensions = {}
-        #: (:class:`PyQt5.QtGui.QAction`) set aspect ration locked action
-        self.__setaspectlocked = QtGui.QAction(
+        #: (:class:`PyQt5.QtWidgets.QAction`) set aspect ration locked action
+        self.__setaspectlocked = QtWidgets.QAction(
             "Set Aspect Locked", self.__viewbox.menu)
         self.__setaspectlocked.setCheckable(True)
         if _PQGVER < 1009:
             self.__viewbox.menu.axes.insert(0, self.__setaspectlocked)
         self.__viewbox.menu.addAction(self.__setaspectlocked)
 
-        #: (:class:`PyQt5.QtGui.QAction`) view one to one pixel action
-        self.__viewonetoone = QtGui.QAction(
+        #: (:class:`PyQt5.QtWidgets.QAction`) view one to one pixel action
+        self.__viewonetoone = QtWidgets.QAction(
             "View 1:1 pixels", self.__viewbox.menu)
         self.__viewonetoone.triggered.connect(self._oneToOneRange)
         if _PQGVER < 1009:

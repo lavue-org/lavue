@@ -27,7 +27,11 @@ import sys
 
 
 from lavuelib.qtuic import qt_api
-from pyqtgraph import QtGui
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 try:
     try:
@@ -114,7 +118,7 @@ def main():
     tangofilesuite = unittest.TestSuite()
     httpsuite = unittest.TestSuite()
     print("Using: %s" % qt_api)
-    app = QtGui.QApplication([])
+    app = QtWidgets.QApplication([])
     CommandLineArgument_test.app = app
     HidraImageSource_test.app = app
     ASAPOImageSource_test.app = app

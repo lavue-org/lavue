@@ -29,6 +29,13 @@ from .qtuic import uic
 from pyqtgraph import QtCore, QtGui
 import os
 import json
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
+
+
 from .sardanaUtils import debugmethod
 
 from . import sourceWidget as swgm
@@ -42,7 +49,7 @@ _sformclass, _sbaseclass = uic.loadUiType(
                  "ui", "SourceForm.ui"))
 
 
-class SourceForm(QtGui.QWidget):
+class SourceForm(QtWidgets.QWidget):
 
     """ source form """
 
@@ -76,7 +83,7 @@ class SourceForm(QtGui.QWidget):
         :param usersourcenames: user source names
         :type  usersourcenames: :obj:`list` < :obj:`str` >
         """
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         #: (:obj:`bool`) if image source connected
         self.__connected = False
@@ -106,7 +113,8 @@ class SourceForm(QtGui.QWidget):
         #: (:obj:`list` < :obj:`str` > ) source tab widgets
         self.__sourcetabs = []
 
-        #: (:obj:`list` < :class:`pyqtgraph.QtGui.QWidget` > ) datasource names
+        #: (:obj:`list` < :class:`pyqtgraph.QtWidgets.QWidget` > )
+        #:   datasource names
         self.__subwidgets = []
 
         #: (:obj:`list` <:obj:`str`>) subwidget object names
@@ -190,7 +198,7 @@ class SourceForm(QtGui.QWidget):
         """ provide grid layout
 
         :returns: grid layout
-        :rtype: :class:`PyQt5.QtGui.QGridLayout`
+        :rtype: :class:`PyQt5.QtWidgets.QGridLayout`
         """
         return self._ui.formGridLayout
 
@@ -619,7 +627,7 @@ class SourceForm(QtGui.QWidget):
             self.toggleServerConnection()
 
 
-class SourceTabWidget(QtGui.QTabWidget):
+class SourceTabWidget(QtWidgets.QTabWidget):
     """ image source selection
     """
 
@@ -654,7 +662,7 @@ class SourceTabWidget(QtGui.QTabWidget):
         :param nrsources: number of sources
         :type nrsources: :obj:`int`
         """
-        QtGui.QTabWidget.__init__(self, parent)
+        QtWidgets.QTabWidget.__init__(self, parent)
 
         #: (:class:`Ui_SourceTabWidget') ui_groupbox object from qtdesigner
         self._ui = _formclass()
@@ -686,7 +694,7 @@ class SourceTabWidget(QtGui.QTabWidget):
         #: (:obj:`list` < :obj:`str` > ) source tab widgets
         self.__buttonstatus = [False]
 
-        #: (:obj:`list` < :class:`pyqtgraph.QtGui.QWidget` > )
+        #: (:obj:`list` < :class:`pyqtgraph.QtWidgets.QWidget` > )
         #        source tab checkbox widgets
         self.__tabcheckboxes = []
         #: (:obj:`list` < :obj:`int` > ) source tab checkbox states
@@ -706,16 +714,16 @@ class SourceTabWidget(QtGui.QTabWidget):
         """ add tab widget
 
         :param widget: tab widget
-        :type widget: :class:`pyqtgraph.QtGui.QWidget`
+        :type widget: :class:`pyqtgraph.QtWidgets.QWidget`
         :param title: tab title
         :type title: :obj:`str`
         """
-        QtGui.QTabWidget.addTab(self, widget, title)
-        cb = QtGui.QCheckBox()
+        QtWidgets.QTabWidget.addTab(self, widget, title)
+        cb = QtWidgets.QCheckBox()
         self.__tabcheckboxes.append(cb)
         self.__tabcheckboxstates.append(2)
         self.tabBar().setTabButton(self.tabBar().count() - 1,
-                                   QtGui.QTabBar.RightSide,
+                                   QtWidgets.QTabBar.RightSide,
                                    cb)
         cb.setChecked(True)
         cb.stateChanged.connect(
@@ -731,7 +739,7 @@ class SourceTabWidget(QtGui.QTabWidget):
         if sid < len(self.__tabcheckboxes):
             self.__tabcheckboxes.pop(sid)
             self.__tabcheckboxstates.pop(sid)
-        QtGui.QTabWidget.removeTab(self, sid)
+        QtWidgets.QTabWidget.removeTab(self, sid)
 
     @debugmethod
     def isChecked(self, sid):
@@ -742,7 +750,8 @@ class SourceTabWidget(QtGui.QTabWidget):
         :returns: check state
         :rtype: :obj:`int`
         """
-        return self.tabBar().tabButton(sid, QtGui.QTabBar.RightSide).state()
+        return self.tabBar().tabButton(
+            sid, QtWidgets.QTabBar.RightSide).state()
 
     @debugmethod
     def setCheckState(self, sid, state):
@@ -754,14 +763,14 @@ class SourceTabWidget(QtGui.QTabWidget):
         :type sid: :obj:`int`
         """
         self.tabBar().tabButton(
-            sid, QtGui.QTabBar.RightSide).setCheckState(state)
+            sid, QtWidgets.QTabBar.RightSide).setCheckState(state)
 
     @debugmethod
     def __updateCheckBoxState(self, cb, state):
         """ update checkbox state
 
         :param widget: checkbox widget
-        :type widget: :class:`pyqtgraph.QtGui.QCheckBox`
+        :type widget: :class:`pyqtgraph.QtWidgets.QCheckBox`
         :param state: checkbox state
         :type state: :obj:`int`
         """

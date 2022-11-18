@@ -26,8 +26,13 @@
 """ motor device widget """
 
 from .qtuic import uic
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
 import os
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 try:
     try:
@@ -46,7 +51,7 @@ _formclass, _baseclass = uic.loadUiType(
                  "ui", "TakeMotorsDialog.ui"))
 
 
-class TakeMotorsDialog(QtGui.QDialog):
+class TakeMotorsDialog(QtWidgets.QDialog):
 
     """ detector geometry widget class"""
 
@@ -56,7 +61,7 @@ class TakeMotorsDialog(QtGui.QDialog):
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
 
         #: (:class:`Ui_Dialog') ui_dialog object from qtdesigner
         self.__ui = _formclass()
@@ -107,7 +112,7 @@ class TakeMotorsDialog(QtGui.QDialog):
             self.__ui.yComboBox.setFocus()
             return
 
-        QtGui.QDialog.accept(self)
+        QtWidgets.QDialog.accept(self)
 
     def __updateComboBox(self, combobox, motorname):
         """ updates a value of motor combo box

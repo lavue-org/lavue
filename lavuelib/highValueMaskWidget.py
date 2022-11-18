@@ -26,15 +26,20 @@
 """ mask widget """
 
 from .qtuic import uic
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
 import os
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 _formclass, _baseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  "ui", "HighValueMaskWidget.ui"))
 
 
-class HighValueMaskWidget(QtGui.QWidget):
+class HighValueMaskWidget(QtWidgets.QWidget):
 
     """
     Define and apply masking of the displayed image.
@@ -53,7 +58,7 @@ class HighValueMaskWidget(QtGui.QWidget):
         :param settings: lavue configuration settings
         :type settings: :class:`lavuelib.settings.Settings`
         """
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         #: (:class:`Ui_HighValueMaskWidget') ui_widget object from qtdesigner
         self.__ui = _formclass()
@@ -133,7 +138,7 @@ class HighValueMaskWidget(QtGui.QWidget):
 if __name__ == "__main__":
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     myapp = HighValueMaskWidget()
     myapp.show()
     sys.exit(app.exec_())

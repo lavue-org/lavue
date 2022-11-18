@@ -28,7 +28,12 @@
 
 from .qtuic import uic
 import pyqtgraph as _pg
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 import re
 import os
@@ -55,7 +60,7 @@ _formclass, _baseclass = uic.loadUiType(
 logger = logging.getLogger("lavue")
 
 
-class ImageWidget(QtGui.QWidget):
+class ImageWidget(QtWidgets.QWidget):
 
     """
     The part of the GUI that incorporates the image view.
@@ -119,7 +124,7 @@ class ImageWidget(QtGui.QWidget):
         :param settings: lavue configuration settings
         :type settings: :class:`lavuelib.settings.Settings`
         """
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         #: (:obj:`list` < :obj:`str` > ) tool class names
         self.__tooltypes = tooltypes or []
@@ -206,8 +211,8 @@ class ImageWidget(QtGui.QWidget):
 
         self.__ui.oneDRightHorizontalLayout.addWidget(self.__rightplot)
 
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred,
-                                       QtGui.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred,
+                                           QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(15)
         sizePolicy.setHeightForWidth(

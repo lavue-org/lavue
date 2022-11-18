@@ -33,6 +33,11 @@ import json
 import re
 import logging
 
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
+
 from . import imageField
 from . import imageFileHandler
 
@@ -105,7 +110,7 @@ __all__ = [
 logger = logging.getLogger("lavue")
 
 
-class SourceBaseWidget(QtGui.QWidget):
+class SourceBaseWidget(QtWidgets.QWidget):
 
     """ general source widget """
 
@@ -137,13 +142,13 @@ class SourceBaseWidget(QtGui.QWidget):
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         #: (:obj:`int`) source id
         self._sourceid = sourceid
         #: (:obj:`list` <:obj:`str`>) subwidget object names
         self.widgetnames = []
-        #: (:obj:`list` <:class:`PyQt5.QtGui.QWidget`>) subwidget objects
+        #: (:obj:`list` <:class:`PyQt5.QtWidgets.QWidget`>) subwidget objects
         self.widgets = []
         #: (:obj:`bool`) source widget active
         self.active = False
@@ -251,12 +256,14 @@ class SourceBaseWidget(QtGui.QWidget):
                 currentattr = str(combobox.currentText()).strip()
                 attrs = sorted(atdict.keys())
                 if currentattr in attrs:
-                    if QtGui.QMessageBox.question(
+                    if QtWidgets.QMessageBox.question(
                             combobox, "Removing Label",
                             'Would you like  to remove "%s"" ?' %
                             (currentattr),
-                            QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
-                            QtGui.QMessageBox.Yes) == QtGui.QMessageBox.No:
+                            QtWidgets.QMessageBox.Yes
+                            | QtWidgets.QMessageBox.No,
+                            QtWidgets.QMessageBox.Yes) == \
+                                QtWidgets.QMessageBox.No:
                         return False
                     value = str(atdict.pop(currentattr)).strip()
                     if value not in atlist:
@@ -1987,7 +1994,7 @@ class NXSFileSourceWidget(SourceBaseWidget):
         if obj not in [self._ui.nxsFileLineEdit, self._ui.nxsFieldLineEdit]:
             return False
         if event.type() in [QtCore.QEvent.MouseButtonDblClick]:
-            fileDialog = QtGui.QFileDialog()
+            fileDialog = QtWidgets.QFileDialog()
             fileout = fileDialog.getOpenFileName(
                 self._ui.nxsFileLineEdit, 'Load file', self.__nxslastfile)
             if isinstance(fileout, tuple):

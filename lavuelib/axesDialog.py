@@ -26,8 +26,13 @@
 """ detector axis widget """
 
 from .qtuic import uic
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
 import os
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 
 _formclass, _baseclass = uic.loadUiType(
@@ -35,7 +40,7 @@ _formclass, _baseclass = uic.loadUiType(
                  "ui", "AxesDialog.ui"))
 
 
-class AxesDialog(QtGui.QDialog):
+class AxesDialog(QtWidgets.QDialog):
 
     """ detector axis widget class"""
 
@@ -45,7 +50,7 @@ class AxesDialog(QtGui.QDialog):
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
 
         #: (:class:`Ui_AxesDialog') ui_dialog object from qtdesigner
         self.__ui = _formclass()
@@ -117,4 +122,4 @@ class AxesDialog(QtGui.QDialog):
         self.xunits = str(self.__ui.xunitsLineEdit.text()) or ""
         self.yunits = str(self.__ui.yunitsLineEdit.text()) or ""
 
-        QtGui.QDialog.accept(self)
+        QtWidgets.QDialog.accept(self)

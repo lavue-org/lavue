@@ -25,9 +25,13 @@
 """  editable list dialog """
 
 from .qtuic import uic
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
 import os
 
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 # from .EdDataDlg import EdDataDlg
 
@@ -40,7 +44,7 @@ _formclass, _baseclass = uic.loadUiType(
                  "ui", "EdDictDialog.ui"))
 
 
-class EdListDialog(QtGui.QDialog):
+class EdListDialog(QtWidgets.QDialog):
     """  editable list dialog
     """
 
@@ -50,7 +54,7 @@ class EdListDialog(QtGui.QDialog):
         :param parent: parent object
         :type parent: :class:`.QtCore.QObject`
         """
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
 
         #: (:class:`Ui_Dialog') ui_dialog object from qtdesigner
         self.__ui = _formclass()
@@ -76,16 +80,17 @@ class EdListDialog(QtGui.QDialog):
                 self.__tableItemChanged)
 
         self.__ui.closePushButton = self.__ui.closeButtonBox.button(
-            QtGui.QDialogButtonBox.Close)
+            QtWidgets.QDialogButtonBox.Close)
 
-        self.__ui.closeButtonBox.button(QtGui.QDialogButtonBox.Close).hide()
+        self.__ui.closeButtonBox.button(
+            QtWidgets.QDialogButtonBox.Close).hide()
         if not hasattr(self.__ui, "addPushButton"):
             self.__ui.addPushButton = \
                 self.__ui.addEditRemoveButtonBox.addButton(
-                    "&Add", QtGui.QDialogButtonBox.ActionRole)
+                    "&Add", QtWidgets.QDialogButtonBox.ActionRole)
             self.__ui.removePushButton = \
                 self.__ui.addEditRemoveButtonBox.addButton(
-                    "&Remove", QtGui.QDialogButtonBox.ActionRole)
+                    "&Remove", QtWidgets.QDialogButtonBox.ActionRole)
 
         self.__populateTable()
         self.__ui.addPushButton.clicked.connect(self.__add)
@@ -93,7 +98,7 @@ class EdListDialog(QtGui.QDialog):
         self.__ui.tableWidget.itemChanged.connect(
             self.__tableItemChanged)
         self.__ui.closeButtonBox.button(
-            QtGui.QDialogButtonBox.Close).clicked.connect(self.accept)
+            QtWidgets.QDialogButtonBox.Close).clicked.connect(self.accept)
         self.__ui.closePushButton.show()
 
     def __updateRecord(self):
@@ -151,7 +156,7 @@ class EdListDialog(QtGui.QDialog):
         row = 0
         for row, name in enumerate(names):
 
-            item = QtGui.QTableWidgetItem(name)
+            item = QtWidgets.QTableWidgetItem(name)
             item.setData(QtCore.Qt.UserRole, (name))
             item.setData(QtCore.Qt.EditRole, (name))
             item.setData(QtCore.Qt.DisplayRole, (name))
@@ -160,17 +165,17 @@ class EdListDialog(QtGui.QDialog):
         if hasattr(self.__ui.tableWidget.horizontalHeader(),
                    "setSectionResizeMode"):
             self.__ui.tableWidget.horizontalHeader().\
-                setSectionResizeMode(0, QtGui.QHeaderView.Stretch)
+                setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         else:
             self.__ui.tableWidget.horizontalHeader().\
-                setResizeMode(0, QtGui.QHeaderView.Stretch)
+                setResizeMode(0, QtWidgets.QHeaderView.Stretch)
 
     @QtCore.pyqtSlot("QTableWidgetItem*")
     def __tableItemChanged(self, item):
         """ changes the current value of the variable
 
         :param item: current item
-        :type item: :class:`QtGui.QTableWidgetItem`
+        :type item: :class:`QtWidgets.QTableWidgetItem`
         """
         self.dirty = True
         self.__updateRecord()
@@ -180,4 +185,4 @@ class EdListDialog(QtGui.QDialog):
         """ updates class variables with the form content
         """
         self.__updateRecord()
-        QtGui.QDialog.accept(self)
+        QtWidgets.QDialog.accept(self)

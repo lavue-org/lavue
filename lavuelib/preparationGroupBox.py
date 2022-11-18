@@ -25,7 +25,10 @@
 
 """ preparationbox widget """
 
-from pyqtgraph import QtGui
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 from . import transformationsWidget
 from . import maskWidget
@@ -34,20 +37,20 @@ from . import bkgSubtractionWidget
 from . import normalizationWidget
 
 
-class QHLine(QtGui.QFrame):
+class QHLine(QtWidgets.QFrame):
     """ horizontal line
     """
 
     def __init__(self):
         """ constructor
         """
-        QtGui.QFrame.__init__(self)
+        QtWidgets.QFrame.__init__(self)
 
-        self.setFrameShape(QtGui.QFrame.HLine)
-        self.setFrameShadow(QtGui.QFrame.Sunken)
+        self.setFrameShape(QtWidgets.QFrame.HLine)
+        self.setFrameShadow(QtWidgets.QFrame.Sunken)
 
 
-class PreparationGroupBox(QtGui.QGroupBox):
+class PreparationGroupBox(QtWidgets.QGroupBox):
     """ colection of image preperation widgets
     """
 
@@ -59,7 +62,7 @@ class PreparationGroupBox(QtGui.QGroupBox):
         :param settings: lavue configuration settings
         :type settings: :class:`lavuelib.settings.Settings`
         """
-        QtGui.QGroupBox.__init__(self, parent)
+        QtWidgets.QGroupBox.__init__(self, parent)
         self.setTitle("Image preparation")
 
         #: (:obj:`bool`) show mask widget
@@ -97,7 +100,7 @@ class PreparationGroupBox(QtGui.QGroupBox):
         self.trafoWidget = transformationsWidget.TransformationsWidget(
             parent=self)
 
-        vlayout = QtGui.QVBoxLayout()
+        vlayout = QtWidgets.QVBoxLayout()
         vlayout.addWidget(self.bkgSubWidget)
         vlayout.addWidget(self.normWidget)
         vlayout.addWidget(self.maskWidget)

@@ -27,9 +27,13 @@
 import numpy as np
 import os
 import logging
-from pyqtgraph import QtGui
 from pyqtgraph.exporters import Exporter
 from pyqtgraph.parametertree import Parameter
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 from . import filewriter
 
@@ -138,7 +142,7 @@ class ImageNexusExporter(Exporter):
             raise Exception("Writer '%s' cannot be opened" % writer)
         wrmodule = WRITERS[writer.lower()]
 
-        if isinstance(self.item, QtGui.QGraphicsItem):
+        if isinstance(self.item, QtWidgets.QGraphicsItem):
             scene = self.item.scene()
         else:
             scene = self.item

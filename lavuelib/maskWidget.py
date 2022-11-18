@@ -29,13 +29,17 @@ from .qtuic import uic
 import os
 from pyqtgraph import QtCore, QtGui
 
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 _formclass, _baseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  "ui", "MaskWidget.ui"))
 
 
-class MaskWidget(QtGui.QWidget):
+class MaskWidget(QtWidgets.QWidget):
 
     """
     Define and apply masking of the displayed image.
@@ -54,7 +58,7 @@ class MaskWidget(QtGui.QWidget):
         :param settings: lavue configuration settings
         :type settings: :class:`lavuelib.settings.Settings`
         """
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         #: (:class:`Ui_MaskWidget') ui_widget object from qtdesigner
         self.__ui = _formclass()
@@ -97,7 +101,7 @@ class MaskWidget(QtGui.QWidget):
     def _showFileDialog(self):
         """ shows file dialog and select the file name
         """
-        fileDialog = QtGui.QFileDialog()
+        fileDialog = QtWidgets.QFileDialog()
         fileout = fileDialog.getOpenFileName(
             self, 'Open mask file',
             self.__settings.maskimagename or '/ramdisk/')
@@ -143,7 +147,7 @@ class MaskWidget(QtGui.QWidget):
 if __name__ == "__main__":
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     myapp = MaskWidget()
     myapp.show()
     sys.exit(app.exec_())

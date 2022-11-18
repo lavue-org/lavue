@@ -25,16 +25,22 @@
 """ gradient dialog """
 
 from .qtuic import uic
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
 from . import messageBox
 import os
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
+
 
 _formclass, _baseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  "ui", "GradientDialog.ui"))
 
 
-class GradientDialog(QtGui.QDialog):
+class GradientDialog(QtWidgets.QDialog):
 
     """ interval widget class"""
 
@@ -44,7 +50,7 @@ class GradientDialog(QtGui.QDialog):
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
 
         #: (:class:`Ui_Dialog') ui_dialog object from qtdesigner
         self.__ui = _formclass()
@@ -73,4 +79,4 @@ class GradientDialog(QtGui.QDialog):
                 None)
             return False
         self.name = name
-        QtGui.QDialog.accept(self)
+        QtWidgets.QDialog.accept(self)

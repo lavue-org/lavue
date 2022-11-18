@@ -30,6 +30,11 @@ from pyqtgraph.graphicsItems.PlotCurveItem import PlotCurveItem
 from pyqtgraph.graphicsItems.AxisItem import AxisItem
 from pyqtgraph.graphicsItems.LinearRegionItem import LinearRegionItem
 
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
+
 
 def histogram__init__(self, image=None, fillHistogram=True, levelMode='mono',
                       gradientPosition='right', orientation='vertical'):
@@ -46,7 +51,7 @@ def histogram__init__(self, image=None, fillHistogram=True, levelMode='mono',
             gradientPosition not in {'top', 'bottom'}:
         self.gradientPosition = 'bottom'
 
-    self.layout = QtGui.QGraphicsGridLayout()
+    self.layout = QtWidgets.QGraphicsGridLayout()
     self.setLayout(self.layout)
     self.layout.setContentsMargins(1, 1, 1, 1)
     self.layout.setSpacing(0)

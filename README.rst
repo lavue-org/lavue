@@ -120,6 +120,11 @@ To install it from pip you need to install pyqt5 in advance, e.g.
    $ python3 -m venv myvenv
    $ . myvenv/bin/activate
 
+   $ pip install PyQtWebKit
+
+or
+
+.. code-block:: console
    $ pip install pyqt5
 
 or

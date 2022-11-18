@@ -26,10 +26,14 @@
 """ level widget """
 
 from .qtuic import uic
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
 import os
 import logging
 
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 _formclass, _baseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -38,7 +42,7 @@ _formclass, _baseclass = uic.loadUiType(
 logger = logging.getLogger("lavue")
 
 
-class ChannelGroupBox(QtGui.QWidget):
+class ChannelGroupBox(QtWidgets.QWidget):
 
     """
     Set minimum and maximum displayed values and its color.
@@ -59,7 +63,7 @@ class ChannelGroupBox(QtGui.QWidget):
         :param expertmode: expert mode flag
         :type expertmode: :obj:`bool`
         """
-        QtGui.QGroupBox.__init__(self, parent)
+        QtWidgets.QGroupBox.__init__(self, parent)
 
         #: (:class:`Ui_LevelsGroupBox') ui_groupbox object from qtdesigner
         self.__ui = _formclass()
@@ -451,11 +455,11 @@ class ChannelGroupBox(QtGui.QWidget):
                     self.__ui.channelComboBox.removeItem(i)
                 self.__ui.channelComboBox.addItem("sum")
                 # self.__ui.channelComboBox.setSizeAdjustPolicy(
-                # QtGui.QComboBox.AdjustToMinimumContentsLength)
+                # QtWidgets.QComboBox.AdjustToMinimumContentsLength)
                 self.__ui.channelGroupBox.show()
                 self.__ui.channelComboBox.show()
                 self.__ui.channelComboBox.setSizeAdjustPolicy(
-                    QtGui.QComboBox.AdjustToContents)
+                    QtWidgets.QComboBox.AdjustToContents)
 
                 self.__ui.channelComboBox.addItems(
                     ["channel %s" % (ch)

@@ -26,16 +26,20 @@
 """ configuration widget """
 
 from .qtuic import uic
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
 import os
 
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 _formclass, _baseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  "ui", "ImageField.ui"))
 
 
-class ImageField(QtGui.QDialog):
+class ImageField(QtWidgets.QDialog):
 
     def __init__(self, parent=None):
         """ constructor
@@ -43,7 +47,7 @@ class ImageField(QtGui.QDialog):
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
 
         #: (:class:`Ui_ConfigDialog') ui_dialog object from qtdesigner
         self.__ui = _formclass()
@@ -74,7 +78,7 @@ class ImageField(QtGui.QDialog):
         self.__ui.imageListWidget.clear()
 
         for name in sorted(self.fields.keys()):
-            item = QtGui.QListWidgetItem("%s" % name)
+            item = QtWidgets.QListWidgetItem("%s" % name)
             item.setData(QtCore.Qt.UserRole, "%s" % name)
             if selected is None:
                 selected = item
@@ -103,4 +107,4 @@ class ImageField(QtGui.QDialog):
         self.growing = int(self.__ui.growingSpinBox.value())
         self.frame = int(self.__ui.frameSpinBox.value())
         if self.field:
-            QtGui.QDialog.accept(self)
+            QtWidgets.QDialog.accept(self)

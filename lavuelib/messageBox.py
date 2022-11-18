@@ -39,7 +39,12 @@ except ImportError:
     #: (:obj:`bool`) tango imported
     TANGO = False
 
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 
 class MessageBox(QtCore.QObject):
@@ -92,16 +97,16 @@ class MessageBox(QtCore.QObject):
         :param icon: message box icon
         :type icon:  :class:`pyqtgraph.QtCore.QIcon`
         """
-        msgBox = QtGui.QMessageBox(parent)
+        msgBox = QtWidgets.QMessageBox(parent)
         msgBox.setText(title)
         msgBox.setInformativeText(text)
         if detailedText is not None:
             msgBox.setDetailedText(detailedText)
         if icon is None:
-            icon = QtGui.QMessageBox.Warning
+            icon = QtWidgets.QMessageBox.Warning
         msgBox.setIcon(icon)
-        spacer = QtGui.QSpacerItem(800, 0, QtGui.QSizePolicy.Minimum,
-                                   QtGui.QSizePolicy.Expanding)
+        spacer = QtWidgets.QSpacerItem(800, 0, QtWidgets.QSizePolicy.Minimum,
+                                       QtWidgets.QSizePolicy.Expanding)
         layout = msgBox.layout()
         layout.addItem(spacer, layout.rowCount(), 0, 1, layout.columnCount())
         msgBox.exec_()

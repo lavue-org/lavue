@@ -27,9 +27,15 @@
 
 
 import pyqtgraph as _pg
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
 import numpy as np
 import logging
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
+
 
 from .external.pyqtgraph_0_12 import (
     histogram__init__, histogram_paint, histogram_setHistogramRange,
@@ -108,7 +114,7 @@ class HistogramHLUTWidget(_pg.widgets.GraphicsView.GraphicsView):
         self.item = HistogramHLUTItem(bins, step, *args, **kargs)
         self.setCentralItem(self.item)
         self.setSizePolicy(
-            QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Expanding)
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
         self.setMinimumWidth(95)
         self.setMinimumHeight(95)
 
@@ -173,10 +179,10 @@ class GradientEditorItemWS(
         self.__skipupdate = False
         #: (:obj:`str`) color gradient name
         self.name = "highcontrast"
-        #: (:class:`pyqtgrath.QtGui.QAction`) save gradient action
-        self.saveAction = QtGui.QAction('Save ...', self)
-        #: (:obj:`pyqtgrath.QtGui.QAction`) remove gradient action
-        self.removeAction = QtGui.QAction('Remove', self)
+        #: (:class:`pyqtgrath.QtWidgets.QAction`) save gradient action
+        self.saveAction = QtWidgets.QAction('Save ...', self)
+        #: (:obj:`pyqtgrath.QtWidgets.QAction`) remove gradient action
+        self.removeAction = QtWidgets.QAction('Remove', self)
 
     def addMenuActions(self):
         """ add save/remove actions
@@ -351,8 +357,8 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         #: (:obj: `bool`) rgb flag
         self.__rgb = False
 
-        #: (:class:`PyQt5.QtGui.QGraphicsGridLayout`) grid layout
-        self.layout = QtGui.QGraphicsGridLayout()
+        #: (:class:`PyQt5.QtWidgets.QGraphicsGridLayout`) grid layout
+        self.layout = QtWidgets.QGraphicsGridLayout()
         self.setLayout(self.layout)
         self.layout.setContentsMargins(1, 1, 1, 1)
         self.layout.setSpacing(0)

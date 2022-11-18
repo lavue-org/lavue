@@ -28,9 +28,14 @@
 from pyqtgraph import QtCore, QtGui
 from .qtuic import QWebView
 
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
+
 
 # detail help
-class HelpForm(QtGui.QDialog):
+class HelpForm(QtWidgets.QDialog):
 
     def __init__(self, page, parent=None):
         """ constructor
@@ -61,11 +66,11 @@ class HelpForm(QtGui.QDialog):
         """
 
         #: help tool bar
-        self.__toolBar = QtGui.QToolBar(self)
+        self.__toolBar = QtWidgets.QToolBar(self)
         #: help text Browser
         self.__textBrowser = QWebView(self)
 
-        layout = QtGui.QVBoxLayout(self)
+        layout = QtWidgets.QVBoxLayout(self)
         layout.addWidget(self.__toolBar)
         layout.addWidget(self.__textBrowser, 1)
 
@@ -74,29 +79,29 @@ class HelpForm(QtGui.QDialog):
 
         self.resize(1500, 700)
         self.setWindowTitle("%s Help" % (
-            QtGui.QApplication.applicationName()))
+            QtWidgets.QApplication.applicationName()))
 
     def createActions(self):
         """ creates actions and sets the command pool and stack
         """
 
-        backAction = QtGui.QAction(
+        backAction = QtWidgets.QAction(
             QtGui.QIcon.fromTheme("go-previous"),
             "&Back", self)
         backAction.setShortcut(QtGui.QKeySequence.Back)
 
-        forwardAction = QtGui.QAction(
+        forwardAction = QtWidgets.QAction(
             QtGui.QIcon.fromTheme("go-next"),
             "&Forward", self)
         forwardAction.setShortcut("Forward")
 
-        homeAction = QtGui.QAction(
+        homeAction = QtWidgets.QAction(
             QtGui.QIcon.fromTheme("go-home"),
             "&Home", self)
         homeAction.setShortcut("Home")
 
         # main label of the help
-        self.__pageLabel = QtGui.QLabel(self)
+        self.__pageLabel = QtWidgets.QLabel(self)
 
         self.__toolBar.addAction(backAction)
         self.__toolBar.addAction(forwardAction)

@@ -25,9 +25,13 @@
 """  editable list dialog """
 
 from .qtuic import uic
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
 import os
 
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 # from .EdDataDlg import EdDataDlg
 
@@ -40,7 +44,7 @@ _formclass, _baseclass = uic.loadUiType(
                  "ui", "EdDictDialog.ui"))
 
 
-class EdDictDialog(QtGui.QDialog):
+class EdDictDialog(QtWidgets.QDialog):
     """  editable list dialog
     """
 
@@ -50,7 +54,7 @@ class EdDictDialog(QtGui.QDialog):
         :param parent: parent object
         :type parent: :class:`.QtCore.QObject`
         """
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
 
         #: (:class:`Ui_Dialog') ui_dialog object from qtdesigner
         self.__ui = _formclass()
@@ -78,16 +82,17 @@ class EdDictDialog(QtGui.QDialog):
                 self.__tableItemChanged)
 
         self.__ui.closePushButton = self.__ui.closeButtonBox.button(
-            QtGui.QDialogButtonBox.Close)
+            QtWidgets.QDialogButtonBox.Close)
 
-        self.__ui.closeButtonBox.button(QtGui.QDialogButtonBox.Close).hide()
+        self.__ui.closeButtonBox.button(
+            QtWidgets.QDialogButtonBox.Close).hide()
         if not hasattr(self.__ui, "addPushButton"):
             self.__ui.addPushButton = \
                 self.__ui.addEditRemoveButtonBox.addButton(
-                    "&Add", QtGui.QDialogButtonBox.ActionRole)
+                    "&Add", QtWidgets.QDialogButtonBox.ActionRole)
             self.__ui.removePushButton = \
                 self.__ui.addEditRemoveButtonBox.addButton(
-                    "&Remove", QtGui.QDialogButtonBox.ActionRole)
+                    "&Remove", QtWidgets.QDialogButtonBox.ActionRole)
 
         if len(self.newvalues) > 0:
             item = ""
@@ -101,7 +106,7 @@ class EdDictDialog(QtGui.QDialog):
         self.__ui.tableWidget.itemChanged.connect(
             self.__tableItemChanged)
         self.__ui.closeButtonBox.button(
-            QtGui.QDialogButtonBox.Close).clicked.connect(self.accept)
+            QtWidgets.QDialogButtonBox.Close).clicked.connect(self.accept)
         self.__ui.closePushButton.show()
 
     def __updateRecord(self):
@@ -154,7 +159,7 @@ class EdDictDialog(QtGui.QDialog):
         """ changes the current value of the variable
 
         :param item: current item
-        :type item: :class:`QtGui.QTableWidgetItem`
+        :type item: :class:`QtWidgets.QTableWidgetItem`
         """
         record = dict(self.record)
         newvalues = list(self.newvalues)
@@ -219,11 +224,11 @@ class EdDictDialog(QtGui.QDialog):
            name not in self.record.keys():
             return
         value = str(self.__currentValue()).strip()
-        if QtGui.QMessageBox.question(
+        if QtWidgets.QMessageBox.question(
                 self, "Removing Data",
                 'Would you like  to remove "%s": "%s" ?' % (name, value),
-                QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
-                QtGui.QMessageBox.Yes) == QtGui.QMessageBox.No:
+                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                QtWidgets.QMessageBox.Yes) == QtWidgets.QMessageBox.No:
             return
         if not name:
             self.newvalues = [
@@ -250,21 +255,21 @@ class EdDictDialog(QtGui.QDialog):
         row = 0
         for value in self.newvalues:
             name = ""
-            item = QtGui.QTableWidgetItem(" ")
+            item = QtWidgets.QTableWidgetItem(" ")
             item.setData(QtCore.Qt.UserRole, (name))
             self.__ui.tableWidget.setItem(row, 0, item)
-            item2 = QtGui.QTableWidgetItem(value)
+            item2 = QtWidgets.QTableWidgetItem(value)
             item2.setData(QtCore.Qt.UserRole, (value))
             self.__ui.tableWidget.setItem(row, 1, item2)
             if selected is None or selected == name:
                 sitem = item
             row += 1
         for name in names:
-            item = QtGui.QTableWidgetItem(name)
+            item = QtWidgets.QTableWidgetItem(name)
             item.setData(QtCore.Qt.UserRole, (name))
             self.__ui.tableWidget.setItem(row, 0, item)
             value = self.record[name] or ""
-            item2 = QtGui.QTableWidgetItem(value)
+            item2 = QtWidgets.QTableWidgetItem(value)
             item2.setData(QtCore.Qt.UserRole, (value))
             self.__ui.tableWidget.setItem(row, 1, item2)
 
@@ -278,10 +283,10 @@ class EdDictDialog(QtGui.QDialog):
         if hasattr(self.__ui.tableWidget.horizontalHeader(),
                    "setSectionResizeMode"):
             self.__ui.tableWidget.horizontalHeader().\
-                setSectionResizeMode(1, QtGui.QHeaderView.Stretch)
+                setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
         else:
             self.__ui.tableWidget.horizontalHeader().\
-                setResizeMode(1, QtGui.QHeaderView.Stretch)
+                setResizeMode(1, QtWidgets.QHeaderView.Stretch)
         if sitem is not None:
             sitem.setSelected(True)
             self.__ui.tableWidget.setCurrentItem(sitem)
@@ -291,4 +296,4 @@ class EdDictDialog(QtGui.QDialog):
         """ updates class variables with the form content
         """
         self.__updateRecord()
-        QtGui.QDialog.accept(self)
+        QtWidgets.QDialog.accept(self)

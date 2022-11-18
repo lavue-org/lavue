@@ -26,7 +26,13 @@
 
 
 from .qtuic import uic
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
+
 import os
 import logging
 
@@ -37,7 +43,7 @@ _formclass, _baseclass = uic.loadUiType(
 logger = logging.getLogger("lavue")
 
 
-class RangeWindowGroupBox(QtGui.QWidget):
+class RangeWindowGroupBox(QtWidgets.QWidget):
     """
     Select how an image should be transformed.
     """
@@ -55,7 +61,7 @@ class RangeWindowGroupBox(QtGui.QWidget):
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         #: (:class:`Ui_RangeWindowGroupBox') ui_widget object from qtdesigner
         self.__ui = _formclass()

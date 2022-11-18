@@ -25,15 +25,21 @@
 """ detector range widget """
 
 from .qtuic import uic
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
 import os
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
+
 
 _tformclass, _tbaseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  "ui", "DiffRangeTabDialog.ui"))
 
 
-class DiffRangeTabDialog(QtGui.QDialog):
+class DiffRangeTabDialog(QtWidgets.QDialog):
 
     """ diffractogram range widget class"""
 
@@ -43,7 +49,7 @@ class DiffRangeTabDialog(QtGui.QDialog):
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
 
         #: (:class:`Ui_Dialog') ui_dialog object from qtdesigner
         self.__ui = _tformclass()
@@ -63,25 +69,25 @@ class DiffRangeTabDialog(QtGui.QDialog):
         self.radunitindex = 2
         #: (:obj:`list` <:obj:`unicode`>) list of units
         self.radunits = [u"1/nm", u"1/\u212B", u"deg", u"rad", u"mm"]
-        #: (:obj:`list` <:class:`pyqtgraph.QtGui.QListEdit`>)
+        #: (:obj:`list` <:class:`pyqtgraph.QtWidgets.QLineEdit`>)
         #          list of azstartLineEdit widgets
         self.__azstartLineEdit = [self.__ui.azstartLineEdit,
                                   self.__ui.azstart2LineEdit,
                                   self.__ui.azstart3LineEdit,
                                   self.__ui.azstart4LineEdit]
-        #: (:obj:`list` <:class:`pyqtgraph.QtGui.QListEdit`>)
+        #: (:obj:`list` <:class:`pyqtgraph.QtWidgets.QLineEdit`>)
         #          list of azendLineEdit widgets
         self.__azendLineEdit = [self.__ui.azendLineEdit,
                                 self.__ui.azend2LineEdit,
                                 self.__ui.azend3LineEdit,
                                 self.__ui.azend4LineEdit]
-        #: (:obj:`list` <:class:`pyqtgraph.QtGui.QListEdit`>)
+        #: (:obj:`list` <:class:`pyqtgraph.QtWidgets.QLineEdit`>)
         #          list of radstartLineEdit widgets
         self.__radstartLineEdit = [self.__ui.radstartLineEdit,
                                    self.__ui.radstart2LineEdit,
                                    self.__ui.radstart3LineEdit,
                                    self.__ui.radstart4LineEdit]
-        #: (:obj:`list` <:class:`pyqtgraph.QtGui.QListEdit`>)
+        #: (:obj:`list` <:class:`pyqtgraph.QtWidgets.QLineEdit`>)
         #          list of radendLineEdit widgets
         self.__radendLineEdit = [self.__ui.radendLineEdit,
                                  self.__ui.radend2LineEdit,
@@ -148,4 +154,4 @@ class DiffRangeTabDialog(QtGui.QDialog):
                and self.radend[-1] < self.radstart[-1]:
                 self.radstart[-1], self.radend[-1] = \
                     self.radend[-1], self.radstart[-1]
-        QtGui.QDialog.accept(self)
+        QtWidgets.QDialog.accept(self)

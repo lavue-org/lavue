@@ -49,6 +49,12 @@ import ntpath
 import logging
 import scipy.ndimage
 
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
+
+
 from . import imageSource as isr
 from . import messageBox
 
@@ -133,7 +139,7 @@ def setLoggerLevel(logger, level):
     logger.setLevel(dlevel)
 
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
 
     @debugmethod
     def __init__(self, options, parent=None):
@@ -144,10 +150,10 @@ class MainWindow(QtGui.QMainWindow):
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        QtGui.QMainWindow.__init__(self, parent)
+        QtWidgets.QMainWindow.__init__(self, parent)
         self.__lavue = LiveViewer(options, self)
-        self.centralwidget = QtGui.QWidget(self)
-        self.gridLayout = QtGui.QGridLayout(self.centralwidget)
+        self.centralwidget = QtWidgets.QWidget(self)
+        self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         try:
             self.gridLayout.setContentsMargins(0, 0, 0, 0)
         except Exception:
@@ -172,7 +178,7 @@ class MainWindow(QtGui.QMainWindow):
         :type event:  :class:`pyqtgraph.QtCore.QEvent`:
         """
         self.__lavue.closeEvent(event)
-        QtGui.QMainWindow.closeEvent(self, event)
+        QtWidgets.QMainWindow.closeEvent(self, event)
 
 
 class LavueState(object):
@@ -385,7 +391,7 @@ def _nansum(a, axis=None):
     return tot
 
 
-class LiveViewer(QtGui.QDialog):
+class LiveViewer(QtWidgets.QDialog):
 
     '''The master class for the dialog, contains all other
     widget and handles communication.'''
@@ -402,7 +408,7 @@ class LiveViewer(QtGui.QDialog):
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
         # self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
 
         if options.mode and options.mode.lower() in ["expert"]:
@@ -679,12 +685,12 @@ class LiveViewer(QtGui.QDialog):
         # # LAYOUT DEFINITIONS
         self.__ui.confVerticalLayout.addWidget(self.__sourcewg)
 
-        self.scroll = QtGui.QScrollArea()
+        self.scroll = QtWidgets.QScrollArea()
         self.scroll.setSizeAdjustPolicy(self.scroll.AdjustToContents)
-        self.scrollWidget = QtGui.QWidget()
-        self.scrollVerticalLayout = QtGui.QVBoxLayout()
+        self.scrollWidget = QtWidgets.QWidget()
+        self.scrollVerticalLayout = QtWidgets.QVBoxLayout()
         self.scroll.setContentsMargins(0, 0, 0, 0)
-        self.scroll.setFrameStyle(QtGui.QFrame.NoFrame)
+        self.scroll.setFrameStyle(QtWidgets.QFrame.NoFrame)
         self.scrollWidget.setContentsMargins(0, 0, 0, 0)
         self.scrollVerticalLayout.setContentsMargins(0, 0, 0, 0)
 
@@ -708,10 +714,10 @@ class LiveViewer(QtGui.QDialog):
         self.scroll.setMinimumWidth(380)
         self.__ui.imageVerticalLayout.addWidget(self.__imagewg)
 
-        spacer = QtGui.QSpacerItem(
+        spacer = QtWidgets.QSpacerItem(
             0, 0,
-            QtGui.QSizePolicy.Minimum,
-            QtGui.QSizePolicy.Expanding
+            QtWidgets.QSizePolicy.Minimum,
+            QtWidgets.QSizePolicy.Expanding
         )
         self.scrollVerticalLayout.addItem(spacer)
 
@@ -1854,7 +1860,7 @@ class LiveViewer(QtGui.QDialog):
                 df.wait()
             self.__settings.seccontext.destroy()
             self.__closing = True
-            QtGui.QApplication.closeAllWindows()
+            QtWidgets.QApplication.closeAllWindows()
         if event is not None:
             event.accept()
 
@@ -2060,7 +2066,7 @@ class LiveViewer(QtGui.QDialog):
             if nexus:
                 imagename = nexus
             else:
-                fileDialog = QtGui.QFileDialog()
+                fileDialog = QtWidgets.QFileDialog()
                 fileout = fileDialog.getOpenFileName(
                     self, 'Load file', self.__settings.imagename or '.')
                 if isinstance(fileout, tuple):
@@ -4379,7 +4385,7 @@ class LiveViewer(QtGui.QDialog):
         :type event:  :class:`pyqtgraph.QtCore.QEvent`:
         """
         if event.key() != QtCore.Qt.Key_Escape:
-            QtGui.QDialog.keyPressEvent(self, event)
+            QtWidgets.QDialog.keyPressEvent(self, event)
         # else:
         #     self.closeEvent(None)
 

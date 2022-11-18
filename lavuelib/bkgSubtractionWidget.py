@@ -29,6 +29,12 @@
 from .qtuic import uic
 from pyqtgraph import QtCore, QtGui
 
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
+
+
 import os
 
 _formclass, _baseclass = uic.loadUiType(
@@ -36,7 +42,7 @@ _formclass, _baseclass = uic.loadUiType(
                  "ui", "BkgSubtractionWidget.ui"))
 
 
-class BkgSubtractionWidget(QtGui.QWidget):
+class BkgSubtractionWidget(QtWidgets.QWidget):
 
     """
     Define bkg image and subtract from displayed image.
@@ -59,7 +65,7 @@ class BkgSubtractionWidget(QtGui.QWidget):
         :param settings: lavue configuration settings
         :type settings: :class:`lavuelib.settings.Settings`
         """
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         #: (:class:`Ui_BkgSubtractionkWidget') ui_widget object from qtdesigner
         self.__ui = _formclass()
@@ -125,7 +131,7 @@ class BkgSubtractionWidget(QtGui.QWidget):
     def _showFileDialog(self):
         """ shows file dialog and select the file name
         """
-        fileDialog = QtGui.QFileDialog()
+        fileDialog = QtWidgets.QFileDialog()
 
         fileout = fileDialog.getOpenFileName(
             self, 'Open file', self.__settings.bkgimagename or '.')
@@ -215,7 +221,7 @@ class BkgSubtractionWidget(QtGui.QWidget):
 if __name__ == "__main__":
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     myapp = BkgSubtractionWidget()
     myapp.show()
     sys.exit(app.exec_())

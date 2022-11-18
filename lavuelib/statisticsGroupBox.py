@@ -27,15 +27,19 @@
 """ statistics widget """
 
 from .qtuic import uic
-from pyqtgraph import QtGui
 import os
+
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 _formclass, _baseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  "ui", "StatisticsGroupBox.ui"))
 
 
-class StatisticsGroupBox(QtGui.QGroupBox):
+class StatisticsGroupBox(QtWidgets.QGroupBox):
 
     """
     Display some general image statistics.
@@ -47,7 +51,7 @@ class StatisticsGroupBox(QtGui.QGroupBox):
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        QtGui.QGroupBox.__init__(self, parent)
+        QtWidgets.QGroupBox.__init__(self, parent)
 
         #: (:class:`Ui_GroupBox') ui_groupbox object from qtdesigner
         self.__ui = _formclass()

@@ -27,9 +27,13 @@
 import numpy as np
 import sys
 from .qtuic import uic
-from pyqtgraph import QtCore, QtGui
+from pyqtgraph import QtCore
 import os
 
+try:
+    from pyqtgraph import QtWidgets
+except Exception:
+    from pyqtgraph import QtGui as QtWidgets
 
 if sys.version_info > (3,):
     unicode = str
@@ -41,7 +45,7 @@ _formclass, _baseclass = uic.loadUiType(
                  "ui", "MemoryBufferGroupBox.ui"))
 
 
-class MemoryBufferGroupBox(QtGui.QGroupBox):
+class MemoryBufferGroupBox(QtWidgets.QGroupBox):
 
     """
     Set circular memory buffer for images
@@ -55,7 +59,7 @@ class MemoryBufferGroupBox(QtGui.QGroupBox):
         :param parent: parent object
         :type parent: :class:`pyqtgraph.QtCore.QObject`
         """
-        QtGui.QGroupBox.__init__(self, parent)
+        QtWidgets.QGroupBox.__init__(self, parent)
 
         #: (:class:`Ui_MemoryBufferGroupBox')
         #      ui_groupbox object from qtdesigner
