@@ -2,7 +2,7 @@
 
 echo "restart mysql"
 # workaround for a bug in debian9, i.e. starting mysql hangs
-if [ "$1" = "debian11" ]; then
+if [ "$1" = "debian11" ]  || [ "$1" = "debian12" ] ; then
     docker exec --user root ndts service mariadb restart
 else
     docker exec --user root ndts service mysql stop
@@ -36,7 +36,7 @@ echo "install tango-starter tango-test and pytango"
 if [ "$2" = "2" ]; then
 	docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq install -y   python-pytango   tango-starter'
 else
-    if [ "$1" = "debian10" ] || [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "ubuntu21.04" ] || [ "$1" = "ubuntu21.10" ] || [ "$1" = "ubuntu22.04" ]  || [ "$1" = "ubuntu22.10" ] || [ "$1" = "debian11" ] ; then
+    if [ "$1" = "debian10" ] || [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "ubuntu21.04" ] || [ "$1" = "ubuntu21.10" ] || [ "$1" = "ubuntu22.04" ]  || [ "$1" = "ubuntu22.10" ] || [ "$1" = "debian11" ] || [ "$1" = "debian12" ] ; then
 	docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq install -y  python3-tango tango-starter'
     else
 	docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq install -y  python3-pytango tango-starter'
