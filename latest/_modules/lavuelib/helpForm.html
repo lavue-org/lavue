@@ -73,9 +73,14 @@
 <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtGui</span>
 <span class="kn">from</span> <span class="nn">.qtuic</span> <span class="kn">import</span> <span class="n">QWebView</span>
 
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtWidgets</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtGui</span> <span class="k">as</span> <span class="n">QtWidgets</span>
+
 
 <span class="c1"># detail help</span>
-<div class="viewcode-block" id="HelpForm"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.helpForm.HelpForm">[docs]</a><span class="k">class</span> <span class="nc">HelpForm</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QDialog</span><span class="p">):</span>
+<div class="viewcode-block" id="HelpForm"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.helpForm.HelpForm">[docs]</a><span class="k">class</span> <span class="nc">HelpForm</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDialog</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
@@ -106,11 +111,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1">#: help tool bar</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__toolBar</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QToolBar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__toolBar</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QToolBar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="c1">#: help text Browser</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span> <span class="o">=</span> <span class="n">QWebView</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-        <span class="n">layout</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__toolBar</span><span class="p">)</span>
         <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__textBrowser</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
@@ -119,29 +124,29 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">1500</span><span class="p">,</span> <span class="mi">700</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> Help&quot;</span> <span class="o">%</span> <span class="p">(</span>
-            <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="o">.</span><span class="n">applicationName</span><span class="p">()))</span></div>
+            <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="o">.</span><span class="n">applicationName</span><span class="p">()))</span></div>
 
 <div class="viewcode-block" id="HelpForm.createActions"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.helpForm.HelpForm.createActions">[docs]</a>    <span class="k">def</span> <span class="nf">createActions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; creates actions and sets the command pool and stack</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">backAction</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span>
+        <span class="n">backAction</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span>
             <span class="n">QtGui</span><span class="o">.</span><span class="n">QIcon</span><span class="o">.</span><span class="n">fromTheme</span><span class="p">(</span><span class="s2">&quot;go-previous&quot;</span><span class="p">),</span>
             <span class="s2">&quot;&amp;Back&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="n">backAction</span><span class="o">.</span><span class="n">setShortcut</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QKeySequence</span><span class="o">.</span><span class="n">Back</span><span class="p">)</span>
 
-        <span class="n">forwardAction</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span>
+        <span class="n">forwardAction</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span>
             <span class="n">QtGui</span><span class="o">.</span><span class="n">QIcon</span><span class="o">.</span><span class="n">fromTheme</span><span class="p">(</span><span class="s2">&quot;go-next&quot;</span><span class="p">),</span>
             <span class="s2">&quot;&amp;Forward&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="n">forwardAction</span><span class="o">.</span><span class="n">setShortcut</span><span class="p">(</span><span class="s2">&quot;Forward&quot;</span><span class="p">)</span>
 
-        <span class="n">homeAction</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span>
+        <span class="n">homeAction</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span>
             <span class="n">QtGui</span><span class="o">.</span><span class="n">QIcon</span><span class="o">.</span><span class="n">fromTheme</span><span class="p">(</span><span class="s2">&quot;go-home&quot;</span><span class="p">),</span>
             <span class="s2">&quot;&amp;Home&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="n">homeAction</span><span class="o">.</span><span class="n">setShortcut</span><span class="p">(</span><span class="s2">&quot;Home&quot;</span><span class="p">)</span>
 
         <span class="c1"># main label of the help</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__pageLabel</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pageLabel</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__toolBar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">backAction</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__toolBar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">forwardAction</span><span class="p">)</span>
@@ -213,6 +218,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.0/index.html">v2.76.0</a></li>

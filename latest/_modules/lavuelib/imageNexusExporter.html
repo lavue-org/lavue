@@ -72,9 +72,13 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtGui</span>
 <span class="kn">from</span> <span class="nn">pyqtgraph.exporters</span> <span class="kn">import</span> <span class="n">Exporter</span>
 <span class="kn">from</span> <span class="nn">pyqtgraph.parametertree</span> <span class="kn">import</span> <span class="n">Parameter</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtWidgets</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtGui</span> <span class="k">as</span> <span class="n">QtWidgets</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">filewriter</span>
 
@@ -183,7 +187,7 @@
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Writer &#39;</span><span class="si">%s</span><span class="s2">&#39; cannot be opened&quot;</span> <span class="o">%</span> <span class="n">writer</span><span class="p">)</span>
         <span class="n">wrmodule</span> <span class="o">=</span> <span class="n">WRITERS</span><span class="p">[</span><span class="n">writer</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">,</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QGraphicsItem</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGraphicsItem</span><span class="p">):</span>
             <span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">scene</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span>
@@ -273,6 +277,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.0/index.html">v2.76.0</a></li>

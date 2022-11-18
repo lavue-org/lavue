@@ -70,15 +70,21 @@
 <span class="sd">&quot;&quot;&quot; detector range widget &quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">.qtuic</span> <span class="kn">import</span> <span class="n">uic</span>
-<span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtGui</span>
+<span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtCore</span>
 <span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtWidgets</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtGui</span> <span class="k">as</span> <span class="n">QtWidgets</span>
+
 
 <span class="n">_tformclass</span><span class="p">,</span> <span class="n">_tbaseclass</span> <span class="o">=</span> <span class="n">uic</span><span class="o">.</span><span class="n">loadUiType</span><span class="p">(</span>
     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span>
                  <span class="s2">&quot;ui&quot;</span><span class="p">,</span> <span class="s2">&quot;DiffRangeTabDialog.ui&quot;</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="DiffRangeTabDialog"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.diffRangeDialog.DiffRangeTabDialog">[docs]</a><span class="k">class</span> <span class="nc">DiffRangeTabDialog</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QDialog</span><span class="p">):</span>
+<div class="viewcode-block" id="DiffRangeTabDialog"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.diffRangeDialog.DiffRangeTabDialog">[docs]</a><span class="k">class</span> <span class="nc">DiffRangeTabDialog</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDialog</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot; diffractogram range widget class&quot;&quot;&quot;</span>
 
@@ -88,7 +94,7 @@
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">QtGui</span><span class="o">.</span><span class="n">QDialog</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDialog</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="c1">#: (:class:`Ui_Dialog&#39;) ui_dialog object from qtdesigner</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span> <span class="o">=</span> <span class="n">_tformclass</span><span class="p">()</span>
@@ -108,25 +114,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">radunitindex</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="c1">#: (:obj:`list` &lt;:obj:`unicode`&gt;) list of units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">radunits</span> <span class="o">=</span> <span class="p">[</span><span class="sa">u</span><span class="s2">&quot;1/nm&quot;</span><span class="p">,</span> <span class="sa">u</span><span class="s2">&quot;1/</span><span class="se">\u212B</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">u</span><span class="s2">&quot;deg&quot;</span><span class="p">,</span> <span class="sa">u</span><span class="s2">&quot;rad&quot;</span><span class="p">,</span> <span class="sa">u</span><span class="s2">&quot;mm&quot;</span><span class="p">]</span>
-        <span class="c1">#: (:obj:`list` &lt;:class:`pyqtgraph.QtGui.QListEdit`&gt;)</span>
+        <span class="c1">#: (:obj:`list` &lt;:class:`pyqtgraph.QtWidgets.QLineEdit`&gt;)</span>
         <span class="c1">#          list of azstartLineEdit widgets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__azstartLineEdit</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">azstartLineEdit</span><span class="p">,</span>
                                   <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">azstart2LineEdit</span><span class="p">,</span>
                                   <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">azstart3LineEdit</span><span class="p">,</span>
                                   <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">azstart4LineEdit</span><span class="p">]</span>
-        <span class="c1">#: (:obj:`list` &lt;:class:`pyqtgraph.QtGui.QListEdit`&gt;)</span>
+        <span class="c1">#: (:obj:`list` &lt;:class:`pyqtgraph.QtWidgets.QLineEdit`&gt;)</span>
         <span class="c1">#          list of azendLineEdit widgets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__azendLineEdit</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">azendLineEdit</span><span class="p">,</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">azend2LineEdit</span><span class="p">,</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">azend3LineEdit</span><span class="p">,</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">azend4LineEdit</span><span class="p">]</span>
-        <span class="c1">#: (:obj:`list` &lt;:class:`pyqtgraph.QtGui.QListEdit`&gt;)</span>
+        <span class="c1">#: (:obj:`list` &lt;:class:`pyqtgraph.QtWidgets.QLineEdit`&gt;)</span>
         <span class="c1">#          list of radstartLineEdit widgets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__radstartLineEdit</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">radstartLineEdit</span><span class="p">,</span>
                                    <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">radstart2LineEdit</span><span class="p">,</span>
                                    <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">radstart3LineEdit</span><span class="p">,</span>
                                    <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">radstart4LineEdit</span><span class="p">]</span>
-        <span class="c1">#: (:obj:`list` &lt;:class:`pyqtgraph.QtGui.QListEdit`&gt;)</span>
+        <span class="c1">#: (:obj:`list` &lt;:class:`pyqtgraph.QtWidgets.QLineEdit`&gt;)</span>
         <span class="c1">#          list of radendLineEdit widgets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__radendLineEdit</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">radendLineEdit</span><span class="p">,</span>
                                  <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">radend2LineEdit</span><span class="p">,</span>
@@ -193,7 +199,7 @@
                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">radend</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">radstart</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">radstart</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">radend</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> \
                     <span class="bp">self</span><span class="o">.</span><span class="n">radend</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">radstart</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">QtGui</span><span class="o">.</span><span class="n">QDialog</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+        <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDialog</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
 </pre></div>
 
             <div class="clearer"></div>
@@ -218,6 +224,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.0/index.html">v2.76.0</a></li>

@@ -71,16 +71,20 @@
 <span class="sd">&quot;&quot;&quot; configuration widget &quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">.qtuic</span> <span class="kn">import</span> <span class="n">uic</span>
-<span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtGui</span>
+<span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtCore</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtWidgets</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtGui</span> <span class="k">as</span> <span class="n">QtWidgets</span>
 
 <span class="n">_formclass</span><span class="p">,</span> <span class="n">_baseclass</span> <span class="o">=</span> <span class="n">uic</span><span class="o">.</span><span class="n">loadUiType</span><span class="p">(</span>
     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span>
                  <span class="s2">&quot;ui&quot;</span><span class="p">,</span> <span class="s2">&quot;ImageField.ui&quot;</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="ImageField"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageField.ImageField">[docs]</a><span class="k">class</span> <span class="nc">ImageField</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QDialog</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageField"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageField.ImageField">[docs]</a><span class="k">class</span> <span class="nc">ImageField</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDialog</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
@@ -88,7 +92,7 @@
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">QtGui</span><span class="o">.</span><span class="n">QDialog</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDialog</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="c1">#: (:class:`Ui_ConfigDialog&#39;) ui_dialog object from qtdesigner</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span> <span class="o">=</span> <span class="n">_formclass</span><span class="p">()</span>
@@ -119,7 +123,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">imageListWidget</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-            <span class="n">item</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QListWidgetItem</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QListWidgetItem</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
             <span class="n">item</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">UserRole</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">selected</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">selected</span> <span class="o">=</span> <span class="n">item</span>
@@ -148,7 +152,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">growing</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">growingSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">frameSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">:</span>
-            <span class="n">QtGui</span><span class="o">.</span><span class="n">QDialog</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+            <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDialog</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
 </pre></div>
 
             <div class="clearer"></div>
@@ -173,6 +177,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.0/index.html">v2.76.0</a></li>

@@ -70,7 +70,10 @@
 
 <span class="sd">&quot;&quot;&quot; preparationbox widget &quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtGui</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtWidgets</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtGui</span> <span class="k">as</span> <span class="n">QtWidgets</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">transformationsWidget</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">maskWidget</span>
@@ -79,20 +82,20 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">normalizationWidget</span>
 
 
-<div class="viewcode-block" id="QHLine"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.preparationGroupBox.QHLine">[docs]</a><span class="k">class</span> <span class="nc">QHLine</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QFrame</span><span class="p">):</span>
+<div class="viewcode-block" id="QHLine"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.preparationGroupBox.QHLine">[docs]</a><span class="k">class</span> <span class="nc">QHLine</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QFrame</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; horizontal line</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">QtGui</span><span class="o">.</span><span class="n">QFrame</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QFrame</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">setFrameShape</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QFrame</span><span class="o">.</span><span class="n">HLine</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">setFrameShadow</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QFrame</span><span class="o">.</span><span class="n">Sunken</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setFrameShape</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QFrame</span><span class="o">.</span><span class="n">HLine</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setFrameShadow</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QFrame</span><span class="o">.</span><span class="n">Sunken</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="PreparationGroupBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.preparationGroupBox.PreparationGroupBox">[docs]</a><span class="k">class</span> <span class="nc">PreparationGroupBox</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">):</span>
+<div class="viewcode-block" id="PreparationGroupBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.preparationGroupBox.PreparationGroupBox">[docs]</a><span class="k">class</span> <span class="nc">PreparationGroupBox</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; colection of image preperation widgets</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -104,7 +107,7 @@
 <span class="sd">        :param settings: lavue configuration settings</span>
 <span class="sd">        :type settings: :class:`lavuelib.settings.Settings`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">QtGui</span><span class="o">.</span><span class="n">QGroupBox</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setTitle</span><span class="p">(</span><span class="s2">&quot;Image preparation&quot;</span><span class="p">)</span>
 
         <span class="c1">#: (:obj:`bool`) show mask widget</span>
@@ -142,7 +145,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">trafoWidget</span> <span class="o">=</span> <span class="n">transformationsWidget</span><span class="o">.</span><span class="n">TransformationsWidget</span><span class="p">(</span>
             <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
-        <span class="n">vlayout</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">vlayout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">()</span>
         <span class="n">vlayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bkgSubWidget</span><span class="p">)</span>
         <span class="n">vlayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">normWidget</span><span class="p">)</span>
         <span class="n">vlayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maskWidget</span><span class="p">)</span>
@@ -257,6 +260,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.0/index.html">v2.76.0</a></li>

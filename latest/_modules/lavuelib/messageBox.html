@@ -84,7 +84,12 @@
     <span class="c1">#: (:obj:`bool`) tango imported</span>
     <span class="n">TANGO</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtGui</span>
+<span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtCore</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtWidgets</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtGui</span> <span class="k">as</span> <span class="n">QtWidgets</span>
 
 
 <div class="viewcode-block" id="MessageBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.messageBox.MessageBox">[docs]</a><span class="k">class</span> <span class="nc">MessageBox</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QObject</span><span class="p">):</span>
@@ -137,16 +142,16 @@
 <span class="sd">        :param icon: message box icon</span>
 <span class="sd">        :type icon:  :class:`pyqtgraph.QtCore.QIcon`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">msgBox</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QMessageBox</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">msgBox</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QMessageBox</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
         <span class="n">msgBox</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
         <span class="n">msgBox</span><span class="o">.</span><span class="n">setInformativeText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">detailedText</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">msgBox</span><span class="o">.</span><span class="n">setDetailedText</span><span class="p">(</span><span class="n">detailedText</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">icon</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">icon</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span>
+            <span class="n">icon</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span>
         <span class="n">msgBox</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">icon</span><span class="p">)</span>
-        <span class="n">spacer</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Minimum</span><span class="p">,</span>
-                                   <span class="n">QtGui</span><span class="o">.</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Expanding</span><span class="p">)</span>
+        <span class="n">spacer</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Minimum</span><span class="p">,</span>
+                                       <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Expanding</span><span class="p">)</span>
         <span class="n">layout</span> <span class="o">=</span> <span class="n">msgBox</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span>
         <span class="n">layout</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">spacer</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">rowCount</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">columnCount</span><span class="p">())</span>
         <span class="n">msgBox</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
@@ -175,6 +180,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.0/index.html">v2.76.0</a></li>
