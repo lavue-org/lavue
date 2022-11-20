@@ -2,7 +2,7 @@
 
 echo "restart mysql"
 # workaround for a bug in debian9, i.e. starting mysql hangs
-if [ "$1" = "debian11" ]; then
+if [ "$1" = "debian11" ]  || [ "$1" = "debian11pg013" ]; then
     docker exec --user root ndts service mariadb restart
 else
     docker exec --user root ndts service mysql stop
@@ -15,7 +15,7 @@ fi
 
 
 echo "install tango-db tango-common"
-docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq install -y tango-db tango-common; sleep 10'
+docker exec  --user root ndts /bin/bash -c 'apt-get -qq update --allow-unauthenticated ; apt-get -qq install -y tango-db tango-common; sleep 10'
 if [ "$?" != "0" ]; then exit 255; fi
 
 if [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "ubuntu21.04" ] || [ "$1" = "ubuntu21.10" ] || [ "$1" = "ubuntu22.04" ] || [ "$1" = "ubuntu22.10" ]; then
@@ -36,8 +36,8 @@ echo "install tango-starter tango-test and pytango"
 if [ "$2" = "2" ]; then
 	docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq install -y   python-pytango   tango-starter'
 else
-    if [ "$1" = "debian10" ] || [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "ubuntu21.04" ] || [ "$1" = "ubuntu21.10" ] || [ "$1" = "ubuntu22.04" ]  || [ "$1" = "ubuntu22.10" ] || [ "$1" = "debian11" ] ; then
-	docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq install -y  python3-tango tango-starter'
+    if [ "$1" = "debian10" ] || [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "ubuntu21.04" ] || [ "$1" = "ubuntu21.10" ] || [ "$1" = "ubuntu22.04" ]  || [ "$1" = "ubuntu22.10" ] || [ "$1" = "debian11pg013" ] || [ "$1" = "debian11" ] ; then
+	docker exec  --user root ndts /bin/bash -c 'apt-get -qq update --allow-unauthenticated ; apt-get -qq install -y  python3-tango tango-starter'
     else
 	docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq install -y  python3-pytango tango-starter'
     fi
@@ -49,7 +49,7 @@ if [ "$?" != "0" ]; then exit 255; fi
 
 docker exec  --user root ndts chown -R tango:tango .
 
-docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq install -y  tango-test'
+docker exec  --user root ndts /bin/bash -c 'apt-get -qq update  --allow-unauthenticated ; apt-get -qq install -y  tango-test'
 
 if [ "$2" = "2" ]; then
     echo "install python-lavue"
