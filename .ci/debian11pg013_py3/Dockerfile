@@ -13,7 +13,7 @@ RUN apt-get -qq update && apt-get -qq install -y libterm-readline-gnu-perl softw
 RUN curl -s http://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
 RUN chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
 RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian bullseye main" -y
-RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian_stage bullseye main" -y
+RUN add-apt-repository "deb [trusted=yes] http://repos.pni-hdri.de/apt/debian_stage bullseye main" -y
 
 # install packages
 RUN apt-get update && apt-get  -y  dist-upgrade
