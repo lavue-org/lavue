@@ -17,7 +17,7 @@ RUN add-apt-repository "deb [trusted=yes] http://repos.pni-hdri.de/apt/debian_st
 
 # install packages
 RUN apt-get update --allow-unauthenticated  --allow-insecure-repositories  && apt-get  -y  dist-upgrade
-RUN apt-get -qq update --allow-unauthenticated --allow-insecure-repositories   && apt-get -qq install -y default-mysql-client  python3-h5py  python3-mysqldb python3-sphinx  apt-utils debconf-utils net-tools  omniidl libomniorb4-dev libcos4-dev libomnithread4-dev libzmq3-dev python3-pyqt5 python3-pyqt5.qtsvg python3-qtchecker python3-pyfai  qtchooser python3-requests python3-pninexus xvfb  libxcb1 libx11-xcb1 libxcb-keysyms1 libxcb-image0 libxcb-icccm4 libxcb-render-util0 xkb-data liblog4j1.2-java pyqt5-dev-tools git python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy python3-pyqt5.qtwebkit
+RUN apt-get -qq update --allow-unauthenticated --allow-insecure-repositories   && apt-get -qq install  --allow-unauthenticated -y default-mysql-client  python3-h5py  python3-mysqldb python3-sphinx  apt-utils debconf-utils net-tools  omniidl libomniorb4-dev libcos4-dev libomnithread4-dev libzmq3-dev python3-pyqt5 python3-pyqt5.qtsvg python3-qtchecker python3-pyfai  qtchooser python3-requests python3-pninexus xvfb  libxcb1 libx11-xcb1 libxcb-keysyms1 libxcb-image0 libxcb-icccm4 libxcb-render-util0 xkb-data liblog4j1.2-java pyqt5-dev-tools git python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy python3-pyqt5.qtwebkit
 
 # set db configuration
 RUN useradd -ms /bin/bash tango
@@ -27,7 +27,7 @@ RUN  /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections
      && /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections <<< "mariadb-server mysql-server/root_password_again password rootpw"' \
      && /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-get-selections |grep mysql '
 
-RUN apt-get -qq install -y default-mysql-server adduser && /bin/bash -c 'sleep 10'
+RUN apt-get -qq install  --allow-unauthenticated -y default-mysql-server adduser && /bin/bash -c 'sleep 10'
 
 RUN /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections <<< "tango-db tango-db/db/app-user string tango"' \
     && /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections <<< "tango-db tango-db/mysql/app-pass password rootpw"' \
