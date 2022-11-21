@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.imageDisplayWidget &#8212; LaVue 2.77.0 documentation</title>
+    <title>lavuelib.imageDisplayWidget &#8212; LaVue 2.78.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.77.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.78.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageDisplayWidget</a></li> 
       </ul>
@@ -76,6 +76,12 @@
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtWidgets</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtGui</span> <span class="k">as</span> <span class="n">QtWidgets</span>
+
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">axesDialog</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">memoExportDialog</span>
@@ -201,7 +207,7 @@
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_pg</span><span class="o">.</span><span class="n">GraphicsLayoutWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
-        <span class="c1">#: (:class:`PyQt5.QtGui.QLayout`) the main layout</span>
+        <span class="c1">#: (:class:`PyQt5.QtWidgets.QLayout`) the main layout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ci</span>
 
         <span class="c1">#: (:class:`lavuelib.imageDisplayWidget.AxesParameters`)</span>
@@ -266,16 +272,16 @@
         <span class="c1">#: (:obj:`dict` &lt; :obj:`str`, :obj:`DisplayExtension` &gt;)</span>
         <span class="c1">#          extension dictionary with name keys</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__extensions</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="c1">#: (:class:`PyQt5.QtGui.QAction`) set aspect ration locked action</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__setaspectlocked</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span>
+        <span class="c1">#: (:class:`PyQt5.QtWidgets.QAction`) set aspect ration locked action</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__setaspectlocked</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span>
             <span class="s2">&quot;Set Aspect Locked&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">menu</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__setaspectlocked</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">_PQGVER</span> <span class="o">&lt;</span> <span class="mi">1009</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__setaspectlocked</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__setaspectlocked</span><span class="p">)</span>
 
-        <span class="c1">#: (:class:`PyQt5.QtGui.QAction`) view one to one pixel action</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__viewonetoone</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span>
+        <span class="c1">#: (:class:`PyQt5.QtWidgets.QAction`) view one to one pixel action</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__viewonetoone</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span>
             <span class="s2">&quot;View 1:1 pixels&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">menu</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__viewonetoone</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_oneToOneRange</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">_PQGVER</span> <span class="o">&lt;</span> <span class="mi">1009</span><span class="p">:</span>
@@ -1403,6 +1409,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.0/index.html">v2.76.0</a></li>
@@ -1429,7 +1436,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.77.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.78.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageDisplayWidget</a></li> 
       </ul>

@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.sourceTabWidget &#8212; LaVue 2.77.0 documentation</title>
+    <title>lavuelib.sourceTabWidget &#8212; LaVue 2.78.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.77.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.78.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.sourceTabWidget</a></li> 
       </ul>
@@ -74,6 +74,13 @@
 <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtGui</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">json</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtWidgets</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtGui</span> <span class="k">as</span> <span class="n">QtWidgets</span>
+
+
 <span class="kn">from</span> <span class="nn">.sardanaUtils</span> <span class="kn">import</span> <span class="n">debugmethod</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">sourceWidget</span> <span class="k">as</span> <span class="n">swgm</span>
@@ -87,7 +94,7 @@
                  <span class="s2">&quot;ui&quot;</span><span class="p">,</span> <span class="s2">&quot;SourceForm.ui&quot;</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="SourceForm"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm">[docs]</a><span class="k">class</span> <span class="nc">SourceForm</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="SourceForm"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm">[docs]</a><span class="k">class</span> <span class="nc">SourceForm</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot; source form &quot;&quot;&quot;</span>
 
@@ -121,7 +128,7 @@
 <span class="sd">        :param usersourcenames: user source names</span>
 <span class="sd">        :type  usersourcenames: :obj:`list` &lt; :obj:`str` &gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">QtGui</span><span class="o">.</span><span class="n">QWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="c1">#: (:obj:`bool`) if image source connected</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__connected</span> <span class="o">=</span> <span class="kc">False</span>
@@ -151,7 +158,8 @@
         <span class="c1">#: (:obj:`list` &lt; :obj:`str` &gt; ) source tab widgets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c1">#: (:obj:`list` &lt; :class:`pyqtgraph.QtGui.QWidget` &gt; ) datasource names</span>
+        <span class="c1">#: (:obj:`list` &lt; :class:`pyqtgraph.QtWidgets.QWidget` &gt; )</span>
+        <span class="c1">#:   datasource names</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__subwidgets</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) subwidget object names</span>
@@ -235,7 +243,7 @@
         <span class="sd">&quot;&quot;&quot; provide grid layout</span>
 
 <span class="sd">        :returns: grid layout</span>
-<span class="sd">        :rtype: :class:`PyQt5.QtGui.QGridLayout`</span>
+<span class="sd">        :rtype: :class:`PyQt5.QtWidgets.QGridLayout`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">formGridLayout</span></div>
 
@@ -664,7 +672,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">toggleServerConnection</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="SourceTabWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget">[docs]</a><span class="k">class</span> <span class="nc">SourceTabWidget</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QTabWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="SourceTabWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget">[docs]</a><span class="k">class</span> <span class="nc">SourceTabWidget</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTabWidget</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; image source selection</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -699,7 +707,7 @@
 <span class="sd">        :param nrsources: number of sources</span>
 <span class="sd">        :type nrsources: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">QtGui</span><span class="o">.</span><span class="n">QTabWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTabWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="c1">#: (:class:`Ui_SourceTabWidget&#39;) ui_groupbox object from qtdesigner</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span> <span class="o">=</span> <span class="n">_formclass</span><span class="p">()</span>
@@ -731,7 +739,7 @@
         <span class="c1">#: (:obj:`list` &lt; :obj:`str` &gt; ) source tab widgets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__buttonstatus</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span>
 
-        <span class="c1">#: (:obj:`list` &lt; :class:`pyqtgraph.QtGui.QWidget` &gt; )</span>
+        <span class="c1">#: (:obj:`list` &lt; :class:`pyqtgraph.QtWidgets.QWidget` &gt; )</span>
         <span class="c1">#        source tab checkbox widgets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__tabcheckboxes</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1">#: (:obj:`list` &lt; :obj:`int` &gt; ) source tab checkbox states</span>
@@ -751,16 +759,16 @@
         <span class="sd">&quot;&quot;&quot; add tab widget</span>
 
 <span class="sd">        :param widget: tab widget</span>
-<span class="sd">        :type widget: :class:`pyqtgraph.QtGui.QWidget`</span>
+<span class="sd">        :type widget: :class:`pyqtgraph.QtWidgets.QWidget`</span>
 <span class="sd">        :param title: tab title</span>
 <span class="sd">        :type title: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">QtGui</span><span class="o">.</span><span class="n">QTabWidget</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
-        <span class="n">cb</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QCheckBox</span><span class="p">()</span>
+        <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTabWidget</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+        <span class="n">cb</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QCheckBox</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__tabcheckboxes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cb</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__tabcheckboxstates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tabBar</span><span class="p">()</span><span class="o">.</span><span class="n">setTabButton</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tabBar</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-                                   <span class="n">QtGui</span><span class="o">.</span><span class="n">QTabBar</span><span class="o">.</span><span class="n">RightSide</span><span class="p">,</span>
+                                   <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTabBar</span><span class="o">.</span><span class="n">RightSide</span><span class="p">,</span>
                                    <span class="n">cb</span><span class="p">)</span>
         <span class="n">cb</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">cb</span><span class="o">.</span><span class="n">stateChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
@@ -776,7 +784,7 @@
         <span class="k">if</span> <span class="n">sid</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tabcheckboxes</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__tabcheckboxes</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__tabcheckboxstates</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
-        <span class="n">QtGui</span><span class="o">.</span><span class="n">QTabWidget</span><span class="o">.</span><span class="n">removeTab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">)</span></div>
+        <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTabWidget</span><span class="o">.</span><span class="n">removeTab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SourceTabWidget.isChecked"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.isChecked">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">isChecked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">):</span>
@@ -787,7 +795,8 @@
 <span class="sd">        :returns: check state</span>
 <span class="sd">        :rtype: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tabBar</span><span class="p">()</span><span class="o">.</span><span class="n">tabButton</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QTabBar</span><span class="o">.</span><span class="n">RightSide</span><span class="p">)</span><span class="o">.</span><span class="n">state</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tabBar</span><span class="p">()</span><span class="o">.</span><span class="n">tabButton</span><span class="p">(</span>
+            <span class="n">sid</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTabBar</span><span class="o">.</span><span class="n">RightSide</span><span class="p">)</span><span class="o">.</span><span class="n">state</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="SourceTabWidget.setCheckState"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.setCheckState">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setCheckState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
@@ -799,14 +808,14 @@
 <span class="sd">        :type sid: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tabBar</span><span class="p">()</span><span class="o">.</span><span class="n">tabButton</span><span class="p">(</span>
-            <span class="n">sid</span><span class="p">,</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QTabBar</span><span class="o">.</span><span class="n">RightSide</span><span class="p">)</span><span class="o">.</span><span class="n">setCheckState</span><span class="p">(</span><span class="n">state</span><span class="p">)</span></div>
+            <span class="n">sid</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTabBar</span><span class="o">.</span><span class="n">RightSide</span><span class="p">)</span><span class="o">.</span><span class="n">setCheckState</span><span class="p">(</span><span class="n">state</span><span class="p">)</span></div>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">__updateCheckBoxState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cb</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update checkbox state</span>
 
 <span class="sd">        :param widget: checkbox widget</span>
-<span class="sd">        :type widget: :class:`pyqtgraph.QtGui.QCheckBox`</span>
+<span class="sd">        :type widget: :class:`pyqtgraph.QtWidgets.QCheckBox`</span>
 <span class="sd">        :param state: checkbox state</span>
 <span class="sd">        :type state: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1229,6 +1238,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.0/index.html">v2.76.0</a></li>
@@ -1255,7 +1265,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.77.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.78.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.sourceTabWidget</a></li> 
       </ul>
