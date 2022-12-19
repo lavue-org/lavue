@@ -365,11 +365,21 @@ class ConfigDialog(QtWidgets.QDialog):
         self.geometryfromsource = False
         #: (:obj:`str`) json list with filters
         self.filters = "[]"
+
         #: (:obj:`str`) json list with rois colors
         self.roiscolors = "[]"
         #: (:obj:`list`<:class:`pyqtgraph.ColorButton`>)
         #    list with rois color widgets
         self.__roiswidgets = []
+
+        #: (:obj:`bool`) high mask with color
+        self.maskwithcolor = False
+        #: (:obj:`str`) json list with high mask color
+        self.maskcolor = "[255, 255, 255]"
+        #: (:class:`pyqtgraph.ColorButton`)
+        #    list with rois color widgets
+        self.__maskcolorwidget = None
+
         #: (:obj:`bool`) show all rois flag
         self.showallrois = False
         #: (:obj:`bool`) send rois to LavueController flag
@@ -519,6 +529,7 @@ class ConfigDialog(QtWidgets.QDialog):
         self.__ui.sourcedisplayCheckBox.setChecked(self.sourcedisplay)
         self.__ui.crosshairCheckBox.setChecked(self.crosshairlocker)
         self.__ui.csaCheckBox.setChecked(self.correctsolidangle)
+        self.__ui.maskColorCheckBox.setChecked(self.maskwithcolor)
 
         if self.floattype not in ["float", "float32", "float64"]:
             self.floattype = "float"
@@ -561,6 +572,7 @@ class ConfigDialog(QtWidgets.QDialog):
             self._removeROIColorWidget)
 
         self.__setROIsColorsWidgets()
+        self.__setMaskColorWidget()
         self.__setFiltersGroupBox()
         self.__ui.isTable.create(
             json.loads(self.imagesources), self.availimagesources,
@@ -738,6 +750,29 @@ class ConfigDialog(QtWidgets.QDialog):
         self.__roiswidgets.append(cb)
         self.__ui.colorHorizontalLayout.addWidget(cb)
 
+    def __setMaskColorWidget(self):
+        """ set Mask color widget
+        """
+        try:
+            color = tuple(json.loads(self.maskcolor))
+        except Exception:
+            color = (255, 255, 255)
+            self.maskcolor = "[255, 255, 255]"
+        if self.__maskcolorwidget:
+            cb = self.__maskcolorwidget
+            self.__maskcolorwidget = None
+            cb.hide()
+            self.__ui.maskColorHorizontalLayout.removeWidget(cb)
+        cb = _pg.ColorButton(self, color)
+        self.__maskcolorwidget = cb
+        self.__ui.maskColorHorizontalLayout.addWidget(cb)
+
+    def __readMaskColor(self):
+        """ takes Mask color from mask color widget
+        """
+        color = list(self.__maskcolorwidget.color(mode='byte')[:3])
+        self.maskcolor = json.dumps(color)
+
     @QtCore.pyqtSlot()
     def _removeROIColorWidget(self):
         """ updates ROIs colors widgets
@@ -829,6 +864,7 @@ class ConfigDialog(QtWidgets.QDialog):
         self.defdetservers = self.__ui.defdetserversCheckBox.isChecked()
         self.crosshairlocker = self.__ui.crosshairCheckBox.isChecked()
         self.correctsolidangle = self.__ui.csaCheckBox.isChecked()
+        self.maskwithcolor = self.__ui.maskColorCheckBox.isChecked()
 
         try:
             dirtrans = str(self.__ui.dirtransLineEdit.text()).strip()
@@ -1003,6 +1039,7 @@ class ConfigDialog(QtWidgets.QDialog):
             self.__ui.mbufsizeLineEdit.setFocus(True)
             return
         self.__readROIsColors()
+        self.__readMaskColor()
         self.imagesources = json.dumps(
             self.__ui.isTable.getChecks(self.availimagesources))
         self.toolwidgets = json.dumps(

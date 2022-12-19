@@ -227,6 +227,11 @@ class Settings(object):
         #: (:obj:`str`) float type for pixel intensity
         self.floattype = "float"
 
+        #: (:obj:`bool`) high mask with color
+        self.maskwithcolor = False
+        #: (:obj:`str`) json list with high mask color
+        self.maskcolor = "[255, 255, 255]"
+
         #: (:obj:`str`) json list with filters
         self.filters = "[]"
 
@@ -796,6 +801,16 @@ class Settings(object):
         if qstval:
             self.roiscolors = qstval
 
+        qstval = str(settings.value(
+            "Configuration/HighValueMaskWithColor", type=str))
+        if qstval.lower() == "true":
+            self.maskwithcolor = True
+
+        qstval = str(
+            settings.value("Configuration/HighValueMaskColor", type=str))
+        if qstval:
+            self.maskcolor = qstval
+
         qstval = str(
             settings.value("Configuration/Filters", type=str))
         if qstval:
@@ -1165,6 +1180,15 @@ class Settings(object):
         settings.setValue(
             "Configuration/ROIsColors",
             self.roiscolors)
+        settings.setValue(
+            "Configuration/HighValueMaskColor",
+            self.maskcolor)
+        settings.setValue(
+            "Configuration/HighValueMaskWithColor",
+            self.maskwithcolor)
+        settings.setValue(
+            "Configuration/MaskColor",
+            self.maskcolor)
         settings.setValue(
             "Configuration/Filters",
             self.filters)

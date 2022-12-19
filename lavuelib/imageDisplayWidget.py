@@ -31,6 +31,7 @@ from pyqtgraph import QtCore, QtGui
 import math
 import types
 import logging
+import json
 
 try:
     from pyqtgraph import QtWidgets
@@ -189,6 +190,8 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
 
         #: (:obj:`list` < :class:`pyqtgraph.ImageItem` >) image item list
         self.__images = [SafeImageItem(), SafeImageItem(), SafeImageItem()]
+        #: (:obj:`list` < :class:`pyqtgraph.ImageItem` >) mask image item list
+        self.__maskImages = [SafeImageItem(), SafeImageItem(), SafeImageItem()]
         #: (:class:`pyqtgraph.ImageItem`) image item
         self.__image = self.__images[0]
 
@@ -200,6 +203,12 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         self.__viewbox.addItem(self.__images[2])
         self.__images[1].hide()
         self.__images[2].hide()
+        self.__viewbox.addItem(self.__maskImages[0])
+        self.__viewbox.addItem(self.__maskImages[1])
+        self.__viewbox.addItem(self.__maskImages[2])
+        self.__maskImages[0].hide()
+        self.__maskImages[1].hide()
+        self.__maskImages[2].hide()
         #: (:obj:`float`) current floar x-position
         self.__xfdata = 0
         #: (:obj:`float`) current floar y-position
@@ -220,6 +229,10 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         self.__doubleclicklock = False
         #: (:obj:`bool`) rgb on flag
         self.__rgb = False
+        #: (:obj:`tuple` <:obj:`int`>) mask color
+        self.__maskcolor = (255, 255, 255)
+        #: (:obj:`bool`) mask with color flag
+        self.__maskwithcolor = False
         #: (:obj:`bool`) gradient colors flag
         self.__gradientcolors = False
         #: (:obj:`str`) levelmode
@@ -266,6 +279,23 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
             self.sceneObj.showExportDialog)
         self.sceneObj.rawdata = None
         self.setCursor(QtGui.QCursor(QtCore.Qt.CrossCursor))
+
+    def setMaskColor(self, color, status=None):
+        """ sets item color
+
+        :param color: json list of mask color
+        :type color: :obj:`str`
+        :param status: mask with color status
+        :type status: :obj:`bool`
+        """
+        if status is not None:
+            self.__maskwithcolor = status
+        # print("STATUS", self.__maskwithcolor)
+        try:
+            # print("COL", color)
+            self.__maskcolor = tuple(json.loads(color))
+        except Exception:
+            self.__maskcolor = (255, 255, 255)
 
     def viewbox(self):
         """provides viewbox
@@ -416,6 +446,8 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
             axes.scale = scale
         for image in self.__images:
             image.resetTransform()
+        for image in self.__maskImages:
+            image.resetTransform()
         if axes.scale is not None and anyupdate:
             if not self.__transformations.transpose:
                 self._imagescale(*axes.scale)
@@ -424,18 +456,24 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                     axes.scale[1], axes.scale[0])
         else:
             self._imagescale(1, 1)
-        for image in self.__images:
+        for iid, image in enumerate(self.__images):
             if axes.position is not None and anyupdate:
                 if self.__transformations.orgtranspose and wrenabled:
                     image.setPos(
                         axes.position[1], axes.position[0])
+                    self.__maskImages[iid].setPos(
+                        axes.position[1], axes.position[0])
                 elif not self.__transformations.transpose:
                     image.setPos(*axes.position)
+                    self.__maskImages[iid].setPos(*axes.position)
                 else:
                     image.setPos(
                         axes.position[1], axes.position[0])
+                    self.__maskImages[iid].setPos(
+                        axes.position[1], axes.position[0])
             else:
                 image.setPos(0, 0)
+                self.__maskImages[iid].setPos(0, 0)
         if self.sceneObj.rawdata is not None and update:
             self.autoRange()
 
@@ -447,13 +485,15 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         :param y: y pixel coordinate
         :type y: float
         """
-        for image in self.__images:
+        for iid, image in enumerate(self.__images):
             try:
                 tr = image.transform()
                 tr.scale(x, y)
                 image.setTransform(tr)
+                self.__maskImages[iid].setTransform(tr)
             except Exception:
                 image.scale(x, y)
+                self.__maskImages[iid].scale(x, y)
 
     def setToolScale(self, position=None, scale=None):
         """ set axes scales
@@ -490,7 +530,8 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                 if self.__axes.position is None \
                 else self.__axes.position
             scale = self.__axes.scale
-        elif self.__wraxes.scale is not None and self.__wraxes.enabled is True:
+        elif self.__wraxes.scale is not None and \
+                self.__wraxes.enabled is True:
             position = [0, 0] \
                 if self.__wraxes.position is None \
                 else self.__wraxes.position
@@ -511,26 +552,30 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         else:
             axes = self.__wraxes
 
-        for image in self.__images:
+        for iid, image in enumerate(self.__images):
             if axes.scale is not None or axes.position is not None:
                 image.resetTransform()
+                self.__maskImages[iid].resetTransform()
         if axes.scale is not None:
             self._imagescale(1, 1)
-        for image in self.__images:
+        for iid, image in enumerate(self.__images):
             if axes.position is not None:
                 image.setPos(0, 0)
+                self.__maskImages[iid].setPos(0, 0)
         if axes.scale is not None or axes.position is not None:
             if self.sceneObj.rawdata is not None:
                 self.autoRange()
             self.__setLabels()
 
-    def updateImage(self, img=None, rawimg=None):
+    def updateImage(self, img=None, rawimg=None, maskimg=None):
         """ updates the image to display
 
         :param img: 2d image array
         :type img: :class:`numpy.ndarray`
         :param rawimg: 2d raw image array
         :type rawimg: :class:`numpy.ndarray`
+        :param maskarray: 2d color mask image array
+        :type maskarray: :class:`numpy.ndarray`
         """
         try:
             if img is not None and len(img.shape) == 3:
@@ -542,10 +587,13 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                         if iid < img.shape[2]:
                             if np.isnan(img[:, :, iid]).all():
                                 image.hide()
+                                self.__maskImages[iid].hide()
                             else:
                                 image.show()
                                 if self.__channellevels and \
                                    self.levelMode() != 'mono':
+                                    # print("SetImg: 1 -  RGB with RGB levels "
+                                    #       "(3 mono grad  separate images)")
                                     image.setImage(
                                         img[:, :, iid],
                                         levels=self.__channellevels[iid],
@@ -553,15 +601,35 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                                 elif self.__displaylevels[0] is not None \
                                         and self.__displaylevels[1] \
                                         is not None:
+                                    # print("SetImg: 1b - RGB with MONO levels"
+                                    #       " (3 mono grad separate images)")
                                     image.setImage(
                                         img[:, :, iid],
                                         levels=self.__displaylevels,
                                         autoLevels=False)
                                 else:
+                                    # print("SetImg: 1c - RGB with w/olevels "
+                                    #       "(3 mono grad separate images)")
                                     image.setImage(
                                         img[:, :, iid],
                                         # levels=[[0,255], [0, 255], [0, 255]],
                                         autoLevels=False)
+                                if maskimg is not None:
+                                    # print(maskimg)
+                                    if self.__maskcolor:
+                                        self.__maskImages[0].show()
+                                        # print(self.__maskcolor)
+                                        self.__maskImages[0].setImage(
+                                            np.array([
+                                                maskimg[:, :, iid].T
+                                                * self.__maskcolor[0],
+                                                maskimg[:, :, iid].T
+                                                * self.__maskcolor[1],
+                                                maskimg[:, :, iid].T
+                                                * self.__maskcolor[2]
+                                            ]).T,
+                                            levels=[0, 255],
+                                            autoLevels=False)
                 else:
                     self._hideimages()
                     self.__image.show()
@@ -570,6 +638,7 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                     if img.dtype.kind == 'f' and np.isnan(img.min()):
                         img = np.nan_to_num(img)
                     if self.__channellevels and self.levelMode() != 'mono':
+                        # print("SetImg: 2a -  RGB with RGB levels")
                         self.__image.setImage(
                             img,
                             # lut=None,
@@ -577,22 +646,43 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                             autoLevels=False)
                     elif self.__displaylevels[0] is not None \
                             and self.__displaylevels[1] is not None:
+                        # print("SetImg: 2b -  RGB with MONO levels ")
                         self.__image.setImage(
                             img,
                             # lut=None,
                             levels=self.__displaylevels,
                             autoLevels=False)
                     else:
+                        # print("SetImg: 2c  -  RGB with without levels")
                         self.__image.setImage(
                             img,
                             # lut=None,
                             # levels=[[0,255], [0, 255], [0, 255]],
                             autoLevels=False)
+                    if maskimg is not None:
+                        # print(maskimg)
+                        if self.__maskcolor:
+                            self.__maskImages[0].show()
+                            # print(self.__maskcolor)
+                            smaskimg = np.sum(np.nan_to_num(maskimg), axis=2)
+                            smaskimg[smaskimg == 0] = np.nan
+                            self.__maskImages[0].setImage(
+                                np.array([
+                                    smaskimg.T
+                                    * self.__maskcolor[0],
+                                    smaskimg.T
+                                    * self.__maskcolor[1],
+                                    smaskimg.T
+                                    * self.__maskcolor[2]
+                                ]).T,
+                                levels=[0, 255],
+                                autoLevels=False)
             elif (self.__autodisplaylevels
                   and self.__displaylevels[0] is not None
                   and self.__displaylevels[1] is not None):
                 self._hideimages()
                 self.__image.show()
+                # print("SetImg: 3")
                 self.__image.setImage(
                     img, autoLevels=False,
                     levels=self.__displaylevels,
@@ -602,16 +692,33 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                   or self.__displaylevels[1] is None):
                 self._hideimages()
                 self.__image.show()
+                # print("SetImg: 4")
                 self.__image.setImage(
                     img, autoLevels=False,
                     autoDownsample=self.__autodownsample)
             else:
                 self._hideimages()
                 self.__image.show()
+                # print("SetImg: 5")
                 self.__image.setImage(
                     img, autoLevels=False,
                     levels=self.__displaylevels,
                     autoDownsample=self.__autodownsample)
+            if img is not None and len(img.shape) != 3:
+                if maskimg is not None:
+                    # print(maskimg)
+                    if self.__maskcolor:
+                        self.__maskImages[0].show()
+                        # print(self.__maskcolor)
+                        self.__maskImages[0].setImage(
+                            np.array([
+                                maskimg.T * self.__maskcolor[0],
+                                maskimg.T * self.__maskcolor[1],
+                                maskimg.T * self.__maskcolor[2]
+                            ]).T,
+                            levels=[0, 255],
+                            autoLevels=False)
+
         except Exception as e:
             logger.warning(str(e))
             # print(str(e))
@@ -1306,6 +1413,9 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         """
         self.__images[1].hide()
         self.__images[2].hide()
+        self.__maskImages[0].hide()
+        self.__maskImages[1].hide()
+        self.__maskImages[2].hide()
 
     def setGradientColors(self, status=True):
         """ sets gradientcolors on/off

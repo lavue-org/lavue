@@ -826,7 +826,7 @@ class ImageWidget(QtWidgets.QWidget):
         """
         return self.__displaywidget.transformations()
 
-    def plot(self, array, rawarray=None, imagename=None):
+    def plot(self, array, rawarray=None, imagename=None, maskarray=None):
         """ plots the image
 
         :param array: 2d image array
@@ -835,6 +835,8 @@ class ImageWidget(QtWidgets.QWidget):
         :type rawarray: :class:`numpy.ndarray`
         :param imagename: image name
         :type imagename: :obj:`str`
+        :param maskarray: 2d color mask image array
+        :type maskarray: :class:`numpy.ndarray`
         """
         if array is None:
             return
@@ -844,25 +846,30 @@ class ImageWidget(QtWidgets.QWidget):
         self.__data = array
         self.__rawdata = rawarray
         self.__imagename = imagename
+        self.__maskdata = maskarray
         if self.__currenttool:
             barrays = self.__currenttool.beforeplot(array, rawarray)
         self.__displaywidget.updateImage(
             barrays[0] if barrays is not None else self.__data,
-            barrays[1] if barrays is not None else self.__rawdata)
+            barrays[1] if barrays is not None else self.__rawdata,
+            None if barrays is not None else self.__maskdata)
         if self.__currenttool:
             self.__currenttool.afterplot()
 
-    def updateImage(self, array=None, rawarray=None):
+    def updateImage(self, array=None, rawarray=None, maskarray=None):
         """ update the image
 
         :param array: 2d image array
         :type array: :class:`numpy.ndarray`
         :param rawarray: 2d raw image array
         :type rawarray: :class:`numpy.ndarray`
+        :param maskarray: 2d color mask image array
+        :type maskarray: :class:`numpy.ndarray`
         """
         self.__displaywidget.updateImage(
             array if array is not None else self.__data,
-            rawarray if rawarray is not None else self.__rawdata)
+            rawarray if rawarray is not None else self.__rawdata,
+            maskarray if maskarray is not None else self.__maskdata)
 
     @QtCore.pyqtSlot(int)
     def setAutoLevels(self, autolevels):
@@ -1126,6 +1133,16 @@ class ImageWidget(QtWidgets.QWidget):
             if hasattr(self.__displaywidget.extension(name), "setColors"):
                 self.__displaywidget.extension(name).setColors(colors)
         self.colorsChanged.emit(colors)
+
+    def setMaskColor(self, color, status=None):
+        """ sets item color
+
+        :param color: json list of mask color
+        :type color: :obj:`str`
+        :param status: mask with color status
+        :type status: :obj:`bool`
+        """
+        self.__displaywidget.setMaskColor(color, status)
 
     def setScalingType(self, scalingtype):
         """ sets intensity scaling types
