@@ -617,9 +617,9 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                                 if maskimg is not None:
                                     # print(maskimg)
                                     if self.__maskcolor:
-                                        self.__maskImages[0].show()
+                                        self.__maskImages[iid].show()
                                         # print(self.__maskcolor)
-                                        self.__maskImages[0].setImage(
+                                        self.__maskImages[iid].setImage(
                                             np.array([
                                                 maskimg[:, :, iid].T
                                                 * self.__maskcolor[0],

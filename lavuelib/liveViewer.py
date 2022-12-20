@@ -2949,13 +2949,13 @@ class LiveViewer(QtWidgets.QDialog):
             # prepare or preprocess the raw image if present:
             self.__prepareImage()
 
+            self.__updateColorMask()
+
             # perform transformation
             # (crdtranspose, crdleftrightflip, crdupdownflip,
             # orgtranspose, orgleftrightflip, orgupdownflip)
             allcrds = self.__transform()
             self.__imagewg.setTransformations(*allcrds)
-
-            self.__updateColorMask()
 
             # use the internal raw image to create a display image with chosen
             # scaling
@@ -3744,17 +3744,24 @@ class LiveViewer(QtWidgets.QDialog):
                 crdupdownflip = True
             elif self.__displayimage is not None:
                 self.__displayimage = np.fliplr(self.__displayimage)
+                if self.__colormaskimage is not None:
+                    self.__colormaskimage = np.fliplr(self.__colormaskimage)
         elif self.__trafoname == "flip (left-right)":
             orgleftrightflip = True
             if self.__settings.keepcoords:
                 crdleftrightflip = True
             elif self.__displayimage is not None:
                 self.__displayimage = np.flipud(self.__displayimage)
+                if self.__colormaskimage is not None:
+                    self.__colormaskimage = np.flipud(self.__colormaskimage)
         elif self.__trafoname == "transpose":
             orgtranspose = True
             if self.__displayimage is not None:
                 self.__displayimage = np.swapaxes(
                     self.__displayimage, 0, 1)
+                if self.__colormaskimage is not None:
+                    self.__colormaskimage = np.swapaxes(
+                        self.__colormaskimage, 0, 1)
                 # self.__displayimage = np.transpose(self.__displayimage)
             if self.__settings.keepcoords:
                 crdtranspose = True
@@ -3767,12 +3774,18 @@ class LiveViewer(QtWidgets.QDialog):
                 if self.__displayimage is not None:
                     self.__displayimage = np.swapaxes(
                         self.__displayimage, 0, 1)
+                    if self.__colormaskimage is not None:
+                        self.__colormaskimage = np.swapaxes(
+                            self.__colormaskimage, 0, 1)
                     # self.__displayimage = np.transpose(self.__displayimage)
             elif self.__displayimage is not None:
                 # self.__displayimage = np.transpose(
                 #     np.flipud(self.__displayimage))
                 self.__displayimage = np.swapaxes(
                     np.flipud(self.__displayimage), 0, 1)
+                if self.__colormaskimage is not None:
+                    self.__colormaskimage = np.swapaxes(
+                        np.flipud(self.__colormaskimage), 0, 1)
         elif self.__trafoname == "rot180":
             orgupdownflip = True
             orgleftrightflip = True
@@ -3782,6 +3795,9 @@ class LiveViewer(QtWidgets.QDialog):
             elif self.__displayimage is not None:
                 self.__displayimage = np.flipud(
                     np.fliplr(self.__displayimage))
+                if self.__colormaskimage is not None:
+                    self.__colormaskimage = np.flipud(
+                        np.fliplr(self.__colormaskimage))
         elif self.__trafoname == "rot270 (clockwise)":
             orgtranspose = True
             orgleftrightflip = True
@@ -3791,10 +3807,16 @@ class LiveViewer(QtWidgets.QDialog):
                 if self.__displayimage is not None:
                     self.__displayimage = np.swapaxes(
                         self.__displayimage, 0, 1)
+                    if self.__colormaskimage is not None:
+                        self.__colormaskimage = np.swapaxes(
+                            self.__colormaskimage, 0, 1)
                     # self.__displayimage = np.transpose(self.__displayimage)
             elif self.__displayimage is not None:
                 self.__displayimage = np.swapaxes(
                     np.fliplr(self.__displayimage), 0, 1)
+                if self.__colormaskimage is not None:
+                    self.__colormaskimage = np.swapaxes(
+                        np.fliplr(self.__colormaskimage), 0, 1)
                 # self.__displayimage = np.transpose(
                 #     np.fliplr(self.__displayimage))
         elif self.__trafoname == "rot180 + transpose":
@@ -3809,9 +3831,15 @@ class LiveViewer(QtWidgets.QDialog):
                     # self.__displayimage = np.transpose(self.__displayimage)
                     self.__displayimage = np.swapaxes(
                         self.__displayimage, 0, 1)
+                    if self.__colormaskimage is not None:
+                        self.__colormaskimage = np.swapaxes(
+                            self.__colormaskimage, 0, 1)
             elif self.__displayimage is not None:
                 self.__displayimage = np.swapaxes(
                     np.fliplr(np.flipud(self.__displayimage)), 0, 1)
+                if self.__colormaskimage is not None:
+                    self.__colormaskimage = np.swapaxes(
+                        np.fliplr(np.flipud(self.__colormaskimage)), 0, 1)
                 # self.__displayimage = np.transpose(
                 #     np.fliplr(np.flipud(self.__displayimage)))
         return (crdtranspose, crdleftrightflip, crdupdownflip,
