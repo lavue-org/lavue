@@ -638,8 +638,12 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         hy = None
         if self.autolevelfactor is not None:
             try:
-                hx, hy = self.__imageItem().getHistogram(
-                    step=self.__step, bins=self.__bins)
+                with np.warnings.catch_warnings():
+                    np.warnings.filterwarnings(
+                        'ignore',
+                        r'All-NaN slice encountered')
+                    hx, hy = self.__imageItem().getHistogram(
+                        step=self.__step, bins=self.__bins)
             except Exception as e:
                 logger.warning(str(e))
                 # print(str(e))
@@ -668,7 +672,11 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         """
         channels = []
         if ch is None:
-            channels = self.__imageItem().getHistogram(perChannel=True)
+            with np.warnings.catch_warnings():
+                np.warnings.filterwarnings(
+                    'ignore',
+                    r'All-NaN slice encountered')
+                channels = self.__imageItem().getHistogram(perChannel=True)
         if ch[0] is None:
             return
         autofactor = False
@@ -723,8 +731,12 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
                 # _pg.graphicsItems.HistogramLUTItem.HistogramLUTItem.\
                 #     imageChanged(
                 #         self, autoLevel=autoLevel, autoRange=autoRange)
-                h = self.__imageItem().getHistogram(
-                    step=self.__step, bins=self.__bins)
+                with np.warnings.catch_warnings():
+                    np.warnings.filterwarnings(
+                        'ignore',
+                        r'All-NaN slice encountered')
+                    h = self.__imageItem().getHistogram(
+                        step=self.__step, bins=self.__bins)
                 if h[0] is None:
                     return
                 self.plot.setData(*h)
@@ -738,7 +750,11 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
         else:
             # plot one histogram for each channel
             self.plots[0].setVisible(False)
-            ch = self.__imageItem().getHistogram(perChannel=True)
+            with np.warnings.catch_warnings():
+                np.warnings.filterwarnings(
+                    'ignore',
+                    r'All-NaN slice encountered')
+                ch = self.__imageItem().getHistogram(perChannel=True)
             if ch[0] is None:
                 return
             for i in range(1, 5):

@@ -4041,6 +4041,8 @@ class LiveViewer(QtWidgets.QDialog):
             with warnings.catch_warnings():
                 warnings.filterwarnings(
                     'ignore', r'All-NaN slice encountered')
+                warnings.filterwarnings(
+                    'ignore', r'Mean of empty slice')
                 maxval = np.nanmax(self.__displayimage) if flag[0] else 0.0
                 meanval = np.nanmean(self.__displayimage) if flag[1] else 0.0
                 varval = np.nanvar(self.__displayimage) if flag[2] else 0.0
