@@ -712,6 +712,18 @@ and reset the display</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt id="lavuelib.configDialog.ConfigDialog.maskcolor">
+<code class="sig-name descname">maskcolor</code><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.maskcolor" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) json list with high mask color</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lavuelib.configDialog.ConfigDialog.maskwithcolor">
+<code class="sig-name descname">maskwithcolor</code><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.maskwithcolor" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) high mask with color</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt id="lavuelib.configDialog.ConfigDialog.maxmbuffersize">
 <code class="sig-name descname">maxmbuffersize</code><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.maxmbuffersize" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) maximal number of images in memory buffer</p>
@@ -7047,6 +7059,20 @@ x position, y position)</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="lavuelib.imageDisplayWidget.ImageDisplayWidget.setMaskColor">
+<code class="sig-name descname">setMaskColor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">color</span></em>, <em class="sig-param"><span class="n">status</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageDisplayWidget.html#ImageDisplayWidget.setMaskColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageDisplayWidget.ImageDisplayWidget.setMaskColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>sets item color</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – json list of mask color</p></li>
+<li><p><strong>status</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – mask with color status</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="lavuelib.imageDisplayWidget.ImageDisplayWidget.setScalingType">
 <code class="sig-name descname">setScalingType</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scalingtype</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageDisplayWidget.html#ImageDisplayWidget.setScalingType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageDisplayWidget.ImageDisplayWidget.setScalingType" title="Permalink to this definition">¶</a></dt>
 <dd><p>sets intensity scaling types</p>
@@ -7169,13 +7195,14 @@ original transpose</p>
 
 <dl class="py method">
 <dt id="lavuelib.imageDisplayWidget.ImageDisplayWidget.updateImage">
-<code class="sig-name descname">updateImage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rawimg</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageDisplayWidget.html#ImageDisplayWidget.updateImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageDisplayWidget.ImageDisplayWidget.updateImage" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">updateImage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rawimg</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">maskimg</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageDisplayWidget.html#ImageDisplayWidget.updateImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageDisplayWidget.ImageDisplayWidget.updateImage" title="Permalink to this definition">¶</a></dt>
 <dd><p>updates the image to display</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>img</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – 2d image array</p></li>
 <li><p><strong>rawimg</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – 2d raw image array</p></li>
+<li><p><strong>maskarray</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – 2d color mask image array</p></li>
 </ul>
 </dd>
 </dl>
@@ -9272,7 +9299,7 @@ an image file name and its directory</p>
 
 <dl class="py method">
 <dt id="lavuelib.imageWidget.ImageWidget.plot">
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">array</span></em>, <em class="sig-param"><span class="n">rawarray</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">imagename</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.plot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">array</span></em>, <em class="sig-param"><span class="n">rawarray</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">imagename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">maskarray</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plots the image</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -9280,6 +9307,7 @@ an image file name and its directory</p>
 <li><p><strong>array</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – 2d image array</p></li>
 <li><p><strong>rawarray</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – 2d raw image array</p></li>
 <li><p><strong>imagename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – image name</p></li>
+<li><p><strong>maskarray</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – 2d color mask image array</p></li>
 </ul>
 </dd>
 </dl>
@@ -9663,6 +9691,20 @@ an image file name and its directory</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>levelmode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – level mode, i.e. <cite>mono</cite> or <cite>rgba</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="lavuelib.imageWidget.ImageWidget.setMaskColor">
+<code class="sig-name descname">setMaskColor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">color</span></em>, <em class="sig-param"><span class="n">status</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.setMaskColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.setMaskColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>sets item color</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – json list of mask color</p></li>
+<li><p><strong>status</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – mask with color status</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -10076,13 +10118,14 @@ original transpose</p>
 
 <dl class="py method">
 <dt id="lavuelib.imageWidget.ImageWidget.updateImage">
-<code class="sig-name descname">updateImage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">array</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rawarray</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.updateImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.updateImage" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">updateImage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">array</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rawarray</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">maskarray</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.updateImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.updateImage" title="Permalink to this definition">¶</a></dt>
 <dd><p>update the image</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>array</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – 2d image array</p></li>
 <li><p><strong>rawarray</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – 2d raw image array</p></li>
+<li><p><strong>maskarray</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – 2d color mask image array</p></li>
 </ul>
 </dd>
 </dl>
@@ -12924,9 +12967,21 @@ version of the object or raise a <code class="docutils literal notranslate"><spa
 </dd></dl>
 
 <dl class="py attribute">
+<dt id="lavuelib.settings.Settings.maskcolor">
+<code class="sig-name descname">maskcolor</code><a class="headerlink" href="#lavuelib.settings.Settings.maskcolor" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) json list with high mask color</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt id="lavuelib.settings.Settings.maskimagename">
 <code class="sig-name descname">maskimagename</code><a class="headerlink" href="#lavuelib.settings.Settings.maskimagename" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) last mask image file name</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lavuelib.settings.Settings.maskwithcolor">
+<code class="sig-name descname">maskwithcolor</code><a class="headerlink" href="#lavuelib.settings.Settings.maskwithcolor" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) high mask with color</p>
 </dd></dl>
 
 <dl class="py attribute">

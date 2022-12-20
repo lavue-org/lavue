@@ -410,11 +410,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">geometryfromsource</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`str`) json list with filters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filters</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span>
+
         <span class="c1">#: (:obj:`str`) json list with rois colors</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">roiscolors</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span>
         <span class="c1">#: (:obj:`list`&lt;:class:`pyqtgraph.ColorButton`&gt;)</span>
         <span class="c1">#    list with rois color widgets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__roiswidgets</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1">#: (:obj:`bool`) high mask with color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maskwithcolor</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`str`) json list with high mask color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maskcolor</span> <span class="o">=</span> <span class="s2">&quot;[255, 255, 255]&quot;</span>
+        <span class="c1">#: (:class:`pyqtgraph.ColorButton`)</span>
+        <span class="c1">#    list with rois color widgets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolorwidget</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="c1">#: (:obj:`bool`) show all rois flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">showallrois</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) send rois to LavueController flag</span>
@@ -564,6 +574,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">sourcedisplayCheckBox</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sourcedisplay</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">crosshairCheckBox</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crosshairlocker</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">csaCheckBox</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">correctsolidangle</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">maskColorCheckBox</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maskwithcolor</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">floattype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="s2">&quot;float32&quot;</span><span class="p">,</span> <span class="s2">&quot;float64&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">floattype</span> <span class="o">=</span> <span class="s2">&quot;float&quot;</span>
@@ -606,6 +617,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_removeROIColorWidget</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__setROIsColorsWidgets</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__setMaskColorWidget</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__setFiltersGroupBox</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">isTable</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
             <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">imagesources</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">availimagesources</span><span class="p">,</span>
@@ -783,6 +795,29 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__roiswidgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cb</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">colorHorizontalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">cb</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">__setMaskColorWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; set Mask color widget</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maskcolor</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">maskcolor</span> <span class="o">=</span> <span class="s2">&quot;[255, 255, 255]&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolorwidget</span><span class="p">:</span>
+            <span class="n">cb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolorwidget</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolorwidget</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">cb</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">maskColorHorizontalLayout</span><span class="o">.</span><span class="n">removeWidget</span><span class="p">(</span><span class="n">cb</span><span class="p">)</span>
+        <span class="n">cb</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">ColorButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolorwidget</span> <span class="o">=</span> <span class="n">cb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">maskColorHorizontalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">cb</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__readMaskColor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; takes Mask color from mask color widget</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__maskcolorwidget</span><span class="o">.</span><span class="n">color</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;byte&#39;</span><span class="p">)[:</span><span class="mi">3</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maskcolor</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_removeROIColorWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; updates ROIs colors widgets</span>
@@ -874,6 +909,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">defdetservers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">defdetserversCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">crosshairlocker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">crosshairCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">correctsolidangle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">csaCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maskwithcolor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">maskColorCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">dirtrans</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">dirtransLineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">())</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
@@ -1048,6 +1084,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">mbufsizeLineEdit</span><span class="o">.</span><span class="n">setFocus</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">return</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__readROIsColors</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__readMaskColor</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">imagesources</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">isTable</span><span class="o">.</span><span class="n">getChecks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">availimagesources</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolwidgets</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>

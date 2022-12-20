@@ -871,7 +871,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ImageWidget.plot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">rawarray</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">imagename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageWidget.plot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">rawarray</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">imagename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maskarray</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plots the image</span>
 
 <span class="sd">        :param array: 2d image array</span>
@@ -880,6 +880,8 @@
 <span class="sd">        :type rawarray: :class:`numpy.ndarray`</span>
 <span class="sd">        :param imagename: image name</span>
 <span class="sd">        :type imagename: :obj:`str`</span>
+<span class="sd">        :param maskarray: 2d color mask image array</span>
+<span class="sd">        :type maskarray: :class:`numpy.ndarray`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">array</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
@@ -889,25 +891,30 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">=</span> <span class="n">array</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__rawdata</span> <span class="o">=</span> <span class="n">rawarray</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagename</span> <span class="o">=</span> <span class="n">imagename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__maskdata</span> <span class="o">=</span> <span class="n">maskarray</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currenttool</span><span class="p">:</span>
             <span class="n">barrays</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currenttool</span><span class="o">.</span><span class="n">beforeplot</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">rawarray</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">updateImage</span><span class="p">(</span>
             <span class="n">barrays</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">barrays</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span><span class="p">,</span>
-            <span class="n">barrays</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">barrays</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rawdata</span><span class="p">)</span>
+            <span class="n">barrays</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">barrays</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rawdata</span><span class="p">,</span>
+            <span class="kc">None</span> <span class="k">if</span> <span class="n">barrays</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskdata</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currenttool</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__currenttool</span><span class="o">.</span><span class="n">afterplot</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ImageWidget.updateImage"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.updateImage">[docs]</a>    <span class="k">def</span> <span class="nf">updateImage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rawarray</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageWidget.updateImage"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.updateImage">[docs]</a>    <span class="k">def</span> <span class="nf">updateImage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rawarray</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maskarray</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update the image</span>
 
 <span class="sd">        :param array: 2d image array</span>
 <span class="sd">        :type array: :class:`numpy.ndarray`</span>
 <span class="sd">        :param rawarray: 2d raw image array</span>
 <span class="sd">        :type rawarray: :class:`numpy.ndarray`</span>
+<span class="sd">        :param maskarray: 2d color mask image array</span>
+<span class="sd">        :type maskarray: :class:`numpy.ndarray`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">updateImage</span><span class="p">(</span>
             <span class="n">array</span> <span class="k">if</span> <span class="n">array</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span><span class="p">,</span>
-            <span class="n">rawarray</span> <span class="k">if</span> <span class="n">rawarray</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rawdata</span><span class="p">)</span></div>
+            <span class="n">rawarray</span> <span class="k">if</span> <span class="n">rawarray</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rawdata</span><span class="p">,</span>
+            <span class="n">maskarray</span> <span class="k">if</span> <span class="n">maskarray</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskdata</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ImageWidget.setAutoLevels"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.setAutoLevels">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">setAutoLevels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">autolevels</span><span class="p">):</span>
@@ -1171,6 +1178,16 @@
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="s2">&quot;setColors&quot;</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">setColors</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">colorsChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ImageWidget.setMaskColor"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.setMaskColor">[docs]</a>    <span class="k">def</span> <span class="nf">setMaskColor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets item color</span>
+
+<span class="sd">        :param color: json list of mask color</span>
+<span class="sd">        :type color: :obj:`str`</span>
+<span class="sd">        :param status: mask with color status</span>
+<span class="sd">        :type status: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">setMaskColor</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ImageWidget.setScalingType"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.setScalingType">[docs]</a>    <span class="k">def</span> <span class="nf">setScalingType</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalingtype</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets intensity scaling types</span>
