@@ -67,8 +67,10 @@ class Settings(object):
         self.showmask = False
         #: (:obj:`bool`) map image sources to color channels
         self.imagechannels = False
-        #: (:obj:`bool`) show high mask value  widget
+        #: (:obj:`bool`) show high mask value widget
         self.showhighvaluemask = False
+        #: (:obj:`bool`) show intensity overflow widget
+        self.showoverflow = False
         #: (:obj:`bool`) show statistics widget
         self.showstats = True
         #: (:obj:`bool`) show image step widget
@@ -227,10 +229,10 @@ class Settings(object):
         #: (:obj:`str`) float type for pixel intensity
         self.floattype = "float"
 
-        #: (:obj:`bool`) high mask with color
-        self.maskwithcolor = False
-        #: (:obj:`str`) json list with high mask color
-        self.maskcolor = "[255, 255, 255]"
+        #: (:obj:`bool`) overflow in color
+        self.overflow = False
+        #: (:obj:`str`) json list with overflow color
+        self.overflowcolor = "[255, 255, 255]"
 
         #: (:obj:`str`) json list with filters
         self.filters = "[]"
@@ -458,6 +460,10 @@ class Settings(object):
             "Configuration/ShowHighValueMaskWidget", type=str))
         if qstval.lower() == "true":
             self.showhighvaluemask = True
+        qstval = str(settings.value(
+            "Configuration/ShowOverflowWidget", type=str))
+        if qstval.lower() == "true":
+            self.showoverflow = True
         qstval = str(settings.value("Configuration/ShowStatistics", type=str))
         if qstval.lower() == "false":
             self.showstats = False
@@ -802,14 +808,14 @@ class Settings(object):
             self.roiscolors = qstval
 
         qstval = str(settings.value(
-            "Configuration/HighValueMaskWithColor", type=str))
+            "Configuration/IntensityOverflowInColor", type=str))
         if qstval.lower() == "true":
-            self.maskwithcolor = True
+            self.overflow = True
 
         qstval = str(
-            settings.value("Configuration/HighValueMaskColor", type=str))
+            settings.value("Configuration/IntensityOverflowColor", type=str))
         if qstval:
-            self.maskcolor = qstval
+            self.overflowcolor = qstval
 
         qstval = str(
             settings.value("Configuration/Filters", type=str))
@@ -998,6 +1004,9 @@ class Settings(object):
             "Configuration/ShowHighValueMaskWidget",
             self.showhighvaluemask)
         settings.setValue(
+            "Configuration/ShowOverflowWidget",
+            self.showoverflow)
+        settings.setValue(
             "Configuration/ShowStatistics",
             self.showstats)
         settings.setValue(
@@ -1181,14 +1190,11 @@ class Settings(object):
             "Configuration/ROIsColors",
             self.roiscolors)
         settings.setValue(
-            "Configuration/HighValueMaskColor",
-            self.maskcolor)
+            "Configuration/IntensityOverflowColor",
+            self.overflowcolor)
         settings.setValue(
-            "Configuration/HighValueMaskWithColor",
-            self.maskwithcolor)
-        settings.setValue(
-            "Configuration/MaskColor",
-            self.maskcolor)
+            "Configuration/IntensityOverflowInColor",
+            self.overflow)
         settings.setValue(
             "Configuration/Filters",
             self.filters)

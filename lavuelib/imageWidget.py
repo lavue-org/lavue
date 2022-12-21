@@ -168,6 +168,10 @@ class ImageWidget(QtWidgets.QWidget):
         self.__maskvalueindices = None
         #: (:obj:`float`) file name
         self.__maskvalue = None
+        #: (:class:`numpy.ndarray`) overflow image value indices
+        self.__overflowvalueindices = None
+        #: (:obj:`float`) file name
+        self.__overflowvalue = None
         #: (:obj:`str`) image name
         self.__imagename = None
 
@@ -1156,15 +1160,15 @@ class ImageWidget(QtWidgets.QWidget):
                 self.__displaywidget.extension(name).setColors(colors)
         self.colorsChanged.emit(colors)
 
-    def setMaskColor(self, color, status=None):
+    def setOverflowColor(self, color, status=None):
         """ sets item color
 
-        :param color: json list of mask color
+        :param color: json list of overflow color
         :type color: :obj:`str`
-        :param status: mask with color status
+        :param status: overflow in color status
         :type status: :obj:`bool`
         """
-        self.__displaywidget.setMaskColor(color, status)
+        self.__displaywidget.setOverflowColor(color, status)
 
     def setScalingType(self, scalingtype):
         """ sets intensity scaling types
@@ -2155,10 +2159,42 @@ class ImageWidget(QtWidgets.QWidget):
     def setMaskValue(self, maskvalue):
         """ sets high mask value
 
-        :params applymask: high mask value
-        :type applymask: :obj:`float`
+        :params maskvalue: high mask value
+        :type maskvalue: :obj:`float`
         """
         self.__maskvalue = maskvalue
+
+    def overflowValue(self):
+        """ provides overflow value
+
+        :returns: overflow value
+        :rtype: :obj:`float`
+        """
+        return self.__overflowvalue
+
+    def setOverflowValue(self, overflowvalue):
+        """ sets overflow value
+
+        :params overflowvalue: overflow value
+        :type overflowvalue: :obj:`float`
+        """
+        self.__overflowvalue = overflowvalue
+
+    def overflowValueIndices(self):
+        """ provides overflow image value indices
+
+        :returns: overflow image indices
+        :rtype: :class:`numpy.ndarray`
+        """
+        return self.__overflowValueIndices
+
+    def setOverflowValueIndices(self, overflowindices):
+        """ sets overflow image indices
+
+        :params overflowindices: overflow image  value indices
+        :type overflowindices: :class:`numpy.ndarray`
+        """
+        self.__overflowValueIndices = overflowindices
 
     def maskIndices(self):
         """ provides mask image indices

@@ -239,6 +239,8 @@ class ConfigDialog(QtWidgets.QDialog):
         self.showmask = False
         #: (:obj:`bool`) show high value mask widget
         self.showhighvaluemask = False
+        #: (:obj:`bool`) show intensity overflow widget
+        self.showoverflow = False
         #: (:obj:`bool`) show statistics widget
         self.showstats = True
         #: (:obj:`bool`) show image step widget
@@ -372,13 +374,13 @@ class ConfigDialog(QtWidgets.QDialog):
         #    list with rois color widgets
         self.__roiswidgets = []
 
-        #: (:obj:`bool`) high mask with color
-        self.maskwithcolor = False
-        #: (:obj:`str`) json list with high mask color
-        self.maskcolor = "[255, 255, 255]"
+        #: (:obj:`bool`) overflow in color
+        self.overflow = False
+        #: (:obj:`str`) json list with overflow color
+        self.overflowcolor = "[255, 255, 255]"
         #: (:class:`pyqtgraph.ColorButton`)
         #    list with rois color widgets
-        self.__maskcolorwidget = None
+        self.__overflowcolorwidget = None
 
         #: (:obj:`bool`) show all rois flag
         self.showallrois = False
@@ -480,6 +482,7 @@ class ConfigDialog(QtWidgets.QDialog):
         self.__ui.showaddhistoCheckBox.setChecked(self.showaddhisto)
         self.__ui.showmaskCheckBox.setChecked(self.showmask)
         self.__ui.showmaskhighCheckBox.setChecked(self.showhighvaluemask)
+        self.__ui.showoverflowCheckBox.setChecked(self.showoverflow)
         self.__ui.showstatsCheckBox.setChecked(self.showstats)
         self.__ui.showstepsCheckBox.setChecked(self.showsteps)
         self.__ui.calcvarianceCheckBox.setChecked(self.calcvariance)
@@ -529,7 +532,7 @@ class ConfigDialog(QtWidgets.QDialog):
         self.__ui.sourcedisplayCheckBox.setChecked(self.sourcedisplay)
         self.__ui.crosshairCheckBox.setChecked(self.crosshairlocker)
         self.__ui.csaCheckBox.setChecked(self.correctsolidangle)
-        self.__ui.maskColorCheckBox.setChecked(self.maskwithcolor)
+        self.__ui.overflowColorCheckBox.setChecked(self.overflow)
 
         if self.floattype not in ["float", "float32", "float64"]:
             self.floattype = "float"
@@ -572,7 +575,7 @@ class ConfigDialog(QtWidgets.QDialog):
             self._removeROIColorWidget)
 
         self.__setROIsColorsWidgets()
-        self.__setMaskColorWidget()
+        self.__setOverflowColorWidget()
         self.__setFiltersGroupBox()
         self.__ui.isTable.create(
             json.loads(self.imagesources), self.availimagesources,
@@ -750,28 +753,28 @@ class ConfigDialog(QtWidgets.QDialog):
         self.__roiswidgets.append(cb)
         self.__ui.colorHorizontalLayout.addWidget(cb)
 
-    def __setMaskColorWidget(self):
+    def __setOverflowColorWidget(self):
         """ set Mask color widget
         """
         try:
-            color = tuple(json.loads(self.maskcolor))
+            color = tuple(json.loads(self.overflowcolor))
         except Exception:
             color = (255, 255, 255)
-            self.maskcolor = "[255, 255, 255]"
-        if self.__maskcolorwidget:
-            cb = self.__maskcolorwidget
-            self.__maskcolorwidget = None
+            self.overflowcolor = "[255, 255, 255]"
+        if self.__overflowcolorwidget:
+            cb = self.__overflowcolorwidget
+            self.__overflowcolorwidget = None
             cb.hide()
-            self.__ui.maskColorHorizontalLayout.removeWidget(cb)
+            self.__ui.overflowColorHorizontalLayout.removeWidget(cb)
         cb = _pg.ColorButton(self, color)
-        self.__maskcolorwidget = cb
-        self.__ui.maskColorHorizontalLayout.addWidget(cb)
+        self.__overflowcolorwidget = cb
+        self.__ui.overflowColorHorizontalLayout.addWidget(cb)
 
-    def __readMaskColor(self):
+    def __readOverflowColor(self):
         """ takes Mask color from mask color widget
         """
-        color = list(self.__maskcolorwidget.color(mode='byte')[:3])
-        self.maskcolor = json.dumps(color)
+        color = list(self.__overflowcolorwidget.color(mode='byte')[:3])
+        self.overflowcolor = json.dumps(color)
 
     @QtCore.pyqtSlot()
     def _removeROIColorWidget(self):
@@ -842,6 +845,7 @@ class ConfigDialog(QtWidgets.QDialog):
         self.showaddhisto = self.__ui.showaddhistoCheckBox.isChecked()
         self.showmask = self.__ui.showmaskCheckBox.isChecked()
         self.showhighvaluemask = self.__ui.showmaskhighCheckBox.isChecked()
+        self.showoverflow = self.__ui.showoverflowCheckBox.isChecked()
         self.showstats = self.__ui.showstatsCheckBox.isChecked()
         self.showsteps = self.__ui.showstepsCheckBox.isChecked()
         self.calcvariance = self.__ui.calcvarianceCheckBox.isChecked()
@@ -864,7 +868,7 @@ class ConfigDialog(QtWidgets.QDialog):
         self.defdetservers = self.__ui.defdetserversCheckBox.isChecked()
         self.crosshairlocker = self.__ui.crosshairCheckBox.isChecked()
         self.correctsolidangle = self.__ui.csaCheckBox.isChecked()
-        self.maskwithcolor = self.__ui.maskColorCheckBox.isChecked()
+        self.overflow = self.__ui.overflowColorCheckBox.isChecked()
 
         try:
             dirtrans = str(self.__ui.dirtransLineEdit.text()).strip()
@@ -1039,7 +1043,7 @@ class ConfigDialog(QtWidgets.QDialog):
             self.__ui.mbufsizeLineEdit.setFocus(True)
             return
         self.__readROIsColors()
-        self.__readMaskColor()
+        self.__readOverflowColor()
         self.imagesources = json.dumps(
             self.__ui.isTable.getChecks(self.availimagesources))
         self.toolwidgets = json.dumps(

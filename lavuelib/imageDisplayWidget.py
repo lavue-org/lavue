@@ -230,9 +230,9 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         #: (:obj:`bool`) rgb on flag
         self.__rgb = False
         #: (:obj:`tuple` <:obj:`int`>) mask color
-        self.__maskcolor = (255, 255, 255)
+        self.__overflowcolor = (255, 255, 255)
         #: (:obj:`bool`) mask with color flag
-        self.__maskwithcolor = False
+        self.__overflow = False
         #: (:obj:`bool`) gradient colors flag
         self.__gradientcolors = False
         #: (:obj:`str`) levelmode
@@ -292,22 +292,22 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         self.sceneObj.rawdata = None
         self.setCursor(QtGui.QCursor(QtCore.Qt.CrossCursor))
 
-    def setMaskColor(self, color, status=None):
+    def setOverflowColor(self, color, status=None):
         """ sets item color
 
-        :param color: json list of mask color
+        :param color: json list of overflow color
         :type color: :obj:`str`
-        :param status: mask with color status
+        :param status: overflow in color status
         :type status: :obj:`bool`
         """
         if status is not None:
-            self.__maskwithcolor = status
-        # print("STATUS", self.__maskwithcolor)
+            self.__overflow = status
+        # print("STATUS", self.__overflow)
         try:
             # print("COL", color)
-            self.__maskcolor = tuple(json.loads(color))
+            self.__overflowcolor = tuple(json.loads(color))
         except Exception:
-            self.__maskcolor = (255, 255, 255)
+            self.__overflowcolor = (255, 255, 255)
 
     def viewbox(self):
         """provides viewbox
@@ -628,17 +628,17 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                                         autoLevels=False)
                                 if maskimg is not None:
                                     # print(maskimg)
-                                    if self.__maskcolor:
+                                    if self.__overflowcolor:
                                         self.__maskImages[iid].show()
-                                        # print(self.__maskcolor)
+                                        # print(self.__overflowcolor)
                                         self.__maskImages[iid].setImage(
                                             np.array([
                                                 maskimg[:, :, iid].T
-                                                * self.__maskcolor[0],
+                                                * self.__overflowcolor[0],
                                                 maskimg[:, :, iid].T
-                                                * self.__maskcolor[1],
+                                                * self.__overflowcolor[1],
                                                 maskimg[:, :, iid].T
-                                                * self.__maskcolor[2]
+                                                * self.__overflowcolor[2]
                                             ]).T,
                                             levels=[0, 255],
                                             autoLevels=False)
@@ -673,19 +673,19 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
                             autoLevels=False)
                     if maskimg is not None:
                         # print(maskimg)
-                        if self.__maskcolor:
+                        if self.__overflowcolor:
                             self.__maskImages[0].show()
-                            # print(self.__maskcolor)
+                            # print(self.__overflowcolor)
                             smaskimg = np.sum(np.nan_to_num(maskimg), axis=2)
                             smaskimg[smaskimg == 0] = np.nan
                             self.__maskImages[0].setImage(
                                 np.array([
                                     smaskimg.T
-                                    * self.__maskcolor[0],
+                                    * self.__overflowcolor[0],
                                     smaskimg.T
-                                    * self.__maskcolor[1],
+                                    * self.__overflowcolor[1],
                                     smaskimg.T
-                                    * self.__maskcolor[2]
+                                    * self.__overflowcolor[2]
                                 ]).T,
                                 levels=[0, 255],
                                 autoLevels=False)
@@ -719,14 +719,14 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
             if img is not None and len(img.shape) != 3:
                 if maskimg is not None:
                     # print(maskimg)
-                    if self.__maskcolor:
+                    if self.__overflowcolor:
                         self.__maskImages[0].show()
-                        # print(self.__maskcolor)
+                        # print(self.__overflowcolor)
                         self.__maskImages[0].setImage(
                             np.array([
-                                maskimg.T * self.__maskcolor[0],
-                                maskimg.T * self.__maskcolor[1],
-                                maskimg.T * self.__maskcolor[2]
+                                maskimg.T * self.__overflowcolor[0],
+                                maskimg.T * self.__overflowcolor[1],
+                                maskimg.T * self.__overflowcolor[2]
                             ]).T,
                             levels=[0, 255],
                             autoLevels=False)
