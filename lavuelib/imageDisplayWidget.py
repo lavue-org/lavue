@@ -255,6 +255,18 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         if _PQGVER < 1009:
             self.__viewbox.menu.axes.insert(0, self.__viewonetoone)
         self.__viewbox.menu.addAction(self.__viewonetoone)
+        self.__viewbox.menu.ctrl[0].invertCheck.hide()
+        self.__viewbox.menu.ctrl[0].mouseCheck.hide()
+        self.__viewbox.menu.ctrl[0].linkCombo.hide()
+        self.__viewbox.menu.ctrl[0].autoPanCheck.hide()
+        self.__viewbox.menu.ctrl[0].visibleOnlyCheck.hide()
+        self.__viewbox.menu.ctrl[0].label.hide()
+        self.__viewbox.menu.ctrl[1].invertCheck.hide()
+        self.__viewbox.menu.ctrl[1].mouseCheck.hide()
+        self.__viewbox.menu.ctrl[1].linkCombo.hide()
+        self.__viewbox.menu.ctrl[1].autoPanCheck.hide()
+        self.__viewbox.menu.ctrl[1].visibleOnlyCheck.hide()
+        self.__viewbox.menu.ctrl[1].label.hide()
 
         #: (:class:`pyqtgraph.AxisItem`) left axis
         self.__leftaxis = _pg.AxisItem('left')
