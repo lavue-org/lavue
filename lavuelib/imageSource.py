@@ -198,10 +198,10 @@ def getLevel(elevel=None):
     }
     dname = None
     for name, vl in lmap.items():
-        if vl[0]<= elevel  and elevel <=vl[1]:
+        if vl[0] <= elevel and elevel <= vl[1]:
             dname = name
             break
-    return  dname
+    return dname
 
 
 def tobytes(x):
