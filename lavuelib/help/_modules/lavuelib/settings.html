@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib.settings &#8212; LaVue 2.79.0 documentation</title>
+    <title>lavuelib.settings &#8212; LaVue 2.80.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
@@ -32,7 +32,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.79.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -128,8 +128,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">showmask</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) map image sources to color channels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">imagechannels</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="c1">#: (:obj:`bool`) show high mask value  widget</span>
+        <span class="c1">#: (:obj:`bool`) show high mask value widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">showhighvaluemask</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) show intensity overflow widget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showoverflow</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) show statistics widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">showstats</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1">#: (:obj:`bool`) show image step widget</span>
@@ -288,10 +290,10 @@
         <span class="c1">#: (:obj:`str`) float type for pixel intensity</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">floattype</span> <span class="o">=</span> <span class="s2">&quot;float&quot;</span>
 
-        <span class="c1">#: (:obj:`bool`) high mask with color</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">maskwithcolor</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="c1">#: (:obj:`str`) json list with high mask color</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">maskcolor</span> <span class="o">=</span> <span class="s2">&quot;[255, 255, 255]&quot;</span>
+        <span class="c1">#: (:obj:`bool`) overflow in color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">overflow</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`str`) json list with overflow color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">overflowcolor</span> <span class="o">=</span> <span class="s2">&quot;[255, 255, 255]&quot;</span>
 
         <span class="c1">#: (:obj:`str`) json list with filters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filters</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span>
@@ -519,6 +521,10 @@
             <span class="s2">&quot;Configuration/ShowHighValueMaskWidget&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">showhighvaluemask</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+            <span class="s2">&quot;Configuration/ShowOverflowWidget&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">showoverflow</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/ShowStatistics&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;false&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">showstats</span> <span class="o">=</span> <span class="kc">False</span>
@@ -863,14 +869,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">roiscolors</span> <span class="o">=</span> <span class="n">qstval</span>
 
         <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
-            <span class="s2">&quot;Configuration/HighValueMaskWithColor&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+            <span class="s2">&quot;Configuration/IntensityOverflowInColor&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">maskwithcolor</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">overflow</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-            <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/HighValueMaskColor&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+            <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/IntensityOverflowColor&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">qstval</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">maskcolor</span> <span class="o">=</span> <span class="n">qstval</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">overflowcolor</span> <span class="o">=</span> <span class="n">qstval</span>
 
         <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
             <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/Filters&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
@@ -1059,6 +1065,9 @@
             <span class="s2">&quot;Configuration/ShowHighValueMaskWidget&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">showhighvaluemask</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
+            <span class="s2">&quot;Configuration/ShowOverflowWidget&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">showoverflow</span><span class="p">)</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/ShowStatistics&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">showstats</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
@@ -1242,14 +1251,11 @@
             <span class="s2">&quot;Configuration/ROIsColors&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">roiscolors</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
-            <span class="s2">&quot;Configuration/HighValueMaskColor&quot;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">maskcolor</span><span class="p">)</span>
+            <span class="s2">&quot;Configuration/IntensityOverflowColor&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">overflowcolor</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
-            <span class="s2">&quot;Configuration/HighValueMaskWithColor&quot;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">maskwithcolor</span><span class="p">)</span>
-        <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
-            <span class="s2">&quot;Configuration/MaskColor&quot;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">maskcolor</span><span class="p">)</span>
+            <span class="s2">&quot;Configuration/IntensityOverflowInColor&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">overflow</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/Filters&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">)</span>
@@ -1791,7 +1797,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.79.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

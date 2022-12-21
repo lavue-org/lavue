@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lavuelib package &#8212; LaVue 2.79.0 documentation</title>
+    <title>lavuelib package &#8212; LaVue 2.80.0 documentation</title>
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="index.html" title="API reference"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.79.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Developer Guide</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">API reference</a> &#187;</li> 
       </ul>
@@ -861,18 +861,6 @@ and reset the display</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="lavuelib.configDialog.ConfigDialog.maskcolor">
-<code class="descname">maskcolor</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.maskcolor" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) json list with high mask color</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavuelib.configDialog.ConfigDialog.maskwithcolor">
-<code class="descname">maskwithcolor</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.maskwithcolor" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) high mask with color</p>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="lavuelib.configDialog.ConfigDialog.maxmbuffersize">
 <code class="descname">maxmbuffersize</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.maxmbuffersize" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) maximal number of images in memory buffer</p>
@@ -912,6 +900,18 @@ and reset the display</p>
 <dt id="lavuelib.configDialog.ConfigDialog.orderrois">
 <code class="descname">orderrois</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.orderrois" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) fetch rois order enabled</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lavuelib.configDialog.ConfigDialog.overflow">
+<code class="descname">overflow</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.overflow" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) overflow in color</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lavuelib.configDialog.ConfigDialog.overflowcolor">
+<code class="descname">overflowcolor</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.overflowcolor" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) json list with overflow color</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -1026,6 +1026,12 @@ and reset the display</p>
 <dt id="lavuelib.configDialog.ConfigDialog.shownormsf">
 <code class="descname">shownormsf</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.shownormsf" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) show image normalization scaling factor widget</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lavuelib.configDialog.ConfigDialog.showoverflow">
+<code class="descname">showoverflow</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.showoverflow" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) show intensity overflow widget</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -8138,16 +8144,16 @@ x position, y position)</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="lavuelib.imageDisplayWidget.ImageDisplayWidget.setMaskColor">
-<code class="descname">setMaskColor</code><span class="sig-paren">(</span><em>color</em>, <em>status=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageDisplayWidget.html#ImageDisplayWidget.setMaskColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageDisplayWidget.ImageDisplayWidget.setMaskColor" title="Permalink to this definition">¶</a></dt>
+<dt id="lavuelib.imageDisplayWidget.ImageDisplayWidget.setOverflowColor">
+<code class="descname">setOverflowColor</code><span class="sig-paren">(</span><em>color</em>, <em>status=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageDisplayWidget.html#ImageDisplayWidget.setOverflowColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageDisplayWidget.ImageDisplayWidget.setOverflowColor" title="Permalink to this definition">¶</a></dt>
 <dd><p>sets item color</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – json list of mask color</li>
-<li><strong>status</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – mask with color status</li>
+<li><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – json list of overflow color</li>
+<li><strong>status</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – overflow in color status</li>
 </ul>
 </td>
 </tr>
@@ -9962,6 +9968,24 @@ an image file name and its directory</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="lavuelib.imageSource.getLevel">
+<code class="descclassname">lavuelib.imageSource.</code><code class="descname">getLevel</code><span class="sig-paren">(</span><em>elevel=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageSource.html#getLevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageSource.getLevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>get log level in string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>elevel</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – effective log level</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">log level in string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="lavuelib.imageSource.tobytes">
 <code class="descclassname">lavuelib.imageSource.</code><code class="descname">tobytes</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageSource.html#tobytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageSource.tobytes" title="Permalink to this definition">¶</a></dt>
 <dd><p>decode str to bytes</p>
@@ -10678,6 +10702,38 @@ an image file name and its directory</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="lavuelib.imageWidget.ImageWidget.overflowValue">
+<code class="descname">overflowValue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.overflowValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.overflowValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>provides overflow value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">overflow value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavuelib.imageWidget.ImageWidget.overflowValueIndices">
+<code class="descname">overflowValueIndices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.overflowValueIndices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.overflowValueIndices" title="Permalink to this definition">¶</a></dt>
+<dd><p>provides overflow image value indices</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">overflow image indices</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="lavuelib.imageWidget.ImageWidget.plot">
 <code class="descname">plot</code><span class="sig-paren">(</span><em>array</em>, <em>rawarray=None</em>, <em>imagename=None</em>, <em>maskarray=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plots the image</p>
@@ -11147,24 +11203,6 @@ an image file name and its directory</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="lavuelib.imageWidget.ImageWidget.setMaskColor">
-<code class="descname">setMaskColor</code><span class="sig-paren">(</span><em>color</em>, <em>status=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.setMaskColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.setMaskColor" title="Permalink to this definition">¶</a></dt>
-<dd><p>sets item color</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – json list of mask color</li>
-<li><strong>status</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – mask with color status</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
 <dt id="lavuelib.imageWidget.ImageWidget.setMaskIndices">
 <code class="descname">setMaskIndices</code><span class="sig-paren">(</span><em>maskindices</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.setMaskIndices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.setMaskIndices" title="Permalink to this definition">¶</a></dt>
 <dd><p>sets mask image indices</p>
@@ -11187,7 +11225,7 @@ an image file name and its directory</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">Params applymask:</th></tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Params maskvalue:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">high mask value</td>
 </tr>
 </tbody>
@@ -11250,6 +11288,54 @@ an image file name and its directory</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – minimum intensity</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavuelib.imageWidget.ImageWidget.setOverflowColor">
+<code class="descname">setOverflowColor</code><span class="sig-paren">(</span><em>color</em>, <em>status=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.setOverflowColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.setOverflowColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>sets item color</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – json list of overflow color</li>
+<li><strong>status</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – overflow in color status</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavuelib.imageWidget.ImageWidget.setOverflowValue">
+<code class="descname">setOverflowValue</code><span class="sig-paren">(</span><em>overflowvalue</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.setOverflowValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.setOverflowValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>sets overflow value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Params overflowvalue:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">overflow value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavuelib.imageWidget.ImageWidget.setOverflowValueIndices">
+<code class="descname">setOverflowValueIndices</code><span class="sig-paren">(</span><em>overflowindices</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.setOverflowValueIndices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.setOverflowValueIndices" title="Permalink to this definition">¶</a></dt>
+<dd><p>sets overflow image indices</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Params overflowindices:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">overflow image  value indices</td>
 </tr>
 </tbody>
 </table>
@@ -14357,12 +14443,12 @@ version of the object or raise a <code class="docutils literal notranslate"><spa
 <dl class="method">
 <dt id="lavuelib.scalingGroupBox.ScalingGroupBox.changeView">
 <code class="descname">changeView</code><span class="sig-paren">(</span><em>showscale=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/scalingGroupBox.html#ScalingGroupBox.changeView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavuelib.scalingGroupBox.ScalingGroupBox.changeView" title="Permalink to this definition">¶</a></dt>
-<dd><p>shows or hides the histogram widget</p>
+<dd><p>shows or hides the scale widget</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>showhistogram</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – if histogram should be shown</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>showscale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – if scale widget should be shown</td>
 </tr>
 </tbody>
 </table>
@@ -14847,21 +14933,9 @@ version of the object or raise a <code class="docutils literal notranslate"><spa
 </dd></dl>
 
 <dl class="attribute">
-<dt id="lavuelib.settings.Settings.maskcolor">
-<code class="descname">maskcolor</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.settings.Settings.maskcolor" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) json list with high mask color</p>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="lavuelib.settings.Settings.maskimagename">
 <code class="descname">maskimagename</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.settings.Settings.maskimagename" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) last mask image file name</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavuelib.settings.Settings.maskwithcolor">
-<code class="descname">maskwithcolor</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.settings.Settings.maskwithcolor" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) high mask with color</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -14904,6 +14978,18 @@ version of the object or raise a <code class="docutils literal notranslate"><spa
 <dt id="lavuelib.settings.Settings.orderrois">
 <code class="descname">orderrois</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.settings.Settings.orderrois" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) fetch rois order enabled</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lavuelib.settings.Settings.overflow">
+<code class="descname">overflow</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.settings.Settings.overflow" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) overflow in color</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lavuelib.settings.Settings.overflowcolor">
+<code class="descname">overflowcolor</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.settings.Settings.overflowcolor" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) json list with overflow color</p>
 </dd></dl>
 
 <dl class="method">
@@ -15062,7 +15148,7 @@ version of the object or raise a <code class="docutils literal notranslate"><spa
 <dl class="attribute">
 <dt id="lavuelib.settings.Settings.showhighvaluemask">
 <code class="descname">showhighvaluemask</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.settings.Settings.showhighvaluemask" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) show high mask value  widget</p>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) show high mask value widget</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -15099,6 +15185,12 @@ version of the object or raise a <code class="docutils literal notranslate"><spa
 <dt id="lavuelib.settings.Settings.shownormsf">
 <code class="descname">shownormsf</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.settings.Settings.shownormsf" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) show image normalization scaling factor widget</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lavuelib.settings.Settings.showoverflow">
+<code class="descname">showoverflow</code><em class="property"> = None</em><a class="headerlink" href="#lavuelib.settings.Settings.showoverflow" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) show intensity overflow widget</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -19908,7 +20000,7 @@ list of [signal, slot] object to connect</p>
         <li class="right" >
           <a href="index.html" title="API reference"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.79.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Developer Guide</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >API reference</a> &#187;</li> 
       </ul>
