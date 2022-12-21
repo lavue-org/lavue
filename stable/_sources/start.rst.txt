@@ -122,6 +122,8 @@ To get all possible command-line parameters
 			   image transformation, i.e.
 			     flip-up-down, flip-left-right, transpose,
 			     rot90, rot180, rot270, rot180+transpose
+     --overflow OVERFLOWVALUE
+                           above the overflow value all pixels are shown in a special color defined in the configuration
      -i SCALING, --scaling SCALING
 			   intensity scaling, i.e. sqrt, linear, log
      -l LEVELS, --levels LEVELS

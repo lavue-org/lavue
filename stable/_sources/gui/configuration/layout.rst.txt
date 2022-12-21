@@ -17,6 +17,7 @@ The second tab of the configuration dialog contains **Layout** options. It allow
 *    **Mask:** shows mask the image widget
 *    **Mask high values:** shows mask high value widget
 *    **Transforms:** shows the transformation widget
+*    **Intensity overflow:** shows the Intensity overflow group
 *    **Intensity scale:** shows the Intensity display scaling group
 *    **Intensity levels:** shows the display levels sub-group
 *    **Additional histogram options:**  shows additional  options: bin edges algorithm and data steps to tune auto finding histogram levels
