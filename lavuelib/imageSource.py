@@ -2265,9 +2265,14 @@ class HiDRASource(BaseSource):
                     self.__targetname, self.__portnumber, 19,
                     [".cbf", ".tif", ".tiff"]]
                 with QtCore.QMutexLocker(self.__mutex):
-                    self.__query = hidra.Transfer(
-                        "QUERY_NEXT", self.__shost,
-                        use_log=getLevel())
+                    try:
+                        self.__query = hidra.Transfer(
+                            "QUERY_NEXT", self.__shost,
+                            use_log=getLevel())
+                    except Exception:
+                        # support for older hidra versions
+                        self.__query = hidra.Transfer(
+                            "QUERY_NEXT", self.__shost)
             else:
                 self.__query = None
             self._initiated = False
@@ -2335,9 +2340,14 @@ class HiDRASource(BaseSource):
                and time.time() - t1 < self._timeout/2000.:
                 with QtCore.QMutexLocker(self.__mutex):
                     self.__query.stop()
-                    self.__query = hidra.Transfer(
-                        "QUERY_NEXT", self.__shost,
-                        use_log=getLevel())
+                    try:
+                        self.__query = hidra.Transfer(
+                            "QUERY_NEXT", self.__shost,
+                            use_log=getLevel())
+                    except Exception:
+                        # support for older hidra versions
+                        self.__query = hidra.Transfer(
+                            "QUERY_NEXT", self.__shost)
                     self.__query.initiate(self.__target)
                     self._initiated = True
                     self.__query.start()
