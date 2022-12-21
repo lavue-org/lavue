@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.liveViewer &#8212; LaVue (latest) documentation</title>
+    <title>lavuelib.liveViewer &#8212; LaVue 2.80.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue (latest) documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.liveViewer</a></li> 
       </ul>
@@ -110,6 +110,7 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">preparationGroupBox</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">memoryBufferGroupBox</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">scalingGroupBox</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">overflowValueGroupBox</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">levelsGroupBox</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">channelGroupBox</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">statisticsGroupBox</span>
@@ -583,6 +584,10 @@
             <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="p">)</span>
         <span class="c1">#: (:class:`lavuelib.scalingGroupBox.ScalingGroupBox`) scaling groupbox</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__scalingwg</span> <span class="o">=</span> <span class="n">scalingGroupBox</span><span class="o">.</span><span class="n">ScalingGroupBox</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1">#: (:class:`lavuelib.overflowValueGroupBox.OverflowValueGroupBox`)</span>
+        <span class="c1">#     scaling groupbox</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__overflowwg</span> <span class="o">=</span> <span class="n">overflowValueGroupBox</span><span class="o">.</span><span class="n">OverflowValueGroupBox</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
         <span class="c1">#: (:class:`lavuelib.levelsGroupBox.LevelsGroupBox`) level groupbox</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span> <span class="o">=</span> <span class="n">levelsGroupBox</span><span class="o">.</span><span class="n">LevelsGroupBox</span><span class="p">(</span>
             <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="p">,</span>
@@ -648,7 +653,7 @@
         <span class="c1">#: (:class:`numpy.ndarray`) scaled displayed image</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__scaledimage</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1">#: (:class:`numpy.ndarray`) color mask image</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1">#: (:class:`numpy.ndarray`) background image</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__backgroundimage</span> <span class="o">=</span> <span class="kc">None</span>
@@ -748,6 +753,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mbufferwg</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__channelwg</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__overflowwg</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__scalingwg</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scrollVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__statswg</span><span class="p">)</span>
@@ -866,6 +872,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_checkHighMasking</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__highvaluemaskwg</span><span class="o">.</span><span class="n">applyStateChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_checkHighMasking</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__overflowwg</span><span class="o">.</span><span class="n">overflowValueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_checkOverflow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__overflowwg</span><span class="o">.</span><span class="n">applyStateChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_checkOverflow</span><span class="p">)</span>
 
         <span class="c1"># signals from transformation widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__trafowg</span><span class="o">.</span><span class="n">transformationChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
@@ -949,6 +959,9 @@
         <span class="n">maskhighvalue</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showhighvaluemask</span><span class="p">:</span>
             <span class="n">maskhighvalue</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__highvaluemaskwg</span><span class="o">.</span><span class="n">mask</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">overflowvalue</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showoverflow</span><span class="p">:</span>
+            <span class="n">overflowvalue</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__overflowwg</span><span class="o">.</span><span class="n">overflowValue</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="n">bkgscale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__backgroundscale</span> \
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showsubsf</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="n">bfscale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__brightfieldscale</span> \
@@ -969,6 +982,7 @@
                 <span class="s2">&quot;autofactor&quot;</span><span class="p">:</span> <span class="n">autofactor</span><span class="p">,</span>
                 <span class="s2">&quot;gradient&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">gradient</span><span class="p">(),</span>
                 <span class="s2">&quot;maskhighvalue&quot;</span><span class="p">:</span> <span class="n">maskhighvalue</span><span class="p">,</span>
+                <span class="s2">&quot;overflowvalue&quot;</span><span class="p">:</span> <span class="n">overflowvalue</span><span class="p">,</span>
                 <span class="s2">&quot;maskfile&quot;</span><span class="p">:</span> <span class="n">maskfile</span><span class="p">,</span>
                 <span class="s2">&quot;bkgfile&quot;</span><span class="p">:</span> <span class="n">bkgfile</span><span class="p">,</span>
                 <span class="s2">&quot;bkgscale&quot;</span><span class="p">:</span> <span class="n">bkgscale</span><span class="p">,</span>
@@ -1664,6 +1678,13 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="o">.</span><span class="n">changeView</span><span class="p">(</span><span class="n">showhighvaluemask</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__highvaluemaskwg</span><span class="o">.</span><span class="n">setMask</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">maskhighvalue</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_checkHighMasking</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;overflowvalue&quot;</span><span class="p">)</span> <span class="ow">and</span> \
+           <span class="n">options</span><span class="o">.</span><span class="n">overflowvalue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showoverflow</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showoverflow</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__overflowwg</span><span class="o">.</span><span class="n">changeView</span><span class="p">(</span><span class="n">showoverflow</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__overflowwg</span><span class="o">.</span><span class="n">setOverflowValue</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">overflowvalue</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_checkOverflow</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;transformation&quot;</span><span class="p">)</span> <span class="ow">and</span> \
            <span class="n">options</span><span class="o">.</span><span class="n">transformation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showtrans</span><span class="p">:</span>
@@ -1794,8 +1815,8 @@
         <span class="n">dataFetchThread</span><span class="o">.</span><span class="n">GLOBALREFRESHRATE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshrate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setStatsWOScaling</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">statswoscaling</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setColors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">roiscolors</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setMaskColor</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">maskcolor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">maskwithcolor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setOverflowColor</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflowcolor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflow</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateSource</span><span class="p">()</span>
 
@@ -1820,6 +1841,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownorm</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">shownormsf</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__overflowwg</span><span class="o">.</span><span class="n">changeView</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showoverflow</span>
+        <span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateBkgScale</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateBFScale</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__rangewg</span><span class="o">.</span><span class="n">changeView</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showrange</span><span class="p">)</span>
@@ -2325,6 +2350,7 @@
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">showaddhisto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showaddhisto</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">showmask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showmask</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">showhighvaluemask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showhighvaluemask</span>
+        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">showoverflow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showoverflow</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">showmbuffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showmbuffer</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">showrange</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showrange</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">showfilters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showfilters</span>
@@ -2376,8 +2402,8 @@
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">storegeometry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">storegeometry</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">geometryfromsource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">geometryfromsource</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">roiscolors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">roiscolors</span>
-        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">maskcolor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">maskcolor</span>
-        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">maskwithcolor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">maskwithcolor</span>
+        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">overflowcolor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflowcolor</span>
+        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">overflow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflow</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">sourcedisplay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sourcedisplay</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">imagesources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">imagesources</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">imagesourcenames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__srcaliasnames</span>
@@ -2452,6 +2478,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__prepwg</span><span class="o">.</span><span class="n">changeView</span><span class="p">(</span>
                 <span class="n">showhighvaluemask</span><span class="o">=</span><span class="n">dialog</span><span class="o">.</span><span class="n">showhighvaluemask</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_checkHighMasking</span><span class="p">()</span>
+            <span class="n">replot</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showoverflow</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">showoverflow</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showoverflow</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">showoverflow</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__overflowwg</span><span class="o">.</span><span class="n">changeView</span><span class="p">(</span>
+                <span class="n">showoverflow</span><span class="o">=</span><span class="n">dialog</span><span class="o">.</span><span class="n">showoverflow</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_checkOverflow</span><span class="p">()</span>
             <span class="n">replot</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showrange</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">showrange</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showrange</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">showrange</span>
@@ -2714,16 +2746,16 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">roiscolors</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">roiscolors</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setColors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">roiscolors</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">maskwithcolor</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">maskwithcolor</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">maskwithcolor</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">maskwithcolor</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setMaskColor</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">maskcolor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">maskwithcolor</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflow</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">overflow</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflow</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">overflow</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setOverflowColor</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflowcolor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflow</span><span class="p">)</span>
             <span class="n">replot</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">maskcolor</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">maskcolor</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">maskcolor</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">maskcolor</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setMaskColor</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">maskcolor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">maskwithcolor</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflowcolor</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">overflowcolor</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflowcolor</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">overflowcolor</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setOverflowColor</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflowcolor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflow</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">remasking</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__remasking</span><span class="p">()</span>
@@ -2877,7 +2909,12 @@
             <span class="k">if</span> <span class="n">mvalue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">values</span><span class="p">[</span><span class="s2">&quot;maskhighvalue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">mvalue</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">values</span><span class="p">[</span><span class="s2">&quot;maskhighvalue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">values</span><span class="p">[</span><span class="s2">&quot;overflowvalue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">mvalue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowwg</span><span class="o">.</span><span class="n">overflowValue</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">mvalue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">values</span><span class="p">[</span><span class="s2">&quot;overflowvalue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">mvalue</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">values</span><span class="p">[</span><span class="s2">&quot;overflowvalue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
             <span class="n">values</span><span class="p">[</span><span class="s2">&quot;viewrange&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">viewRange</span><span class="p">()</span>
             <span class="n">values</span><span class="p">[</span><span class="s2">&quot;offset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_translations</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">setSourceDisplay</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
@@ -2994,8 +3031,6 @@
             <span class="c1"># prepare or preprocess the raw image if present:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__prepareImage</span><span class="p">()</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">__updateColorMask</span><span class="p">()</span>
-
             <span class="c1"># perform transformation</span>
             <span class="c1"># (crdtranspose, crdleftrightflip, crdupdownflip,</span>
             <span class="c1"># orgtranspose, orgleftrightflip, orgupdownflip)</span>
@@ -3017,7 +3052,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">statswoscaling</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scaledimage</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__imagename</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showhisto</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__updatehisto</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">updateHistoImage</span><span class="p">()</span>
@@ -3509,6 +3544,7 @@
         <span class="sd">&quot;&quot;&quot;applies: make image gray, substracke the background image and</span>
 <span class="sd">           apply the mask</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__filteredimage</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="n">ics</span> <span class="o">=</span> <span class="mi">0</span>
@@ -3750,21 +3786,31 @@
                     <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;lavue: Cannot apply high value mask&quot;</span>
                     <span class="s2">&quot; to the current image&quot;</span><span class="p">,</span>
                     <span class="n">text</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
-
-    <span class="c1"># @debugmethod</span>
-    <span class="k">def</span> <span class="nf">__updateColorMask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates color mask image</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showhighvaluemask</span> <span class="ow">and</span> \
-           <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">maskValue</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
-           <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">maskwithcolor</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">floattype</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span><span class="p">[</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">maskValueIndices</span><span class="p">()]</span> <span class="o">=</span> <span class="mf">1.0</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showoverflow</span> <span class="ow">and</span> \
+           <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">overflowValue</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+           <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflow</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">overflowvalue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">overflowValue</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
+                        <span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;invalid value encountered in greater&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setOverflowValueIndices</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">&gt;</span> <span class="n">overflowvalue</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">floattype</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span><span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">overflowValueIndices</span><span class="p">()]</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="kn">import</span> <span class="nn">traceback</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="n">messageBox</span><span class="o">.</span><span class="n">MessageBox</span><span class="o">.</span><span class="n">getText</span><span class="p">(</span>
+                    <span class="s2">&quot;lavue: Cannot apply high value mask to the current image&quot;</span><span class="p">)</span>
+                <span class="n">messageBox</span><span class="o">.</span><span class="n">MessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;lavue: Cannot apply high value mask&quot;</span>
+                    <span class="s2">&quot; to the current image&quot;</span><span class="p">,</span>
+                    <span class="n">text</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__transform</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -3789,24 +3835,24 @@
                 <span class="n">crdupdownflip</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__trafoname</span> <span class="o">==</span> <span class="s2">&quot;flip (left-right)&quot;</span><span class="p">:</span>
             <span class="n">orgleftrightflip</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">keepcoords</span><span class="p">:</span>
                 <span class="n">crdleftrightflip</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__trafoname</span> <span class="o">==</span> <span class="s2">&quot;transpose&quot;</span><span class="p">:</span>
             <span class="n">orgtranspose</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
                 <span class="c1"># self.__displayimage = np.transpose(self.__displayimage)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">keepcoords</span><span class="p">:</span>
                 <span class="n">crdtranspose</span> <span class="o">=</span> <span class="kc">True</span>
@@ -3819,18 +3865,18 @@
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
                     <span class="c1"># self.__displayimage = np.transpose(self.__displayimage)</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># self.__displayimage = np.transpose(</span>
                 <span class="c1">#     np.flipud(self.__displayimage))</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
                     <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
-                        <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__trafoname</span> <span class="o">==</span> <span class="s2">&quot;rot180&quot;</span><span class="p">:</span>
             <span class="n">orgupdownflip</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">orgleftrightflip</span> <span class="o">=</span> <span class="kc">True</span>
@@ -3840,9 +3886,9 @@
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span>
                     <span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span><span class="p">))</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span>
-                        <span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span><span class="p">))</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span><span class="p">))</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__trafoname</span> <span class="o">==</span> <span class="s2">&quot;rot270 (clockwise)&quot;</span><span class="p">:</span>
             <span class="n">orgtranspose</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">orgleftrightflip</span> <span class="o">=</span> <span class="kc">True</span>
@@ -3852,16 +3898,16 @@
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
                     <span class="c1"># self.__displayimage = np.transpose(self.__displayimage)</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
                     <span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
-                        <span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
                 <span class="c1"># self.__displayimage = np.transpose(</span>
                 <span class="c1">#     np.fliplr(self.__displayimage))</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__trafoname</span> <span class="o">==</span> <span class="s2">&quot;rot180 + transpose&quot;</span><span class="p">:</span>
@@ -3876,15 +3922,15 @@
                     <span class="c1"># self.__displayimage = np.transpose(self.__displayimage)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
                     <span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span><span class="p">)),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
-                        <span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__colormaskimage</span><span class="p">)),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span><span class="p">)),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
                 <span class="c1"># self.__displayimage = np.transpose(</span>
                 <span class="c1">#     np.fliplr(np.flipud(self.__displayimage)))</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">crdtranspose</span><span class="p">,</span> <span class="n">crdleftrightflip</span><span class="p">,</span> <span class="n">crdupdownflip</span><span class="p">,</span>
@@ -4140,6 +4186,24 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showhighvaluemask</span><span class="p">:</span>
             <span class="n">maskhighvalue</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setLavueState</span><span class="p">({</span><span class="s2">&quot;maskhighvalue&quot;</span><span class="p">:</span> <span class="n">maskhighvalue</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_plot</span><span class="p">()</span>
+
+    <span class="nd">@debugmethod</span>
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_checkOverflow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; reads the mask image, select non-zero elements</span>
+<span class="sd">            and store the indices</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowwg</span><span class="o">.</span><span class="n">overflowValue</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setOverflowValue</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setOverflowValue</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">overflowvalue</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showoverflow</span><span class="p">:</span>
+            <span class="n">overflowvalue</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLavueState</span><span class="p">({</span><span class="s2">&quot;overflowvalue&quot;</span><span class="p">:</span> <span class="n">overflowvalue</span><span class="p">})</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_plot</span><span class="p">()</span>
 
     <span class="nd">@debugmethod</span>
@@ -4557,6 +4621,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.80.0/index.html">v2.80.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.79.0/index.html">v2.79.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
@@ -4585,7 +4650,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue (latest) documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.liveViewer</a></li> 
       </ul>

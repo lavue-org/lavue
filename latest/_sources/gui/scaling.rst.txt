@@ -7,6 +7,7 @@ In **Display levels and colors** user sets mapping between image pixel intensiti
 
 .. figure:: ../_images/autolevels_lavue.png
 
+*    **overflow:** maximal intensity value above one all pixels are plotted in a special color defined in the configuration
 *    **scaling:** `sqrt`, `linear` or `log` – basic intensity scale for 2D images
      applied to `Image Statistics/1D plot` or not  – depending on *Configuration*
 *    **Levels:** maximum and minimum intensity displayed. It can be automatic or set by user

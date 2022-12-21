@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.imageDisplayWidget &#8212; LaVue (latest) documentation</title>
+    <title>lavuelib.imageDisplayWidget &#8212; LaVue 2.80.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue (latest) documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageDisplayWidget</a></li> 
       </ul>
@@ -275,9 +275,9 @@
         <span class="c1">#: (:obj:`bool`) rgb on flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__rgb</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`tuple` &lt;:obj:`int`&gt;) mask color</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolor</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__overflowcolor</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
         <span class="c1">#: (:obj:`bool`) mask with color flag</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__maskwithcolor</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__overflow</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) gradient colors flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__gradientcolors</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`str`) levelmode</span>
@@ -337,22 +337,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sceneObj</span><span class="o">.</span><span class="n">rawdata</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setCursor</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QCursor</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">CrossCursor</span><span class="p">))</span>
 
-<div class="viewcode-block" id="ImageDisplayWidget.setMaskColor"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setMaskColor">[docs]</a>    <span class="k">def</span> <span class="nf">setMaskColor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDisplayWidget.setOverflowColor"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setOverflowColor">[docs]</a>    <span class="k">def</span> <span class="nf">setOverflowColor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets item color</span>
 
-<span class="sd">        :param color: json list of mask color</span>
+<span class="sd">        :param color: json list of overflow color</span>
 <span class="sd">        :type color: :obj:`str`</span>
-<span class="sd">        :param status: mask with color status</span>
+<span class="sd">        :param status: overflow in color status</span>
 <span class="sd">        :type status: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">status</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__maskwithcolor</span> <span class="o">=</span> <span class="n">status</span>
-        <span class="c1"># print(&quot;STATUS&quot;, self.__maskwithcolor)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__overflow</span> <span class="o">=</span> <span class="n">status</span>
+        <span class="c1"># print(&quot;STATUS&quot;, self.__overflow)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># print(&quot;COL&quot;, color)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolor</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">color</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__overflowcolor</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">color</span><span class="p">))</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolor</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__overflowcolor</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ImageDisplayWidget.viewbox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.viewbox">[docs]</a>    <span class="k">def</span> <span class="nf">viewbox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;provides viewbox</span>
@@ -673,17 +673,17 @@
                                         <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                                 <span class="k">if</span> <span class="n">maskimg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                                     <span class="c1"># print(maskimg)</span>
-                                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolor</span><span class="p">:</span>
+                                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowcolor</span><span class="p">:</span>
                                         <span class="bp">self</span><span class="o">.</span><span class="n">__maskImages</span><span class="p">[</span><span class="n">iid</span><span class="p">]</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-                                        <span class="c1"># print(self.__maskcolor)</span>
+                                        <span class="c1"># print(self.__overflowcolor)</span>
                                         <span class="bp">self</span><span class="o">.</span><span class="n">__maskImages</span><span class="p">[</span><span class="n">iid</span><span class="p">]</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
                                             <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
                                                 <span class="n">maskimg</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">iid</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-                                                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolor</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowcolor</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                                                 <span class="n">maskimg</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">iid</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-                                                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolor</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowcolor</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
                                                 <span class="n">maskimg</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">iid</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-                                                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolor</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                                                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowcolor</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
                                             <span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
                                             <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">],</span>
                                             <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -718,19 +718,19 @@
                             <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">maskimg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="c1"># print(maskimg)</span>
-                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolor</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowcolor</span><span class="p">:</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">__maskImages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-                            <span class="c1"># print(self.__maskcolor)</span>
+                            <span class="c1"># print(self.__overflowcolor)</span>
                             <span class="n">smaskimg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">maskimg</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
                             <span class="n">smaskimg</span><span class="p">[</span><span class="n">smaskimg</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">__maskImages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
                                 <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
                                     <span class="n">smaskimg</span><span class="o">.</span><span class="n">T</span>
-                                    <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolor</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                    <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowcolor</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                                     <span class="n">smaskimg</span><span class="o">.</span><span class="n">T</span>
-                                    <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolor</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowcolor</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
                                     <span class="n">smaskimg</span><span class="o">.</span><span class="n">T</span>
-                                    <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolor</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                                    <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowcolor</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
                                 <span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
                                 <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">],</span>
                                 <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -764,14 +764,14 @@
             <span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">maskimg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="c1"># print(maskimg)</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolor</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowcolor</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__maskImages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-                        <span class="c1"># print(self.__maskcolor)</span>
+                        <span class="c1"># print(self.__overflowcolor)</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__maskImages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
                             <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-                                <span class="n">maskimg</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolor</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                                <span class="n">maskimg</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolor</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                                <span class="n">maskimg</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskcolor</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                                <span class="n">maskimg</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowcolor</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                <span class="n">maskimg</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowcolor</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                <span class="n">maskimg</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowcolor</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
                             <span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
                             <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">],</span>
                             <span class="n">autoLevels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1531,6 +1531,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.80.0/index.html">v2.80.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.79.0/index.html">v2.79.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
@@ -1559,7 +1560,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue (latest) documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageDisplayWidget</a></li> 
       </ul>
