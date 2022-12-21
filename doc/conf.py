@@ -260,9 +260,9 @@ if os.getenv("LAVUE_HIDE_VERSIONS") != 'TRUE':
 
 html_context = {
     "docs_versions" : [
-        "v2.79.0", "v2.78.0", "v2.77.0", "v2.76.1", "v2.76.0",
-        "v2.75.3", "v2.75.1", "v2.74.0", "v2.73.0", "v2.72.0",
-        "v2.71.1"]
+        "v2.80.0", "v2.79.0",
+        "v2.78.0", "v2.77.0", "v2.76.1", "v2.76.0", "v2.75.3",
+        "v2.75.1", "v2.74.0", "v2.73.0", "v2.72.0", "v2.71.1"]
 }
 
 # Additional templates that should be rendered to pages, maps page names to
