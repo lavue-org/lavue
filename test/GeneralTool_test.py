@@ -143,6 +143,7 @@ class GeneralToolTest(unittest.TestCase):
             'bkgfile': '',
             'maskfile': '',
             'maskhighvalue': '',
+            'overflowvalue': '',
             'transformation': 'none',
             'scaling': 'sqrt',
             'levels': '',
@@ -1340,7 +1341,7 @@ class GeneralToolTest(unittest.TestCase):
             ls, dls,
             ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
 
-    def test_tango_maskhighvalue_color(self):
+    def test_tango_maskhighvalue_overflow_color(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
@@ -1351,18 +1352,14 @@ class GeneralToolTest(unittest.TestCase):
         imagefile = os.path.join(filepath, filename)
         image = fabio.open(imagefile)
         t1 = image.data
-        m14 = (t1 > 14)
+        m14 = (t1 > 6)
         t1m14 = np.array(t1)
         t1m14[m14] = 0
-        m4 = (t1 > 4)
-        t1m4 = np.array(t1)
-        t1m4[m4] = 0
 
         cfg = '[Configuration]\n' \
-            'HighValueMaskColor="[255, 26, 56]"\n' \
-            'HighValueMaskWithColor=true\n' \
-            'MaskingAsNAN=false\n' \
-            'MaskingWithZeros=true\n'
+            'IntensityOverflowColor="[2, 255, 44]"\n' \
+            'IntensityOverflowInColor=true\n' \
+            'MaskingAsNAN=false\n'
 
         if not os.path.exists(self.__cfgfdir):
             os.makedirs(self.__cfgfdir)
@@ -1379,7 +1376,8 @@ class GeneralToolTest(unittest.TestCase):
             # log='debug',
             log='info',
             imagefile=imagefile,
-            maskhighvalue=14,
+            maskhighvalue=6,
+            overflowvalue=11,
             scaling='linear',
             levels='m20,20',
             gradient='thermal',
@@ -1392,9 +1390,9 @@ class GeneralToolTest(unittest.TestCase):
         dialog = lavuelib.liveViewer.MainWindow(options=options)
         dialog.show()
 
-        cnf1 = {"maskhighvalue": ''}
+        cnf1 = {"overflowvalue": ''}
         lavuestate1 = json.dumps(cnf1)
-        cnf2 = {"maskhighvalue": '4'}
+        cnf2 = {"overflowvalue": '4'}
         lavuestate2 = json.dumps(cnf2)
         lavuestate3 = json.dumps(cnf2)
 
@@ -1450,14 +1448,14 @@ class GeneralToolTest(unittest.TestCase):
         self.assertTrue(np.allclose(res1[1], lastimage, equal_nan=True))
         self.assertTrue(np.allclose(res1[2], lastimage, equal_nan=True))
 
-        lastimage = t1.T
+        lastimage = t1m14.T
         if not np.allclose(res2[2], lastimage, equal_nan=True):
             print(res1[2])
             print(lastimage)
         self.assertTrue(np.allclose(res2[1], lastimage, equal_nan=True))
         self.assertTrue(np.allclose(res2[2], lastimage, equal_nan=True))
 
-        lastimage = t1m4.T
+        lastimage = t1m14.T
         if not np.allclose(res3[2], lastimage, equal_nan=True):
             print(res3[2])
             print(lastimage)
@@ -1472,6 +1470,7 @@ class GeneralToolTest(unittest.TestCase):
             configuration='test/lavuecontroller/00/Image',
             instance='tgtest',
             tool='roi',
+            maskhighvalue='6',
             transformation='none',
             log='info',
             # log='debug',

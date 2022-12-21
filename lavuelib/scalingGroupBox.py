@@ -90,10 +90,10 @@ class ScalingGroupBox(QtWidgets.QGroupBox):
         self.simpleScalingChanged.emit()
 
     def changeView(self, showscale=False):
-        """ shows or hides the histogram widget
+        """ shows or hides the scale widget
 
-        :param showhistogram: if histogram should be shown
-        :type showhistogram: :obj:`bool`
+        :param showscale: if scale widget should be shown
+        :type showscale: :obj:`bool`
         """
         if showscale:
             self.show()

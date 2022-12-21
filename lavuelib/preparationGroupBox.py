@@ -35,7 +35,6 @@ from . import maskWidget
 from . import highValueMaskWidget
 from . import bkgSubtractionWidget
 from . import normalizationWidget
-from . import overflowValueWidget
 
 
 class QHLine(QtWidgets.QFrame):
@@ -80,8 +79,6 @@ class PreparationGroupBox(QtWidgets.QGroupBox):
         self.__subsf = False
         #: (:obj:`bool`) show norm scalar factors
         self.__normsf = False
-        #: (:obj:`bool`) show overflow widget
-        self.__overflow = False
 
         #: (:class:`lavuelib.maskWidget.Maskwidget`) mask widget
         self.maskWidget = maskWidget.MaskWidget(
@@ -98,14 +95,10 @@ class PreparationGroupBox(QtWidgets.QGroupBox):
         self.normWidget = normalizationWidget.NormalizationWidget(
             parent=self, settings=settings)
         self.__hline = QHLine()
-        self.__hline2 = QHLine()
         #: (:class:`lavuelib.transformationsWidget.TransformationsWidget`)
         #  transformations widget
         self.trafoWidget = transformationsWidget.TransformationsWidget(
             parent=self)
-        #: (:class:`lavuelib.maskWidget.Maskwidget`) mask widget
-        self.overflowWidget = overflowValueWidget.OverflowValueWidget(
-            parent=self, settings=settings)
 
         vlayout = QtWidgets.QVBoxLayout()
         vlayout.addWidget(self.bkgSubWidget)
@@ -114,14 +107,12 @@ class PreparationGroupBox(QtWidgets.QGroupBox):
         vlayout.addWidget(self.highValueMaskWidget)
         vlayout.addWidget(self.__hline)
         vlayout.addWidget(self.trafoWidget)
-        vlayout.addWidget(self.__hline2)
-        vlayout.addWidget(self.overflowWidget)
 
         self.setLayout(vlayout)
 
     def changeView(self, showmask=None, showsub=None, showtrans=None,
                    showhighvaluemask=None, showsubsf=None,
-                   shownorm=None, shownormsf=None, showoverflow=None):
+                   shownorm=None, shownormsf=None):
         """ show or hide widgets in the preparation colection
 
         :param showmask: mask widget shown
@@ -138,8 +129,6 @@ class PreparationGroupBox(QtWidgets.QGroupBox):
         :type shownorm: :obj:`bool`
         :param shownormsf: normalization scaling widget shown
         :type shownormsf: :obj:`bool`
-        :param showoverflow: overflow value widget shown
-        :type showoverflow: :obj:`bool`
         """
 
         if showmask is True:
@@ -191,23 +180,12 @@ class PreparationGroupBox(QtWidgets.QGroupBox):
             self.__highvaluemask = False
             self.highValueMaskWidget.hide()
 
-        if showoverflow is True:
-            self.__overflow = True
-            self.overflowWidget.show()
-        elif showoverflow is False:
-            self.__overflow = False
-            self.overflowWidget.hide()
         masks = self.__bkgsub or self.__mask or self.__highvaluemask
 
         if self.__trans and masks:
             self.__hline.show()
         else:
             self.__hline.hide()
-
-        if self.__trans and self.__overflow:
-            self.__hline2.show()
-        else:
-            self.__hline2.hide()
 
         if self.__trans or masks:
             self.show()

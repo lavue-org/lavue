@@ -65,6 +65,7 @@ from . import sourceWidget
 from . import preparationGroupBox
 from . import memoryBufferGroupBox
 from . import scalingGroupBox
+from . import overflowValueGroupBox
 from . import levelsGroupBox
 from . import channelGroupBox
 from . import statisticsGroupBox
@@ -538,6 +539,10 @@ class LiveViewer(QtWidgets.QDialog):
             parent=self, settings=self.__settings)
         #: (:class:`lavuelib.scalingGroupBox.ScalingGroupBox`) scaling groupbox
         self.__scalingwg = scalingGroupBox.ScalingGroupBox(parent=self)
+        #: (:class:`lavuelib.overflowValueGroupBox.OverflowValueGroupBox`)
+        #     scaling groupbox
+        self.__overflowwg = overflowValueGroupBox.OverflowValueGroupBox(
+            parent=self)
         #: (:class:`lavuelib.levelsGroupBox.LevelsGroupBox`) level groupbox
         self.__levelswg = levelsGroupBox.LevelsGroupBox(
             parent=self, settings=self.__settings,
@@ -580,9 +585,6 @@ class LiveViewer(QtWidgets.QDialog):
         #: (:class:`lavuelib.transformationsWidget.TransformationsWidget`)
         #:    transformations widget
         self.__trafowg = self.__prepwg.trafoWidget
-        #: (:class:`lavuelib.overflowValueWidget.OverflowValueWidget`)
-        #               high value mask widget
-        self.__overflowwg = self.__prepwg.overflowWidget
 
         # keep a reference to the "raw" image and the current filename
         #: (:class:`numpy.ndarray`) raw image
@@ -706,6 +708,7 @@ class LiveViewer(QtWidgets.QDialog):
         self.scrollVerticalLayout.addWidget(self.__mbufferwg)
         self.scrollVerticalLayout.addWidget(self.__channelwg)
         self.scrollVerticalLayout.addWidget(self.__prepwg)
+        self.scrollVerticalLayout.addWidget(self.__overflowwg)
         self.scrollVerticalLayout.addWidget(self.__scalingwg)
         self.scrollVerticalLayout.addWidget(self.__levelswg)
         self.scrollVerticalLayout.addWidget(self.__statswg)
@@ -1634,7 +1637,7 @@ class LiveViewer(QtWidgets.QDialog):
            options.overflowvalue is not None:
             if not self.__settings.showoverflow:
                 self.__settings.showoverflow = True
-                self.__prepwg.changeView(showoverflow=True)
+                self.__overflowwg.changeView(showoverflow=True)
             self.__overflowwg.setOverflowValue(str(options.overflowvalue))
             self._checkOverflow()
         if hasattr(options, "transformation") and \
@@ -1791,9 +1794,12 @@ class LiveViewer(QtWidgets.QDialog):
             self.__settings.showhighvaluemask,
             self.__settings.showsubsf,
             self.__settings.shownorm,
-            self.__settings.shownormsf,
-            self.__settings.showoverflow,
+            self.__settings.shownormsf
         )
+        self.__overflowwg.changeView(
+            self.__settings.showoverflow
+        )
+
         self._updateBkgScale()
         self._updateBFScale()
         self.__rangewg.changeView(self.__settings.showrange)
@@ -2430,7 +2436,7 @@ class LiveViewer(QtWidgets.QDialog):
             replot = True
         if self.__settings.showoverflow != dialog.showoverflow:
             self.__settings.showoverflow = dialog.showoverflow
-            self.__prepwg.changeView(
+            self.__overflowwg.changeView(
                 showoverflow=dialog.showoverflow)
             self._checkOverflow()
             replot = True
