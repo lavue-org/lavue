@@ -1,0 +1,174 @@
+
+
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Specialized Tools &#8212; LaVue 2.80.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Intensity Tool" href="intensity.html" />
+    <link rel="prev" title="2D Plot" href="../plot.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="intensity.html" title="Intensity Tool"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../plot.html" title="2D Plot"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">GUI User Guide</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Specialized Tools</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="specialized-tools">
+<span id="special-tools"></span><h1>Specialized Tools<a class="headerlink" href="#specialized-tools" title="Permalink to this headline">¶</a></h1>
+<p>In the bottom-right corner <cite>ComboBox</cite> the user selects one of the <strong>Specialized Image Tools</strong>:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="intensity.html#intensity"><span class="std std-ref">Intensity</span></a> - shows intensity of the selected pixels</p></li>
+<li><p><a class="reference internal" href="roi.html#roi"><span class="std std-ref">ROI</span></a> - selects Regions Of Interest and culculates a sum of their pixel intensities</p></li>
+<li><p><a class="reference internal" href="linecut.html#linecut"><span class="std std-ref">LineCut</span></a> - selects Line Cuts and shows their 1d intensity plots</p></li>
+<li><p><a class="reference internal" href="angleq.html#angleq"><span class="std std-ref">Angle/Q</span></a> - shows pixel coordinates in q-space or theta-angles</p></li>
+<li><p><a class="reference internal" href="movemotor.html#move-motor"><span class="std std-ref">MoveMotor</span></a> - moves the selected motors to the position pointed by mouse</p></li>
+<li><p><a class="reference internal" href="meshscan.html#mesh-scan"><span class="std std-ref">MeshScan</span></a> - performs sardana mesh scan on the selected ROI region</p></li>
+<li><p><a class="reference internal" href="onedplot.html#d-plot"><span class="std std-ref">1d-Plot</span></a> - plots 1d-plots of the selected image rows</p></li>
+<li><p><a class="reference internal" href="projections.html#projections"><span class="std std-ref">Projections</span></a> - plots horizontal and vertical projections of the current image</p></li>
+<li><p><a class="reference internal" href="qroiproj.html#q-roi-proj"><span class="std std-ref">Q+ROI+Proj</span></a> - combines <a class="reference internal" href="angleq.html#angleq"><span class="std std-ref">Angle/Q</span></a>, <a class="reference internal" href="roi.html#roi"><span class="std std-ref">ROI</span></a> and <a class="reference internal" href="projections.html#projections"><span class="std std-ref">Projections</span></a></p></li>
+<li><p><a class="reference internal" href="maxima.html#maxima"><span class="std std-ref">Maxima</span></a> - points pixels with the highest intensity</p></li>
+<li><p><a class="reference internal" href="parameters.html#parameters"><span class="std std-ref">Parameters</span></a> - reads and writes tango attributes to change detector settings</p></li>
+<li><p><a class="reference internal" href="diffractogram.html#diffractogram"><span class="std std-ref">Diffractogram</span></a> - shows a result of azimuth integration on 1d plot</p></li>
+</ul>
+<p>The <strong>configuration</strong> of tools can be set with a JSON dictionary passed in the  <code class="docutils literal notranslate"><span class="pre">--tool-configuration</span></code>  option in command line or as a <code class="docutils literal notranslate"><span class="pre">toolconfig</span></code> variable in the <code class="docutils literal notranslate"><span class="pre">LavueState</span></code> attribute of <a class="reference internal" href="../../lavuecontroller.html#lavuecontroller"><span class="std std-ref">LaVueController server</span></a>, e.g.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tango</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">lc</span> <span class="o">=</span> <span class="n">tango</span><span class="o">.</span><span class="n">DeviceProxy</span><span class="p">(</span><span class="s2">&quot;p09/lavuecontroller/1&quot;</span><span class="p">)</span>
+
+<span class="n">lc</span><span class="o">.</span><span class="n">LavueState</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;tool&quot;</span><span class="p">:</span><span class="s2">&quot;intensity&quot;</span><span class="p">,</span> <span class="s2">&quot;toolconfig&quot;</span><span class="p">:</span><span class="s1">&#39;{&quot;crosshair_locker&quot;:true}&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intensity.html">Intensity Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roi.html">ROI Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linecut.html">LineCut Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="angleq.html">Angle/Q Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="movemotor.html">MoveMotor Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="meshscan.html">MeshScan Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="onedplot.html">1d-Plot Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projections.html">Projections Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qroiproj.html">Q+ROI+Proj Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maxima.html">Maxima Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffractogram.html">Diffractogram Tool</a></li>
+</ul>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../plot.html"
+                        title="previous chapter">2D Plot</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="intensity.html"
+                        title="next chapter">Intensity Tool</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v2.80.0/index.html">v2.80.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.79.0/index.html">v2.79.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.76.0/index.html">v2.76.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.75.3/index.html">v2.75.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.75.1/index.html">v2.75.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.74.0/index.html">v2.74.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.73.0/index.html">v2.73.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.72.0/index.html">v2.72.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.71.1/index.html">v2.71.1</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="intensity.html" title="Intensity Tool"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../plot.html" title="2D Plot"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >GUI User Guide</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Specialized Tools</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+
+GNU GENERAL PUBLIC LICENSE, version 2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>
