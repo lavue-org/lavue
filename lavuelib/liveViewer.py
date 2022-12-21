@@ -118,7 +118,7 @@ _formclass, _baseclass = uic.loadUiType(
                  "ui", "MainDialog.ui"))
 
 
-_logginglevel = 'info'
+_logginglevel = 'warning'
 
 
 def setLoggerLevel(logger, level):
@@ -134,8 +134,8 @@ def setLoggerLevel(logger, level):
               'warning': logging.WARNING,
               'error': logging.ERROR,
               'critical': logging.CRITICAL}
-    _logginglevel = level if level in levels else "info"
-    dlevel = levels.get(level, logging.INFO)
+    _logginglevel = level if level in levels else "warning"
+    dlevel = levels.get(level, logging.WARNING)
     logger.setLevel(dlevel)
 
 

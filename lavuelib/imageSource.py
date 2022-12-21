@@ -180,6 +180,30 @@ if sys.version_info > (3,):
         pass
 
 
+def getLevel(elevel=None):
+    """ get log level in string
+
+    :param elevel: effective log level
+    :type elevel: :obj:`int`
+    :returns:  log level in string
+    :rtype: :obj:`str`
+    """
+    elevel = elevel or logger.getEffectiveLevel()
+    lmap = {
+        "debug": [0, 10],
+        "info": [11, 20],
+        "warning": [21, 30],
+        "error": [31, 40],
+        "critical": [41, 100]
+    }
+    dname = None
+    for name, vl in lmap.items():
+        if vl[0]<= elevel  and elevel <=vl[1]:
+            dname = name
+            break
+    return  dname
+
+
 def tobytes(x):
     """ decode str to bytes
 
@@ -2242,7 +2266,8 @@ class HiDRASource(BaseSource):
                     [".cbf", ".tif", ".tiff"]]
                 with QtCore.QMutexLocker(self.__mutex):
                     self.__query = hidra.Transfer(
-                        "QUERY_NEXT", self.__shost)
+                        "QUERY_NEXT", self.__shost,
+                        use_log=getLevel())
             else:
                 self.__query = None
             self._initiated = False
@@ -2311,7 +2336,8 @@ class HiDRASource(BaseSource):
                 with QtCore.QMutexLocker(self.__mutex):
                     self.__query.stop()
                     self.__query = hidra.Transfer(
-                        "QUERY_NEXT", self.__shost)
+                        "QUERY_NEXT", self.__shost,
+                        use_log=getLevel())
                     self.__query.initiate(self.__target)
                     self._initiated = True
                     self.__query.start()
