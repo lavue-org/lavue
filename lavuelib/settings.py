@@ -870,7 +870,7 @@ class Settings(object):
         except Exception:
             pass
         try:
-            self.diffnpt = float(
+            self.diffnpt = int(
                 settings.value("Tools/DiffractogramNPT", type=str))
         except Exception:
             pass
