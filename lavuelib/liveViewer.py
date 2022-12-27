@@ -2699,7 +2699,6 @@ class LiveViewer(QtWidgets.QDialog):
             self.__settings.roiscolors = dialog.roiscolors
             self.__imagewg.setColors(self.__settings.roiscolors)
 
-
         if self.__settings.overflowcolor != dialog.overflowcolor:
             self.__settings.overflowcolor = dialog.overflowcolor
             self.__imagewg.setOverflowColor(self.__settings.overflowcolor)
