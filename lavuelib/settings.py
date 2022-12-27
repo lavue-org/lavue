@@ -229,8 +229,6 @@ class Settings(object):
         #: (:obj:`str`) float type for pixel intensity
         self.floattype = "float"
 
-        #: (:obj:`bool`) overflow in color
-        self.overflow = False
         #: (:obj:`str`) json list with overflow color
         self.overflowcolor = "[255, 255, 255]"
 
@@ -807,11 +805,6 @@ class Settings(object):
         if qstval:
             self.roiscolors = qstval
 
-        qstval = str(settings.value(
-            "Configuration/IntensityOverflowInColor", type=str))
-        if qstval.lower() == "true":
-            self.overflow = True
-
         qstval = str(
             settings.value("Configuration/IntensityOverflowColor", type=str))
         if qstval:
@@ -1192,9 +1185,6 @@ class Settings(object):
         settings.setValue(
             "Configuration/IntensityOverflowColor",
             self.overflowcolor)
-        settings.setValue(
-            "Configuration/IntensityOverflowInColor",
-            self.overflow)
         settings.setValue(
             "Configuration/Filters",
             self.filters)

@@ -374,8 +374,6 @@ class ConfigDialog(QtWidgets.QDialog):
         #    list with rois color widgets
         self.__roiswidgets = []
 
-        #: (:obj:`bool`) overflow in color
-        self.overflow = False
         #: (:obj:`str`) json list with overflow color
         self.overflowcolor = "[255, 255, 255]"
         #: (:class:`pyqtgraph.ColorButton`)
@@ -532,7 +530,6 @@ class ConfigDialog(QtWidgets.QDialog):
         self.__ui.sourcedisplayCheckBox.setChecked(self.sourcedisplay)
         self.__ui.crosshairCheckBox.setChecked(self.crosshairlocker)
         self.__ui.csaCheckBox.setChecked(self.correctsolidangle)
-        self.__ui.overflowColorCheckBox.setChecked(self.overflow)
 
         if self.floattype not in ["float", "float32", "float64"]:
             self.floattype = "float"
@@ -868,7 +865,6 @@ class ConfigDialog(QtWidgets.QDialog):
         self.defdetservers = self.__ui.defdetserversCheckBox.isChecked()
         self.crosshairlocker = self.__ui.crosshairCheckBox.isChecked()
         self.correctsolidangle = self.__ui.csaCheckBox.isChecked()
-        self.overflow = self.__ui.overflowColorCheckBox.isChecked()
 
         try:
             dirtrans = str(self.__ui.dirtransLineEdit.text()).strip()

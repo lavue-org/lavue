@@ -1770,8 +1770,7 @@ class LiveViewer(QtWidgets.QDialog):
         dataFetchThread.GLOBALREFRESHRATE = self.__settings.refreshrate
         self.__imagewg.setStatsWOScaling(self.__settings.statswoscaling)
         self.__imagewg.setColors(self.__settings.roiscolors)
-        self.__imagewg.setOverflowColor(
-            self.__settings.overflowcolor, self.__settings.overflow)
+        self.__imagewg.setOverflowColor(self.__settings.overflowcolor)
 
         self.__updateSource()
 
@@ -2358,7 +2357,6 @@ class LiveViewer(QtWidgets.QDialog):
         cnfdlg.geometryfromsource = self.__settings.geometryfromsource
         cnfdlg.roiscolors = self.__settings.roiscolors
         cnfdlg.overflowcolor = self.__settings.overflowcolor
-        cnfdlg.overflow = self.__settings.overflow
         cnfdlg.sourcedisplay = self.__settings.sourcedisplay
         cnfdlg.imagesources = self.__settings.imagesources
         cnfdlg.imagesourcenames = self.__srcaliasnames
@@ -2701,16 +2699,10 @@ class LiveViewer(QtWidgets.QDialog):
             self.__settings.roiscolors = dialog.roiscolors
             self.__imagewg.setColors(self.__settings.roiscolors)
 
-        if self.__settings.overflow != dialog.overflow:
-            self.__settings.overflow = dialog.overflow
-            self.__imagewg.setOverflowColor(
-                self.__settings.overflowcolor, self.__settings.overflow)
-            replot = True
 
         if self.__settings.overflowcolor != dialog.overflowcolor:
             self.__settings.overflowcolor = dialog.overflowcolor
-            self.__imagewg.setOverflowColor(
-                self.__settings.overflowcolor, self.__settings.overflow)
+            self.__imagewg.setOverflowColor(self.__settings.overflowcolor)
 
         if remasking:
             self.__remasking()
@@ -3743,7 +3735,7 @@ class LiveViewer(QtWidgets.QDialog):
                     text, str(value))
         if self.__settings.showoverflow and \
            self.__imagewg.overflowValue() is not None and \
-           self.__settings.overflow and self.__displayimage is not None:
+           self.__displayimage is not None:
             overflowvalue = self.__imagewg.overflowValue()
             try:
                 with np.warnings.catch_warnings():

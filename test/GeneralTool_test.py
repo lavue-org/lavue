@@ -1358,7 +1358,6 @@ class GeneralToolTest(unittest.TestCase):
 
         cfg = '[Configuration]\n' \
             'IntensityOverflowColor="[2, 255, 44]"\n' \
-            'IntensityOverflowInColor=true\n' \
             'MaskingAsNAN=false\n'
 
         if not os.path.exists(self.__cfgfdir):

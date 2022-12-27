@@ -231,8 +231,6 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         self.__rgb = False
         #: (:obj:`tuple` <:obj:`int`>) mask color
         self.__overflowcolor = (255, 255, 255)
-        #: (:obj:`bool`) mask with color flag
-        self.__overflow = False
         #: (:obj:`bool`) gradient colors flag
         self.__gradientcolors = False
         #: (:obj:`str`) levelmode
@@ -292,17 +290,12 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         self.sceneObj.rawdata = None
         self.setCursor(QtGui.QCursor(QtCore.Qt.CrossCursor))
 
-    def setOverflowColor(self, color, status=None):
+    def setOverflowColor(self, color):
         """ sets item color
 
         :param color: json list of overflow color
         :type color: :obj:`str`
-        :param status: overflow in color status
-        :type status: :obj:`bool`
         """
-        if status is not None:
-            self.__overflow = status
-        # print("STATUS", self.__overflow)
         try:
             # print("COL", color)
             self.__overflowcolor = tuple(json.loads(color))

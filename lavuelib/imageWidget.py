@@ -1160,15 +1160,13 @@ class ImageWidget(QtWidgets.QWidget):
                 self.__displaywidget.extension(name).setColors(colors)
         self.colorsChanged.emit(colors)
 
-    def setOverflowColor(self, color, status=None):
+    def setOverflowColor(self, color):
         """ sets item color
 
         :param color: json list of overflow color
         :type color: :obj:`str`
-        :param status: overflow in color status
-        :type status: :obj:`bool`
         """
-        self.__displaywidget.setOverflowColor(color, status)
+        self.__displaywidget.setOverflowColor(color)
 
     def setScalingType(self, scalingtype):
         """ sets intensity scaling types
