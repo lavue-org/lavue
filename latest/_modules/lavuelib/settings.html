@@ -274,8 +274,6 @@
         <span class="c1">#: (:obj:`str`) float type for pixel intensity</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">floattype</span> <span class="o">=</span> <span class="s2">&quot;float&quot;</span>
 
-        <span class="c1">#: (:obj:`bool`) overflow in color</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">overflow</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`str`) json list with overflow color</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">overflowcolor</span> <span class="o">=</span> <span class="s2">&quot;[255, 255, 255]&quot;</span>
 
@@ -852,11 +850,6 @@
         <span class="k">if</span> <span class="n">qstval</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">roiscolors</span> <span class="o">=</span> <span class="n">qstval</span>
 
-        <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
-            <span class="s2">&quot;Configuration/IntensityOverflowInColor&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">overflow</span> <span class="o">=</span> <span class="kc">True</span>
-
         <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
             <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/IntensityOverflowColor&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">qstval</span><span class="p">:</span>
@@ -1237,9 +1230,6 @@
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/IntensityOverflowColor&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">overflowcolor</span><span class="p">)</span>
-        <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
-            <span class="s2">&quot;Configuration/IntensityOverflowInColor&quot;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">overflow</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/Filters&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">)</span>
