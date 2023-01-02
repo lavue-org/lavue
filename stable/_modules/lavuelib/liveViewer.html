@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.liveViewer &#8212; LaVue 2.80.0 documentation</title>
+    <title>lavuelib.liveViewer &#8212; LaVue 2.80.1 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.liveViewer</a></li> 
       </ul>
@@ -1815,8 +1815,7 @@
         <span class="n">dataFetchThread</span><span class="o">.</span><span class="n">GLOBALREFRESHRATE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshrate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setStatsWOScaling</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">statswoscaling</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setColors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">roiscolors</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setOverflowColor</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflowcolor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setOverflowColor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflowcolor</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateSource</span><span class="p">()</span>
 
@@ -2403,7 +2402,6 @@
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">geometryfromsource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">geometryfromsource</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">roiscolors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">roiscolors</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">overflowcolor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflowcolor</span>
-        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">overflow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflow</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">sourcedisplay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sourcedisplay</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">imagesources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">imagesources</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">imagesourcenames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__srcaliasnames</span>
@@ -2746,16 +2744,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">roiscolors</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">roiscolors</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setColors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">roiscolors</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflow</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">overflow</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflow</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">overflow</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setOverflowColor</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflowcolor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflow</span><span class="p">)</span>
-            <span class="n">replot</span> <span class="o">=</span> <span class="kc">True</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflowcolor</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">overflowcolor</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflowcolor</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">overflowcolor</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setOverflowColor</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflowcolor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflow</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setOverflowColor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflowcolor</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">remasking</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__remasking</span><span class="p">()</span>
@@ -3788,7 +3779,7 @@
                     <span class="n">text</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showoverflow</span> <span class="ow">and</span> \
            <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">overflowValue</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
-           <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflow</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+           <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">overflowvalue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">overflowValue</span><span class="p">()</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
@@ -4621,6 +4612,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.80.1/index.html">v2.80.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.80.0/index.html">v2.80.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.79.0/index.html">v2.79.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
@@ -4650,7 +4642,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.liveViewer</a></li> 
       </ul>

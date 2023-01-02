@@ -32,7 +32,7 @@ The first tab of the configuration dialog contains **General Settings**. It is d
 *    **Mask pixels with NAN:** stores masked pixels as a float Not-A-Number (NAN)
 *    **Max value added to negative mask:** add maximal type value of current image to the negative high value mask
 *    **Pixel masks with zero values:** causes that zero pixel values of mask image are interpreted as masking
-*    **Intensity overflow in color:** causes that pixels with intesity over the overflow value are ploted in the color
+*    **Intensity overflow color:** causes that pixels with intesity over the overflow value are ploted in the color
 *    **Keep original coordinates:** causes the 2D-plot axes transforms with image transformation
 *    **Lazy image slider:** plot a new image after the image slider is focused out
 *    **Aspect Ratio locked:** sets the aspect ratio to 1:1 in the 2D-plot
