@@ -102,7 +102,10 @@ class MemoExportDialog(exportDialog.ExportDialog):
             self.currentExporter = None
             self.ui.paramTree.clear()
             return
-        expClass = self.exporterClasses[str(item.text())]
+        if hasattr(item, "expClass"):
+            expClass = item.expClass
+        else:
+            expClass = self.exporterClasses[str(item.text())]
         exp = expClass(item=self.ui.itemTree.currentItem().gitem)
 
         if prev:
