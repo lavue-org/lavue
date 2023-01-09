@@ -171,10 +171,20 @@ class ImageNexusExporter(Exporter):
             raise Exception(
                 "File '%s' cannot be created \n" % (filename))
         root = fl.root()
-        if "data" in root.names():
-            node = root.open("data")
+        if "entry" in root.names():
+            entry = root.open("entry")
         else:
-            node = root.create_group("data", "NXdata")
+            entry = root.create_group("entry", "NXentry")
+        root.attributes.create(
+            "default", "string",
+            overwrite=True)[...] = "entry"
+        if "data" in entry.names():
+            node = entry.open("data")
+        else:
+            node = entry.create_group("data", "NXdata")
+        entry.attributes.create(
+            "default", "string",
+            overwrite=True)[...] =  "data"
         if fieldname in node.names():
             field = node.open(fieldname)
         else:
@@ -198,6 +208,9 @@ class ImageNexusExporter(Exporter):
                 shape=fdshape,
                 chunk=fdchunk,
                 dfilter=cfilter)
+        node.attributes.create(
+            "signal", "string",
+            overwrite=True)[...] =  fieldname
         field.grow(0, 1)
         field[-1, ...] = rawdata
         field.close()
