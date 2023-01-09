@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.imageNexusExporter &#8212; LaVue 2.80.1 documentation</title>
+    <title>lavuelib.imageNexusExporter &#8212; LaVue 2.81.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.81.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageNexusExporter</a></li> 
       </ul>
@@ -216,10 +216,20 @@
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                 <span class="s2">&quot;File &#39;</span><span class="si">%s</span><span class="s2">&#39; cannot be created </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">filename</span><span class="p">))</span>
         <span class="n">root</span> <span class="o">=</span> <span class="n">fl</span><span class="o">.</span><span class="n">root</span><span class="p">()</span>
-        <span class="k">if</span> <span class="s2">&quot;data&quot;</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
-            <span class="n">node</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;entry&quot;</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;entry&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">node</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;NXdata&quot;</span><span class="p">)</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;entry&quot;</span><span class="p">,</span> <span class="s2">&quot;NXentry&quot;</span><span class="p">)</span>
+        <span class="n">root</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;entry&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;data&quot;</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;NXdata&quot;</span><span class="p">)</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;data&quot;</span>
         <span class="k">if</span> <span class="n">fieldname</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
             <span class="n">field</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fieldname</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -243,6 +253,9 @@
                 <span class="n">shape</span><span class="o">=</span><span class="n">fdshape</span><span class="p">,</span>
                 <span class="n">chunk</span><span class="o">=</span><span class="n">fdchunk</span><span class="p">,</span>
                 <span class="n">dfilter</span><span class="o">=</span><span class="n">cfilter</span><span class="p">)</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="s2">&quot;signal&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">fieldname</span>
         <span class="n">field</span><span class="o">.</span><span class="n">grow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">field</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">rawdata</span>
         <span class="n">field</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -277,6 +290,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.81.0/index.html">v2.81.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.80.1/index.html">v2.80.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.80.0/index.html">v2.80.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.79.0/index.html">v2.79.0</a></li>
@@ -307,7 +321,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.81.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageNexusExporter</a></li> 
       </ul>

@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.memoExportDialog &#8212; LaVue 2.80.1 documentation</title>
+    <title>lavuelib.memoExportDialog &#8212; LaVue 2.81.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.81.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.memoExportDialog</a></li> 
       </ul>
@@ -147,7 +147,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">currentExporter</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">paramTree</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
             <span class="k">return</span>
-        <span class="n">expClass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exporterClasses</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="p">())]</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;expClass&quot;</span><span class="p">):</span>
+            <span class="n">expClass</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">expClass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">expClass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exporterClasses</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="p">())]</span>
         <span class="n">exp</span> <span class="o">=</span> <span class="n">expClass</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">itemTree</span><span class="o">.</span><span class="n">currentItem</span><span class="p">()</span><span class="o">.</span><span class="n">gitem</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">prev</span><span class="p">:</span>
@@ -199,6 +202,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.81.0/index.html">v2.81.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.80.1/index.html">v2.80.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.80.0/index.html">v2.80.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.79.0/index.html">v2.79.0</a></li>
@@ -229,7 +233,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.80.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.81.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.memoExportDialog</a></li> 
       </ul>
