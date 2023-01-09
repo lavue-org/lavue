@@ -184,7 +184,7 @@ class ImageNexusExporter(Exporter):
             node = entry.create_group("data", "NXdata")
         entry.attributes.create(
             "default", "string",
-            overwrite=True)[...] =  "data"
+            overwrite=True)[...] = "data"
         if fieldname in node.names():
             field = node.open(fieldname)
         else:
@@ -210,7 +210,7 @@ class ImageNexusExporter(Exporter):
                 dfilter=cfilter)
         node.attributes.create(
             "signal", "string",
-            overwrite=True)[...] =  fieldname
+            overwrite=True)[...] = fieldname
         field.grow(0, 1)
         field[-1, ...] = rawdata
         field.close()
