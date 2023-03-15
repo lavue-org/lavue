@@ -23,7 +23,7 @@ The ``setup.py`` script may need: ``setuptools``  ``sphinx``  ``numpy``  ``pytes
 Debian packages
 """""""""""""""
 
-Debian `bullseye`, `buster` and `stretch` or Ubuntu  `impish`, `hirsute`, `focal`, `bionic` packages can be found in the HDRI repository.
+Debian `bullseye`, `buster` and `stretch` or Ubuntu  `kinetic`, `jammy`, `focal` packages can be found in the HDRI repository.
 
 To install the debian packages, add the PGP repository key
 
@@ -50,6 +50,12 @@ or
 .. code-block:: console
 
    $ wget http://repos.pni-hdri.de/buster-pni-hdri.list
+
+or
+
+.. code-block:: console
+
+   $ wget http://repos.pni-hdri.de/jammy-pni-hdri.list
 
 or
 
