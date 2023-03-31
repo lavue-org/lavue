@@ -1767,7 +1767,7 @@ class LiveViewer(QtWidgets.QDialog):
         self._assessTransformation(self.__trafoname)
         for i, ds in enumerate(self.__datasources):
             ds.setTimeOut(self.__settings.timeout)
-        dataFetchThread.GLOBALREFRESHRATE = self.__settings.refreshrate
+        dataFetchThread.GLOBALREFRESHTIME = self.__settings.refreshrate
         self.__imagewg.setStatsWOScaling(self.__settings.statswoscaling)
         self.__imagewg.setColors(self.__settings.roiscolors)
         self.__imagewg.setOverflowColor(self.__settings.overflowcolor)
@@ -1839,7 +1839,7 @@ class LiveViewer(QtWidgets.QDialog):
             "Layout/DialogGeometry",
             QtCore.QByteArray(self.saveGeometry()))
 
-        self.__settings.refreshrate = dataFetchThread.GLOBALREFRESHRATE
+        self.__settings.refreshrate = dataFetchThread.GLOBALREFRESHTIME
         self.__settings.sardana = True if self.__sardana is not None else False
         self.__settings.store(settings)
 
@@ -2322,7 +2322,7 @@ class LiveViewer(QtWidgets.QDialog):
         cnfdlg.zeromask = self.__settings.zeromask
         cnfdlg.nanmask = self.__settings.nanmask
         cnfdlg.negmask = self.__settings.negmask
-        cnfdlg.refreshrate = dataFetchThread.GLOBALREFRESHRATE
+        cnfdlg.refreshrate = dataFetchThread.GLOBALREFRESHTIME
         cnfdlg.toolrefreshtime = self.__settings.toolrefreshtime
         cnfdlg.toolpollinginterval = self.__settings.toolpollinginterval
         cnfdlg.timeout = self.__settings.timeout
@@ -2494,7 +2494,7 @@ class LiveViewer(QtWidgets.QDialog):
                 [self.__tlaliasnames[twn]
                  for twn in json.loads(self.__settings.toolwidgets)],
                 self.__imagewg.currentTool())
-        dataFetchThread.GLOBALREFRESHRATE = dialog.refreshrate
+        dataFetchThread.GLOBALREFRESHTIME = dialog.refreshrate
 
         if self.__settings.refreshrate != dialog.refreshrate:
             self.__settings.refreshrate = dialog.refreshrate
@@ -2937,7 +2937,7 @@ class LiveViewer(QtWidgets.QDialog):
                     ds.setConfiguration(self.__sourceconfiguration[sid])
                     self.__sourcewg.updateSourceMetaData(
                         sid, **ds.getMetaData())
-        dataFetchThread.GLOBALREFRESHRATE = self.__settings.refreshrate
+        dataFetchThread.GLOBALREFRESHTIME = self.__settings.refreshrate
         self._stateUpdated.emit(bool(status))
 
     @debugmethod

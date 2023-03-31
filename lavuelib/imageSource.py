@@ -2699,7 +2699,7 @@ class TinePropSource(BaseSource):
         if not self.__address or not self.__prop:
             return "No Tine Property defined", "__ERROR__", None
         try:
-            interval = int(dataFetchThread.GLOBALREFRESHRATE*1000)
+            interval = int(dataFetchThread.GLOBALREFRESHTIME*1000)
             with QtCore.QMutexLocker(globalmutex):
                 prop = PyTine.get(address=self.__address,
                                   property=self.__prop,

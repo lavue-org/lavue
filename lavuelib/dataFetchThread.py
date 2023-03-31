@@ -33,7 +33,7 @@ import time
 from .omniQThread import OmniQThread
 
 #: (:obj:`float`) refresh rate in seconds
-GLOBALREFRESHRATE = .1
+GLOBALREFRESHTIME = .1
 
 
 class ExchangeList(object):
@@ -122,22 +122,22 @@ class DataFetchThread(OmniQThread):
     def _run(self):
         """ run function of the fetching thread
         """
-        global GLOBALREFRESHRATE
+        global GLOBALREFRESHTIME
         self.__loop = True
         self.__dt = 0
         skip = False
         while self.__loop:
             if not self.__isConnected:
-                self.msleep(int(1000*GLOBALREFRESHRATE))
+                self.msleep(int(1000*GLOBALREFRESHTIME))
             if skip:
-                self.msleep(int(100*GLOBALREFRESHRATE))
+                self.msleep(int(100*GLOBALREFRESHTIME))
             else:
                 for _ in range(3):
                     self.msleep(
-                        max(int((1000*GLOBALREFRESHRATE - self.__dt)/4.), 0))
+                        max(int((1000*GLOBALREFRESHTIME - self.__dt)/4.), 0))
             self.msleep(
                 max(int(
-                    1000*GLOBALREFRESHRATE
+                    1000*GLOBALREFRESHTIME
                     - (time.time() - self.__tm) * 1000.), 0))
             self.__tm = time.time()
             if self.__isConnected and self.__ready:
@@ -152,9 +152,9 @@ class DataFetchThread(OmniQThread):
                             if self.__starttime:
                                 eltime = float(etime - self.__starttime) \
                                     / self.__maxcounter
-                                # print(eltime, GLOBALREFRESHRATE)
-                                if eltime > self.__factor * GLOBALREFRESHRATE:
-                                    GLOBALREFRESHRATE = GLOBALREFRESHRATE * \
+                                # print(eltime, GLOBALREFRESHTIME)
+                                if eltime > self.__factor * GLOBALREFRESHTIME:
+                                    GLOBALREFRESHTIME = GLOBALREFRESHTIME * \
                                         self.__factor
                             self.__counter = 0
                         else:
