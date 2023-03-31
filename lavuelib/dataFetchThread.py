@@ -110,10 +110,19 @@ class DataFetchThread(OmniQThread):
         self.__tm2 = time.time()
         #: (:obj:`int`) current timestamp
         self.__dt = 0
+        #: (:obj:`int`) counter
+        self.__counter = 0
+        #: (:obj:`int`) maximal counter value
+        self.__maxcounter = 100
+        #: (:obj:`int`) start time
+        self.__starttime = 0
+        #: (:obj:`float`) elapsed time factor
+        self.__factor = 2.0
 
     def _run(self):
         """ run function of the fetching thread
         """
+        global GLOBALREFRESHRATE
         self.__loop = True
         self.__dt = 0
         skip = False
@@ -135,6 +144,21 @@ class DataFetchThread(OmniQThread):
                 try:
                     with QtCore.QMutexLocker(self.__mutex):
                         img, name, metadata = self.__datasource.getData()
+                    if not self.__tid:
+                        if not self.__counter:
+                            self.__starttime = self.__tm
+                        if self.__counter == self.__maxcounter:
+                            etime = time.time()
+                            if self.__starttime:
+                                eltime = float(etime - self.__starttime) \
+                                    / self.__maxcounter
+                                # print(eltime, GLOBALREFRESHRATE)
+                                if eltime > self.__factor * GLOBALREFRESHRATE:
+                                    GLOBALREFRESHRATE = GLOBALREFRESHRATE * \
+                                        self.__factor
+                            self.__counter = 0
+                        else:
+                            self.__counter += 1
                 except Exception as e:
                     name = "__ERROR__"
                     img = str(e)

@@ -2937,6 +2937,7 @@ class LiveViewer(QtWidgets.QDialog):
                     ds.setConfiguration(self.__sourceconfiguration[sid])
                     self.__sourcewg.updateSourceMetaData(
                         sid, **ds.getMetaData())
+        dataFetchThread.GLOBALREFRESHRATE = self.__settings.refreshrate
         self._stateUpdated.emit(bool(status))
 
     @debugmethod
