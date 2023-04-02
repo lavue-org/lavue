@@ -30,10 +30,14 @@ from __future__ import unicode_literals
 
 from pyqtgraph import QtCore
 import time
+import logging
+
 from .omniQThread import OmniQThread
 
 #: (:obj:`float`) refresh rate in seconds
 GLOBALREFRESHTIME = .1
+
+logger = logging.getLogger("lavue")
 
 
 class ExchangeList(object):
@@ -156,6 +160,9 @@ class DataFetchThread(OmniQThread):
                                 if eltime > self.__factor * GLOBALREFRESHTIME:
                                     GLOBALREFRESHTIME = GLOBALREFRESHTIME * \
                                         self.__factor
+                                    logger.warning(
+                                        "The Image refresh time changed to: "
+                                        "%s s" % GLOBALREFRESHTIME)
                             self.__counter = 0
                         else:
                             self.__counter += 1

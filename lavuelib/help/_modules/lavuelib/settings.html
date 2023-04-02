@@ -180,8 +180,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">negmask</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) security stream options</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">secsockopt</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
-        <span class="c1">#: (:obj:`float`) refresh rate is s</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">refreshrate</span> <span class="o">=</span> <span class="mf">0.2</span>
+        <span class="c1">#: (:obj:`float`) refresh time is s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refreshtime</span> <span class="o">=</span> <span class="mf">0.2</span>
         <span class="c1">#: (:obj:`float`) tool refresh rate time is s</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolrefreshtime</span> <span class="o">=</span> <span class="mf">0.02</span>
         <span class="c1">#: (:obj:`float`) tool polling interval is s</span>
@@ -640,10 +640,15 @@
                 <span class="n">status</span> <span class="o">=</span> <span class="p">[(</span><span class="n">text</span><span class="p">,</span> <span class="n">value</span><span class="p">)]</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">refreshrate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
-                <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/RefreshRate&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshtime</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/RefreshTime&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="k">pass</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">refreshtime</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                    <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                        <span class="s2">&quot;Configuration/RefreshRate&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">toolrefreshtime</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
@@ -1057,8 +1062,8 @@
             <span class="s2">&quot;Configuration/CalculateVariance&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">calcvariance</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
-            <span class="s2">&quot;Configuration/RefreshRate&quot;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">refreshrate</span><span class="p">)</span>
+            <span class="s2">&quot;Configuration/RefreshTime&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshtime</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/ToolRefreshTime&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">toolrefreshtime</span><span class="p">)</span>
