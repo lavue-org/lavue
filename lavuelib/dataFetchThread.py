@@ -34,8 +34,10 @@ import logging
 
 from .omniQThread import OmniQThread
 
-#: (:obj:`float`) refresh rate in seconds
+#: (:obj:`float`) refresh time in seconds
 GLOBALREFRESHTIME = .1
+#: (:obj:`bool`) auto enlarge time
+GLOBALAUTOREFRESHTIME = True
 
 logger = logging.getLogger("lavue")
 
@@ -148,7 +150,7 @@ class DataFetchThread(OmniQThread):
                 try:
                     with QtCore.QMutexLocker(self.__mutex):
                         img, name, metadata = self.__datasource.getData()
-                    if not self.__tid:
+                    if not self.__tid and GLOBALAUTOREFRESHTIME:
                         if not self.__counter:
                             self.__starttime = self.__tm
                         if self.__counter == self.__maxcounter:

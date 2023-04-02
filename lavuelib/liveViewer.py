@@ -795,7 +795,7 @@ class LiveViewer(QtWidgets.QDialog):
         for ds in self.__datasources:
             self.__exchangelists.append(dataFetchThread.ExchangeList())
 
-        #: (:class:`lavuelib.dataFetchTread.DataFetchThread`)
+        #: (:class:`lavuelib.dataFetchTread.DataFechThread`)
         #:    data fetch thread
         self.__dataFetchers = []
         for i, ds in enumerate(self.__datasources):
@@ -1768,6 +1768,8 @@ class LiveViewer(QtWidgets.QDialog):
         for i, ds in enumerate(self.__datasources):
             ds.setTimeOut(self.__settings.timeout)
         dataFetchThread.GLOBALREFRESHTIME = self.__settings.refreshtime
+        dataFetchThread.GLOBALAUTOREFRESHTIME = \
+            self.__settings.autorefreshtime
         self.__imagewg.setStatsWOScaling(self.__settings.statswoscaling)
         self.__imagewg.setColors(self.__settings.roiscolors)
         self.__imagewg.setOverflowColor(self.__settings.overflowcolor)
@@ -2322,7 +2324,9 @@ class LiveViewer(QtWidgets.QDialog):
         cnfdlg.zeromask = self.__settings.zeromask
         cnfdlg.nanmask = self.__settings.nanmask
         cnfdlg.negmask = self.__settings.negmask
-        cnfdlg.refreshtime = dataFetchThread.GLOBALREFRESHTIME
+        cnfdlg.refreshtime = self.__settings.refreshtime
+        # cnfdlg.refreshtime = dataFetchThread.GLOBALREFRESHTIME
+        cnfdlg.autorefreshtime = self.__settings.autorefreshtime
         cnfdlg.toolrefreshtime = self.__settings.toolrefreshtime
         cnfdlg.toolpollinginterval = self.__settings.toolpollinginterval
         cnfdlg.timeout = self.__settings.timeout
@@ -2495,9 +2499,12 @@ class LiveViewer(QtWidgets.QDialog):
                  for twn in json.loads(self.__settings.toolwidgets)],
                 self.__imagewg.currentTool())
         dataFetchThread.GLOBALREFRESHTIME = dialog.refreshtime
+        dataFetchThread.GLOBALAUTOREFRESHTIME = dialog.autorefreshtime
         if self.__settings.refreshtime != dialog.refreshtime:
             self.__settings.refreshtime = dialog.refreshtime
             self.__updateframeratetip(self.__settings.refreshtime)
+        if self.__settings.autorefreshtime != dialog.autorefreshtime:
+            self.__settings.autorefreshtime = dialog.autorefreshtime
         if self.__settings.toolrefreshtime != dialog.toolrefreshtime:
             self.__settings.toolrefreshtime = dialog.toolrefreshtime
             self.__imagewg.setExtensionsRefreshTime(
@@ -2937,6 +2944,7 @@ class LiveViewer(QtWidgets.QDialog):
                     self.__sourcewg.updateSourceMetaData(
                         sid, **ds.getMetaData())
         dataFetchThread.GLOBALREFRESHTIME = self.__settings.refreshtime
+        dataFetchThread.GLOBALAUTOREFRESHTIME = self.__settings.autorefreshtime
         self._stateUpdated.emit(bool(status))
 
     @debugmethod

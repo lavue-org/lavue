@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.configDialog &#8212; LaVue (latest) documentation</title>
+    <title>lavuelib.configDialog &#8212; LaVue 2.82.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue (latest) documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.82.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.configDialog</a></li> 
       </ul>
@@ -266,9 +266,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">hidraport</span> <span class="o">=</span> <span class="s1">&#39;[&quot;50001&quot;]&#39;</span>
         <span class="c1">#: (:obj:`bool`) find security stream port automatically</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">secautoport</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="c1">#: (:obj:`float`) refresh rate</span>
+        <span class="c1">#: (:obj:`float`) refresh time in s</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">refreshtime</span> <span class="o">=</span> <span class="mf">0.2</span>
-        <span class="c1">#: (:obj:`float`) tool refresh rate time is s</span>
+        <span class="c1">#: (:obj:`bool`) auto enlarge refresh time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autorefreshtime</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1">#: (:obj:`float`) tool refresh time is s</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolrefreshtime</span> <span class="o">=</span> <span class="mf">0.02</span>
         <span class="c1">#: (:obj:`float`) tool polling interval is s</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolpollinginterval</span> <span class="o">=</span> <span class="mf">1.0</span>
@@ -494,6 +496,7 @@
         <span class="sd">&quot;&quot;&quot; create GUI</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">rateDoubleSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">refreshtime</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">enlargeCheckBox</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">autorefreshtime</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">nrsourcesSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nrsources</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">diffsizeSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diffnpt</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolrefreshtimeDoubleSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">toolrefreshtime</span><span class="p">)</span>
@@ -863,6 +866,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">negmask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">negmaskCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">secautoport</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">secautoportCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">refreshtime</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">rateDoubleSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autorefreshtime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">enlargeCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">floattype</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">floatComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolrefreshtime</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolrefreshtimeDoubleSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
@@ -1122,7 +1126,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue (latest) documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.82.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.configDialog</a></li> 
       </ul>

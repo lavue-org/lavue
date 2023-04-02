@@ -221,9 +221,11 @@ class ConfigDialog(QtWidgets.QDialog):
         self.hidraport = '["50001"]'
         #: (:obj:`bool`) find security stream port automatically
         self.secautoport = True
-        #: (:obj:`float`) refresh rate
+        #: (:obj:`float`) refresh time in s
         self.refreshtime = 0.2
-        #: (:obj:`float`) tool refresh rate time is s
+        #: (:obj:`bool`) auto enlarge refresh time
+        self.autorefreshtime = True
+        #: (:obj:`float`) tool refresh time is s
         self.toolrefreshtime = 0.02
         #: (:obj:`float`) tool polling interval is s
         self.toolpollinginterval = 1.0
@@ -449,6 +451,7 @@ class ConfigDialog(QtWidgets.QDialog):
         """ create GUI
         """
         self.__ui.rateDoubleSpinBox.setValue(self.refreshtime)
+        self.__ui.enlargeCheckBox.setChecked(self.autorefreshtime)
         self.__ui.nrsourcesSpinBox.setValue(self.nrsources)
         self.__ui.diffsizeSpinBox.setValue(self.diffnpt)
         self.__ui.toolrefreshtimeDoubleSpinBox.setValue(self.toolrefreshtime)
@@ -818,6 +821,7 @@ class ConfigDialog(QtWidgets.QDialog):
         self.negmask = self.__ui.negmaskCheckBox.isChecked()
         self.secautoport = self.__ui.secautoportCheckBox.isChecked()
         self.refreshtime = float(self.__ui.rateDoubleSpinBox.value())
+        self.autorefreshtime = self.__ui.enlargeCheckBox.isChecked()
         self.floattype = str(self.__ui.floatComboBox.currentText())
         self.toolrefreshtime = float(
             self.__ui.toolrefreshtimeDoubleSpinBox.value())

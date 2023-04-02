@@ -8,7 +8,8 @@ The first tab of the configuration dialog contains **General Settings**. It is d
 
 **Image source**
 
-*    **Refresh rate in s:** select a minimal time between consecutive frames
+*    **Refresh time in s:** select a minimal time between consecutive frames
+*    **Auto enlarge refresh time** automatically changes the refresh time if it is too small
 *    **Number of image sources:**  a number of different image sources  from which images should be stitched
 *    **Map images to color channels:** places images form different image sources to separate color channels
 *    **Interrupt on source errors:** stops live image viewing on image source errors

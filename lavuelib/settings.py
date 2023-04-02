@@ -137,7 +137,9 @@ class Settings(object):
         self.secsockopt = b""
         #: (:obj:`float`) refresh time is s
         self.refreshtime = 0.2
-        #: (:obj:`float`) tool refresh rate time is s
+        #: (:obj:`bool`) auto enlarge refresh time
+        self.autorefreshtime = True
+        #: (:obj:`float`) tool refresh time is s
         self.toolrefreshtime = 0.02
         #: (:obj:`float`) tool polling interval is s
         self.toolpollinginterval = 1.0
@@ -602,6 +604,12 @@ class Settings(object):
         except Exception:
             pass
 
+        qstval = str(
+            settings.value("Configuration/AutoEnlargeRefreshTime", type=str))
+        if qstval.lower() == "false":
+            self.autorefreshtime = False
+        elif qstval.lower() == "true":
+            self.autorefreshtime = True
         try:
             self.toolrefreshtime = float(
                 settings.value("Configuration/ToolRefreshTime", type=str))
@@ -1016,6 +1024,9 @@ class Settings(object):
         settings.setValue(
             "Configuration/RefreshTime",
             self.refreshtime)
+        settings.setValue(
+            "Configuration/AutoEnlargeRefreshTime",
+            self.autorefreshtime)
         settings.setValue(
             "Configuration/ToolRefreshTime",
             self.toolrefreshtime)

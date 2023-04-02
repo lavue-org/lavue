@@ -38,7 +38,7 @@ from .omniQThread import OmniQThread
 # from .sardanaUtils import debugmethod
 
 
-#: (:obj:`float`) refresh rate in seconds
+#: (:obj:`float`) refresh time in seconds
 GLOBALREFRESHTIME = .1
 #: (:obj:`float`) polling inverval in seconds
 POLLINGINTERVAL = 1.
