@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.settings &#8212; LaVue (latest) documentation</title>
+    <title>lavuelib.settings &#8212; LaVue 2.82.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue (latest) documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.82.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.settings</a></li> 
       </ul>
@@ -180,9 +180,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">negmask</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) security stream options</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">secsockopt</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
-        <span class="c1">#: (:obj:`float`) refresh rate is s</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">refreshrate</span> <span class="o">=</span> <span class="mf">0.2</span>
-        <span class="c1">#: (:obj:`float`) tool refresh rate time is s</span>
+        <span class="c1">#: (:obj:`float`) refresh time is s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refreshtime</span> <span class="o">=</span> <span class="mf">0.2</span>
+        <span class="c1">#: (:obj:`bool`) auto enlarge refresh time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autorefreshtime</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1">#: (:obj:`float`) tool refresh time is s</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolrefreshtime</span> <span class="o">=</span> <span class="mf">0.02</span>
         <span class="c1">#: (:obj:`float`) tool polling interval is s</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolpollinginterval</span> <span class="o">=</span> <span class="mf">1.0</span>
@@ -640,11 +642,19 @@
                 <span class="n">status</span> <span class="o">=</span> <span class="p">[(</span><span class="n">text</span><span class="p">,</span> <span class="n">value</span><span class="p">)]</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">refreshrate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
-                <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/RefreshRate&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+            <span class="n">rt</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/RefreshTime&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">rt</span><span class="p">:</span>
+                <span class="n">rt</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/RefreshRate&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshtime</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rt</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">pass</span>
 
+        <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/AutoEnlargeRefreshTime&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;false&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">autorefreshtime</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">autorefreshtime</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">toolrefreshtime</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
                 <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/ToolRefreshTime&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
@@ -1057,8 +1067,11 @@
             <span class="s2">&quot;Configuration/CalculateVariance&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">calcvariance</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
-            <span class="s2">&quot;Configuration/RefreshRate&quot;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">refreshrate</span><span class="p">)</span>
+            <span class="s2">&quot;Configuration/RefreshTime&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshtime</span><span class="p">)</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
+            <span class="s2">&quot;Configuration/AutoEnlargeRefreshTime&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">autorefreshtime</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/ToolRefreshTime&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">toolrefreshtime</span><span class="p">)</span>
@@ -1779,6 +1792,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.82.0/index.html">v2.82.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.81.0/index.html">v2.81.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.80.1/index.html">v2.80.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.80.0/index.html">v2.80.0</a></li>
@@ -1810,7 +1824,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue (latest) documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.82.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.settings</a></li> 
       </ul>

@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib package &#8212; LaVue (latest) documentation</title>
+    <title>lavuelib package &#8212; LaVue 2.82.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="index.html" title="API reference"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue (latest) documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.82.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Developer Guide</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">API reference</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib package</a></li> 
@@ -566,6 +566,12 @@ and reset the display</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt id="lavuelib.configDialog.ConfigDialog.autorefreshtime">
+<code class="sig-name descname">autorefreshtime</code><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.autorefreshtime" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) auto enlarge refresh time</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt id="lavuelib.configDialog.ConfigDialog.autozmqtopics">
 <code class="sig-name descname">autozmqtopics</code><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.autozmqtopics" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) topics for ZMQ stream source fetched from the stream</p>
@@ -760,9 +766,9 @@ and reset the display</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lavuelib.configDialog.ConfigDialog.refreshrate">
-<code class="sig-name descname">refreshrate</code><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.refreshrate" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) refresh rate</p>
+<dt id="lavuelib.configDialog.ConfigDialog.refreshtime">
+<code class="sig-name descname">refreshtime</code><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.refreshtime" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) refresh time in s</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -960,7 +966,7 @@ and reset the display</p>
 <dl class="py attribute">
 <dt id="lavuelib.configDialog.ConfigDialog.toolrefreshtime">
 <code class="sig-name descname">toolrefreshtime</code><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.toolrefreshtime" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) tool refresh rate time is s</p>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) tool refresh time is s</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1312,9 +1318,15 @@ and reset the display</p>
 </dd></dl>
 
 <dl class="py data">
-<dt id="lavuelib.dataFetchThread.GLOBALREFRESHRATE">
-<code class="sig-prename descclassname">lavuelib.dataFetchThread.</code><code class="sig-name descname">GLOBALREFRESHRATE</code><em class="property"> = 0.1</em><a class="headerlink" href="#lavuelib.dataFetchThread.GLOBALREFRESHRATE" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) refresh rate in seconds</p>
+<dt id="lavuelib.dataFetchThread.GLOBALAUTOREFRESHTIME">
+<code class="sig-prename descclassname">lavuelib.dataFetchThread.</code><code class="sig-name descname">GLOBALAUTOREFRESHTIME</code><em class="property"> = True</em><a class="headerlink" href="#lavuelib.dataFetchThread.GLOBALAUTOREFRESHTIME" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) auto enlarge time</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="lavuelib.dataFetchThread.GLOBALREFRESHTIME">
+<code class="sig-prename descclassname">lavuelib.dataFetchThread.</code><code class="sig-name descname">GLOBALREFRESHTIME</code><em class="property"> = 0.1</em><a class="headerlink" href="#lavuelib.dataFetchThread.GLOBALREFRESHTIME" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) refresh time in seconds</p>
 </dd></dl>
 
 </div>
@@ -11459,9 +11471,9 @@ or <cite>None</cite></p>
 </dd></dl>
 
 <dl class="py data">
-<dt id="lavuelib.motorWatchThread.GLOBALREFRESHRATE">
-<code class="sig-prename descclassname">lavuelib.motorWatchThread.</code><code class="sig-name descname">GLOBALREFRESHRATE</code><em class="property"> = 0.1</em><a class="headerlink" href="#lavuelib.motorWatchThread.GLOBALREFRESHRATE" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) refresh rate in seconds</p>
+<dt id="lavuelib.motorWatchThread.GLOBALREFRESHTIME">
+<code class="sig-prename descclassname">lavuelib.motorWatchThread.</code><code class="sig-name descname">GLOBALREFRESHTIME</code><em class="property"> = 0.1</em><a class="headerlink" href="#lavuelib.motorWatchThread.GLOBALREFRESHTIME" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) refresh time in seconds</p>
 </dd></dl>
 
 <dl class="py class">
@@ -12688,6 +12700,12 @@ version of the object or raise a <code class="docutils literal notranslate"><spa
 </dd></dl>
 
 <dl class="py attribute">
+<dt id="lavuelib.settings.Settings.autorefreshtime">
+<code class="sig-name descname">autorefreshtime</code><a class="headerlink" href="#lavuelib.settings.Settings.autorefreshtime" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) auto enlarge refresh time</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt id="lavuelib.settings.Settings.autozmqtopics">
 <code class="sig-name descname">autozmqtopics</code><a class="headerlink" href="#lavuelib.settings.Settings.autozmqtopics" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) automatic zmq source topics</p>
@@ -13112,9 +13130,9 @@ version of the object or raise a <code class="docutils literal notranslate"><spa
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lavuelib.settings.Settings.refreshrate">
-<code class="sig-name descname">refreshrate</code><a class="headerlink" href="#lavuelib.settings.Settings.refreshrate" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) refresh rate is s</p>
+<dt id="lavuelib.settings.Settings.refreshtime">
+<code class="sig-name descname">refreshtime</code><a class="headerlink" href="#lavuelib.settings.Settings.refreshtime" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) refresh time is s</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -13383,7 +13401,7 @@ version of the object or raise a <code class="docutils literal notranslate"><spa
 <dl class="py attribute">
 <dt id="lavuelib.settings.Settings.toolrefreshtime">
 <code class="sig-name descname">toolrefreshtime</code><a class="headerlink" href="#lavuelib.settings.Settings.toolrefreshtime" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) tool refresh rate time is s</p>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) tool refresh time is s</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -17564,6 +17582,7 @@ list of [signal, slot] object to connect</p>
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.82.0/index.html">v2.82.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.81.0/index.html">v2.81.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.80.1/index.html">v2.80.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.80.0/index.html">v2.80.0</a></li>
@@ -17601,7 +17620,7 @@ list of [signal, slot] object to connect</p>
         <li class="right" >
           <a href="index.html" title="API reference"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue (latest) documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.82.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Developer Guide</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >API reference</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib package</a></li> 
