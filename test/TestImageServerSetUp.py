@@ -67,6 +67,7 @@ class TestImageServerSetUp(object):
     # \brief Common set up of Tango Server
     def setUp(self):
         print("\nsetting up...")
+        time.sleep(1)
         db = tango.Database()
         db.add_device(self.new_device_info)
         db.add_server(
