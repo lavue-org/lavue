@@ -42,26 +42,8 @@ jobs:
           OS: ${{ matrix.os }}
         run: .ci/install.sh ${OS} 3
 
-      - name: run basic tests
-        run: .ci/run.sh 3 basic
-
-      - name: run general tool tests
-        run: .ci/run.sh 3 generaltools
-
-      - name: run specialized tool tests
-        run: .ci/run.sh 3 specializedtools
-
-      - name: run diffractogram tests
-        run: .ci/run.sh 3 diffractogram
-
-      - name: run tangosource tests
-        run: .ci/run.sh 3 tangosource
-
-      - name: run tangofilesource tests
-        run: .ci/run.sh 3 tangofilesource
-
-      - name: run httpsource tests
-        run: .ci/run.sh 3 httpsource
+      - name: run all tests
+        run: .ci/run.sh 3 all
 
       - name: Append documentation for the latest release version
         if: github.ref == 'refs/heads/develop' &&  matrix.os == 'debian11'
@@ -129,19 +111,5 @@ jobs:
         env:
           OS: ${{ matrix.os }}
         run: .ci/install.sh ${OS} 2
-      - name: run basic tests
-        run: .ci/run.sh 2 basic
-      - name: run general tool tests
-        run: .ci/run.sh 2 generaltools
-      - name: run specialized tool tests
-        run: .ci/run.sh 2 specializedtools
-      - name: run diffractogram tests
-        run: .ci/run.sh 2 diffractogram
-      - name: run tangosource tests
-        run: .ci/run.sh 2 tangosource
-      - name: run tangofilesource tests
-        run: .ci/run.sh 2 tangofilesource
-      - name: run httpsource tests
-        run: .ci/run.sh 2 httpsource
-      - name: Stop the docker
-        run: docker container stop ndts
+      - name: run all tests
+        run: .ci/run.sh 2 all
