@@ -817,7 +817,7 @@ class TIFLoader(object):
         :returns: image data
         :rtype: :class:`numpy.ndarray`
         """
-        image = np.float(-1)
+        image = np.float64(-1)
         # define unsigned default if undefined - i.e. like MAR165 data
         sample_format = 1
         flbuffer_endian = 'none'

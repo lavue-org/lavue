@@ -677,10 +677,13 @@ class TangoFileImageSourceTest(unittest.TestCase):
             # self.assertTrue(np.allclose(res1[3], scaledimage))
 
             lastimage = res1[4].T
-            if not np.allclose(res2[1], lastimage):
+            if not np.allclose(np.array(res2[1], dtype=float),
+                               np.array(lastimage, dtype=float)):
                 print(res2[1])
                 print(lastimage)
-            self.assertTrue(np.allclose(res2[1], lastimage))
+            self.assertTrue(
+                np.allclose(np.array(res2[1], dtype=float),
+                            np.array(lastimage, dtype=float))
             scaledimage = np.clip(lastimage, 10e-3, np.inf)
             scaledimage = np.log10(scaledimage)
             self.assertTrue(np.allclose(res2[2], scaledimage))
