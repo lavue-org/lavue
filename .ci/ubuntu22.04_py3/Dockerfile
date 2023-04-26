@@ -4,6 +4,9 @@ MAINTAINER DESY, Jan Kotanski <jankotan@gmail.com>
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# switch to the german archive mirror
+RUN sed -i 's|http://archive|http://de.archive|g' /etc/apt/sources.list
+
 # add the HDRI repository
 RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get -qq install -y software-properties-common curl wget
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
