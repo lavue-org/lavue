@@ -23,7 +23,7 @@ The ``setup.py`` script may need: ``setuptools``  ``sphinx``  ``numpy``  ``pytes
 Debian packages
 """""""""""""""
 
-Debian `bullseye`, `buster` or Ubuntu  `kinetic`, `jammy`, `focal` packages can be found in the HDRI repository.
+Debian `bullseye`, `buster` or Ubuntu  `lunar`, `jammy`, `focal` packages can be found in the HDRI repository.
 
 To install the debian packages, add the PGP repository key
 
