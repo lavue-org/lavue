@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.imageSource &#8212; LaVue 2.82.0 documentation</title>
+    <title>lavuelib.imageSource &#8212; LaVue 2.83.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.82.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.83.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageSource</a></li> 
       </ul>
@@ -143,7 +143,8 @@
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">zmq</span>
     <span class="c1">#: (:obj:`str`,:obj:`str`) zmq major version, zmq minor version</span>
-    <span class="n">ZMQMAJOR</span><span class="p">,</span> <span class="n">ZMQMINOR</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">zmq</span><span class="o">.</span><span class="n">zmq_version</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)))[:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">ZMQMAJOR</span><span class="p">,</span> <span class="n">ZMQMINOR</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">zmq</span><span class="o">.</span><span class="n">zmq_version</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)))[:</span><span class="mi">2</span><span class="p">])</span>
 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
     <span class="c1">#: (:obj:`str`,:obj:`str`) zmq major version, zmq minor version</span>
     <span class="n">ZMQMAJOR</span><span class="p">,</span> <span class="n">ZMQMINOR</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
@@ -1693,8 +1694,16 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_initiated</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__socket</span><span class="p">:</span>
-                    <span class="n">shost</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_configuration</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-                    <span class="n">topic</span> <span class="o">=</span> <span class="n">shost</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shost</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+                    <span class="n">conf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configuration</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">conf</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+                        <span class="n">shost</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_configuration</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+                        <span class="n">topic</span> <span class="o">=</span> <span class="n">shost</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shost</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">shost</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">conf</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">conf</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                            <span class="n">topic</span> <span class="o">=</span> <span class="n">tobytes</span><span class="p">(</span><span class="n">conf</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">topic</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__socket</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__bindaddress</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__socket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span>
                         <span class="n">zmq</span><span class="o">.</span><span class="n">UNSUBSCRIBE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__topic</span><span class="p">)</span>
@@ -1838,10 +1847,25 @@
         <span class="sd">&quot;&quot;&quot; connects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">shost</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_configuration</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-            <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">shost</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__topic</span> <span class="o">=</span> <span class="n">tobytes</span><span class="p">(</span><span class="n">shost</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shost</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-            <span class="n">hwm</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">shost</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">shost</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">shost</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">else</span> <span class="mi">2</span>
+            <span class="n">conf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configuration</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">conf</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">shost</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_configuration</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">shost</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__topic</span> <span class="o">=</span> <span class="n">tobytes</span><span class="p">(</span><span class="n">shost</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shost</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">hwm</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">shost</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">shost</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">shost</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">else</span> <span class="mi">2</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">host</span> <span class="o">=</span> <span class="n">conf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">port</span> <span class="o">=</span> <span class="n">conf</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">conf</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__topic</span> <span class="o">=</span> <span class="n">tobytes</span><span class="p">(</span><span class="n">conf</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__topic</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">hwm</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">conf</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="n">hwm</span> <span class="o">=</span> <span class="mi">2</span>
+
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initiated</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__socket</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
@@ -1858,7 +1882,6 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">__socket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">zmq</span><span class="o">.</span><span class="n">SUBSCRIBE</span><span class="p">,</span>
                                              <span class="bp">self</span><span class="o">.</span><span class="n">__topic</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__socket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">zmq</span><span class="o">.</span><span class="n">SUBSCRIBE</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;datasources&quot;</span><span class="p">)</span>
-                    <span class="c1"># self.__socket.setsockopt(zmq.SUBSCRIBE, &quot;&quot;)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__socket</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__bindaddress</span><span class="p">)</span>
                 <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">True</span>
@@ -2845,7 +2868,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.82.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.83.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageSource</a></li> 
       </ul>
