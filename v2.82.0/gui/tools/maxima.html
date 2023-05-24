@@ -1,0 +1,154 @@
+
+
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maxima Tool &#8212; LaVue 2.82.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Parameters Tool" href="parameters.html" />
+    <link rel="prev" title="Q+ROI+Proj Tool" href="qroiproj.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parameters.html" title="Parameters Tool"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="qroiproj.html" title="Q+ROI+Proj Tool"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.82.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >GUI User Guide</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Specialized Tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Maxima Tool</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="maxima-tool">
+<span id="maxima"></span><h1>Maxima Tool<a class="headerlink" href="#maxima-tool" title="Permalink to this headline">¶</a></h1>
+<p><strong>Maxima Tool</strong> points pixels with the highest intensity</p>
+<div class="figure align-default">
+<img alt="../../_images/lavue_maxima.png" src="../../_images/lavue_maxima.png" />
+</div>
+<ul class="simple">
+<li><p><strong>Maxima:</strong> a list of pixels with the highest intensity, i.e  nr: intensity_value at (x, y)
+<br> A number of maxima to find can be selected in a spin-box on the right</p></li>
+<li><p><strong>Geometry:</strong> detector geometry parameters.  They can be pass in both ways via LavueController tango server</p></li>
+<li><p><strong>theta angles</strong> or <strong>q-space</strong>  selects the radial transformation</p></li>
+</ul>
+<p>The <strong>configuration</strong> of the tool can be set with a JSON dictionary passed in the  <code class="docutils literal notranslate"><span class="pre">--tool-configuration</span></code>  option in command line or a toolconfig variable of <code class="docutils literal notranslate"><span class="pre">LavueController.LavueState</span></code> with the following keys:</p>
+<p><code class="docutils literal notranslate"><span class="pre">maxima_number</span></code>  (integer), <code class="docutils literal notranslate"><span class="pre">current_maximum</span></code>  (integer), <code class="docutils literal notranslate"><span class="pre">units</span></code> (<code class="docutils literal notranslate"><span class="pre">angles</span></code>  or <code class="docutils literal notranslate"><span class="pre">q-spaces</span></code> string), <code class="docutils literal notranslate"><span class="pre">geometry</span></code> (string:float dictionary with the <code class="docutils literal notranslate"><span class="pre">centerx</span></code>, <code class="docutils literal notranslate"><span class="pre">centery</span></code>, <code class="docutils literal notranslate"><span class="pre">energy</span></code>, <code class="docutils literal notranslate"><span class="pre">pixelsizex</span></code>, <code class="docutils literal notranslate"><span class="pre">pixelsizey</span></code>, <code class="docutils literal notranslate"><span class="pre">detdistance</span></code> keywords)</p>
+<p>e.g.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">lavue -u maxima -s test --tool-configuration \{\&quot;maxima_number\&quot;:10,\&quot;units\&quot;:\&quot;angles\&quot;,\&quot;geometry\&quot;:\{\&quot;centerx\&quot;:123.4,\&quot;centery\&quot;:93.4,\&quot;pixelsizex\&quot;:70,\&quot;pixelsizey\&quot;:70.2,\&quot;energy\&quot;:5050,\&quot;detdistance\&quot;:50.5\}\} --start</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="qroiproj.html"
+                        title="previous chapter">Q+ROI+Proj Tool</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parameters.html"
+                        title="next chapter">Parameters Tool</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v2.82.0/index.html">v2.82.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.81.0/index.html">v2.81.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.80.1/index.html">v2.80.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.80.0/index.html">v2.80.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.79.0/index.html">v2.79.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.76.0/index.html">v2.76.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.75.3/index.html">v2.75.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.75.1/index.html">v2.75.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.74.0/index.html">v2.74.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.73.0/index.html">v2.73.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.72.0/index.html">v2.72.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.71.1/index.html">v2.71.1</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parameters.html" title="Parameters Tool"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="qroiproj.html" title="Q+ROI+Proj Tool"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.82.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >GUI User Guide</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Specialized Tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Maxima Tool</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+
+GNU GENERAL PUBLIC LICENSE, version 2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>
