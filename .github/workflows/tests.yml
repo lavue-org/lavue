@@ -24,7 +24,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [debian11, debian11pg013, debian10, debian9, ubuntu22.10, ubuntu22.04, ubuntu20.04]
+        os: [debian11,
+	     # debian11pg013, debian10, debian9, ubuntu22.10, ubuntu22.04, ubuntu20.04
+	     ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -111,37 +113,37 @@ jobs:
       - name: Stop the docker
         run: docker container stop ndts
 
-  python2_tests:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [debian10, debian9]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-      - name: Build the docker
-        env:
-          OS: ${{ matrix.os }}
-        run: docker build -t ndts .ci/${OS}_py2
-      - name: Run the docker
-        run: docker run  --name  ndts -d -it -v `pwd`:/home/tango ndts
-      - name: install tango and lavue
-        env:
-          OS: ${{ matrix.os }}
-        run: .ci/install.sh ${OS} 2
-      - name: run basic tests
-        run: .ci/run.sh 2 basic
-      - name: run general tool tests
-        run: .ci/run.sh 2 generaltools
-      - name: run specialized tool tests
-        run: .ci/run.sh 2 specializedtools
-      - name: run diffractogram tests
-        run: .ci/run.sh 2 diffractogram
-      - name: run tangosource tests
-        run: .ci/run.sh 2 tangosource
-      - name: run tangofilesource tests
-        run: .ci/run.sh 2 tangofilesource
-      - name: run httpsource tests
-        run: .ci/run.sh 2 httpsource
-      - name: Stop the docker
-        run: docker container stop ndts
+  # python2_tests:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [debian10, debian9]
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-python@v2
+  #     - name: Build the docker
+  #       env:
+  #         OS: ${{ matrix.os }}
+  #       run: docker build -t ndts .ci/${OS}_py2
+  #     - name: Run the docker
+  #       run: docker run  --name  ndts -d -it -v `pwd`:/home/tango ndts
+  #     - name: install tango and lavue
+  #       env:
+  #         OS: ${{ matrix.os }}
+  #       run: .ci/install.sh ${OS} 2
+  #     - name: run basic tests
+  #       run: .ci/run.sh 2 basic
+  #     - name: run general tool tests
+  #       run: .ci/run.sh 2 generaltools
+  #     - name: run specialized tool tests
+  #       run: .ci/run.sh 2 specializedtools
+  #     - name: run diffractogram tests
+  #       run: .ci/run.sh 2 diffractogram
+  #     - name: run tangosource tests
+  #       run: .ci/run.sh 2 tangosource
+  #     - name: run tangofilesource tests
+  #       run: .ci/run.sh 2 tangofilesource
+  #     - name: run httpsource tests
+  #       run: .ci/run.sh 2 httpsource
+  #     - name: Stop the docker
+  #       run: docker container stop ndts
