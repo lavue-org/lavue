@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.sourceWidget &#8212; LaVue 2.81.0 documentation</title>
+    <title>lavuelib.sourceWidget &#8212; LaVue 2.83.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.81.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.83.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.sourceWidget</a></li> 
       </ul>
@@ -2305,7 +2305,11 @@
             <span class="n">hosturl</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">_</span><span class="p">,</span> <span class="n">sport</span> <span class="o">=</span> <span class="n">hosturl</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__zmqcolon</span><span class="p">:</span>
+                    <span class="n">_</span><span class="p">,</span> <span class="n">sport</span> <span class="o">=</span> <span class="n">hosturl</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_</span><span class="p">,</span> <span class="n">sport</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">hosturl</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[:</span><span class="mi">2</span><span class="p">])</span>
+
                 <span class="n">port</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sport</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">port</span> <span class="o">&gt;</span> <span class="mi">65535</span> <span class="ow">or</span> <span class="n">port</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Wrong port&quot;</span><span class="p">)</span>
@@ -2313,12 +2317,20 @@
                     <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pickleTopicComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
                     <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;**ALL**&quot;</span><span class="p">:</span>
                         <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                    <span class="n">shost</span> <span class="o">=</span> <span class="n">hosturl</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shost</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
-                        <span class="n">shost</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__zmqcolon</span><span class="p">:</span>
+                        <span class="n">shost</span> <span class="o">=</span> <span class="n">hosturl</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shost</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">shost</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">shost</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+                        <span class="n">hosturl</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">shost</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">shost</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
-                    <span class="n">hosturl</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">shost</span><span class="p">)</span>
+                        <span class="n">shost</span> <span class="o">=</span> <span class="n">hosturl</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shost</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                            <span class="n">shost</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">shost</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+                        <span class="n">hosturl</span> <span class="o">=</span> <span class="s2">&quot;:&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">shost</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="n">hosturl</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">return</span> <span class="n">hosturl</span></div>
@@ -2339,6 +2351,7 @@
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">zmqtopics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">autozmqtopics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">datasources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disconnect</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">zmqservers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">zmqcolon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update source input parameters</span>
 
@@ -2353,6 +2366,8 @@
 <span class="sd">        :param zmqservers: json dictionary with</span>
 <span class="sd">                           (label, zmq servers) items</span>
 <span class="sd">        :type zmqservers: :obj:`str`</span>
+<span class="sd">        :param zmqcolon: zmq colon configuation separator</span>
+<span class="sd">        :type zmqcolon: :obj:`bool`</span>
 <span class="sd">        :param kargs:  source widget input parameter dictionary</span>
 <span class="sd">        :type kargs: :obj:`dict` &lt; :obj:`str`, :obj:`any`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2376,6 +2391,8 @@
             <span class="n">updatecombo</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="n">autozmqtopics</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__autozmqtopics</span> <span class="o">=</span> <span class="n">autozmqtopics</span>
+        <span class="k">if</span> <span class="n">zmqcolon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__zmqcolon</span> <span class="o">=</span> <span class="n">zmqcolon</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__autozmqtopics</span><span class="p">:</span>
             <span class="n">updatecombo</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
@@ -2439,13 +2456,24 @@
 <span class="sd">        :param configuration: configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">cnflst</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
-        <span class="n">srvcnf</span> <span class="o">=</span> <span class="n">cnflst</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">cnflst</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
-        <span class="n">topiccnf</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnflst</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">topiccnf</span> <span class="o">=</span> <span class="n">cnflst</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">topiccnf</span><span class="p">:</span>
-                <span class="n">topiccnf</span> <span class="o">=</span> <span class="s2">&quot;**ALL**&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__zmqcolon</span><span class="p">:</span>
+            <span class="n">cnflst</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="n">srvcnf</span> <span class="o">=</span> <span class="n">cnflst</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">cnflst</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">topiccnf</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnflst</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">topiccnf</span> <span class="o">=</span> <span class="n">cnflst</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">topiccnf</span><span class="p">:</span>
+                    <span class="n">topiccnf</span> <span class="o">=</span> <span class="s2">&quot;**ALL**&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cnflst</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="n">topiccnf</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">srvcnf</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">cnflst</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnflst</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">srvcnf</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">cnflst</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnflst</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">topiccnf</span> <span class="o">=</span> <span class="n">cnflst</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">topiccnf</span><span class="p">:</span>
+                        <span class="n">topiccnf</span> <span class="o">=</span> <span class="s2">&quot;**ALL**&quot;</span>
 
         <span class="n">iid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pickleComboBox</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">srvcnf</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">iid</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
@@ -2661,6 +2689,8 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.83.0/index.html">v2.83.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.82.0/index.html">v2.82.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.81.0/index.html">v2.81.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.80.1/index.html">v2.80.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.80.0/index.html">v2.80.0</a></li>
@@ -2692,7 +2722,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.81.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.83.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.sourceWidget</a></li> 
       </ul>

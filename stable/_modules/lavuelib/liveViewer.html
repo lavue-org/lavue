@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.liveViewer &#8212; LaVue 2.81.0 documentation</title>
+    <title>lavuelib.liveViewer &#8212; LaVue 2.83.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.81.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.83.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.liveViewer</a></li> 
       </ul>
@@ -840,7 +840,7 @@
         <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datasources</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__exchangelists</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataFetchThread</span><span class="o">.</span><span class="n">ExchangeList</span><span class="p">())</span>
 
-        <span class="c1">#: (:class:`lavuelib.dataFetchTread.DataFetchThread`)</span>
+        <span class="c1">#: (:class:`lavuelib.dataFetchTread.DataFechThread`)</span>
         <span class="c1">#:    data fetch thread</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dataFetchers</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__datasources</span><span class="p">):</span>
@@ -918,7 +918,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateframeview</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">__updateframeratetip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshrate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updateframeratetip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshtime</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setExtensionsRefreshTime</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">toolrefreshtime</span><span class="p">)</span>
 
@@ -1364,6 +1364,7 @@
             <span class="n">serverdict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;pool&quot;</span><span class="p">:</span> <span class="p">[]}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__sourcewg</span><span class="o">.</span><span class="n">updateMetaData</span><span class="p">(</span>
             <span class="n">zmqtopics</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">zmqtopics</span><span class="p">,</span>
+            <span class="n">zmqcolon</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">zmqcolon</span><span class="p">,</span>
             <span class="n">dirtrans</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">dirtrans</span><span class="p">,</span>
             <span class="n">tangoattrs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">tangoattrs</span><span class="p">,</span>
             <span class="n">tangoevattrs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">tangoevattrs</span><span class="p">,</span>
@@ -1812,7 +1813,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_assessTransformation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__trafoname</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__datasources</span><span class="p">):</span>
             <span class="n">ds</span><span class="o">.</span><span class="n">setTimeOut</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
-        <span class="n">dataFetchThread</span><span class="o">.</span><span class="n">GLOBALREFRESHRATE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshrate</span>
+        <span class="n">dataFetchThread</span><span class="o">.</span><span class="n">GLOBALREFRESHTIME</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshtime</span>
+        <span class="n">dataFetchThread</span><span class="o">.</span><span class="n">GLOBALAUTOREFRESHTIME</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">autorefreshtime</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setStatsWOScaling</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">statswoscaling</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setColors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">roiscolors</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setOverflowColor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">overflowcolor</span><span class="p">)</span>
@@ -1884,7 +1887,7 @@
             <span class="s2">&quot;Layout/DialogGeometry&quot;</span><span class="p">,</span>
             <span class="n">QtCore</span><span class="o">.</span><span class="n">QByteArray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">saveGeometry</span><span class="p">()))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshrate</span> <span class="o">=</span> <span class="n">dataFetchThread</span><span class="o">.</span><span class="n">GLOBALREFRESHRATE</span>
+        <span class="c1"># self.__settings.refreshtime = dataFetchThread.GLOBALREFRESHTIME</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sardana</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sardana</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
 
@@ -2364,10 +2367,13 @@
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">gradientcolors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">gradientcolors</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">floattype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">floattype</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">secstream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">secstream</span>
+        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">zmqcolon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">zmqcolon</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">zeromask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">zeromask</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">nanmask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">nanmask</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">negmask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">negmask</span>
-        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">refreshrate</span> <span class="o">=</span> <span class="n">dataFetchThread</span><span class="o">.</span><span class="n">GLOBALREFRESHRATE</span>
+        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">refreshtime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshtime</span>
+        <span class="c1"># cnfdlg.refreshtime = dataFetchThread.GLOBALREFRESHTIME</span>
+        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">autorefreshtime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">autorefreshtime</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">toolrefreshtime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">toolrefreshtime</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">toolpollinginterval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">toolpollinginterval</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">timeout</span>
@@ -2539,11 +2545,13 @@
                 <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__tlaliasnames</span><span class="p">[</span><span class="n">twn</span><span class="p">]</span>
                  <span class="k">for</span> <span class="n">twn</span> <span class="ow">in</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">toolwidgets</span><span class="p">)],</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">currentTool</span><span class="p">())</span>
-        <span class="n">dataFetchThread</span><span class="o">.</span><span class="n">GLOBALREFRESHRATE</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">refreshrate</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshrate</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">refreshrate</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshrate</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">refreshrate</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__updateframeratetip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshrate</span><span class="p">)</span>
+        <span class="n">dataFetchThread</span><span class="o">.</span><span class="n">GLOBALREFRESHTIME</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">refreshtime</span>
+        <span class="n">dataFetchThread</span><span class="o">.</span><span class="n">GLOBALAUTOREFRESHTIME</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">autorefreshtime</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshtime</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">refreshtime</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshtime</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">refreshtime</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__updateframeratetip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshtime</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">autorefreshtime</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">autorefreshtime</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">autorefreshtime</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">autorefreshtime</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">toolrefreshtime</span> <span class="o">!=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">toolrefreshtime</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">toolrefreshtime</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">toolrefreshtime</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setExtensionsRefreshTime</span><span class="p">(</span>
@@ -2582,6 +2590,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">__sourcewg</span><span class="o">.</span><span class="n">connectSuccess</span><span class="p">(</span><span class="n">dialog</span><span class="o">.</span><span class="n">secport</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">secautoport</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">secautoport</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">secport</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">secport</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">zmqcolon</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">zmqcolon</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">timeout</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__datasources</span><span class="p">):</span>
             <span class="n">ds</span><span class="o">.</span><span class="n">setTimeOut</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
@@ -2982,6 +2991,8 @@
                     <span class="n">ds</span><span class="o">.</span><span class="n">setConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sourceconfiguration</span><span class="p">[</span><span class="n">sid</span><span class="p">])</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__sourcewg</span><span class="o">.</span><span class="n">updateSourceMetaData</span><span class="p">(</span>
                         <span class="n">sid</span><span class="p">,</span> <span class="o">**</span><span class="n">ds</span><span class="o">.</span><span class="n">getMetaData</span><span class="p">())</span>
+        <span class="n">dataFetchThread</span><span class="o">.</span><span class="n">GLOBALREFRESHTIME</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshtime</span>
+        <span class="n">dataFetchThread</span><span class="o">.</span><span class="n">GLOBALAUTOREFRESHTIME</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">autorefreshtime</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_stateUpdated</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">status</span><span class="p">))</span>
 
     <span class="nd">@debugmethod</span>
@@ -3352,7 +3363,7 @@
                 <span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="k">while</span> <span class="p">(</span><span class="ow">not</span> <span class="n">df</span><span class="o">.</span><span class="n">fetching</span><span class="p">()</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcewg</span><span class="o">.</span><span class="n">isConnected</span><span class="p">()</span>
                        <span class="ow">and</span> <span class="n">cnt</span> <span class="o">&lt;</span> <span class="mi">100</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">name</span><span class="p">):</span>
-                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshrate</span><span class="o">/</span><span class="mf">100.</span><span class="p">)</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshtime</span><span class="o">/</span><span class="mf">100.</span><span class="p">)</span>
                     <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="k">if</span> <span class="n">cnt</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
                     <span class="c1"># print(&quot;READ&quot;, i, time.time())</span>
@@ -3570,8 +3581,8 @@
                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgb</span><span class="p">():</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">setrgb</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">showGradient</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-                        <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
-                            <span class="n">np</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
+                        <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+                            <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
                                 <span class="s1">&#39;ignore&#39;</span><span class="p">,</span>
                                 <span class="sa">r</span><span class="s1">&#39;Mean of empty slice&#39;</span><span class="p">)</span>
                             <span class="k">if</span> <span class="s2">&quot;skipfirst&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mdata</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
@@ -3754,8 +3765,8 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span><span class="p">,</span>
                         <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">floattype</span><span class="p">)</span>
-                    <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
-                        <span class="n">np</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
+                    <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
                             <span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;invalid value encountered in greater&#39;</span><span class="p">)</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setMaskValueIndices</span><span class="p">(</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">&gt;</span> <span class="n">maskvalue</span><span class="p">)</span>
@@ -3782,8 +3793,8 @@
            <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">overflowvalue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">overflowValue</span><span class="p">()</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
+                <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
                         <span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;invalid value encountered in greater&#39;</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setOverflowValueIndices</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__displayimage</span> <span class="o">&gt;</span> <span class="n">overflowvalue</span><span class="p">)</span>
@@ -4612,6 +4623,8 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.83.0/index.html">v2.83.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.82.0/index.html">v2.82.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.81.0/index.html">v2.81.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.80.1/index.html">v2.80.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.80.0/index.html">v2.80.0</a></li>
@@ -4643,7 +4656,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.81.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.83.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.liveViewer</a></li> 
       </ul>
