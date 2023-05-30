@@ -15,7 +15,6 @@ The first tab of the configuration dialog contains **General Settings**. It is d
 *    **Interrupt on source errors:** stops live image viewing on image source errors
 *    **Display specific for a source:** store/retrieve display parameters for an each image source separately
 *    **Source timeout in ms:** maximal time in milliseconds to wait for a response , e.g. from  Hidra or HTTP image sources
-*    **ZMQ colon conf. separator:** use ":" character to separate topic and HWM in the ZMQ configuration string i.e.  host:port[:topic[:HWM]]  ZMQ configuration syntax instead of host:port[/topic[/HWM]]
 
 **Statistics and 1d plots**
 

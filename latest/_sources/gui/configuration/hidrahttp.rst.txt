@@ -22,6 +22,7 @@ It allows for the user to adjust image sources and their dialogs.
 *    **Servers and Ports:** `JSON <https://www.json.org/json-en.html>`_ dictionary assigning labels to server and port of ZMQ stream
 *    **Automatic datasources:** selects possible datasources from ZMQ stream metadata
 *    **Datasources:** defines possible datasources, i.e. ZMQ topics, separated by spaces
+*    **Colon conf. separator:** use ":" character to separate topic and HWM in the ZMQ configuration string i.e.  host:port[:topic[:HWM]]  ZMQ configuration syntax instead of host:port[/topic[/HWM]]
 
 **ASAPO**
 
