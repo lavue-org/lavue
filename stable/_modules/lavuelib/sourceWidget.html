@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.sourceWidget &#8212; LaVue 2.83.3 documentation</title>
+    <title>lavuelib.sourceWidget &#8212; LaVue 2.83.4 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.83.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.83.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.sourceWidget</a></li> 
       </ul>
@@ -2225,6 +2225,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__zmqtopics</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1">#: (:obj:`bool`) automatic zmq topics enabled</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__autozmqtopics</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`)  zmq colon enabled</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__zmqcolon</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) dictionary with</span>
         <span class="c1">#:                     (label, server:port) items</span>
@@ -2486,6 +2488,8 @@
             <span class="k">if</span> <span class="n">iid</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pickleTopicComboBox</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">topiccnf</span><span class="p">)</span>
                 <span class="n">iid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pickleTopicComboBox</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="n">topiccnf</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">topiccnf</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__zmqtopics</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__zmqtopics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">topiccnf</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pickleTopicComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">iid</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ZMQSourceWidget.label"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.ZMQSourceWidget.label">[docs]</a>    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2689,6 +2693,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.83.4/index.html">v2.83.4</a></li>
       <li><a class="reference external" href="../../index/../../v2.83.3/index.html">v2.83.3</a></li>
       <li><a class="reference external" href="../../index/../../v2.83.2/index.html">v2.83.2</a></li>
       <li><a class="reference external" href="../../index/../../v2.83.1/index.html">v2.83.1</a></li>
@@ -2725,7 +2730,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.83.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.83.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.sourceWidget</a></li> 
       </ul>
