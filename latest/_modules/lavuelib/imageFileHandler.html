@@ -2,18 +2,20 @@
 
 <!doctype html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>lavuelib.imageFileHandler &#8212; LaVue (latest) documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -118,11 +120,11 @@
 
 <div class="viewcode-block" id="NexusFieldHandler"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageFileHandler.NexusFieldHandler">[docs]</a><span class="k">class</span> <span class="nc">NexusFieldHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot;Nexus file handler class.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Nexus file handler class.</span>
 <span class="sd">       Reads image from file and returns the numpy array.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param fname: file name</span>
 <span class="sd">        :type fname: :obj:`str`</span>
@@ -173,7 +175,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fl</span><span class="o">.</span><span class="n">root</span><span class="p">()</span>
 
 <div class="viewcode-block" id="NexusFieldHandler.frombuffer"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageFileHandler.NexusFieldHandler.frombuffer">[docs]</a>    <span class="k">def</span> <span class="nf">frombuffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">membuffer</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param membuffer: memory buffer</span>
 <span class="sd">        :type membuffer: :obj:`bytes` or :obj:`io.BytesIO`</span>
@@ -218,7 +220,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fl</span><span class="o">.</span><span class="n">root</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NexusFieldHandler.findImageFields"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageFileHandler.NexusFieldHandler.findImageFields">[docs]</a>    <span class="k">def</span> <span class="nf">findImageFields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides a dictionary with of all image fields</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides a dictionary with of all image fields</span>
 
 <span class="sd">        :returns: dictionary of the field names and the field objects</span>
 <span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`,  :obj:`dict` &lt;:obj:`str`, :obj:`any`&gt;&gt;</span>
@@ -231,7 +233,7 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__getpath</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; converts full_path with NX_classes into nexus_path</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; converts full_path with NX_classes into nexus_path</span>
 
 <span class="sd">        :param path: nexus full_path</span>
 <span class="sd">        :type path: :obj:`str`</span>
@@ -242,7 +244,7 @@
              <span class="k">for</span> <span class="n">dr</span> <span class="ow">in</span> <span class="n">spath</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">__addimage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">tgpath</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;adds the node into the description list</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;adds the node into the description list</span>
 
 <span class="sd">        :param node: nexus node</span>
 <span class="sd">        :type node: :class:`lavuelib.filewriter.FTField` or \</span>
@@ -272,7 +274,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__fields</span><span class="p">[</span><span class="n">desc</span><span class="p">[</span><span class="s2">&quot;nexus_path&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">desc</span>
 
     <span class="k">def</span> <span class="nf">__parseimages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">tgpath</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;parses the node and add it into the description list</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;parses the node and add it into the description list</span>
 
 <span class="sd">        :param node: nexus node</span>
 <span class="sd">        :type node: :class:`lavuelib.filewriter.FTField` or \</span>
@@ -297,7 +299,7 @@
                 <span class="k">pass</span>
 
 <div class="viewcode-block" id="NexusFieldHandler.getNode"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageFileHandler.NexusFieldHandler.getNode">[docs]</a>    <span class="k">def</span> <span class="nf">getNode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get node</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; get node</span>
 <span class="sd">        :param field: field path</span>
 <span class="sd">        :type field: :obj:`str`</span>
 <span class="sd">        :returns: nexus field node</span>
@@ -316,7 +318,7 @@
 
 <div class="viewcode-block" id="NexusFieldHandler.getFrameCount"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageFileHandler.NexusFieldHandler.getFrameCount">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getFrameCount</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">growing</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides the last frame number</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the last frame number</span>
 
 <span class="sd">        :param node: nexus field node</span>
 <span class="sd">        :type node: :class:`lavuelib.filewriter.FTField`</span>
@@ -338,7 +340,7 @@
 
 <div class="viewcode-block" id="NexusFieldHandler.getMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageFileHandler.NexusFieldHandler.getMetaData">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getMetaData</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">mdata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxrec</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;  provides the image metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;  provides the image metadata</span>
 
 <span class="sd">        :returns: JSON dictionary with image metadata</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -417,7 +419,7 @@
 
 <div class="viewcode-block" id="NexusFieldHandler.getImage"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageFileHandler.NexusFieldHandler.getImage">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getImage</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">frame</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">growing</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;parses the field and add it into the description list</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;parses the field and add it into the description list</span>
 
 <span class="sd">        :param node: nexus field node</span>
 <span class="sd">        :type node: :class:`lavuelib.filewriter.FTField`</span>
@@ -466,11 +468,11 @@
 
 <div class="viewcode-block" id="ImageFileHandler"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageFileHandler.ImageFileHandler">[docs]</a><span class="k">class</span> <span class="nc">ImageFileHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot;Simple file handler class.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple file handler class.</span>
 <span class="sd">       Reads image from file and returns the numpy array.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param fname: file name</span>
 <span class="sd">        :type fname: :obj:`str`</span>
@@ -515,7 +517,7 @@
                     <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 
 <div class="viewcode-block" id="ImageFileHandler.getImage"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageFileHandler.ImageFileHandler.getImage">[docs]</a>    <span class="k">def</span> <span class="nf">getImage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;  provides the image data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;  provides the image data</span>
 
 <span class="sd">        :returns: image data</span>
 <span class="sd">        :rtype: :class:`numpy.ndarray`</span>
@@ -523,7 +525,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span></div>
 
 <div class="viewcode-block" id="ImageFileHandler.getMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageFileHandler.ImageFileHandler.getMetaData">[docs]</a>    <span class="k">def</span> <span class="nf">getMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;  provides the image metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;  provides the image metadata</span>
 
 <span class="sd">        :returns: JSON dictionary with image metadata</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -533,11 +535,11 @@
 
 <div class="viewcode-block" id="CBFLoader"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageFileHandler.CBFLoader">[docs]</a><span class="k">class</span> <span class="nc">CBFLoader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; CBF loader &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; CBF loader &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="CBFLoader.metadata"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageFileHandler.CBFLoader.metadata">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">metadata</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">flbuffer</span><span class="p">,</span> <span class="n">premeta</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; extract header_contents from CBF file image data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; extract header_contents from CBF file image data</span>
 
 <span class="sd">        :param flbuffer: numpy array with CBF file image data</span>
 <span class="sd">        :type flbuffer: :class:`numpy.ndarray` or :obj:`str`</span>
@@ -652,7 +654,7 @@
 
 <div class="viewcode-block" id="CBFLoader.load"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageFileHandler.CBFLoader.load">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">flbuffer</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; loads CBF file image data into numpy array</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; loads CBF file image data into numpy array</span>
 
 <span class="sd">        :param flbuffer: numpy array with CBF file image data</span>
 <span class="sd">        :type flbuffer: :class:`numpy.ndarray`</span>
@@ -757,7 +759,7 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_decompress_cbf_c</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; decompresses CBF</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; decompresses CBF</span>
 
 <span class="sd">        :param stream: a part of cbf data</span>
 <span class="sd">        :type stream: :class:`numpy.ndarray`</span>
@@ -851,11 +853,11 @@
 
 <div class="viewcode-block" id="TIFLoader"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageFileHandler.TIFLoader">[docs]</a><span class="k">class</span> <span class="nc">TIFLoader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; TIF loader &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; TIF loader &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="TIFLoader.load"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageFileHandler.TIFLoader.load">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">flbuffer</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; loads TIF file image data into numpy array</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; loads TIF file image data into numpy array</span>
 
 <span class="sd">        :param flbuffer: numpy array with TIF file image data</span>
 <span class="sd">        :type flbuffer: :class:`numpy.ndarray`</span>
@@ -1055,12 +1057,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><p>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
   <h3 class='versions'>Versions</h3>
   <p>
     <ul>
@@ -1113,7 +1115,7 @@
         &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

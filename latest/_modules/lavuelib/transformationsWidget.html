@@ -2,18 +2,20 @@
 
 <!doctype html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>lavuelib.transformationsWidget &#8212; LaVue (latest) documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -86,7 +88,7 @@
 
 
 <div class="viewcode-block" id="TransformationsWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.transformationsWidget.TransformationsWidget">[docs]</a><span class="k">class</span> <span class="nc">TransformationsWidget</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Select how an image should be transformed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -94,7 +96,7 @@
     <span class="n">transformationChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
@@ -114,7 +116,7 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_onTransformationChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates transformation according to the index</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates transformation according to the index</span>
 
 <span class="sd">        :param state: transformation index</span>
 <span class="sd">        :type state: :obj:`int`</span>
@@ -123,7 +125,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">comboBox</span><span class="o">.</span><span class="n">itemText</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
 
 <div class="viewcode-block" id="TransformationsWidget.setEnable"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.transformationsWidget.TransformationsWidget.setEnable">[docs]</a>    <span class="k">def</span> <span class="nf">setEnable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flag</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disables or enables the combobox</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disables or enables the combobox</span>
 
 <span class="sd">        :param flag: combobox to be enabled</span>
 <span class="sd">        :type flag: :obj:`bool`</span>
@@ -133,7 +135,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">comboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TransformationsWidget.transformation"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.transformationsWidget.TransformationsWidget.transformation">[docs]</a>    <span class="k">def</span> <span class="nf">transformation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides transformation name</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides transformation name</span>
 
 <span class="sd">        :returns: transfromation name</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -145,7 +147,7 @@
             <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="TransformationsWidget.setTransformation"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.transformationsWidget.TransformationsWidget.setTransformation">[docs]</a>    <span class="k">def</span> <span class="nf">setTransformation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tname</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets transformation from the string</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets transformation from the string</span>
 
 <span class="sd">        :param tname: transfromation name</span>
 <span class="sd">        :type tname: :obj:`str`</span>
@@ -157,7 +159,7 @@
             <span class="c1">#                self.__ui.comboBox.itemText(tid))</span>
 
 <div class="viewcode-block" id="TransformationsWidget.setKeepCoordsLabel"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.transformationsWidget.TransformationsWidget.setKeepCoordsLabel">[docs]</a>    <span class="k">def</span> <span class="nf">setKeepCoordsLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flag</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets keep original coordinates label according to flag</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets keep original coordinates label according to flag</span>
 
 <span class="sd">        :param flag: keep original coordinates flag</span>
 <span class="sd">        :type flag: :obj:`bool`</span>
@@ -184,12 +186,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><p>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
   <h3 class='versions'>Versions</h3>
   <p>
     <ul>
@@ -242,7 +244,7 @@
         &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

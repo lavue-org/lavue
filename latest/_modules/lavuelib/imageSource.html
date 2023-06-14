@@ -2,18 +2,20 @@
 
 <!doctype html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>lavuelib.imageSource &#8212; LaVue (latest) documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -227,7 +229,7 @@
 
 
 <div class="viewcode-block" id="getLevel"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.getLevel">[docs]</a><span class="k">def</span> <span class="nf">getLevel</span><span class="p">(</span><span class="n">elevel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; get log level in string</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; get log level in string</span>
 
 <span class="sd">    :param elevel: effective log level</span>
 <span class="sd">    :type elevel: :obj:`int`</span>
@@ -251,7 +253,7 @@
 
 
 <div class="viewcode-block" id="tobytes"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.tobytes">[docs]</a><span class="k">def</span> <span class="nf">tobytes</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; decode str to bytes</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; decode str to bytes</span>
 
 <span class="sd">    :param x: string</span>
 <span class="sd">    :type x: :obj:`str`</span>
@@ -267,7 +269,7 @@
 
 
 <div class="viewcode-block" id="currenttime"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.currenttime">[docs]</a><span class="k">def</span> <span class="nf">currenttime</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot; provides current time in iso format</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; provides current time in iso format</span>
 
 <span class="sd">    :returns:  current time in iso format</span>
 <span class="sd">    :rtype: :obj:`str`</span>
@@ -286,7 +288,7 @@
 
 
 <div class="viewcode-block" id="tostr"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.tostr">[docs]</a><span class="k">def</span> <span class="nf">tostr</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; decode bytes to str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; decode bytes to str</span>
 
 <span class="sd">    :param x: string</span>
 <span class="sd">    :type x: :obj:`bytes`</span>
@@ -303,11 +305,11 @@
 
 <div class="viewcode-block" id="BaseSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.BaseSource">[docs]</a><span class="k">class</span> <span class="nc">BaseSource</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; source base class&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; source base class&quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param timeout: timeout for setting connection in ms</span>
 <span class="sd">        :type timeout: :obj:`int`</span>
@@ -328,7 +330,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__isize</span> <span class="o">=</span> <span class="mi">11</span>
 
 <div class="viewcode-block" id="BaseSource.getMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.BaseSource.getMetaData">[docs]</a>    <span class="k">def</span> <span class="nf">getMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; get metadata</span>
 
 <span class="sd">        :returns: dictionary with metadata</span>
 <span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, :obj:`any`&gt;</span>
@@ -337,7 +339,7 @@
 
 <div class="viewcode-block" id="BaseSource.setConfiguration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.BaseSource.setConfiguration">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration</span>
 
 <span class="sd">        :param configuration:  configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
@@ -348,7 +350,7 @@
 
 <div class="viewcode-block" id="BaseSource.setTimeOut"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.BaseSource.setTimeOut">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setTimeOut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set timeout</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set timeout</span>
 
 <span class="sd">        :param timeout: timeout in ms</span>
 <span class="sd">        :type timeout: :obj:`int`</span>
@@ -357,7 +359,7 @@
 
 <div class="viewcode-block" id="BaseSource.getData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.BaseSource.getData">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
 
 <span class="sd">        :returns:  image name, image data, json dictionary with metadata</span>
 <span class="sd">        :rtype: (:obj:`str` , :class:`numpy.ndarray` , :obj:`str`)</span>
@@ -376,7 +378,7 @@
 
 <div class="viewcode-block" id="BaseSource.connect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.BaseSource.connect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_initiated</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">=</span> <span class="mi">0</span>
@@ -385,7 +387,7 @@
 
 <div class="viewcode-block" id="BaseSource.disconnect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.BaseSource.disconnect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">pass</span>
@@ -394,7 +396,7 @@
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">_updaterror</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates error  message</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates error  message</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">import</span> <span class="nn">traceback</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">errormessage</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span></div>
@@ -402,12 +404,12 @@
 
 <div class="viewcode-block" id="FixTestSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.FixTestSource">[docs]</a><span class="k">class</span> <span class="nc">FixTestSource</span><span class="p">(</span><span class="n">BaseSource</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; image source as Tango attributes describing</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; image source as Tango attributes describing</span>
 <span class="sd">        an image file name and its directory&quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param timeout: timeout for setting connection in ms</span>
 <span class="sd">        :type timeout: :obj:`int`</span>
@@ -430,7 +432,7 @@
 
 <div class="viewcode-block" id="FixTestSource.getData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.FixTestSource.getData">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
 
 <span class="sd">        :returns:  image name, image data, json dictionary with metadata</span>
 <span class="sd">        :rtype: (:obj:`str` , :class:`numpy.ndarray` , :obj:`str`)</span>
@@ -441,7 +443,7 @@
 
 <div class="viewcode-block" id="FixTestSource.connect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.FixTestSource.connect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_initiated</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">=</span> <span class="mi">0</span>
@@ -449,7 +451,7 @@
 
 <div class="viewcode-block" id="FixTestSource.disconnect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.FixTestSource.disconnect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">pass</span>
@@ -459,12 +461,12 @@
 
 <div class="viewcode-block" id="NXSFileSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.NXSFileSource">[docs]</a><span class="k">class</span> <span class="nc">NXSFileSource</span><span class="p">(</span><span class="n">BaseSource</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; image source as Tango attributes describing</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; image source as Tango attributes describing</span>
 <span class="sd">        an image file name and its directory&quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param timeout: timeout for setting connection in ms</span>
 <span class="sd">        :type timeout: :obj:`int`</span>
@@ -493,7 +495,7 @@
 
 <div class="viewcode-block" id="NXSFileSource.setConfiguration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.NXSFileSource.setConfiguration">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration</span>
 
 <span class="sd">        :param configuration:  configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
@@ -511,7 +513,7 @@
 
 <div class="viewcode-block" id="NXSFileSource.getData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.NXSFileSource.getData">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
 
 <span class="sd">        :returns:  image name, image data, json dictionary with metadata</span>
 <span class="sd">        :rtype: (:obj:`str` , :class:`numpy.ndarray` , :obj:`str`)</span>
@@ -579,7 +581,7 @@
 
 <div class="viewcode-block" id="NXSFileSource.connect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.NXSFileSource.connect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__handler</span> <span class="o">=</span> <span class="kc">None</span>
@@ -614,7 +616,7 @@
 
 <div class="viewcode-block" id="NXSFileSource.disconnect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.NXSFileSource.disconnect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__handler</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__node</span> <span class="o">=</span> <span class="kc">None</span></div></div>
@@ -622,12 +624,12 @@
 
 <div class="viewcode-block" id="TangoFileSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TangoFileSource">[docs]</a><span class="k">class</span> <span class="nc">TangoFileSource</span><span class="p">(</span><span class="n">BaseSource</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; image source as Tango attributes describing</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; image source as Tango attributes describing</span>
 <span class="sd">        an image file name and its directory&quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param timeout: timeout for setting connection in ms</span>
 <span class="sd">        :type timeout: :obj:`int`</span>
@@ -667,7 +669,7 @@
 
 <div class="viewcode-block" id="TangoFileSource.getData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TangoFileSource.getData">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
 
 <span class="sd">        :returns:  image name, image data, json dictionary with metadata</span>
 <span class="sd">        :rtype: (:obj:`str` , :class:`numpy.ndarray` , :obj:`str`)</span>
@@ -802,7 +804,7 @@
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
 
     <span class="k">def</span> <span class="nf">__resetnexus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; resets nexus variables&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; resets nexus variables&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nxsfile</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nxsfield</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__gdim</span> <span class="o">=</span> <span class="mi">0</span>
@@ -815,7 +817,7 @@
 
 <div class="viewcode-block" id="TangoFileSource.connect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TangoFileSource.connect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__resetnexus</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
@@ -845,19 +847,19 @@
 
 <div class="viewcode-block" id="TangoFileSource.disconnect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TangoFileSource.disconnect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__resetnexus</span><span class="p">()</span></div></div>
 
 
 <div class="viewcode-block" id="VDEOdecoder"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.VDEOdecoder">[docs]</a><span class="k">class</span> <span class="nc">VDEOdecoder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; VIDEO IMAGE LIMA decoder</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; VIDEO IMAGE LIMA decoder</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :brief: It clears the local variables</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -883,7 +885,7 @@
 
     <span class="c1"># @debugmethod</span>
 <div class="viewcode-block" id="VDEOdecoder.load"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.VDEOdecoder.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;  loads encoded data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;  loads encoded data</span>
 
 <span class="sd">        :param data: encoded data</span>
 <span class="sd">        :type data: [:obj:`str`, :obj:`str`]</span>
@@ -897,7 +899,7 @@
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">_loadHeader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">headerData</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; loads the image header</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; loads the image header</span>
 
 <span class="sd">        :param headerData: buffer with header data</span>
 <span class="sd">        :type headerData: :obj:`str`</span>
@@ -918,7 +920,7 @@
 
 <div class="viewcode-block" id="VDEOdecoder.shape"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.VDEOdecoder.shape">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides the data shape</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the data shape</span>
 
 <span class="sd">        :returns: the data shape if data was loaded</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`int` &gt;</span>
@@ -928,7 +930,7 @@
 
 <div class="viewcode-block" id="VDEOdecoder.frameNumber"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.VDEOdecoder.frameNumber">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">frameNumber</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides the frame number</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the frame number</span>
 
 <span class="sd">        :returns: the frame number</span>
 <span class="sd">        :rtype: :obj:`int`</span>
@@ -938,7 +940,7 @@
 
 <div class="viewcode-block" id="VDEOdecoder.decode"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.VDEOdecoder.decode">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides the decoded data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the decoded data</span>
 
 <span class="sd">        :returns: the decoded data if data was loaded</span>
 <span class="sd">        :rtype: :class:`numpy.ndarray`</span>
@@ -965,12 +967,12 @@
 
 <div class="viewcode-block" id="DATAARRAYdecoder"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.DATAARRAYdecoder">[docs]</a><span class="k">class</span> <span class="nc">DATAARRAYdecoder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; DATA ARRAY LIMA decoder</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; DATA ARRAY LIMA decoder</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :brief: It clears the local variables</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1004,7 +1006,7 @@
 
     <span class="c1"># @debugmethod</span>
 <div class="viewcode-block" id="DATAARRAYdecoder.load"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.DATAARRAYdecoder.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;  loads encoded data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;  loads encoded data</span>
 
 <span class="sd">        :param data: encoded data</span>
 <span class="sd">        :type data: [:obj:`str`, :obj:`str`]</span>
@@ -1018,7 +1020,7 @@
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">_loadHeader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">headerData</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; loads the image header</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; loads the image header</span>
 
 <span class="sd">        :param headerData: buffer with header data</span>
 <span class="sd">        :type headerData: :obj:`str`</span>
@@ -1043,11 +1045,11 @@
 
 <div class="viewcode-block" id="DATAARRAYdecoder.frameNumber"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.DATAARRAYdecoder.frameNumber">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">frameNumber</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; no data &quot;&quot;&quot;</span></div>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; no data &quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="DATAARRAYdecoder.shape"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.DATAARRAYdecoder.shape">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides the data shape</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the data shape</span>
 
 <span class="sd">        :returns: the data shape if data was loaded</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`int` &gt;</span>
@@ -1059,7 +1061,7 @@
 
 <div class="viewcode-block" id="DATAARRAYdecoder.steps"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.DATAARRAYdecoder.steps">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">steps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides the data steps</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the data steps</span>
 
 <span class="sd">        :returns: the data steps if data was loaded</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`int` &gt;</span>
@@ -1071,7 +1073,7 @@
 
 <div class="viewcode-block" id="DATAARRAYdecoder.decode"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.DATAARRAYdecoder.decode">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides the decoded data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the decoded data</span>
 
 <span class="sd">        :returns: the decoded data if data was loaded</span>
 <span class="sd">        :rtype: :class:`numpy.ndarray`</span>
@@ -1098,12 +1100,12 @@
 
 <div class="viewcode-block" id="TangoAttrSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TangoAttrSource">[docs]</a><span class="k">class</span> <span class="nc">TangoAttrSource</span><span class="p">(</span><span class="n">BaseSource</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; image source as IMAGE Tango attribute</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; image source as IMAGE Tango attribute</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param timeout: timeout for setting connection in ms</span>
 <span class="sd">        :type timeout: :obj:`int`</span>
@@ -1133,7 +1135,7 @@
 
 <div class="viewcode-block" id="TangoAttrSource.getData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TangoAttrSource.getData">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
 
 <span class="sd">        :returns:  image name, image data, json dictionary with metadata</span>
 <span class="sd">        :rtype: (:obj:`str` , :class:`numpy.ndarray` , :obj:`str`)</span>
@@ -1221,7 +1223,7 @@
 
 <div class="viewcode-block" id="TangoAttrSource.connect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TangoAttrSource.connect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__bytearray</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1238,11 +1240,11 @@
 
 <div class="viewcode-block" id="TangoEventsCB"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TangoEventsCB">[docs]</a><span class="k">class</span> <span class="nc">TangoEventsCB</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; tango attribute callback class&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; tango attribute callback class&quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">mutex</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param client: tango controller client</span>
 <span class="sd">        :type client: :class:`str`</span>
@@ -1257,7 +1259,7 @@
 
     <span class="c1"># @debugmethod</span>
 <div class="viewcode-block" id="TangoEventsCB.push_event"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TangoEventsCB.push_event">[docs]</a>    <span class="k">def</span> <span class="nf">push_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_data</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;callback method receiving the event</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;callback method receiving the event</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">:</span>
@@ -1284,11 +1286,11 @@
 
 <div class="viewcode-block" id="TangoReadyEventsCB"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TangoReadyEventsCB">[docs]</a><span class="k">class</span> <span class="nc">TangoReadyEventsCB</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; tango attribute callback class&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; tango attribute callback class&quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">mutex</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param client: tango controller client</span>
 <span class="sd">        :type client: :class:`str`</span>
@@ -1303,7 +1305,7 @@
 
     <span class="c1"># @debugmethod</span>
 <div class="viewcode-block" id="TangoReadyEventsCB.push_event"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TangoReadyEventsCB.push_event">[docs]</a>    <span class="k">def</span> <span class="nf">push_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_data</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;callback method receiving the event</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;callback method receiving the event</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">:</span>
@@ -1332,12 +1334,12 @@
 
 <div class="viewcode-block" id="TangoEventsSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TangoEventsSource">[docs]</a><span class="k">class</span> <span class="nc">TangoEventsSource</span><span class="p">(</span><span class="n">BaseSource</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; image source as IMAGE Tango attribute</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; image source as IMAGE Tango attribute</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param timeout: timeout for setting connection in ms</span>
 <span class="sd">        :type timeout: :obj:`int`</span>
@@ -1374,7 +1376,7 @@
 
 <div class="viewcode-block" id="TangoEventsSource.getData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TangoEventsSource.getData">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
 
 <span class="sd">        :returns:  image name, image data, json dictionary with metadata</span>
 <span class="sd">        :rtype: (:obj:`str` , :class:`numpy.ndarray` , :obj:`str`)</span>
@@ -1441,7 +1443,7 @@
 
 <div class="viewcode-block" id="TangoEventsSource.connect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TangoEventsSource.connect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initiated</span><span class="p">:</span>
@@ -1479,7 +1481,7 @@
 
 <div class="viewcode-block" id="TangoEventsSource.disconnect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TangoEventsSource.disconnect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initiated</span><span class="p">:</span>
@@ -1499,12 +1501,12 @@
 
 <div class="viewcode-block" id="HTTPSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.HTTPSource">[docs]</a><span class="k">class</span> <span class="nc">HTTPSource</span><span class="p">(</span><span class="n">BaseSource</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; image source as HTTP request response</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; image source as HTTP request response</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param timeout: timeout for setting connection in ms</span>
 <span class="sd">        :type timeout: :obj:`int`</span>
@@ -1517,7 +1519,7 @@
 
 <div class="viewcode-block" id="HTTPSource.getData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.HTTPSource.getData">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
 
 <span class="sd">        :returns:  image name, image data, json dictionary with metadata</span>
 <span class="sd">        :rtype: (:obj:`str` , :class:`numpy.ndarray` , :obj:`str`)</span>
@@ -1608,7 +1610,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get response</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; get response</span>
 
 <span class="sd">        :returns: response object</span>
 <span class="sd">        :rtype: :class:`requests.Response`</span>
@@ -1631,7 +1633,7 @@
 
 <div class="viewcode-block" id="HTTPSource.connect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.HTTPSource.connect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__tiffloader</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1658,11 +1660,11 @@
 
 <div class="viewcode-block" id="ZMQSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.ZMQSource">[docs]</a><span class="k">class</span> <span class="nc">ZMQSource</span><span class="p">(</span><span class="n">BaseSource</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; image source as ZMQ stream&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; image source as ZMQ stream&quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param timeout: timeout for setting connection in ms</span>
 <span class="sd">        :type timeout: :obj:`int`</span>
@@ -1684,7 +1686,7 @@
 
 <div class="viewcode-block" id="ZMQSource.setConfiguration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.ZMQSource.setConfiguration">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration</span>
 
 <span class="sd">        :param configuration:  configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
@@ -1718,7 +1720,7 @@
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">__loads</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; loads json or pickle string</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; loads json or pickle string</span>
 
 <span class="sd">        :param message: message to encode</span>
 <span class="sd">        :type message: :obj:`str`</span>
@@ -1741,7 +1743,7 @@
 
 <div class="viewcode-block" id="ZMQSource.getData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.ZMQSource.getData">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
 
 <span class="sd">        :returns:  image name, image data, json dictionary with metadata</span>
 <span class="sd">        :rtype: (:obj:`str` , :class:`numpy.ndarray` , :obj:`str`)</span>
@@ -1844,7 +1846,7 @@
 
 <div class="viewcode-block" id="ZMQSource.connect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.ZMQSource.connect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">conf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configuration</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
@@ -1894,7 +1896,7 @@
 
 <div class="viewcode-block" id="ZMQSource.disconnect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.ZMQSource.disconnect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
@@ -1910,7 +1912,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__bindaddress</span> <span class="o">=</span> <span class="kc">None</span></div>
 
     <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; destructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; destructor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__context</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span></div>
@@ -1918,11 +1920,11 @@
 
 <div class="viewcode-block" id="ASAPOSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.ASAPOSource">[docs]</a><span class="k">class</span> <span class="nc">ASAPOSource</span><span class="p">(</span><span class="n">BaseSource</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; asapo image source&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; asapo image source&quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param timeout: timeout for setting connection in ms</span>
 <span class="sd">        :type timeout: :obj:`int`</span>
@@ -1967,7 +1969,7 @@
 
 <div class="viewcode-block" id="ASAPOSource.setConfiguration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.ASAPOSource.setConfiguration">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration</span>
 
 <span class="sd">        :param configuration:  configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
@@ -1990,7 +1992,7 @@
 
 <div class="viewcode-block" id="ASAPOSource.getMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.ASAPOSource.getMetaData">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; get metadata</span>
 
 <span class="sd">        :returns: dictionary with metadata</span>
 <span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, :obj:`any`&gt;</span>
@@ -2025,7 +2027,7 @@
 
 <div class="viewcode-block" id="ASAPOSource.connect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.ASAPOSource.connect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__tiffloader</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">try</span><span class="p">:</span>
@@ -2077,7 +2079,7 @@
 
 <div class="viewcode-block" id="ASAPOSource.disconnect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.ASAPOSource.disconnect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__broker</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -2090,7 +2092,7 @@
 
 <div class="viewcode-block" id="ASAPOSource.getData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.ASAPOSource.getData">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
 
 <span class="sd">        :returns:  image name, image data, json dictionary with metadata</span>
 <span class="sd">        :rtype: (:obj:`str` , :class:`numpy.ndarray` , :obj:`str`)</span>
@@ -2278,11 +2280,11 @@
 
 <div class="viewcode-block" id="HiDRASource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.HiDRASource">[docs]</a><span class="k">class</span> <span class="nc">HiDRASource</span><span class="p">(</span><span class="n">BaseSource</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; hidra image source&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; hidra image source&quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param timeout: timeout for setting connection in ms</span>
 <span class="sd">        :type timeout: :obj:`int`</span>
@@ -2312,7 +2314,7 @@
 
     <span class="c1"># @debugmethod</span>
 <div class="viewcode-block" id="HiDRASource.setConfiguration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.HiDRASource.setConfiguration">[docs]</a>    <span class="k">def</span> <span class="nf">setConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration</span>
 
 <span class="sd">        :param configuration:  configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
@@ -2347,7 +2349,7 @@
 
 <div class="viewcode-block" id="HiDRASource.connect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.HiDRASource.connect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__tiffloader</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">try</span><span class="p">:</span>
@@ -2376,7 +2378,7 @@
 
 <div class="viewcode-block" id="HiDRASource.disconnect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.HiDRASource.disconnect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__query</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -2388,7 +2390,7 @@
 
 <div class="viewcode-block" id="HiDRASource.getData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.HiDRASource.getData">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
 
 <span class="sd">        :returns:  image name, image data, json dictionary with metadata</span>
 <span class="sd">        :rtype: (:obj:`str` , :class:`numpy.ndarray` , :obj:`str`)</span>
@@ -2556,12 +2558,12 @@
 
 <div class="viewcode-block" id="DOOCSPropSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.DOOCSPropSource">[docs]</a><span class="k">class</span> <span class="nc">DOOCSPropSource</span><span class="p">(</span><span class="n">BaseSource</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; image source as IMAGE DOOCS property</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; image source as IMAGE DOOCS property</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param timeout: timeout for setting connection in ms</span>
 <span class="sd">        :type timeout: :obj:`int`</span>
@@ -2570,7 +2572,7 @@
 
 <div class="viewcode-block" id="DOOCSPropSource.getData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.DOOCSPropSource.getData">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
 
 <span class="sd">        :returns:  image name, image data, json dictionary with metadata</span>
 <span class="sd">        :rtype: (:obj:`str` , :class:`numpy.ndarray` , :obj:`str`)</span>
@@ -2593,18 +2595,18 @@
 
 <div class="viewcode-block" id="DOOCSPropSource.connect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.DOOCSPropSource.connect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="kc">True</span></div></div>
 
 
 <div class="viewcode-block" id="EpicsPVSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.EpicsPVSource">[docs]</a><span class="k">class</span> <span class="nc">EpicsPVSource</span><span class="p">(</span><span class="n">BaseSource</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; image source as Epics Process variable&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; image source as Epics Process variable&quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param timeout: timeout for setting connection in ms</span>
 <span class="sd">        :type timeout: :obj:`int`</span>
@@ -2622,7 +2624,7 @@
 
 <div class="viewcode-block" id="EpicsPVSource.getData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.EpicsPVSource.getData">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
 
 <span class="sd">        :returns:  image name, image data, json dictionary with metadata</span>
 <span class="sd">        :rtype: (:obj:`str` , :class:`numpy.ndarray` , :obj:`str`)</span>
@@ -2650,7 +2652,7 @@
 
 <div class="viewcode-block" id="EpicsPVSource.connect"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.EpicsPVSource.connect">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects the source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects the source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">pvnm</span><span class="p">,</span> <span class="n">pvsh</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
@@ -2674,11 +2676,11 @@
 
 <div class="viewcode-block" id="TinePropSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TinePropSource">[docs]</a><span class="k">class</span> <span class="nc">TinePropSource</span><span class="p">(</span><span class="n">BaseSource</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; image source as Tine Property &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; image source as Tine Property &quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param timeout: timeout for setting connection in ms</span>
 <span class="sd">        :type timeout: :obj:`int`</span>
@@ -2693,7 +2695,7 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__dtype</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">header</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides dtype of tine property</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides dtype of tine property</span>
 
 <span class="sd">        :param header: tine frameHeader</span>
 <span class="sd">        :type header: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
@@ -2718,7 +2720,7 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__height</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">header</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides height of tine property</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides height of tine property</span>
 
 <span class="sd">        :param header: tine frameHeader</span>
 <span class="sd">        :type header: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
@@ -2738,7 +2740,7 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__width</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">header</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides width of tine property</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides width of tine property</span>
 
 <span class="sd">        :param header: tine frameHeader</span>
 <span class="sd">        :type header: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
@@ -2758,7 +2760,7 @@
 
 <div class="viewcode-block" id="TinePropSource.getData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TinePropSource.getData">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides image name, image data and metadata</span>
 
 <span class="sd">        :returns:  image name, image data, json dictionary with metadata</span>
 <span class="sd">        :rtype: (:obj:`str` , :class:`numpy.ndarray` , :obj:`str`)</span>
@@ -2799,7 +2801,7 @@
 
 <div class="viewcode-block" id="TinePropSource.setConfiguration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TinePropSource.setConfiguration">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration</span>
 
 <span class="sd">        :param configuration:  configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
@@ -2824,12 +2826,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><p>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
   <h3 class='versions'>Versions</h3>
   <p>
     <ul>
@@ -2882,7 +2884,7 @@
         &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

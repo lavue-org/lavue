@@ -2,18 +2,21 @@
 
 <!doctype html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
     <title>LaVueController server &#8212; LaVue (latest) documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
     
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -49,14 +52,14 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="lavuecontroller-server">
-<span id="lavuecontroller"></span><h1>LaVueController server<a class="headerlink" href="#lavuecontroller-server" title="Permalink to this headline">¶</a></h1>
+  <section id="lavuecontroller-server">
+<span id="lavuecontroller"></span><h1>LaVueController server<a class="headerlink" href="#lavuecontroller-server" title="Permalink to this heading">¶</a></h1>
 <p><strong>LavueController</strong> server allows for communication with LaVue GUI via tango interface, e.g. with user scripts or macros</p>
-<div class="figure align-default">
+<figure class="align-default">
 <img alt="_images/lavuecontrollerpogo.png" src="_images/lavuecontrollerpogo.png" />
-</div>
-<div class="section" id="attributes">
-<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+</figure>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading">¶</a></h2>
 <p>The user can <strong>pass to</strong> and <strong>read back</strong> from the LaVue GUI  the following attributes:</p>
 <ul class="simple">
 <li><p><strong>BeamCenterX</strong>: x-coordinate of the beam center in pixels, e.g. used in <em>Angle/Q Tool</em></p></li>
@@ -135,16 +138,16 @@
 </pre></div>
 </div>
 <p>You can <strong>read</strong> the current LaVue state via <code class="docutils literal notranslate"><span class="pre">LavueState</span></code>. To update the <code class="docutils literal notranslate"><span class="pre">viewrange</span></code> parameter write  to <code class="docutils literal notranslate"><span class="pre">LavueState</span></code>  an empty <a class="reference external" href="https://www.json.org/json-en.html">JSON</a> dictionary or <code class="docutils literal notranslate"><span class="pre">{&quot;__update__&quot;:</span> <span class="pre">true}</span></code>.</p>
-</div>
-<div class="section" id="properties">
-<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this heading">¶</a></h2>
 <p>The <strong>DynamicROIsValues</strong> device property can be set to true or false. When it is true dynamic attributes with ROIs sums are added.</p>
 <p>They names are defined by ROIs aliases from Lavue GUI.</p>
 <p>The <strong>DynamicROIs</strong> device property can be set to true or false. When it is true dynamic attributes with ROIs bounds are added.</p>
 <p>They names are defined by ROIs aliases from Lavue GUI.</p>
 <p>The <strong>ROIAttributesNames</strong> device property contains names of dynamic attributes which will be created event if the corresponding ROIs aliases in Lavue GUI are missing.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -153,8 +156,9 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">LaVueController server</a><ul>
 <li><a class="reference internal" href="#attributes">Attributes</a></li>
 <li><a class="reference internal" href="#properties">Properties</a></li>
@@ -162,22 +166,27 @@
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="gui/configuration/filtersettings.html"
-                        title="previous chapter">Filter plugins settings</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="lavuemonitor.html"
-                        title="next chapter">LaVue Monitor</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="gui/configuration/filtersettings.html"
+                          title="previous chapter">Filter plugins settings</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="lavuemonitor.html"
+                          title="next chapter">LaVue Monitor</a></p>
+  </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><p>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
   <h3 class='versions'>Versions</h3>
   <p>
     <ul>
@@ -235,7 +244,7 @@
         &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

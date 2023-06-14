@@ -2,18 +2,20 @@
 
 <!doctype html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>lavuelib.normalizationWidget &#8212; LaVue (latest) documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -88,7 +90,7 @@
 
 <div class="viewcode-block" id="NormalizationWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.normalizationWidget.NormalizationWidget">[docs]</a><span class="k">class</span> <span class="nc">NormalizationWidget</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Define bkg image and subtract from displayed image.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -101,7 +103,7 @@
     <span class="n">bfScalingFactorChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
@@ -134,7 +136,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectBFPushButton</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">icon</span><span class="p">)</span>
 
 <div class="viewcode-block" id="NormalizationWidget.setBFScalingFactor"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.normalizationWidget.NormalizationWidget.setBFScalingFactor">[docs]</a>    <span class="k">def</span> <span class="nf">setBFScalingFactor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets the bright field scaling factor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets the bright field scaling factor</span>
 
 <span class="sd">        :param scale: bright field scaling factor</span>
 <span class="sd">        :type scale: :obj:`float` or :obj:`str`</span>
@@ -142,7 +144,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">bfsfLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">scale</span> <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="NormalizationWidget.bfScalingFactor"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.normalizationWidget.NormalizationWidget.bfScalingFactor">[docs]</a>    <span class="k">def</span> <span class="nf">bfScalingFactor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides bright field scaling factor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides bright field scaling factor</span>
 
 <span class="sd">        :returns: bright field scaling factor</span>
 <span class="sd">        :rtype: :obj:`float`</span>
@@ -155,13 +157,13 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_emitBFScalingFactorChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; emits BF scaling factor chnaged</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; emits BF scaling factor chnaged</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bfScalingFactorChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_emitApplyBFStateChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; emits state of apply brightfield button</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; emits state of apply brightfield button</span>
 
 <span class="sd">        :param state: apply button state</span>
 <span class="sd">        :type state: :obj:`bool`</span>
@@ -170,7 +172,7 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_showBFFileDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; shows file dialog and select the file name</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; shows file dialog and select the file name</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fileDialog</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QFileDialog</span><span class="p">()</span>
 
@@ -187,7 +189,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__hideBFImageSelection</span><span class="p">()</span>
 
 <div class="viewcode-block" id="NormalizationWidget.setBrightField"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.normalizationWidget.NormalizationWidget.setBrightField">[docs]</a>    <span class="k">def</span> <span class="nf">setBrightField</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets the image background</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets the image background</span>
 
 <span class="sd">        :param fname: file name</span>
 <span class="sd">        :type fname: :obj:`str`</span>
@@ -200,13 +202,13 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_useCurrentBF</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; emits useCurrentImageAsBF and hides image selection</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; emits useCurrentImageAsBF and hides image selection</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">useCurrentImageAsBF</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__hideBFImageSelection</span><span class="p">()</span>
 
 <div class="viewcode-block" id="NormalizationWidget.setDisplayedBFName"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.normalizationWidget.NormalizationWidget.setDisplayedBFName">[docs]</a>    <span class="k">def</span> <span class="nf">setDisplayedBFName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets displayed file name</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets displayed file name</span>
 
 <span class="sd">        :param name: file name</span>
 <span class="sd">        :type name: :obj:`str`</span>
@@ -220,7 +222,7 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_showBFImageSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; shows image selection</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; shows image selection</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectCurrentBFPushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectBFFilePushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -234,14 +236,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">bfsfWidget</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">__hideBFImageSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; hides image selection</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; hides image selection</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectCurrentBFPushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectBFFilePushButton</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">selectBFPushButton</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <div class="viewcode-block" id="NormalizationWidget.checkBFSubtraction"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.normalizationWidget.NormalizationWidget.checkBFSubtraction">[docs]</a>    <span class="k">def</span> <span class="nf">checkBFSubtraction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; unchecks apply CheckBox if state is 1 and it is checked</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; unchecks apply CheckBox if state is 1 and it is checked</span>
 <span class="sd">        and reset the display</span>
 
 <span class="sd">        :param state: checkbox state</span>
@@ -252,7 +254,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">setDisplayedBFName</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NormalizationWidget.isBFSubApplied"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.normalizationWidget.NormalizationWidget.isBFSubApplied">[docs]</a>    <span class="k">def</span> <span class="nf">isBFSubApplied</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; if brightfield correction applied</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; if brightfield correction applied</span>
 <span class="sd">        :returns: apply status</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -278,12 +280,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><p>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
   <h3 class='versions'>Versions</h3>
   <p>
     <ul>
@@ -336,7 +338,7 @@
         &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

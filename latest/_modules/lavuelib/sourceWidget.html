@@ -2,18 +2,20 @@
 
 <!doctype html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>lavuelib.sourceWidget &#8212; LaVue (latest) documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -157,7 +159,7 @@
 
 <div class="viewcode-block" id="SourceBaseWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.SourceBaseWidget">[docs]</a><span class="k">class</span> <span class="nc">SourceBaseWidget</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; general source widget &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; general source widget &quot;&quot;&quot;</span>
 
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) push button enabled signal</span>
     <span class="n">buttonEnabled</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
@@ -180,7 +182,7 @@
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;BaseSource&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param sourceid: source id</span>
 <span class="sd">        :type sourceid: :obj:`int`</span>
@@ -208,7 +210,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__detached</span> <span class="o">=</span> <span class="kc">False</span>
 
 <div class="viewcode-block" id="SourceBaseWidget.setActive"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.SourceBaseWidget.setActive">[docs]</a>    <span class="k">def</span> <span class="nf">setActive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set active flag</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set active flag</span>
 
 <span class="sd">        :param active: active flag</span>
 <span class="sd">        :type active: :obj:`bool`</span>
@@ -217,14 +219,14 @@
 
 <div class="viewcode-block" id="SourceBaseWidget.updateButton"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.SourceBaseWidget.updateButton">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update slot for test source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update slot for test source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">buttonEnabled</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SourceBaseWidget.updateMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.SourceBaseWidget.updateMetaData">[docs]</a>    <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update source input parameters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update source input parameters</span>
 
 <span class="sd">        :param kargs:  source widget input parameter dictionary</span>
 <span class="sd">        :type kargs: :obj:`dict` &lt; :obj:`str`, :obj:`any`&gt;</span>
@@ -233,23 +235,23 @@
 
 <div class="viewcode-block" id="SourceBaseWidget.updateComboBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.SourceBaseWidget.updateComboBox">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; abstract updateComboBox</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; abstract updateComboBox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">updateButton</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="SourceBaseWidget.connectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.SourceBaseWidget.connectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">connectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sourceLabelChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="SourceBaseWidget.disconnectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.SourceBaseWidget.disconnectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">disconnectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span></div>
 
     <span class="k">def</span> <span class="nf">_detachWidgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; detaches the form widgets from the gridLayout</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; detaches the form widgets from the gridLayout</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">wnm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">widgetnames</span><span class="p">:</span>
@@ -261,14 +263,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__detached</span> <span class="o">=</span> <span class="kc">True</span>
 
 <div class="viewcode-block" id="SourceBaseWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.SourceBaseWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
 
 <span class="sd">        :param configuration: configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="SourceBaseWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.SourceBaseWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
 <span class="sd">        :rtype configuration: :obj:`str`</span>
@@ -276,7 +278,7 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="SourceBaseWidget.label"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.SourceBaseWidget.label">[docs]</a>    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
 
 <span class="sd">        :return: label of the current detector</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -284,7 +286,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span></div>
 
 <div class="viewcode-block" id="SourceBaseWidget.eventObjectFilter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.SourceBaseWidget.eventObjectFilter">[docs]</a>    <span class="k">def</span> <span class="nf">eventObjectFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">combobox</span><span class="p">,</span> <span class="n">varname</span><span class="p">,</span> <span class="n">atdict</span><span class="p">,</span> <span class="n">atlist</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; event filter</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; event filter</span>
 
 <span class="sd">        :param obj: qt object</span>
 <span class="sd">        :type obj: :class: `pyqtgraph.QtCore.QObject`</span>
@@ -339,7 +341,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">updateButton</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_updateComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">combobox</span><span class="p">,</span> <span class="n">atdict</span><span class="p">,</span> <span class="n">atlist</span><span class="p">,</span> <span class="n">currentattr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates a value of attr combo box</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates a value of attr combo box</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_disconnectComboBox</span><span class="p">(</span><span class="n">combobox</span><span class="p">)</span>
         <span class="n">currentattr</span> <span class="o">=</span> <span class="n">currentattr</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">combobox</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
@@ -383,10 +385,10 @@
 
 <div class="viewcode-block" id="TestSourceWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TestSourceWidget">[docs]</a><span class="k">class</span> <span class="nc">TestSourceWidget</span><span class="p">(</span><span class="n">SourceBaseWidget</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param sourceid: source id</span>
 <span class="sd">        :type sourceid: :obj:`int`</span>
@@ -403,7 +405,7 @@
 
 <span class="k">class</span> <span class="nc">FixTestSourceWidget</span><span class="p">(</span><span class="n">SourceBaseWidget</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
 
     <span class="c1">#: (:obj:`str`) source name</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Fix Test&quot;</span>
@@ -413,7 +415,7 @@
     <span class="n">alias</span> <span class="o">=</span> <span class="s2">&quot;fixtest&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param sourceid: source id</span>
 <span class="sd">        :type sourceid: :obj:`int`</span>
@@ -430,7 +432,7 @@
 
 <div class="viewcode-block" id="HTTPSourceWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HTTPSourceWidget">[docs]</a><span class="k">class</span> <span class="nc">HTTPSourceWidget</span><span class="p">(</span><span class="n">SourceBaseWidget</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
 
     <span class="c1">#: (:obj:`str`) source name</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;HTTP response&quot;</span>
@@ -442,7 +444,7 @@
     <span class="n">alias</span> <span class="o">=</span> <span class="s2">&quot;http&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param sourceid: source id</span>
 <span class="sd">        :type sourceid: :obj:`int`</span>
@@ -472,7 +474,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">httpComboBox</span><span class="o">.</span><span class="n">installEventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="HTTPSourceWidget.eventFilter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HTTPSourceWidget.eventFilter">[docs]</a>    <span class="k">def</span> <span class="nf">eventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; event filter</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; event filter</span>
 
 <span class="sd">        :param obj: qt object</span>
 <span class="sd">        :type obj: :class: `pyqtgraph.QtCore.QObject`</span>
@@ -491,7 +493,7 @@
 
 <div class="viewcode-block" id="HTTPSourceWidget.updateButton"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HTTPSourceWidget.updateButton">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update slot for HTTP response source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update slot for HTTP response source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
             <span class="k">return</span>
@@ -503,7 +505,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">sourceLabelChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="HTTPSourceWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HTTPSourceWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
 <span class="sd">        :rtype configuration: :obj:`str`</span>
@@ -522,7 +524,7 @@
         <span class="k">return</span> <span class="n">url</span></div>
 
 <div class="viewcode-block" id="HTTPSourceWidget.updateMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HTTPSourceWidget.updateMetaData">[docs]</a>    <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">httpurls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update source input parameters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update source input parameters</span>
 
 <span class="sd">        :param httpurls: json dictionary with</span>
 <span class="sd">                           (label, http urls) items</span>
@@ -537,14 +539,14 @@
 
 <div class="viewcode-block" id="HTTPSourceWidget.updateComboBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HTTPSourceWidget.updateComboBox">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates ComboBox</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates ComboBox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateComboBox</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">httpComboBox</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__urls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userurls</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">updateButton</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="HTTPSourceWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HTTPSourceWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
 
 <span class="sd">        :param configuration: configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
@@ -556,7 +558,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">httpComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">iid</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="HTTPSourceWidget.connectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HTTPSourceWidget.connectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">connectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">httpComboBox</span><span class="o">.</span><span class="n">lineEdit</span><span class="p">()</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -569,14 +571,14 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">httpComboBox</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__urls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userurls</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="HTTPSourceWidget.disconnectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HTTPSourceWidget.disconnectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">disconnectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">httpComboBox</span><span class="o">.</span><span class="n">lineEdit</span><span class="p">()</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">httpComboBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="HTTPSourceWidget.label"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HTTPSourceWidget.label">[docs]</a>    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
 
 <span class="sd">        :return: label of the current detector</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -587,7 +589,7 @@
 
 <div class="viewcode-block" id="HidraSourceWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HidraSourceWidget">[docs]</a><span class="k">class</span> <span class="nc">HidraSourceWidget</span><span class="p">(</span><span class="n">SourceBaseWidget</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
 
     <span class="c1">#: (:obj:`str`) source name</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Hidra&quot;</span>
@@ -599,7 +601,7 @@
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;HiDRASource&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param sourceid: source id</span>
 <span class="sd">        :type sourceid: :obj:`int`</span>
@@ -636,7 +638,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_connectComboBox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">serverComboBox</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_bumptheport</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">portgap</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; it bumps the hidra port by source id</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; it bumps the hidra port by source id</span>
 
 <span class="sd">        :param offset: port gap for multi image sources</span>
 <span class="sd">        :type name: :obj:`int`</span>
@@ -650,7 +652,7 @@
 
 <div class="viewcode-block" id="HidraSourceWidget.updateButton"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HidraSourceWidget.updateButton">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update slot for Hidra source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update slot for Hidra source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
             <span class="k">return</span>
@@ -662,7 +664,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">sourceLabelChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="HidraSourceWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HidraSourceWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
 <span class="sd">        :rtype configuration: :obj:`str`</span>
@@ -674,7 +676,7 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="HidraSourceWidget.updateMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HidraSourceWidget.updateMetaData">[docs]</a>    <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">serverdict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hidraport</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update source input parameters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update source input parameters</span>
 
 <span class="sd">        :param serverdict: server dictionary</span>
 <span class="sd">        :type serverdict: :obj:`dict` &lt; :obj:`str`, :obj:`list` &lt;:obj:`str`&gt; &gt;</span>
@@ -713,7 +715,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sourceLabelChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">__sortServerList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; small function to sort out the server list details.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; small function to sort out the server list details.</span>
 <span class="sd">        It searches the hostname for a</span>
 <span class="sd">        string and return only the elements in the list that fit</span>
 
@@ -731,19 +733,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__sortedserverlist</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sortedserverlist</span><span class="p">)</span>
 
 <div class="viewcode-block" id="HidraSourceWidget.connectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HidraSourceWidget.connectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">connectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">serverComboBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="HidraSourceWidget.disconnectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HidraSourceWidget.disconnectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">disconnectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">serverComboBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="HidraSourceWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HidraSourceWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
 
 <span class="sd">        :param configuration: configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
@@ -758,7 +760,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">serverComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">iid</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="HidraSourceWidget.label"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.HidraSourceWidget.label">[docs]</a>    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
 
 <span class="sd">        :return: label of the current detector</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -772,7 +774,7 @@
 
 <div class="viewcode-block" id="ASAPOSourceWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.ASAPOSourceWidget">[docs]</a><span class="k">class</span> <span class="nc">ASAPOSourceWidget</span><span class="p">(</span><span class="n">SourceBaseWidget</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
 
     <span class="c1">#: (:obj:`str`) source name</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;ASAPO&quot;</span>
@@ -784,7 +786,7 @@
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;ASAPOSource&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param sourceid: source id</span>
 <span class="sd">        :type sourceid: :obj:`int`</span>
@@ -835,7 +837,7 @@
 
 <div class="viewcode-block" id="ASAPOSourceWidget.updateButton"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.ASAPOSourceWidget.updateButton">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">disconnect</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update slot for Asapo source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update slot for Asapo source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__udmutex</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__updating</span><span class="p">:</span>
@@ -864,7 +866,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__updating</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="ASAPOSourceWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.ASAPOSourceWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
 <span class="sd">        :rtype configuration: :obj:`str`</span>
@@ -884,7 +886,7 @@
                        <span class="n">asaposourcepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">disconnect</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                        <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update source input parameters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update source input parameters</span>
 
 <span class="sd">        :param asaposervers asapo servers, i.e. host:port</span>
 <span class="sd">        :type asaposervers: :obj:`str`</span>
@@ -967,7 +969,7 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_updateStreamComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update ASAPO substream combobox</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update ASAPO substream combobox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">disconnected</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
@@ -978,19 +980,19 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">sourceStateChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ASAPOSourceWidget.connectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.ASAPOSourceWidget.connectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">connectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ASAPOSourceWidget.disconnectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.ASAPOSourceWidget.disconnectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">disconnectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ASAPOSourceWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.ASAPOSourceWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
 
 <span class="sd">        :param configuration: configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
@@ -1016,7 +1018,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">iid</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ASAPOSourceWidget.label"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.ASAPOSourceWidget.label">[docs]</a>    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
 
 <span class="sd">        :return: label of the current detector</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -1027,7 +1029,7 @@
 
 <div class="viewcode-block" id="TangoAttrSourceWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoAttrSourceWidget">[docs]</a><span class="k">class</span> <span class="nc">TangoAttrSourceWidget</span><span class="p">(</span><span class="n">SourceBaseWidget</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
 
     <span class="c1">#: (:obj:`str`) source name</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Tango Attribute&quot;</span>
@@ -1039,7 +1041,7 @@
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;TangoAttrSource&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param sourceid: source id</span>
 <span class="sd">        :type sourceid: :obj:`int`</span>
@@ -1071,7 +1073,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">attrComboBox</span><span class="o">.</span><span class="n">installEventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TangoAttrSourceWidget.eventFilter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoAttrSourceWidget.eventFilter">[docs]</a>    <span class="k">def</span> <span class="nf">eventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; event filter</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; event filter</span>
 
 <span class="sd">        :param obj: qt object</span>
 <span class="sd">        :type obj: :class: `pyqtgraph.QtCore.QObject`</span>
@@ -1090,7 +1092,7 @@
 
 <div class="viewcode-block" id="TangoAttrSourceWidget.updateButton"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoAttrSourceWidget.updateButton">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update slot for Tango attribute source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update slot for Tango attribute source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
 
@@ -1104,7 +1106,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">attrComboBox</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">currentattr</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaulttip</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TangoAttrSourceWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoAttrSourceWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
 <span class="sd">        :rtype configuration: :obj:`str`</span>
@@ -1115,7 +1117,7 @@
         <span class="k">return</span> <span class="n">currentattr</span></div>
 
 <div class="viewcode-block" id="TangoAttrSourceWidget.updateMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoAttrSourceWidget.updateMetaData">[docs]</a>    <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tangoattrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update source input parameters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update source input parameters</span>
 
 <span class="sd">        :param tangoattrs: json dictionary with</span>
 <span class="sd">                           (label, tango attribute) items</span>
@@ -1130,7 +1132,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sourceLabelChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TangoAttrSourceWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoAttrSourceWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
 
 <span class="sd">        :param configuration: configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
@@ -1143,21 +1145,21 @@
 
 <div class="viewcode-block" id="TangoAttrSourceWidget.updateComboBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoAttrSourceWidget.updateComboBox">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates ComboBox</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates ComboBox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateComboBox</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">attrComboBox</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tangoattrs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userattrs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">updateButton</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TangoAttrSourceWidget.disconnectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoAttrSourceWidget.disconnectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">disconnectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">attrComboBox</span><span class="o">.</span><span class="n">lineEdit</span><span class="p">()</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">attrComboBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TangoAttrSourceWidget.connectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoAttrSourceWidget.connectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">connectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">attrComboBox</span><span class="o">.</span><span class="n">lineEdit</span><span class="p">()</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -1170,7 +1172,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">attrComboBox</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tangoattrs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userattrs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TangoAttrSourceWidget.label"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoAttrSourceWidget.label">[docs]</a>    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
 
 <span class="sd">        :return: label of the current detector</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -1181,7 +1183,7 @@
 
 <div class="viewcode-block" id="TinePropSourceWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TinePropSourceWidget">[docs]</a><span class="k">class</span> <span class="nc">TinePropSourceWidget</span><span class="p">(</span><span class="n">SourceBaseWidget</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
 
     <span class="c1">#: (:obj:`str`) source name</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Tine Property&quot;</span>
@@ -1193,7 +1195,7 @@
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;TinePropSource&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param sourceid: source id</span>
 <span class="sd">        :type sourceid: :obj:`int`</span>
@@ -1225,7 +1227,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">tinepropComboBox</span><span class="o">.</span><span class="n">installEventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TinePropSourceWidget.eventFilter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TinePropSourceWidget.eventFilter">[docs]</a>    <span class="k">def</span> <span class="nf">eventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; event filter</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; event filter</span>
 
 <span class="sd">        :param obj: qt object</span>
 <span class="sd">        :type obj: :class: `pyqtgraph.QtCore.QObject`</span>
@@ -1244,7 +1246,7 @@
 
 <div class="viewcode-block" id="TinePropSourceWidget.updateButton"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TinePropSourceWidget.updateButton">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update slot for Tine property source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update slot for Tine property source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
 
@@ -1259,7 +1261,7 @@
             <span class="n">currentprop</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaulttip</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TinePropSourceWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TinePropSourceWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
 
 <span class="sd">        :returns: configuration string</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -1270,7 +1272,7 @@
         <span class="k">return</span> <span class="n">currentprop</span></div>
 
 <div class="viewcode-block" id="TinePropSourceWidget.updateMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TinePropSourceWidget.updateMetaData">[docs]</a>    <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tineprops</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update source input parameters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update source input parameters</span>
 
 <span class="sd">        :param tineprops: json dictionary with</span>
 <span class="sd">                           (label, tine property) items</span>
@@ -1287,7 +1289,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sourceLabelChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TinePropSourceWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TinePropSourceWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
 
 <span class="sd">        :param configuration: configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
@@ -1300,21 +1302,21 @@
 
 <div class="viewcode-block" id="TinePropSourceWidget.updateComboBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TinePropSourceWidget.updateComboBox">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates ComboBox</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates ComboBox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateComboBox</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">tinepropComboBox</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tineprops</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userprops</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">updateButton</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TinePropSourceWidget.disconnectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TinePropSourceWidget.disconnectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">disconnectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">tinepropComboBox</span><span class="o">.</span><span class="n">lineEdit</span><span class="p">()</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">tinepropComboBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TinePropSourceWidget.connectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TinePropSourceWidget.connectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">connectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">tinepropComboBox</span><span class="o">.</span><span class="n">lineEdit</span><span class="p">()</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -1328,7 +1330,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__tineprops</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userprops</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TinePropSourceWidget.label"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TinePropSourceWidget.label">[docs]</a>    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
 
 <span class="sd">        :return: label of the current detector</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -1339,7 +1341,7 @@
 
 <div class="viewcode-block" id="TangoEventsSourceWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoEventsSourceWidget">[docs]</a><span class="k">class</span> <span class="nc">TangoEventsSourceWidget</span><span class="p">(</span><span class="n">SourceBaseWidget</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
 
     <span class="c1">#: (:obj:`str`) source name</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Tango Events&quot;</span>
@@ -1351,7 +1353,7 @@
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;TangoEventsSource&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param sourceid: source id</span>
 <span class="sd">        :type sourceid: :obj:`int`</span>
@@ -1383,7 +1385,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">evattrComboBox</span><span class="o">.</span><span class="n">installEventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TangoEventsSourceWidget.eventFilter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoEventsSourceWidget.eventFilter">[docs]</a>    <span class="k">def</span> <span class="nf">eventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; event filter</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; event filter</span>
 
 <span class="sd">        :param obj: qt object</span>
 <span class="sd">        :type obj: :class: `pyqtgraph.QtCore.QObject`</span>
@@ -1402,7 +1404,7 @@
 
 <div class="viewcode-block" id="TangoEventsSourceWidget.updateButton"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoEventsSourceWidget.updateButton">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update slot for Tango attribute source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update slot for Tango attribute source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
             <span class="k">return</span>
@@ -1415,7 +1417,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">evattrComboBox</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">currentattr</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaulttip</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TangoEventsSourceWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoEventsSourceWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
 <span class="sd">        :rtype configuration: :obj:`str`</span>
@@ -1426,7 +1428,7 @@
         <span class="k">return</span> <span class="n">currentattr</span></div>
 
 <div class="viewcode-block" id="TangoEventsSourceWidget.updateMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoEventsSourceWidget.updateMetaData">[docs]</a>    <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tangoevattrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update source input parameters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update source input parameters</span>
 
 <span class="sd">        :param tangoevattrs: json dictionary with</span>
 <span class="sd">                           (label, tango attribute) items</span>
@@ -1441,7 +1443,7 @@
 
 <div class="viewcode-block" id="TangoEventsSourceWidget.updateComboBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoEventsSourceWidget.updateComboBox">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates ComboBox</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates ComboBox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateComboBox</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">evattrComboBox</span><span class="p">,</span>
@@ -1449,7 +1451,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">updateButton</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TangoEventsSourceWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoEventsSourceWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
 
 <span class="sd">        :param configuration: configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
@@ -1461,14 +1463,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">evattrComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">iid</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TangoEventsSourceWidget.disconnectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoEventsSourceWidget.disconnectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">disconnectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">evattrComboBox</span><span class="o">.</span><span class="n">lineEdit</span><span class="p">()</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">evattrComboBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TangoEventsSourceWidget.connectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoEventsSourceWidget.connectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">connectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">evattrComboBox</span><span class="o">.</span><span class="n">lineEdit</span><span class="p">()</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -1482,7 +1484,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__tangoevattrs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userevattrs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TangoEventsSourceWidget.label"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoEventsSourceWidget.label">[docs]</a>    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
 
 <span class="sd">        :return: label of the current detector</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -1493,7 +1495,7 @@
 
 <div class="viewcode-block" id="TangoFileSourceWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoFileSourceWidget">[docs]</a><span class="k">class</span> <span class="nc">TangoFileSourceWidget</span><span class="p">(</span><span class="n">SourceBaseWidget</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
 
     <span class="c1">#: (:obj:`str`) source name</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Tango File&quot;</span>
@@ -1505,7 +1507,7 @@
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;TangoFileSource&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param sourceid: source id</span>
 <span class="sd">        :type sourceid: :obj:`int`</span>
@@ -1558,7 +1560,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">dirattrComboBox</span><span class="o">.</span><span class="n">installEventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TangoFileSourceWidget.eventFilter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoFileSourceWidget.eventFilter">[docs]</a>    <span class="k">def</span> <span class="nf">eventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; event filter</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; event filter</span>
 
 <span class="sd">        :param obj: qt object</span>
 <span class="sd">        :type obj: :class: `pyqtgraph.QtCore.QObject`</span>
@@ -1587,7 +1589,7 @@
 
 <div class="viewcode-block" id="TangoFileSourceWidget.updateButton"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoFileSourceWidget.updateButton">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update slot for Tango file source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update slot for Tango file source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
             <span class="k">return</span>
@@ -1601,7 +1603,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">dirattrComboBox</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">dattr</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultdirtip</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
 
 <span class="sd">        :returns configuration: configuration tuple</span>
 <span class="sd">        :rtype configuration: :obj:`tuple`</span>
@@ -1616,7 +1618,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">fattr</span><span class="p">,</span> <span class="n">dattr</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nxsopen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nxslast</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TangoFileSourceWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoFileSourceWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
 <span class="sd">        :rtype configuration: :obj:`str`</span>
@@ -1625,7 +1627,7 @@
 
 <div class="viewcode-block" id="TangoFileSourceWidget.updateMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoFileSourceWidget.updateMetaData">[docs]</a>    <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tangofileattrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tangodirattrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">dirtrans</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nxsopen</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nxslast</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update source input parameters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update source input parameters</span>
 
 <span class="sd">        :param tangofileattrs: json dictionary with</span>
 <span class="sd">                           (label, file tango attribute) items</span>
@@ -1663,7 +1665,7 @@
 
 <div class="viewcode-block" id="TangoFileSourceWidget.updateComboBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoFileSourceWidget.updateComboBox">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates ComboBox</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates ComboBox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateComboBox</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">fileattrComboBox</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tangofileattrs</span><span class="p">,</span>
@@ -1674,7 +1676,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">updateButton</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TangoFileSourceWidget.connectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoFileSourceWidget.connectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">connectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">fileattrComboBox</span><span class="o">.</span><span class="n">lineEdit</span><span class="p">()</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -1697,7 +1699,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__userdirattrs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TangoFileSourceWidget.disconnectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoFileSourceWidget.disconnectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">disconnectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">fileattrComboBox</span><span class="o">.</span><span class="n">lineEdit</span><span class="p">()</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
@@ -1706,7 +1708,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">dirattrComboBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TangoFileSourceWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoFileSourceWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
 
 <span class="sd">        :param configuration: configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
@@ -1728,7 +1730,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">dirattrComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">iid</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TangoFileSourceWidget.label"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.TangoFileSourceWidget.label">[docs]</a>    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
 
 <span class="sd">        :return: label of the current detector</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -1739,7 +1741,7 @@
 
 <div class="viewcode-block" id="EpicsPVSourceWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.EpicsPVSourceWidget">[docs]</a><span class="k">class</span> <span class="nc">EpicsPVSourceWidget</span><span class="p">(</span><span class="n">SourceBaseWidget</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
 
     <span class="c1">#: (:obj:`str`) source name</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Epics PV&quot;</span>
@@ -1751,7 +1753,7 @@
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;EpicsPVSource&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param sourceid: source id</span>
 <span class="sd">        :type sourceid: :obj:`int`</span>
@@ -1795,7 +1797,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pvshapeComboBox</span><span class="o">.</span><span class="n">installEventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="EpicsPVSourceWidget.eventFilter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.EpicsPVSourceWidget.eventFilter">[docs]</a>    <span class="k">def</span> <span class="nf">eventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; event filter</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; event filter</span>
 
 <span class="sd">        :param obj: qt object</span>
 <span class="sd">        :type obj: :class: `pyqtgraph.QtCore.QObject`</span>
@@ -1824,7 +1826,7 @@
 
 <div class="viewcode-block" id="EpicsPVSourceWidget.updateButton"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.EpicsPVSourceWidget.updateButton">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update slot for Epics file source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update slot for Epics file source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
             <span class="k">return</span>
@@ -1838,7 +1840,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pvshapeComboBox</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">pvsh</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultpvshapetip</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
 
 <span class="sd">        :returns configuration: configuration tuple</span>
 <span class="sd">        :rtype configuration: :obj:`tuple`</span>
@@ -1852,7 +1854,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">pvnm</span><span class="p">,</span> <span class="n">pvsh</span><span class="p">)</span>
 
 <div class="viewcode-block" id="EpicsPVSourceWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.EpicsPVSourceWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
 <span class="sd">        :rtype configuration: :obj:`str`</span>
@@ -1860,7 +1862,7 @@
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">,[</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__configuration</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="EpicsPVSourceWidget.updateMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.EpicsPVSourceWidget.updateMetaData">[docs]</a>    <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epicspvnames</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">epicspvshapes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update source input parameters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update source input parameters</span>
 
 <span class="sd">        :param epicspvnames: json dictionary with</span>
 <span class="sd">                           (label, file epics attribute) items</span>
@@ -1885,7 +1887,7 @@
 
 <div class="viewcode-block" id="EpicsPVSourceWidget.updateComboBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.EpicsPVSourceWidget.updateComboBox">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates ComboBox</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates ComboBox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateComboBox</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pvnameComboBox</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__epicspvnames</span><span class="p">,</span>
@@ -1896,7 +1898,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">updateButton</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="EpicsPVSourceWidget.connectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.EpicsPVSourceWidget.connectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">connectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pvnameComboBox</span><span class="o">.</span><span class="n">lineEdit</span><span class="p">()</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -1919,7 +1921,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__userpvshapes</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EpicsPVSourceWidget.disconnectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.EpicsPVSourceWidget.disconnectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">disconnectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pvnameComboBox</span><span class="o">.</span><span class="n">lineEdit</span><span class="p">()</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
@@ -1928,7 +1930,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pvshapeComboBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EpicsPVSourceWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.EpicsPVSourceWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
 
 <span class="sd">        :param configuration: configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
@@ -1955,7 +1957,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pvshapeComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">iid</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EpicsPVSourceWidget.label"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.EpicsPVSourceWidget.label">[docs]</a>    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
 
 <span class="sd">        :return: label of the current detector</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -1966,7 +1968,7 @@
 
 <div class="viewcode-block" id="NXSFileSourceWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.NXSFileSourceWidget">[docs]</a><span class="k">class</span> <span class="nc">NXSFileSourceWidget</span><span class="p">(</span><span class="n">SourceBaseWidget</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
 
     <span class="c1">#: (:obj:`str`) source name</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;NeXus File&quot;</span>
@@ -1976,7 +1978,7 @@
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;NXSFileSource&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param sourceid: source id</span>
 <span class="sd">        :type sourceid: :obj:`int`</span>
@@ -2014,7 +2016,7 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_updateFrameSpinBox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update nexus frame combobox</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update nexus frame combobox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">disconnected</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
@@ -2025,7 +2027,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">sourceStateChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
 <div class="viewcode-block" id="NXSFileSourceWidget.eventFilter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.NXSFileSourceWidget.eventFilter">[docs]</a>    <span class="k">def</span> <span class="nf">eventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; event filter</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; event filter</span>
 
 <span class="sd">        :param obj: qt object</span>
 <span class="sd">        :type obj: :class: `pyqtgraph.QtCore.QObject`</span>
@@ -2079,7 +2081,7 @@
 
 <div class="viewcode-block" id="NXSFileSourceWidget.updateButton"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.NXSFileSourceWidget.updateButton">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update slot for nexus file source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update slot for nexus file source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
             <span class="k">return</span>
@@ -2091,7 +2093,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">sourceLabelChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">__configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
 
 <span class="sd">        :returns configuration: configuration tuple</span>
 <span class="sd">        :rtype configuration: :obj:`tuple`</span>
@@ -2103,7 +2105,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">nfl</span><span class="p">,</span> <span class="n">nfd</span><span class="p">,</span> <span class="n">nfm</span><span class="p">,</span> <span class="n">nsb</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nxsopen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nxslast</span><span class="p">)</span>
 
 <div class="viewcode-block" id="NXSFileSourceWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.NXSFileSourceWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
 <span class="sd">        :rtype configuration: :obj:`str`</span>
@@ -2111,7 +2113,7 @@
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__configuration</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NXSFileSourceWidget.connectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.NXSFileSourceWidget.connectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">connectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">nxsFileLineEdit</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -2119,7 +2121,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">nxsDimSpinBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSFileSourceWidget.disconnectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.NXSFileSourceWidget.disconnectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">disconnectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">nxsFileLineEdit</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
@@ -2127,7 +2129,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">nxsDimSpinBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NXSFileSourceWidget.updateMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.NXSFileSourceWidget.updateMetaData">[docs]</a>    <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nxsopen</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nxslast</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update source input parameters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update source input parameters</span>
 
 <span class="sd">        :param nxsopen: nexus file source keeps the file open</span>
 <span class="sd">        :type nxsopen: :obj:`bool`</span>
@@ -2150,7 +2152,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sourceLabelChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NXSFileSourceWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.NXSFileSourceWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
 
 <span class="sd">        :param configuration: configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
@@ -2179,7 +2181,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">updateButton</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NXSFileSourceWidget.label"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.NXSFileSourceWidget.label">[docs]</a>    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
 
 <span class="sd">        :return: label of the current detector</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -2193,7 +2195,7 @@
 
 <div class="viewcode-block" id="ZMQSourceWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.ZMQSourceWidget">[docs]</a><span class="k">class</span> <span class="nc">ZMQSourceWidget</span><span class="p">(</span><span class="n">SourceBaseWidget</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
 
     <span class="c1">#: (:obj:`str`) source name</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;ZMQ Stream&quot;</span>
@@ -2203,7 +2205,7 @@
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;ZMQSource&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param sourceid: source id</span>
 <span class="sd">        :type sourceid: :obj:`int`</span>
@@ -2252,7 +2254,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_updateZMQComboBox</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ZMQSourceWidget.eventFilter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.ZMQSourceWidget.eventFilter">[docs]</a>    <span class="k">def</span> <span class="nf">eventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; event filter</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; event filter</span>
 
 <span class="sd">        :param obj: qt object</span>
 <span class="sd">        :type obj: :class: `pyqtgraph.QtCore.QObject`</span>
@@ -2271,7 +2273,7 @@
 
 <div class="viewcode-block" id="ZMQSourceWidget.updateButton"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.ZMQSourceWidget.updateButton">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">disconnect</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update slot for ZMQ source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update slot for ZMQ source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__udmutex</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__updating</span><span class="p">:</span>
@@ -2295,7 +2297,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__updating</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="ZMQSourceWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.ZMQSourceWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
 <span class="sd">        :rtype configuration: :obj:`str`</span>
@@ -2339,7 +2341,7 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_updateZMQComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update ZMQ datasource combobox</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update ZMQ datasource combobox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">disconnected</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
@@ -2355,7 +2357,7 @@
             <span class="n">datasources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disconnect</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">zmqservers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">zmqcolon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update source input parameters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update source input parameters</span>
 
 <span class="sd">        :param zmqtopics: zmq source topics</span>
 <span class="sd">        :type zmqtopics: :obj:`list` &lt;:obj:`str`&gt; &gt;</span>
@@ -2425,7 +2427,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sourceLabelChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ZMQSourceWidget.connectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.ZMQSourceWidget.connectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">connectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pickleComboBox</span><span class="o">.</span><span class="n">lineEdit</span><span class="p">()</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -2439,21 +2441,21 @@
 
 <div class="viewcode-block" id="ZMQSourceWidget.updateComboBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.ZMQSourceWidget.updateComboBox">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates ComboBox</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates ComboBox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateComboBox</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pickleComboBox</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__servers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userservers</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">updateButton</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ZMQSourceWidget.disconnectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.ZMQSourceWidget.disconnectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">disconnectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pickleComboBox</span><span class="o">.</span><span class="n">lineEdit</span><span class="p">()</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pickleComboBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ZMQSourceWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.ZMQSourceWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
 
 <span class="sd">        :param configuration: configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
@@ -2493,7 +2495,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pickleTopicComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">iid</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ZMQSourceWidget.label"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.ZMQSourceWidget.label">[docs]</a>    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
 
 <span class="sd">        :return: label of the current detector</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -2504,7 +2506,7 @@
 
 <div class="viewcode-block" id="DOOCSPropSourceWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.DOOCSPropSourceWidget">[docs]</a><span class="k">class</span> <span class="nc">DOOCSPropSourceWidget</span><span class="p">(</span><span class="n">SourceBaseWidget</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; test source widget &quot;&quot;&quot;</span>
 
     <span class="c1">#: (:obj:`str`) source name</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;DOOCS Property&quot;</span>
@@ -2516,7 +2518,7 @@
     <span class="n">datasource</span> <span class="o">=</span> <span class="s2">&quot;DOOCSPropSource&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param sourceid: source id</span>
 <span class="sd">        :type sourceid: :obj:`int`</span>
@@ -2548,7 +2550,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">doocspropComboBox</span><span class="o">.</span><span class="n">installEventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DOOCSPropSourceWidget.eventFilter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.DOOCSPropSourceWidget.eventFilter">[docs]</a>    <span class="k">def</span> <span class="nf">eventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; event filter</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; event filter</span>
 
 <span class="sd">        :param obj: qt object</span>
 <span class="sd">        :type obj: :class: `pyqtgraph.QtCore.QObject`</span>
@@ -2567,7 +2569,7 @@
 
 <div class="viewcode-block" id="DOOCSPropSourceWidget.updateButton"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.DOOCSPropSourceWidget.updateButton">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update slot for Doocs attribute source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update slot for Doocs attribute source</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
             <span class="k">return</span>
@@ -2580,7 +2582,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">doocspropComboBox</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">currentprop</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaulttip</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DOOCSPropSourceWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.DOOCSPropSourceWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
 <span class="sd">        :rtype configuration: :obj:`str`</span>
@@ -2591,7 +2593,7 @@
         <span class="k">return</span> <span class="n">currentprop</span></div>
 
 <div class="viewcode-block" id="DOOCSPropSourceWidget.updateMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.DOOCSPropSourceWidget.updateMetaData">[docs]</a>    <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doocsprops</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update source input parameters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update source input parameters</span>
 
 <span class="sd">        :param doocsprops: json dictionary with</span>
 <span class="sd">                           (label, doocs attribute) items</span>
@@ -2607,7 +2609,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sourceLabelChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="DOOCSPropSourceWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.DOOCSPropSourceWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
 
 <span class="sd">        :param configuration: configuration string</span>
 <span class="sd">        :type configuration: :obj:`str`</span>
@@ -2620,21 +2622,21 @@
 
 <div class="viewcode-block" id="DOOCSPropSourceWidget.updateComboBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.DOOCSPropSourceWidget.updateComboBox">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates ComboBox</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates ComboBox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateComboBox</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">doocspropComboBox</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__doocsprops</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userprops</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">updateButton</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="DOOCSPropSourceWidget.disconnectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.DOOCSPropSourceWidget.disconnectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">disconnectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; disconnects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">doocspropComboBox</span><span class="o">.</span><span class="n">lineEdit</span><span class="p">()</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">doocspropComboBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DOOCSPropSourceWidget.connectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.DOOCSPropSourceWidget.connectWidget">[docs]</a>    <span class="k">def</span> <span class="nf">connectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; connects widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; connects widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">doocspropComboBox</span><span class="o">.</span><span class="n">lineEdit</span><span class="p">()</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -2648,7 +2650,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__userprops</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DOOCSPropSourceWidget.label"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceWidget.DOOCSPropSourceWidget.label">[docs]</a>    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
 
 <span class="sd">        :return: label of the current detector</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -2681,12 +2683,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><p>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
   <h3 class='versions'>Versions</h3>
   <p>
     <ul>
@@ -2739,7 +2741,7 @@
         &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>
