@@ -541,7 +541,7 @@ class LavueController (tango.LatestDeviceImpl):
         argout = tango.DevState.ON
         return argout
         if argout != tango.DevState.ALARM:
-            tango.Device_4Impl.dev_state(self)
+            tango.LatestDeviceImpl.dev_state(self)
         return self.get_state()
 
     def dev_status(self):
@@ -555,7 +555,7 @@ class LavueController (tango.LatestDeviceImpl):
         self.argout = "State is ON"
 
         self.set_status(self.argout)
-        self.__status = tango.Device_4Impl.dev_status(self)
+        self.__status = tango.LatestDeviceImpl.dev_status(self)
         return self.__status
 
 
