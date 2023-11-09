@@ -2,18 +2,20 @@
 
 <!doctype html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.edListDialog &#8212; LaVue 2.83.4 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <title>lavuelib.edListDialog &#8212; LaVue 2.84.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -31,7 +33,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.83.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.84.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.edListDialog</a></li> 
       </ul>
@@ -90,11 +92,11 @@
 
 
 <div class="viewcode-block" id="EdListDialog"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.edListDialog.EdListDialog">[docs]</a><span class="k">class</span> <span class="nc">EdListDialog</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDialog</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;  editable list dialog</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;  editable list dialog</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`.QtCore.QObject`</span>
@@ -115,7 +117,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">record</span> <span class="o">=</span> <span class="p">[]</span>
 
 <div class="viewcode-block" id="EdListDialog.createGUI"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.edListDialog.EdListDialog.createGUI">[docs]</a>    <span class="k">def</span> <span class="nf">createGUI</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; creates widget GUI</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates widget GUI</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="ow">or</span> <span class="s2">&quot;Source Parameters Labels&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="p">,</span> <span class="s2">&quot;addPushButton&quot;</span><span class="p">):</span>
@@ -162,7 +164,7 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">__add</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; adds a new record into the table</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; adds a new record into the table</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dirty</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
@@ -174,7 +176,7 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">__remove</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; removes the current record from the table</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; removes the current record from the table</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">tableWidget</span><span class="o">.</span><span class="n">currentRow</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">idx</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">tableWidget</span><span class="o">.</span><span class="n">rowCount</span><span class="p">():</span>
@@ -187,7 +189,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__tableItemChanged</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__populateTable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; populate table records</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; populate table records</span>
 
 <span class="sd">        :param selected: name of selected item</span>
 <span class="sd">        :type selected: :obj:`str`</span>
@@ -217,7 +219,7 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="s2">&quot;QTableWidgetItem*&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">__tableItemChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; changes the current value of the variable</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; changes the current value of the variable</span>
 
 <span class="sd">        :param item: current item</span>
 <span class="sd">        :type item: :class:`QtWidgets.QTableWidgetItem`</span>
@@ -227,7 +229,7 @@
 
 <div class="viewcode-block" id="EdListDialog.accept"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.edListDialog.EdListDialog.accept">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates class variables with the form content</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates class variables with the form content</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateRecord</span><span class="p">()</span>
         <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDialog</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
@@ -243,18 +245,19 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><p>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
   <h3 class='versions'>Versions</h3>
   <p>
     <ul>
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.84.0/index.html">v2.84.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.83.4/index.html">v2.83.4</a></li>
       <li><a class="reference external" href="../../index/../../v2.83.3/index.html">v2.83.3</a></li>
       <li><a class="reference external" href="../../index/../../v2.83.2/index.html">v2.83.2</a></li>
@@ -292,7 +295,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.83.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.84.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.edListDialog</a></li> 
       </ul>
@@ -301,7 +304,7 @@
         &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

@@ -2,18 +2,20 @@
 
 <!doctype html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.memoryBufferGroupBox &#8212; LaVue 2.83.4 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <title>lavuelib.memoryBufferGroupBox &#8212; LaVue 2.84.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -31,7 +33,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.83.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.84.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.memoryBufferGroupBox</a></li> 
       </ul>
@@ -92,14 +94,14 @@
 
 <div class="viewcode-block" id="MemoryBufferGroupBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox">[docs]</a><span class="k">class</span> <span class="nc">MemoryBufferGroupBox</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set circular memory buffer for images</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) state updated signal</span>
     <span class="n">bufferSizeChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param parent: parent object</span>
 <span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
@@ -141,7 +143,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">resetPushButton</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_onBufferSizeChanged</span><span class="p">)</span>
 
 <div class="viewcode-block" id="MemoryBufferGroupBox.bufferSize"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.bufferSize">[docs]</a>    <span class="k">def</span> <span class="nf">bufferSize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides buffer size</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides buffer size</span>
 
 <span class="sd">        :returns: buffer size if buffer is on</span>
 <span class="sd">        :rtype: int</span>
@@ -152,7 +154,7 @@
         <span class="k">return</span> <span class="n">size</span></div>
 
 <div class="viewcode-block" id="MemoryBufferGroupBox.isOn"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.isOn">[docs]</a>    <span class="k">def</span> <span class="nf">isOn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; is on flag</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; is on flag</span>
 
 <span class="sd">        :returns: is on flag</span>
 <span class="sd">        :rtype: bool</span>
@@ -160,7 +162,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__isOn</span></div>
 
 <div class="viewcode-block" id="MemoryBufferGroupBox.setBufferSize"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.setBufferSize">[docs]</a>    <span class="k">def</span> <span class="nf">setBufferSize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffersize</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets buffer size</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets buffer size</span>
 
 <span class="sd">        :param buffersize: maximal number of images in the buffer</span>
 <span class="sd">        :type buffersize: :obj:`int` or :obj:`str`</span>
@@ -173,7 +175,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_onBufferSizeChanged</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MemoryBufferGroupBox.setMaxBufferSize"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.setMaxBufferSize">[docs]</a>    <span class="k">def</span> <span class="nf">setMaxBufferSize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxbuffersize</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets maximal buffer size</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets maximal buffer size</span>
 
 <span class="sd">        :param maxbuffersize: maximal number of images in the buffer</span>
 <span class="sd">        :type maxbuffersize: :obj:`int` or :obj:`str`</span>
@@ -187,7 +189,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_onBufferSizeChanged</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__maxbuffersize</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MemoryBufferGroupBox.setComputeSum"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.setComputeSum">[docs]</a>    <span class="k">def</span> <span class="nf">setComputeSum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">computesum</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets compute sum flag</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets compute sum flag</span>
 
 <span class="sd">        :param computesum: compute sum flag</span>
 <span class="sd">        :type computesum: :obj:`bool`</span>
@@ -199,7 +201,7 @@
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_onBufferSizeChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set size of image buffer in frame numbers</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set size of image buffer in frame numbers</span>
 
 <span class="sd">        :param size: buffer size</span>
 <span class="sd">        :type size: :obj:`int`</span>
@@ -216,7 +218,7 @@
 
 <div class="viewcode-block" id="MemoryBufferGroupBox.onOff"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.onOff">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">onOff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; switch on/off  the widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; switch on/off  the widget</span>
 
 <span class="sd">        :param status: flag on/off</span>
 <span class="sd">        :type status: :obj:`int`</span>
@@ -231,7 +233,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">bufferSizeChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">status</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MemoryBufferGroupBox.initialize"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; initialize the filter</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; initialize the filter</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__lastimage</span> <span class="o">=</span> <span class="kc">None</span>
@@ -242,7 +244,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">sizeSpinBox</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MemoryBufferGroupBox.process"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.process">[docs]</a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">imagename</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; append image to the buffer and returns image buffer and metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; append image to the buffer and returns image buffer and metadata</span>
 
 <span class="sd">        :param image: numpy array with an image</span>
 <span class="sd">        :type image: :class:`numpy.ndarray`</span>
@@ -370,7 +372,7 @@
                 <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">,</span> <span class="n">mdata</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MemoryBufferGroupBox.changeView"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.changeView">[docs]</a>    <span class="k">def</span> <span class="nf">changeView</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; shows or hides the histogram widget</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; shows or hides the histogram widget</span>
 
 <span class="sd">        :param show: if histogram should be shown</span>
 <span class="sd">        :type show: :obj:`bool`</span>
@@ -391,18 +393,19 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><p>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
   <h3 class='versions'>Versions</h3>
   <p>
     <ul>
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.84.0/index.html">v2.84.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.83.4/index.html">v2.83.4</a></li>
       <li><a class="reference external" href="../../index/../../v2.83.3/index.html">v2.83.3</a></li>
       <li><a class="reference external" href="../../index/../../v2.83.2/index.html">v2.83.2</a></li>
@@ -440,7 +443,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.83.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.84.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.memoryBufferGroupBox</a></li> 
       </ul>
@@ -449,7 +452,7 @@
         &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>
