@@ -38,7 +38,10 @@
 #     (Program Obviously used to Generate tango Object)
 # ############################################################################
 
-import PyTango
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 import sys
 import json
 
@@ -52,11 +55,11 @@ if sys.version_info > (3,):
     unicode = str
 
 
-class LavueController (PyTango.Device_4Impl):
+class LavueController (tango.LatestDeviceImpl):
     """tango server to change lavue setting in real time"""
 
     def __init__(self, cl, name):
-        PyTango.Device_4Impl.__init__(self, cl, name)
+        tango.LatestDeviceImpl.__init__(self, cl, name)
         self.debug_stream("In __init__()")
 
         self.current_scalar_aliases = []
@@ -411,19 +414,19 @@ class LavueController (PyTango.Device_4Impl):
 
             for alias in self.requested_scalar_aliases:
                 if alias not in self.current_scalar_aliases:
-                    myAttr = PyTango.Attr(
+                    myAttr = tango.Attr(
                         str("%sSum" % alias) if alias != "__Null__" else "Sum",
-                        PyTango.DevDouble, PyTango.READ)
+                        tango.DevDouble, tango.READ)
                     self.add_attribute(
                         myAttr, LavueController.read_ScalarDynamicAttr,
                         None, None)
             for alias in self.requested_spectrum_aliases:
                 if alias not in self.current_spectrum_aliases:
-                    myAttr = PyTango.SpectrumAttr(
+                    myAttr = tango.SpectrumAttr(
                         str("%sSums" % alias)
                         if alias != "__Null__" else "Sums",
-                        PyTango.DevDouble,
-                        PyTango.AttrWriteType.READ, 4096)
+                        tango.DevDouble,
+                        tango.AttrWriteType.READ, 4096)
                     self.add_attribute(
                         myAttr, LavueController.read_SpectrumDynamicAttr,
                         None, None)
@@ -434,9 +437,9 @@ class LavueController (PyTango.Device_4Impl):
                     if not salias:
                         salias = "__Null__"
                     if salias not in self.current_scalar_aliases:
-                        myAttr = PyTango.Attr(
+                        myAttr = tango.Attr(
                             str(alias),
-                            PyTango.DevDouble, PyTango.READ)
+                            tango.DevDouble, tango.READ)
                         self.add_attribute(
                             myAttr, LavueController.read_ScalarDynamicAttr,
                             None, None)
@@ -446,9 +449,9 @@ class LavueController (PyTango.Device_4Impl):
                     if not salias:
                         salias = "__Null__"
                     if salias not in self.current_spectrum_aliases:
-                        myAttr = PyTango.SpectrumAttr(
-                            str(alias), PyTango.DevDouble,
-                            PyTango.AttrWriteType.READ, 4096)
+                        myAttr = tango.SpectrumAttr(
+                            str(alias), tango.DevDouble,
+                            tango.AttrWriteType.READ, 4096)
                         self.add_attribute(
                             myAttr,
                             LavueController.read_SpectrumDynamicAttr,
@@ -471,11 +474,11 @@ class LavueController (PyTango.Device_4Impl):
 
             for alias in self.requested_rois_aliases:
                 if alias not in self.current_rois_aliases:
-                    myAttr = PyTango.SpectrumAttr(
+                    myAttr = tango.SpectrumAttr(
                         str("%sROI" % alias)
                         if alias != "__Null__" else "ROI",
-                        PyTango.DevLong,
-                        PyTango.AttrWriteType.READ, 4096)
+                        tango.DevLong,
+                        tango.AttrWriteType.READ, 4096)
                     self.add_attribute(
                         myAttr, LavueController.read_ROIsDynamicAttr,
                         None, None)
@@ -485,9 +488,9 @@ class LavueController (PyTango.Device_4Impl):
                     if not salias:
                         salias = "__Null__"
                     if salias not in self.current_rois_aliases:
-                        myAttr = PyTango.SpectrumAttr(
-                            str(alias), PyTango.DevLong,
-                            PyTango.AttrWriteType.READ, 4096)
+                        myAttr = tango.SpectrumAttr(
+                            str(alias), tango.DevLong,
+                            tango.AttrWriteType.READ, 4096)
                         self.add_attribute(
                             myAttr, LavueController.read_ROIsDynamicAttr,
                             None, None)
@@ -501,8 +504,8 @@ class LavueController (PyTango.Device_4Impl):
         #   Copy inside the folowing protected area to instanciate at startup.
 
         """   For Attribute ScalarDynamicAttr
-        myScalarDynamicAttr = PyTango.Attr(
-              'MyScalarDynamicAttr', PyTango.DevDouble, PyTango.READ)
+        myScalarDynamicAttr = tango.Attr(
+              'MyScalarDynamicAttr', tango.DevDouble, tango.READ)
         self.add_attribute(
               myScalarDynamicAttr,LavueController.read_ScalarDynamicAttr,
               None, None)
@@ -510,8 +513,8 @@ class LavueController (PyTango.Device_4Impl):
         """
 
         """   For Attribute SpectrumDynamicAttr
-        mySpectrumDynamicAttr = PyTango.SpectrumAttr(
-              'MySpectrumDynamicAttr', PyTango.DevDouble, PyTango.READ, 4096)
+        mySpectrumDynamicAttr = tango.SpectrumAttr(
+              'MySpectrumDynamicAttr', tango.DevDouble, tango.READ, 4096)
         self.add_attribute(mySpectrumDynamicAttr,
               LavueController.read_SpectrumDynamicAttr, None, None)
         self.attr_SpectrumDynamicAttr_read = [0.0]
@@ -531,14 +534,14 @@ class LavueController (PyTango.Device_4Impl):
         (stored in its device_state data member) and returns it to the caller.
 
         :return: Device state
-        :rtype: PyTango.CmdArgType.DevState
+        :rtype: tango.CmdArgType.DevState
         """
         self.debug_stream("In dev_state()")
-        argout = PyTango.DevState.UNKNOWN
-        argout = PyTango.DevState.ON
+        argout = tango.DevState.UNKNOWN
+        argout = tango.DevState.ON
         return argout
-        if argout != PyTango.DevState.ALARM:
-            PyTango.Device_4Impl.dev_state(self)
+        if argout != tango.DevState.ALARM:
+            tango.LatestDeviceImpl.dev_state(self)
         return self.get_state()
 
     def dev_status(self):
@@ -546,17 +549,17 @@ class LavueController (PyTango.Device_4Impl):
             (stored in its device_status data member)
             and returns it to the caller.
         :return: Device status
-        :rtype: PyTango.ConstDevString
+        :rtype: tango.ConstDevString
         """
         self.debug_stream("In dev_status()")
         self.argout = "State is ON"
 
         self.set_status(self.argout)
-        self.__status = PyTango.Device_4Impl.dev_status(self)
+        self.__status = tango.LatestDeviceImpl.dev_status(self)
         return self.__status
 
 
-class LavueControllerClass(PyTango.DeviceClass):
+class LavueControllerClass(tango.DeviceClass):
     # -------- Add you global class variables here --------------------------
 
     def dyn_attr(self, dev_list):
@@ -565,7 +568,7 @@ class LavueControllerClass(PyTango.DeviceClass):
         :meth:`LavueController.initialize_dynamic_attributes` for each device
 
         :param dev_list: list of devices
-        :type dev_list: :class:`PyTango.DeviceImpl`"""
+        :type dev_list: :class:`tango.DeviceImpl`"""
 
         for dev in dev_list:
             try:
@@ -582,15 +585,15 @@ class LavueControllerClass(PyTango.DeviceClass):
     #    Device Properties
     device_property_list = {
         'DynamicROIs':
-        [PyTango.DevBoolean,
+        [tango.DevBoolean,
          "create dynamically Attributes for ROIs aliases with their bounds",
          [True]],
         'DynamicROIsValues':
-        [PyTango.DevBoolean,
+        [tango.DevBoolean,
          "create dynamically Attributes for ROIs aliases with their sums",
          [True]],
         'ROIAttributesNames':
-        [PyTango.DevVarStringArray,
+        [tango.DevVarStringArray,
          "fixed ROI attributes names, They should ends with ROI, Sum or Sums",
          []],
     }
@@ -602,9 +605,9 @@ class LavueControllerClass(PyTango.DeviceClass):
     #    Attribute definitions
     attr_list = {
         'BeamCenterX':
-            [[PyTango.DevDouble,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevDouble,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "beam center x",
                  'unit': "pixels",
@@ -612,9 +615,9 @@ class LavueControllerClass(PyTango.DeviceClass):
                  'Memorized': "true"
              }],
         'BeamCenterY':
-            [[PyTango.DevDouble,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevDouble,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "beam center y",
                  'unit': "pixels",
@@ -622,9 +625,9 @@ class LavueControllerClass(PyTango.DeviceClass):
                  'Memorized': "true"
              }],
         'DetectorDistance':
-            [[PyTango.DevDouble,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevDouble,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "detector distance",
                  'unit': "mm",
@@ -632,31 +635,31 @@ class LavueControllerClass(PyTango.DeviceClass):
                  'Memorized': "true"
              }],
         'DetectorROIs':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "detector ROIs",
                  'description': "json dictionary with detector ROIs, e.g.  "
                  "{\"pilatusroi1\": [[26, 15, 232, 65]], "
                  "\"lambdarois\": [[54, 78, 102, 204], [10, 20, 40, 50]]}",
-                 'Display level': PyTango.DispLevel.EXPERT,
+                 'Display level': tango.DispLevel.EXPERT,
                  'Memorized': "true"
              }],
         'ToolResults':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "tool results",
                  'description': "json dictionary with tool results",
-                 'Display level': PyTango.DispLevel.EXPERT,
+                 'Display level': tango.DispLevel.EXPERT,
                  'Memorized': "false"
              }],
         'DetectorROIsValues':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "detector ROIs values",
                  'description':
@@ -665,9 +668,9 @@ class LavueControllerClass(PyTango.DeviceClass):
                  'Memorized': "true"
              }],
         'DetectorROIsParams':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "detector ROIs parameters",
                  'description': "json dictionary with detector ROIs "
@@ -676,9 +679,9 @@ class LavueControllerClass(PyTango.DeviceClass):
                  'Memorized': "true"
              }],
         'Energy':
-            [[PyTango.DevDouble,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevDouble,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "beam energy",
                  'unit': "eV",
@@ -686,9 +689,9 @@ class LavueControllerClass(PyTango.DeviceClass):
                  'Memorized': "true"
              }],
         'PixelSizeX':
-            [[PyTango.DevDouble,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevDouble,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "pixel x-size",
                  'unit': "um",
@@ -697,9 +700,9 @@ class LavueControllerClass(PyTango.DeviceClass):
                  'Memorized': "true"
              }],
         'PixelSizeY':
-            [[PyTango.DevDouble,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevDouble,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "pixel y-size",
                  'unit': "um",
@@ -708,16 +711,16 @@ class LavueControllerClass(PyTango.DeviceClass):
                  'Memorized': "true"
              }],
         'LavueState':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "Lavue State",
                  'description': "json dictionary with Lavue State "
                  "configuration, "
                  "e.g. {\"source\": \"hidra\", "
                  "\"configuration\":\"hasodet.desy.de\"}",
-                 'Display level': PyTango.DispLevel.EXPERT,
+                 'Display level': tango.DispLevel.EXPERT,
                  # 'Memorized': "true"
              }],
         }
@@ -725,14 +728,14 @@ class LavueControllerClass(PyTango.DeviceClass):
 
 def main():
     try:
-        py = PyTango.Util(sys.argv)
+        py = tango.Util(sys.argv)
         py.add_class(LavueControllerClass, LavueController, 'LavueController')
 
-        U = PyTango.Util.instance()
+        U = tango.Util.instance()
         U.server_init()
         U.server_run()
 
-    except PyTango.DevFailed as e:
+    except tango.DevFailed as e:
         print('-------> Received a DevFailed exception: %s' % e)
     except Exception as e:
         print('-------> An unforeseen exception occured.... %s' % e)

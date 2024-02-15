@@ -18,10 +18,10 @@ import struct
 import numpy
 
 
-class TestImageServer (tango.Device_4Impl):
+class TestImageServer (tango.LatestDeviceImpl):
 
     def __init__(self, cl, name):
-        tango.Device_4Impl.__init__(self, cl, name)
+        tango.LatestDeviceImpl.__init__(self, cl, name)
         TestImageServer.init_device(self)
 
     def init_device(self):
