@@ -14,20 +14,20 @@ This function **returns** `new_numpy_image` or `None` or *tuple* (`new_numpy_ima
     from scipy import ndimage
 
     def rot45(image, imagename, metadata, imagewg):
-    """ rotate image by 45 deg
+	""" rotate image by 45 deg
 
-    :param image: numpy array with an image
-    :type image: :class:`numpy.ndarray`
-    :param imagename: image name
-    :type imagename: :obj:`str`
-    :param metadata: JSON dictionary with metadata
-    :type metadata: :obj:`str`
-    :param imagewg: image wigdet
-    :type imagewg: :class:`lavuelib.imageWidget.ImageWidget`
-    :returns: numpy array with an image
-    :rtype: :class:`numpy.ndarray` or `None`
-    """
-    return ndimage.rotate(image, 45)
+	:param image: numpy array with an image
+	:type image: :class:`numpy.ndarray`
+	:param imagename: image name
+	:type imagename: :obj:`str`
+	:param metadata: JSON dictionary with metadata
+	:type metadata: :obj:`str`
+	:param imagewg: image wigdet
+	:type imagewg: :class:`lavuelib.imageWidget.ImageWidget`
+	:returns: numpy array with an image
+	:rtype: :class:`numpy.ndarray` or `None`
+	"""
+	return ndimage.rotate(image, 45)
 
 
 A **filter plugin** defined by a **class** it should have defined **__call__** method with four arguments: `numpy_image`, `image_name`, `JSON_metadata`, `ImageWidget`.
