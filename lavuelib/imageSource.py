@@ -1994,7 +1994,8 @@ class ASAPOSource(BaseSource):
                    or not self.__token:
                     if self.__btmetafile:
                         btmfs = glob.glob(self.__btmetafile)
-                        for btf in btmfs:
+                        if btmfs and btmfs[0]:
+                            btf = btmfs[0]
                             try:
                                 with open(os.path.abspath(btf)) as fl:
                                     btmd = json.loads(fl.read())
@@ -2004,15 +2005,15 @@ class ASAPOSource(BaseSource):
                                 if not self.__server and "asapo" in btmd and \
                                    "endpoint" in btmd["asapo"] and \
                                    btmd["asapo"]["endpoint"]:
-                                    self.__server = btmd["endpoint"]
-                                if not self.__server and "asapo" in btmd and \
+                                    self.__server = btmd["asapo"]["endpoint"]
+                                if not self.__token and "asapo" in btmd and \
                                    "beamtimeTokenPath" in btmd["asapo"] and \
                                    btmd["asapo"]["beamtimeTokenPath"]:
                                     btp = btmd["asapo"]["beamtimeTokenPath"]
                                     bp, _ = os.path.split(os.path.abspath(btf))
                                     with open(os.path.join(bp, btp)) as fl:
                                         token = fl.read()
-                                    self.__token = token
+                                    self.__token = str(token).strip()
                             except Exception as e:
                                 logger.warning(str(e))
                 if self.__server and self.__beamtime and self.__token:

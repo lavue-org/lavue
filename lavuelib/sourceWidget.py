@@ -805,10 +805,7 @@ class ASAPOSourceWidget(SourceBaseWidget):
                     currentIndexChanged.disconnect(
                         self._updateStreamComboBox)
             if not self._ui.asapostreamComboBox.count() \
-               or not self._ui.asapodatasourceComboBox.currentText() \
-               or not self.__server \
-               or not self.__token \
-               or not self.__beamtime:
+               or not self._ui.asapodatasourceComboBox.currentText():
                 self.buttonEnabled.emit(False)
             else:
                 self.buttonEnabled.emit(True)
