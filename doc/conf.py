@@ -466,5 +466,6 @@ intersphinx_mapping = {
     'https://doc.qt.io/qtforpython/': None,
     # 'https://www.silx.org/doc/fabio/latest/': None,
     'https://pillow.readthedocs.io/en/stable/': None,
-    'https://pyfai.readthedocs.io/en/master/': None,
+    # 'https://pyfai.readthedocs.io/en/master/': None,
+    'https://pyfai.readthedocs.io/en/v2023.1/': None,
 }

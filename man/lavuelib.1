@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "LAVUELIB" "1" "Nov 09, 2023" "2.84" "LaVue"
+.TH "LAVUELIB" "1" "Mar 07, 2024" "2.85" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .
@@ -1750,6 +1750,12 @@ It allows for the user to adjust image sources and their dialogs.
 \fBDatasources:\fP defines possible datasource names which are separated by spaces
 .IP \(bu 2
 \fBSource Path:\fP a path to ASAPO files, e.g. /asap3/petra.gpfs/{beamline}/{year}/data/{beamtime_id}
+.IP \(bu 2
+\fBMetadata File:\fP  Beamtime Metadata files, default “/gpfs/current/beamtime\-metadata\-
+.nf
+*
+.fi
+\&.json”
 .UNINDENT
 .sp
 \fBNexus File\fP
@@ -2139,20 +2145,20 @@ This function \fBreturns\fP \fInew_numpy_image\fP or \fINone\fP or \fItuple\fP (
 from scipy import ndimage
 
 def rot45(image, imagename, metadata, imagewg):
-""" rotate image by 45 deg
+    """ rotate image by 45 deg
 
-:param image: numpy array with an image
-:type image: :class:\(ganumpy.ndarray\(ga
-:param imagename: image name
-:type imagename: :obj:\(gastr\(ga
-:param metadata: JSON dictionary with metadata
-:type metadata: :obj:\(gastr\(ga
-:param imagewg: image wigdet
-:type imagewg: :class:\(galavuelib.imageWidget.ImageWidget\(ga
-:returns: numpy array with an image
-:rtype: :class:\(ganumpy.ndarray\(ga or \(gaNone\(ga
-"""
-return ndimage.rotate(image, 45)
+    :param image: numpy array with an image
+    :type image: :class:\(ganumpy.ndarray\(ga
+    :param imagename: image name
+    :type imagename: :obj:\(gastr\(ga
+    :param metadata: JSON dictionary with metadata
+    :type metadata: :obj:\(gastr\(ga
+    :param imagewg: image wigdet
+    :type imagewg: :class:\(galavuelib.imageWidget.ImageWidget\(ga
+    :returns: numpy array with an image
+    :rtype: :class:\(ganumpy.ndarray\(ga or \(gaNone\(ga
+    """
+    return ndimage.rotate(image, 45)
 .ft P
 .fi
 .UNINDENT
@@ -2722,6 +2728,11 @@ updates class variables with the form content
 .TP
 .B asapobeamtime
 (\fI\%str\fP) asapo beamtime id
+.UNINDENT
+.INDENT 7.0
+.TP
+.B asapobtmetafile
+(\fI\%str\fP) asapo beamline metadata file
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -14363,6 +14374,11 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
+.B asapobtmetafile
+(\fI\%str\fP) asapo beamline metadata file
+.UNINDENT
+.INDENT 7.0
+.TP
 .B asapodatasources
 (\fI\%list\fP < \fI\%str\fP > ) asapo datasources
 .UNINDENT
@@ -15920,7 +15936,7 @@ update slot for Asapo source
 .UNINDENT
 .INDENT 7.0
 .TP
-.B updateMetaData(asaposerver=None, asapotoken=None, asapobeamtime=None, asapodatasources=None, asapostreams=None, asaposourcepath=None, disconnect=True, **kargs)
+.B updateMetaData(asaposerver=None, asapotoken=None, asapobeamtime=None, asapodatasources=None, asapostreams=None, asaposourcepath=None, asapobtmetafile=None, disconnect=True, **kargs)
 update source input parameters
 .sp
 :param asaposervers asapo servers, i.e. host:port
@@ -15935,6 +15951,8 @@ update source input parameters
 :type asapostreams: \fI\%list\fP <\fI\%str\fP> >
 :param asaposourcepath: source path
 :type asaposourcepath: \fI\%str\fP
+:param asapobtmetafile: beamtime metadata file
+:type asapobtmetafile: \fI\%str\fP
 :param disconnect: disconnect on update
 :type disconnect: \fI\%bool\fP
 :param kargs:  source widget input parameter dictionary
