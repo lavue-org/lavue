@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.sourceWidget &#8212; LaVue (latest) documentation</title>
+    <title>lavuelib.sourceWidget &#8212; LaVue 2.85.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
@@ -33,7 +33,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue (latest) documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.85.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.sourceWidget</a></li> 
       </ul>
@@ -810,6 +810,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="c1">#: (:obj:`str`&gt;) source path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__sourcepath</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1">#: (:obj:`str`&gt;) beamtime metadata file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__btmetafile</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="c1">#: (:obj:`str`&gt;) asapo token</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__token</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
@@ -850,10 +852,7 @@
                     <span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">_updateStreamComboBox</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> \
-               <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span> \
-               <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__server</span> \
-               <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__token</span> \
-               <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime</span><span class="p">:</span>
+               <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">buttonEnabled</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">buttonEnabled</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -871,12 +870,13 @@
 <span class="sd">        :returns configuration: configuration string</span>
 <span class="sd">        :rtype configuration: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__server</span><span class="p">,</span>
             <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapodatasourceComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()),</span>
             <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">asapostreamComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()),</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__sourcepath</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__btmetafile</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__token</span>
         <span class="p">)</span></div>
 
@@ -884,6 +884,7 @@
                        <span class="n">asapobeamtime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">asapodatasources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">asapostreams</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">asaposourcepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">asapobtmetafile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">disconnect</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                        <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update source input parameters</span>
@@ -900,6 +901,8 @@
 <span class="sd">        :type asapostreams: :obj:`list` &lt;:obj:`str`&gt; &gt;</span>
 <span class="sd">        :param asaposourcepath: source path</span>
 <span class="sd">        :type asaposourcepath: :obj:`str`</span>
+<span class="sd">        :param asapobtmetafile: beamtime metadata file</span>
+<span class="sd">        :type asapobtmetafile: :obj:`str`</span>
 <span class="sd">        :param disconnect: disconnect on update</span>
 <span class="sd">        :type disconnect: :obj:`bool`</span>
 <span class="sd">        :param kargs:  source widget input parameter dictionary</span>
@@ -931,6 +934,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime</span> <span class="o">=</span> <span class="n">asapobeamtime</span>
         <span class="k">if</span> <span class="n">asaposourcepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__sourcepath</span> <span class="o">=</span> <span class="n">asaposourcepath</span>
+        <span class="k">if</span> <span class="n">asapobtmetafile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__btmetafile</span> <span class="o">=</span> <span class="n">asapobtmetafile</span>
         <span class="n">updatecombo</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asapostreams</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
@@ -2695,6 +2700,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.85.0/index.html">v2.85.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.84.0/index.html">v2.84.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.83.4/index.html">v2.83.4</a></li>
       <li><a class="reference external" href="../../index/../../v2.83.3/index.html">v2.83.3</a></li>
@@ -2733,7 +2739,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue (latest) documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.85.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.sourceWidget</a></li> 
       </ul>
