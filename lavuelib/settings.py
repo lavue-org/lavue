@@ -217,6 +217,8 @@ class Settings(object):
         self.asapobeamtime = ""
         #: (:obj:`str`) asapo sourcepath
         self.asaposourcepath = ""
+        #: (:obj:`str`) asapo beamline metadata file
+        self.asapobtmetafile = "/gpfs/current/beamtime-metadata-*.json"
         #: (:obj:`list` < :obj:`str` > ) asapo datasources
         self.asapodatasources = []
 
@@ -731,6 +733,14 @@ class Settings(object):
 
         qstval = \
             settings.value(
+                "Configuration/ASAPOMetadataFile", type=str)
+        if qstval:
+            self.asapobtmetafile = str(qstval)
+        else:
+            self.asapobtmetafile = "/gpfs/current/beamtime-metadata-*.json"
+
+        qstval = \
+            settings.value(
                 "Configuration/HidraDetectorServers", type=str)
         if qstval:
             try:
@@ -1144,6 +1154,9 @@ class Settings(object):
         settings.setValue(
             "Configuration/ASAPOSourcePath",
             self.asaposourcepath)
+        settings.setValue(
+            "Configuration/ASAPOMetadataFile",
+            self.asapobtmetafile)
         settings.setValue(
             "Configuration/HidraDetectorServers",
             self.detservers)

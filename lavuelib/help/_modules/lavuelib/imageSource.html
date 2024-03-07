@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.imageSource &#8212; LaVue 2.84.0 documentation</title>
+    <title>lavuelib.imageSource &#8212; LaVue 2.85.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
     
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.84.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.85.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageSource</a></li> 
       </ul>
@@ -76,6 +76,7 @@
 <span class="kn">import</span> <span class="nn">struct</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">dataFetchThread</span>
 <span class="kn">from</span> <span class="nn">.sardanaUtils</span> <span class="kn">import</span> <span class="n">debugmethod</span>
@@ -1935,6 +1936,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="c1">#: (:obj:`str`) sourcepath</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__sourcepath</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1">#: (:obj:`str`&gt;) beamtime metadata file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__btmetafile</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="c1">#: (:obj:`str`) asapo server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__server</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="c1">#: (:obj:`str`) stream</span>
@@ -1976,7 +1979,8 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datasource</span><span class="p">,</span>
                  <span class="bp">self</span><span class="o">.</span><span class="n">__stream</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcepath</span><span class="p">,</span>
-                 <span class="bp">self</span><span class="o">.</span><span class="n">__token</span><span class="p">)</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">__btmetafile</span><span class="p">,</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">__token</span><span class="p">)</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__lastname</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__lastid</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__subcounter</span> <span class="o">=</span> <span class="mi">0</span>
@@ -2031,6 +2035,31 @@
         <span class="k">try</span><span class="p">:</span>
 
             <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__server</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime</span> \
+                   <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__token</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__btmetafile</span><span class="p">:</span>
+                        <span class="n">btmfs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__btmetafile</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">btf</span> <span class="ow">in</span> <span class="n">btmfs</span><span class="p">:</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">btf</span><span class="p">))</span> <span class="k">as</span> <span class="n">fl</span><span class="p">:</span>
+                                    <span class="n">btmd</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fl</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime</span> <span class="ow">and</span> \
+                                   <span class="s2">&quot;beamtimeId&quot;</span> <span class="ow">in</span> <span class="n">btmd</span> <span class="ow">and</span> <span class="n">btmd</span><span class="p">[</span><span class="s2">&quot;beamtimeId&quot;</span><span class="p">]:</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime</span> <span class="o">=</span> <span class="n">btmd</span><span class="p">[</span><span class="s2">&quot;beamtimeId&quot;</span><span class="p">]</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__server</span> <span class="ow">and</span> <span class="s2">&quot;asapo&quot;</span> <span class="ow">in</span> <span class="n">btmd</span> <span class="ow">and</span> \
+                                   <span class="s2">&quot;endpoint&quot;</span> <span class="ow">in</span> <span class="n">btmd</span><span class="p">[</span><span class="s2">&quot;asapo&quot;</span><span class="p">]</span> <span class="ow">and</span> \
+                                   <span class="n">btmd</span><span class="p">[</span><span class="s2">&quot;asapo&quot;</span><span class="p">][</span><span class="s2">&quot;endpoint&quot;</span><span class="p">]:</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__server</span> <span class="o">=</span> <span class="n">btmd</span><span class="p">[</span><span class="s2">&quot;endpoint&quot;</span><span class="p">]</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__server</span> <span class="ow">and</span> <span class="s2">&quot;asapo&quot;</span> <span class="ow">in</span> <span class="n">btmd</span> <span class="ow">and</span> \
+                                   <span class="s2">&quot;beamtimeTokenPath&quot;</span> <span class="ow">in</span> <span class="n">btmd</span><span class="p">[</span><span class="s2">&quot;asapo&quot;</span><span class="p">]</span> <span class="ow">and</span> \
+                                   <span class="n">btmd</span><span class="p">[</span><span class="s2">&quot;asapo&quot;</span><span class="p">][</span><span class="s2">&quot;beamtimeTokenPath&quot;</span><span class="p">]:</span>
+                                    <span class="n">btp</span> <span class="o">=</span> <span class="n">btmd</span><span class="p">[</span><span class="s2">&quot;asapo&quot;</span><span class="p">][</span><span class="s2">&quot;beamtimeTokenPath&quot;</span><span class="p">]</span>
+                                    <span class="n">bp</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">btf</span><span class="p">))</span>
+                                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bp</span><span class="p">,</span> <span class="n">btp</span><span class="p">))</span> <span class="k">as</span> <span class="n">fl</span><span class="p">:</span>
+                                        <span class="n">token</span> <span class="o">=</span> <span class="n">fl</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__token</span> <span class="o">=</span> <span class="n">token</span>
+                            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__server</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__token</span><span class="p">:</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcepath</span><span class="p">:</span>
                         <span class="n">sourcepath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcepath</span>
@@ -2843,7 +2872,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.84.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.85.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageSource</a></li> 
       </ul>

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1203</width>
-    <height>776</height>
+    <height>826</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1687,39 +1687,6 @@
            </property>
           </spacer>
          </item>
-         <item row="1" column="0">
-          <widget class="QGroupBox" name="httpGroupBox">
-           <property name="title">
-            <string>HTTP response</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_22">
-            <item row="0" column="0">
-             <layout class="QGridLayout" name="gridLayout_12">
-              <item row="0" column="0">
-               <widget class="QLabel" name="urlsLabel">
-                <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;JSON dictionary with http urls, i.e.&lt;/p&gt;&lt;p&gt;{&amp;quot;eiger1&amp;quot;: &amp;quot;http://haso228eiger/monitor/api/1.5.0/images/monitor&amp;quot;, &amp;quot;eiger2&amp;quot;:&amp;quot;haso228eiger/1.5.0&amp;quot; }&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
-                <property name="text">
-                 <string>&amp;URLs:</string>
-                </property>
-                <property name="buddy">
-                 <cstring>urlsLineEdit</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QLineEdit" name="urlsLineEdit">
-                <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;JSON dictionary with http urls, i.e.&lt;/p&gt;&lt;p&gt;{&amp;quot;eiger1&amp;quot;: &amp;quot;http://haso228eiger/monitor/api/1.5.0/images/monitor&amp;quot;, &amp;quot;eiger2&amp;quot;:&amp;quot;haso228eiger/1.5.0&amp;quot; }&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-         </item>
          <item row="0" column="0">
           <widget class="QGroupBox" name="hidraGroupBox">
            <property name="title">
@@ -1895,6 +1862,39 @@
            </layout>
           </widget>
          </item>
+         <item row="1" column="0">
+          <widget class="QGroupBox" name="httpGroupBox">
+           <property name="title">
+            <string>HTTP response</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_22">
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="gridLayout_12">
+              <item row="0" column="0">
+               <widget class="QLabel" name="urlsLabel">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;JSON dictionary with http urls, i.e.&lt;/p&gt;&lt;p&gt;{&amp;quot;eiger1&amp;quot;: &amp;quot;http://haso228eiger/monitor/api/1.5.0/images/monitor&amp;quot;, &amp;quot;eiger2&amp;quot;:&amp;quot;haso228eiger/1.5.0&amp;quot; }&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>&amp;URLs:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>urlsLineEdit</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="urlsLineEdit">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;JSON dictionary with http urls, i.e.&lt;/p&gt;&lt;p&gt;{&amp;quot;eiger1&amp;quot;: &amp;quot;http://haso228eiger/monitor/api/1.5.0/images/monitor&amp;quot;, &amp;quot;eiger2&amp;quot;:&amp;quot;haso228eiger/1.5.0&amp;quot; }&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
          <item row="7" column="0">
           <widget class="QGroupBox" name="groupBox_6">
            <property name="title">
@@ -1903,6 +1903,19 @@
            <layout class="QGridLayout" name="gridLayout_36">
             <item row="0" column="0">
              <layout class="QGridLayout" name="gridLayout_35">
+              <item row="2" column="0">
+               <widget class="QLabel" name="asapobeamtimeLabel">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;asapo beamtime name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>&amp;Beamtime:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>asapobeamtimeLineEdit</cstring>
+                </property>
+               </widget>
+              </item>
               <item row="1" column="0">
                <widget class="QLabel" name="asapotokenLabel">
                 <property name="toolTip">
@@ -1923,23 +1936,16 @@
                 </property>
                </widget>
               </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="asapobeamtimeLabel">
+              <item row="3" column="0">
+               <widget class="QLabel" name="asapodatasourcesLabel">
                 <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;asapo beamtime name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Possible ASAPO stream names separated by spaces&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="text">
-                 <string>&amp;Beamtime:</string>
+                 <string>Datasources:</string>
                 </property>
                 <property name="buddy">
-                 <cstring>asapobeamtimeLineEdit</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QLineEdit" name="asapobeamtimeLineEdit">
-                <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;asapo beamtime name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <cstring>asapodatasourcesLineEdit</cstring>
                 </property>
                </widget>
               </item>
@@ -1956,6 +1962,13 @@
                 </property>
                </widget>
               </item>
+              <item row="3" column="1">
+               <widget class="QLineEdit" name="asapodatasourcesLineEdit">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Possible ASAPO stream names separated by spaces&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
               <item row="0" column="1">
                <widget class="QLineEdit" name="asaposerverLineEdit">
                 <property name="toolTip">
@@ -1963,23 +1976,10 @@
                 </property>
                </widget>
               </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="asapodatasourcesLabel">
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="asapobeamtimeLineEdit">
                 <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Possible ASAPO stream names separated by spaces&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
-                <property name="text">
-                 <string>Datasources:</string>
-                </property>
-                <property name="buddy">
-                 <cstring>asapodatasourcesLineEdit</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <widget class="QLineEdit" name="asapodatasourcesLineEdit">
-                <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Possible ASAPO stream names separated by spaces&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;asapo beamtime name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                </widget>
               </item>
@@ -2000,6 +2000,26 @@
                 </property>
                 <property name="buddy">
                  <cstring>asaposourcepathLineEdit</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="asapobtmetafileLabel">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The beamtime metadata file with asapo.endpoint (server), asapo.beamtimeTokenPath and beamtimeId.  &lt;br/&gt;By default it is usually, /gpfs/current/beamtime-metadata-*.json&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Metadata File:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>asapobtmetafileLineEdit</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QLineEdit" name="asapobtmetafileLineEdit">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The beamtime metadata file with server, token and beamtime.  &lt;br/&gt;By default it is usually, /gpfs/current/beamtime-metadata-*.json&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                </widget>
               </item>
@@ -2432,12 +2452,14 @@ in the file name and the file directory for Tango File Source</string>
   <tabstop>defdetserversCheckBox</tabstop>
   <tabstop>urlsLineEdit</tabstop>
   <tabstop>zmqserversLineEdit</tabstop>
-  <tabstop>autozmqtopicsCheckBox</tabstop> 
+  <tabstop>autozmqtopicsCheckBox</tabstop>
   <tabstop>zmqtopicsLineEdit</tabstop>
   <tabstop>zmqcolonCheckBox</tabstop>
   <tabstop>asapotokenLineEdit</tabstop>
   <tabstop>asapobeamtimeLineEdit</tabstop>
   <tabstop>asapodatasourcesLineEdit</tabstop>
+  <tabstop>asaposourcepathLineEdit</tabstop>
+  <tabstop>asapobtmetafileLineEdit</tabstop>
   <tabstop>nxsopenCheckBox</tabstop>
   <tabstop>nxslastCheckBox</tabstop>
   <tabstop>attrLineEdit</tabstop>

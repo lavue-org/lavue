@@ -31,6 +31,7 @@ import json
 import struct
 import logging
 import os
+import glob
 
 from . import dataFetchThread
 from .sardanaUtils import debugmethod
@@ -1890,6 +1891,8 @@ class ASAPOSource(BaseSource):
         self.__beamtime = ""
         #: (:obj:`str`) sourcepath
         self.__sourcepath = ""
+        #: (:obj:`str`>) beamtime metadata file
+        self.__btmetafile = ""
         #: (:obj:`str`) asapo server
         self.__server = ""
         #: (:obj:`str`) stream
@@ -1931,7 +1934,8 @@ class ASAPOSource(BaseSource):
             try:
                 (self.__server, self.__datasource,
                  self.__stream, self.__beamtime, self.__sourcepath,
-                 self.__token) = str(configuration).split(",", 6)
+                 self.__btmetafile,
+                 self.__token) = str(configuration).split(",", 7)
                 self.__lastname = ""
                 self.__lastid = ""
                 self.__subcounter = 0
@@ -1986,6 +1990,32 @@ class ASAPOSource(BaseSource):
         try:
 
             with QtCore.QMutexLocker(self.__mutex):
+                if not self.__server or not self.__beamtime \
+                   or not self.__token:
+                    if self.__btmetafile:
+                        btmfs = glob.glob(self.__btmetafile)
+                        if btmfs and btmfs[0]:
+                            btf = btmfs[0]
+                            try:
+                                with open(os.path.abspath(btf)) as fl:
+                                    btmd = json.loads(fl.read())
+                                if not self.__beamtime and \
+                                   "beamtimeId" in btmd and btmd["beamtimeId"]:
+                                    self.__beamtime = btmd["beamtimeId"]
+                                if not self.__server and "asapo" in btmd and \
+                                   "endpoint" in btmd["asapo"] and \
+                                   btmd["asapo"]["endpoint"]:
+                                    self.__server = btmd["asapo"]["endpoint"]
+                                if not self.__token and "asapo" in btmd and \
+                                   "beamtimeTokenPath" in btmd["asapo"] and \
+                                   btmd["asapo"]["beamtimeTokenPath"]:
+                                    btp = btmd["asapo"]["beamtimeTokenPath"]
+                                    bp, _ = os.path.split(os.path.abspath(btf))
+                                    with open(os.path.join(bp, btp)) as fl:
+                                        token = fl.read()
+                                    self.__token = str(token).strip()
+                            except Exception as e:
+                                logger.warning(str(e))
                 if self.__server and self.__beamtime and self.__token:
                     if self.__sourcepath:
                         sourcepath = self.__sourcepath

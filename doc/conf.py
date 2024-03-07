@@ -260,7 +260,7 @@ if os.getenv("LAVUE_HIDE_VERSIONS") != 'TRUE':
 
 html_context = {
     "docs_versions" : [
-        "v2.84.0",
+        "v2.85.0", "v2.84.0",
         "v2.83.4", "v2.83.3", "v2.83.2", "v2.83.1", "v2.83.0",
         "v2.82.0", "v2.81.0", "v2.80.1", "v2.80.0", "v2.79.0",
         "v2.78.0", "v2.77.0", "v2.76.1", "v2.76.0", "v2.75.3",
@@ -466,5 +466,6 @@ intersphinx_mapping = {
     'https://doc.qt.io/qtforpython/': None,
     # 'https://www.silx.org/doc/fabio/latest/': None,
     'https://pillow.readthedocs.io/en/stable/': None,
-    'https://pyfai.readthedocs.io/en/master/': None,
+    # 'https://pyfai.readthedocs.io/en/master/': None,
+    'https://pyfai.readthedocs.io/en/v2023.1/': None,
 }

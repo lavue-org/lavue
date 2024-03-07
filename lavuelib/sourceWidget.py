@@ -763,6 +763,8 @@ class ASAPOSourceWidget(SourceBaseWidget):
         self.__beamtime = ""
         #: (:obj:`str`>) source path
         self.__sourcepath = ""
+        #: (:obj:`str`>) beamtime metadata file
+        self.__btmetafile = ""
         #: (:obj:`str`>) asapo token
         self.__token = ""
 
@@ -803,10 +805,7 @@ class ASAPOSourceWidget(SourceBaseWidget):
                     currentIndexChanged.disconnect(
                         self._updateStreamComboBox)
             if not self._ui.asapostreamComboBox.count() \
-               or not self._ui.asapodatasourceComboBox.currentText() \
-               or not self.__server \
-               or not self.__token \
-               or not self.__beamtime:
+               or not self._ui.asapodatasourceComboBox.currentText():
                 self.buttonEnabled.emit(False)
             else:
                 self.buttonEnabled.emit(True)
@@ -824,12 +823,13 @@ class ASAPOSourceWidget(SourceBaseWidget):
         :returns configuration: configuration string
         :rtype configuration: :obj:`str`
         """
-        return "%s,%s,%s,%s,%s,%s" % (
+        return "%s,%s,%s,%s,%s,%s,%s" % (
             self.__server,
             str(self._ui.asapodatasourceComboBox.currentText()),
             str(self._ui.asapostreamComboBox.currentText()),
             self.__beamtime,
             self.__sourcepath,
+            self.__btmetafile,
             self.__token
         )
 
@@ -837,6 +837,7 @@ class ASAPOSourceWidget(SourceBaseWidget):
                        asapobeamtime=None,
                        asapodatasources=None, asapostreams=None,
                        asaposourcepath=None,
+                       asapobtmetafile=None,
                        disconnect=True,
                        **kargs):
         """ update source input parameters
@@ -853,6 +854,8 @@ class ASAPOSourceWidget(SourceBaseWidget):
         :type asapostreams: :obj:`list` <:obj:`str`> >
         :param asaposourcepath: source path
         :type asaposourcepath: :obj:`str`
+        :param asapobtmetafile: beamtime metadata file
+        :type asapobtmetafile: :obj:`str`
         :param disconnect: disconnect on update
         :type disconnect: :obj:`bool`
         :param kargs:  source widget input parameter dictionary
@@ -884,6 +887,8 @@ class ASAPOSourceWidget(SourceBaseWidget):
             self.__beamtime = asapobeamtime
         if asaposourcepath is not None:
             self.__sourcepath = asaposourcepath
+        if asapobtmetafile is not None:
+            self.__btmetafile = asapobtmetafile
         updatecombo = False
         if isinstance(asapostreams, list):
             with QtCore.QMutexLocker(self.__mutex):
