@@ -31,7 +31,7 @@ It allows for the user to adjust image sources and their dialogs.
 *    **Beamtime:** a name of beamtime used by asapo
 *    **Datasources:** defines possible datasource names which are separated by spaces
 *    **Source Path:** a path to ASAPO files, e.g. /asap3/petra.gpfs/{beamline}/{year}/data/{beamtime_id}
-*    **Metadata File:**  Beamtime Metadata files, default "/gpfs/current/beamtime-metadata-*.json"
+*    **Metadata File:**  Beamtime Metadata files, default "/gpfs/current/beamtime-metadata-\*.json"
 
 **Nexus File**
 
