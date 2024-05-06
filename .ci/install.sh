@@ -40,6 +40,7 @@ fi
 docker exec  --user root ndts service tango-db restart
 docker exec  --user root ndts mkdir -p /tmp/runtime-tango
 docker exec  --user root ndts chown -R tango:tango /tmp/runtime-tango
+docker exec  --user root ndts chmod 700 /tmp/runtime-tango
 
 
 echo "install tango servers"

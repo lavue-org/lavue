@@ -38,6 +38,8 @@ RUN /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections 
 
 ENV PKG_CONFIG_PATH=/home/tango/lib/pkgconfig
 ENV HDF5_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/hdf5/plugins
+ENV XDG_RUNTIME_DIR=/tmp/runtime-tango
+ENV LIBGL_ALWAYS_SOFTWARE=1
 # ENV QT_XKB_CONFIG_ROOT=/usr/share/X11/xkb
 # ENV XDG_RUNTIME_DIR=/tmp/runtime-tango
 # ENV RUNLEVEL=3
