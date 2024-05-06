@@ -52,6 +52,7 @@ try:
 except ImportError as e:
     H5PY_AVAILABLE = False
     print("h5py is not available: %s" % e)
+H5PY_AVAILABLE = False
 
 try:
     __import__("pninexus.h5cpp")
