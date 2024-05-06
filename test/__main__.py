@@ -240,7 +240,7 @@ def main():
         "generaltools": [generalsuite],
         "specializedtools": [specializedsuite],
         "diffractogram": [diffractogramsuite],
-        "all": [basicsuite, basicsuite2,, basicsuite3,
+        "all": [basicsuite, basicsuite2, basicsuite3,
                 tangosuite, httpsuite,
                 generalsuite, specializedsuite,
                 diffractogramsuite],
