@@ -224,7 +224,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         'args', metavar='name', type=str, nargs='*',
-        help='suite names: all, basic, tangosource, httpsource, '
+        help='suite names: all, basic, basic2, basic3, '
+        ' tangosource, httpsource, '
         ' generaltools, specializedtools, diffractogram'
         ', tangofilesource'
     )
