@@ -38,6 +38,7 @@ RUN /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections 
 
 ENV PKG_CONFIG_PATH=/home/tango/lib/pkgconfig
 ENV HDF5_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/hdf5/plugins
+ENV XDG_RUNTIME_DIR=/tmp/runtime-tango
 ENV MYSQL_HOST=localhost
 USER tango
 WORKDIR /home/tango
