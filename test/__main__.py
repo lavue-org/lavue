@@ -52,7 +52,6 @@ try:
 except ImportError as e:
     H5PY_AVAILABLE = False
     print("h5py is not available: %s" % e)
-# H5PY_AVAILABLE = False
 
 try:
     __import__("pninexus.h5cpp")
@@ -110,6 +109,7 @@ def main():
     # ts = None
     # test suit
     basicsuite = unittest.TestSuite()
+    basicsuite2 = unittest.TestSuite()
     generalsuite = unittest.TestSuite()
     specializedsuite = unittest.TestSuite()
     generalsuite = unittest.TestSuite()
@@ -141,7 +141,7 @@ def main():
     if H5PY_AVAILABLE:
         ASAPOImageSourceH5PY_test.app = app
         HidraImageSourceH5PY_test.app = app
-    basicsuite.addTests(
+    basicsuite2.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             CommandLineArgument_test))
     basicsuite.addTests(
@@ -160,41 +160,41 @@ def main():
         unittest.defaultTestLoader.loadTestsFromModule(
             EpicsImageSource_test))
     if H5PY_AVAILABLE:
-        basicsuite.addTests(
+        basicsuite2.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 FileWriterH5PY_test))
-        basicsuite.addTests(
+        basicsuite2.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(H5PYWriter_test))
-        basicsuite.addTests(
+        basicsuite2.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 ASAPOImageSourceH5PY_test))
-        basicsuite.addTests(
+        basicsuite2.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 HidraImageSourceH5PY_test))
     if H5CPP_AVAILABLE:
-        basicsuite.addTests(
+        basicsuite2.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 NXSFileImageSource_test))
-        basicsuite.addTests(
+        basicsuite2.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 CommandLineArgumentH5Cpp_test))
-        basicsuite.addTests(
+        basicsuite2.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 FileWriterH5Cpp_test))
-        basicsuite.addTests(
+        basicsuite2.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 ASAPOImageSourceH5Cpp_test))
-        basicsuite.addTests(
+        basicsuite2.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 HidraImageSourceH5Cpp_test))
-        basicsuite.addTests(
+        basicsuite2.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(H5CppWriter_test))
     if H5CPP_AVAILABLE and H5PY_AVAILABLE:
-        basicsuite.addTests(
+        basicsuite2.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 FileWriterH5CppH5PY_test))
     if TANGO_AVAILABLE:
-        basicsuite.addTests(
+        basicsuite2.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 LavueController_test))
         generalsuite.addTests(
@@ -212,7 +212,7 @@ def main():
         tangofilesuite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 TangoFileImageSource_test))
-        basicsuite.addTests(
+        basicsuite2.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 ZMQStreamImageSource_test))
 
@@ -231,13 +231,15 @@ def main():
 
     namesuite = {
         "basic": [basicsuite],
+        "basic2": [basicsuite2],
         "httpsource": [httpsuite],
         "tangosource": [tangosuite],
         "tangofilesource": [tangofilesuite],
         "generaltools": [generalsuite],
         "specializedtools": [specializedsuite],
         "diffractogram": [diffractogramsuite],
-        "all": [basicsuite, tangosuite, httpsuite,
+        "all": [basicsuite, basicsuite2,
+                tangosuite, httpsuite,
                 generalsuite, specializedsuite,
                 diffractogramsuite],
     }

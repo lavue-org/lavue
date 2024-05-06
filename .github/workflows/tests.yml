@@ -42,8 +42,8 @@ jobs:
           OS: ${{ matrix.os }}
         run: .ci/install.sh ${OS} 3
 
-      # - name: run basic tests
-      #   run: .ci/run.sh 3 basic
+      - name: run basic tests
+        run: .ci/run.sh 3 basic
 
       - name: run general tool tests
         run: .ci/run.sh 3 generaltools
