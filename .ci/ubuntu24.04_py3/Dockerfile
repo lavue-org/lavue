@@ -18,7 +18,7 @@ RUN cd /etc/apt/sources.list.d && wget http://repos.pni-hdri.de/noble-pni-hdri.l
 
 # install packages
 RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get -qq dist-upgrade
-RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y mariadb-client python3-h5py python3-sphinx apt-utils debconf-utils net-tools  omniidl python3-pninexus python3-pyqt5 python3-pyqt5.qtsvg python3-qtchecker  python3-pyfai qt5-qmake  qtchooser python3-requests xvfb  libxcb1 libx11-xcb1 libxcb-keysyms1 libxcb-image0 libxcb-icccm4 libxcb-render-util0 xkb-data liblog4j1.2-java python3-pyqt5  git python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy python3-pyqt5.qtwebkit hdf5-filter-plugin qt5-quickcontrols
+RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y mariadb-client python3-h5py python3-sphinx apt-utils debconf-utils net-tools  omniidl python3-pninexus python3-pyqt5 python3-pyqt5.qtsvg python3-qtchecker  python3-pyfai qt5-qmake  qtchooser python3-requests xvfb  libxcb1 libx11-xcb1 libxcb-keysyms1 libxcb-image0 libxcb-icccm4 libxcb-render-util0 xkb-data liblog4j1.2-java python3-pyqt5  git python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy python3-pyqt5.qtwebkit hdf5-filter-plugin
 
 # set db configuration
 RUN  /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections <<< "mariadb-server mysql-server/root_password password rootpw"' \
