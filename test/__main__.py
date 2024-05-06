@@ -110,6 +110,7 @@ def main():
     # test suit
     basicsuite = unittest.TestSuite()
     basicsuite2 = unittest.TestSuite()
+    basicsuite3 = unittest.TestSuite()
     generalsuite = unittest.TestSuite()
     specializedsuite = unittest.TestSuite()
     generalsuite = unittest.TestSuite()
@@ -141,7 +142,7 @@ def main():
     if H5PY_AVAILABLE:
         ASAPOImageSourceH5PY_test.app = app
         HidraImageSourceH5PY_test.app = app
-    basicsuite2.addTests(
+    basicsuite3.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             CommandLineArgument_test))
     basicsuite.addTests(
@@ -160,15 +161,15 @@ def main():
         unittest.defaultTestLoader.loadTestsFromModule(
             EpicsImageSource_test))
     if H5PY_AVAILABLE:
-        basicsuite2.addTests(
+        basicsuite3.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 FileWriterH5PY_test))
-        basicsuite2.addTests(
+        basicsuite3.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(H5PYWriter_test))
-        basicsuite2.addTests(
+        basicsuite3.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 ASAPOImageSourceH5PY_test))
-        basicsuite2.addTests(
+        basicsuite3.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(
                 HidraImageSourceH5PY_test))
     if H5CPP_AVAILABLE:
@@ -232,13 +233,14 @@ def main():
     namesuite = {
         "basic": [basicsuite],
         "basic2": [basicsuite2],
+        "basic3": [basicsuite3],
         "httpsource": [httpsuite],
         "tangosource": [tangosuite],
         "tangofilesource": [tangofilesuite],
         "generaltools": [generalsuite],
         "specializedtools": [specializedsuite],
         "diffractogram": [diffractogramsuite],
-        "all": [basicsuite, basicsuite2,
+        "all": [basicsuite, basicsuite2,, basicsuite3,
                 tangosuite, httpsuite,
                 generalsuite, specializedsuite,
                 diffractogramsuite],
