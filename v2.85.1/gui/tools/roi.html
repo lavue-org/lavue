@@ -1,0 +1,180 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>ROI Tool &#8212; LaVue  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="LineCut Tool" href="linecut.html" />
+    <link rel="prev" title="Intensity Tool" href="intensity.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="linecut.html" title="LineCut Tool"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intensity.html" title="Intensity Tool"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >GUI User Guide</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Specialized Tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ROI Tool</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="roi-tool">
+<span id="roi"></span><h1>ROI Tool<a class="headerlink" href="#roi-tool" title="Permalink to this heading">¶</a></h1>
+<p><strong>ROI Tool</strong> selects Regions Of Interest and culculates a sum of their pixel intensities</p>
+<figure class="align-default">
+<img alt="../../_images/intensitylavue.png" src="../../_images/intensitylavue.png" />
+</figure>
+<ul class="simple">
+<li><p><strong>ROI alias(es)</strong> for roi tango devices</p></li>
+<li><p><strong>Add</strong> to or <strong>Fetch</strong> from sardana environment (see below). If lavue is working with ANALYSISDEVICE , i.e. lavue -n &lt;device&gt;,  <strong>ROIs</strong> bounds are sending also to tango SPECTRUM  RoIs  attribute of the device, e.g. LambdaOnlineAnalysis server.</p></li>
+<li><p><strong>Sum of</strong> the selected <strong>ROI</strong> or all <strong>ROIs</strong>. The used version can be selected in the configuration.</p></li>
+</ul>
+<p>Moreover, in configuration can be set if the sums of calculated ROIs should be sent to <strong>LavueController</strong> tango server.</p>
+<p>After adding ROIs to sardana  the following environment variables are created or updated</p>
+<ul class="simple">
+<li><p><strong>DetectorROIs</strong>: <a class="reference external" href="https://www.json.org/json-en.html">JSON</a> dictionary with  all Regions Of Interests ranges, e.g.
+<br> <cite>{“pilatus_roi1”: [[195, 73, 277, 145]], “pilatus_roi2”:[[305, 65, 455, 125]], “old_pilatus_roi”:[[19, 27, 73, 146]]}</cite></p></li>
+<li><p><strong>DetectorROIsValues</strong>: <a class="reference external" href="https://www.json.org/json-en.html">JSON</a> dictionary with Regions Of Interests sums, e.g.
+<br> <cite>{“pilatus_roi1”: [44940.0], “pilatus_roi2”: [8167.0]}}</cite></p></li>
+<li><p><strong>DetectorROIsParams</strong>: <a class="reference external" href="https://www.json.org/json-en.html">JSON</a> list of image transformations performed by lavue, e.g.
+<br> <cite>[“transpose”, “flip-left-right”, “flip-up-down”]</cite></p></li>
+<li><p><strong>DetectorROIsOrder</strong>: <a class="reference external" href="https://www.json.org/json-en.html">JSON</a> list of ROI aliases representing they order, e.g.
+<br> <cite>[“pilatus_roi1”, “pilatus_roi2”]</cite></p></li>
+</ul>
+<p>The <strong>configuration</strong> of the tool can be set with a <a class="reference external" href="https://www.json.org/json-en.html">JSON</a> dictionary passed in the  <code class="docutils literal notranslate"><span class="pre">--tool-configuration</span></code>  option in command line or a toolconfig variable of <code class="docutils literal notranslate"><span class="pre">LavueController.LavueState</span></code> with the following keys:</p>
+<p><code class="docutils literal notranslate"><span class="pre">aliases</span></code> (list of strings), <code class="docutils literal notranslate"><span class="pre">rois_number</span></code> (integer)</p>
+<p>e.g.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">lavue -u roi --tool-configuration \{\&quot;rois_number\&quot;:2,\&quot;aliases\&quot;:[\&quot;pilatus_roi1\&quot;,\&quot;polatus_roi2\&quot;]}</span>
+</pre></div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="intensity.html"
+                          title="previous chapter">Intensity Tool</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="linecut.html"
+                          title="next chapter">LineCut Tool</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v2.85.1/index.html">v2.85.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.85.0/index.html">v2.85.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.84.0/index.html">v2.84.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.4/index.html">v2.83.4</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.3/index.html">v2.83.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.2/index.html">v2.83.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.1/index.html">v2.83.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.0/index.html">v2.83.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.82.0/index.html">v2.82.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.81.0/index.html">v2.81.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.80.1/index.html">v2.80.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.80.0/index.html">v2.80.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.79.0/index.html">v2.79.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.76.0/index.html">v2.76.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.75.3/index.html">v2.75.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.75.1/index.html">v2.75.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.74.0/index.html">v2.74.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.73.0/index.html">v2.73.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.72.0/index.html">v2.72.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.71.1/index.html">v2.71.1</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="linecut.html" title="LineCut Tool"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intensity.html" title="Intensity Tool"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >GUI User Guide</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Specialized Tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ROI Tool</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+
+GNU GENERAL PUBLIC LICENSE, version 2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>
