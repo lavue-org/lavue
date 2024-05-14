@@ -3573,8 +3573,7 @@ class LiveViewer(QtWidgets.QDialog):
                                 self.__rawgreyimage = np.concatenate(
                                     (self.__rawgreyimage,
                                      np.zeros(
-                                         shape=nshape.
-                                         shape[:, :, -1],
+                                         shape=nshape,
                                          dtype=self.__rawgreyimage.dtype)),
                                     axis=2)
                         else:
