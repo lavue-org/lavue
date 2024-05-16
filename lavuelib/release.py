@@ -28,4 +28,3 @@
 #: (:obj:`str`) the live viewer version
 # __version__ = "2.86"
 __version__ = "2.86.0"
-

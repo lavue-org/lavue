@@ -208,7 +208,7 @@ class NormalizationWidget(QtWidgets.QWidget):
 
     def isBFSubApplied(self):
         """ if brightfield correction applied
-        
+
         :returns: apply status
         :rtype: :obj:`bool`
         """
