@@ -2,18 +2,20 @@
 
 <!doctype html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.memoExportDialog &#8212; LaVue 2.85.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <title>lavuelib.memoExportDialog &#8212; LaVue 2.86.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -31,7 +33,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.85.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.86.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.memoExportDialog</a></li> 
       </ul>
@@ -83,7 +85,7 @@
 
 <div class="viewcode-block" id="MemoPlotWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoExportDialog.MemoPlotWidget">[docs]</a><span class="k">class</span> <span class="nc">MemoPlotWidget</span><span class="p">(</span><span class="n">_pg</span><span class="o">.</span><span class="n">PlotWidget</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; Plot Widget with improved Export Dialog</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Plot Widget with improved Export Dialog</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) freeze clicked signal</span>
     <span class="n">freezeClicked</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
@@ -112,17 +114,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">showMenu</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_freeze</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; emits freezeClicked signal</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; emits freezeClicked signal</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">freezeClicked</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; emits clearClicked signal</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; emits clearClicked signal</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">clearClicked</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
 
 <div class="viewcode-block" id="MemoPlotWidget.showMenu"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoExportDialog.MemoPlotWidget.showMenu">[docs]</a>    <span class="k">def</span> <span class="nf">showMenu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freeze</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="n">clear</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; shows freeze or/and clear action in the menu</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; shows freeze or/and clear action in the menu</span>
 
 <span class="sd">        :param freeze: freeze show status</span>
 <span class="sd">        :type freeze: :obj:`bool`</span>
@@ -136,7 +138,7 @@
 
 <div class="viewcode-block" id="MemoExportDialog"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoExportDialog.MemoExportDialog">[docs]</a><span class="k">class</span> <span class="nc">MemoExportDialog</span><span class="p">(</span><span class="n">exportDialog</span><span class="o">.</span><span class="n">ExportDialog</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; ExportDialog with bookkeeping  parameters &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; ExportDialog with bookkeeping  parameters &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">):</span>
         <span class="n">exportDialog</span><span class="o">.</span><span class="n">ExportDialog</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">)</span>
@@ -173,7 +175,7 @@
 
 
 <div class="viewcode-block" id="GraphicsScene_showExportDialog"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoExportDialog.GraphicsScene_showExportDialog">[docs]</a><span class="k">def</span> <span class="nf">GraphicsScene_showExportDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; dynamic replacement of GraphicsScene.showExportDialog</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; dynamic replacement of GraphicsScene.showExportDialog</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exportDialog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exportDialog</span> <span class="o">=</span> <span class="n">MemoExportDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -190,12 +192,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -209,7 +211,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.85.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.86.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.memoExportDialog</a></li> 
       </ul>
@@ -218,7 +220,7 @@
         &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

@@ -2,18 +2,20 @@
 
 <!doctype html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.sardanaUtils &#8212; LaVue 2.85.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <title>lavuelib.sardanaUtils &#8212; LaVue 2.86.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -31,7 +33,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.85.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.86.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.sardanaUtils</a></li> 
       </ul>
@@ -99,7 +101,7 @@
 
 
 <div class="viewcode-block" id="debugmethod"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sardanaUtils.debugmethod">[docs]</a><span class="k">def</span> <span class="nf">debugmethod</span><span class="p">(</span><span class="n">method</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; debug wrapper for methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; debug wrapper for methods</span>
 <span class="sd">    :param method: any class method</span>
 <span class="sd">    :type method: :class:`any`</span>
 <span class="sd">    :returns: wrapped class method</span>
@@ -128,10 +130,10 @@
 
 
 <div class="viewcode-block" id="numpyEncoder"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sardanaUtils.numpyEncoder">[docs]</a><span class="k">class</span> <span class="nc">numpyEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; numpy json encoder with list</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; numpy json encoder with list</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="numpyEncoder.default"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sardanaUtils.numpyEncoder.default">[docs]</a>    <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; default encoder</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; default encoder</span>
 
 <span class="sd">        :param obj: numpy array object</span>
 <span class="sd">        :type obj: :obj:`object` or `any`</span>
@@ -149,11 +151,11 @@
 
 <div class="viewcode-block" id="SardanaUtils"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sardanaUtils.SardanaUtils">[docs]</a><span class="k">class</span> <span class="nc">SardanaUtils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; sardanamacro server&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; sardanamacro server&quot;&quot;&quot;</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor &quot;&quot;&quot;</span>
 
         <span class="c1">#: (:obj:`list` &lt;:class:`tango.DeviceProxy`&gt;) pool tango servers</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span> <span class="o">=</span> <span class="p">[]</span>
@@ -165,7 +167,7 @@
 
 <div class="viewcode-block" id="SardanaUtils.openProxy"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sardanaUtils.SardanaUtils.openProxy">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">openProxy</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">counter</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; opens device proxy of the given device</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; opens device proxy of the given device</span>
 
 <span class="sd">        :param device: device name</span>
 <span class="sd">        :type device: :obj:`str`</span>
@@ -193,7 +195,7 @@
 
 <div class="viewcode-block" id="SardanaUtils.getMacroServer"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sardanaUtils.SardanaUtils.getMacroServer">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; door macro server device name</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; door macro server device name</span>
 
 <span class="sd">        :param door: door device name</span>
 <span class="sd">        :type door: :obj:`str`</span>
@@ -249,7 +251,7 @@
 
 <div class="viewcode-block" id="SardanaUtils.pickleloads"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sardanaUtils.SardanaUtils.pickleloads">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">pickleloads</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">bytestr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; loads pickle byte string</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; loads pickle byte string</span>
 <span class="sd">        :param bytestr: byte string to convert</span>
 <span class="sd">        :type bytesstr: :obj:`bytes`</span>
 <span class="sd">        :returns: loaded bytestring</span>
@@ -262,7 +264,7 @@
 
 <div class="viewcode-block" id="SardanaUtils.getScanEnv"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sardanaUtils.SardanaUtils.getScanEnv">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getScanEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; fetches Scan Environment Data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; fetches Scan Environment Data</span>
 
 <span class="sd">        :param door: door device</span>
 <span class="sd">        :type door: :obj:`str`</span>
@@ -283,7 +285,7 @@
 
 <div class="viewcode-block" id="SardanaUtils.getDeviceName"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sardanaUtils.SardanaUtils.getDeviceName">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getDeviceName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cname</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; finds device of give class</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; finds device of give class</span>
 
 <span class="sd">        :param cname: device class name</span>
 <span class="sd">        :type cname: :obj:`str`</span>
@@ -311,7 +313,7 @@
 
 <div class="viewcode-block" id="SardanaUtils.setScanEnv"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sardanaUtils.SardanaUtils.setScanEnv">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setScanEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">,</span> <span class="n">jdata</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; stores Scan Environment Data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; stores Scan Environment Data</span>
 
 <span class="sd">        :param door: door device</span>
 <span class="sd">        :type door: :obj:`str`</span>
@@ -349,7 +351,7 @@
 
 <div class="viewcode-block" id="SardanaUtils.wait"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sardanaUtils.SardanaUtils.wait">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">proxy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxcount</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; stores Scan Environment Data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; stores Scan Environment Data</span>
 
 <span class="sd">        :param name: device name</span>
 <span class="sd">        :type name: :obj:`str`</span>
@@ -367,7 +369,7 @@
 
 <div class="viewcode-block" id="SardanaUtils.runMacro"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sardanaUtils.SardanaUtils.runMacro">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">runMacro</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; stores Scan Environment Data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; stores Scan Environment Data</span>
 
 <span class="sd">        :param door: door device</span>
 <span class="sd">        :type door: :obj:`str`</span>
@@ -410,7 +412,7 @@
 
 <div class="viewcode-block" id="SardanaUtils.getError"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sardanaUtils.SardanaUtils.getError">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getError</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; stores Scan Environment Data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; stores Scan Environment Data</span>
 
 <span class="sd">        :param door: door device</span>
 <span class="sd">        :type door: :obj:`str`</span>
@@ -424,7 +426,7 @@
 
 <div class="viewcode-block" id="SardanaUtils.toString"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sardanaUtils.SardanaUtils.toString">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">toString</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; converts list/dict/object of unicode/string to string object</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; converts list/dict/object of unicode/string to string object</span>
 
 <span class="sd">        :param obj: given unicode/string object</span>
 <span class="sd">        :type obj: `any`</span>
@@ -443,7 +445,7 @@
 
 <div class="viewcode-block" id="SardanaUtils.getElementNames"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sardanaUtils.SardanaUtils.getElementNames">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getElementNames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">,</span> <span class="n">listattr</span><span class="p">,</span> <span class="n">typefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides experimental Channels</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides experimental Channels</span>
 
 <span class="sd">        :param door: door device name</span>
 <span class="sd">        :type door: :obj:`str`</span>
@@ -475,7 +477,7 @@
 
 <div class="viewcode-block" id="SardanaUtils.getPools"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sardanaUtils.SardanaUtils.getPools">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">getPools</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides pool devices</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides pool devices</span>
 
 <span class="sd">        :param door: door device name</span>
 <span class="sd">        :type door: :obj:`str`</span>
@@ -500,7 +502,7 @@
 
 <div class="viewcode-block" id="SardanaUtils.getProxies"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sardanaUtils.SardanaUtils.getProxies">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">getProxies</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides proxies of given device names</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides proxies of given device names</span>
 
 <span class="sd">        :param names: given device names</span>
 <span class="sd">        :type names: :obj:`list` &lt;:obj:`str`&gt;</span>
@@ -528,12 +530,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -547,7 +549,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.85.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.86.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.sardanaUtils</a></li> 
       </ul>
@@ -556,7 +558,7 @@
         &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>
