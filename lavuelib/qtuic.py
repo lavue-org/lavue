@@ -26,7 +26,6 @@
 """ uic support """
 import os
 
-
 uic = None
 QWebView = None
 qwebview_error = ""

@@ -1033,14 +1033,14 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         self.__lavuestate = None
         l1 = self.__tisu.proxy.LastImage.T
         lsh = l1.shape
-        zzs = np.zeros(dtype="float64", shape=[lsh[0], lsh[1] * 3])
+        zzs = np.zeros(dtype="float64", shape=[lsh[0], lsh[1]])
         zzs[:] = np.nan
         ll1 = np.array(zzs)
         ll2 = np.array(zzs)
         ll3 = np.array(zzs)
         ll1[0:lsh[0], 0:lsh[1]] = l1
-        ll2[0:lsh[0], 256:lsh[1]+256] = l1
-        ll3[0:lsh[0], 512:lsh[1]+512] = l1
+        ll2[0:lsh[0], 0:lsh[1]] = l1
+        ll3[0:lsh[0], 0:lsh[1]] = l1
         lastimage = np.stack([ll1, ll2, ll3], 2)
 
         cfg = '[Configuration]\n' \
@@ -1136,6 +1136,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         res1 = qtck1.results()
         res2 = qtck2.results()
         res3 = qtck3.results()
+        print("SIZE", res1[2].shape, lastimage.shape, lastimage.shape)
         if not np.allclose(res1[2], lastimage, equal_nan=True):
             print(res1[2])
             print(lastimage)
@@ -1151,8 +1152,8 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         ll2 = np.array(zzs)
         ll3 = np.array(zzs)
         ll1[0:lsh[0], 0:lsh[1]] = l1
-        ll2[0:lsh[0], 256:lsh[1]+256] = l1
-        ll3[0:lsh[0], 512:lsh[1]+512] = l1
+        ll2[0:lsh[0], 0:lsh[1]] = l1
+        ll3[0:lsh[0], 0:lsh[1]] = l1
         lastimage = np.stack([ll1, ll2, ll3], 2)
         if not np.allclose(res2[1], lastimage, equal_nan=True):
             print(res2[1])
@@ -1167,8 +1168,8 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         ll2 = np.array(zzs)
         ll3 = np.array(zzs)
         ll1[0:lsh[0], 0:lsh[1]] = l1
-        ll2[0:lsh[0], 256:lsh[1]+256] = l1
-        ll3[0:lsh[0], 512:lsh[1]+512] = l1
+        ll2[0:lsh[0], 0:lsh[1]] = l1
+        ll3[0:lsh[0], 0:lsh[1]] = l1
         lastimage = np.stack([ll1, ll2, ll3], 2)
 
         self.assertTrue(np.allclose(res3[0], lastimage, equal_nan=True))

@@ -65,7 +65,7 @@ class NormalizationWidget(QtWidgets.QWidget):
         """
         QtWidgets.QWidget.__init__(self, parent)
 
-        #: (:class:`Ui_NormalizationkWidget') ui_widget object from qtdesigner
+        #: (:class:`Ui_NormalizationkWidget`) ui_widget object from qtdesigner
         self.__ui = _formclass()
         self.__ui.setupUi(self)
 
@@ -208,6 +208,7 @@ class NormalizationWidget(QtWidgets.QWidget):
 
     def isBFSubApplied(self):
         """ if brightfield correction applied
+
         :returns: apply status
         :rtype: :obj:`bool`
         """

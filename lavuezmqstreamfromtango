@@ -31,8 +31,16 @@ import zmq
 import time
 import argparse
 import signal
-import cPickle
-import PyTango
+try:
+    import tango
+except Exception:
+    import PyTango as tango
+
+try:
+    import _pickle as cPickle
+except Exception:
+    import cPickle
+
 
 maxtimegap = 0.1
 port = None
@@ -55,7 +63,7 @@ def _onexit(signum, frame):
             context.destroy()
             context = None
             print("disconnect")
-        except:
+        except Exception:
             pass
     signal.signal(signal.SIGINT, original_sigint)
     sys.exit(1)
@@ -73,29 +81,32 @@ def main():
     counter = 0
 
     receiveloop = True
-    da = PyTango.AttributeProxy(attribute)
+    da = tango.AttributeProxy(attribute)
     while receiveloop:
         try:
             attr = da.read()
             value = attr.value
             shape = value.shape
             dtype = value.dtype.name
-
-            datasources = ["%s" % (10010 + counter / 50), "10001", "10002"]
+            datasources = [
+                "%s" % (10010 + int(counter / 50)), "10001", "10002"]
             if topicfilter is not None:
-                tfilter = topicfilter
+                tfilter = bytes(topicfilter, "utf8")
             else:
-                tfilter = datasources[counter % 2]
+                tfilter = bytes(datasources[counter % 2], "utf8")
             if not counter % 10:
                 axisscales = [
-                    float(counter), float(counter),
+                    counter, counter,
                     (counter % 5) + 1.0, (counter % 5) + 2.0]
             else:
                 axisscales = None
             if not counter % 20:
                 axislabels = [
-                    "x%s" % counter, "y%s" % counter,
-                    "m" * ((counter / 20) % 3), "A" * ((counter / 20) % 3)]
+                    "x%s" % counter,
+                    "y%s" % counter,
+                    "m" * int((counter / 20) % 3),
+                    "A" * int((counter / 20) % 3)
+                ]
             else:
                 axislabels = None
             if nodict:
@@ -135,16 +146,15 @@ def main():
                     metadata2.pop("shape")
                     metadata2.pop("dtype")
                 message2 = (
-                    "datasources",
-                    cPickle.dumps(metadata2)
-                )
+                    b"datasources",
+                    cPickle.dumps(metadata2))
                 print("Send2: tcp://*:%s/%s %s"
                       % (port, "datasources", metadata2))
                 socket.send_multipart(message2)
             counter += 1
             socket.send_multipart(message)
             print("Send: tcp://*:%s/%s %s %s %s_%s"
-                  % (port, tfilter, shape, dtype,
+                  % (port, tfilter.decode(), shape, dtype,
                      prefix or "", counter))
         except Exception as e:
             print("Error: %s" % str(e))
@@ -188,7 +198,7 @@ if __name__ == "__main__":
 
     try:
         port = int(options.port)
-    except Exception as e:
+    except Exception:
         # print(str(e))
         sys.stderr.write("lavuemonitor: Invalid --port parameter\n")
         sys.stderr.flush()
@@ -197,11 +207,11 @@ if __name__ == "__main__":
     try:
         if options.topic is not None:
             topicfilter = str(options.topic)
-    except:
+    except Exception:
         pass
     try:
         maxtimegap = float(options.timegap)
-    except:
+    except Exception:
         sys.stderr.write("lavuemonitor: Invalid --time-gap parameter\n")
         sys.stderr.flush()
         parser.print_help()

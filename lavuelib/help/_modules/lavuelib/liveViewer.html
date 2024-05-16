@@ -2,18 +2,20 @@
 
 <!doctype html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.liveViewer &#8212; LaVue 2.85.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <title>lavuelib.liveViewer &#8212; LaVue 2.86.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -31,7 +33,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.85.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.86.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.liveViewer</a></li> 
       </ul>
@@ -169,7 +171,7 @@
 
 <div class="viewcode-block" id="setLoggerLevel"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.setLoggerLevel">[docs]</a><span class="k">def</span> <span class="nf">setLoggerLevel</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
     <span class="k">global</span> <span class="n">_logginglevel</span>
-    <span class="sd">&quot;&quot;&quot; sets logging level from string</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; sets logging level from string</span>
 <span class="sd">    :param logger: logger</span>
 <span class="sd">    :type logger: :obj:`logging.logger`</span>
 <span class="sd">    :param level: logging level</span>
@@ -189,7 +191,7 @@
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param options: commandline options</span>
 <span class="sd">        :type options: :class:`argparse.Namespace`</span>
@@ -218,7 +220,7 @@
 
 <div class="viewcode-block" id="MainWindow.closeEvent"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.MainWindow.closeEvent">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; stores the setting before finishing the application</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; stores the setting before finishing the application</span>
 
 <span class="sd">        :param event: close event</span>
 <span class="sd">        :type event:  :class:`pyqtgraph.QtCore.QEvent`:</span>
@@ -228,17 +230,17 @@
 
 
 <div class="viewcode-block" id="LavueState"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.LavueState">[docs]</a><span class="k">class</span> <span class="nc">LavueState</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; lavue state</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; lavue state</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;  constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;  constructor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#: (:obj:`dict` &lt; :obj:`str`, :obj:`any`&gt;) lavue state dictionary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__state</span> <span class="o">=</span> <span class="p">{}</span>
 
 <div class="viewcode-block" id="LavueState.updateState"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.LavueState.updateState">[docs]</a>    <span class="k">def</span> <span class="nf">updateState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dct</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;update lavue state dictonary</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;update lavue state dictonary</span>
 
 <span class="sd">        :param dct: lavue state dictionary</span>
 <span class="sd">        :type dct: :obj:`dict` &lt; :obj:`str`, :obj:`any`&gt;</span>
@@ -248,7 +250,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="p">[</span><span class="s2">&quot;__timestamp__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="LavueState.dump"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.LavueState.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; returns string representation</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; returns string representation</span>
 
 <span class="sd">        :returns: string representation</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -257,7 +259,7 @@
 
 
 <div class="viewcode-block" id="PartialData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.PartialData">[docs]</a><span class="k">class</span> <span class="nc">PartialData</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; partial data</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; partial data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1">#: ( :obj:`dict &lt; :obj:`str`, :obj:&#39;bool`&gt; `)</span>
@@ -275,7 +277,7 @@
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">rawdata</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">tr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param name: data name</span>
 <span class="sd">        :type name: :obj:`str`</span>
@@ -310,6 +312,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">scc</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="c1">#: (:obj:`str`) transformation</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tr</span> <span class="o">=</span> <span class="n">tr</span>
+        <span class="c1">#: (:obj:`bool`) rgb flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__data</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
@@ -323,7 +326,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">sy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
 <div class="viewcode-block" id="PartialData.dtype"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.PartialData.dtype">[docs]</a>    <span class="k">def</span> <span class="nf">dtype</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides data type</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides data type</span>
 
 <span class="sd">        :returns: numpy data type</span>
 <span class="sd">        :rtype: :obj:`numpy.dtype`</span>
@@ -334,7 +337,7 @@
             <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="PartialData.intmaxvalue"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.PartialData.intmaxvalue">[docs]</a>    <span class="k">def</span> <span class="nf">intmaxvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides data type maximal value</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides data type maximal value</span>
 
 <span class="sd">        :returns: integer data type maximal value</span>
 <span class="sd">        :rtype: :obj:`int`</span>
@@ -349,7 +352,7 @@
         <span class="k">return</span> <span class="n">maxval</span></div>
 
 <div class="viewcode-block" id="PartialData.data"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.PartialData.data">[docs]</a>    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides transformed data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides transformed data</span>
 
 <span class="sd">        :returns: transformed data</span>
 <span class="sd">        :rtype: :obj:`numpy.ndarray`</span>
@@ -406,7 +409,7 @@
 
 <div class="viewcode-block" id="PartialData.tolist"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.PartialData.tolist">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">tolist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; converts partial data to a list</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; converts partial data to a list</span>
 
 <span class="sd">        :returns: a list: [name, rawdata, metadata, x, y, sx, sy, tr]</span>
 <span class="sd">        :rtype: [:obj:`str`, :obj:`numpy.ndarray&#39;, :obj:`str`, :obj:`int`,</span>
@@ -417,7 +420,7 @@
 
 
 <span class="k">def</span> <span class="nf">_nansum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; old the numpy nansum</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; old the numpy nansum</span>
 
 <span class="sd">    :param axis: axis to sum up</span>
 <span class="sd">    :type axis: :obj:`int`</span>
@@ -439,7 +442,7 @@
 
 <div class="viewcode-block" id="LiveViewer"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.LiveViewer">[docs]</a><span class="k">class</span> <span class="nc">LiveViewer</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QDialog</span><span class="p">):</span>
 
-    <span class="sd">&#39;&#39;&#39;The master class for the dialog, contains all other</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;The master class for the dialog, contains all other</span>
 <span class="sd">    widget and handles communication.&#39;&#39;&#39;</span>
 
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) state updated signal</span>
@@ -447,7 +450,7 @@
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param options: commandline options</span>
 <span class="sd">        :type options: :class:`argparse.Namespace`</span>
@@ -934,7 +937,7 @@
 
 <div class="viewcode-block" id="LiveViewer.setState"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.LiveViewer.setState">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set current state &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set current state &quot;&quot;&quot;</span>
 
         <span class="n">dssa</span> <span class="o">=</span> <span class="s2">&quot;;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sourcewg</span><span class="o">.</span><span class="n">currentDataSourceAlias</span><span class="p">())</span>
         <span class="n">configuration</span> <span class="o">=</span> <span class="s2">&quot;;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sourcewg</span><span class="o">.</span><span class="n">configuration</span><span class="p">())</span>
@@ -1004,7 +1007,7 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_setScalingState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scaling</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets scaling state</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets scaling state</span>
 
 <span class="sd">        :param scalingtype: scaling type, i.e. log, linear, sqrt</span>
 <span class="sd">        :type scalingtype: :obj:`str`</span>
@@ -1014,7 +1017,7 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_setChannelState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets gradient state</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets gradient state</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># eself.__levelswg.setScalingLabel(scaling)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">setRGBChannels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__channelwg</span><span class="o">.</span><span class="n">rgbchannels</span><span class="p">())</span>
@@ -1023,19 +1026,19 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_setGradientState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets gradient state</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets gradient state</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setLavueState</span><span class="p">({</span><span class="s2">&quot;gradient&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">gradient</span><span class="p">()})</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_setToolState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets tool state</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets tool state</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setLavueState</span><span class="p">({</span><span class="s2">&quot;tool&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">tool</span><span class="p">()})</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_setBufferSizeState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets buffer size state</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets buffer size state</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setLavueState</span><span class="p">({</span><span class="s2">&quot;mbuffer&quot;</span><span class="p">:</span> <span class="n">size</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">})</span>
         <span class="k">if</span> <span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1048,7 +1051,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__channelwg</span><span class="o">.</span><span class="n">updateChannelLabels</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__setLevelState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets intensity level state</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets intensity level state</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">isAutoLevel</span><span class="p">():</span>
             <span class="n">levels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__levelswg</span><span class="o">.</span><span class="n">levels</span><span class="p">()</span>
@@ -1059,14 +1062,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">setLavueState</span><span class="p">({</span><span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="n">levels</span><span class="p">,</span> <span class="s2">&quot;autofactor&quot;</span><span class="p">:</span> <span class="n">autofactor</span><span class="p">})</span>
 
     <span class="k">def</span> <span class="nf">_setLevelState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets intensity level state and plot</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets intensity level state and plot</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__setLevelState</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_plot</span><span class="p">()</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_setMinLevelState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets minimum intensity level</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets minimum intensity level</span>
 
 <span class="sd">        :param level: minimum intensity</span>
 <span class="sd">        :type level: :obj:`float`</span>
@@ -1077,7 +1080,7 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_setMaxLevelState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets maximum intensity level</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets maximum intensity level</span>
 
 <span class="sd">        :param level: maximum intensity</span>
 <span class="sd">        :type level: :obj:`float`</span>
@@ -1088,7 +1091,7 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_setChannelLevelState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets maximum intensity level</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets maximum intensity level</span>
 
 <span class="sd">        :param level: json with channel levels</span>
 <span class="sd">        :type level: :obj:`str`</span>
@@ -1101,7 +1104,7 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_setAutoLevelsState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">autolevels</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets auto levels</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets auto levels</span>
 
 <span class="sd">        :param autolevels: 2: auto levels enabled 1: with autofactor</span>
 <span class="sd">        :type autolevels: :obj:&#39;int`</span>
@@ -1111,7 +1114,7 @@
 
 <div class="viewcode-block" id="LiveViewer.setLavueState"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.LiveViewer.setLavueState">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setLavueState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dct</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update LavueState of LavueController</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update LavueState of LavueController</span>
 
 <span class="sd">        :param dct: lavue state dictionary</span>
 <span class="sd">        :type dct: :obj:`dict` &lt; :obj:`str`, :obj:`any`&gt;</span>
@@ -1127,7 +1130,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_showhelp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; shows the detail help</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; shows the detail help</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">QWebView</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">messageBox</span><span class="o">.</span><span class="n">MessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
@@ -1143,7 +1146,7 @@
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">_translations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; povides translations and optional transformations</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; povides translations and optional transformations</span>
 <span class="sd">            of the given sources</span>
 
 <span class="sd">        :returns: x,y tranlation or x,y,transformations, e.g. 2345,354,r90</span>
@@ -1155,7 +1158,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_setTranslation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trans</span><span class="p">,</span> <span class="n">sid</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets translation and optional transfromation of the given source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets translation and optional transfromation of the given source</span>
 
 <span class="sd">        :param trans: x,y tranlation or x,y,transformations, e.g. 2345,354</span>
 <span class="sd">        :type trans: :obj:`str`</span>
@@ -1199,7 +1202,7 @@
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__updateTypeList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">typelist</span><span class="p">,</span>
                          <span class="n">allaliases</span><span class="p">,</span> <span class="n">snametoname</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates type list, i.e. typelist, allaliases and snametoname</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates type list, i.e. typelist, allaliases and snametoname</span>
 
 <span class="sd">        :param properties: dictionary with properies, i.e.</span>
 <span class="sd">                            {&quot;requires&quot;: (&quot;&lt;PACKAGE1&gt;&quot;,&quot;&lt;PACKAGE2&gt;&quot;),</span>
@@ -1230,7 +1233,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__switchlazysignals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;switch lazy signals</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;switch lazy signals</span>
 
 <span class="sd">        :param lazy: lazy image slider flag</span>
 <span class="sd">        :type lazy: :obj:`bool`</span>
@@ -1246,7 +1249,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__disconnectslider</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;switch lazy signals</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;switch lazy signals</span>
 
 <span class="sd">        :param lazy: lazy image slider flag</span>
 <span class="sd">        :type lazy: :obj:`bool`</span>
@@ -1257,7 +1260,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__connectslider</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;switch lazy signals</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;switch lazy signals</span>
 
 <span class="sd">        :param lazy: lazy image slider flag</span>
 <span class="sd">        :type lazy: :obj:`bool`</span>
@@ -1268,7 +1271,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__resetFilters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filters</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; resets filters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; resets filters</span>
 
 <span class="sd">        :param filters: filters settings</span>
 <span class="sd">        :type filters: :obj:`str`</span>
@@ -1303,7 +1306,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_addLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; emits addIconClicked signal</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; emits addIconClicked signal</span>
 
 <span class="sd">        :param name: object name</span>
 <span class="sd">        :type name: :obj:`str`</span>
@@ -1331,7 +1334,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_removeLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; emits addIconClicked signal</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; emits addIconClicked signal</span>
 
 <span class="sd">        :param name: object name</span>
 <span class="sd">        :type name: :obj:`str`</span>
@@ -1397,7 +1400,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_updateLavueState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates lavue state configuration</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates lavue state configuration</span>
 
 <span class="sd">        :param state: json dictionary with configuration</span>
 <span class="sd">        :type state: :obj:`str`</span>
@@ -1435,7 +1438,7 @@
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">__updateTool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tool</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update current tool</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update current tool</span>
 
 <span class="sd">        :param tool: alias tool name</span>
 <span class="sd">        :type tool: :obj:`str`</span>
@@ -1445,7 +1448,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__applyoptionsfromdict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dctcnf</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; apply options</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; apply options</span>
 
 <span class="sd">        :param dctcnf: commandline options</span>
 <span class="sd">        :type dctcnf: :obj:`dict` &lt;:obj:`str`, any &gt;</span>
@@ -1458,7 +1461,7 @@
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">__applyoptions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; apply options</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; apply options</span>
 
 <span class="sd">        :param options: commandline options</span>
 <span class="sd">        :type options: :class:`argparse.Namespace`</span>
@@ -1795,7 +1798,7 @@
             <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">__loadSettings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; loads settings from QSettings object</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; loads settings from QSettings object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">settings</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QSettings</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1869,7 +1872,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__viewFrameRate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; show/hide frame rate</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; show/hide frame rate</span>
 <span class="sd">        :param status: True for show and False for hide</span>
 <span class="sd">        :type status: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1881,7 +1884,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_storeSettings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; stores settings in QSettings object</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; stores settings in QSettings object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">settings</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QSettings</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1904,7 +1907,7 @@
 
 <div class="viewcode-block" id="LiveViewer.closeEvent"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.LiveViewer.closeEvent">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; stores the setting before finishing the application</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; stores the setting before finishing the application</span>
 
 <span class="sd">        :param event: close event</span>
 <span class="sd">        :type event:  :class:`pyqtgraph.QtCore.QEvent`:</span>
@@ -1948,13 +1951,13 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_clickloadfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; reloads the image file</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reloads the image file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_loadfile</span><span class="p">()</span>
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">_loadfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; reloads the image file</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reloads the image file</span>
 
 <span class="sd">        :param fid: frame id</span>
 <span class="sd">        :type fid: :obj:`int`</span>
@@ -1964,7 +1967,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_spinreloadfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">showmessage</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; reloads the image file</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reloads the image file</span>
 
 <span class="sd">        :param fid: frame id</span>
 <span class="sd">        :type fid: :obj:`int` or :obj:`str`</span>
@@ -1988,7 +1991,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_pushreloadfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; reloads the image file</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reloads the image file</span>
 
 <span class="sd">        :param fid: frame id</span>
 <span class="sd">        :type fid: :obj:`int` or :obj:`str`</span>
@@ -2035,7 +2038,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_sliderreloadfilelazy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; reloads the image file or</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reloads the image file or</span>
 <span class="sd">        if lazy flag it displays only splider value</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lazyimageslider</span><span class="p">:</span>
@@ -2051,7 +2054,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_sliderreloadfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">showmessage</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; reloads the image file</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reloads the image file</span>
 
 <span class="sd">        :param fid: frame id</span>
 <span class="sd">        :type fid: :obj:`int`</span>
@@ -2068,7 +2071,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__reloadflag</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">__findfid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imagename</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; find file id</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; find file id</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">ipath</span><span class="p">,</span> <span class="n">iname</span> <span class="o">=</span> <span class="n">ntpath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">imagename</span><span class="p">)</span>
@@ -2091,7 +2094,7 @@
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">_reloadfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">showmessage</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nexus</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; reloads the image file</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reloads the image file</span>
 
 <span class="sd">        :param fid: frame id</span>
 <span class="sd">        :type fid: :obj:`int`</span>
@@ -2334,7 +2337,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; launches the configuration dialog</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; launches the configuration dialog</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cnfdlg</span> <span class="o">=</span> <span class="n">configDialog</span><span class="o">.</span><span class="n">ConfigDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">doorname</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sardana</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -2439,7 +2442,7 @@
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">__updateConfig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dialog</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; updates the configuration</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates the configuration</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">replot</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">doorname</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">door</span>
@@ -2774,7 +2777,7 @@
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">__setNumberOfSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nrsources</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set a number of image sources</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set a number of image sources</span>
 
 <span class="sd">        :param nrsources: a number of image sources</span>
 <span class="sd">        :type nrsources: :obj:`int`</span>
@@ -2805,7 +2808,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__mergeDetServers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">detserverdict</span><span class="p">,</span> <span class="n">detserverlist</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; merges detector servers from</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; merges detector servers from</span>
 <span class="sd">        a dictionary and a list</span>
 
 <span class="sd">        :param detserverdict: detector server dictionary</span>
@@ -2825,7 +2828,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__retrieveUserDetServers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">detserverdict</span><span class="p">,</span> <span class="n">detserverlist</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; retrives user detector servers from a list</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; retrives user detector servers from a list</span>
 <span class="sd">             which are not in a dictionary</span>
 
 <span class="sd">        :param detserverdict: detector server dictionary</span>
@@ -2845,7 +2848,7 @@
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">_setSourceConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourceConfiguration</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets the source configuration</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets the source configuration</span>
 
 <span class="sd">        :param sourceConfiguration: source configuration string</span>
 <span class="sd">        :type sourceConfiguration: :obj:`str</span>
@@ -2863,7 +2866,7 @@
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">_switchSourceDisplay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;switches source display parameters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;switches source display parameters</span>
 
 <span class="sd">        :param sourceConfiguration: source configuration string</span>
 <span class="sd">        :type sourceConfiguration: :obj:`str</span>
@@ -2877,7 +2880,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__setSourceLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;sets source display parameters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;sets source display parameters</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcelabel</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sourcedisplay</span><span class="p">:</span>
             <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcelabel</span>
@@ -2930,7 +2933,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__setSardana</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets the sardana utils</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets the sardana utils</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">status</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__sardana</span> <span class="o">=</span> <span class="kc">None</span>
@@ -2941,7 +2944,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_onSourceChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update a list of sources according to the status</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update a list of sources according to the status</span>
 
 <span class="sd">        :param status: json list on status, i.e source type ids</span>
 <span class="sd">        :type status: :obj:`str`</span>
@@ -2962,7 +2965,7 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_onToolConfigurationChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update tool configuration in lavue state</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update tool configuration in lavue state</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setLavueState</span><span class="p">(</span>
             <span class="p">{</span><span class="s2">&quot;tool&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">tool</span><span class="p">(),</span>
@@ -2971,7 +2974,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_updateSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">sid</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update the current source</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update the current source</span>
 
 <span class="sd">        :param status: current source combobox status id from starting from 1,</span>
 <span class="sd">                       0 is disconnected, -1 current source</span>
@@ -3007,7 +3010,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_replot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">autorange</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; The main command of the live viewer class:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; The main command of the live viewer class:</span>
 <span class="sd">        draw a numpy array with the given name and autoRange.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_plot</span><span class="p">()</span>
@@ -3017,7 +3020,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; The main command of the live viewer class:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; The main command of the live viewer class:</span>
 <span class="sd">        draw a numpy array with the given name.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ploting</span><span class="p">:</span>
@@ -3074,13 +3077,13 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_calcUpdateStatsSec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; calcuates statistics without  sending security stream</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; calcuates statistics without  sending security stream</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__calcUpdateStats</span><span class="p">(</span><span class="n">secstream</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__calcUpdateStats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">secstream</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; calcuates statistics</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; calcuates statistics</span>
 
 <span class="sd">        :param secstream: send security stream flag</span>
 <span class="sd">        :type secstream: :obj:`bool`</span>
@@ -3133,7 +3136,7 @@
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">_startPlotting</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; mode changer: start plotting mode.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; mode changer: start plotting mode.</span>
 <span class="sd">        It starts plotting if the connection is really established.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#</span>
@@ -3146,7 +3149,7 @@
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">_stopPlotting</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; mode changer: stop plotting mode</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; mode changer: stop plotting mode</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">dft</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dataFetchers</span><span class="p">:</span>
@@ -3156,7 +3159,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_connectSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;  calls the connect function of the source interface</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;  calls the connect function of the source interface</span>
 
 <span class="sd">        :param status: current source status id</span>
 <span class="sd">        :type status: :obj:`int`</span>
@@ -3206,7 +3209,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_disconnectSource</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; calls the disconnect function of the source interface</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; calls the disconnect function of the source interface</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__disconnectSource</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateSource</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
@@ -3215,7 +3218,7 @@
         <span class="c1"># self.__datasources[0] = None</span>
 
     <span class="k">def</span> <span class="nf">__disconnectSource</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; calls the disconnect function of the source interface</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; calls the disconnect function of the source interface</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_stopPlotting</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datasources</span><span class="p">:</span>
@@ -3234,7 +3237,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__mergeData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fulldata</span><span class="p">,</span> <span class="n">oldname</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; merge data parts to (name, rawdata, metadata)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; merge data parts to (name, rawdata, metadata)</span>
 
 <span class="sd">        :param fulldata: a list of PartialData objects</span>
 <span class="sd">        :type fulldata: :obj:`list` &lt;:class:`PartialData`&gt;</span>
@@ -3298,7 +3301,14 @@
                     <span class="n">scc</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">scc</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">scc</span><span class="p">)</span>
                     <span class="n">pd</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">x</span> <span class="ow">or</span> <span class="mi">0</span>
                     <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">pd</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">rgb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgb</span><span class="p">()</span>
+                        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                            <span class="n">rgb</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="k">if</span> <span class="n">rgb</span><span class="p">:</span>
+                            <span class="n">pd</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">pd</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                     <span class="n">psh</span> <span class="o">=</span> <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">sx</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">sy</span><span class="p">]</span>
                     <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">psh</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
                         <span class="n">psh</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -3356,7 +3366,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_getNewData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; checks if data is there at all</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; checks if data is there at all</span>
 
 <span class="sd">        :param name: image name</span>
 <span class="sd">        :type name: :obj:`str`</span>
@@ -3552,7 +3562,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__prepareImage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;applies: make image gray, substracke the background image and</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;applies: make image gray, substracke the background image and</span>
 <span class="sd">           apply the mask</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__overflowimage</span> <span class="o">=</span> <span class="kc">None</span>
@@ -3618,8 +3628,7 @@
                                 <span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
                                     <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span><span class="p">,</span>
                                      <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                                         <span class="n">shape</span><span class="o">=</span><span class="n">nshape</span><span class="o">.</span>
-                                         <span class="n">shape</span><span class="p">[:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                         <span class="n">shape</span><span class="o">=</span><span class="n">nshape</span><span class="p">,</span>
                                          <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span><span class="o">.</span><span class="n">dtype</span><span class="p">)),</span>
                                     <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
                         <span class="k">else</span><span class="p">:</span>
@@ -3825,7 +3834,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__transform</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; does the image transformation on the given numpy array.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; does the image transformation on the given numpy array.</span>
 
 <span class="sd">        :returns: crdtranspose, crdleftrightflip, crdupdownflip,</span>
 <span class="sd">         orgtranspose, orgleftrightflip, orgupdownflip flags</span>
@@ -3949,7 +3958,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__applyRange</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; applies user range</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; applies user range</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showrange</span> <span class="ow">and</span> \
            <span class="bp">self</span><span class="o">.</span><span class="n">__filteredimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -3972,7 +3981,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__setrange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets window range</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets window range</span>
 
 <span class="sd">        :param x1: x1 position</span>
 <span class="sd">        :type x1: :obj:`int`</span>
@@ -4001,7 +4010,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__npresize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">,</span> <span class="n">function</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; resizes image</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; resizes image</span>
 
 <span class="sd">        :param factor: down-sampling factor</span>
 <span class="sd">        :type factor: :obj:`int`</span>
@@ -4044,7 +4053,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_resizePlot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; resize window and plot</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; resize window and plot</span>
 <span class="sd">        :param show: enable/disable resizing</span>
 <span class="sd">        :type show: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -4067,7 +4076,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__applyFilters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; applies user filters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; applies user filters</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># self.__filteredimage = self.__rawimage</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__filterstate</span><span class="p">:</span>
@@ -4103,7 +4112,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalingtype</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets scaletype on the image</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets scaletype on the image</span>
 
 <span class="sd">        :param scalingtype: scaling type</span>
 <span class="sd">        :type scalingtype: :obj:`str`</span>
@@ -4126,7 +4135,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__calcStats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flag</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; calcualtes scaled limits for intesity levels</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; calcualtes scaled limits for intesity levels</span>
 
 <span class="sd">        :param flag: (max value, mean value, variance value,</span>
 <span class="sd">                  min scaled value, max raw value, max scaled value)</span>
@@ -4185,7 +4194,7 @@
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_checkHighMasking</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; reads the mask image, select non-zero elements</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reads the mask image, select non-zero elements</span>
 <span class="sd">            and store the indices</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__highvaluemaskwg</span><span class="o">.</span><span class="n">mask</span><span class="p">()</span>
@@ -4203,7 +4212,7 @@
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_checkOverflow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; reads the mask image, select non-zero elements</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reads the mask image, select non-zero elements</span>
 <span class="sd">            and store the indices</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__overflowwg</span><span class="o">.</span><span class="n">overflowValue</span><span class="p">()</span>
@@ -4220,7 +4229,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_checkMasking</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; replots the image with mask if mask exists</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; replots the image with mask if mask exists</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">setApplyMask</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">applyMask</span><span class="p">()</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskimage</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -4234,7 +4243,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_prepareMasking</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imagename</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; reads the mask image, select non-zero elements</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reads the mask image, select non-zero elements</span>
 <span class="sd">            and store the indices</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">imagename</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">imagename</span><span class="p">)</span>
@@ -4277,7 +4286,7 @@
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__remasking</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; recalculates the mask</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; recalculates the mask</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maskimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">zeromask</span><span class="p">:</span>
@@ -4288,7 +4297,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_checkBkgSubtraction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; replots the image with subtranction if background image exists</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; replots the image with subtranction if background image exists</span>
 
 <span class="sd">        :param state: checkbox state</span>
 <span class="sd">        :type state:  :obj:`int`</span>
@@ -4309,7 +4318,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_checkBFSubtraction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; replots the image with subtranction if background image exists</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; replots the image with subtranction if background image exists</span>
 
 <span class="sd">        :param state: checkbox state</span>
 <span class="sd">        :type state:  :obj:`int`</span>
@@ -4330,7 +4339,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_prepareBkgSubtraction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imagename</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; reads the background image</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reads the background image</span>
 
 <span class="sd">        :param imagename: image name</span>
 <span class="sd">        :type imagename: :obj:`str`</span>
@@ -4377,7 +4386,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_prepareBFSubtraction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imagename</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; reads the brightfield image</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reads the brightfield image</span>
 
 <span class="sd">        :param imagename: image name</span>
 <span class="sd">        :type imagename: :obj:`str`</span>
@@ -4422,7 +4431,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_setCurrentImageAsBkg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets the chrrent image as the background image</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets the chrrent image as the background image</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__backgroundimage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span>
@@ -4464,7 +4473,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_setCurrentImageAsBF</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets the chrrent image as the brightfield image</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets the chrrent image as the brightfield image</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__brightfieldimage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rawgreyimage</span>
@@ -4474,7 +4483,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__normwg</span><span class="o">.</span><span class="n">setDisplayedBFName</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__updatebfmdf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets brightfield - darkfield image</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets brightfield - darkfield image</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scbrightfieldimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
            <span class="bp">self</span><span class="o">.</span><span class="n">__scbackgroundimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -4514,7 +4523,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_assessFilters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; assesses the filter on/off state</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; assesses the filter on/off state</span>
 
 <span class="sd">        :param state: assess filter status</span>
 <span class="sd">        :type state:  :obj:`bool`</span>
@@ -4546,7 +4555,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_assessTransformation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trafoname</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; assesses the transformation and replot it</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; assesses the transformation and replot it</span>
 
 <span class="sd">        :param imagename: transformation name</span>
 <span class="sd">        :type imagename: :obj:`str`</span>
@@ -4565,7 +4574,7 @@
 
 <div class="viewcode-block" id="LiveViewer.keyPressEvent"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.LiveViewer.keyPressEvent">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">keyPressEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; skips escape key action</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; skips escape key action</span>
 
 <span class="sd">        :param event: close event</span>
 <span class="sd">        :type event:  :class:`pyqtgraph.QtCore.QEvent`:</span>
@@ -4578,7 +4587,7 @@
 <div class="viewcode-block" id="LiveViewer.setrgb"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.LiveViewer.setrgb">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">setrgb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets RGB on/off</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets RGB on/off</span>
 
 <span class="sd">        :param status: True for on and False for off</span>
 <span class="sd">        :type status: :obj:`bool`</span>
@@ -4590,7 +4599,7 @@
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_setRGBState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sets RGB on/off</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets RGB on/off</span>
 
 <span class="sd">        :param status: True for on and False for off</span>
 <span class="sd">        :type status: :obj:`bool`</span>
@@ -4602,7 +4611,7 @@
 
 <div class="viewcode-block" id="LiveViewer.rgb"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.LiveViewer.rgb">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">rgb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; gets RGB on/off</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; gets RGB on/off</span>
 
 <span class="sd">        :returns: True for on and False for off</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -4620,12 +4629,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -4639,7 +4648,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.85.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.86.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.liveViewer</a></li> 
       </ul>
@@ -4648,7 +4657,7 @@
         &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

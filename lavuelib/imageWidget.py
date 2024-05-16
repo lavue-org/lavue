@@ -378,7 +378,7 @@ class ImageWidget(QtWidgets.QWidget):
         """ writes DetectorROIsValuesattribute of device
 
         :param rvalues: list of roi values
-        :type rvalues: `obj`list < :obj:`float`>
+        :type rvalues: :obj:`list` < :obj:`float`>
         """
         if self.__tangoclient:
             rois = {}
@@ -991,7 +991,7 @@ class ImageWidget(QtWidgets.QWidget):
         """ calculates all roi sums
 
         :returns: sum roi value, roi id
-        :rtype: :obj:`list` < float >
+        :rtype: :obj:`list` < :obj:`float` >
         """
         return self.__displaywidget.extension('rois').calcROIsums()
 
