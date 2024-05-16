@@ -265,6 +265,7 @@ class PartialData(object):
         self.scc = 1
         #: (:obj:`str`) transformation
         self.tr = tr
+        #: (:obj:`bool`) rgb flag
         self.data()
         if hasattr(self.__data, "shape"):
             if len(self.__data.shape) > 2:
@@ -3253,7 +3254,14 @@ class LiveViewer(QtWidgets.QDialog):
                     scc = max(scc, pd.scc)
                     pd.x = pd.x or 0
                     if pd.y is None:
-                        pd.y = shape[1]
+                        try:
+                            rgb = self.rgb()
+                        except Exception:
+                            rgb = False
+                        if rgb:
+                            pd.y = 0
+                        else:
+                            pd.y = shape[1]
                     psh = [pd.sx, pd.sy]
                     while len(psh) < 2:
                         psh.append(1)
