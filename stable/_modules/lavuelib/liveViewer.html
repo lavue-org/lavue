@@ -312,6 +312,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">scc</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="c1">#: (:obj:`str`) transformation</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tr</span> <span class="o">=</span> <span class="n">tr</span>
+        <span class="c1">#: (:obj:`bool`) rgb flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__data</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
@@ -3300,7 +3301,14 @@
                     <span class="n">scc</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">scc</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">scc</span><span class="p">)</span>
                     <span class="n">pd</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">x</span> <span class="ow">or</span> <span class="mi">0</span>
                     <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">pd</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">rgb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgb</span><span class="p">()</span>
+                        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                            <span class="n">rgb</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="k">if</span> <span class="n">rgb</span><span class="p">:</span>
+                            <span class="n">pd</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">pd</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                     <span class="n">psh</span> <span class="o">=</span> <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">sx</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">sy</span><span class="p">]</span>
                     <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">psh</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
                         <span class="n">psh</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -4633,6 +4641,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.86.0/index.html">v2.86.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.85.1/index.html">v2.85.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.85.0/index.html">v2.85.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.84.0/index.html">v2.84.0</a></li>
