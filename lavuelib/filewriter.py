@@ -30,6 +30,7 @@ import pytz
 import datetime
 import threading
 import numpy
+import sys
 
 
 #: (:mod:`H5PYWriter`or :mod:`H5CppWriter`)
