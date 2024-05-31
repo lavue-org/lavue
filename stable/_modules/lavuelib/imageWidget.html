@@ -95,7 +95,7 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">toolWidget</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">memoExportDialog</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">sardanaUtils</span>
-<span class="kn">from</span> <span class="nn">.sardanaUtils</span> <span class="kn">import</span> <span class="n">debugmethod</span>
+<span class="kn">from</span> <span class="nn">.sardanaUtils</span> <span class="kn">import</span> <span class="n">debugmethod</span><span class="p">,</span> <span class="n">numpyEncoder</span>
 
 <span class="c1"># _VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(&quot;.&quot;) \</span>
 <span class="c1">#     if _pg.__version__ else (&quot;0&quot;, &quot;9&quot;, &quot;0&quot;)</span>
@@ -419,7 +419,8 @@
                     <span class="k">if</span> <span class="n">lastalias</span> <span class="ow">in</span> <span class="n">rois</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                         <span class="n">rois</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">lastalias</span><span class="p">)</span>
                     <span class="n">toadd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lastalias</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__tangoclient</span><span class="o">.</span><span class="n">writeAttribute</span><span class="p">(</span><span class="s2">&quot;DetectorROIs&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">rois</span><span class="p">))</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__tangoclient</span><span class="o">.</span><span class="n">writeAttribute</span><span class="p">(</span>
+                <span class="s2">&quot;DetectorROIs&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">rois</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="ImageWidget.writeDetectorROIsValuesAttribute"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.writeDetectorROIsValuesAttribute">[docs]</a>    <span class="k">def</span> <span class="nf">writeDetectorROIsValuesAttribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rvalues</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; writes DetectorROIsValuesattribute of device</span>
@@ -474,7 +475,8 @@
                         <span class="n">rois</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">lastalias</span><span class="p">)</span>
                     <span class="n">toadd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lastalias</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__tangoclient</span><span class="o">.</span><span class="n">writeAttribute</span><span class="p">(</span>
-                <span class="s2">&quot;DetectorROIsValues&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">rois</span><span class="p">))</span></div>
+                <span class="s2">&quot;DetectorROIsValues&quot;</span><span class="p">,</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">rois</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="ImageWidget.setTangoClient"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.setTangoClient">[docs]</a>    <span class="k">def</span> <span class="nf">setTangoClient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tangoclient</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets tango client</span>
@@ -886,7 +888,8 @@
                 <span class="p">}</span>
                 <span class="n">lpars</span> <span class="o">=</span> <span class="p">[</span><span class="n">tr</span> <span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">pars</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="k">if</span> <span class="n">pars</span><span class="p">[</span><span class="n">tr</span><span class="p">]]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__tangoclient</span><span class="o">.</span><span class="n">writeAttribute</span><span class="p">(</span>
-                    <span class="s2">&quot;DetectorROIsParams&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">lpars</span><span class="p">))</span>
+                    <span class="s2">&quot;DetectorROIsParams&quot;</span><span class="p">,</span>
+                    <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">lpars</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">))</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__lastroisparams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selectedtrans</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__lastkeepcoords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">keepcoords</span></div>
 
@@ -1437,7 +1440,8 @@
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sardana</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__sardana</span><span class="o">.</span><span class="n">setScanEnv</span><span class="p">(</span>
-                    <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">doorname</span><span class="p">),</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">rois</span><span class="p">))</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">doorname</span><span class="p">),</span>
+                    <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">rois</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">))</span>
                 <span class="n">warns</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">addrois</span><span class="p">:</span>
                     <span class="k">try</span><span class="p">:</span>
@@ -2336,6 +2340,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.87.0/index.html">v2.87.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.86.1/index.html">v2.86.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.86.0/index.html">v2.86.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.85.1/index.html">v2.85.1</a></li>
