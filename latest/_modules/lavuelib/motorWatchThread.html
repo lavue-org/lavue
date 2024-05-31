@@ -83,6 +83,7 @@
 
 <span class="kn">from</span> <span class="nn">.omniQThread</span> <span class="kn">import</span> <span class="n">OmniQThread</span>
 <span class="c1"># from .sardanaUtils import debugmethod</span>
+<span class="kn">from</span> <span class="nn">.sardanaUtils</span> <span class="kn">import</span> <span class="n">numpyEncoder</span>
 
 
 <span class="c1">#: (:obj:`float`) refresh time in seconds</span>
@@ -206,7 +207,8 @@
                     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">vl</span><span class="p">,</span> <span class="s2">&quot;tolist&quot;</span><span class="p">):</span>
                         <span class="n">vl</span> <span class="o">=</span> <span class="n">vl</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
                     <span class="n">attrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vl</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">attrValuesSignal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">attrs</span><span class="p">)))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">attrValuesSignal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span>
+                    <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)))</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">time</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span><span class="p">:</span>
@@ -252,6 +254,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.87.0/index.html">v2.87.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.86.1/index.html">v2.86.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.86.0/index.html">v2.86.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.85.1/index.html">v2.85.1</a></li>
