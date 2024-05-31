@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.sourceTabWidget &#8212; LaVue 2.86.1 documentation</title>
+    <title>lavuelib.sourceTabWidget &#8212; LaVue 2.87.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
@@ -33,7 +33,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.86.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.87.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.sourceTabWidget</a></li> 
       </ul>
@@ -83,7 +83,7 @@
     <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtGui</span> <span class="k">as</span> <span class="n">QtWidgets</span>
 
 
-<span class="kn">from</span> <span class="nn">.sardanaUtils</span> <span class="kn">import</span> <span class="n">debugmethod</span>
+<span class="kn">from</span> <span class="nn">.sardanaUtils</span> <span class="kn">import</span> <span class="n">debugmethod</span><span class="p">,</span> <span class="n">numpyEncoder</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">sourceWidget</span> <span class="k">as</span> <span class="n">swgm</span>
 
@@ -993,8 +993,10 @@
     <span class="k">def</span> <span class="nf">emitSourceChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; emits sourceChanged signal</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">status</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="n">st</span><span class="o">.</span><span class="n">sourceStatus</span><span class="p">()</span>
-                             <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">()])</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">st</span><span class="o">.</span><span class="n">sourceStatus</span><span class="p">()</span>
+             <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">()],</span>
+            <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sourceChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">status</span><span class="p">)</span></div>
 
     <span class="nd">@debugmethod</span>
@@ -1043,7 +1045,8 @@
         <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">status</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
                 <span class="p">[</span><span class="n">st</span><span class="o">.</span><span class="n">sourceStatus</span><span class="p">()</span>
-                 <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">()])</span>
+                 <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">()],</span>
+                <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sourceConnected</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sourceStateChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">sid</span><span class="p">)</span>
@@ -1126,7 +1129,8 @@
                 <span class="n">st</span><span class="o">.</span><span class="n">connectWidget</span><span class="p">()</span>
             <span class="n">status</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
                 <span class="p">[</span><span class="n">st</span><span class="o">.</span><span class="n">sourceStatus</span><span class="p">()</span>
-                 <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">()])</span>
+                 <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">()],</span>
+                <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sourceConnected</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">status</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SourceTabWidget.setErrorStatus"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.setErrorStatus">[docs]</a>    <span class="nd">@debugmethod</span>
@@ -1247,7 +1251,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.86.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.87.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.sourceTabWidget</a></li> 
       </ul>

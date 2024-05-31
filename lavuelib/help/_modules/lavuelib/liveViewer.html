@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.liveViewer &#8212; LaVue 2.86.1 documentation</title>
+    <title>lavuelib.liveViewer &#8212; LaVue 2.87.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
@@ -33,7 +33,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.86.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.87.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.liveViewer</a></li> 
       </ul>
@@ -125,8 +125,7 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">rangeWindowGroupBox</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">filtersGroupBox</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">helpForm</span>
-<span class="kn">from</span> <span class="nn">.sardanaUtils</span> <span class="kn">import</span> <span class="n">debugmethod</span>
-<span class="c1"># from . import imageNexusExporter</span>
+<span class="kn">from</span> <span class="nn">.sardanaUtils</span> <span class="kn">import</span> <span class="n">debugmethod</span><span class="p">,</span> <span class="n">numpyEncoder</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">controllerClient</span>
@@ -255,7 +254,7 @@
 <span class="sd">        :returns: string representation</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="PartialData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.liveViewer.PartialData">[docs]</a><span class="k">class</span> <span class="nc">PartialData</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -1327,7 +1326,8 @@
             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">labelvalues</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
                     <span class="n">labelvalues</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">labelvalues</span><span class="p">))</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
+                    <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">labelvalues</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__updateSource</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_storeSettings</span><span class="p">()</span>
 
@@ -1343,10 +1343,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="n">label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-        <span class="n">labelvalues</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">labelvalues</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labelvalues</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">labelvalues</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">labelvalues</span><span class="p">))</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
+                    <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">labelvalues</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__updateSource</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_storeSettings</span><span class="p">()</span>
 
@@ -1749,7 +1751,8 @@
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;toolconfig&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">options</span><span class="o">.</span><span class="n">toolconfig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">toolconfig</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">tlconfig</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">toolconfig</span><span class="p">))</span>
+                    <span class="n">tlconfig</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+                        <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">toolconfig</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">))</span>
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                     <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
                     <span class="n">tlconfig</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">toolconfig</span><span class="p">)</span>
@@ -2432,9 +2435,11 @@
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">asaposourcepath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asaposourcepath</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">asapobtmetafile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapobtmetafile</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">asapodatasources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">asapodatasources</span>
-        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">detservers</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mergeDetServers</span><span class="p">(</span>
-            <span class="n">HIDRASERVERLIST</span> <span class="k">if</span> <span class="n">cnfdlg</span><span class="o">.</span><span class="n">defdetservers</span> <span class="k">else</span> <span class="p">{</span><span class="s2">&quot;pool&quot;</span><span class="p">:</span> <span class="p">[]},</span>
-            <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">detservers</span><span class="p">)))</span>
+        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">detservers</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__mergeDetServers</span><span class="p">(</span>
+                <span class="n">HIDRASERVERLIST</span> <span class="k">if</span> <span class="n">cnfdlg</span><span class="o">.</span><span class="n">defdetservers</span> <span class="k">else</span> <span class="p">{</span><span class="s2">&quot;pool&quot;</span><span class="p">:</span> <span class="p">[]},</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">detservers</span><span class="p">)),</span>
+            <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span>
         <span class="n">cnfdlg</span><span class="o">.</span><span class="n">createGUI</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">cnfdlg</span><span class="o">.</span><span class="n">exec_</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__updateConfig</span><span class="p">(</span><span class="n">cnfdlg</span><span class="p">)</span>
@@ -2691,7 +2696,8 @@
             <span class="n">setsrc</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">detservers</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__retrieveUserDetServers</span><span class="p">(</span>
             <span class="n">HIDRASERVERLIST</span> <span class="k">if</span> <span class="n">dialog</span><span class="o">.</span><span class="n">defdetservers</span> <span class="k">else</span> <span class="p">{</span><span class="s2">&quot;pool&quot;</span><span class="p">:</span> <span class="p">[]},</span>
-            <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">dialog</span><span class="o">.</span><span class="n">detservers</span><span class="p">)))</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">dialog</span><span class="o">.</span><span class="n">detservers</span><span class="p">)),</span>
+            <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">detservers</span> <span class="o">!=</span> <span class="n">detservers</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">detservers</span> <span class="o">=</span> <span class="n">detservers</span>
             <span class="n">setsrc</span> <span class="o">=</span> <span class="kc">True</span>
@@ -3123,7 +3129,8 @@
                     <span class="k">else</span> <span class="n">currentscaling</span><span class="p">)}</span>
             <span class="n">topic</span> <span class="o">=</span> <span class="mi">10001</span>
             <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
-                <span class="n">topic</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">messagedata</span><span class="p">))</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">))</span>
+                <span class="n">topic</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+                    <span class="n">messagedata</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">))</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">secsocket</span><span class="o">.</span><span class="n">send_string</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__statswg</span><span class="o">.</span><span class="n">updateStatistics</span><span class="p">(</span>
@@ -3200,7 +3207,9 @@
             <span class="n">topic</span> <span class="o">=</span> <span class="mi">10001</span>
             <span class="c1"># print(str(messagedata))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">secsocket</span><span class="o">.</span><span class="n">send_string</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
-                <span class="n">topic</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">messagedata</span><span class="p">))</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)))</span>
+                <span class="n">topic</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+                    <span class="n">messagedata</span><span class="p">,</span>
+                    <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">))</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updatehisto</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__setSourceLabel</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setLavueState</span><span class="p">({</span><span class="s2">&quot;connected&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcewg</span><span class="o">.</span><span class="n">isConnected</span><span class="p">()})</span>
@@ -3233,7 +3242,9 @@
             <span class="c1"># print(str(messagedata))</span>
             <span class="n">topic</span> <span class="o">=</span> <span class="mi">10001</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">secsocket</span><span class="o">.</span><span class="n">send_string</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
-                <span class="n">topic</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">messagedata</span><span class="p">))</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)))</span>
+                <span class="n">topic</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+                    <span class="n">messagedata</span><span class="p">,</span>
+                    <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">))</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)))</span>
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__mergeData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fulldata</span><span class="p">,</span> <span class="n">oldname</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -3279,7 +3290,7 @@
                             <span class="s2">&quot;lavuelib.liveViewer.LiveViewer.__getNewData &quot;</span>
                             <span class="s2">&quot;update metadata </span><span class="si">%s</span><span class="s2">: (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">md</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">md</span><span class="p">)))</span>
 
-            <span class="n">metadata</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dmdata</span><span class="p">))</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dmdata</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
             <span class="n">ldata</span> <span class="o">=</span> <span class="p">[</span><span class="n">pdata</span> <span class="k">for</span> <span class="n">pdata</span> <span class="ow">in</span> <span class="n">fulldata</span> <span class="k">if</span> <span class="n">pdata</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ldata</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -4648,7 +4659,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.86.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.87.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.liveViewer</a></li> 
       </ul>
