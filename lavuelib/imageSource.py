@@ -34,7 +34,7 @@ import os
 import glob
 
 from . import dataFetchThread
-from .sardanaUtils import debugmethod
+from .sardanaUtils import debugmethod, numpyEncoder
 
 try:
     import requests
@@ -1741,7 +1741,7 @@ class ZMQSource(BaseSource):
                     metadata.pop("dtype")
                 jmetadata = ""
                 if metadata:
-                    jmetadata = json.dumps(metadata)
+                    jmetadata = json.dumps(metadata, cls=numpyEncoder)
                 return ("", "", jmetadata)
             elif topic == b"datasources" and lmsg == 3:
                 (topic, _, _metadata) = message
@@ -1752,7 +1752,7 @@ class ZMQSource(BaseSource):
                     metadata.pop("dtype")
                 jmetadata = ""
                 if metadata:
-                    jmetadata = json.dumps(metadata)
+                    jmetadata = json.dumps(metadata, cls=numpyEncoder)
                 return ("", "", jmetadata)
             elif self.__topic == b"" or tobytes(topic) == self.__topic:
                 if lmsg == 3:
@@ -1787,7 +1787,7 @@ class ZMQSource(BaseSource):
                     metadata.pop("shape")
                     metadata.pop("dtype")
                     try:
-                        jmetadata = json.dumps(metadata)
+                        jmetadata = json.dumps(metadata, cls=numpyEncoder)
                     except Exception:
                         pass
                 if hasattr(array, "size") and array.size == 0:
@@ -2100,7 +2100,7 @@ class ASAPOSource(BaseSource):
                 if self.__subcounter == 0:
                     submeta = self.getMetaData()
                     if submeta:
-                        jsubmeta = json.dumps(submeta)
+                        jsubmeta = json.dumps(submeta, cls=numpyEncoder)
                         if jsubmeta == self.__lastjsubmeta:
                             jsubmeta = None
                         else:

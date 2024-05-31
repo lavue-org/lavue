@@ -32,6 +32,8 @@ import sys
 import json
 from pyqtgraph import QtCore
 
+from .sardanaUtils import numpyEncoder
+
 if sys.version_info > (3,):
     unicode = str
 
@@ -539,11 +541,12 @@ class Settings(object):
             except Exception:
                 for port in qstval:
                     int(port)
-                self.hidraport = json.dumps([str(tp) for tp in qstval])
+                self.hidraport = json.dumps(
+                    [str(tp) for tp in qstval], cls=numpyEncoder)
         else:
             try:
                 int(qstval)
-                self.hidraport = json.dumps([str(qstval)])
+                self.hidraport = json.dumps([str(qstval)], cls=numpyEncoder)
             except Exception:
                 pass
 
@@ -747,7 +750,8 @@ class Settings(object):
                 json.loads(qstval)
                 self.detservers = qstval
             except Exception:
-                self.detsetvers = json.dumps([str(tp) for tp in qstval])
+                self.detsetvers = json.dumps(
+                    [str(tp) for tp in qstval], cls=numpyEncoder)
 
         qstval = str(
             settings.value(

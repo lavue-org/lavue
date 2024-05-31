@@ -36,7 +36,7 @@ except Exception:
     from pyqtgraph import QtGui as QtWidgets
 
 
-from .sardanaUtils import debugmethod
+from .sardanaUtils import debugmethod, numpyEncoder
 
 from . import sourceWidget as swgm
 
@@ -946,8 +946,10 @@ class SourceTabWidget(QtWidgets.QTabWidget):
     def emitSourceChanged(self):
         """ emits sourceChanged signal
         """
-        status = json.dumps([st.sourceStatus()
-                             for st in self.__sourcetabs][:self.count()])
+        status = json.dumps(
+            [st.sourceStatus()
+             for st in self.__sourcetabs][:self.count()],
+            cls=numpyEncoder)
         self.sourceChanged.emit(status)
 
     @debugmethod
@@ -996,7 +998,8 @@ class SourceTabWidget(QtWidgets.QTabWidget):
         if status == -1:
             status = json.dumps(
                 [st.sourceStatus()
-                 for st in self.__sourcetabs][:self.count()])
+                 for st in self.__sourcetabs][:self.count()],
+                cls=numpyEncoder)
             self.sourceConnected.emit(status)
         else:
             self.sourceStateChanged.emit(status, sid)
@@ -1079,7 +1082,8 @@ class SourceTabWidget(QtWidgets.QTabWidget):
                 st.connectWidget()
             status = json.dumps(
                 [st.sourceStatus()
-                 for st in self.__sourcetabs][:self.count()])
+                 for st in self.__sourcetabs][:self.count()],
+                cls=numpyEncoder)
             self.sourceConnected.emit(status)
 
     @debugmethod

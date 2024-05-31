@@ -31,6 +31,7 @@ from pyqtgraph import QtCore
 import os
 import json
 import logging
+from .sardanaUtils import numpyEncoder
 
 try:
     from pyqtgraph import QtWidgets
@@ -447,7 +448,7 @@ class ConfigDialog(QtWidgets.QDialog):
                 for key in list(record.keys()):
                     if not str(key).strip():
                         record.pop(key)
-                obj.setText(json.dumps(record))
+                obj.setText(json.dumps(record, cls=numpyEncoder))
             return True
         return False
 
@@ -626,7 +627,7 @@ class ConfigDialog(QtWidgets.QDialog):
             else:
                 params = ""
             fltlist.append([fltname or "", params or ""])
-        filters = json.dumps(fltlist)
+        filters = json.dumps(fltlist, cls=numpyEncoder)
         if self.filters != filters:
             self.filters = filters
             return True
@@ -652,7 +653,7 @@ class ConfigDialog(QtWidgets.QDialog):
         else:
             fltlist.insert(0, ["", ""])
 
-        self.filters = json.dumps(fltlist)
+        self.filters = json.dumps(fltlist, cls=numpyEncoder)
         self.__populateTable()
         self.__updateRecord()
 
@@ -667,7 +668,7 @@ class ConfigDialog(QtWidgets.QDialog):
         else:
             fltlist.append(["", ""])
 
-        self.filters = json.dumps(fltlist)
+        self.filters = json.dumps(fltlist, cls=numpyEncoder)
         self.__populateTable()
         self.__updateRecord()
 
@@ -687,7 +688,7 @@ class ConfigDialog(QtWidgets.QDialog):
                     QtWidgets.QMessageBox.Yes) == QtWidgets.QMessageBox.No:
                 return
             fltlist.pop(row)
-            self.filters = json.dumps(fltlist)
+            self.filters = json.dumps(fltlist, cls=numpyEncoder)
             self.__populateTable()
             self.__updateRecord()
 
@@ -780,7 +781,7 @@ class ConfigDialog(QtWidgets.QDialog):
         """ takes Mask color from mask color widget
         """
         color = list(self.__overflowcolorwidget.color(mode='byte')[:3])
-        self.overflowcolor = json.dumps(color)
+        self.overflowcolor = json.dumps(color, cls=numpyEncoder)
 
     @QtCore.pyqtSlot()
     def _removeROIColorWidget(self):
@@ -796,7 +797,7 @@ class ConfigDialog(QtWidgets.QDialog):
         colors = []
         for roiswg in self.__roiswidgets:
             colors.append(list(roiswg.color(mode='byte')[:3]))
-        self.roiscolors = json.dumps(colors)
+        self.roiscolors = json.dumps(colors, cls=numpyEncoder)
 
     @QtCore.pyqtSlot(int)
     def _updateSecPortLineEdit(self, value):
@@ -1019,7 +1020,8 @@ class ConfigDialog(QtWidgets.QDialog):
             self.__ui.asapobtmetafileLineEdit.text()).strip()
         detservers = str(
             self.__ui.detserversLineEdit.text()).strip().split(" ")
-        self.detservers = json.dumps([ds for ds in detservers if ds])
+        self.detservers = json.dumps(
+            [ds for ds in detservers if ds], cls=numpyEncoder)
         try:
             self.timeout = int(self.__ui.timeoutLineEdit.text())
         except Exception:
@@ -1038,7 +1040,8 @@ class ConfigDialog(QtWidgets.QDialog):
                 self.__ui.hidraportLineEdit.text()).strip().split(" ")
             for pt in hidraport:
                 int(pt)
-            self.hidraport = json.dumps([pt for pt in hidraport if pt])
+            self.hidraport = json.dumps(
+                [pt for pt in hidraport if pt], cls=numpyEncoder)
         except Exception:
             self.__ui.tabWidget.setCurrentIndex(2)
             self.__ui.hidraportLineEdit.setFocus(True)
@@ -1054,8 +1057,10 @@ class ConfigDialog(QtWidgets.QDialog):
         self.__readROIsColors()
         self.__readOverflowColor()
         self.imagesources = json.dumps(
-            self.__ui.isTable.getChecks(self.availimagesources))
+            self.__ui.isTable.getChecks(self.availimagesources),
+            cls=numpyEncoder)
         self.toolwidgets = json.dumps(
-            self.__ui.twTable.getChecks(self.availtoolwidgets))
+            self.__ui.twTable.getChecks(self.availtoolwidgets),
+            cls=numpyEncoder)
 
         QtWidgets.QDialog.accept(self)

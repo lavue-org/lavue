@@ -78,8 +78,7 @@ from . import filters
 from . import rangeWindowGroupBox
 from . import filtersGroupBox
 from . import helpForm
-from .sardanaUtils import debugmethod
-# from . import imageNexusExporter
+from .sardanaUtils import debugmethod, numpyEncoder
 
 try:
     from . import controllerClient
@@ -208,7 +207,7 @@ class LavueState(object):
         :returns: string representation
         :rtype: :obj:`str`
         """
-        return json.dumps(self.__state)
+        return json.dumps(self.__state, cls=numpyEncoder)
 
 
 class PartialData(object):
@@ -1280,7 +1279,8 @@ class LiveViewer(QtWidgets.QDialog):
             for key in list(labelvalues.keys()):
                 if not str(key).strip():
                     labelvalues.pop(key)
-            setattr(self.__settings, name, json.dumps(labelvalues))
+            setattr(self.__settings, name,
+                    json.dumps(labelvalues, cls=numpyEncoder))
             self.__updateSource()
             self._storeSettings()
 
@@ -1296,10 +1296,12 @@ class LiveViewer(QtWidgets.QDialog):
         """
         name = str(name)
         label = str(label)
-        labelvalues = json.loads(getattr(self.__settings, name) or '{}')
+        labelvalues = json.loads(
+            getattr(self.__settings, name) or '{}', cls=numpyEncoder)
         if label in labelvalues.keys():
             labelvalues.pop(label)
-            setattr(self.__settings, name, json.dumps(labelvalues))
+            setattr(self.__settings, name,
+                    json.dumps(labelvalues, cls=numpyEncoder))
             self.__updateSource()
             self._storeSettings()
 
@@ -1702,7 +1704,8 @@ class LiveViewer(QtWidgets.QDialog):
         if hasattr(options, "toolconfig") and options.toolconfig is not None:
             if isinstance(options.toolconfig, dict):
                 try:
-                    tlconfig = str(json.dumps(options.toolconfig))
+                    tlconfig = str(
+                        json.dumps(options.toolconfig, cls=numpyEncoder))
                 except Exception as e:
                     logger.warning(str(e))
                     tlconfig = str(options.toolconfig)
@@ -2385,9 +2388,11 @@ class LiveViewer(QtWidgets.QDialog):
         cnfdlg.asaposourcepath = self.__settings.asaposourcepath
         cnfdlg.asapobtmetafile = self.__settings.asapobtmetafile
         cnfdlg.asapodatasources = self.__settings.asapodatasources
-        cnfdlg.detservers = json.dumps(self.__mergeDetServers(
-            HIDRASERVERLIST if cnfdlg.defdetservers else {"pool": []},
-            json.loads(self.__settings.detservers)))
+        cnfdlg.detservers = json.dumps(
+            self.__mergeDetServers(
+                HIDRASERVERLIST if cnfdlg.defdetservers else {"pool": []},
+                json.loads(self.__settings.detservers)),
+            cls=numpyEncoder)
         cnfdlg.createGUI()
         if cnfdlg.exec_():
             self.__updateConfig(cnfdlg)
@@ -2644,7 +2649,8 @@ class LiveViewer(QtWidgets.QDialog):
             setsrc = True
         detservers = json.dumps(self.__retrieveUserDetServers(
             HIDRASERVERLIST if dialog.defdetservers else {"pool": []},
-            json.loads(dialog.detservers)))
+            json.loads(dialog.detservers)),
+            cls=numpyEncoder)
         if self.__settings.detservers != detservers:
             self.__settings.detservers = detservers
             setsrc = True
@@ -3076,7 +3082,8 @@ class LiveViewer(QtWidgets.QDialog):
                     else currentscaling)}
             topic = 10001
             message = "%d %s" % (
-                topic, str(json.dumps(messagedata)).encode("ascii"))
+                topic, str(json.dumps(
+                    messagedata, cls=numpyEncoder)).encode("ascii"))
             self.__settings.secsocket.send_string(str(message))
 
         self.__statswg.updateStatistics(
@@ -3153,7 +3160,9 @@ class LiveViewer(QtWidgets.QDialog):
             topic = 10001
             # print(str(messagedata))
             self.__settings.secsocket.send_string("%d %s" % (
-                topic, str(json.dumps(messagedata)).encode("ascii")))
+                topic, str(json.dumps(
+                    messagedata,
+                    cls=numpyEncoder)).encode("ascii")))
         self.__updatehisto = True
         self.__setSourceLabel()
         self.setLavueState({"connected": self.__sourcewg.isConnected()})
@@ -3186,7 +3195,9 @@ class LiveViewer(QtWidgets.QDialog):
             # print(str(messagedata))
             topic = 10001
             self.__settings.secsocket.send_string("%d %s" % (
-                topic, str(json.dumps(messagedata)).encode("ascii")))
+                topic, str(json.dumps(
+                    messagedata,
+                    cls=numpyEncoder)).encode("ascii")))
 
     # @debugmethod
     def __mergeData(self, fulldata, oldname, channels=False):
@@ -3232,7 +3243,7 @@ class LiveViewer(QtWidgets.QDialog):
                             "lavuelib.liveViewer.LiveViewer.__getNewData "
                             "update metadata %s: (%s)" % (md, type(md)))
 
-            metadata = str(json.dumps(dmdata))
+            metadata = str(json.dumps(dmdata, cls=numpyEncoder))
         if name:
             ldata = [pdata for pdata in fulldata if pdata.name]
             if len(ldata) == 1:

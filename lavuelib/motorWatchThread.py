@@ -36,6 +36,7 @@ from pyqtgraph import QtCore
 
 from .omniQThread import OmniQThread
 # from .sardanaUtils import debugmethod
+from .sardanaUtils import numpyEncoder
 
 
 #: (:obj:`float`) refresh time in seconds
@@ -159,7 +160,8 @@ class AttributeWatchThread(OmniQThread):
                     if hasattr(vl, "tolist"):
                         vl = vl.tolist()
                     attrs.append(vl)
-                self.attrValuesSignal.emit(str(json.dumps(attrs)))
+                self.attrValuesSignal.emit(str(
+                    json.dumps(attrs, cls=numpyEncoder)))
             except Exception as e:
                 logger.warning(str(e))
             if time and self.__loop:

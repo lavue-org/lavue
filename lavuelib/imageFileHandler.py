@@ -33,6 +33,7 @@ import sys
 import json
 import logging
 
+from .sardanaUtils import numpyEncoder
 from . import filewriter
 
 if sys.version_info > (3,):
@@ -361,7 +362,7 @@ class NexusFieldHandler(object):
             except Exception as e:
                 # print(str(e))
                 logger.warning(str(e))
-        return json.dumps(metadata)
+        return json.dumps(metadata, cls=numpyEncoder)
 
     @classmethod
     def extract(cls, value):
@@ -601,9 +602,9 @@ class CBFLoader(object):
         if mdata:
             if premeta:
                 mdata.update(premeta)
-            return json.dumps(mdata)
+            return json.dumps(mdata, cls=numpyEncoder)
         else:
-            return json.dumps(premeta) if premeta else ""
+            return json.dumps(premeta, cls=numpyEncoder) if premeta else ""
 
     @classmethod
     def load(cls, flbuffer):
