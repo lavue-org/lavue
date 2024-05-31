@@ -48,7 +48,7 @@ from . import imageSource as isr
 from . import toolWidget
 from . import memoExportDialog
 from . import sardanaUtils
-from .sardanaUtils import debugmethod
+from .sardanaUtils import debugmethod, numpyEncoder
 
 # _VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(".") \
 #     if _pg.__version__ else ("0", "9", "0")
@@ -372,7 +372,8 @@ class ImageWidget(QtWidgets.QWidget):
                     if lastalias in rois.keys():
                         rois.pop(lastalias)
                     toadd.append(lastalias)
-            self.__tangoclient.writeAttribute("DetectorROIs", json.dumps(rois))
+            self.__tangoclient.writeAttribute(
+                "DetectorROIs", json.dumps(rois, cls=numpyEncoder))
 
     def writeDetectorROIsValuesAttribute(self, rvalues):
         """ writes DetectorROIsValuesattribute of device
@@ -427,7 +428,8 @@ class ImageWidget(QtWidgets.QWidget):
                         rois.pop(lastalias)
                     toadd.append(lastalias)
             self.__tangoclient.writeAttribute(
-                "DetectorROIsValues", json.dumps(rois))
+                "DetectorROIsValues",
+                json.dumps(rois, cls=numpyEncoder))
 
     def setTangoClient(self, tangoclient):
         """ sets tango client
@@ -839,7 +841,8 @@ class ImageWidget(QtWidgets.QWidget):
                 }
                 lpars = [tr for tr in sorted(pars.keys()) if pars[tr]]
                 self.__tangoclient.writeAttribute(
-                    "DetectorROIsParams", json.dumps(lpars))
+                    "DetectorROIsParams",
+                    json.dumps(lpars, cls=numpyEncoder))
                 self.__lastroisparams = self.__selectedtrans
                 self.__lastkeepcoords = self.__settings.keepcoords
 
@@ -1390,7 +1393,8 @@ class ImageWidget(QtWidgets.QWidget):
 
             if self.__settings.sardana:
                 self.__sardana.setScanEnv(
-                    str(self.__settings.doorname), json.dumps(rois))
+                    str(self.__settings.doorname),
+                    json.dumps(rois, cls=numpyEncoder))
                 warns = []
                 if self.__settings.addrois:
                     try:

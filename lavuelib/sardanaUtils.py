@@ -234,7 +234,7 @@ class SardanaUtils(object):
                 for var in params:
                     if var in dc['new'].keys():
                         res[var] = dc['new'][var]
-        return json.dumps(res)
+        return json.dumps(res, cls=numpyEncoder)
 
     @debugmethod
     def getDeviceName(self, cname, db=None):
