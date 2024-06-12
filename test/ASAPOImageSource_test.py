@@ -186,7 +186,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
             'ASAPOServer="haso.desy.de:8500"\n' \
             'ASAPOToken=2asaldskjsalkdjflsakjflksj \n' \
             'ASAPOBeamtime=123124 \n' \
-            'ASAPODataSources=detector, \n' \
+            'ASAPODataSources=[\\"detector\\"]\n' \
             'ASAPOSourcePath=/asap3/petra/gpfs/p21/2021/data/123124\n' \
             'StoreGeometry=true\n' \
             'GeometryFromSource=true'

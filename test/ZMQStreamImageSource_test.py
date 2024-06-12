@@ -676,7 +676,7 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
 
         cfg = '[Configuration]\n' \
             'AutoZMQStreamTopics=true\n' \
-            'ZMQStreamTopics=243, 234, 34\n' \
+            'ZMQStreamTopics=[\\"243\\", \\"234\\", \\"34\\"]\n' \
             'ZMQServers={}\n'
 
         if not os.path.exists(self.__cfgfdir):
