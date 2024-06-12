@@ -687,7 +687,10 @@ class Settings(object):
             settings.value(
                 "Configuration/ZMQStreamTopics", type=str)
         if qstval:
-            self.zmqtopics = [str(tp) for tp in qstval]
+            try:
+                self.zmqtopics = json.loads(qstval)
+            except Exception:
+                self.zmqtopics = [str(tp) for tp in qstval]
 
         qstval2 = \
             settings.value(
@@ -696,9 +699,15 @@ class Settings(object):
             settings.value(
                 "Configuration/ASAPODataSources", type=str)
         if qstval:
-            self.asapodatasources = [str(tp) for tp in qstval]
+            try:
+                self.asapodatasources = json.loads(qstval)
+            except Exception:
+                self.asapodatasources = [str(tp) for tp in qstval]
         elif qstval2:
-            self.asapodatasources = [str(tp) for tp in qstval2]
+            try:
+                self.asapodatasources = json.loads(qstval2)
+            except Exception:
+                self.asapodatasources = [str(tp) for tp in qstval2]
         else:
             self.asapodatasources = []
 
@@ -750,7 +759,7 @@ class Settings(object):
                 json.loads(qstval)
                 self.detservers = qstval
             except Exception:
-                self.detsetvers = json.dumps(
+                self.detservers = json.dumps(
                     [str(tp) for tp in qstval], cls=numpyEncoder)
 
         qstval = str(
@@ -1142,10 +1151,10 @@ class Settings(object):
             self.toolwidgets)
         settings.setValue(
             "Configuration/ZMQStreamTopics",
-            self.zmqtopics)
+            json.dumps(self.zmqtopics or [], cls=numpyEncoder))
         settings.setValue(
             "Configuration/ASAPODataSources",
-            self.asapodatasources)
+            json.dumps(self.asapodatasources or [], cls=numpyEncoder))
         settings.setValue(
             "Configuration/ASAPOServer",
             self.asaposerver)
