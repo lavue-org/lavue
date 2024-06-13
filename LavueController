@@ -169,7 +169,9 @@ class LavueController (tango.LatestDeviceImpl):
         data = attr.get_write_value()
         if self.attr_BeamCenterX_read != float(data):
             self.attr_BeamCenterX_read = float(data)
-            self.push_change_event("BeamCenterX", self.attr_BeamCenterX_read)
+            if "BeamCenterX" not in self.AttributesWithoutEvents:
+                self.push_change_event(
+                    "BeamCenterX", self.attr_BeamCenterX_read)
 
     def read_BeamCenterY(self, attr):
         self.debug_stream("In read_BeamCenterY()")
@@ -179,8 +181,10 @@ class LavueController (tango.LatestDeviceImpl):
         self.debug_stream("In write_BeamCenterY()")
         data = attr.get_write_value()
         if self.attr_BeamCenterY_read != float(data):
-            self.attr_BeamCenterY_read = float(data)
-            self.push_change_event("BeamCenterY", self.attr_BeamCenterY_read)
+            if "BeamCenterY" not in self.AttributesWithoutEvents:
+                self.attr_BeamCenterY_read = float(data)
+                self.push_change_event(
+                    "BeamCenterY", self.attr_BeamCenterY_read)
 
     def read_PixelSizeX(self, attr):
         self.debug_stream("In read_PixelSizeX()")
@@ -191,7 +195,9 @@ class LavueController (tango.LatestDeviceImpl):
         data = attr.get_write_value()
         if self.attr_PixelSizeX_read != float(data):
             self.attr_PixelSizeX_read = float(data)
-            self.push_change_event("PixelSizeX", self.attr_PixelSizeX_read)
+            if "PixelSizeX" not in self.AttributesWithoutEvents:
+                self.push_change_event(
+                    "PixelSizeX", self.attr_PixelSizeX_read)
 
     def read_PixelSizeY(self, attr):
         self.debug_stream("In read_PixelSizeY()")
@@ -202,7 +208,9 @@ class LavueController (tango.LatestDeviceImpl):
         data = attr.get_write_value()
         if self.attr_PixelSizeY_read != float(data):
             self.attr_PixelSizeY_read = float(data)
-            self.push_change_event("PixelSizeY", self.attr_PixelSizeY_read)
+            if "PixelSizeY" not in self.AttributesWithoutEvents:
+                self.push_change_event(
+                    "PixelSizeY", self.attr_PixelSizeY_read)
 
     def read_DetectorDistance(self, attr):
         self.debug_stream("In read_DetectorDistance()")
@@ -214,8 +222,9 @@ class LavueController (tango.LatestDeviceImpl):
 #
         if self.attr_DetectorDistance_read != float(data):
             self.attr_DetectorDistance_read = float(data)
-            self.push_change_event(
-                "DetectorDistance", self.attr_DetectorDistance_read)
+            if "DetectorDistance" not in self.AttributesWithoutEvents:
+                self.push_change_event(
+                    "DetectorDistance", self.attr_DetectorDistance_read)
 
     def read_LavueState(self, attr):
         self.debug_stream("In read_LavueState()")
@@ -233,9 +242,10 @@ class LavueController (tango.LatestDeviceImpl):
             self.attr_LavueState_read = data
         else:
             self.attr_LavueState_write = data
-            self.push_change_event(
-                "LavueState",
-                self.attr_LavueState_write)
+            if "LavueState" not in self.AttributesWithoutEvents:
+                self.push_change_event(
+                    "LavueState",
+                    self.attr_LavueState_write)
 
     def read_DetectorROIs(self, attr):
         self.debug_stream("In read_DetectorROIs()")
@@ -270,7 +280,9 @@ class LavueController (tango.LatestDeviceImpl):
             self.attr_DetectorROIs_read = data
             if self.DynamicROIs:
                 self.initialize_dynamic_attributes()
-            self.push_change_event("DetectorROIs", self.attr_DetectorROIs_read)
+            if "DetectorROIs" not in self.AttributesWithoutEvents:
+                self.push_change_event(
+                    "DetectorROIs", self.attr_DetectorROIs_read)
 
     def read_ToolResults(self, attr):
         self.debug_stream("In read_ToolResults()")
@@ -279,10 +291,12 @@ class LavueController (tango.LatestDeviceImpl):
     def write_ToolResults(self, attr):
         self.debug_stream("In write_ToolResults()")
         data = attr.get_write_value()
-        detrois = json.loads(data)
+        _ = json.loads(data)
         if self.attr_ToolResults_read != data:
             self.attr_ToolResults_read = data
-            self.push_change_event("ToolResults", self.attr_ToolResults_read)
+            if "ToolResults" not in self.AttributesWithoutEvents:
+                self.push_change_event(
+                    "ToolResults", self.attr_ToolResults_read)
 
     def read_DetectorROIsValues(self, attr):
         self.debug_stream("In read_DetectorROIsValues()")
@@ -318,8 +332,9 @@ class LavueController (tango.LatestDeviceImpl):
             self.attr_DetectorROIsValues_read = data
             if self.DynamicROIsValues:
                 self.initialize_dynamic_attributes()
-            self.push_change_event(
-                "DetectorROIsValues", self.attr_DetectorROIsValues_read)
+            if "DetectorROIsValues" not in self.AttributesWithoutEvents:
+                self.push_change_event(
+                    "DetectorROIsValues", self.attr_DetectorROIsValues_read)
 
     def read_DetectorROIsParams(self, attr):
         self.debug_stream("In read_DetectorROIsParams()")
@@ -330,8 +345,9 @@ class LavueController (tango.LatestDeviceImpl):
         data = attr.get_write_value()
         if self.attr_DetectorROIsParams_read != str(data):
             self.attr_DetectorROIsParams_read = str(data)
-            self.push_change_event(
-                "DetectorROIsParams", self.attr_DetectorROIsParams_read)
+            if "DetectorROIsParams" not in self.AttributesWithoutEvents:
+                self.push_change_event(
+                    "DetectorROIsParams", self.attr_DetectorROIsParams_read)
 
     def read_Energy(self, attr):
         self.debug_stream("In read_Energy()")
@@ -342,7 +358,8 @@ class LavueController (tango.LatestDeviceImpl):
         data = attr.get_write_value()
         if self.attr_Energy_read != float(data):
             self.attr_Energy_read = float(data)
-            self.push_change_event("Energy", self.attr_Energy_read)
+            if "Energy" not in self.AttributesWithoutEvents:
+                self.push_change_event("Energy", self.attr_Energy_read)
 
     def read_ScalarDynamicAttr(self, attr):
         self.debug_stream("In read_ScalarDynamicAttr()")
@@ -596,6 +613,11 @@ class LavueControllerClass(tango.DeviceClass):
         [tango.DevVarStringArray,
          "fixed ROI attributes names, They should ends with ROI, Sum or Sums",
          []],
+        'AttributesWithoutEvents':
+        [tango.DevVarStringArray,
+         "A names of attributes for which push_change_event is not called",
+         [["ToolResults"]],
+         ]
     }
 
     #    Command definitions

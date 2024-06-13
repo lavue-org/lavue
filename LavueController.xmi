@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
-<pogoDsl:PogoSystem xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pogoDsl="http://www.esrf.fr/tango/pogo/PogoDsl">
-  <classes name="LavueController" pogoRevision="9.4">
+<pogoDsl:PogoSystem xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pogoDsl="http://tango.org/pogo/PogoDsl">
+  <classes name="LavueController" pogoRevision="9.8">
     <description description="tango server to change lavue setting in real time" title="Lavue Controller" sourcePath="/home/jkotan/ndts/lavue" language="Python" filestogenerate="XMI   file,Code files,Protected Regions,html Pages" license="GPL" copyright="GPL 2" hasMandatoryProperty="false" hasConcreteProperty="true" hasAbstractCommand="false" hasAbstractAttribute="false" descriptionHtmlExists="false">
       <inheritances classname="Device_Impl" sourcePath=""/>
       <identification contact="at desy.de - jan.kotanski" author="jan.kotanski" emailDomain="desy.de" classFamily="SoftwareSystem" siteSpecific="" platform="All Platforms" bus="Not Applicable" manufacturer="none" reference="">
@@ -27,6 +27,11 @@
     <deviceProperties name="ROIAttributesNames" description="fixed ROI attributes names, They should ends with ROI, Sum or Sums">
       <type xsi:type="pogoDsl:StringVectorType"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </deviceProperties>
+    <deviceProperties name="AttributesWithoutEvents" description="A names of attributes for which push_change_event is not called">
+      <type xsi:type="pogoDsl:StringVectorType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <DefaultPropValue>&quot;ToolResults&quot;</DefaultPropValue>
     </deviceProperties>
     <commands name="State" description="This command gets the device state (stored in its device_state data member) and returns it to the caller." execMethod="dev_state" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="none">
@@ -170,6 +175,6 @@
     <states name="OFF" description="">
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </states>
-    <preferences docHome="./doc_html" makefileHome="/usr/share/pogo/preferences"/>
+    <preferences docHome="./doc_html" makefileHome="$(TANGO_DIR)/Libraries/cppserver/common"/>
   </classes>
 </pogoDsl:PogoSystem>
