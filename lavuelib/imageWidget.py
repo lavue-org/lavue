@@ -403,7 +403,7 @@ class ImageWidget(QtWidgets.QWidget):
                 lastcrdlist = rois[alias]
                 if rid < len(rvalues):
                     lastcrdlist.append(
-                        np.asscalar(rvalues[rid])
+                        rvalues[rid].item()
                         if hasattr(rvalues[rid], "item")
                         else rvalues[rid]
                     )
@@ -418,7 +418,7 @@ class ImageWidget(QtWidgets.QWidget):
             if rid > 0:
                 while rid < len(rvalues):
                     lastcrdlist.append(
-                        np.asscalar(rvalues[rid])
+                        rvalues[rid].item()
                         if hasattr(rvalues[rid], "item")
                         else rvalues[rid]
                     )
