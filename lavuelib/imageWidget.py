@@ -38,7 +38,6 @@ except Exception:
 import re
 import os
 import json
-import numpy as np
 import logging
 
 from . import imageDisplayWidget
