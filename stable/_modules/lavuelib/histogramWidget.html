@@ -725,7 +725,7 @@
                     <span class="s1">&#39;ignore&#39;</span><span class="p">,</span>
                     <span class="sa">r</span><span class="s1">&#39;All-NaN slice encountered&#39;</span><span class="p">)</span>
                 <span class="n">channels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imageItem</span><span class="p">()</span><span class="o">.</span><span class="n">getHistogram</span><span class="p">(</span><span class="n">perChannel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">ch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ch</span> <span class="ow">or</span> <span class="n">ch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="n">autofactor</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autolevelfactor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -803,7 +803,7 @@
                     <span class="s1">&#39;ignore&#39;</span><span class="p">,</span>
                     <span class="sa">r</span><span class="s1">&#39;All-NaN slice encountered&#39;</span><span class="p">)</span>
                 <span class="n">ch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imageItem</span><span class="p">()</span><span class="o">.</span><span class="n">getHistogram</span><span class="p">(</span><span class="n">perChannel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">ch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ch</span> <span class="ow">or</span> <span class="n">ch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">i</span><span class="p">:</span>
@@ -884,6 +884,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.88.0/index.html">v2.88.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.87.0/index.html">v2.87.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.86.1/index.html">v2.86.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.86.0/index.html">v2.86.0</a></li>
