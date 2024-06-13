@@ -678,7 +678,7 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
                     'ignore',
                     r'All-NaN slice encountered')
                 channels = self.__imageItem().getHistogram(perChannel=True)
-        if ch[0] is None:
+        if not ch or ch[0] is None:
             return
         autofactor = False
         if self.autolevelfactor is not None:
@@ -756,7 +756,7 @@ class HistogramHLUTItem(_pg.HistogramLUTItem):
                     'ignore',
                     r'All-NaN slice encountered')
                 ch = self.__imageItem().getHistogram(perChannel=True)
-            if ch[0] is None:
+            if not ch or ch[0] is None:
                 return
             for i in range(1, 5):
                 if len(ch) >= i:

@@ -7066,6 +7066,9 @@ class QROIProjToolWidget(ToolBaseWidget):
         """ plots the current image in 1d plots
         """
         if self._mainwidget.currentTool() == self.name:
+            if self.__bottomplot is None or self.__rightplot is None:
+                return
+
             dts = self._mainwidget.rawData()
             if dts is not None:
                 while dts.ndim > 2:
