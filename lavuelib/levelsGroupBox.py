@@ -582,7 +582,7 @@ class LevelsGroupBox(QtWidgets.QWidget):
         :type step: :obj:`str`
         """
         try:
-            fstep = float(step)
+            fstep = float(step or 0)
             if fstep <= 0:
                 fstep = None
                 self.__ui.stepLineEdit.setText("")
@@ -602,7 +602,7 @@ class LevelsGroupBox(QtWidgets.QWidget):
         :type factor: :obj:`str`
         """
         try:
-            ffactor = float(factor)
+            ffactor = float(factor or 0)
             if ffactor < 0:
                 ffactor = 0
                 self.__ui.autofactorLineEdit.setText("0")
@@ -630,7 +630,7 @@ class LevelsGroupBox(QtWidgets.QWidget):
             self.__hideControls()
             factor = str(self.__ui.autofactorLineEdit.text())
             try:
-                ffactor = float(factor)
+                ffactor = float(factor or 0)
                 if ffactor < 0:
                     ffactor = 0
                     self.__ui.autofactorLineEdit.setText("0")
@@ -885,7 +885,7 @@ class LevelsGroupBox(QtWidgets.QWidget):
             self.__channels = channels
         try:
             factor = str(self.__ui.autofactorLineEdit.text())
-            float(factor)
+            float(factor or 0)
             channels = None
             llim = None
             ulim = None
