@@ -102,7 +102,11 @@ class LavueController (tango.LatestDeviceImpl):
         ]
         for atname in self.__attrname_list:
             self.set_change_event(atname, True, False)
-            self.set_data_ready_event(atname, True)
+            if hasattr(self, "set_data_ready_event"):
+                self.set_data_ready_event(atname, True)
+            else:
+                self.get_device_attr().\
+                    get_attr_by_name(atname).set_data_ready_event(True)
 
         self.attr_DetectorROIs_read = "{}"
         self.attr_DetectorROIsValues_read = "{}"
