@@ -55,6 +55,10 @@ if sys.version_info > (3,):
     unicode = str
 
 
+def dummy_callback(*args, **kwargs):
+    pass
+
+
 class LavueController (tango.LatestDeviceImpl):
     """tango server to change lavue setting in real time"""
 
@@ -71,6 +75,8 @@ class LavueController (tango.LatestDeviceImpl):
 
     def delete_device(self):
         self.debug_stream("In delete_device()")
+        for eid in self.__eids:
+            self.unsubscribe_event(eid)
 
     def init_device(self):
         self.debug_stream("In init_device()")
@@ -162,6 +168,9 @@ class LavueController (tango.LatestDeviceImpl):
         self.current_attributes = set(attrs)
 
         self.initialize_dynamic_attributes()
+
+        self.__eids = []
+        self.__dp = tango.DeviceProxy(self.get_name())
 
     def always_executed_hook(self):
         self.debug_stream("In always_excuted_hook()")
@@ -319,6 +328,10 @@ class LavueController (tango.LatestDeviceImpl):
         if self.attr_ToolResults_read != data:
             self.attr_ToolResults_read = data
             if "ToolResults" not in self.DataReadyEventAttributes:
+                if not self.__eids:
+                    self.__eids.append(self.__dp.subscribe_event(
+                        "ToolResults", tango.EventType.CHANGE_EVENT,
+                        dummy_callback))
                 self.push_change_event(
                     "ToolResults", self.attr_ToolResults_read)
             else:
