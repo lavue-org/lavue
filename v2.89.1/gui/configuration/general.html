@@ -1,0 +1,224 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>General Settings &#8212; LaVue  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Layout Settings" href="layout.html" />
+    <link rel="prev" title="Configuration" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="layout.html" title="Layout Settings"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Configuration"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >GUI User Guide</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Configuration</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">General Settings</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="general-settings">
+<h1>General Settings<a class="headerlink" href="#general-settings" title="Permalink to this heading">¶</a></h1>
+<p>The first tab of the configuration dialog contains <strong>General Settings</strong>. It is divided into a few groups:</p>
+<figure class="align-default">
+<img alt="../../_images/lavuegeneralconfig.png" src="../../_images/lavuegeneralconfig.png" />
+</figure>
+<p><strong>Image source</strong></p>
+<ul class="simple">
+<li><p><strong>Refresh time in s:</strong> select a minimal time between consecutive frames</p></li>
+<li><p><strong>Auto enlarge refresh time</strong> automatically changes the refresh time if it is too small</p></li>
+<li><p><strong>Number of image sources:</strong>  a number of different image sources  from which images should be stitched</p></li>
+<li><p><strong>Map images to color channels:</strong> places images form different image sources to separate color channels</p></li>
+<li><p><strong>Interrupt on source errors:</strong> stops live image viewing on image source errors</p></li>
+<li><p><strong>Display specific for a source:</strong> store/retrieve display parameters for an each image source separately</p></li>
+<li><p><strong>Source timeout in ms:</strong> maximal time in milliseconds to wait for a response , e.g. from  Hidra or HTTP image sources</p></li>
+</ul>
+<p><strong>Statistics and 1d plots</strong></p>
+<ul class="simple">
+<li><p><strong>Intensity scaling:</strong> applies the intensity display scaling to image statistics and 1d-plots</p></li>
+<li><p><strong>Calculate variance:</strong> perform calculations of variance from image pixel intensities</p></li>
+</ul>
+<p><strong>ZMQ security stream</strong></p>
+<ul class="simple">
+<li><p><strong>Enabled:</strong> turns on sending the ZMQ security stream with basic information about the image, e.g. maximal intensity</p></li>
+<li><p><strong>Automatic port:</strong> selects a port number for the ZMQ security stream automatically</p></li>
+<li><p><strong>Port:</strong> defines a port number for the ZMQ security stream</p></li>
+</ul>
+<p><strong>Image display</strong></p>
+<ul class="simple">
+<li><p><strong>Maximal memory buffer size:</strong> maximal frame number in the memory buffer</p></li>
+<li><p><strong>Mask pixels with NAN:</strong> stores masked pixels as a float Not-A-Number (NAN)</p></li>
+<li><p><strong>Max value added to negative mask:</strong> add maximal type value of current image to the negative high value mask</p></li>
+<li><p><strong>Pixel masks with zero values:</strong> causes that zero pixel values of mask image are interpreted as masking</p></li>
+<li><p><strong>Intensity overflow color:</strong> causes that pixels with intesity over the overflow value are ploted in the color</p></li>
+<li><p><strong>Keep original coordinates:</strong> causes the 2D-plot axes transforms with image transformation</p></li>
+<li><p><strong>Lazy image slider:</strong> plot a new image after the image slider is focused out</p></li>
+<li><p><strong>Aspect Ratio locked:</strong> sets the aspect ratio to 1:1 in the 2D-plot</p></li>
+<li><p><strong>Auto Down-Sample:</strong> turns on auto-down-sampling mode of pyqtgraph</p></li>
+<li><p><strong>Float type for intensity:</strong>  type to which intensity is converted if it is changed to float type</p></li>
+<li><p><strong>Accelerate memory buffer sum:</strong> speeds up calculation of an image sum for the memory buffer tool</p></li>
+<li><p><strong>Image channels with gradient colors:</strong> use gradient color maps to display pixel intensities in the RGB-channel  mode</p></li>
+<li><p><strong>Ranges and ROIs Colors:</strong> allows to defined colors of Ranges or ROIs selection frames. Colors are used cyclically</p></li>
+</ul>
+<p><strong>ROIs</strong></p>
+<ul class="simple">
+<li><p><strong>Show all ROIs values:</strong> calculates ROIs sum values for all ROI frames</p></li>
+<li><p><strong>Send ROIs values:</strong> sends ROIs sum values to <cite>LaVueController</cite> tango server</p></li>
+<li><p><strong>Single ROIs aliases:</strong> adds <cite>rois1</cite>, <cite>roi2</cite>, <cite>roi3</cite>, … aliases if a number of rois is higher than their aliases</p></li>
+</ul>
+<p><strong>Tools</strong></p>
+<ul class="simple">
+<li><p><strong>Store detector geometry for Angle/Q:</strong> store the detector geometry for the Angle/Q tool in the configuration settings</p></li>
+<li><p><strong>Geometry form a source:</strong> fetch metadata parameters describing detector geometry from the image source</p></li>
+<li><p><strong>Display extension refresh time in s:</strong> Minimum refresh time for display extensions</p></li>
+<li><p><strong>Parameter polling interval in s:</strong> time in seconds between read-outs of detector tango attributes in the Parameters tool</p></li>
+<li><p><strong>Crosshair locker switched on:</strong>  initial status of intensity crosshair locker</p></li>
+<li><p><strong>Diffractogram size:</strong> number of points in the diffractogram</p></li>
+<li><p><strong>Correct Solid Angle:</strong> correct solid angle flag for diffractogram</p></li>
+<li><p><strong>Send results to LavueController:</strong> sends the current tool results to <cite>LaVueController</cite> tango server</p></li>
+</ul>
+<p><strong>Sardana</strong></p>
+<ul class="simple">
+<li><p><strong>Enabled:</strong> turns on communication with Sardana</p></li>
+<li><p><strong>Door:</strong> Door tango device to communicate with Sardana</p></li>
+<li><p><strong>Add ROIs to MG:</strong> causes the ROIs Apply button adds the corresponding ROIs aliases into the current Sardana Measurement Group</p></li>
+<li><p><strong>Fetch ROIs order:</strong> read a ROIs order from Sardana environment variables</p></li>
+</ul>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">Configuration</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="layout.html"
+                          title="next chapter">Layout Settings</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v2.89.1/index.html">v2.89.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.89.0/index.html">v2.89.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.88.0/index.html">v2.88.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.87.0/index.html">v2.87.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.86.1/index.html">v2.86.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.86.0/index.html">v2.86.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.85.1/index.html">v2.85.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.85.0/index.html">v2.85.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.84.0/index.html">v2.84.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.4/index.html">v2.83.4</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.3/index.html">v2.83.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.2/index.html">v2.83.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.1/index.html">v2.83.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.0/index.html">v2.83.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.82.0/index.html">v2.82.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.81.0/index.html">v2.81.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.80.1/index.html">v2.80.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.80.0/index.html">v2.80.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.79.0/index.html">v2.79.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.76.0/index.html">v2.76.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.75.3/index.html">v2.75.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.75.1/index.html">v2.75.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.74.0/index.html">v2.74.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.73.0/index.html">v2.73.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.72.0/index.html">v2.72.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.71.1/index.html">v2.71.1</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="layout.html" title="Layout Settings"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Configuration"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >GUI User Guide</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Configuration</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">General Settings</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+
+GNU GENERAL PUBLIC LICENSE, version 2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>
