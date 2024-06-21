@@ -76,12 +76,15 @@ class LavueController (tango.LatestDeviceImpl):
     def __unsubscribe(self):
         if hasattr(self, "__eids"):
             for eid in self.__eids.values():
-                self.unsubscribe_event(eid)
+                if eid is not None:
+                    self.unsubscribe_event(eid)
             self.__eids.clear()
 
     def __push_event(self, atname, data):
         if atname not in self.DataReadyEventAttributes:
             if atname not in self.__eids:
+                self.__eids[atname] = None
+            elif self.__eids[atname] is None:
                 self.__eids[atname] = self.__dp.subscribe_event(
                     atname, tango.EventType.CHANGE_EVENT,
                     dummy_callback)
