@@ -129,7 +129,7 @@
 	</tr>
 	<tr>
 		<td> DataReadyEventAttributes </td>
-		<td> Names of attributes for which push_data_ready_event is called instead of push_change_event </td>
+		<td> Names of attributes for which push_change_event is not called </td>
 		<td> String[] </td>
 		<td> &quot;ToolResults&quot; <br> </td>
 	</tr>
@@ -316,7 +316,7 @@
 		<td> READ_WRITE </td>
 		<td> Tango::DEV_STRING </td>
 		<td> EXPERT </td>
-		<td> json dictionary with detector ROIs, e.g.  {\&quot;pilatusroi1\&quot;: [[26, 15, 232, 65]], \&quot;lambdarois\&quot;: [[54, 78, 102, 204], [10, 20, 40, 50]]} </td>
+		<td> json dictionary with detector ROIs, e.g.  {\``pilatusroi1\``: [[26, 15, 232, 65]], \``lambdarois\``: [[54, 78, 102, 204], [10, 20, 40, 50]]} </td>
 	</tr>
 	<tr>
 		<td> <a href="AttrDetectorROIsValues.html"> DetectorROIsValues </a> </td>
@@ -326,7 +326,7 @@
 		<td> READ_WRITE </td>
 		<td> Tango::DEV_STRING </td>
 		<td> OPERATOR </td>
-		<td> json dictionary with detector ROIs values, e.g.  {\&quot;pilatusroi1\&quot;: [26.3], \&quot;lambdarois\&quot;: [54.3, 434.30]]} </td>
+		<td> json dictionary with detector ROIs values, e.g.  {\``pilatusroi1\``: [26.3], \``lambdarois\``: [54.3, 434.30]]} </td>
 	</tr>
 	<tr>
 		<td> <a href="AttrEnergy.html"> Energy </a> </td>
@@ -346,7 +346,7 @@
 		<td> READ_WRITE </td>
 		<td> Tango::DEV_STRING </td>
 		<td> OPERATOR </td>
-		<td> json dictionary with detector ROIs parameters, e.g.  {\&quot;transpose\&quot;: False, \&quot;flip-lr\&quot;: True,  \&quot;flip-ud\&quot;: False} </td>
+		<td> json dictionary with detector ROIs parameters, e.g.  {\``transpose\``: False, \``flip-lr\``: True,  \``flip-ud\``: False} </td>
 	</tr>
 	<tr>
 		<td> <a href="AttrLavueState.html"> LavueState </a> </td>
@@ -604,7 +604,11 @@
 			<Tr BGCOLOR="#CCCCFF"><Td> </Td><Td> </Td></Tr>
 				<tr>
 					<td> Push DataReady event by user code </td>
-					<td> false </td>
+					<td> true </td>
+				</tr>
+				<tr>
+					<td> <li> Criteria checked by TANGO </li> </td>
+					<td> true </td>
 				</tr>
 			</table>
 		</td>
@@ -778,7 +782,11 @@
 			<Tr BGCOLOR="#CCCCFF"><Td> </Td><Td> </Td></Tr>
 				<tr>
 					<td> Push DataReady event by user code </td>
-					<td> false </td>
+					<td> true </td>
+				</tr>
+				<tr>
+					<td> <li> Criteria checked by TANGO </li> </td>
+					<td> true </td>
 				</tr>
 			</table>
 		</td>
@@ -952,7 +960,11 @@
 			<Tr BGCOLOR="#CCCCFF"><Td> </Td><Td> </Td></Tr>
 				<tr>
 					<td> Push DataReady event by user code </td>
-					<td> false </td>
+					<td> true </td>
+				</tr>
+				<tr>
+					<td> <li> Criteria checked by TANGO </li> </td>
+					<td> true </td>
 				</tr>
 			</table>
 		</td>
@@ -964,7 +976,7 @@
 <br><br><br>
 <font size="+1"><u><b> Attribute DetectorROIs : </b></u></font>
 <ul>
-	json dictionary with detector ROIs, e.g.  {\&quot;pilatusroi1\&quot;: [[26, 15, 232, 65]], \&quot;lambdarois\&quot;: [[54, 78, 102, 204], [10, 20, 40, 50]]}
+	json dictionary with detector ROIs, e.g.  {\``pilatusroi1\``: [[26, 15, 232, 65]], \``lambdarois\``: [[54, 78, 102, 204], [10, 20, 40, 50]]}
 </ul>
 <br><br><br>
 <Table Border=0 Cellpadding=0 CELLSPACING=20>
@@ -1127,7 +1139,11 @@
 			<Tr BGCOLOR="#CCCCFF"><Td> </Td><Td> </Td></Tr>
 				<tr>
 					<td> Push DataReady event by user code </td>
-					<td> false </td>
+					<td> true </td>
+				</tr>
+				<tr>
+					<td> <li> Criteria checked by TANGO </li> </td>
+					<td> true </td>
 				</tr>
 			</table>
 		</td>
@@ -1139,7 +1155,7 @@
 <br><br><br>
 <font size="+1"><u><b> Attribute DetectorROIsValues : </b></u></font>
 <ul>
-	json dictionary with detector ROIs values, e.g.  {\&quot;pilatusroi1\&quot;: [26.3], \&quot;lambdarois\&quot;: [54.3, 434.30]]}
+	json dictionary with detector ROIs values, e.g.  {\``pilatusroi1\``: [26.3], \``lambdarois\``: [54.3, 434.30]]}
 </ul>
 <br><br><br>
 <Table Border=0 Cellpadding=0 CELLSPACING=20>
@@ -1302,7 +1318,11 @@
 			<Tr BGCOLOR="#CCCCFF"><Td> </Td><Td> </Td></Tr>
 				<tr>
 					<td> Push DataReady event by user code </td>
-					<td> false </td>
+					<td> true </td>
+				</tr>
+				<tr>
+					<td> <li> Criteria checked by TANGO </li> </td>
+					<td> true </td>
 				</tr>
 			</table>
 		</td>
@@ -1476,7 +1496,11 @@
 			<Tr BGCOLOR="#CCCCFF"><Td> </Td><Td> </Td></Tr>
 				<tr>
 					<td> Push DataReady event by user code </td>
-					<td> false </td>
+					<td> true </td>
+				</tr>
+				<tr>
+					<td> <li> Criteria checked by TANGO </li> </td>
+					<td> true </td>
 				</tr>
 			</table>
 		</td>
@@ -1488,7 +1512,7 @@
 <br><br><br>
 <font size="+1"><u><b> Attribute DetectorROIsParams : </b></u></font>
 <ul>
-	json dictionary with detector ROIs parameters, e.g.  {\&quot;transpose\&quot;: False, \&quot;flip-lr\&quot;: True,  \&quot;flip-ud\&quot;: False}
+	json dictionary with detector ROIs parameters, e.g.  {\``transpose\``: False, \``flip-lr\``: True,  \``flip-ud\``: False}
 </ul>
 <br><br><br>
 <Table Border=0 Cellpadding=0 CELLSPACING=20>
@@ -1651,7 +1675,11 @@
 			<Tr BGCOLOR="#CCCCFF"><Td> </Td><Td> </Td></Tr>
 				<tr>
 					<td> Push DataReady event by user code </td>
-					<td> false </td>
+					<td> true </td>
+				</tr>
+				<tr>
+					<td> <li> Criteria checked by TANGO </li> </td>
+					<td> true </td>
 				</tr>
 			</table>
 		</td>
@@ -1826,7 +1854,11 @@
 			<Tr BGCOLOR="#CCCCFF"><Td> </Td><Td> </Td></Tr>
 				<tr>
 					<td> Push DataReady event by user code </td>
-					<td> false </td>
+					<td> true </td>
+				</tr>
+				<tr>
+					<td> <li> Criteria checked by TANGO </li> </td>
+					<td> true </td>
 				</tr>
 			</table>
 		</td>
@@ -2001,7 +2033,11 @@
 			<Tr BGCOLOR="#CCCCFF"><Td> </Td><Td> </Td></Tr>
 				<tr>
 					<td> Push DataReady event by user code </td>
-					<td> false </td>
+					<td> true </td>
+				</tr>
+				<tr>
+					<td> <li> Criteria checked by TANGO </li> </td>
+					<td> true </td>
 				</tr>
 			</table>
 		</td>
@@ -2176,7 +2212,11 @@
 			<Tr BGCOLOR="#CCCCFF"><Td> </Td><Td> </Td></Tr>
 				<tr>
 					<td> Push DataReady event by user code </td>
-					<td> false </td>
+					<td> true </td>
+				</tr>
+				<tr>
+					<td> <li> Criteria checked by TANGO </li> </td>
+					<td> true </td>
 				</tr>
 			</table>
 		</td>
@@ -2351,7 +2391,11 @@
 			<Tr BGCOLOR="#CCCCFF"><Td> </Td><Td> </Td></Tr>
 				<tr>
 					<td> Push DataReady event by user code </td>
-					<td> false </td>
+					<td> true </td>
+				</tr>
+				<tr>
+					<td> <li> Criteria checked by TANGO </li> </td>
+					<td> true </td>
 				</tr>
 			</table>
 		</td>
