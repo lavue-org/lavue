@@ -349,7 +349,7 @@ class SardanaUtils(object):
         try:
             doorproxy.RunMacro(command)
         except tango.DevFailed as e:
-            if e.args[0].reason == 'API_CommandNotAllowed':
+            if e.args and e.args[0].reason == 'API_CommandNotAllowed':
                 self.wait(proxy=doorproxy)
                 doorproxy.RunMacro(command)
             else:
