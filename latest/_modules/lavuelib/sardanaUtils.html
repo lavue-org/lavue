@@ -396,7 +396,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">doorproxy</span><span class="o">.</span><span class="n">RunMacro</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">tango</span><span class="o">.</span><span class="n">DevFailed</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reason</span> <span class="o">==</span> <span class="s1">&#39;API_CommandNotAllowed&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reason</span> <span class="o">==</span> <span class="s1">&#39;API_CommandNotAllowed&#39;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">proxy</span><span class="o">=</span><span class="n">doorproxy</span><span class="p">)</span>
                 <span class="n">doorproxy</span><span class="o">.</span><span class="n">RunMacro</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
