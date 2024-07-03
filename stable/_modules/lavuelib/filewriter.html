@@ -73,7 +73,6 @@
 
 <span class="kn">import</span> <span class="nn">weakref</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">pytz</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
@@ -574,16 +573,20 @@
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tzone</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">tzname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S.</span><span class="si">%f</span><span class="s1">%z&#39;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">tz</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">tzone</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+                <span class="kn">import</span> <span class="nn">zoneinfo</span>
+                <span class="n">tz</span> <span class="o">=</span> <span class="n">zoneinfo</span><span class="o">.</span><span class="n">ZoneInfo</span><span class="p">(</span><span class="n">tzone</span><span class="p">)</span>
+                <span class="n">starttime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">tz</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="kn">import</span> <span class="nn">pytz</span>
+                <span class="n">tz</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">tzone</span><span class="p">)</span>
+                <span class="n">starttime</span> <span class="o">=</span> <span class="n">tz</span><span class="o">.</span><span class="n">localize</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="kn">import</span> <span class="nn">tzlocal</span>
             <span class="n">tz</span> <span class="o">=</span> <span class="n">tzlocal</span><span class="o">.</span><span class="n">get_localzone</span><span class="p">()</span>
-        <span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S.</span><span class="si">%f</span><span class="s1">%z&#39;</span>
-        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
             <span class="n">starttime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">tz</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">starttime</span> <span class="o">=</span> <span class="n">tz</span><span class="o">.</span><span class="n">localize</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">starttime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">fmt</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="FTFile.default_field"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTFile.default_field">[docs]</a>    <span class="k">def</span> <span class="nf">default_field</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1212,6 +1215,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.89.2/index.html">v2.89.2</a></li>
       <li><a class="reference external" href="../../index/../../v2.89.1/index.html">v2.89.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.89.0/index.html">v2.89.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.88.0/index.html">v2.88.0</a></li>
