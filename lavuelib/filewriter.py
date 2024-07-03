@@ -26,7 +26,6 @@
 
 import weakref
 import time
-import pytz
 import datetime
 import threading
 import numpy
@@ -529,8 +528,14 @@ class FTFile(FTObject):
         tzone = time.tzname[0]
         fmt = '%Y-%m-%dT%H:%M:%S.%f%z'
         try:
-            tz = pytz.timezone(tzone)
-            starttime = tz.localize(datetime.datetime.now())
+            if sys.version_info >= (3, 9):
+                import zoneinfo
+                tz = zoneinfo.ZoneInfo(tzone)
+                starttime = datetime.datetime.now().replace(tzinfo=tz)
+            else:
+                import pytz
+                tz = pytz.timezone(tzone)
+                starttime = tz.localize(datetime.datetime.now())
         except Exception:
             import tzlocal
             tz = tzlocal.get_localzone()
