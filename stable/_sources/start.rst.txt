@@ -62,7 +62,7 @@ To get all possible command-line parameters
      --domain DOMAIN
 			   Organization domain name
      --configuration-path CONFIGPATH
-			   Configuration path
+			   Base configuration path
      -f IMAGEFILE, --image-file IMAGEFILE
 			   image file name to show, e.g. /tmp/myfile2.nxs://entry/data/pilatus,,-1
      -s SOURCE, --source SOURCE
