@@ -1762,6 +1762,7 @@ class LiveViewer(QtWidgets.QDialog):
                 "Layout/Geometry", type=QtCore.QByteArray))
         self.restoreGeometry(settings.value(
             "Layout/DialogGeometry", type=QtCore.QByteArray))
+        logger.info("Loading settings from '%s'" % (str(settings.fileName())))
         status = self.__settings.load(settings)
         logger.debug("lavuelib.liveViewer.LiveViewer.__loadSettings %s"
                      % self.__settings.__dict__)
@@ -1843,6 +1844,7 @@ class LiveViewer(QtWidgets.QDialog):
         """ stores settings in QSettings object
         """
         settings = QtCore.QSettings()
+        logger.info("Saving settings to '%s'" % (str(settings.fileName())))
         if self.parent() is not None and self.parent().parent() is not None:
             settings.setValue(
                 "Layout/Geometry",
