@@ -534,6 +534,113 @@ class SpecializedToolTest(unittest.TestCase):
         finally:
             tisu.tearDown()
 
+    def test_roi_tools(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        cfg = '[Configuration]\n' \
+            'LabelROIsWithAliases=true\n'
+
+        if not os.path.exists(self.__cfgfdir):
+            os.makedirs(self.__cfgfdir)
+        with open(self.__cfgfname, "w+") as cf:
+            cf.write(cfg)
+
+        tisu = TestImageServerSetUp()
+        try:
+            tisu.setUp()
+
+            self.__lcsu.proxy.Init()
+            self.__lavuestate = None
+            filepath = "%s/%s" % (os.path.abspath(path), "test/images")
+            filename = "%05d.tif" % 2
+            imagefile = os.path.join(filepath, filename)
+            options = argparse.Namespace(
+                mode='expert',
+                source='tangoattr',
+                configuration='test/lavuecontroller/00/Image',
+                instance='tgtest',
+                tool='roi',
+                transformation='flip-up-down',
+                log='debug',
+                # log='info',
+                imagefile=imagefile,
+                scaling='log',
+                levels='m20,20',
+                gradient='thermal',
+                tangodevice='test/lavuecontroller/00'
+            )
+            logging.basicConfig(
+                 format="%(levelname)s: %(message)s")
+            logger = logging.getLogger("lavue")
+            lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+            dialog = lavuelib.liveViewer.MainWindow(options=options)
+            dialog.show()
+
+            cnf = {}
+            cnf["toolconfig"] = '{' \
+                '"aliases": ["pilatus_roi1", "pilatus_roi2"],' \
+                ' "rois_number": 2}'
+            lavuestate1 = json.dumps(cnf)
+
+            qtck1 = QtChecker(app, dialog, True, sleep=100,
+                              withitem=EnsureOmniThread)
+            qtck10 = QtChecker(app, dialog, True, sleep=100,
+                               withitem=EnsureOmniThread)
+            qtck11 = QtChecker(app, dialog, True, sleep=100,
+                               withitem=EnsureOmniThread)
+            qtck1.setChecks([
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+                ExtCmdCheck(self, "setLavueStatePar", [lavuestate1])
+            ])
+            qtck10.setChecks([
+                ExtCmdCheck(self, "getLavueStatePar"),
+            ])
+            qtck11.setChecks([])
+
+            print("execute")
+            qtck1.executeChecks(delay=6000)
+            qtck10.executeChecks(delay=12000)
+            status = qtck11.executeChecksAndClose(delay=18000)
+
+            self.assertEqual(status, 0)
+            qtck1.compareResults(self, [False, None])
+
+            # res1 = qtck1.results()
+            res10 = qtck10.results()
+            # res11 = qtck11.results()
+
+            ls = json.loads(res10[0])
+            dls = dict(self.__defaultls)
+            dls.update(dict(
+                mode='expert',
+                source='tangoattr',
+                configuration='test/lavuecontroller/00/Image',
+                instance='tgtest',
+                tool='roi',
+                transformation='flip-up-down',
+                # log='info',
+                log='debug',
+                toolconfig='{"aliases": ["pilatus_roi1", "pilatus_roi2"],'
+                ' "rois_number": 2}',
+                scaling='log',
+                imagefile=imagefile,
+                levels='-20.0,20.0',
+                gradient='thermal',
+                tangodevice='test/lavuecontroller/00',
+                autofactor=None
+            ))
+            self.compareStates(
+                ls, dls,
+                ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+            tc1 = json.loads(ls["toolconfig"])
+            tc2 = json.loads(dls["toolconfig"])
+            self.compareStates(tc1, tc2)
+
+        finally:
+            tisu.tearDown()
+
     def test_1dplot(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))

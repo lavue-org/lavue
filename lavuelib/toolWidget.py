@@ -1802,6 +1802,7 @@ class ROIToolWidget(ToolBaseWidget):
             [self._mainwidget.mouseImagePositionChanged, self._message],
         ]
 
+    # @debugmethod
     def configure(self, configuration):
         """ set configuration for the current tool
 
@@ -1815,6 +1816,9 @@ class ROIToolWidget(ToolBaseWidget):
                 if isinstance(aliases, list):
                     aliases = " ".join(aliases)
                 self.__ui.labelROILineEdit.setText(aliases)
+                self._mainwidget.roilabels = str(
+                    self.__ui.labelROILineEdit.text())
+                self._mainwidget.writeDetectorROIsAttribute()
             if "rois_number" in cnf.keys():
                 try:
                     self.__ui.roiSpinBox.setValue(int(cnf["rois_number"]))
@@ -1831,6 +1835,7 @@ class ROIToolWidget(ToolBaseWidget):
                 if cnf["fetch"]:
                     self._emitFetchROIPressed()
 
+    # @debugmethod
     def configuration(self):
         """ provides configuration for the current tool
 

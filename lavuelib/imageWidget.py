@@ -344,6 +344,8 @@ class ImageWidget(QtWidgets.QWidget):
         self.__displaywidget.extension('rois').updateLabels(slabel)
         if self.__tangoclient:
             rois = {}
+            slabel = re.split(';|,| |\n', str(self.roilabels))
+            slabel = [lb for lb in slabel if lb]
             if len(slabel) == 0:
                 slabel = ["__null__"]
             rid = 0
