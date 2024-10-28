@@ -341,7 +341,7 @@ class ROIExtension(DisplayExtension):
         """
         return "intensity"
 
-    def __addROI(self, coords=None):
+    def __addROI(self, coords=None, label=None):
         """ adds ROIs
 
         :param coords: roi coordinates
@@ -363,7 +363,10 @@ class ROIExtension(DisplayExtension):
         self.__roi.append(ROI(pnt, spnt))
         self.__roi[-1].addScaleHandle([1, 1], [0, 0])
         self.__roi[-1].addScaleHandle([0, 0], [1, 1])
-        text = _pg.TextItem("%s." % len(self.__roi), anchor=(1, 1))
+        if label:
+            text = _pg.TextItem("%s" % label, anchor=(1, 1))
+        else:
+            text = _pg.TextItem("%s." % len(self.__roi), anchor=(1, 1))
         text.setParentItem(self.__roi[-1])
         self.__roitext.append(text)
         self._mainwidget.viewbox().addItem(self.__roi[-1])
@@ -549,7 +552,25 @@ class ROIExtension(DisplayExtension):
             self.__current = rid
             self.roiCoordsChanged.emit()
 
-    def updateROIs(self, rid, coords):
+    def updateLabels(self, roilabels=[]):
+        """ update ROIs
+
+        :param roilabels: roi labels i.e. aliases
+        :type roilabels: :obj:`list`< :obj:`str` >
+        """
+        for ri, roi in enumerate(self.__roi):
+            if len(roilabels) > ri:
+                text = _pg.TextItem("%s" % roilabels[ri], anchor=(1, 1))
+            else:
+                text = _pg.TextItem("%s." % (ri + 1), anchor=(1, 1))
+            if len(self.__roitext) > ri:
+                self.__roitext[ri].setParentItem(None)
+                self.__roitext[ri] = text
+            else:
+                self.__roitext.append(text)
+            text.setParentItem(self.__roi[ri])
+
+    def updateROIs(self, rid, coords, roilabels=[]):
         """ update ROIs
 
         :param rid: roi id
@@ -557,13 +578,18 @@ class ROIExtension(DisplayExtension):
         :param coords: roi coordinates
         :type coords: :obj:`list`
                  < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
+        :param roilabels: roi labels i.e. aliases
+        :type roilabels: :obj:`list`< :obj:`str` >
         """
         self.__addROICoords(coords)
         while rid > len(self.__roi):
+            label = None
+            if roilabels and len(roilabels) > len(self.__roi):
+                label = roilabels[len(self.__roi)]
+            crd = None
             if coords and len(coords) >= len(self.__roi):
-                self.__addROI(coords[len(self.__roi)])
-            else:
-                self.__addROI()
+                crd = coords[len(self.__roi)]
+            self.__addROI(crd, label)
             self._getROI().sigHoverEvent.connect(self.__currentroimapper.map)
             self._getROI().sigRegionChanged.connect(self.__roiregionmapper.map)
             self.__currentroimapper.setMapping(
@@ -1093,10 +1119,10 @@ class MeshExtension(DisplayExtension):
         """
         self.__addROICoords(coords)
         while rid > len(self.__roi):
+            crd = None
             if coords and len(coords) >= len(self.__roi):
-                self.__addROI(coords[len(self.__roi)])
-            else:
-                self.__addROI()
+                crd = coords[len(self.__roi)]
+            self.__addROI(crd)
             self._getROI().sigHoverEvent.connect(self.__currentroimapper.map)
             self._getROI().sigRegionChanged.connect(self.__roiregionmapper.map)
             self.__currentroimapper.setMapping(

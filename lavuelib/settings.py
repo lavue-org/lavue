@@ -291,6 +291,8 @@ class Settings(object):
         self.showallrois = False
         #: (:obj:`bool`) single rois flag
         self.singlerois = False
+        #: (:obj:`bool`) display roi aliases on the 2d image
+        self.labelrois = False
         #: (:obj:`bool`) send rois to LavueController flag
         self.sendrois = False
         #: (:obj:`bool`) send results to LavueController flag
@@ -515,6 +517,10 @@ class Settings(object):
             "Configuration/SingleROIAliases", type=str))
         if qstval.lower() == "true":
             self.singlerois = True
+        qstval = str(settings.value(
+            "Configuration/LabelROIsWithAliases", type=str))
+        if qstval.lower() == "true":
+            self.labelrois = True
         qstval = str(settings.value("Configuration/SendROIs", type=str))
         if qstval.lower() == "true":
             self.sendrois = True
@@ -1248,6 +1254,9 @@ class Settings(object):
         settings.setValue(
             "Configuration/SingleROIAliases",
             self.singlerois)
+        settings.setValue(
+            "Configuration/LabelROIsWithAliases",
+            self.labelrois)
         settings.setValue(
             "Configuration/ShowAllROIs",
             self.showallrois)

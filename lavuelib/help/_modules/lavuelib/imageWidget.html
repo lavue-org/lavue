@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.imageWidget &#8212; LaVue 2.89.3 documentation</title>
+    <title>lavuelib.imageWidget &#8212; LaVue 2.90.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
@@ -33,7 +33,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.89.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.90.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageWidget</a></li> 
       </ul>
@@ -225,7 +225,7 @@
         <span class="c1">#        selected (transpose, leftright-flip, updown-flip )</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selectedtrans</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
-        <span class="c1">#: (:class:`Ui_ImageWidget&#39;) ui_imagewidget object from qtdesigner</span>
+        <span class="c1">#: (:class:`Ui_ImageWidget`) ui_imagewidget object from qtdesigner</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span> <span class="o">=</span> <span class="n">_formclass</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
@@ -383,10 +383,14 @@
     <span class="k">def</span> <span class="nf">writeDetectorROIsAttribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; writes DetectorROIsattribute value of device</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">slabel</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;|,| |</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">roilabels</span><span class="p">))</span>
+        <span class="n">slabel</span> <span class="o">=</span> <span class="p">[</span><span class="n">lb</span> <span class="k">for</span> <span class="n">lb</span> <span class="ow">in</span> <span class="n">slabel</span> <span class="k">if</span> <span class="n">lb</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">labelrois</span><span class="p">:</span>
+            <span class="n">slabel</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s1">&#39;rois&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">updateLabels</span><span class="p">(</span><span class="n">slabel</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tangoclient</span><span class="p">:</span>
             <span class="n">rois</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="n">slabel</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;|,| |</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">roilabels</span><span class="p">))</span>
-            <span class="n">slabel</span> <span class="o">=</span> <span class="p">[</span><span class="n">lb</span> <span class="k">for</span> <span class="n">lb</span> <span class="ow">in</span> <span class="n">slabel</span> <span class="k">if</span> <span class="n">lb</span><span class="p">]</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">slabel</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">slabel</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;__null__&quot;</span><span class="p">]</span>
             <span class="n">rid</span> <span class="o">=</span> <span class="mi">0</span>
@@ -395,6 +399,7 @@
             <span class="n">lastalias</span> <span class="o">=</span> <span class="kc">None</span>
 
             <span class="n">roicoords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s1">&#39;rois&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">roiCoords</span><span class="p">()</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">__lastrois</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">roicoords</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">slabel</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">alias</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">toadd</span><span class="p">:</span>
@@ -697,7 +702,12 @@
 <span class="sd">        :type coords: :obj:`list`</span>
 <span class="sd">                  &lt; [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] &gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s1">&#39;rois&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">updateROIs</span><span class="p">(</span><span class="n">rid</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">labelrois</span><span class="p">:</span>
+            <span class="n">slabel</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;|,| |</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">roilabels</span><span class="p">))</span>
+            <span class="n">slabel</span> <span class="o">=</span> <span class="p">[</span><span class="n">lb</span> <span class="k">for</span> <span class="n">lb</span> <span class="ow">in</span> <span class="n">slabel</span> <span class="k">if</span> <span class="n">lb</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">slabel</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s1">&#39;rois&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">updateROIs</span><span class="p">(</span><span class="n">rid</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">slabel</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">applyTipsChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">rid</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">roiCoordsChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">roiNumberChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">rid</span><span class="p">)</span></div>
@@ -2346,7 +2356,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.89.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.90.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageWidget</a></li> 
       </ul>

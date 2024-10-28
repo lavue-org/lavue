@@ -395,6 +395,8 @@ class ConfigDialog(QtWidgets.QDialog):
         self.sendresults = False
         #: (:obj:`bool`) set roi1, roi2, roi3, ... when alias names are missing
         self.singlerois = False
+        #: (:obj:`bool`) display roi aliases on the 2d image
+        self.labelrois = False
         #: (:obj:`int`) number of points for diffractogram
         self.diffnpt = 1000
         #: (:obj:`bool`) correct solid angle flag
@@ -536,6 +538,7 @@ class ConfigDialog(QtWidgets.QDialog):
         self.__ui.sendroisCheckBox.setChecked(self.sendrois)
         self.__ui.sendresultsCheckBox.setChecked(self.sendresults)
         self.__ui.singleroisCheckBox.setChecked(self.singlerois)
+        self.__ui.labelroisCheckBox.setChecked(self.labelrois)
         self.__ui.showallroisCheckBox.setChecked(self.showallrois)
         self.__ui.sourcedisplayCheckBox.setChecked(self.sourcedisplay)
         self.__ui.crosshairCheckBox.setChecked(self.crosshairlocker)
@@ -872,6 +875,7 @@ class ConfigDialog(QtWidgets.QDialog):
         self.sendrois = self.__ui.sendroisCheckBox.isChecked()
         self.sendresults = self.__ui.sendresultsCheckBox.isChecked()
         self.singlerois = self.__ui.singleroisCheckBox.isChecked()
+        self.labelrois = self.__ui.labelroisCheckBox.isChecked()
         self.showallrois = self.__ui.showallroisCheckBox.isChecked()
         self.sourcedisplay = self.__ui.sourcedisplayCheckBox.isChecked()
         self.defdetservers = self.__ui.defdetserversCheckBox.isChecked()
