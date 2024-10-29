@@ -569,6 +569,7 @@ class ROIExtension(DisplayExtension):
             else:
                 self.__roitext.append(text)
             text.setParentItem(self.__roi[ri])
+        self.setColors()
 
     def updateROIs(self, rid, coords, roilabels=[]):
         """ update ROIs
