@@ -225,7 +225,7 @@
         <span class="c1">#        selected (transpose, leftright-flip, updown-flip )</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selectedtrans</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
-        <span class="c1">#: (:class:`Ui_ImageWidget&#39;) ui_imagewidget object from qtdesigner</span>
+        <span class="c1">#: (:class:`Ui_ImageWidget`) ui_imagewidget object from qtdesigner</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span> <span class="o">=</span> <span class="n">_formclass</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
@@ -383,6 +383,12 @@
     <span class="k">def</span> <span class="nf">writeDetectorROIsAttribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; writes DetectorROIsattribute value of device</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">slabel</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;|,| |</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">roilabels</span><span class="p">))</span>
+        <span class="n">slabel</span> <span class="o">=</span> <span class="p">[</span><span class="n">lb</span> <span class="k">for</span> <span class="n">lb</span> <span class="ow">in</span> <span class="n">slabel</span> <span class="k">if</span> <span class="n">lb</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">labelrois</span><span class="p">:</span>
+            <span class="n">slabel</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s1">&#39;rois&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">updateLabels</span><span class="p">(</span><span class="n">slabel</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tangoclient</span><span class="p">:</span>
             <span class="n">rois</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="n">slabel</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;|,| |</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">roilabels</span><span class="p">))</span>
@@ -395,6 +401,7 @@
             <span class="n">lastalias</span> <span class="o">=</span> <span class="kc">None</span>
 
             <span class="n">roicoords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s1">&#39;rois&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">roiCoords</span><span class="p">()</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">__lastrois</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">roicoords</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">slabel</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">alias</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">toadd</span><span class="p">:</span>
@@ -697,7 +704,12 @@
 <span class="sd">        :type coords: :obj:`list`</span>
 <span class="sd">                  &lt; [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] &gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s1">&#39;rois&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">updateROIs</span><span class="p">(</span><span class="n">rid</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">labelrois</span><span class="p">:</span>
+            <span class="n">slabel</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;|,| |</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">roilabels</span><span class="p">))</span>
+            <span class="n">slabel</span> <span class="o">=</span> <span class="p">[</span><span class="n">lb</span> <span class="k">for</span> <span class="n">lb</span> <span class="ow">in</span> <span class="n">slabel</span> <span class="k">if</span> <span class="n">lb</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">slabel</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s1">&#39;rois&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">updateROIs</span><span class="p">(</span><span class="n">rid</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">slabel</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">applyTipsChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">rid</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">roiCoordsChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">roiNumberChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">rid</span><span class="p">)</span></div>
@@ -2339,6 +2351,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.90.0/index.html">v2.90.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.89.3/index.html">v2.89.3</a></li>
       <li><a class="reference external" href="../../index/../../v2.89.2/index.html">v2.89.2</a></li>
       <li><a class="reference external" href="../../index/../../v2.89.1/index.html">v2.89.1</a></li>
