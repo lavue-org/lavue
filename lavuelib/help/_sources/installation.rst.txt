@@ -23,7 +23,7 @@ The ``setup.py`` script may need: ``setuptools``  ``sphinx``  ``numpy``  ``pytes
 Debian packages
 """""""""""""""
 
-Debian `bookworm`, `bullseye`, `buster` or Ubuntu  `lunar`, `jammy`, `focal` packages can be found in the HDRI repository.
+Debian `bookworm`, `bullseye`, `buster` or Ubuntu  `noble`, `jammy`, `oracular` packages can be found in the HDRI repository.
 
 To install the debian packages, add the PGP repository key
 
@@ -55,13 +55,13 @@ or
 
 .. code-block:: console
 
-   $ wget http://repos.pni-hdri.de/jammy-pni-hdri.list
+   $ wget http://repos.pni-hdri.de/noble-pni-hdri.list
 
 or
 
 .. code-block:: console
 
-   $ wget http://repos.pni-hdri.de/focal-pni-hdri.list
+   $ wget http://repos.pni-hdri.de/jammy-pni-hdri.list
 
 respectively.
 
