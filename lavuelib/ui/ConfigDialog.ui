@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1203</width>
-    <height>826</height>
+    <height>834</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -751,29 +751,6 @@
                <layout class="QGridLayout" name="gridLayout_50">
                 <item row="0" column="0">
                  <layout class="QGridLayout" name="gridLayout_49">
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="showallroisLabel">
-                    <property name="toolTip">
-                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;calculate all ROIs values&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                    </property>
-                    <property name="text">
-                     <string>Show all ROIs values:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>showallroisCheckBox</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="QCheckBox" name="showallroisCheckBox">
-                    <property name="toolTip">
-                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;calculate all ROIs values&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="3" column="0">
                    <widget class="QLabel" name="sendroisLabel">
                     <property name="toolTip">
@@ -787,6 +764,26 @@
                     </property>
                    </widget>
                   </item>
+                  <item row="2" column="1">
+                   <widget class="QCheckBox" name="showallroisCheckBox">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;calculate all ROIs values&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="1">
+                   <widget class="QCheckBox" name="singleroisCheckBox">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;add roi1, roi2, ro3 ... aliases if their number is lower than a numer of rois&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="3" column="1">
                    <widget class="QCheckBox" name="sendroisCheckBox">
                     <property name="toolTip">
@@ -794,6 +791,19 @@
                     </property>
                     <property name="text">
                      <string/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="showallroisLabel">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;calculate all ROIs values&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Show all ROIs values:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>showallroisCheckBox</cstring>
                     </property>
                    </widget>
                   </item>
@@ -807,16 +817,6 @@
                     </property>
                     <property name="buddy">
                      <cstring>singleroisCheckBox</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="1">
-                   <widget class="QCheckBox" name="singleroisCheckBox">
-                    <property name="toolTip">
-                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;add roi1, roi2, ro3 ... aliases if their number is lower than a numer of rois&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                    </property>
-                    <property name="text">
-                     <string/>
                     </property>
                    </widget>
                   </item>
@@ -836,6 +836,29 @@
                       <number>0</number>
                      </property>
                     </layout>
+                   </widget>
+                  </item>
+                  <item row="5" column="0">
+                   <widget class="QLabel" name="labelroisLabel">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;display ROIs aliases  on the 2D image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Label ROIs with aliases: </string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>labelroisCheckBox</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="1">
+                   <widget class="QCheckBox" name="labelroisCheckBox">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;display ROIs aliases  on the 2D image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
                    </widget>
                   </item>
                  </layout>
@@ -2417,6 +2440,7 @@ in the file name and the file directory for Tango File Source</string>
   <tabstop>showallroisCheckBox</tabstop>
   <tabstop>sendroisCheckBox</tabstop>
   <tabstop>singleroisCheckBox</tabstop>
+  <tabstop>labelroisCheckBox</tabstop>
   <tabstop>storegeometryCheckBox</tabstop>
   <tabstop>fetchgeometryCheckBox</tabstop>
   <tabstop>toolrefreshtimeDoubleSpinBox</tabstop>

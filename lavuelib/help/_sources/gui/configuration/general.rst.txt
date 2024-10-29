@@ -48,6 +48,7 @@ The first tab of the configuration dialog contains **General Settings**. It is d
 *    **Show all ROIs values:** calculates ROIs sum values for all ROI frames
 *    **Send ROIs values:** sends ROIs sum values to `LaVueController` tango server
 *    **Single ROIs aliases:** adds `rois1`, `roi2`, `roi3`, ... aliases if a number of rois is higher than their aliases
+*    **Label ROIs with aliases:** displays ROIs aliases on the 2D image
 
 **Tools**
 

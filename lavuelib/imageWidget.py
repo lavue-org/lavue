@@ -178,7 +178,7 @@ class ImageWidget(QtWidgets.QWidget):
         #        selected (transpose, leftright-flip, updown-flip )
         self.__selectedtrans = (False, False, False)
 
-        #: (:class:`Ui_ImageWidget') ui_imagewidget object from qtdesigner
+        #: (:class:`Ui_ImageWidget`) ui_imagewidget object from qtdesigner
         self.__ui = _formclass()
         self.__ui.setupUi(self)
 
@@ -336,6 +336,12 @@ class ImageWidget(QtWidgets.QWidget):
     def writeDetectorROIsAttribute(self):
         """ writes DetectorROIsattribute value of device
         """
+
+        slabel = re.split(';|,| |\n', str(self.roilabels))
+        slabel = [lb for lb in slabel if lb]
+        if not self.__settings.labelrois:
+            slabel = []
+        self.__displaywidget.extension('rois').updateLabels(slabel)
         if self.__tangoclient:
             rois = {}
             slabel = re.split(';|,| |\n', str(self.roilabels))
@@ -348,6 +354,7 @@ class ImageWidget(QtWidgets.QWidget):
             lastalias = None
 
             roicoords = self.__displaywidget.extension('rois').roiCoords()
+
             self.__lastrois = list(roicoords)
             for alias in slabel:
                 if alias not in toadd:
@@ -650,7 +657,12 @@ class ImageWidget(QtWidgets.QWidget):
         :type coords: :obj:`list`
                   < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
         """
-        self.__displaywidget.extension('rois').updateROIs(rid, coords)
+        if self.__settings.labelrois:
+            slabel = re.split(';|,| |\n', str(self.roilabels))
+            slabel = [lb for lb in slabel if lb]
+        else:
+            slabel = []
+        self.__displaywidget.extension('rois').updateROIs(rid, coords, slabel)
         self.applyTipsChanged.emit(rid)
         self.roiCoordsChanged.emit()
         self.roiNumberChanged.emit(rid)

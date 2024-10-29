@@ -2369,6 +2369,7 @@ class LiveViewer(QtWidgets.QDialog):
         cnfdlg.sendrois = self.__settings.sendrois
         cnfdlg.sendresults = self.__settings.sendresults
         cnfdlg.singlerois = self.__settings.singlerois
+        cnfdlg.labelrois = self.__settings.labelrois
         cnfdlg.showallrois = self.__settings.showallrois
         cnfdlg.storegeometry = self.__settings.storegeometry
         cnfdlg.geometryfromsource = self.__settings.geometryfromsource
@@ -2686,6 +2687,8 @@ class LiveViewer(QtWidgets.QDialog):
             self.__settings.sendresults = dialog.sendresults
         if self.__settings.singlerois != dialog.singlerois:
             self.__settings.singlerois = dialog.singlerois
+        if self.__settings.labelrois != dialog.labelrois:
+            self.__settings.labelrois = dialog.labelrois
         if self.__settings.showallrois != dialog.showallrois:
             self.__settings.showallrois = dialog.showallrois
         if setsrc:

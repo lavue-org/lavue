@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "LAVUELIB" "1" "Jul 03, 2024" "2.89" "LaVue"
+.TH "LAVUELIB" "1" "Oct 29, 2024" "2.90" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .sp
@@ -65,7 +65,7 @@ $ python setup.py install
 The \fBsetup.py\fP script may need: \fBsetuptools\fP  \fBsphinx\fP  \fBnumpy\fP  \fBpytest\fP python packages as well as \fBqtbase5\-dev\-tools\fP or \fBlibqt4\-dev\-bin\fP\&.
 .SS Debian packages
 .sp
-Debian \fIbookworm\fP, \fIbullseye\fP, \fIbuster\fP or Ubuntu  \fIlunar\fP, \fIjammy\fP, \fIfocal\fP packages can be found in the HDRI repository.
+Debian \fIbookworm\fP, \fIbullseye\fP, \fIbuster\fP or Ubuntu  \fInoble\fP, \fIjammy\fP, \fIoracular\fP packages can be found in the HDRI repository.
 .sp
 To install the debian packages, add the PGP repository key
 .INDENT 0.0
@@ -123,7 +123,7 @@ or
 .sp
 .nf
 .ft C
-$ wget http://repos.pni\-hdri.de/jammy\-pni\-hdri.list
+$ wget http://repos.pni\-hdri.de/noble\-pni\-hdri.list
 .ft P
 .fi
 .UNINDENT
@@ -135,7 +135,7 @@ or
 .sp
 .nf
 .ft C
-$ wget http://repos.pni\-hdri.de/focal\-pni\-hdri.list
+$ wget http://repos.pni\-hdri.de/jammy\-pni\-hdri.list
 .ft P
 .fi
 .UNINDENT
@@ -1613,6 +1613,8 @@ The first tab of the configuration dialog contains \fBGeneral Settings\fP\&. It 
 \fBSend ROIs values:\fP sends ROIs sum values to \fILaVueController\fP tango server
 .IP \(bu 2
 \fBSingle ROIs aliases:\fP adds \fIrois1\fP, \fIroi2\fP, \fIroi3\fP, … aliases if a number of rois is higher than their aliases
+.IP \(bu 2
+\fBLabel ROIs with aliases:\fP displays ROIs aliases on the 2D image
 .UNINDENT
 .sp
 \fBTools\fP
@@ -2885,6 +2887,11 @@ status flag
 .TP
 .B keepcoords
 (\fI\%bool\fP) keep original coordinates
+.UNINDENT
+.INDENT 7.0
+.TP
+.B labelrois
+(\fI\%bool\fP) display roi aliases on the 2d image
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -4350,7 +4357,17 @@ transposes ROIs
 .UNINDENT
 .INDENT 7.0
 .TP
-.B updateROIs(rid, coords)
+.B updateLabels(roilabels=[])
+update ROIs
+.INDENT 7.0
+.TP
+.B Parameters
+\fBroilabels\fP (\fBlist\(ga< :obj:\(gastr\fP >) – roi labels i.e. aliases
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateROIs(rid, coords, roilabels=[])
 update ROIs
 .INDENT 7.0
 .TP
@@ -4361,6 +4378,8 @@ update ROIs
 .IP \(bu 2
 \fBcoords\fP (\fI\%list\fP
 < [\fI\%float\fP, \fI\%float\fP, \fI\%float\fP, \fI\%float\fP] >) – roi coordinates
+.IP \(bu 2
+\fBroilabels\fP (\fBlist\(ga< :obj:\(gastr\fP >) – roi labels i.e. aliases
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -9745,7 +9764,7 @@ exporter parameters
 set of image sources
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.ASAPO  =  False
+.B lavuelib.imageSource.ASAPO  =  True
 (\fI\%bool\fP) asapo imported
 .UNINDENT
 .INDENT 0.0
@@ -10070,7 +10089,7 @@ image name, image data, json dictionary with metadata
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.HIDRA  =  False
+.B lavuelib.imageSource.HIDRA  =  True
 (\fI\%bool\fP) hidra imported
 .UNINDENT
 .INDENT 0.0
@@ -14833,6 +14852,11 @@ length in m
 .TP
 .B keepcoords
 (\fI\%bool\fP) keep original coordinates
+.UNINDENT
+.INDENT 7.0
+.TP
+.B labelrois
+(\fI\%bool\fP) display roi aliases on the 2d image
 .UNINDENT
 .INDENT 7.0
 .TP
