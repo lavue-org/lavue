@@ -5218,7 +5218,8 @@ class DiffractogramToolWidget(ToolBaseWidget):
                                 except Exception as e:
                                     logger.warning(str(e))
                                     self.__simplefindpeaks = True
-                                    logger.info("Simple find peaks algorithm is used")
+                                    logger.info(
+                                        "Simple find peaks algorithm is used")
                                     px, py, pe = self.__findpeaks(x, y)
                                     pxl.append([float(e) for e in px])
                                     pyl.append([float(e) for e in py])
