@@ -5210,6 +5210,7 @@ class DiffractogramToolWidget(ToolBaseWidget):
                                     pyl.append([float(e) for e in py])
                                     pel.append(float(pe))
                                 except Exception as e:
+                                    logger.warning(str(e))
                                     px, py, pe = self.__findpeaks(x, y)
                                     pxl.append([float(e) for e in px])
                                     pyl.append([float(e) for e in py])
