@@ -4234,7 +4234,7 @@ class DiffractogramToolWidget(ToolBaseWidget):
         self.__accumulate = False
         #: (:obj:`bool`) show buffer status
         self.__showbuffer = False
-        #: (:obj:`bool`) show buffer status
+        #: (:obj:`bool`) use simple find peaks algorithm
         self.__simplefindpeaks = False
         #: (:obj:`int`) buffer size
         self.__buffersize = 1024
