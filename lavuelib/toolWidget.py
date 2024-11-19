@@ -4234,6 +4234,8 @@ class DiffractogramToolWidget(ToolBaseWidget):
         self.__accumulate = False
         #: (:obj:`bool`) show buffer status
         self.__showbuffer = False
+        #: (:obj:`bool`) show buffer status
+        self.__simplefindpeaks = False
         #: (:obj:`int`) buffer size
         self.__buffersize = 1024
         #: ([:class:`ndarray`,:class:`ndarray` :class:`ndarray`,
@@ -4304,6 +4306,8 @@ class DiffractogramToolWidget(ToolBaseWidget):
         :param configuration: configuration string
         :type configuration: :obj:`str`
         """
+        self.__simplefindpeaks = False
+        logger.info("Simple find peaks algorithm is used")
         if configuration:
             cnf = json.loads(configuration)
             if "calibration" in cnf.keys():
@@ -5205,12 +5209,16 @@ class DiffractogramToolWidget(ToolBaseWidget):
                                 yl.append([float(e) for e in y])
                             if self.__settings.sendresults:
                                 try:
-                                    px, py, pe = self.__findpeaks2(x, y)
-                                    pxl.append([float(e) for e in px])
+                                    if self.__simplefindpeaks:
+                                        px, py, pe = self.__findpeaks(x, y)
+                                    else:
+                                        px, py, pe = self.__findpeaks2(x, y)
                                     pyl.append([float(e) for e in py])
                                     pel.append(float(pe))
                                 except Exception as e:
                                     logger.warning(str(e))
+                                    self.__simplefindpeaks = True
+                                    logger.info("Simple find peaks algorithm is used")
                                     px, py, pe = self.__findpeaks(x, y)
                                     pxl.append([float(e) for e in px])
                                     pyl.append([float(e) for e in py])
@@ -5331,6 +5339,7 @@ class DiffractogramToolWidget(ToolBaseWidget):
         xml = f.derivative().roots()
         yml = f(xml)
         er = max([(x[i+1] - x[i]) for i in range(len(x) - 1)])
+        nr = min(nr, len(yml))
         iml = np.argpartition(yml, -nr)[-nr:]
         iml = iml[np.argsort(-yml[iml])]
         iml = iml[:nr]
