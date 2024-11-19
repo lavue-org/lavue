@@ -5204,10 +5204,17 @@ class DiffractogramToolWidget(ToolBaseWidget):
                                 xl.append([float(e) for e in x])
                                 yl.append([float(e) for e in y])
                             if self.__settings.sendresults:
-                                px, py, pe = self.__findpeaks2(x, y)
-                                pxl.append([float(e) for e in px])
-                                pyl.append([float(e) for e in py])
-                                pel.append(float(pe))
+                                try:
+                                    px, py, pe = self.__findpeaks2(x, y)
+                                    pxl.append([float(e) for e in px])
+                                    pyl.append([float(e) for e in py])
+                                    pel.append(float(pe))
+                                except Exception as e:
+                                    logger.warning(str(e))
+                                    px, py, pe = self.__findpeaks(x, y)
+                                    pxl.append([float(e) for e in px])
+                                    pyl.append([float(e) for e in py])
+                                    pel.append(float(pe))
                         except Exception as e:
                             # print(str(e))
                             logger.warning(str(e))
