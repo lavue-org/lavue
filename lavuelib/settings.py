@@ -77,6 +77,8 @@ class Settings(object):
         self.showstats = True
         #: (:obj:`bool`) show image step widget
         self.showsteps = True
+        #: (:obj:`bool`) show user plot widget
+        self.showuserplot = False
         #: (:obj:`bool`) calculate variance
         self.calcvariance = False
         #: (:obj:`bool`) show bakcground subtraction widget
@@ -478,6 +480,9 @@ class Settings(object):
         qstval = str(settings.value("Configuration/ShowImageSteps", type=str))
         if qstval.lower() == "false":
             self.showsteps = False
+        qstval = str(settings.value("Configuration/ShowUserPlot", type=str))
+        if qstval.lower() == "true":
+            self.showuserplot = True
         qstval = str(settings.value("Configuration/CrossHairLocker", type=str))
         if qstval.lower() == "false":
             self.crosshairlocker = False
@@ -1053,6 +1058,9 @@ class Settings(object):
         settings.setValue(
             "Configuration/ShowImageSteps",
             self.showsteps)
+        settings.setValue(
+            "Configuration/ShowUserPlot",
+            self.showuserplot)
         settings.setValue(
             "Configuration/CrossHairLocker",
             self.crosshairlocker)

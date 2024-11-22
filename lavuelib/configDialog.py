@@ -250,6 +250,8 @@ class ConfigDialog(QtWidgets.QDialog):
         self.showstats = True
         #: (:obj:`bool`) show image step widget
         self.showsteps = True
+        #: (:obj:`bool`) show user plot widget
+        self.showuserplot = False
         #: (:obj:`bool`) calculate variance
         self.calcvariance = False
         #: (:obj:`bool`) zero mask enabled
@@ -494,6 +496,7 @@ class ConfigDialog(QtWidgets.QDialog):
         self.__ui.showoverflowCheckBox.setChecked(self.showoverflow)
         self.__ui.showstatsCheckBox.setChecked(self.showstats)
         self.__ui.showstepsCheckBox.setChecked(self.showsteps)
+        self.__ui.showuserplotCheckBox.setChecked(self.showuserplot)
         self.__ui.calcvarianceCheckBox.setChecked(self.calcvariance)
         self.__ui.showsubCheckBox.setChecked(self.showsub)
         self.__ui.shownormCheckBox.setChecked(self.shownorm)
@@ -860,6 +863,7 @@ class ConfigDialog(QtWidgets.QDialog):
         self.showoverflow = self.__ui.showoverflowCheckBox.isChecked()
         self.showstats = self.__ui.showstatsCheckBox.isChecked()
         self.showsteps = self.__ui.showstepsCheckBox.isChecked()
+        self.showuserplot = self.__ui.showuserplotCheckBox.isChecked()
         self.calcvariance = self.__ui.calcvarianceCheckBox.isChecked()
         self.aspectlocked = self.__ui.aspectlockedCheckBox.isChecked()
         self.autodownsample = self.__ui.downsampleCheckBox.isChecked()

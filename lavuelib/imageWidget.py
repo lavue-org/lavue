@@ -217,6 +217,22 @@ class ImageWidget(QtWidgets.QWidget):
         self.__bottomplot.getViewBox().menu.ctrl[1].visibleOnlyCheck.hide()
         self.__bottomplot.getViewBox().menu.ctrl[1].label.hide()
 
+        #: (:class:`pyqtgraph.PlotWidget`) user 1D plot widget
+        self.__userplot = memoExportDialog.MemoPlotWidget(self)
+        self.__userplot.addLegend()
+        self.__userplot.plotItem.legend.hide()
+        self.__userplot.getViewBox().menu.ctrl[0].invertCheck.hide()
+        self.__userplot.getViewBox().menu.ctrl[0].mouseCheck.hide()
+        self.__userplot.getViewBox().menu.ctrl[0].linkCombo.hide()
+        self.__userplot.getViewBox().menu.ctrl[0].autoPanCheck.hide()
+        self.__userplot.getViewBox().menu.ctrl[0].visibleOnlyCheck.hide()
+        self.__userplot.getViewBox().menu.ctrl[0].label.hide()
+        self.__userplot.getViewBox().menu.ctrl[1].mouseCheck.hide()
+        self.__userplot.getViewBox().menu.ctrl[1].linkCombo.hide()
+        self.__userplot.getViewBox().menu.ctrl[1].autoPanCheck.hide()
+        self.__userplot.getViewBox().menu.ctrl[1].visibleOnlyCheck.hide()
+        self.__userplot.getViewBox().menu.ctrl[1].label.hide()
+
         #: (:class:`pyqtgraph.PlotWidget`) right 1D plot widget
         self.__rightplot = memoExportDialog.MemoPlotWidget(self)
         self.__rightplot.getViewBox().menu.ctrl[0].mouseCheck.hide()
@@ -233,6 +249,7 @@ class ImageWidget(QtWidgets.QWidget):
 
         self.__ui.twoDVerticalLayout.addWidget(self.__displaywidget)
         self.__ui.oneDBottomVerticalLayout.addWidget(self.__bottomplot)
+        self.__ui.oneDBottomVerticalLayout.addWidget(self.__userplot)
 
         self.__ui.oneDRightHorizontalLayout.addWidget(self.__rightplot)
 
@@ -496,6 +513,16 @@ class ImageWidget(QtWidgets.QWidget):
         """
         return self.__bottomplot.plot(clear=clear, name=name)
 
+    def oneduserplot(self, clear=False, name=None):
+        """ creates 1d user plot
+
+        :param clear: clear flag
+        :type clear: :obj:`bool`
+        :returns: 1d user plot
+        :rtype: :class:`pyqtgraph.PlotDataItem`
+        """
+        return self.__userplot.plot(clear=clear, name=name)
+
     def onedshowlegend(self, show=True):
         """ shows/hides 1d bottom plot legend
 
@@ -512,6 +539,19 @@ class ImageWidget(QtWidgets.QWidget):
             for it in its:
                 legend.removeItem(it)
             legend.hide()
+
+    def onedshowuserplot(self, show=True):
+        """ shows/hides 1d bottom plot legend
+
+        :param status: show flag
+        :type status: :obj:`bool`
+        :returns: 1d bottom plot
+        :rtype: :class:`pyqtgraph.PlotDataItem`
+        """
+        if show:
+            self.__userplot.show()
+        else:
+            self.__userplot.hide()
 
     def bottomplotShowMenu(self, freeze=False, clear=False):
         """ shows freeze or/and clean action in the menu
