@@ -328,6 +328,10 @@ class ImageWidget(QtWidgets.QWidget):
                         self.__usercurve.setData(
                             x=userplot["x"], y=userplot["y"])
                         self.__usercurve.setVisible(True)
+                    elif userplot and "y" in userplot:
+                        self.__usercurve.setVisible(False)
+                        self.__usercurve.setData(y=userplot["y"])
+                        self.__usercurve.setVisible(True)
                     else:
                         self.__usercurve.setVisible(False)
                 except Exception as e:
