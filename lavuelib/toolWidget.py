@@ -261,6 +261,7 @@ class ToolBaseWidget(QtWidgets.QWidget):
     def afterplot(self):
         """ command after plot
         """
+        self._mainwidget.plotUserFunction()
 
     def beforeplot(self, array, rawarray):
         """ command  before plot
@@ -455,6 +456,7 @@ class IntensityToolWidget(ToolBaseWidget):
         results["intensity_scaling"] = scaling
         self._mainwidget.writeAttribute(
             "ToolResults", json.dumps(results, cls=numpyEncoder))
+        self._mainwidget.plotUserFunction(results)
 
 
 class MotorsToolWidget(ToolBaseWidget):
@@ -2362,6 +2364,7 @@ class LineCutToolWidget(ToolBaseWidget):
         results["unit"] = ["point", "x-pixel", "y-pixel"][self.__xindex]
         self._mainwidget.writeAttribute(
             "ToolResults", json.dumps(results, cls=numpyEncoder))
+        self._mainwidget.plotUserFunction(results)
 
     @QtCore.pyqtSlot(int)
     def _setCutsNumber(self, cid):
@@ -2799,6 +2802,7 @@ class ProjectionToolWidget(ToolBaseWidget):
         results["function"] = fun
         self._mainwidget.writeAttribute(
             "ToolResults", json.dumps(results, cls=numpyEncoder))
+        self._mainwidget.plotUserFunction(results)
 
     @QtCore.pyqtSlot()
     def _message(self):
@@ -3235,6 +3239,7 @@ class OneDToolWidget(ToolBaseWidget):
             results["onedplot_%s" % (i + 1)] = [xl[i], yl[i]]
         self._mainwidget.writeAttribute(
             "ToolResults", json.dumps(results, cls=numpyEncoder))
+        self._mainwidget.plotUserFunction(results)
 
     @QtCore.pyqtSlot()
     def _message(self):
@@ -5275,6 +5280,7 @@ class DiffractogramToolWidget(ToolBaseWidget):
         results["unit"] = self.__units[self.__unitindex]
         self._mainwidget.writeAttribute(
             "ToolResults", json.dumps(results, cls=numpyEncoder))
+        self._mainwidget.plotUserFunction(results)
 
     def __findpeaks(self, x, y, nr=20):
         """ find peaks from diffractogram
@@ -6450,6 +6456,7 @@ class MaximaToolWidget(ToolBaseWidget):
         results["maxima"] = maxidxs
         self._mainwidget.writeAttribute(
             "ToolResults", json.dumps(results, cls=numpyEncoder))
+        self._mainwidget.plotUserFunction(results)
 
     @QtCore.pyqtSlot(float, float)
     def _updateCenter(self, xdata, ydata):

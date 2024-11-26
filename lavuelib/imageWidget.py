@@ -236,6 +236,10 @@ class ImageWidget(QtWidgets.QWidget):
         self.__userplot.getViewBox().menu.ctrl[1].autoPanCheck.hide()
         self.__userplot.getViewBox().menu.ctrl[1].visibleOnlyCheck.hide()
         self.__userplot.getViewBox().menu.ctrl[1].label.hide()
+        self.__usercurve = self.oneduserplot()
+        self.__usercurve.setPen(_pg.mkColor('g'))
+        self.__usercurve.hide()
+        self.__usercurve.setVisible(False)
 
         #: (:class:`pyqtgraph.PlotWidget`) right 1D plot widget
         self.__rightplot = memoExportDialog.MemoPlotWidget(self)
@@ -297,6 +301,45 @@ class ImageWidget(QtWidgets.QWidget):
         self.__connectsplitters()
 
         self.roiLineEditChanged.emit()
+
+    # @debugmethod
+    def plotUserFunction(self, results=None):
+        """ plot user function
+
+        :param results: tool results
+        :type results: :obj:`str`
+        """
+        print("results", results)
+        if results is None or not self.__settings.showuserplot:
+            self.onedshowuserplot(False)
+        else:
+            self.onedshowuserplot(True)
+            for ufun in self.__userfunctions:
+                # if True:
+                try:
+                    userplot = ufun(results)
+                    # userplot = {}
+                    # print("USERPLOT", userplot)
+                    # if "linecut_1" in results:
+                    #     userplot= {"x": results["linecut_1"][0],
+                    #                "y": results["linecut_1"][1]}
+                    if userplot and "x" in userplot and "y" in userplot:
+                        self.__usercurve.setVisible(False)
+                        self.__usercurve.setData(
+                            x=userplot["x"], y=userplot["y"])
+                        self.__usercurve.setVisible(True)
+                    else:
+                        self.__usercurve.setVisible(False)
+                except Exception as e:
+                    self.__usercurve.setVisible(False)
+                    self.__filterswg.setState(0)
+                    import traceback
+                    value = traceback.format_exc()
+                    messageBox.MessageBox.warning(
+                        self, "lavue: problems in user function",
+                        "%s" % str(e),
+                        "%s" % value)
+                break
 
     # @debugmethod
     def resetUserFunctions(self, userfunctions):
