@@ -627,9 +627,10 @@ class ConfigDialog(QtWidgets.QDialog):
                 fltname = item.data(QtCore.Qt.EditRole)
                 if hasattr(fltname, "toString"):
                     fltname = fltname.toString()
+                checked = (item.checkState() != QtCore.Qt.Unchecked)
             else:
                 fltname = ""
-            checked = (item.checkState() != QtCore.Qt.Unchecked)
+                checked = False
             item2 = self.__ui.filterTableWidget.item(i, 1)
             if item2 is not None:
                 params = item2.data(QtCore.Qt.EditRole)
@@ -763,7 +764,7 @@ class ConfigDialog(QtWidgets.QDialog):
                 "Insert Row &Below", QtWidgets.QDialogButtonBox.ActionRole)
         self.__ui.ufRemovePushButton = self.__ui.userfuncButtonBox.addButton(
             "&Delete Row", QtWidgets.QDialogButtonBox.ActionRole)
-        self.__populateTable(0)
+        self.__ufPopulateTable(0)
         self.__ui.ufAddupPushButton.clicked.connect(self.__ufAddup)
         self.__ui.ufAdddownPushButton.clicked.connect(self.__ufAdddown)
         self.__ui.userfuncTableWidget.itemChanged.connect(
@@ -779,9 +780,10 @@ class ConfigDialog(QtWidgets.QDialog):
                 ufunname = item.data(QtCore.Qt.EditRole)
                 if hasattr(ufunname, "toString"):
                     ufunname = ufunname.toString()
+                checked = (item.checkState() != QtCore.Qt.Unchecked)
             else:
                 ufunname = ""
-            checked = (item.checkState() != QtCore.Qt.Unchecked)
+                checked = False
             item2 = self.__ui.userfuncTableWidget.item(i, 1)
             if item2 is not None:
                 params = item2.data(QtCore.Qt.EditRole)

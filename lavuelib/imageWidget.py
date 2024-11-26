@@ -308,8 +308,10 @@ class ImageWidget(QtWidgets.QWidget):
         try:
             fsettings = json.loads(userfunctions)
             self.__userfunctions.reset(fsettings)
-            if self.__settings.userfunctions != userfunctions:
-                self.__settings.userfunctions = userfunctions
+            cfsettings = json.loads(self.__userfunctions.currentconfig)
+            currentconfig = self.__userfunctions.currentconfig
+            if self.__settings.userfunctions != currentconfig:
+                self.__settings.userfunctions = currentconfig
         except Exception as e:
             # self.__userfunctionswg.setState(0)
             import traceback
