@@ -47,6 +47,7 @@ from . import imageSource as isr
 from . import toolWidget
 from . import memoExportDialog
 from . import sardanaUtils
+from . import filters
 from .sardanaUtils import debugmethod, numpyEncoder
 
 # _VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(".") \
@@ -154,6 +155,9 @@ class ImageWidget(QtWidgets.QWidget):
         self.roilabels = ""
         #: (:class:`lavuelib.toolWidget.BaseToolWidget`) current tool
         self.__currenttool = None
+
+        #: (:class:`filters.FilterList` ) user functions
+        self.__userfunctions = filters.FilterList()
 
         #: (:class:`numpy.ndarray`) data to displayed in 2d widget
         self.__data = None
@@ -293,6 +297,35 @@ class ImageWidget(QtWidgets.QWidget):
         self.__connectsplitters()
 
         self.roiLineEditChanged.emit()
+
+    # @debugmethod
+    def resetUserFunctions(self, userfunctions):
+        """ resets userfunctions
+
+        :param userfunctions: userfunctions settings
+        :type userfunctions: :obj:`str`
+        """
+        try:
+            fsettings = json.loads(userfunctions)
+            self.__userfunctions.reset(fsettings)
+            if self.__settings.userfunctions != userfunctions:
+                self.__settings.userfunctions = userfunctions
+        except Exception as e:
+            # self.__userfunctionswg.setState(0)
+            import traceback
+            value = traceback.format_exc()
+            messageBox.MessageBox.warning(
+                self, "lavue: problems in setting userfunctions",
+                "%s" % str(e),
+                "%s" % value)
+            # print(str(e))
+        if self.__userfunctions.errors:
+            errors = self.__userfunctions.errors
+            messageBox.MessageBox.warning(
+                self, "lavue: problems in setting filters",
+                "%s" % "\n".join(er[0] for er in errors if er),
+                "%s" % "\n".join(er[1] for er in errors
+                                 if (er and len(er) > 1)))
 
     def updateToolComboBox(self, toolnames, name=None):
         """ set tool by changing combobox

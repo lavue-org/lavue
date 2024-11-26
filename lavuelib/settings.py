@@ -245,6 +245,9 @@ class Settings(object):
         #: (:obj:`str`) json list with filters
         self.filters = "[]"
 
+        #: (:obj:`str`) json list with user functions
+        self.userfunctions = "[]"
+
         #: (:obj:`str`) json list with image source widget names
         self.imagesources = "[]"
 
@@ -869,6 +872,11 @@ class Settings(object):
             self.filters = qstval
 
         qstval = str(
+            settings.value("Configuration/UserFunctions", type=str))
+        if qstval:
+            self.userfunctions = qstval
+
+        qstval = str(
             settings.value(
                 "Configuration/SourceDisplayParams", type=str))
         if qstval.lower() == "true":
@@ -1253,6 +1261,9 @@ class Settings(object):
         settings.setValue(
             "Configuration/Filters",
             self.filters)
+        settings.setValue(
+            "Configuration/UserFunctions",
+            self.userfunctions)
         settings.setValue(
             "Configuration/SendROIs",
             self.sendrois)

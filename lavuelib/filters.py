@@ -25,6 +25,7 @@
 """ set of image sources """
 
 import sys
+import json
 
 
 def _tostr(text):
@@ -88,7 +89,7 @@ class FilterList(list):
     """ Filter list
     """
 
-    def __init__(self, configlist=None):
+    def __init__(self, configlist=None, onlyfirst=False):
         """ constructor
 
         :param configlist: list with filter configuration
@@ -96,6 +97,9 @@ class FilterList(list):
         :    :obj:`list` < [:obj:`str` , :obj:`str`] >
         """
         list.__init__(self)
+        self.__onlyfirst = onlyfirst
+        self.currentconfig = ""
+        self.errors = []
         if configlist:
             self.appendFilter(configlist)
 
@@ -116,17 +120,32 @@ class FilterList(list):
         :type configlist: \
         :    :obj:`list` < [:obj:`str` , :obj:`str`] >
         """
-        for modulename, params in configlist:
-            if modulename:
-                pkl = _tostr(modulename).split(".")
-                pkg = ".".join(pkl[:-1])
-                if pkg in sys.modules.keys():
-                    pdec = sys.modules[pkg]
-                    dec = pdec
-                else:
-                    dec = __import__(pkg, globals(),
-                                     locals(), pkl[-1])
-                self.__append(getattr(dec, pkl[-1]), params)
+        self.currentconfig = ""
+        self.errors = []
+        newconfig = []
+        found = False
+        for modulename, params, checked in configlist:
+            if modulename and checked and not (found and self.__onlyfirst):
+                try:
+                    pkl = _tostr(modulename).split(".")
+                    pkg = ".".join(pkl[:-1])
+                    if pkg in sys.modules.keys():
+                        pdec = sys.modules[pkg]
+                        dec = pdec
+                    else:
+                        dec = __import__(pkg, globals(),
+                                         locals(), pkl[-1])
+                    self.__append(getattr(dec, pkl[-1]), params)
+                    newconfig.append([modulename, params, True])
+                    found = True
+                except Exception as e:
+                    import traceback
+                    value = traceback.format_exc()
+                    self.errors.append((str(e), value))
+                    newconfig.append([modulename, params, False])
+            else:
+                newconfig.append([modulename, params, False])
+        self.currentconfig = json.dumps(newconfig)
 
     def __append(self, imgfilter, params):
         """ adds additional imgfilter

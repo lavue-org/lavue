@@ -873,6 +873,7 @@ class LiveViewer(QtWidgets.QDialog):
 
         self.__updateframeview()
 
+        self.__imagewg.resetUserFunctions(self.__settings.userfunctions)
         self.__imagewg.onedshowuserplot(self.__settings.showuserplot)
         self.__updateframeratetip(self.__settings.refreshtime)
         self.__imagewg.setExtensionsRefreshTime(
@@ -1232,6 +1233,8 @@ class LiveViewer(QtWidgets.QDialog):
         try:
             fsettings = json.loads(filters)
             self.__filters.reset(fsettings)
+            # if filters != self.__filters.currentconfig:
+
             label = " | ".join([flt[0].split(".")[-1]
                                 for flt in fsettings if flt[0]])
             if len(label) > 32:
@@ -1254,6 +1257,12 @@ class LiveViewer(QtWidgets.QDialog):
                 self, "lavue: problems in setting filters",
                 "%s" % str(e),
                 "%s" % value)
+        if self.__filters.errors:
+            messageBox.MessageBox.warning(
+                self, "lavue: problems in setting filters",
+                "%s" % "\n".join(er[0] for er in self.__filters.errors if er),
+                "%s" % "\n".join(er[1] for er in self.__filters.errors
+                                 if (er and len(er) > 1)))
             # print(str(e))
 
     @debugmethod
@@ -2328,6 +2337,7 @@ class LiveViewer(QtWidgets.QDialog):
         cnfdlg.showuserplot = self.__settings.showuserplot
         cnfdlg.calcvariance = self.__settings.calcvariance
         cnfdlg.filters = self.__settings.filters
+        cnfdlg.userfunctions = self.__settings.userfunctions
         cnfdlg.secautoport = self.__settings.secautoport
         cnfdlg.secport = self.__settings.secport
         cnfdlg.hidraport = self.__settings.hidraport
@@ -2537,6 +2547,9 @@ class LiveViewer(QtWidgets.QDialog):
                 self.__settings.toolrefreshtime)
         if self.__settings.filters != dialog.filters:
             self.__resetFilters(dialog.filters)
+            replot = True
+        if self.__settings.userfunctions != dialog.userfunctions:
+            self.__imagewg.resetUserFunctions(dialog.userfunctions)
             replot = True
 
         if self.__settings.secstream != dialog.secstream or (
