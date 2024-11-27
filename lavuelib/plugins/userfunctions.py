@@ -27,7 +27,7 @@
 
 class LineCut(object):
 
-    """ Horizontal gap filter"""
+    """ LineCut selection"""
 
     def __init__(self, configuration=None):
         """ constructor
@@ -63,8 +63,49 @@ class LineCut(object):
         return userplot
 
 
+class LineCutFlat(object):
+
+    """Flatten line cut"""
+
+    def __init__(self, configuration=None):
+        """ constructor
+
+        :param configuration: JSON list with horizontal gap pixels to add
+        :type configuration: :obj:`str`
+        """
+        #: (:obj:`list` <:obj: `str`>) list of indexes for gap
+        self.__index = 1
+        try:
+            self.__flat = float(configuration)
+        except Exception:
+            self.__flat = 100000000.
+            pass
+
+    def __call__(self, results):
+        """ call method
+
+        :param results: dictionary with tool results
+        :type results: :obj:`dict`
+        :returns: dictionary with user plot data
+        :rtype: :obj:`dict`
+        """
+        userplot = {}
+        # print("RESULTS", results)
+        label = "linecut_%s" % self.__index
+        if label in results:
+            userplot = {"x": results[label][0],
+                        "y": [min(yy, self.__flat)
+                              for yy in results[label][1]],
+                        "title":
+                        "%s flatten at '%s'" % (label, self.__flat)}
+            if "unit" in results:
+                userplot["bottom"] = results["unit"]
+                userplot["left"] = "intencity"
+        return userplot
+
+
 def linecut_1(results):
-    """ rotate image by 45 deg
+    """ line rotate image by 45 deg
 
     :param results: dictionary with tool results
     :type results: :obj:`dict`
