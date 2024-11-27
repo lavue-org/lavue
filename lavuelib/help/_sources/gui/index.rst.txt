@@ -18,7 +18,7 @@ GUI User Guide
 ..
 
 *    On the top right side of the main window the user finds an **Image/File name** label as well as a button for :ref:`Load <images>` images from a file-system, **Reload** images from a file -system, this Help, the :ref:`Configuration <configuration>` and Quit buttons.
-*    Below them the detector :ref:`2D image <2d-plot>` is displayed with associated **1D-plots**.
+*    Below them the detector :ref:`2D image <2d-plot>` is displayed with associated **1D-plots** and **user function 1D-plot** if turn on in the configuration layout.
 
 ..
 
@@ -35,6 +35,7 @@ GUI User Guide
    imagesources/index
    rangewindow
    filters
+   userfunctions
    memorybuffer
    imagepreparation
    scaling

@@ -12,4 +12,4 @@ Only the first user function is applyied.
 
 To configure user functions see :ref:`user-function-plugins-settings`
 
-Examples of the user functions can be found at :ref:`user-functions`
+Examples of the user functions can be found at :ref:`user-function-plugins`

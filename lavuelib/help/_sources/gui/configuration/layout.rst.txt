@@ -25,6 +25,7 @@ The second tab of the configuration dialog contains **Layout** options. It allow
 *    **Statistics:** shows the image statistics group
 *    **Frame Rate:** shows frame rate (in Hz)
 *    **Image Steps:** shows image step widgets for loaded files
+*    **User Plot:** shows user function plot from lavue tool results
 
 **Image Source Selection**
 
