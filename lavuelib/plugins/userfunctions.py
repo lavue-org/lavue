@@ -24,8 +24,6 @@
 
 """ set of image sources """
 
-import json
-
 
 class LineCut(object):
 
@@ -38,8 +36,11 @@ class LineCut(object):
         :type configuration: :obj:`str`
         """
         #: (:obj:`list` <:obj: `str`>) list of indexes for gap
-        self.__indexes = [
-            int(idx) for idx in json.loads(configuration)]
+        self.__index = 1
+        try:
+            self.__index = int(configuration)
+        except Exception:
+            pass
 
     def __call__(self, results):
         """ call method
@@ -50,14 +51,15 @@ class LineCut(object):
         :rtype: :obj:`dict`
         """
         userplot = {}
-        # print("USERPLOT", userplot)
-        try:
-            label = "linecut_%s" % self.__indexes[0]
-        except Exception:
-            label = ""
+        # print("RESULTS", results)
+        label = "linecut_%s" % self.__index
         if label in results:
             userplot = {"x": results[label][0],
-                        "y": results[label][1]}
+                        "y": results[label][1],
+                        "title": label}
+            if "unit" in results:
+                userplot["bottom"] = results["unit"]
+                userplot["left"] = "intencity"
         return userplot
 
 

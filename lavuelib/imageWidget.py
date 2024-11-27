@@ -309,7 +309,8 @@ class ImageWidget(QtWidgets.QWidget):
         :param results: tool results
         :type results: :obj:`str`
         """
-        if results is None or not self.__settings.showuserplot:
+        if results is None or not self.__settings.showuserplot \
+           or not self.__userfunctions:
             self.onedshowuserplot(False)
         else:
             self.onedshowuserplot(True)
@@ -317,20 +318,33 @@ class ImageWidget(QtWidgets.QWidget):
                 #  if True:
                 try:
                     userplot = ufun(results)
-                    if userplot and "x" in userplot and "y" in userplot:
-                        self.__usercurve.setVisible(False)
-                        self.__usercurve.setData(
-                            x=userplot["x"], y=userplot["y"])
-                        self.__usercurve.setVisible(True)
-                    elif userplot and "y" in userplot:
-                        self.__usercurve.setVisible(False)
-                        self.__usercurve.setData(y=userplot["y"])
-                        self.__usercurve.setVisible(True)
+                    if userplot:
+                        if "x" in userplot and "y" in userplot:
+                            self.__usercurve.setVisible(False)
+                            self.__usercurve.setData(
+                                x=userplot["x"], y=userplot["y"])
+                            self.__usercurve.setVisible(True)
+                        elif "y" in userplot:
+                            self.__usercurve.setVisible(False)
+                            self.__usercurve.setData(y=userplot["y"])
+                            self.__usercurve.setVisible(True)
+                        else:
+                            self.__usercurve.setVisible(False)
+                        pars = {"title": "", "bottom": "", "left": ""}
+                        if "title" in userplot:
+                            pars["title"] = userplot["title"]
+                        if "bottom" in userplot:
+                            pars["bottom"] = userplot["bottom"]
+                        if "left" in userplot:
+                            pars["left"] = userplot["left"]
+                        self.__userplot.setLabels(**pars)
                     else:
+                        # self.__usercurve.setData()
                         self.__usercurve.setVisible(False)
+
                 except Exception as e:
                     self.__usercurve.setVisible(False)
-                    self.__filterswg.setState(0)
+                    # self.__usercurve.setData()
                     import traceback
                     value = traceback.format_exc()
                     messageBox.MessageBox.warning(
@@ -353,7 +367,6 @@ class ImageWidget(QtWidgets.QWidget):
             if self.__settings.userfunctions != currentconfig:
                 self.__settings.userfunctions = currentconfig
         except Exception as e:
-            # self.__userfunctionswg.setState(0)
             import traceback
             value = traceback.format_exc()
             messageBox.MessageBox.warning(
