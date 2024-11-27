@@ -257,7 +257,7 @@ class ImageWidget(QtWidgets.QWidget):
 
         self.__ui.twoDVerticalLayout.addWidget(self.__displaywidget)
         self.__ui.oneDBottomVerticalLayout.addWidget(self.__bottomplot)
-        self.__ui.oneDBottomVerticalLayout.addWidget(self.__userplot)
+        self.__ui.userBottomVerticalLayout.addWidget(self.__userplot)
 
         self.__ui.oneDRightHorizontalLayout.addWidget(self.__rightplot)
 
@@ -309,20 +309,14 @@ class ImageWidget(QtWidgets.QWidget):
         :param results: tool results
         :type results: :obj:`str`
         """
-        print("results", results)
         if results is None or not self.__settings.showuserplot:
             self.onedshowuserplot(False)
         else:
             self.onedshowuserplot(True)
             for ufun in self.__userfunctions:
-                # if True:
+                #  if True:
                 try:
                     userplot = ufun(results)
-                    # userplot = {}
-                    # print("USERPLOT", userplot)
-                    # if "linecut_1" in results:
-                    #     userplot= {"x": results["linecut_1"][0],
-                    #                "y": results["linecut_1"][1]}
                     if userplot and "x" in userplot and "y" in userplot:
                         self.__usercurve.setVisible(False)
                         self.__usercurve.setData(
@@ -633,6 +627,8 @@ class ImageWidget(QtWidgets.QWidget):
             self.__userplot.show()
         else:
             self.__userplot.hide()
+            self.__ui.toolSplitter.setStretchFactor(0, 2000)
+            self.__ui.toolSplitter.setStretchFactor(1, 1)
 
     def bottomplotShowMenu(self, freeze=False, clear=False):
         """ shows freeze or/and clean action in the menu
