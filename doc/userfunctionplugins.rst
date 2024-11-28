@@ -74,5 +74,65 @@ Moreover, the class *constructor* has one configuration string argument initiali
 		    userplot["left"] = "intencity"
 	    return userplot
 
+or
 
+.. code-block:: python
+
+    import json
+
+
+    class DiffPDF(object):
+
+	"""diffpy PDF user function"""
+
+	def __init__(self, configuration=None):
+	    """ constructor
+
+	    :param configuration: JSON list with config file and diff index
+	    :type configuration: :obj:`str`
+	    """
+	    #: (:obj:`list` <:obj: `str`>) list of indexes for gap
+	    self.__configfile = None
+
+	    config = None
+	    try:
+		config = json.loads(configuration)
+		try:
+		    self.__index = int(config[1])
+		except Exception:
+		    self.__index = 1
+		self.__configfile = str(config[0])
+	    except Exception:
+		self.__index = 1
+		self.__configfile = str(configuration)
+
+	    from diffpy.pdfgetx import loadPDFConfig
+	    self.__cfg = loadPDFConfig(self.__configfile)
+
+	def __call__(self, results):
+	    """ call method
+
+	    :param results: dictionary with tool results
+	    :type results: :obj:`dict`
+	    :returns: dictionary with user plot data
+	    :rtype: :obj:`dict`
+	    """
+	    userplot = {}
+	    from diffpy.pdfgetx import PDFGetter
+	    self.__pg = PDFGetter(config=self.__cfg)
+	    label = "diff_%s" % self.__index
+	    if label in results and self.__configfile:
+		qq = results[label][0]
+		df = results[label][1]
+		data_gr = self.__pg(qq, df)
+		x = data_gr[0]
+		y = data_gr[1]
+
+		userplot = {
+		    "x": x, "y": y,
+		    "title": "DiffPDF: %s with %s" % (label, self.__configfile)
+		}
+	    return userplot
+    
+	    
 To configure filters see :ref:`user-function-plugins-settings`.
