@@ -57,7 +57,7 @@ class DiffPDF(object):
 
     def __call__(self, results):
         """ call method
-        
+
         :param results: dictionary with tool results
         :type results: :obj:`dict`
         :returns: dictionary with user plot data
@@ -80,5 +80,5 @@ class DiffPDF(object):
             }
             #     userplot["bottom"] = ""
             #     userplot["left"] = ""
-            print("USERPLOT", len(qq), len(x))
+            # print("USERPLOT", len(qq), len(x))
         return userplot
