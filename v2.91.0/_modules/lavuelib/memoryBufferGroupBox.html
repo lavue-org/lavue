@@ -1,0 +1,472 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lavuelib.memoryBufferGroupBox &#8212; LaVue  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lavuelib.memoryBufferGroupBox</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for lavuelib.memoryBufferGroupBox</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (C) 2017  DESY, Notkestr. 85, D-22607 Hamburg</span>
+<span class="c1">#</span>
+<span class="c1"># lavue is an image viewing program for photon science imaging detectors.</span>
+<span class="c1"># Its usual application is as a live viewer using hidra as data source.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is free software; you can redistribute it and/or</span>
+<span class="c1"># modify it under the terms of the GNU General Public License</span>
+<span class="c1"># as published by the Free Software Foundation in  version 2</span>
+<span class="c1"># of the License.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with this program; if not, write to the Free Software</span>
+<span class="c1"># Foundation, Inc., 51 Franklin Street, Fifth Floor,</span>
+<span class="c1"># Boston, MA  02110-1301, USA.</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:</span>
+<span class="c1">#     Jan Kotanski &lt;jan.kotanski@desy.de&gt;</span>
+<span class="c1">#</span>
+
+<span class="sd">&quot;&quot;&quot; Memory Buffer widget &quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">.qtuic</span> <span class="kn">import</span> <span class="n">uic</span>
+<span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtCore</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtWidgets</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtGui</span> <span class="k">as</span> <span class="n">QtWidgets</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
+    <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">bytes</span> <span class="o">=</span> <span class="nb">str</span>
+
+<span class="n">_formclass</span><span class="p">,</span> <span class="n">_baseclass</span> <span class="o">=</span> <span class="n">uic</span><span class="o">.</span><span class="n">loadUiType</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span>
+                 <span class="s2">&quot;ui&quot;</span><span class="p">,</span> <span class="s2">&quot;MemoryBufferGroupBox.ui&quot;</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="MemoryBufferGroupBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox">[docs]</a><span class="k">class</span> <span class="nc">MemoryBufferGroupBox</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set circular memory buffer for images</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) state updated signal</span>
+    <span class="n">bufferSizeChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param parent: parent object</span>
+<span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QGroupBox</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+
+        <span class="c1">#: (:class:`Ui_MemoryBufferGroupBox&#39;)</span>
+        <span class="c1">#      ui_groupbox object from qtdesigner</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span> <span class="o">=</span> <span class="n">_formclass</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1">#: (:obj:`int`) number of frames in memory buffer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="c1">#: (:obj:`int`) maximal number of frames in memory buffer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__maxbuffersize</span> <span class="o">=</span> <span class="mi">1000</span>
+        <span class="c1">#: (:obj:`bool`) is on status</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__isOn</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) compute sum flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__computeSum</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) is buffer full</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__full</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1">#: (:class:`numpy.ndarray`) image stack</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`int`) the current size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__current</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c1">#: (:class:`numpy.ndarray`) the last image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__lastimage</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:class:`numpy.ndarray`) the image sum</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`bool`)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__first</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">sizeSpinBox</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">sizeSpinBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">resetPushButton</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">sizeSpinBox</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_onBufferSizeChanged</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">onoffCheckBox</span><span class="o">.</span><span class="n">stateChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onOff</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">resetPushButton</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_onBufferSizeChanged</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MemoryBufferGroupBox.bufferSize"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.bufferSize">[docs]</a>    <span class="k">def</span> <span class="nf">bufferSize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides buffer size</span>
+
+<span class="sd">        :returns: buffer size if buffer is on</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__isOn</span><span class="p">:</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span>
+        <span class="k">return</span> <span class="n">size</span></div>
+
+<div class="viewcode-block" id="MemoryBufferGroupBox.isOn"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.isOn">[docs]</a>    <span class="k">def</span> <span class="nf">isOn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; is on flag</span>
+
+<span class="sd">        :returns: is on flag</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__isOn</span></div>
+
+<div class="viewcode-block" id="MemoryBufferGroupBox.setBufferSize"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.setBufferSize">[docs]</a>    <span class="k">def</span> <span class="nf">setBufferSize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffersize</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets buffer size</span>
+
+<span class="sd">        :param buffersize: maximal number of images in the buffer</span>
+<span class="sd">        :type buffersize: :obj:`int` or :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">buffersize</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">sizeSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_onBufferSizeChanged</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MemoryBufferGroupBox.setMaxBufferSize"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.setMaxBufferSize">[docs]</a>    <span class="k">def</span> <span class="nf">setMaxBufferSize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxbuffersize</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets maximal buffer size</span>
+
+<span class="sd">        :param maxbuffersize: maximal number of images in the buffer</span>
+<span class="sd">        :type maxbuffersize: :obj:`int` or :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__maxbuffersize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">maxbuffersize</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__maxbuffersize</span> <span class="o">=</span> <span class="mi">1000</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxbuffersize</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">sizeSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__maxbuffersize</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_onBufferSizeChanged</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__maxbuffersize</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MemoryBufferGroupBox.setComputeSum"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.setComputeSum">[docs]</a>    <span class="k">def</span> <span class="nf">setComputeSum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">computesum</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets compute sum flag</span>
+
+<span class="sd">        :param computesum: compute sum flag</span>
+<span class="sd">        :type computesum: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__computeSum</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">computesum</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span></div>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_onBufferSizeChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set size of image buffer in frame numbers</span>
+
+<span class="sd">        :param size: buffer size</span>
+<span class="sd">        :type size: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span> <span class="o">!=</span> <span class="n">size</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxbuffersize</span> <span class="o">&gt;=</span> <span class="n">size</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span> <span class="o">=</span> <span class="n">size</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxbuffersize</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">sizeSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__maxbuffersize</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bufferSizeChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">size</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MemoryBufferGroupBox.onOff"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.onOff">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">onOff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; switch on/off  the widget</span>
+
+<span class="sd">        :param status: flag on/off</span>
+<span class="sd">        :type status: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__isOn</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">status</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">onoffCheckBox</span><span class="o">.</span><span class="n">setCheckState</span><span class="p">(</span><span class="mi">2</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__isOn</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">sizeSpinBox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">resetPushButton</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">sizeSpinBox</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bufferSizeChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">status</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MemoryBufferGroupBox.initialize"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; initialize the filter</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__lastimage</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__current</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__first</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__full</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">sizeSpinBox</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MemoryBufferGroupBox.process"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.process">[docs]</a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">imagename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; append image to the buffer and returns image buffer and metadata</span>
+
+<span class="sd">        :param image: numpy array with an image</span>
+<span class="sd">        :type image: :class:`numpy.ndarray`</span>
+<span class="sd">        :param imagename: image name</span>
+<span class="sd">        :type imagename: :obj:`str`</span>
+<span class="sd">        :returns: numpy array with an image</span>
+<span class="sd">        :rtype: (:class:`numpy.ndarray`, :obj`dict`&lt;:obj:`str`, :obj:`str`&gt;)</span>
+<span class="sd">                 or `None`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__isOn</span> <span class="ow">and</span> <span class="n">image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mdata</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">ics</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__computeSum</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ics</span><span class="p">:</span>
+                <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;suminthelast&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lastimage</span> <span class="ow">is</span> <span class="kc">None</span> \
+               <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lastimage</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span> \
+               <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lastimage</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">image</span><span class="o">.</span><span class="n">dtype</span> \
+               <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">__lastimage</span> <span class="o">-</span> <span class="n">image</span><span class="p">)):</span>
+                <span class="n">shape</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span>
+                <span class="n">dtype</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">dtype</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">!=</span> <span class="n">shape</span> <span class="ow">or</span> \
+                       <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">dtype</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__first</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__current</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">newshape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+                        <span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">ics</span><span class="p">],</span>
+                         <span class="nb">list</span><span class="p">(</span><span class="n">shape</span><span class="p">)))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">newshape</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__current</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__current</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__current</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__full</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">sizeSpinBox</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                        <span class="s2">&quot;color: black;&quot;</span>
+                        <span class="s2">&quot;background-color: paleGreen;&quot;</span><span class="p">)</span>
+                <span class="n">lshape</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+                <span class="n">theoldest</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">if</span> <span class="n">lshape</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ics</span><span class="p">:</span>
+                        <span class="n">theoldest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__current</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__current</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">image</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">image</span>
+                    <span class="k">if</span> <span class="n">ics</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__full</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span>
+                                        <span class="mi">1</span><span class="p">:(</span><span class="bp">self</span><span class="o">.</span><span class="n">__current</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">:,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">+</span> <span class="n">image</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__full</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">-</span> <span class="n">theoldest</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span>
+                <span class="k">elif</span> <span class="n">lshape</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ics</span><span class="p">:</span>
+                        <span class="n">theoldest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__current</span><span class="p">,</span> <span class="p">:])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__current</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">image</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">image</span>
+                    <span class="k">if</span> <span class="n">ics</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__full</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span>
+                                        <span class="mi">1</span><span class="p">:(</span><span class="bp">self</span><span class="o">.</span><span class="n">__current</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">+</span> <span class="n">image</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__full</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">-</span> <span class="n">theoldest</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span>
+                <span class="k">elif</span> <span class="n">lshape</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ics</span><span class="p">:</span>
+                        <span class="n">theoldest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__current</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__current</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span>
+                    <span class="k">if</span> <span class="n">ics</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__full</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span>
+                                        <span class="mi">1</span><span class="p">:(</span><span class="bp">self</span><span class="o">.</span><span class="n">__current</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)],</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">+</span> <span class="n">image</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__full</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span> <span class="o">-</span> <span class="n">theoldest</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagesum</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">__lastimage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__current</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__first</span><span class="p">:</span>
+                    <span class="n">cblbl</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="n">key</span>
+                             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__maxindex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)}</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">cblbl</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;channellabels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cblbl</span>
+                <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;skipfirst&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="n">ics</span><span class="p">:</span>
+                    <span class="n">mdata</span><span class="p">[</span><span class="s2">&quot;suminthelast&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">cblbl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0: the last image&quot;</span>
+                <span class="c1"># if imagename:</span>
+                <span class="c1">#     imagename = imagename.replace(&quot;\n&quot;, &quot; &quot;)</span>
+                <span class="n">cblbl</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__current</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__current</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">imagename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__first</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__imagestack</span><span class="p">,</span> <span class="n">mdata</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MemoryBufferGroupBox.changeView"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoryBufferGroupBox.MemoryBufferGroupBox.changeView">[docs]</a>    <span class="k">def</span> <span class="nf">changeView</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; shows or hides the histogram widget</span>
+
+<span class="sd">        :param show: if histogram should be shown</span>
+<span class="sd">        :type show: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v2.91.0/index.html">v2.91.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.90.2/index.html">v2.90.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.90.1/index.html">v2.90.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.90.0/index.html">v2.90.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.89.3/index.html">v2.89.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.89.2/index.html">v2.89.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.89.1/index.html">v2.89.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.89.0/index.html">v2.89.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.88.0/index.html">v2.88.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.87.0/index.html">v2.87.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.86.1/index.html">v2.86.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.86.0/index.html">v2.86.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.85.1/index.html">v2.85.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.85.0/index.html">v2.85.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.84.0/index.html">v2.84.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.4/index.html">v2.83.4</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.3/index.html">v2.83.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.2/index.html">v2.83.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.1/index.html">v2.83.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.0/index.html">v2.83.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.82.0/index.html">v2.82.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.81.0/index.html">v2.81.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.80.1/index.html">v2.80.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.80.0/index.html">v2.80.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.79.0/index.html">v2.79.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.76.0/index.html">v2.76.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.75.3/index.html">v2.75.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.75.1/index.html">v2.75.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.74.0/index.html">v2.74.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.73.0/index.html">v2.73.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.72.0/index.html">v2.72.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.71.1/index.html">v2.71.1</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lavuelib.memoryBufferGroupBox</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+
+GNU GENERAL PUBLIC LICENSE, version 2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>
