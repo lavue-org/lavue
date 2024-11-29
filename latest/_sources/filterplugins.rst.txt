@@ -73,7 +73,7 @@ Moreover, the class *constructor* has one configuration string argument initiali
 
 
 
-Moreover,  it can have an **initialize()** or **terminate()** method to perform an action of switching **on** or **off** filters respectively.
+Furthermore, it can have an **initialize()** or **terminate()** method to perform an action of switching **on** or **off** filters respectively.
 
 More sophisticated examples can be found at `lavuefilters <https://github.com/lavue-org/lavue-filters/tree/develop/lavuefilters>`_:
 

@@ -124,6 +124,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">showstats</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1">#: (:obj:`bool`) show image step widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">showsteps</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1">#: (:obj:`bool`) show user plot widget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showuserplot</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) calculate variance</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calcvariance</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) show bakcground subtraction widget</span>
@@ -289,6 +291,9 @@
 
         <span class="c1">#: (:obj:`str`) json list with filters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filters</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span>
+
+        <span class="c1">#: (:obj:`str`) json list with user functions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">userfunctions</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span>
 
         <span class="c1">#: (:obj:`str`) json list with image source widget names</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">imagesources</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span>
@@ -525,6 +530,9 @@
         <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/ShowImageSteps&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;false&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">showsteps</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/ShowUserPlot&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">showuserplot</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/CrossHairLocker&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;false&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">crosshairlocker</span> <span class="o">=</span> <span class="kc">False</span>
@@ -911,6 +919,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">filters</span> <span class="o">=</span> <span class="n">qstval</span>
 
         <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/UserFunctions&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">qstval</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">userfunctions</span> <span class="o">=</span> <span class="n">qstval</span>
+
+        <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
             <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
                 <span class="s2">&quot;Configuration/SourceDisplayParams&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
@@ -1100,6 +1113,9 @@
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/ShowImageSteps&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">showsteps</span><span class="p">)</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
+            <span class="s2">&quot;Configuration/ShowUserPlot&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">showuserplot</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/CrossHairLocker&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">crosshairlocker</span><span class="p">)</span>
@@ -1292,6 +1308,9 @@
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/Filters&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">)</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
+            <span class="s2">&quot;Configuration/UserFunctions&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">userfunctions</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/SendROIs&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sendrois</span><span class="p">)</span>
@@ -1841,6 +1860,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.91.0/index.html">v2.91.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.90.2/index.html">v2.90.2</a></li>
       <li><a class="reference external" href="../../index/../../v2.90.1/index.html">v2.90.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.90.0/index.html">v2.90.0</a></li>

@@ -949,6 +949,12 @@ and reset the display</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="lavuelib.configDialog.ConfigDialog.showuserplot">
+<span class="sig-name descname"><span class="pre">showuserplot</span></span><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.showuserplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) show user plot widget</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="lavuelib.configDialog.ConfigDialog.singlerois">
 <span class="sig-name descname"><span class="pre">singlerois</span></span><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.singlerois" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) set roi1, roi2, roi3, … when alias names are missing</p>
@@ -994,6 +1000,12 @@ and reset the display</p>
 <dt class="sig sig-object py" id="lavuelib.configDialog.ConfigDialog.toolwidgets">
 <span class="sig-name descname"><span class="pre">toolwidgets</span></span><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.toolwidgets" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>)  json list with tool widget names</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lavuelib.configDialog.ConfigDialog.userfunctions">
+<span class="sig-name descname"><span class="pre">userfunctions</span></span><a class="headerlink" href="#lavuelib.configDialog.ConfigDialog.userfunctions" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) json list with user functions</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -3828,7 +3840,7 @@ and reset the display</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="lavuelib.filters.FilterList">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lavuelib.filters.</span></span><span class="sig-name descname"><span class="pre">FilterList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configlist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/filters.html#FilterList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.filters.FilterList" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lavuelib.filters.</span></span><span class="sig-name descname"><span class="pre">FilterList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configlist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onlyfirst</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/filters.html#FilterList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.filters.FilterList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
 <p>Filter list</p>
 <p>constructor</p>
@@ -9373,6 +9385,40 @@ arguments is the optional sequence of the names of the signal’s arguments.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="lavuelib.imageWidget.ImageWidget.onedshowuserplot">
+<span class="sig-name descname"><span class="pre">onedshowuserplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.onedshowuserplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.onedshowuserplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>shows/hides 1d bottom plot legend</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>status</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – show flag</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>1d bottom plot</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://pyqtgraph.readthedocs.io/en/latest/api_reference/graphicsItems/plotdataitem.html#pyqtgraph.PlotDataItem" title="(in pyqtgraph v0.14.0dev0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyqtgraph.PlotDataItem</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lavuelib.imageWidget.ImageWidget.oneduserplot">
+<span class="sig-name descname"><span class="pre">oneduserplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.oneduserplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.oneduserplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates 1d user plot</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>clear</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – clear flag</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>1d user plot</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://pyqtgraph.readthedocs.io/en/latest/api_reference/graphicsItems/plotdataitem.html#pyqtgraph.PlotDataItem" title="(in pyqtgraph v0.14.0dev0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyqtgraph.PlotDataItem</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="lavuelib.imageWidget.ImageWidget.overflowValue">
 <span class="sig-name descname"><span class="pre">overflowValue</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.overflowValue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.overflowValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>provides overflow value</p>
@@ -9412,6 +9458,17 @@ arguments is the optional sequence of the names of the signal’s arguments.</p>
 <li><p><strong>imagename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – image name</p></li>
 <li><p><strong>maskarray</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – 2d color mask image array</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lavuelib.imageWidget.ImageWidget.plotUserFunction">
+<span class="sig-name descname"><span class="pre">plotUserFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.plotUserFunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.plotUserFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot user function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>results</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – tool results</p>
 </dd>
 </dl>
 </dd></dl>
@@ -9484,6 +9541,17 @@ arguments is the optional sequence of the names of the signal’s arguments.</p>
 <dt class="sig sig-object py" id="lavuelib.imageWidget.ImageWidget.replotImage">
 <span class="sig-name descname"><span class="pre">replotImage</span></span><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.replotImage" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<code class="xref py py-class docutils literal notranslate"><span class="pre">pyqtgraph.QtCore.pyqtSignal</span></code>) replot image signal</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lavuelib.imageWidget.ImageWidget.resetUserFunctions">
+<span class="sig-name descname"><span class="pre">resetUserFunctions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userfunctions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.resetUserFunctions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.resetUserFunctions" title="Permalink to this definition">¶</a></dt>
+<dd><p>resets userfunctions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>userfunctions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – userfunctions settings</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -13494,6 +13562,12 @@ version of the object or raise a <code class="docutils literal notranslate"><spa
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="lavuelib.settings.Settings.showuserplot">
+<span class="sig-name descname"><span class="pre">showuserplot</span></span><a class="headerlink" href="#lavuelib.settings.Settings.showuserplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) show user plot widget</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="lavuelib.settings.Settings.singlerois">
 <span class="sig-name descname"><span class="pre">singlerois</span></span><a class="headerlink" href="#lavuelib.settings.Settings.singlerois" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) single rois flag</p>
@@ -13590,6 +13664,12 @@ version of the object or raise a <code class="docutils literal notranslate"><spa
 <dd class="field-odd"><p><strong>kargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#any" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">any</span></code></a>&gt;) – physical parameter dictionary</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lavuelib.settings.Settings.userfunctions">
+<span class="sig-name descname"><span class="pre">userfunctions</span></span><a class="headerlink" href="#lavuelib.settings.Settings.userfunctions" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) json list with user functions</p>
 </dd></dl>
 
 <dl class="py method">
@@ -17810,6 +17890,7 @@ list of [signal, slot] object to connect</p>
 <li><a class="reference internal" href="#lavuelib.configDialog.ConfigDialog.showsub"><code class="docutils literal notranslate"><span class="pre">ConfigDialog.showsub</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.configDialog.ConfigDialog.showsubsf"><code class="docutils literal notranslate"><span class="pre">ConfigDialog.showsubsf</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.configDialog.ConfigDialog.showtrans"><code class="docutils literal notranslate"><span class="pre">ConfigDialog.showtrans</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.configDialog.ConfigDialog.showuserplot"><code class="docutils literal notranslate"><span class="pre">ConfigDialog.showuserplot</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.configDialog.ConfigDialog.singlerois"><code class="docutils literal notranslate"><span class="pre">ConfigDialog.singlerois</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.configDialog.ConfigDialog.sourcedisplay"><code class="docutils literal notranslate"><span class="pre">ConfigDialog.sourcedisplay</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.configDialog.ConfigDialog.statswoscaling"><code class="docutils literal notranslate"><span class="pre">ConfigDialog.statswoscaling</span></code></a></li>
@@ -17818,6 +17899,7 @@ list of [signal, slot] object to connect</p>
 <li><a class="reference internal" href="#lavuelib.configDialog.ConfigDialog.toolpollinginterval"><code class="docutils literal notranslate"><span class="pre">ConfigDialog.toolpollinginterval</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.configDialog.ConfigDialog.toolrefreshtime"><code class="docutils literal notranslate"><span class="pre">ConfigDialog.toolrefreshtime</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.configDialog.ConfigDialog.toolwidgets"><code class="docutils literal notranslate"><span class="pre">ConfigDialog.toolwidgets</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.configDialog.ConfigDialog.userfunctions"><code class="docutils literal notranslate"><span class="pre">ConfigDialog.userfunctions</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.configDialog.ConfigDialog.zeromask"><code class="docutils literal notranslate"><span class="pre">ConfigDialog.zeromask</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.configDialog.ConfigDialog.zmqcolon"><code class="docutils literal notranslate"><span class="pre">ConfigDialog.zmqcolon</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.configDialog.ConfigDialog.zmqtopics"><code class="docutils literal notranslate"><span class="pre">ConfigDialog.zmqtopics</span></code></a></li>
@@ -18786,15 +18868,19 @@ list of [signal, slot] object to connect</p>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.onedbottomplot"><code class="docutils literal notranslate"><span class="pre">ImageWidget.onedbottomplot()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.onedrightplot"><code class="docutils literal notranslate"><span class="pre">ImageWidget.onedrightplot()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.onedshowlegend"><code class="docutils literal notranslate"><span class="pre">ImageWidget.onedshowlegend()</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.onedshowuserplot"><code class="docutils literal notranslate"><span class="pre">ImageWidget.onedshowuserplot()</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.oneduserplot"><code class="docutils literal notranslate"><span class="pre">ImageWidget.oneduserplot()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.overflowValue"><code class="docutils literal notranslate"><span class="pre">ImageWidget.overflowValue()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.overflowValueIndices"><code class="docutils literal notranslate"><span class="pre">ImageWidget.overflowValueIndices()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.plot"><code class="docutils literal notranslate"><span class="pre">ImageWidget.plot()</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.plotUserFunction"><code class="docutils literal notranslate"><span class="pre">ImageWidget.plotUserFunction()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.rangeWindowEnabled"><code class="docutils literal notranslate"><span class="pre">ImageWidget.rangeWindowEnabled()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.rangeWindowScale"><code class="docutils literal notranslate"><span class="pre">ImageWidget.rangeWindowScale()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.rawData"><code class="docutils literal notranslate"><span class="pre">ImageWidget.rawData()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.removebottomplot"><code class="docutils literal notranslate"><span class="pre">ImageWidget.removebottomplot()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.removerightplot"><code class="docutils literal notranslate"><span class="pre">ImageWidget.removerightplot()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.replotImage"><code class="docutils literal notranslate"><span class="pre">ImageWidget.replotImage</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.resetUserFunctions"><code class="docutils literal notranslate"><span class="pre">ImageWidget.resetUserFunctions()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.rgb"><code class="docutils literal notranslate"><span class="pre">ImageWidget.rgb()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.roiAliasesChanged"><code class="docutils literal notranslate"><span class="pre">ImageWidget.roiAliasesChanged</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.roiCoords"><code class="docutils literal notranslate"><span class="pre">ImageWidget.roiCoords()</span></code></a></li>
@@ -19314,6 +19400,7 @@ list of [signal, slot] object to connect</p>
 <li><a class="reference internal" href="#lavuelib.settings.Settings.showsub"><code class="docutils literal notranslate"><span class="pre">Settings.showsub</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.settings.Settings.showsubsf"><code class="docutils literal notranslate"><span class="pre">Settings.showsubsf</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.settings.Settings.showtrans"><code class="docutils literal notranslate"><span class="pre">Settings.showtrans</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.settings.Settings.showuserplot"><code class="docutils literal notranslate"><span class="pre">Settings.showuserplot</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.settings.Settings.singlerois"><code class="docutils literal notranslate"><span class="pre">Settings.singlerois</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.settings.Settings.sourceDisplay"><code class="docutils literal notranslate"><span class="pre">Settings.sourceDisplay()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.settings.Settings.sourcedisplay"><code class="docutils literal notranslate"><span class="pre">Settings.sourcedisplay</span></code></a></li>
@@ -19327,6 +19414,7 @@ list of [signal, slot] object to connect</p>
 <li><a class="reference internal" href="#lavuelib.settings.Settings.updateAISettings"><code class="docutils literal notranslate"><span class="pre">Settings.updateAISettings()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.settings.Settings.updateDetectorParameters"><code class="docutils literal notranslate"><span class="pre">Settings.updateDetectorParameters()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.settings.Settings.updateMetaData"><code class="docutils literal notranslate"><span class="pre">Settings.updateMetaData()</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.settings.Settings.userfunctions"><code class="docutils literal notranslate"><span class="pre">Settings.userfunctions</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.settings.Settings.xyposition2pixels"><code class="docutils literal notranslate"><span class="pre">Settings.xyposition2pixels()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.settings.Settings.zeromask"><code class="docutils literal notranslate"><span class="pre">Settings.zeromask</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.settings.Settings.zmqcolon"><code class="docutils literal notranslate"><span class="pre">Settings.zmqcolon</span></code></a></li>
@@ -19870,6 +19958,7 @@ list of [signal, slot] object to connect</p>
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.91.0/index.html">v2.91.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.90.2/index.html">v2.90.2</a></li>
       <li><a class="reference external" href="../../index/../../v2.90.1/index.html">v2.90.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.90.0/index.html">v2.90.0</a></li>
