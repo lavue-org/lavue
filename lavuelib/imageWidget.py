@@ -47,6 +47,7 @@ from . import imageSource as isr
 from . import toolWidget
 from . import memoExportDialog
 from . import sardanaUtils
+from . import filters
 from .sardanaUtils import debugmethod, numpyEncoder
 
 # _VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(".") \
@@ -155,6 +156,9 @@ class ImageWidget(QtWidgets.QWidget):
         #: (:class:`lavuelib.toolWidget.BaseToolWidget`) current tool
         self.__currenttool = None
 
+        #: (:class:`filters.FilterList` ) user functions
+        self.__userfunctions = filters.FilterList()
+
         #: (:class:`numpy.ndarray`) data to displayed in 2d widget
         self.__data = None
         #: (:class:`numpy.ndarray`) raw data to cut plots
@@ -217,6 +221,26 @@ class ImageWidget(QtWidgets.QWidget):
         self.__bottomplot.getViewBox().menu.ctrl[1].visibleOnlyCheck.hide()
         self.__bottomplot.getViewBox().menu.ctrl[1].label.hide()
 
+        #: (:class:`pyqtgraph.PlotWidget`) user 1D plot widget
+        self.__userplot = memoExportDialog.MemoPlotWidget(self)
+        self.__userplot.addLegend()
+        self.__userplot.plotItem.legend.hide()
+        self.__userplot.getViewBox().menu.ctrl[0].invertCheck.hide()
+        self.__userplot.getViewBox().menu.ctrl[0].mouseCheck.hide()
+        self.__userplot.getViewBox().menu.ctrl[0].linkCombo.hide()
+        self.__userplot.getViewBox().menu.ctrl[0].autoPanCheck.hide()
+        self.__userplot.getViewBox().menu.ctrl[0].visibleOnlyCheck.hide()
+        self.__userplot.getViewBox().menu.ctrl[0].label.hide()
+        self.__userplot.getViewBox().menu.ctrl[1].mouseCheck.hide()
+        self.__userplot.getViewBox().menu.ctrl[1].linkCombo.hide()
+        self.__userplot.getViewBox().menu.ctrl[1].autoPanCheck.hide()
+        self.__userplot.getViewBox().menu.ctrl[1].visibleOnlyCheck.hide()
+        self.__userplot.getViewBox().menu.ctrl[1].label.hide()
+        self.__usercurve = self.oneduserplot()
+        self.__usercurve.setPen(_pg.mkColor('g'))
+        self.__usercurve.hide()
+        self.__usercurve.setVisible(False)
+
         #: (:class:`pyqtgraph.PlotWidget`) right 1D plot widget
         self.__rightplot = memoExportDialog.MemoPlotWidget(self)
         self.__rightplot.getViewBox().menu.ctrl[0].mouseCheck.hide()
@@ -233,6 +257,7 @@ class ImageWidget(QtWidgets.QWidget):
 
         self.__ui.twoDVerticalLayout.addWidget(self.__displaywidget)
         self.__ui.oneDBottomVerticalLayout.addWidget(self.__bottomplot)
+        self.__ui.userBottomVerticalLayout.addWidget(self.__userplot)
 
         self.__ui.oneDRightHorizontalLayout.addWidget(self.__rightplot)
 
@@ -276,6 +301,86 @@ class ImageWidget(QtWidgets.QWidget):
         self.__connectsplitters()
 
         self.roiLineEditChanged.emit()
+
+    # @debugmethod
+    def plotUserFunction(self, results=None):
+        """ plot user function
+
+        :param results: tool results
+        :type results: :obj:`str`
+        """
+        if results is None or not self.__settings.showuserplot \
+           or not self.__userfunctions:
+            self.onedshowuserplot(False)
+        else:
+            self.onedshowuserplot(True)
+            for ufun in self.__userfunctions:
+                #  if True:
+                try:
+                    userplot = ufun(results)
+                    if userplot:
+                        if "x" in userplot and "y" in userplot:
+                            self.__usercurve.setVisible(False)
+                            self.__usercurve.setData(
+                                x=userplot["x"], y=userplot["y"])
+                            self.__usercurve.setVisible(True)
+                        elif "y" in userplot:
+                            self.__usercurve.setVisible(False)
+                            self.__usercurve.setData(y=userplot["y"])
+                            self.__usercurve.setVisible(True)
+                        else:
+                            self.__usercurve.setVisible(False)
+                        pars = {"title": "", "bottom": "", "left": ""}
+                        if "title" in userplot:
+                            pars["title"] = userplot["title"]
+                        if "bottom" in userplot:
+                            pars["bottom"] = userplot["bottom"]
+                        if "left" in userplot:
+                            pars["left"] = userplot["left"]
+                        self.__userplot.setLabels(**pars)
+                    else:
+                        # self.__usercurve.setData()
+                        self.__usercurve.setVisible(False)
+
+                except Exception as e:
+                    self.__usercurve.setVisible(False)
+                    # self.__usercurve.setData()
+                    import traceback
+                    value = traceback.format_exc()
+                    messageBox.MessageBox.warning(
+                        self, "lavue: problems in user function",
+                        "%s" % str(e),
+                        "%s" % value)
+                break
+
+    # @debugmethod
+    def resetUserFunctions(self, userfunctions):
+        """ resets userfunctions
+
+        :param userfunctions: userfunctions settings
+        :type userfunctions: :obj:`str`
+        """
+        try:
+            fsettings = json.loads(userfunctions)
+            self.__userfunctions.reset(fsettings)
+            currentconfig = self.__userfunctions.currentconfig
+            if self.__settings.userfunctions != currentconfig:
+                self.__settings.userfunctions = currentconfig
+        except Exception as e:
+            import traceback
+            value = traceback.format_exc()
+            messageBox.MessageBox.warning(
+                self, "lavue: problems in setting userfunctions",
+                "%s" % str(e),
+                "%s" % value)
+            # print(str(e))
+        if self.__userfunctions.errors:
+            errors = self.__userfunctions.errors
+            messageBox.MessageBox.warning(
+                self, "lavue: problems in setting filters",
+                "%s" % "\n".join(er[0] for er in errors if er),
+                "%s" % "\n".join(er[1] for er in errors
+                                 if (er and len(er) > 1)))
 
     def updateToolComboBox(self, toolnames, name=None):
         """ set tool by changing combobox
@@ -496,6 +601,16 @@ class ImageWidget(QtWidgets.QWidget):
         """
         return self.__bottomplot.plot(clear=clear, name=name)
 
+    def oneduserplot(self, clear=False, name=None):
+        """ creates 1d user plot
+
+        :param clear: clear flag
+        :type clear: :obj:`bool`
+        :returns: 1d user plot
+        :rtype: :class:`pyqtgraph.PlotDataItem`
+        """
+        return self.__userplot.plot(clear=clear, name=name)
+
     def onedshowlegend(self, show=True):
         """ shows/hides 1d bottom plot legend
 
@@ -512,6 +627,21 @@ class ImageWidget(QtWidgets.QWidget):
             for it in its:
                 legend.removeItem(it)
             legend.hide()
+
+    def onedshowuserplot(self, show=True):
+        """ shows/hides 1d bottom plot legend
+
+        :param status: show flag
+        :type status: :obj:`bool`
+        :returns: 1d bottom plot
+        :rtype: :class:`pyqtgraph.PlotDataItem`
+        """
+        if show:
+            self.__userplot.show()
+        else:
+            self.__userplot.hide()
+            self.__ui.toolSplitter.setStretchFactor(0, 2000)
+            self.__ui.toolSplitter.setStretchFactor(1, 1)
 
     def bottomplotShowMenu(self, freeze=False, clear=False):
         """ shows freeze or/and clean action in the menu

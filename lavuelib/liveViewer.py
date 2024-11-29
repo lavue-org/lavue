@@ -873,6 +873,8 @@ class LiveViewer(QtWidgets.QDialog):
 
         self.__updateframeview()
 
+        self.__imagewg.resetUserFunctions(self.__settings.userfunctions)
+        self.__imagewg.onedshowuserplot(self.__settings.showuserplot)
         self.__updateframeratetip(self.__settings.refreshtime)
         self.__imagewg.setExtensionsRefreshTime(
             self.__settings.toolrefreshtime)
@@ -1231,8 +1233,12 @@ class LiveViewer(QtWidgets.QDialog):
         try:
             fsettings = json.loads(filters)
             self.__filters.reset(fsettings)
+            cfsettings = json.loads(self.__filters.currentconfig)
+            # if filters != self.__filters.currentconfig:
+
             label = " | ".join([flt[0].split(".")[-1]
-                                for flt in fsettings if flt[0]])
+                                for flt in cfsettings
+                                if (flt[0] and flt[2])])
             if len(label) > 32:
                 label = label[:32] + " ..."
             self.__filterswg.setLabel(label)
@@ -1241,10 +1247,10 @@ class LiveViewer(QtWidgets.QDialog):
                     ["%s(%s)" %
                      (flt[0],
                       ("'%s'" % flt[1]) if flt[1] else "")
-                     for flt in fsettings if flt[0]])
+                     for flt in cfsettings if flt[0]])
             )
-            if self.__settings.filters != filters:
-                self.__settings.filters = filters
+            if self.__settings.filters != self.__filters.currentconfig:
+                self.__settings.filters = self.__filters.currentconfig
         except Exception as e:
             self.__filterswg.setState(0)
             import traceback
@@ -1253,6 +1259,12 @@ class LiveViewer(QtWidgets.QDialog):
                 self, "lavue: problems in setting filters",
                 "%s" % str(e),
                 "%s" % value)
+        if self.__filters.errors:
+            messageBox.MessageBox.warning(
+                self, "lavue: problems in setting filters",
+                "%s" % "\n".join(er[0] for er in self.__filters.errors if er),
+                "%s" % "\n".join(er[1] for er in self.__filters.errors
+                                 if (er and len(er) > 1)))
             # print(str(e))
 
     @debugmethod
@@ -2324,8 +2336,10 @@ class LiveViewer(QtWidgets.QDialog):
         cnfdlg.showfilters = self.__settings.showfilters
         cnfdlg.showstats = self.__settings.showstats
         cnfdlg.showsteps = self.__settings.showsteps
+        cnfdlg.showuserplot = self.__settings.showuserplot
         cnfdlg.calcvariance = self.__settings.calcvariance
         cnfdlg.filters = self.__settings.filters
+        cnfdlg.userfunctions = self.__settings.userfunctions
         cnfdlg.secautoport = self.__settings.secautoport
         cnfdlg.secport = self.__settings.secport
         cnfdlg.hidraport = self.__settings.hidraport
@@ -2493,6 +2507,9 @@ class LiveViewer(QtWidgets.QDialog):
         if self.__settings.showsteps != dialog.showsteps:
             self.__settings.showsteps = dialog.showsteps
             self.__updateframeview(self.__frame is not None)
+        if self.__settings.showuserplot != dialog.showuserplot:
+            self.__settings.showuserplot = dialog.showuserplot
+            self.__imagewg.onedshowuserplot(dialog.showuserplot)
         statschanged = False
         if self.__settings.showstats != dialog.showstats:
             self.__settings.showstats = dialog.showstats
@@ -2532,6 +2549,9 @@ class LiveViewer(QtWidgets.QDialog):
                 self.__settings.toolrefreshtime)
         if self.__settings.filters != dialog.filters:
             self.__resetFilters(dialog.filters)
+            replot = True
+        if self.__settings.userfunctions != dialog.userfunctions:
+            self.__imagewg.resetUserFunctions(dialog.userfunctions)
             replot = True
 
         if self.__settings.secstream != dialog.secstream or (

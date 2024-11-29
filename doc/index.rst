@@ -30,6 +30,7 @@ Contents
    lavuemonitor
    zmqserver
    filterplugins
+   userfunctionplugins
    develop/index
 
 Indices and tables

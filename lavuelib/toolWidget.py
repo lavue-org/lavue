@@ -261,6 +261,7 @@ class ToolBaseWidget(QtWidgets.QWidget):
     def afterplot(self):
         """ command after plot
         """
+        self._mainwidget.plotUserFunction()
 
     def beforeplot(self, array, rawarray):
         """ command  before plot
@@ -397,7 +398,7 @@ class IntensityToolWidget(ToolBaseWidget):
     def afterplot(self):
         """ command after plot
         """
-        if self.__settings.sendresults:
+        if self.__settings.sendresults or self.__settings.showuserplot:
             self.__sendresults()
 
     def configure(self, configuration):
@@ -453,8 +454,10 @@ class IntensityToolWidget(ToolBaseWidget):
         results["scaled_coordiantes"] = [float(sx), float(sy)]
         results["coordiantes_units"] = [xunits, yunits]
         results["intensity_scaling"] = scaling
-        self._mainwidget.writeAttribute(
-            "ToolResults", json.dumps(results, cls=numpyEncoder))
+        if self.__settings.sendresults:
+            self._mainwidget.writeAttribute(
+                "ToolResults", json.dumps(results, cls=numpyEncoder))
+        self._mainwidget.plotUserFunction(results)
 
 
 class MotorsToolWidget(ToolBaseWidget):
@@ -2238,7 +2241,7 @@ class LineCutToolWidget(ToolBaseWidget):
         """
 
         if self._mainwidget.currentTool() == self.name:
-            if self.__settings.sendresults:
+            if self.__settings.sendresults or self.__settings.showuserplot:
                 xl = []
                 yl = []
             nrplots = self.__ui.cutSpinBox.value()
@@ -2272,26 +2275,29 @@ class LineCutToolWidget(ToolBaseWidget):
                         else:
                             dx = np.linspace(crds[0], crds[2], len(dt))
                         self.__curves[i].setData(x=dx, y=dt)
-                        if self.__settings.sendresults:
+                        if self.__settings.sendresults or \
+                                self.__settings.showuserplot:
                             xl.append([float(e) for e in dx])
                             yl.append([float(e) for e in dt])
                     else:
                         if rws > 1.0:
                             dx = np.linspace(0, len(dt - 1) * rws, len(dt))
                             self.__curves[i].setData(x=dx, y=dt)
-                            if self.__settings.sendresults:
+                            if self.__settings.sendresults \
+                                    or self.__settings.showuserplot:
                                 xl.append([float(e) for e in dx])
                                 yl.append([float(e) for e in dt])
                         else:
                             self.__curves[i].setData(y=dt)
-                            if self.__settings.sendresults:
+                            if self.__settings.sendresults \
+                                    or self.__settings.showuserplot:
                                 xl.append(list(range(len(dt))))
                                 yl.append([float(e) for e in dt])
 
                     self.__curves[i].setVisible(True)
                 else:
                     self.__curves[i].setVisible(False)
-            if self.__settings.sendresults:
+            if self.__settings.sendresults or self.__settings.showuserplot:
                 self.__sendresults(xl, yl)
 
     def _plotCut(self):
@@ -2303,7 +2309,7 @@ class LineCutToolWidget(ToolBaseWidget):
                 self.__curves[i].hide()
             self.__nrplots = 1
         if self._mainwidget.currentTool() == self.name:
-            if self.__settings.sendresults:
+            if self.__settings.sendresults or self.__settings.showuserplot:
                 xl = []
                 yl = []
             dt = self._mainwidget.cutData()
@@ -2322,7 +2328,8 @@ class LineCutToolWidget(ToolBaseWidget):
                     else:
                         dx = np.linspace(crds[0], crds[2], len(dt))
                     self.__curves[0].setData(x=dx, y=dt)
-                    if self.__settings.sendresults:
+                    if self.__settings.sendresults or \
+                            self.__settings.showuserplot:
                         xl.append([float(e) for e in dx])
                         yl.append([float(e) for e in dt])
                 else:
@@ -2330,18 +2337,20 @@ class LineCutToolWidget(ToolBaseWidget):
                     if rws > 1.0:
                         dx = np.linspace(0, len(dt - 1) * rws, len(dt))
                         self.__curves[0].setData(x=dx, y=dt)
-                        if self.__settings.sendresults:
+                        if self.__settings.sendresults or \
+                                self.__settings.showuserplot:
                             xl.append([float(e) for e in dx])
                             yl.append([float(e) for e in dt])
                     else:
                         self.__curves[0].setData(y=dt)
-                        if self.__settings.sendresults:
+                        if self.__settings.sendresults \
+                                or self.__settings.showuserplot:
                             xl.append(list(range(len(dt))))
                             yl.append([float(e) for e in dt])
                 self.__curves[0].setVisible(True)
             else:
                 self.__curves[0].setVisible(False)
-            if self.__settings.sendresults:
+            if self.__settings.sendresults or self.__settings.showuserplot:
                 self.__sendresults(xl, yl)
 
     def __sendresults(self, xl, yl):
@@ -2360,8 +2369,10 @@ class LineCutToolWidget(ToolBaseWidget):
         for i in range(npl):
             results["linecut_%s" % (i + 1)] = [xl[i], yl[i]]
         results["unit"] = ["point", "x-pixel", "y-pixel"][self.__xindex]
-        self._mainwidget.writeAttribute(
-            "ToolResults", json.dumps(results, cls=numpyEncoder))
+        if self.__settings.sendresults:
+            self._mainwidget.writeAttribute(
+                "ToolResults", json.dumps(results, cls=numpyEncoder))
+        self._mainwidget.plotUserFunction(results)
 
     @QtCore.pyqtSlot(int)
     def _setCutsNumber(self, cid):
@@ -2745,7 +2756,7 @@ class ProjectionToolWidget(ToolBaseWidget):
                     x0=[0]*len(sy), x1=sy, y=yy,
                     height=height)
                 self.__rightplot.drawPicture()
-                if self.__settings.sendresults:
+                if self.__settings.sendresults or self.__settings.showuserplot:
                     xslice = self.__dsrows
                     yslice = self.__dscolumns
                     if hasattr(xslice, "start"):
@@ -2797,8 +2808,10 @@ class ProjectionToolWidget(ToolBaseWidget):
         results["yscale"] = yscale
         results["yslice"] = yslice
         results["function"] = fun
-        self._mainwidget.writeAttribute(
-            "ToolResults", json.dumps(results, cls=numpyEncoder))
+        if self.__settings.sendresults:
+            self._mainwidget.writeAttribute(
+                "ToolResults", json.dumps(results, cls=numpyEncoder))
+        self._mainwidget.plotUserFunction(results)
 
     @QtCore.pyqtSlot()
     def _message(self):
@@ -3107,7 +3120,7 @@ class OneDToolWidget(ToolBaseWidget):
         """
         if self._mainwidget.currentTool() == self.name:
             reset = False
-            if self.__settings.sendresults:
+            if self.__settings.sendresults or self.__settings.showuserplot:
                 xl = []
                 yl = []
             dts = self._mainwidget.rawData()
@@ -3162,7 +3175,8 @@ class OneDToolWidget(ToolBaseWidget):
                             if self.__xinfirstrow and i:
                                 self.__curves[i].setData(
                                     x=dts[:, 0], y=dts[:, i])
-                                if self.__settings.sendresults:
+                                if self.__settings.sendresults \
+                                        or self.__settings.showuserplot:
                                     xl.append([float(e) for e in dts[:, 0]])
                                     yl.append([float(e) for e in dts[:, i]])
                             elif rwe:
@@ -3170,12 +3184,14 @@ class OneDToolWidget(ToolBaseWidget):
                                 x = np.linspace(
                                     dx, len(y - 1) * ds1 + dx, len(y))
                                 self.__curves[i].setData(x=x, y=y)
-                                if self.__settings.sendresults:
+                                if self.__settings.sendresults \
+                                        or self.__settings.showuserplot:
                                     xl.append([float(e) for e in x])
                                     yl.append([float(e) for e in y])
                             else:
                                 self.__curves[i].setData(dts[:, i])
-                                if self.__settings.sendresults:
+                                if self.__settings.sendresults \
+                                        or self.__settings.showuserplot:
                                     dt = dts[:, i]
                                     xl.append(list(range(len(dt))))
                                     yl.append([float(e) for e in dt])
@@ -3185,7 +3201,8 @@ class OneDToolWidget(ToolBaseWidget):
                             if self.__xinfirstrow:
                                 self.__curves[i].setData(
                                     x=dts[:, 0], y=dts[:, self.__dsrows[i]])
-                                if self.__settings.sendresults:
+                                if self.__settings.sendresults \
+                                        or self.__settings.showuserplot:
                                     xl.append([float(e) for e in dts[:, 0]])
                                     yl.append([float(e) for e in
                                                dts[:, self.__dsrows[i]]])
@@ -3194,13 +3211,15 @@ class OneDToolWidget(ToolBaseWidget):
                                 x = np.linspace(
                                     dx, len(y - 1) * ds1 + dx, len(y))
                                 self.__curves[i].setData(x=x, y=y)
-                                if self.__settings.sendresults:
+                                if self.__settings.sendresults \
+                                        or self.__settings.showuserplot:
                                     xl.append([float(e) for e in x])
                                     yl.append([float(e) for e in y])
                             else:
                                 self.__curves[i].setData(
                                     dts[:, self.__dsrows[i]])
-                                if self.__settings.sendresults:
+                                if self.__settings.sendresults \
+                                        or self.__settings.showuserplot:
                                     dt = dts[:, self.__dsrows[i]]
                                     xl.append(list(range(len(dt))))
                                     yl.append([float(e) for e in dt])
@@ -3209,7 +3228,7 @@ class OneDToolWidget(ToolBaseWidget):
                             self.__curves[i].setVisible(False)
                     else:
                         self.__curves[i].setVisible(False)
-                if self.__settings.sendresults:
+                if self.__settings.sendresults or self.__settings.showuserplot:
                     self.__sendresults(xl, yl)
             else:
                 for cr in self.__curves:
@@ -3233,8 +3252,10 @@ class OneDToolWidget(ToolBaseWidget):
         results["nrplots"] = len(xl)
         for i in range(npl):
             results["onedplot_%s" % (i + 1)] = [xl[i], yl[i]]
-        self._mainwidget.writeAttribute(
-            "ToolResults", json.dumps(results, cls=numpyEncoder))
+        if self.__settings.sendresults:
+            self._mainwidget.writeAttribute(
+                "ToolResults", json.dumps(results, cls=numpyEncoder))
+        self._mainwidget.plotUserFunction(results)
 
     @QtCore.pyqtSlot()
     def _message(self):
@@ -5085,7 +5106,7 @@ class DiffractogramToolWidget(ToolBaseWidget):
         timestamp = time.time()
         if aistat:
             if self._mainwidget.currentTool() == self.name:
-                if self.__settings.sendresults:
+                if self.__settings.sendresults or self.__settings.showuserplot:
                     xl = []
                     yl = []
                     pxl = []
@@ -5204,10 +5225,12 @@ class DiffractogramToolWidget(ToolBaseWidget):
                                         for r in x]
                             self.__curves[i].setData(x=x, y=y)
                             if self.__settings.sendresults or \
-                               self.__accumulate:
+                               self.__accumulate or \
+                               self.__settings.showuserplot:
                                 xl.append([float(e) for e in x])
                                 yl.append([float(e) for e in y])
-                            if self.__settings.sendresults:
+                            if self.__settings.sendresults or \
+                               self.__settings.showuserplot:
                                 try:
                                     if self.__simplefindpeaks:
                                         px, py, pe = self.__findpeaks(x, y)
@@ -5234,7 +5257,7 @@ class DiffractogramToolWidget(ToolBaseWidget):
                 else:
                     for i in range(nrplots):
                         self.__curves[i].setVisible(False)
-                if self.__settings.sendresults:
+                if self.__settings.sendresults or self.__settings.showuserplot:
                     self.__sendresults(xl, yl, pxl, pyl, pel, timestamp)
         return xl, yl, timestamp
 
@@ -5273,8 +5296,10 @@ class DiffractogramToolWidget(ToolBaseWidget):
                     if pel is not None:
                         results["peaks_%s_error" % (i + 1)] = pel[i]
         results["unit"] = self.__units[self.__unitindex]
-        self._mainwidget.writeAttribute(
-            "ToolResults", json.dumps(results, cls=numpyEncoder))
+        if self.__settings.sendresults:
+            self._mainwidget.writeAttribute(
+                "ToolResults", json.dumps(results, cls=numpyEncoder))
+        self._mainwidget.plotUserFunction(results)
 
     def __findpeaks(self, x, y, nr=20):
         """ find peaks from diffractogram
@@ -6434,7 +6459,7 @@ class MaximaToolWidget(ToolBaseWidget):
             combo.addItems(comboitems)
             combo.setCurrentIndex(idx)
         self.__updating = False
-        if self.__settings.sendresults:
+        if self.__settings.sendresults or self.__settings.showuserplot:
             self.__sendresults(maxidxs)
         return idx
 
@@ -6448,8 +6473,10 @@ class MaximaToolWidget(ToolBaseWidget):
         results["imagename"] = self._mainwidget.imageName()
         results["timestamp"] = time.time()
         results["maxima"] = maxidxs
-        self._mainwidget.writeAttribute(
-            "ToolResults", json.dumps(results, cls=numpyEncoder))
+        if self.__settings.sendresults:
+            self._mainwidget.writeAttribute(
+                "ToolResults", json.dumps(results, cls=numpyEncoder))
+        self._mainwidget.plotUserFunction(results)
 
     @QtCore.pyqtSlot(float, float)
     def _updateCenter(self, xdata, ydata):
@@ -7169,7 +7196,7 @@ class QROIProjToolWidget(ToolBaseWidget):
                     x0=[0]*len(sy), x1=sy, y=yy,
                     height=height)
                 self.__rightplot.drawPicture()
-                if self.__settings.sendresults:
+                if self.__settings.sendresults or self.__settings.showuserplot:
                     xslice = self.__dsrows
                     yslice = self.__dscolumns
                     if hasattr(xslice, "start"):
@@ -7221,8 +7248,9 @@ class QROIProjToolWidget(ToolBaseWidget):
         results["yscale"] = yscale
         results["yslice"] = yslice
         results["function"] = fun
-        self._mainwidget.writeAttribute(
-            "ToolResults", json.dumps(results, cls=numpyEncoder))
+        if self.__settings.sendresults:
+            self._mainwidget.writeAttribute(
+                "ToolResults", json.dumps(results, cls=numpyEncoder))
 
     def __updateCompleter(self):
         """ updates the labelROI help

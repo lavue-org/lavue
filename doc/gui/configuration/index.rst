@@ -24,3 +24,4 @@ It opens the configuration dialog where the user select matching LaVue **setting
    hidrahttp
    tangodoocs
    filtersettings
+   userfunctionsettings

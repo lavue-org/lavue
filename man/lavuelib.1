@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "LAVUELIB" "1" "Nov 19, 2024" "2.90" "LaVue"
+.TH "LAVUELIB" "1" "Nov 28, 2024" "2.91" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .sp
@@ -430,7 +430,7 @@ The \fI\%Image statistics\fP part shows the basic statistic information about th
 .IP \(bu 2
 On the top right side of the main window the user finds an \fBImage/File name\fP label as well as a button for \fI\%Load\fP images from a file\-system, \fBReload\fP images from a file \-system, this Help, the \fI\%Configuration\fP and Quit buttons.
 .IP \(bu 2
-Below them the detector \fI\%2D image\fP is displayed with associated \fB1D\-plots\fP\&.
+Below them the detector \fI\%2D image\fP is displayed with associated \fB1D\-plots\fP and \fBuser function 1D\-plot\fP if turn on in the configuration layout.
 .UNINDENT
 .INDENT 0.0
 .IP \(bu 2
@@ -832,6 +832,20 @@ The \fBFilters\fP widget allows to change an image before displaying it by apply
 To configure filters see \fI\%Filter plugins settings\fP
 .sp
 Examples of the filters can be found at \fI\%Filter plugins\fP
+.SS LaVue User Function Plot
+.INDENT 0.0
+.INDENT 2.5
+[image]
+.UNINDENT
+.UNINDENT
+.sp
+The \fBUser Plot\fP widget allows to display user 1d\-plot defined by a user function plugin from the ToolResults dictionary.
+.sp
+Only the first user function is applyied.
+.sp
+To configure user functions see \fI\%User Functions settings\fP
+.sp
+Examples of the user functions can be found at \fI\%User Function plugins\fP
 .SS Memory Buffer
 .INDENT 0.0
 .INDENT 2.5
@@ -1693,6 +1707,8 @@ The second tab of the configuration dialog contains \fBLayout\fP options. It all
 \fBFrame Rate:\fP shows frame rate (in Hz)
 .IP \(bu 2
 \fBImage Steps:\fP shows image step widgets for loaded files
+.IP \(bu 2
+\fBUser Plot:\fP shows user function plot from lavue tool results
 .UNINDENT
 .sp
 \fBImage Source Selection\fP
@@ -1835,6 +1851,32 @@ Filter plugin table buttons:
 .UNINDENT
 .sp
 Filter plugin table columns:
+.INDENT 0.0
+.IP \(bu 2
+\fBpackage.module.class or package.module.function:\fP location of user plugin class or function in package.module directories
+.IP \(bu 2
+\fBinitialization parameters:\fP string which with initialization parameters of filter plugin class constructor
+.UNINDENT
+.SS User Functions settings
+.sp
+The sixth tab of the configuration dialog contains \fBUser Functions configuration\fP\&. It allows to add the \fI\%User Function plugins\fP of tool resultes defined by classes or functions in python packages.
+.INDENT 0.0
+.INDENT 2.5
+[image]
+.UNINDENT
+.UNINDENT
+.sp
+User Functions plugin table buttons:
+.INDENT 0.0
+.IP \(bu 2
+\fBInsert Row Above:\fP inserts  a row for a filter plugin above the selected row
+.IP \(bu 2
+\fBInsert Row Below:\fP inserts a row for a filter plugin below the selected row
+.IP \(bu 2
+\fBDelete Row:\fP deletes the selected row
+.UNINDENT
+.sp
+User Functions plugin table columns:
 .INDENT 0.0
 .IP \(bu 2
 \fBpackage.module.class or package.module.function:\fP location of user plugin class or function in package.module directories
@@ -2209,7 +2251,7 @@ def __call__(self, image, imagename, metadata, imagewg):
 .UNINDENT
 .UNINDENT
 .sp
-Moreover,  it can have an \fBinitialize()\fP or \fBterminate()\fP method to perform an action of switching \fBon\fP or \fBoff\fP filters respectively.
+Furthermore, it can have an \fBinitialize()\fP or \fBterminate()\fP method to perform an action of switching \fBon\fP or \fBoff\fP filters respectively.
 .sp
 More sophisticated examples can be found at \fI\%lavuefilters\fP:
 .INDENT 0.0
@@ -2222,6 +2264,157 @@ More sophisticated examples can be found at \fI\%lavuefilters\fP:
 .UNINDENT
 .sp
 To configure filters see \fI\%Filter plugins settings\fP\&.
+.SH USER FUNCTION PLUGINS
+.sp
+A \fBUser Function plugin\fP can be defined by a \fBclass\fP or a \fBfunction\fP in a python package.
+.sp
+A \fBuser function plugin\fP defined by a \fBfunction\fP is a simple python function with one argument: \fIresults\fP which contain a python dictionary of \fBToolResults\fP\&.
+.sp
+This function \fBreturns\fP a python dictionary with \fIx\fP and  \fIy\fP \fIlist\fP data to plot  and optionally \fItitle\fP, \fIbottom\fP and \fIleft\fP \fIstring\fP labels , e.g.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+def positive(results):
+    \(dq\(dq\(dq plot positive function values on the LineCut tool
+
+    :param results: dictionary with tool results
+    :type results: :obj:\(gadict\(ga
+    :returns: dictionary with user plot data
+    :rtype: :obj:\(gadict\(ga
+    \(dq\(dq\(dq
+    userplot = {}
+    if \(dqlinecut_1\(dq in results:
+        userplot = {\(dqx\(dq: results[\(dqlinecut_1\(dq][0],
+                    \(dqy\(dq: [max(0.0, yy) for yy in results[\(dqlinecut_1\(dq][1]]}
+    return userplot
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+A \fBuser function plugin\fP defined by a \fBclass\fP it should have defined \fB__call__\fP method with one argument: \fIresults\fP\&.
+.sp
+This \fB__call__\fP function returns a python dictionary with \fIx\fP and  \fIy\fP \fIlist\fP data to plot  and optionally \fItitle\fP, \fIbottom\fP and \fIleft\fP \fIstring\fP labels.
+.sp
+Moreover, the class \fIconstructor\fP has one configuration string argument initialized by an initialization parameter, e.g.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+class LineCutFlat(object):
+
+    \(dq\(dq\(dqFlatten line cut\(dq\(dq\(dq
+
+    def __init__(self, configuration=None):
+        \(dq\(dq\(dq constructor
+
+        :param configuration: JSON list with horizontal gap pixels to add
+        :type configuration: :obj:\(gastr\(ga
+        \(dq\(dq\(dq
+        #: (:obj:\(galist\(ga <:obj: \(gastr\(ga>) list of indexes for gap
+        self.__index = 1
+        try:
+            self.__flat = float(configuration)
+        except Exception:
+            self.__flat = 100000000.
+            pass
+
+    def __call__(self, results):
+        \(dq\(dq\(dq call method
+
+        :param results: dictionary with tool results
+        :type results: :obj:\(gadict\(ga
+        :returns: dictionary with user plot data
+        :rtype: :obj:\(gadict\(ga
+        \(dq\(dq\(dq
+        userplot = {}
+        # print(\(dqRESULTS\(dq, results)
+        label = \(dqlinecut_%s\(dq % self.__index
+        if label in results:
+            userplot = {\(dqx\(dq: results[label][0],
+                        \(dqy\(dq: [min(yy, self.__flat)
+                              for yy in results[label][1]],
+                        \(dqtitle\(dq:
+                        \(dq%s flatten at \(aq%s\(aq\(dq % (label, self.__flat)}
+            if \(dqunit\(dq in results:
+                userplot[\(dqbottom\(dq] = results[\(dqunit\(dq]
+                userplot[\(dqleft\(dq] = \(dqintencity\(dq
+        return userplot
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+or
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+import json
+
+
+class DiffPDF(object):
+
+    \(dq\(dq\(dqdiffpy PDF user function\(dq\(dq\(dq
+
+    def __init__(self, configuration=None):
+        \(dq\(dq\(dq constructor
+
+        :param configuration: JSON list with config file and diff index
+        :type configuration: :obj:\(gastr\(ga
+        \(dq\(dq\(dq
+        #: (:obj:\(galist\(ga <:obj: \(gastr\(ga>) list of indexes for gap
+        self.__configfile = None
+
+        config = None
+        try:
+            config = json.loads(configuration)
+            try:
+                self.__index = int(config[1])
+            except Exception:
+                self.__index = 1
+            self.__configfile = str(config[0])
+        except Exception:
+            self.__index = 1
+            self.__configfile = str(configuration)
+
+        from diffpy.pdfgetx import loadPDFConfig
+        self.__cfg = loadPDFConfig(self.__configfile)
+
+    def __call__(self, results):
+        \(dq\(dq\(dq call method
+
+        :param results: dictionary with tool results
+        :type results: :obj:\(gadict\(ga
+        :returns: dictionary with user plot data
+        :rtype: :obj:\(gadict\(ga
+        \(dq\(dq\(dq
+        userplot = {}
+        from diffpy.pdfgetx import PDFGetter
+        self.__pg = PDFGetter(config=self.__cfg)
+        label = \(dqdiff_%s\(dq % self.__index
+        if label in results and self.__configfile:
+            qq = results[label][0]
+            df = results[label][1]
+            data_gr = self.__pg(qq, df)
+            x = data_gr[0]
+            y = data_gr[1]
+
+            userplot = {
+                \(dqx\(dq: x, \(dqy\(dq: y,
+                \(dqtitle\(dq: \(dqDiffPDF: %s with %s\(dq % (label, self.__configfile)
+            }
+        return userplot
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+To configure filters see \fI\%User Functions settings\fP\&.
 .SH DEVELOPER GUIDE
 .SS API reference
 .SS lavuelib package
@@ -3075,6 +3268,11 @@ status flag
 .UNINDENT
 .INDENT 7.0
 .TP
+.B showuserplot
+(\fI\%bool\fP) show user plot widget
+.UNINDENT
+.INDENT 7.0
+.TP
 .B singlerois
 (\fI\%bool\fP) set roi1, roi2, roi3, … when alias names are missing
 .UNINDENT
@@ -3112,6 +3310,11 @@ status flag
 .TP
 .B toolwidgets
 (\fI\%str\fP)  json list with tool widget names
+.UNINDENT
+.INDENT 7.0
+.TP
+.B userfunctions
+(\fI\%str\fP) json list with user functions
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -5882,7 +6085,7 @@ stop filter
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class  lavuelib.filters.FilterList(configlist=None)
+.B class  lavuelib.filters.FilterList(configlist=None, onlyfirst=False)
 Bases: \fI\%list\fP
 .sp
 Filter list
@@ -9764,7 +9967,7 @@ exporter parameters
 set of image sources
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.ASAPO  =  True
+.B lavuelib.imageSource.ASAPO  =  False
 (\fI\%bool\fP) asapo imported
 .UNINDENT
 .INDENT 0.0
@@ -10089,7 +10292,7 @@ image name, image data, json dictionary with metadata
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.HIDRA  =  True
+.B lavuelib.imageSource.HIDRA  =  False
 (\fI\%bool\fP) hidra imported
 .UNINDENT
 .INDENT 0.0
@@ -11254,6 +11457,38 @@ shows/hides 1d bottom plot legend
 .UNINDENT
 .INDENT 7.0
 .TP
+.B onedshowuserplot(show=True)
+shows/hides 1d bottom plot legend
+.INDENT 7.0
+.TP
+.B Parameters
+\fBstatus\fP (\fI\%bool\fP) – show flag
+.TP
+.B Returns
+1d bottom plot
+.TP
+.B Return type
+\fI\%pyqtgraph.PlotDataItem\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B oneduserplot(clear=False, name=None)
+creates 1d user plot
+.INDENT 7.0
+.TP
+.B Parameters
+\fBclear\fP (\fI\%bool\fP) – clear flag
+.TP
+.B Returns
+1d user plot
+.TP
+.B Return type
+\fI\%pyqtgraph.PlotDataItem\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B overflowValue()
 provides overflow value
 .INDENT 7.0
@@ -11295,6 +11530,16 @@ plots the image
 .IP \(bu 2
 \fBmaskarray\fP (\fI\%numpy.ndarray\fP) – 2d color mask image array
 .UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B plotUserFunction(results=None)
+plot user function
+.INDENT 7.0
+.TP
+.B Parameters
+\fBresults\fP (\fI\%str\fP) – tool results
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -11360,6 +11605,16 @@ removes right plot
 .TP
 .B replotImage
 (\fBpyqtgraph.QtCore.pyqtSignal\fP) replot image signal
+.UNINDENT
+.INDENT 7.0
+.TP
+.B resetUserFunctions(userfunctions)
+resets userfunctions
+.INDENT 7.0
+.TP
+.B Parameters
+\fBuserfunctions\fP (\fI\%str\fP) – userfunctions settings
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -15144,6 +15399,11 @@ sets source display parameters
 .UNINDENT
 .INDENT 7.0
 .TP
+.B showuserplot
+(\fI\%bool\fP) show user plot widget
+.UNINDENT
+.INDENT 7.0
+.TP
 .B singlerois
 (\fI\%bool\fP) single rois flag
 .UNINDENT
@@ -15227,6 +15487,11 @@ update physical parameters
 .B Parameters
 \fBkargs\fP (\fI\%dict\fP < \fI\%str\fP, \fI\%any\fP>) – physical parameter dictionary
 .UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B userfunctions
+(\fI\%str\fP) json list with user functions
 .UNINDENT
 .INDENT 7.0
 .TP

@@ -250,6 +250,8 @@ class ConfigDialog(QtWidgets.QDialog):
         self.showstats = True
         #: (:obj:`bool`) show image step widget
         self.showsteps = True
+        #: (:obj:`bool`) show user plot widget
+        self.showuserplot = False
         #: (:obj:`bool`) calculate variance
         self.calcvariance = False
         #: (:obj:`bool`) zero mask enabled
@@ -374,6 +376,8 @@ class ConfigDialog(QtWidgets.QDialog):
         self.geometryfromsource = False
         #: (:obj:`str`) json list with filters
         self.filters = "[]"
+        #: (:obj:`str`) json list with user functions
+        self.userfunctions = "[]"
 
         #: (:obj:`str`) json list with rois colors
         self.roiscolors = "[]"
@@ -494,6 +498,7 @@ class ConfigDialog(QtWidgets.QDialog):
         self.__ui.showoverflowCheckBox.setChecked(self.showoverflow)
         self.__ui.showstatsCheckBox.setChecked(self.showstats)
         self.__ui.showstepsCheckBox.setChecked(self.showsteps)
+        self.__ui.showuserplotCheckBox.setChecked(self.showuserplot)
         self.__ui.calcvarianceCheckBox.setChecked(self.calcvariance)
         self.__ui.showsubCheckBox.setChecked(self.showsub)
         self.__ui.shownormCheckBox.setChecked(self.shownorm)
@@ -587,6 +592,7 @@ class ConfigDialog(QtWidgets.QDialog):
         self.__setROIsColorsWidgets()
         self.__setOverflowColorWidget()
         self.__setFiltersGroupBox()
+        self.__setUserFunctionsGroupBox()
         self.__ui.isTable.create(
             json.loads(self.imagesources), self.availimagesources,
             self.imagesourcenames
@@ -615,13 +621,16 @@ class ConfigDialog(QtWidgets.QDialog):
     def __updateRecord(self):
         fltlist = []
         for i in range(self.__ui.filterTableWidget.rowCount()):
+            checked = True
             item = self.__ui.filterTableWidget.item(i, 0)
             if item is not None:
                 fltname = item.data(QtCore.Qt.EditRole)
                 if hasattr(fltname, "toString"):
                     fltname = fltname.toString()
+                checked = (item.checkState() != QtCore.Qt.Unchecked)
             else:
                 fltname = ""
+                checked = False
             item2 = self.__ui.filterTableWidget.item(i, 1)
             if item2 is not None:
                 params = item2.data(QtCore.Qt.EditRole)
@@ -629,7 +638,7 @@ class ConfigDialog(QtWidgets.QDialog):
                     params = params.toString()
             else:
                 params = ""
-            fltlist.append([fltname or "", params or ""])
+            fltlist.append([fltname or "", params or "", checked])
         filters = json.dumps(fltlist, cls=numpyEncoder)
         if self.filters != filters:
             self.filters = filters
@@ -652,9 +661,9 @@ class ConfigDialog(QtWidgets.QDialog):
         row = self.__ui.filterTableWidget.currentRow()
         fltlist = json.loads(self.filters)
         if row >= 0 and row <= len(fltlist):
-            fltlist.insert(row, ["", ""])
+            fltlist.insert(row, ["", "", True])
         else:
-            fltlist.insert(0, ["", ""])
+            fltlist.insert(0, ["", "", True])
 
         self.filters = json.dumps(fltlist, cls=numpyEncoder)
         self.__populateTable()
@@ -667,9 +676,9 @@ class ConfigDialog(QtWidgets.QDialog):
         row = self.__ui.filterTableWidget.currentRow()
         fltlist = json.loads(self.filters)
         if row >= 0 and row <= len(fltlist):
-            fltlist.insert(row + 1, ["", ""])
+            fltlist.insert(row + 1, ["", "", True])
         else:
-            fltlist.append(["", ""])
+            fltlist.append(["", "", True])
 
         self.filters = json.dumps(fltlist, cls=numpyEncoder)
         self.__populateTable()
@@ -682,8 +691,10 @@ class ConfigDialog(QtWidgets.QDialog):
         row = self.__ui.filterTableWidget.currentRow()
         fltlist = json.loads(self.filters)
         if row >= 0 and row < len(fltlist):
-
-            flt, params = fltlist[row]
+            fltparams = fltlist[row]
+            if len(fltparams) == 2:
+                fltparams.append(True)
+            flt, params, checked = fltparams
             if QtWidgets.QMessageBox.question(
                     self, "Removing Filter",
                     'Would you like  to remove "%s": "%s" ?' % (flt, params),
@@ -711,9 +722,17 @@ class ConfigDialog(QtWidgets.QDialog):
         self.__ui.filterTableWidget.setColumnCount(len(headers))
         self.__ui.filterTableWidget.setHorizontalHeaderLabels(headers)
         for row, fltparams in enumerate(fltlist):
-            flt, params = fltparams
+            if len(fltparams) == 2:
+                fltparams.append(True)
+            flt, params, checked = fltparams
             item = QtWidgets.QTableWidgetItem(flt or "")
             item.setData(QtCore.Qt.EditRole, (flt or ""))
+            item.setFlags(
+                QtCore.Qt.EditRole |
+                QtCore.Qt.ItemIsUserCheckable |
+                QtCore.Qt.ItemIsEnabled)
+            item.setCheckState(QtCore.Qt.Checked
+                               if checked else QtCore.Qt.Unchecked)
             self.__ui.filterTableWidget.setItem(row, 0, item)
 
             item2 = QtWidgets.QTableWidgetItem(params or "")
@@ -734,6 +753,159 @@ class ConfigDialog(QtWidgets.QDialog):
         if sitem is not None:
             sitem.setSelected(True)
             self.__ui.filterTableWidget.setCurrentItem(sitem)
+
+    def __setUserFunctionsGroupBox(self):
+        """ updates filter tab  widget
+        """
+        self.__ui.ufAddupPushButton = self.__ui.userfuncButtonBox.addButton(
+            "Insert Row &Above", QtWidgets.QDialogButtonBox.ActionRole)
+        self.__ui.ufAdddownPushButton = \
+            self.__ui.userfuncButtonBox.addButton(
+                "Insert Row &Below", QtWidgets.QDialogButtonBox.ActionRole)
+        self.__ui.ufRemovePushButton = self.__ui.userfuncButtonBox.addButton(
+            "&Delete Row", QtWidgets.QDialogButtonBox.ActionRole)
+        self.__ufPopulateTable(0)
+        self.__ui.ufAddupPushButton.clicked.connect(self.__ufAddup)
+        self.__ui.ufAdddownPushButton.clicked.connect(self.__ufAdddown)
+        self.__ui.userfuncTableWidget.itemChanged.connect(
+            self.__ufTableItemChanged)
+        self.__ui.ufRemovePushButton.clicked.connect(self.__ufRemove)
+
+    def __ufUpdateRecord(self):
+        ufunclist = []
+        for i in range(self.__ui.userfuncTableWidget.rowCount()):
+            checked = True
+            item = self.__ui.userfuncTableWidget.item(i, 0)
+            if item is not None:
+                ufunname = item.data(QtCore.Qt.EditRole)
+                if hasattr(ufunname, "toString"):
+                    ufunname = ufunname.toString()
+                checked = (item.checkState() != QtCore.Qt.Unchecked)
+            else:
+                ufunname = ""
+                checked = False
+            item2 = self.__ui.userfuncTableWidget.item(i, 1)
+            if item2 is not None:
+                params = item2.data(QtCore.Qt.EditRole)
+                if hasattr(params, "toString"):
+                    params = params.toString()
+            else:
+                params = ""
+            ufunclist.append([ufunname or "", params or "", checked])
+        userfunctions = json.dumps(ufunclist, cls=numpyEncoder)
+        if self.userfunctions != userfunctions:
+            self.userfunctions = userfunctions
+            return True
+        return False
+
+    @QtCore.pyqtSlot("QTableWidgetItem*")
+    def __ufTableItemChanged(self, item):
+        """ changes the current value of the variable
+
+        :param item: current item
+        :type item: :class:`QtWidgets.QTableWidgetItem`
+        """
+        self.__ufUpdateRecord()
+
+    @QtCore.pyqtSlot()
+    def __ufAddup(self):
+        """ adds a new record into the table
+        """
+        row = self.__ui.userfuncTableWidget.currentRow()
+        ufunclist = json.loads(self.userfunctions)
+        if row >= 0 and row <= len(ufunclist):
+            ufunclist.insert(row, ["", "", True])
+        else:
+            ufunclist.insert(0, ["", "", True])
+
+        self.userfunctions = json.dumps(ufunclist, cls=numpyEncoder)
+        self.__ufPopulateTable()
+        self.__ufUpdateRecord()
+
+    @QtCore.pyqtSlot()
+    def __ufAdddown(self):
+        """ adds a new record into the table
+        """
+        row = self.__ui.userfuncTableWidget.currentRow()
+        ufunclist = json.loads(self.userfunctions)
+        if row >= 0 and row <= len(ufunclist):
+            ufunclist.insert(row + 1, ["", "", True])
+        else:
+            ufunclist.append(["", "", True])
+
+        self.userfunctions = json.dumps(ufunclist, cls=numpyEncoder)
+        self.__ufPopulateTable()
+        self.__ufUpdateRecord()
+
+    @QtCore.pyqtSlot()
+    def __ufRemove(self):
+        """ removes the current record from the table
+        """
+        row = self.__ui.userfuncTableWidget.currentRow()
+        ufunclist = json.loads(self.userfunctions)
+        if row >= 0 and row < len(ufunclist):
+            ufparams = ufunclist[row]
+            if len(ufparams) == 2:
+                ufparams.append(True)
+            ufun, params, checked = ufparams
+            if QtWidgets.QMessageBox.question(
+                    self, "Removing Filter",
+                    'Would you like  to remove "%s": "%s" ?' % (ufun, params),
+                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                    QtWidgets.QMessageBox.Yes) == QtWidgets.QMessageBox.No:
+                return
+            ufunclist.pop(row)
+            self.userfunctions = json.dumps(ufunclist, cls=numpyEncoder)
+            self.__ufPopulateTable()
+            self.__ufUpdateRecord()
+
+    def __ufPopulateTable(self, selected=None):
+        """ populates the group table
+
+        :param selected: selected property
+        :type selected: :obj:`str`
+        """
+        ufunclist = json.loads(self.userfunctions)
+        self.__ui.userfuncTableWidget.clear()
+        sitem = None
+        self.__ui.userfuncTableWidget.setSortingEnabled(False)
+        self.__ui.userfuncTableWidget.setRowCount(len(ufunclist))
+        headers = ["package.module.class or package.module.function",
+                   "initialization parameters"]
+        self.__ui.userfuncTableWidget.setColumnCount(len(headers))
+        self.__ui.userfuncTableWidget.setHorizontalHeaderLabels(headers)
+        for row, ufparams in enumerate(ufunclist):
+            if len(ufparams) == 2:
+                ufparams.append(True)
+            ufun, params, checked = ufparams
+            item = QtWidgets.QTableWidgetItem(ufun or "")
+            item.setData(QtCore.Qt.EditRole, (ufun or ""))
+            item.setFlags(
+                QtCore.Qt.EditRole |
+                QtCore.Qt.ItemIsUserCheckable |
+                QtCore.Qt.ItemIsEnabled)
+            item.setCheckState(QtCore.Qt.Checked
+                               if checked else QtCore.Qt.Unchecked)
+            self.__ui.userfuncTableWidget.setItem(row, 0, item)
+
+            item2 = QtWidgets.QTableWidgetItem(params or "")
+            item2.setData(QtCore.Qt.EditRole, (params or ""))
+            self.__ui.userfuncTableWidget.setItem(row, 1, item2)
+        self.__ui.userfuncTableWidget.resizeColumnsToContents()
+        self.__ui.userfuncTableWidget.setSelectionMode(
+            QtWidgets.QAbstractItemView.SingleSelection)
+        # self.__ui.userfuncTableWidget.horizontalHeader(
+        # ).setStretchLastSection(True)
+        if hasattr(self.__ui.userfuncTableWidget.horizontalHeader(),
+                   "setSectionResizeMode"):
+            self.__ui.userfuncTableWidget.horizontalHeader().\
+                setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        else:
+            self.__ui.userfuncTableWidget.horizontalHeader().\
+                setResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        if sitem is not None:
+            sitem.setSelected(True)
+            self.__ui.userfuncTableWidget.setCurrentItem(sitem)
 
     def __setROIsColorsWidgets(self):
         """ updates ROIs colors widgets
@@ -860,6 +1032,7 @@ class ConfigDialog(QtWidgets.QDialog):
         self.showoverflow = self.__ui.showoverflowCheckBox.isChecked()
         self.showstats = self.__ui.showstatsCheckBox.isChecked()
         self.showsteps = self.__ui.showstepsCheckBox.isChecked()
+        self.showuserplot = self.__ui.showuserplotCheckBox.isChecked()
         self.calcvariance = self.__ui.calcvarianceCheckBox.isChecked()
         self.aspectlocked = self.__ui.aspectlockedCheckBox.isChecked()
         self.autodownsample = self.__ui.downsampleCheckBox.isChecked()
