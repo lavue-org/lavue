@@ -236,10 +236,10 @@ class ImageWidget(QtWidgets.QWidget):
         self.__userplot.getViewBox().menu.ctrl[1].autoPanCheck.hide()
         self.__userplot.getViewBox().menu.ctrl[1].visibleOnlyCheck.hide()
         self.__userplot.getViewBox().menu.ctrl[1].label.hide()
-        self.__usercurve = self.oneduserplot()
-        self.__usercurve.setPen(_pg.mkColor('g'))
-        self.__usercurve.hide()
-        self.__usercurve.setVisible(False)
+        self.__usercurves = [self.oneduserplot()]
+        self.__usercurves[0].setPen(_pg.mkColor('g'))
+        self.__usercurves[0].hide()
+        self.__usercurves[0].setVisible(False)
 
         #: (:class:`pyqtgraph.PlotWidget`) right 1D plot widget
         self.__rightplot = memoExportDialog.MemoPlotWidget(self)
@@ -319,6 +319,7 @@ class ImageWidget(QtWidgets.QWidget):
                 try:
                     userplot = ufun(results)
                     if userplot:
+                        
                         if "x" in userplot and "y" in userplot:
                             self.__usercurve.setVisible(False)
                             self.__usercurve.setData(
@@ -339,12 +340,12 @@ class ImageWidget(QtWidgets.QWidget):
                             pars["left"] = userplot["left"]
                         self.__userplot.setLabels(**pars)
                     else:
-                        # self.__usercurve.setData()
-                        self.__usercurve.setVisible(False)
+                        for ucr in self.__usercurves:
+                            ucr.setVisible(False)
 
                 except Exception as e:
-                    self.__usercurve.setVisible(False)
-                    # self.__usercurve.setData()
+                    for ucr in self.__usercurves:
+                        ucr.setVisible(False)
                     import traceback
                     value = traceback.format_exc()
                     messageBox.MessageBox.warning(
