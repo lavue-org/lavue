@@ -94,6 +94,7 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">toolWidget</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">memoExportDialog</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">sardanaUtils</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">filters</span>
 <span class="kn">from</span> <span class="nn">.sardanaUtils</span> <span class="kn">import</span> <span class="n">debugmethod</span><span class="p">,</span> <span class="n">numpyEncoder</span>
 
 <span class="c1"># _VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(&quot;.&quot;) \</span>
@@ -202,6 +203,9 @@
         <span class="c1">#: (:class:`lavuelib.toolWidget.BaseToolWidget`) current tool</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__currenttool</span> <span class="o">=</span> <span class="kc">None</span>
 
+        <span class="c1">#: (:class:`filters.FilterList` ) user functions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userfunctions</span> <span class="o">=</span> <span class="n">filters</span><span class="o">.</span><span class="n">FilterList</span><span class="p">()</span>
+
         <span class="c1">#: (:class:`numpy.ndarray`) data to displayed in 2d widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1">#: (:class:`numpy.ndarray`) raw data to cut plots</span>
@@ -264,6 +268,26 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__bottomplot</span><span class="o">.</span><span class="n">getViewBox</span><span class="p">()</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">visibleOnlyCheck</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__bottomplot</span><span class="o">.</span><span class="n">getViewBox</span><span class="p">()</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
 
+        <span class="c1">#: (:class:`pyqtgraph.PlotWidget`) user 1D plot widget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span> <span class="o">=</span> <span class="n">memoExportDialog</span><span class="o">.</span><span class="n">MemoPlotWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">addLegend</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">getViewBox</span><span class="p">()</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">invertCheck</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">getViewBox</span><span class="p">()</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">mouseCheck</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">getViewBox</span><span class="p">()</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">linkCombo</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">getViewBox</span><span class="p">()</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">autoPanCheck</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">getViewBox</span><span class="p">()</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">visibleOnlyCheck</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">getViewBox</span><span class="p">()</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">getViewBox</span><span class="p">()</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mouseCheck</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">getViewBox</span><span class="p">()</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">linkCombo</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">getViewBox</span><span class="p">()</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">autoPanCheck</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">getViewBox</span><span class="p">()</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">visibleOnlyCheck</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">getViewBox</span><span class="p">()</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__usercurve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oneduserplot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__usercurve</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">_pg</span><span class="o">.</span><span class="n">mkColor</span><span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__usercurve</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__usercurve</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
         <span class="c1">#: (:class:`pyqtgraph.PlotWidget`) right 1D plot widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__rightplot</span> <span class="o">=</span> <span class="n">memoExportDialog</span><span class="o">.</span><span class="n">MemoPlotWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__rightplot</span><span class="o">.</span><span class="n">getViewBox</span><span class="p">()</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">mouseCheck</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
@@ -280,6 +304,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">twoDVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">oneDBottomVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__bottomplot</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">userBottomVerticalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">oneDRightHorizontalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__rightplot</span><span class="p">)</span>
 
@@ -323,6 +348,86 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__connectsplitters</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">roiLineEditChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+
+    <span class="c1"># @debugmethod</span>
+<div class="viewcode-block" id="ImageWidget.plotUserFunction"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.plotUserFunction">[docs]</a>    <span class="k">def</span> <span class="nf">plotUserFunction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; plot user function</span>
+
+<span class="sd">        :param results: tool results</span>
+<span class="sd">        :type results: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">results</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showuserplot</span> \
+           <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userfunctions</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">onedshowuserplot</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">onedshowuserplot</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ufun</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userfunctions</span><span class="p">:</span>
+                <span class="c1">#  if True:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">userplot</span> <span class="o">=</span> <span class="n">ufun</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">userplot</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="s2">&quot;x&quot;</span> <span class="ow">in</span> <span class="n">userplot</span> <span class="ow">and</span> <span class="s2">&quot;y&quot;</span> <span class="ow">in</span> <span class="n">userplot</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__usercurve</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__usercurve</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span>
+                                <span class="n">x</span><span class="o">=</span><span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">])</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__usercurve</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="s2">&quot;y&quot;</span> <span class="ow">in</span> <span class="n">userplot</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__usercurve</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__usercurve</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">])</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__usercurve</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__usercurve</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                        <span class="n">pars</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;bottom&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+                        <span class="k">if</span> <span class="s2">&quot;title&quot;</span> <span class="ow">in</span> <span class="n">userplot</span><span class="p">:</span>
+                            <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="s2">&quot;bottom&quot;</span> <span class="ow">in</span> <span class="n">userplot</span><span class="p">:</span>
+                            <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;bottom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;bottom&quot;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="s2">&quot;left&quot;</span> <span class="ow">in</span> <span class="n">userplot</span><span class="p">:</span>
+                            <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">setLabels</span><span class="p">(</span><span class="o">**</span><span class="n">pars</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># self.__usercurve.setData()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__usercurve</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__usercurve</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                    <span class="c1"># self.__usercurve.setData()</span>
+                    <span class="kn">import</span> <span class="nn">traceback</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+                    <span class="n">messageBox</span><span class="o">.</span><span class="n">MessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;lavue: problems in user function&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span>
+                        <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">value</span><span class="p">)</span>
+                <span class="k">break</span></div>
+
+    <span class="c1"># @debugmethod</span>
+<div class="viewcode-block" id="ImageWidget.resetUserFunctions"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.resetUserFunctions">[docs]</a>    <span class="k">def</span> <span class="nf">resetUserFunctions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">userfunctions</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; resets userfunctions</span>
+
+<span class="sd">        :param userfunctions: userfunctions settings</span>
+<span class="sd">        :type userfunctions: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fsettings</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">userfunctions</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__userfunctions</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">fsettings</span><span class="p">)</span>
+            <span class="n">currentconfig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userfunctions</span><span class="o">.</span><span class="n">currentconfig</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">userfunctions</span> <span class="o">!=</span> <span class="n">currentconfig</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">userfunctions</span> <span class="o">=</span> <span class="n">currentconfig</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">traceback</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+            <span class="n">messageBox</span><span class="o">.</span><span class="n">MessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;lavue: problems in setting userfunctions&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">value</span><span class="p">)</span>
+            <span class="c1"># print(str(e))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userfunctions</span><span class="o">.</span><span class="n">errors</span><span class="p">:</span>
+            <span class="n">errors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userfunctions</span><span class="o">.</span><span class="n">errors</span>
+            <span class="n">messageBox</span><span class="o">.</span><span class="n">MessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;lavue: problems in setting filters&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">er</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">er</span> <span class="ow">in</span> <span class="n">errors</span> <span class="k">if</span> <span class="n">er</span><span class="p">),</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">er</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">er</span> <span class="ow">in</span> <span class="n">errors</span>
+                                 <span class="k">if</span> <span class="p">(</span><span class="n">er</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">er</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)))</span></div>
 
 <div class="viewcode-block" id="ImageWidget.updateToolComboBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.updateToolComboBox">[docs]</a>    <span class="k">def</span> <span class="nf">updateToolComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">toolnames</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set tool by changing combobox</span>
@@ -543,6 +648,16 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bottomplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="n">clear</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="ImageWidget.oneduserplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.oneduserplot">[docs]</a>    <span class="k">def</span> <span class="nf">oneduserplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates 1d user plot</span>
+
+<span class="sd">        :param clear: clear flag</span>
+<span class="sd">        :type clear: :obj:`bool`</span>
+<span class="sd">        :returns: 1d user plot</span>
+<span class="sd">        :rtype: :class:`pyqtgraph.PlotDataItem`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="n">clear</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="ImageWidget.onedshowlegend"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.onedshowlegend">[docs]</a>    <span class="k">def</span> <span class="nf">onedshowlegend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; shows/hides 1d bottom plot legend</span>
 
@@ -559,6 +674,21 @@
             <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">its</span><span class="p">:</span>
                 <span class="n">legend</span><span class="o">.</span><span class="n">removeItem</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
             <span class="n">legend</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ImageWidget.onedshowuserplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.onedshowuserplot">[docs]</a>    <span class="k">def</span> <span class="nf">onedshowuserplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; shows/hides 1d bottom plot legend</span>
+
+<span class="sd">        :param status: show flag</span>
+<span class="sd">        :type status: :obj:`bool`</span>
+<span class="sd">        :returns: 1d bottom plot</span>
+<span class="sd">        :rtype: :class:`pyqtgraph.PlotDataItem`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolSplitter</span><span class="o">.</span><span class="n">setStretchFactor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolSplitter</span><span class="o">.</span><span class="n">setStretchFactor</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ImageWidget.bottomplotShowMenu"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.bottomplotShowMenu">[docs]</a>    <span class="k">def</span> <span class="nf">bottomplotShowMenu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freeze</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; shows freeze or/and clean action in the menu</span>
@@ -2351,6 +2481,9 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.91.1/index.html">v2.91.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.91.0/index.html">v2.91.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.90.2/index.html">v2.90.2</a></li>
       <li><a class="reference external" href="../../index/../../v2.90.1/index.html">v2.90.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.90.0/index.html">v2.90.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.89.3/index.html">v2.89.3</a></li>

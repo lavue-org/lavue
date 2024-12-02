@@ -72,6 +72,7 @@
 <span class="sd">&quot;&quot;&quot; set of image sources &quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">json</span>
 
 
 <span class="k">def</span> <span class="nf">_tostr</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
@@ -135,7 +136,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Filter list</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configlist</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configlist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">onlyfirst</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param configlist: list with filter configuration</span>
@@ -143,6 +144,9 @@
 <span class="sd">        :    :obj:`list` &lt; [:obj:`str` , :obj:`str`] &gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">list</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__onlyfirst</span> <span class="o">=</span> <span class="n">onlyfirst</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">currentconfig</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">configlist</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">appendFilter</span><span class="p">(</span><span class="n">configlist</span><span class="p">)</span>
 
@@ -163,17 +167,35 @@
 <span class="sd">        :type configlist: \</span>
 <span class="sd">        :    :obj:`list` &lt; [:obj:`str` , :obj:`str`] &gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">modulename</span><span class="p">,</span> <span class="n">params</span> <span class="ow">in</span> <span class="n">configlist</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">modulename</span><span class="p">:</span>
-                <span class="n">pkl</span> <span class="o">=</span> <span class="n">_tostr</span><span class="p">(</span><span class="n">modulename</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
-                <span class="n">pkg</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pkl</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-                <span class="k">if</span> <span class="n">pkg</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                    <span class="n">pdec</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">pkg</span><span class="p">]</span>
-                    <span class="n">dec</span> <span class="o">=</span> <span class="n">pdec</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">dec</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">globals</span><span class="p">(),</span>
-                                     <span class="nb">locals</span><span class="p">(),</span> <span class="n">pkl</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__append</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">dec</span><span class="p">,</span> <span class="n">pkl</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">params</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">currentconfig</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">newconfig</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">configitem</span> <span class="ow">in</span> <span class="n">configlist</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">configitem</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">configitem</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">modulename</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">checked</span> <span class="o">=</span> <span class="n">configitem</span>
+            <span class="k">if</span> <span class="n">modulename</span> <span class="ow">and</span> <span class="n">checked</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">found</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__onlyfirst</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">pkl</span> <span class="o">=</span> <span class="n">_tostr</span><span class="p">(</span><span class="n">modulename</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+                    <span class="n">pkg</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pkl</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">pkg</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="n">pdec</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">pkg</span><span class="p">]</span>
+                        <span class="n">dec</span> <span class="o">=</span> <span class="n">pdec</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">dec</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">globals</span><span class="p">(),</span>
+                                         <span class="nb">locals</span><span class="p">(),</span> <span class="n">pkl</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__append</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">dec</span><span class="p">,</span> <span class="n">pkl</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">params</span><span class="p">)</span>
+                    <span class="n">newconfig</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">modulename</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="kc">True</span><span class="p">])</span>
+                    <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="kn">import</span> <span class="nn">traceback</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">value</span><span class="p">))</span>
+                    <span class="n">newconfig</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">modulename</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">newconfig</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">modulename</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">currentconfig</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">newconfig</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imgfilter</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; adds additional imgfilter</span>
@@ -216,6 +238,9 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.91.1/index.html">v2.91.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.91.0/index.html">v2.91.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.90.2/index.html">v2.90.2</a></li>
       <li><a class="reference external" href="../../index/../../v2.90.1/index.html">v2.90.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.90.0/index.html">v2.90.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.89.3/index.html">v2.89.3</a></li>
