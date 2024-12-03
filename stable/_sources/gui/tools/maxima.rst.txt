@@ -22,6 +22,10 @@ e.g.
 
    lavue -u maxima -s test --tool-configuration \{\"maxima_number\":10,\"units\":\"angles\",\"geometry\":\{\"centerx\":123.4,\"centery\":93.4,\"pixelsizex\":70,\"pixelsizey\":70.2,\"energy\":5050,\"detdistance\":50.5\}\} --start
 
+A JSON dictionary with the **tool results** is passed to the **LavueController** or/and to **user functions plugins**. It contains the following keys:
+
+``tool`` : "maxima", ``imagename`` (string), ``timestamp`` (float), ``nrplots`` (int), ``maxima`` ([[float, float, float], ..., [float, float, float]]) [i.e. [x, y, intensity]]
+
 .. |br| raw:: html
 
      <br>

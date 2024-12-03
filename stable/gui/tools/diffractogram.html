@@ -87,6 +87,8 @@
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">lavue -u diffractogram -s test --tool-configuration \{\&quot;calibration\&quot;:\&quot;test/images/eiger4n_al203_13.45kev.poni\&quot;,\&quot;diff_number\&quot;:2,\&quot;diff_ranges\&quot;:[[10,20,0,10],[-5,5,5,15]],\&quot;diff_units\&quot;:\&quot;r\ [mm]\&quot;,\&quot;buffering\&quot;:true,\&quot;buffer_size\&quot;:512\} --start</span>
 </pre></div>
 </div>
+<p>A JSON dictionary with the <strong>tool results</strong> is passed to the <strong>LavueController</strong> or/and to <strong>user functions plugins</strong>. It contains the following keys:</p>
+<p><code class="docutils literal notranslate"><span class="pre">tool</span></code> : “diffractogram”, <code class="docutils literal notranslate"><span class="pre">imagename</span></code> (string), <code class="docutils literal notranslate"><span class="pre">timestamp</span></code> (float), <code class="docutils literal notranslate"><span class="pre">nrdiffs</span></code> (int), <code class="docutils literal notranslate"><span class="pre">calibration</span></code> (str) [i.e a pyfai file name],  <code class="docutils literal notranslate"><span class="pre">unit</span></code> (str) [i.e. “q_nm^-1”, “q_A^-1”, “2th_deg”, “2th_rad”, “r_mm” or “r_pixel”], <code class="docutils literal notranslate"><span class="pre">diff_%i</span></code> ([[float, float], …, [float, float]]) [i.e. “%i” goes from 1 to <code class="docutils literal notranslate"><span class="pre">nrdiffs</span></code>], <code class="docutils literal notranslate"><span class="pre">radial_range_%i</span></code> ([float, float]) [i.e. “%i” goes from 1 to <code class="docutils literal notranslate"><span class="pre">nrdiffs</span></code>], <code class="docutils literal notranslate"><span class="pre">azimuth_range_%i</span></code> ([float, float]) [i.e. “%i” goes from 1 to <code class="docutils literal notranslate"><span class="pre">nrdiffs</span></code>], <code class="docutils literal notranslate"><span class="pre">peaks_%i</span></code> ([[float, …, float], [float, …, float]]) [i.e. “%i” goes from 1 to <code class="docutils literal notranslate"><span class="pre">nrdiffs</span></code> and it contains peak positions and  peak values lists]</p>
 </section>
 
 
@@ -122,6 +124,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.92.0/index.html">v2.92.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.91.1/index.html">v2.91.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.91.0/index.html">v2.91.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.90.2/index.html">v2.90.2</a></li>
