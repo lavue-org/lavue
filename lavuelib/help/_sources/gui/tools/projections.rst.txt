@@ -21,6 +21,9 @@ e.g.
 
    lavue -u projections -s test --tool-configuration \{\"mapping\":\"sum\",\"rows\":\"10:200:5\",\"columns\":\"50:150\"\} --start
 
+A JSON dictionary with the **tool results** is passed to the **LavueController** or/and to **user functions plugins**. It contains the following keys:
+
+``tool`` : "projections", ``imagename`` (string), ``timestamp`` (float), ``xx`` ([float, .., float]), ``sx`` ([float, .., float]), ``yy`` ([float, .., float]), ``sy`` ([float, .., float]), ``xscale`` (float), ``xslice`` ([float, float, float]), ``yscale`` (float), ``yslice`` ([float, float, float]), fun (str) [i.e. "mean" or "sum"]
 
 .. |br| raw:: html
 

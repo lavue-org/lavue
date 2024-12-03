@@ -319,18 +319,18 @@ class ImageWidget(QtWidgets.QWidget):
                 try:
                     userplot = ufun(results)
                     if userplot:
-                        
+
                         if "x" in userplot and "y" in userplot:
-                            self.__usercurve.setVisible(False)
-                            self.__usercurve.setData(
+                            self.__usercurves[0].setVisible(False)
+                            self.__usercurves[0].setData(
                                 x=userplot["x"], y=userplot["y"])
-                            self.__usercurve.setVisible(True)
+                            self.__usercurves[0].setVisible(True)
                         elif "y" in userplot:
-                            self.__usercurve.setVisible(False)
-                            self.__usercurve.setData(y=userplot["y"])
-                            self.__usercurve.setVisible(True)
+                            self.__usercurves[0].setVisible(False)
+                            self.__usercurves[0].setData(y=userplot["y"])
+                            self.__usercurves[0].setVisible(True)
                         else:
-                            self.__usercurve.setVisible(False)
+                            self.__usercurves[0].setVisible(False)
                         pars = {"title": "", "bottom": "", "left": ""}
                         if "title" in userplot:
                             pars["title"] = userplot["title"]
@@ -1188,7 +1188,7 @@ class ImageWidget(QtWidgets.QWidget):
                        "ytext" : ylabel
                        "xunits" : xunits
                        "yunits" : yunits
-        :type record: :obj:`dict`<:obj:`str`, `any`>
+        :type record: :obj:`dict` < :obj:`str`, `any`>
         """
         self.__displaywidget.updateTicks(record)
         self.emitTCC()
@@ -1812,7 +1812,7 @@ class ImageWidget(QtWidgets.QWidget):
         """ provides intensity for current mouse position
 
         :returns: x position, y position, pixel intensity
-        :rtype: (float, float, float)
+        :rtype: (:obj:`float`, :obj:`float`, :obj:`float`)
         """
         return self.__displaywidget.currentIntensity()
 
