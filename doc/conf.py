@@ -205,6 +205,7 @@ html_theme_options = {
     # Choose Bootstrap version.
     # Values: "3" (default) or "2" (in quotes)
     # 'bootstrap_version': "3",
+    "sidebarwidth":400,
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -260,7 +261,8 @@ if os.getenv("LAVUE_HIDE_VERSIONS") != 'TRUE':
 
 html_context = {
     "docs_versions" : [
-        "v2.90.2", "v2.90.1", "v2.90.0", "v2.89.3",
+        "v2.91.1",
+        "v2.91.0", "v2.90.2", "v2.90.1", "v2.90.0", "v2.89.3",
         "v2.89.2", "v2.89.1", "v2.89.0", "v2.88.0", "v2.87.0",
         "v2.86.1", "v2.86.0", "v2.85.1", "v2.85.0", "v2.84.0",
         "v2.83.4", "v2.83.3", "v2.83.2", "v2.83.1", "v2.83.0",
