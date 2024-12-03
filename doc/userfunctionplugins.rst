@@ -7,7 +7,8 @@ A **User Function plugin** can be defined by a **class** or a **function** in a 
 
 A **user function plugin** defined by a **function** is a simple python function with one argument: `results` which contain a python dictionary of **ToolResults**.
 
-This function **returns** a python dictionary with `x` and  `y` *list* data to plot  and optionally `title`, `bottom` and `left` *string* labels , e.g.
+This function **returns** a python dictionary with `x` and  `y` *(list)* data to plot , `title`, `bottom` and `left` *(string)* labels  `color` and `hvscolor` *(string)*  or *(int)* . For user plots with mutli-curves the python dictionary can contains `nrplots` *(int)* , `x_%i`,  `y_%i` *(list)* data to plot, `color_%i` and `hvscolor_%i` *(string)*  or *(int)* where `%i` runs from 1 to `nrplots`. If `y_%i` is set to ``None`` the previous plot will stay shown.
+, e.g.
 
 .. code-block:: python
 
@@ -61,17 +62,27 @@ Moreover, the class *constructor* has one configuration string argument initiali
 	    :rtype: :obj:`dict`
 	    """
 	    userplot = {}
-	    # print("RESULTS", results)
-	    label = "linecut_%s" % self.__index
-	    if label in results:
-		userplot = {"x": results[label][0],
-			    "y": [min(yy, self.__flat)
-				  for yy in results[label][1]],
-			    "title":
-			    "%s flatten at '%s'" % (label, self.__flat)}
-		if "unit" in results:
-		    userplot["bottom"] = results["unit"]
-		    userplot["left"] = "intencity"
+        if "tool" in results and results["tool"] == "linecut":
+            try:
+                nrplots = int(results["nrlinecuts"])
+            except Exception:
+                nrplots = 0
+            userplot["nrplots"] = nrplots
+            userplot["title"] = "Linecuts flatten at '%s'" % (self.__flat)
+
+            for i in range(nrplots):
+                xlabel = "x_%s" % (i + 1)
+                ylabel = "y_%s" % (i + 1)
+                label = "linecut_%s" % (i + 1)
+                cllabel = "hsvcolor_%s" % (i + 1)
+                if label in results:
+                    userplot[xlabel] = results[label][0]
+                    userplot[ylabel] = [min(yy, self.__flat)
+                                        for yy in results[label][1]]
+                    userplot[cllabel] = i/float(nrplots)
+            if "unit" in results:
+                userplot["bottom"] = results["unit"]
+                userplot["left"] = "intensity"
 	    return userplot
 
 or
