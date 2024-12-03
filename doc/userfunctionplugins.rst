@@ -7,7 +7,8 @@ A **User Function plugin** can be defined by a **class** or a **function** in a 
 
 A **user function plugin** defined by a **function** is a simple python function with one argument: `results` which contain a python dictionary of **ToolResults**.
 
-This function **returns** a python dictionary with `x` and  `y` *list* data to plot  and optionally `title`, `bottom` and `left` *string* labels , e.g.
+This function **returns** a python dictionary with `x` and  `y` *(list)* data to plot , `title`, `bottom` and `left` *(string)* labels  `color` and `hvscolor` *(string)*  or *(int)* . For user plots with mutli-curves the python dictionary can contains `nrplots` *(int)* , `x_%i`,  `y_%i` *(list)* data to plot, `color_%i` and `hvscolor_%i` *(string)*  or *(int)* where `%i` runs from 1 to `nrplots`. If `y_%i` is set to ``None`` the previous plot will stay shown.
+, e.g.
 
 .. code-block:: python
 

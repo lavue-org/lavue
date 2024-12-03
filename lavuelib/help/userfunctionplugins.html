@@ -56,7 +56,8 @@
 <span id="id1"></span><h1>User Function plugins<a class="headerlink" href="#user-function-plugins" title="Permalink to this heading">¶</a></h1>
 <p>A <strong>User Function plugin</strong> can be defined by a <strong>class</strong> or a <strong>function</strong> in a python package.</p>
 <p>A <strong>user function plugin</strong> defined by a <strong>function</strong> is a simple python function with one argument: <cite>results</cite> which contain a python dictionary of <strong>ToolResults</strong>.</p>
-<p>This function <strong>returns</strong> a python dictionary with <cite>x</cite> and  <cite>y</cite> <em>list</em> data to plot  and optionally <cite>title</cite>, <cite>bottom</cite> and <cite>left</cite> <em>string</em> labels , e.g.</p>
+<p>This function <strong>returns</strong> a python dictionary with <cite>x</cite> and  <cite>y</cite> <em>(list)</em> data to plot , <cite>title</cite>, <cite>bottom</cite> and <cite>left</cite> <em>(string)</em> labels  <cite>color</cite> and <cite>hvscolor</cite> <em>(string)</em>  or <em>(int)</em> . For user plots with mutli-curves the python dictionary can contains <cite>nrplots</cite> <em>(int)</em> , <cite>x_%i</cite>,  <cite>y_%i</cite> <em>(list)</em> data to plot, <cite>color_%i</cite> and <cite>hvscolor_%i</cite> <em>(string)</em>  or <em>(int)</em> where <cite>%i</cite> runs from 1 to <cite>nrplots</cite>. If <cite>y_%i</cite> is set to <code class="docutils literal notranslate"><span class="pre">None</span></code> the previous plot will stay shown.
+, e.g.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">positive</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; plot positive function values on the LineCut tool</span>
 
