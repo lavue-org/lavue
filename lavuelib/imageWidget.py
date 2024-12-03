@@ -337,11 +337,6 @@ class ImageWidget(QtWidgets.QWidget):
                             for i in range(nrplots, len(self.__usercurves)):
                                 self.__usercurves[i].hide()
                             self.__nrplots = nrplots
-                            # if nrplots:
-                            #     for i, cr in enumerate(self.__usercurves):
-                            #         if i < nrplots:
-                            #             cr.setPen(_pg.hsvColor(
-                            #       i/float(nrplots)))
 
                         if "x" in userplot and "y" in userplot:
                             self.__usercurves[0].setVisible(False)
@@ -379,6 +374,12 @@ class ImageWidget(QtWidgets.QWidget):
                                 if isinstance(yy, list) or \
                                         isinstance(yy, np.ndarray):
                                     self.__usercurves[i].setData(x=xx, y=yy)
+                                if rgblabel in userplot:
+                                    self.__usercurves[i].setPen(
+                                        _pg.mkColor(userplot[rgblabel]))
+                                if hsvlabel in userplot:
+                                    self.__usercurves[i].setPen(
+                                        _pg.hsvColor(userplot[hsvlabel]))
                                 self.__usercurves[i].setVisible(True)
                             elif "y" in userplot:
                                 self.__usercurves[i].setVisible(False)
@@ -386,15 +387,15 @@ class ImageWidget(QtWidgets.QWidget):
                                 if isinstance(yy, list) or \
                                         isinstance(yy, np.ndarray):
                                     self.__usercurves[i].setData(y=yy)
+                                if rgblabel in userplot:
+                                    self.__usercurves[i].setPen(
+                                        _pg.mkColor(userplot[rgblabel]))
+                                if hsvlabel in userplot:
+                                    self.__usercurves[i].setPen(
+                                        _pg.hsvColor(userplot[hsvlabel]))
                                 self.__usercurves[i].setVisible(True)
                             else:
                                 self.__usercurves[i].setVisible(False)
-                            if rgblabel in userplot:
-                                self.__usercurves[0].setPen(
-                                    _pg.mkColor(userplot[rgblabel]))
-                            if hsvlabel in userplot:
-                                self.__usercurves[0].setPen(
-                                    _pg.hsvColor(userplot[hsvlabel]))
 
                         pars = {"title": "", "bottom": "", "left": ""}
                         if "title" in userplot:

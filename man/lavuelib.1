@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "LAVUELIB" "1" "Nov 29, 2024" "2.91" "LaVue"
+.TH "LAVUELIB" "1" "Dec 03, 2024" "2.92" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .sp
@@ -1066,6 +1066,10 @@ lavue \-u intensity \-s test \-\-tool\-configuration \e{\e\(dqcross_hair\e\(dq:f
 .fi
 .UNINDENT
 .UNINDENT
+.sp
+A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
+.sp
+\fBtool\fP : “intensity”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBpixel\fP ([float, float]), \fBscaled_coordiantes\fP ([float, float]), \fBcoordiantes_units\fP ([str, str]), \fBintensity_scaling\fP (str) [i.e. “log”, “linear” or “sqrt”]
 .SS ROI Tool
 .sp
 \fBROI Tool\fP selects Regions Of Interest and culculates a sum of their pixel intensities
@@ -1146,6 +1150,10 @@ lavue \-u linecut \-\-tool\-configuration \e{\e\(dqcuts_number\e\(dq:2,\e\(dqx_c
 .fi
 .UNINDENT
 .UNINDENT
+.sp
+A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
+.sp
+\fBtool\fP : “linecut”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBunit\fP (str) [i.e. “point”, “x\-pixel” or “y\-pixel”], \fBnrlinecuts\fP (int), \fBlinecut_%i\fP ([[float, float], …, [float, float]]) [i.e. “%i” goes from 1 to \fBnrlinecuts\fP]
 .SS Angle/Q Tool
 .sp
 \fBAngle/Q Tool\fP shows pixel coordinates in q\-space or theta\-angles
@@ -1294,6 +1302,10 @@ lavue \-u 1d\-plot \-s tangoattr\e;tangoattr \-c aspectro\e;fspecto \-\-tool\-co
 .fi
 .UNINDENT
 .UNINDENT
+.sp
+A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
+.sp
+\fBtool\fP : “1d\-plot”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBnrplots\fP (int), \fBonedplot_%i\fP ([[float, float], …, [float, float]]) [i.e. “%i” goes from 1 to \fBnrplots\fP]
 .SS Projections Tool
 .sp
 \fBProjections Tool\fP plots horizontal and vertical projections of the current image
@@ -1326,6 +1338,10 @@ lavue \-u projections \-s test \-\-tool\-configuration \e{\e\(dqmapping\e\(dq:\e
 .fi
 .UNINDENT
 .UNINDENT
+.sp
+A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
+.sp
+\fBtool\fP : “projections”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBxx\fP ([float, .., float]), \fBsx\fP ([float, .., float]), \fByy\fP ([float, .., float]), \fBsy\fP ([float, .., float]), \fBxscale\fP (float), \fBxslice\fP ([float, float, float]), \fByscale\fP (float), \fByslice\fP ([float, float, float]), fun (str) [i.e. “mean” or “sum”]
 .SS Q+ROI+Proj Tool
 .sp
 \fBQ+ROI+Proj Tool\fP combines Angle/Q, ROI and Projections
@@ -1378,6 +1394,10 @@ lavue \-u q+roi+proj \-s test \-\-tool\-configuration \e{\e\(dqrois_number\e\(dq
 .fi
 .UNINDENT
 .UNINDENT
+.sp
+A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
+.sp
+\fBtool\fP : “q+roi+proj”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBxx\fP ([float, .., float]), \fBsx\fP ([float, .., float]), \fByy\fP ([float, .., float]), \fBsy\fP ([float, .., float]), \fBxscale\fP (float), \fBxslice\fP ([float, float, float]), \fByscale\fP (float), \fByslice\fP ([float, float, float]), fun (str) [i.e. “mean” or “sum”]
 .SS Maxima Tool
 .sp
 \fBMaxima Tool\fP points pixels with the highest intensity
@@ -1411,6 +1431,10 @@ lavue \-u maxima \-s test \-\-tool\-configuration \e{\e\(dqmaxima_number\e\(dq:1
 .fi
 .UNINDENT
 .UNINDENT
+.sp
+A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
+.sp
+\fBtool\fP : “maxima”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBnrplots\fP (int), \fBmaxima\fP ([[float, float, float], …, [float, float, float]]) [i.e. [x, y, intensity]]
 .SS Parameters Tool
 .sp
 \fBParameters Tool\fP allows to read and write tango attributes to change detector settings
@@ -1503,6 +1527,10 @@ lavue \-u diffractogram \-s test \-\-tool\-configuration \e{\e\(dqcalibration\e\
 .fi
 .UNINDENT
 .UNINDENT
+.sp
+A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
+.sp
+\fBtool\fP : “diffractogram”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBnrdiffs\fP (int), \fBcalibration\fP (str) [i.e a pyfai file name],  \fBunit\fP (str) [i.e. “q_nm^\-1”, “q_A^\-1”, “2th_deg”, “2th_rad”, “r_mm” or “r_pixel”], \fBdiff_%i\fP ([[float, float], …, [float, float]]) [i.e. “%i” goes from 1 to \fBnrdiffs\fP], \fBradial_range_%i\fP ([float, float]) [i.e. “%i” goes from 1 to \fBnrdiffs\fP], \fBazimuth_range_%i\fP ([float, float]) [i.e. “%i” goes from 1 to \fBnrdiffs\fP], \fBpeaks_%i\fP ([[float, …, float], [float, …, float]]) [i.e. “%i” goes from 1 to \fBnrdiffs\fP and it contains peak positions and  peak values lists]
 .SS Images from FileSystem
 .sp
 By pressing the \fBLoad\fP button user can open the existing file.
@@ -2270,7 +2298,8 @@ A \fBUser Function plugin\fP can be defined by a \fBclass\fP or a \fBfunction\fP
 .sp
 A \fBuser function plugin\fP defined by a \fBfunction\fP is a simple python function with one argument: \fIresults\fP which contain a python dictionary of \fBToolResults\fP\&.
 .sp
-This function \fBreturns\fP a python dictionary with \fIx\fP and  \fIy\fP \fIlist\fP data to plot  and optionally \fItitle\fP, \fIbottom\fP and \fIleft\fP \fIstring\fP labels , e.g.
+This function \fBreturns\fP a python dictionary with \fIx\fP and  \fIy\fP \fI(list)\fP data to plot , \fItitle\fP, \fIbottom\fP and \fIleft\fP \fI(string)\fP labels  \fIcolor\fP and \fIhvscolor\fP \fI(string)\fP  or \fI(int)\fP . For user plots with mutli\-curves the python dictionary can contains \fInrplots\fP \fI(int)\fP , \fIx_%i\fP,  \fIy_%i\fP \fI(list)\fP data to plot, \fIcolor_%i\fP and \fIhvscolor_%i\fP \fI(string)\fP  or \fI(int)\fP where \fI%i\fP runs from 1 to \fInrplots\fP\&. If \fIy_%i\fP is set to \fBNone\fP the previous plot will stay shown.
+, e.g.
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -2331,17 +2360,27 @@ class LineCutFlat(object):
         :rtype: :obj:\(gadict\(ga
         \(dq\(dq\(dq
         userplot = {}
-        # print(\(dqRESULTS\(dq, results)
-        label = \(dqlinecut_%s\(dq % self.__index
-        if label in results:
-            userplot = {\(dqx\(dq: results[label][0],
-                        \(dqy\(dq: [min(yy, self.__flat)
-                              for yy in results[label][1]],
-                        \(dqtitle\(dq:
-                        \(dq%s flatten at \(aq%s\(aq\(dq % (label, self.__flat)}
-            if \(dqunit\(dq in results:
-                userplot[\(dqbottom\(dq] = results[\(dqunit\(dq]
-                userplot[\(dqleft\(dq] = \(dqintencity\(dq
+    if \(dqtool\(dq in results and results[\(dqtool\(dq] == \(dqlinecut\(dq:
+        try:
+            nrplots = int(results[\(dqnrlinecuts\(dq])
+        except Exception:
+            nrplots = 0
+        userplot[\(dqnrplots\(dq] = nrplots
+        userplot[\(dqtitle\(dq] = \(dqLinecuts flatten at \(aq%s\(aq\(dq % (self.__flat)
+
+        for i in range(nrplots):
+            xlabel = \(dqx_%s\(dq % (i + 1)
+            ylabel = \(dqy_%s\(dq % (i + 1)
+            label = \(dqlinecut_%s\(dq % (i + 1)
+            cllabel = \(dqhsvcolor_%s\(dq % (i + 1)
+            if label in results:
+                userplot[xlabel] = results[label][0]
+                userplot[ylabel] = [min(yy, self.__flat)
+                                    for yy in results[label][1]]
+                userplot[cllabel] = i/float(nrplots)
+        if \(dqunit\(dq in results:
+            userplot[\(dqbottom\(dq] = results[\(dqunit\(dq]
+            userplot[\(dqleft\(dq] = \(dqintensity\(dq
         return userplot
 .ft P
 .fi
@@ -2488,6 +2527,70 @@ numpy array with an image
 .TP
 .B Return type
 \fI\%numpy.ndarray\fP or \fINone\fP
+.UNINDENT
+.UNINDENT
+.SS lavuelib.plugins.userfunctions module
+.sp
+set of image sources
+.INDENT 0.0
+.TP
+.B class  lavuelib.plugins.userfunctions.LineCut(configuration=None)
+Bases: \fI\%object\fP
+.sp
+LineCut selection
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – JSON list with horizontal gap pixels to add
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  lavuelib.plugins.userfunctions.LineCutFlat(configuration=None)
+Bases: \fI\%object\fP
+.sp
+Flatten line cut
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – JSON list with horizontal gap pixels to add
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B lavuelib.plugins.userfunctions.linecut_1(results)
+line rotate image by 45 deg
+.INDENT 7.0
+.TP
+.B Parameters
+\fBresults\fP (\fI\%dict\fP) – dictionary with tool results
+.TP
+.B Returns
+dictionary with user plot data
+.TP
+.B Return type
+\fI\%dict\fP
+.UNINDENT
+.UNINDENT
+.SS lavuelib.plugins.diffpyfunctions module
+.sp
+set of image sources
+.INDENT 0.0
+.TP
+.B class  lavuelib.plugins.diffpyfunctions.DiffPDF(configuration=None)
+Bases: \fI\%object\fP
+.sp
+diffpy PDF user function
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – JSON list with config file and diff index
 .UNINDENT
 .UNINDENT
 .SS Submodules
@@ -9967,7 +10070,7 @@ exporter parameters
 set of image sources
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.ASAPO  =  False
+.B lavuelib.imageSource.ASAPO  =  True
 (\fI\%bool\fP) asapo imported
 .UNINDENT
 .INDENT 0.0
@@ -10292,7 +10395,7 @@ image name, image data, json dictionary with metadata
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.HIDRA  =  False
+.B lavuelib.imageSource.HIDRA  =  True
 (\fI\%bool\fP) hidra imported
 .UNINDENT
 .INDENT 0.0
@@ -11360,21 +11463,8 @@ rois coordinates
 .INDENT 7.0
 .TP
 .B mouseImagePositionChanged
-pyqtSignal(
-.nf
-*
-.fi
-types, name: str = …, revision: int = …, arguments: Sequence = …) \-> PYQT_SIGNAL
-.sp
-types is normally a sequence of individual types.  Each type is either a
-type object or a string that is the name of a C++ type.  Alternatively
-each type could itself be a sequence of types each describing a different
-overloaded signal.
-name is the optional C++ name of the signal.  If it is not specified then
-the name of the class attribute that is bound to the signal is used.
-revision is the optional revision of the signal that is exported to QML.
-If it is not specified then 0 is used.
-arguments is the optional sequence of the names of the signal’s arguments.
+(\fBpyqtgraph.QtCore.pyqtSignal\fP)
+mouse image position changed signal
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -12450,7 +12540,7 @@ update Ticks values
 .INDENT 7.0
 .TP
 .B Parameters
-\fBrecord\fP (\fBdict\(ga<:obj:\(gastr\fP, \fIany\fP>) – dict record with the tick parameters:
+\fBrecord\fP (\fI\%dict\fP < \fI\%str\fP, \fIany\fP>) – dict record with the tick parameters:
 “position” : [x, y]
 “scale” : [sx, sy]
 “xtext” : xlabel
@@ -13647,21 +13737,7 @@ constructor
 .INDENT 7.0
 .TP
 .B bfFileSelected
-pyqtSignal(
-.nf
-*
-.fi
-types, name: str = …, revision: int = …, arguments: Sequence = …) \-> PYQT_SIGNAL
-.sp
-types is normally a sequence of individual types.  Each type is either a
-type object or a string that is the name of a C++ type.  Alternatively
-each type could itself be a sequence of types each describing a different
-overloaded signal.
-name is the optional C++ name of the signal.  If it is not specified then
-the name of the class attribute that is bound to the signal is used.
-revision is the optional revision of the signal that is exported to QML.
-If it is not specified then 0 is used.
-arguments is the optional sequence of the names of the signal’s arguments.
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) bf file selected signal
 .UNINDENT
 .INDENT 7.0
 .TP
