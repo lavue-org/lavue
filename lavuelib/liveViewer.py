@@ -1235,10 +1235,9 @@ class LiveViewer(QtWidgets.QDialog):
             self.__filters.reset(fsettings)
             cfsettings = json.loads(self.__filters.currentconfig)
             # if filters != self.__filters.currentconfig:
-
             label = " | ".join([flt[0].split(".")[-1]
                                 for flt in cfsettings
-                                if (flt[0] and flt[2])])
+                                if (flt[0] and (len(flt) < 3 or flt[2]))])
             if len(label) > 32:
                 label = label[:32] + " ..."
             self.__filterswg.setLabel(label)

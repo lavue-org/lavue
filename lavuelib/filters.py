@@ -124,7 +124,10 @@ class FilterList(list):
         self.errors = []
         newconfig = []
         found = False
-        for modulename, params, checked in configlist:
+        for configitem in configlist:
+            if len(configitem) == 2:
+                configitem.append(True)
+            modulename, params, checked = configitem
             if modulename and checked and not (found and self.__onlyfirst):
                 try:
                     pkl = _tostr(modulename).split(".")
