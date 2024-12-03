@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Diffractogram Tool &#8212; LaVue 2.91.1 documentation</title>
+    <title>Diffractogram Tool &#8212; LaVue 2.92.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="parameters.html" title="Parameters Tool"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.91.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.92.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >GUI User Guide</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Specialized Tools</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Diffractogram Tool</a></li> 
@@ -87,6 +87,8 @@
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">lavue -u diffractogram -s test --tool-configuration \{\&quot;calibration\&quot;:\&quot;test/images/eiger4n_al203_13.45kev.poni\&quot;,\&quot;diff_number\&quot;:2,\&quot;diff_ranges\&quot;:[[10,20,0,10],[-5,5,5,15]],\&quot;diff_units\&quot;:\&quot;r\ [mm]\&quot;,\&quot;buffering\&quot;:true,\&quot;buffer_size\&quot;:512\} --start</span>
 </pre></div>
 </div>
+<p>A JSON dictionary with the <strong>tool results</strong> is passed to the <strong>LavueController</strong> or/and to <strong>user functions plugins</strong>. It contains the following keys:</p>
+<p><code class="docutils literal notranslate"><span class="pre">tool</span></code> : “diffractogram”, <code class="docutils literal notranslate"><span class="pre">imagename</span></code> (string), <code class="docutils literal notranslate"><span class="pre">timestamp</span></code> (float), <code class="docutils literal notranslate"><span class="pre">nrdiffs</span></code> (int), <code class="docutils literal notranslate"><span class="pre">calibration</span></code> (str) [i.e a pyfai file name],  <code class="docutils literal notranslate"><span class="pre">unit</span></code> (str) [i.e. “q_nm^-1”, “q_A^-1”, “2th_deg”, “2th_rad”, “r_mm” or “r_pixel”], <code class="docutils literal notranslate"><span class="pre">diff_%i</span></code> ([[float, float], …, [float, float]]) [i.e. “%i” goes from 1 to <code class="docutils literal notranslate"><span class="pre">nrdiffs</span></code>], <code class="docutils literal notranslate"><span class="pre">radial_range_%i</span></code> ([float, float]) [i.e. “%i” goes from 1 to <code class="docutils literal notranslate"><span class="pre">nrdiffs</span></code>], <code class="docutils literal notranslate"><span class="pre">azimuth_range_%i</span></code> ([float, float]) [i.e. “%i” goes from 1 to <code class="docutils literal notranslate"><span class="pre">nrdiffs</span></code>], <code class="docutils literal notranslate"><span class="pre">peaks_%i</span></code> ([[float, …, float], [float, …, float]]) [i.e. “%i” goes from 1 to <code class="docutils literal notranslate"><span class="pre">nrdiffs</span></code> and it contains peak positions and  peak values lists]</p>
 </section>
 
 
@@ -135,7 +137,7 @@
         <li class="right" >
           <a href="parameters.html" title="Parameters Tool"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.91.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.92.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >GUI User Guide</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Specialized Tools</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Diffractogram Tool</a></li> 

@@ -21,6 +21,11 @@ The **configuration** of the tool can be set with a JSON dictionary passed in th
 .. code-block:: console
 
    lavue -u linecut --tool-configuration \{\"cuts_number\":2,\"x_coordinates\":\"y-pixels\",\"all_cuts\":true}
+
+A JSON dictionary with the **tool results** is passed to the **LavueController** or/and to **user functions plugins**. It contains the following keys:
+
+``tool`` : "linecut", ``imagename`` (string), ``timestamp`` (float), ``unit`` (str) [i.e. "point", "x-pixel" or "y-pixel"], ``nrlinecuts`` (int), ``linecut_%i`` ([[float, float], ..., [float, float]]) [i.e. "%i" goes from 1 to ``nrlinecuts``]
+
 .. |br| raw:: html
 
      <br>

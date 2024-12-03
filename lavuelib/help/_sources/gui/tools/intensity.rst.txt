@@ -21,6 +21,11 @@ e.g.
 
    lavue -u intensity -s test --tool-configuration \{\"cross_hair\":false,\"position\":[112,125.5],\"scale\":[2,3]\} --start
 
+A JSON dictionary with the **tool results** is passed to the **LavueController** or/and to **user functions plugins**. It contains the following keys:
+
+``tool`` : "intensity", ``imagename`` (string), ``timestamp`` (float), ``pixel`` ([float, float]), ``scaled_coordiantes`` ([float, float]), ``coordiantes_units`` ([str, str]), ``intensity_scaling`` (str) [i.e. "log", "linear" or "sqrt"]
+
 .. |br| raw:: html
 
      <br>
+
