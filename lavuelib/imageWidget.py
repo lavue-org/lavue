@@ -28,6 +28,7 @@
 
 from .qtuic import uic
 import pyqtgraph as _pg
+import numpy as np
 from pyqtgraph import QtCore
 
 try:
@@ -95,7 +96,7 @@ class ImageWidget(QtWidgets.QWidget):
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) apply tips changed signal
     applyTipsChanged = QtCore.pyqtSignal(int)
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`)
-    #         mouse image position changed signal
+    #:         mouse image position changed signal
     mouseImagePositionChanged = QtCore.pyqtSignal()
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) mouse double clicked
     mouseImageDoubleClicked = QtCore.pyqtSignal(float, float)
@@ -236,10 +237,14 @@ class ImageWidget(QtWidgets.QWidget):
         self.__userplot.getViewBox().menu.ctrl[1].autoPanCheck.hide()
         self.__userplot.getViewBox().menu.ctrl[1].visibleOnlyCheck.hide()
         self.__userplot.getViewBox().menu.ctrl[1].label.hide()
-        self.__usercurve = self.oneduserplot()
-        self.__usercurve.setPen(_pg.mkColor('g'))
-        self.__usercurve.hide()
-        self.__usercurve.setVisible(False)
+
+        self.__usercurves = [self.oneduserplot()]
+        self.__usercurves[0].setPen(_pg.mkColor('g'))
+        self.__usercurves[0].hide()
+        self.__usercurves[0].setVisible(False)
+
+        #: (:obj:`int`) current plot number
+        self.__nrplots = 0
 
         #: (:class:`pyqtgraph.PlotWidget`) right 1D plot widget
         self.__rightplot = memoExportDialog.MemoPlotWidget(self)
@@ -319,17 +324,79 @@ class ImageWidget(QtWidgets.QWidget):
                 try:
                     userplot = ufun(results)
                     if userplot:
+                        try:
+                            nrplots = max(int(userplot["nrplots"]), 0)
+                        except Exception:
+                            nrplots = 0
+
+                        if self.__nrplots != nrplots:
+                            while nrplots > len(self.__usercurves):
+                                self.__usercurves.append(self.oneduserplot())
+                            for i in range(nrplots):
+                                self.__usercurves[i].show()
+                            for i in range(nrplots, len(self.__usercurves)):
+                                self.__usercurves[i].hide()
+                            self.__nrplots = nrplots
+
                         if "x" in userplot and "y" in userplot:
-                            self.__usercurve.setVisible(False)
-                            self.__usercurve.setData(
-                                x=userplot["x"], y=userplot["y"])
-                            self.__usercurve.setVisible(True)
+                            self.__usercurves[0].setVisible(False)
+                            xx = userplot["x"]
+                            yy = userplot["y"]
+                            if isinstance(yy, list) or \
+                                    isinstance(yy, np.ndarray):
+                                self.__usercurves[0].setData(x=xx, y=yy)
+                            self.__usercurves[0].setVisible(True)
                         elif "y" in userplot:
-                            self.__usercurve.setVisible(False)
-                            self.__usercurve.setData(y=userplot["y"])
-                            self.__usercurve.setVisible(True)
+                            self.__usercurves[0].setVisible(False)
+                            yy = userplot["y"]
+                            if isinstance(yy, list) or \
+                                    isinstance(yy, np.ndarray):
+                                self.__usercurves[0].setData(y=yy)
+                            self.__usercurves[0].setVisible(True)
                         else:
-                            self.__usercurve.setVisible(False)
+                            self.__usercurves[0].setVisible(False)
+                        if "color" in userplot:
+                            self.__usercurves[0].setPen(
+                                _pg.mkColor(userplot["color"]))
+                        if "hsvcolor" in userplot:
+                            self.__usercurves[0].setPen(
+                                _pg.hsvColor(userplot["hsvcolor"]))
+
+                        for i in range(nrplots):
+                            xilabel = "x_%s" % (i + 1)
+                            yilabel = "y_%s" % (i + 1)
+                            rgblabel = "color_%s" % (i + 1)
+                            hsvlabel = "hsvcolor_%s" % (i + 1)
+                            if xilabel in userplot and yilabel in userplot:
+                                self.__usercurves[i].setVisible(False)
+                                xx = userplot[xilabel]
+                                yy = userplot[yilabel]
+                                if isinstance(yy, list) or \
+                                        isinstance(yy, np.ndarray):
+                                    self.__usercurves[i].setData(x=xx, y=yy)
+                                if rgblabel in userplot:
+                                    self.__usercurves[i].setPen(
+                                        _pg.mkColor(userplot[rgblabel]))
+                                if hsvlabel in userplot:
+                                    self.__usercurves[i].setPen(
+                                        _pg.hsvColor(userplot[hsvlabel]))
+                                self.__usercurves[i].setVisible(True)
+                            elif "y" in userplot:
+                                self.__usercurves[i].setVisible(False)
+                                yy = userplot[yilabel]
+                                if isinstance(yy, list) or \
+                                        isinstance(yy, np.ndarray):
+                                    self.__usercurves[i].setData(y=yy)
+                                if rgblabel in userplot:
+                                    self.__usercurves[i].setPen(
+                                        _pg.mkColor(userplot[rgblabel]))
+                                if hsvlabel in userplot:
+                                    self.__usercurves[i].setPen(
+                                        _pg.hsvColor(userplot[hsvlabel]))
+                                self.__usercurves[i].setVisible(True)
+                            else:
+                                self.__usercurves[i].setVisible(False)
+
                         pars = {"title": "", "bottom": "", "left": ""}
                         if "title" in userplot:
                             pars["title"] = userplot["title"]
@@ -339,12 +406,14 @@ class ImageWidget(QtWidgets.QWidget):
                             pars["left"] = userplot["left"]
                         self.__userplot.setLabels(**pars)
                     else:
-                        # self.__usercurve.setData()
-                        self.__usercurve.setVisible(False)
+                        for ucr in self.__usercurves:
+                            ucr.setVisible(False)
+                        self.__nrplots = 0
 
                 except Exception as e:
-                    self.__usercurve.setVisible(False)
-                    # self.__usercurve.setData()
+                    for ucr in self.__usercurves:
+                        ucr.setVisible(False)
+                    self.__nrplots = 0
                     import traceback
                     value = traceback.format_exc()
                     messageBox.MessageBox.warning(
@@ -1187,7 +1256,7 @@ class ImageWidget(QtWidgets.QWidget):
                        "ytext" : ylabel
                        "xunits" : xunits
                        "yunits" : yunits
-        :type record: :obj:`dict`<:obj:`str`, `any`>
+        :type record: :obj:`dict` < :obj:`str`, `any`>
         """
         self.__displaywidget.updateTicks(record)
         self.emitTCC()
@@ -1811,7 +1880,7 @@ class ImageWidget(QtWidgets.QWidget):
         """ provides intensity for current mouse position
 
         :returns: x position, y position, pixel intensity
-        :rtype: (float, float, float)
+        :rtype: (:obj:`float`, :obj:`float`, :obj:`float`)
         """
         return self.__displaywidget.currentIntensity()
 

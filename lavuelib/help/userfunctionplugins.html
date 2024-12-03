@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>User Function plugins &#8212; LaVue 2.91.1 documentation</title>
+    <title>User Function plugins &#8212; LaVue 2.92.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
     
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="filterplugins.html" title="Filter plugins"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">LaVue 2.91.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LaVue 2.92.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">User Function plugins</a></li> 
       </ul>
     </div>  
@@ -56,7 +56,8 @@
 <span id="id1"></span><h1>User Function plugins<a class="headerlink" href="#user-function-plugins" title="Permalink to this heading">¶</a></h1>
 <p>A <strong>User Function plugin</strong> can be defined by a <strong>class</strong> or a <strong>function</strong> in a python package.</p>
 <p>A <strong>user function plugin</strong> defined by a <strong>function</strong> is a simple python function with one argument: <cite>results</cite> which contain a python dictionary of <strong>ToolResults</strong>.</p>
-<p>This function <strong>returns</strong> a python dictionary with <cite>x</cite> and  <cite>y</cite> <em>list</em> data to plot  and optionally <cite>title</cite>, <cite>bottom</cite> and <cite>left</cite> <em>string</em> labels , e.g.</p>
+<p>This function <strong>returns</strong> a python dictionary with <cite>x</cite> and  <cite>y</cite> <em>(list)</em> data to plot , <cite>title</cite>, <cite>bottom</cite> and <cite>left</cite> <em>(string)</em> labels  <cite>color</cite> and <cite>hvscolor</cite> <em>(string)</em>  or <em>(int)</em> . For user plots with mutli-curves the python dictionary can contains <cite>nrplots</cite> <em>(int)</em> , <cite>x_%i</cite>,  <cite>y_%i</cite> <em>(list)</em> data to plot, <cite>color_%i</cite> and <cite>hvscolor_%i</cite> <em>(string)</em>  or <em>(int)</em> where <cite>%i</cite> runs from 1 to <cite>nrplots</cite>. If <cite>y_%i</cite> is set to <code class="docutils literal notranslate"><span class="pre">None</span></code> the previous plot will stay shown.
+, e.g.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">positive</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; plot positive function values on the LineCut tool</span>
 
@@ -102,17 +103,27 @@
 <span class="sd">        :rtype: :obj:`dict`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">userplot</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="c1"># print(&quot;RESULTS&quot;, results)</span>
-        <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;linecut_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__index</span>
-        <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
-            <span class="n">userplot</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                        <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">yy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__flat</span><span class="p">)</span>
-                              <span class="k">for</span> <span class="n">yy</span> <span class="ow">in</span> <span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">1</span><span class="p">]],</span>
-                        <span class="s2">&quot;title&quot;</span><span class="p">:</span>
-                        <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> flatten at &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__flat</span><span class="p">)}</span>
-            <span class="k">if</span> <span class="s2">&quot;unit&quot;</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
-                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;bottom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span>
-                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;intencity&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;tool&quot;</span> <span class="ow">in</span> <span class="n">results</span> <span class="ow">and</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;tool&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;linecut&quot;</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">nrplots</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;nrlinecuts&quot;</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">nrplots</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;nrplots&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nrplots</span>
+        <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Linecuts flatten at &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__flat</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrplots</span><span class="p">):</span>
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s2">&quot;x_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;y_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;linecut_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">cllabel</span> <span class="o">=</span> <span class="s2">&quot;hsvcolor_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                <span class="n">userplot</span><span class="p">[</span><span class="n">xlabel</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">userplot</span><span class="p">[</span><span class="n">ylabel</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">yy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__flat</span><span class="p">)</span>
+                                    <span class="k">for</span> <span class="n">yy</span> <span class="ow">in</span> <span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="n">userplot</span><span class="p">[</span><span class="n">cllabel</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">nrplots</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;unit&quot;</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;bottom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span>
+            <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;intensity&quot;</span>
         <span class="k">return</span> <span class="n">userplot</span>
 </pre></div>
 </div>
@@ -223,7 +234,7 @@
         <li class="right" >
           <a href="filterplugins.html" title="Filter plugins"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">LaVue 2.91.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LaVue 2.92.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">User Function plugins</a></li> 
       </ul>
     </div>

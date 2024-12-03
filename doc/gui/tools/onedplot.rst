@@ -26,6 +26,11 @@ e.g.
 
    lavue -u 1d-plot -s tangoattr\;tangoattr -c aspectro\;fspecto --tool-configuration \{\"rows_to_plot\":\"0,1\",\"1d_stretch\":1000,\"labels\":\[\"sample\ 1\"\,\"water\"]\} --start
 
+A JSON dictionary with the **tool results** is passed to the **LavueController** or/and to **user functions plugins**. It contains the following keys:
+
+``tool`` : "1d-plot", ``imagename`` (string), ``timestamp`` (float), ``nrplots`` (int), ``onedplot_%i`` ([[float, float], ..., [float, float]]) [i.e. "%i" goes from 1 to ``nrplots``]
+
 .. |br| raw:: html
 
      <br>
+

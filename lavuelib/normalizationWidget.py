@@ -47,6 +47,7 @@ class NormalizationWidget(QtWidgets.QWidget):
     Define bkg image and subtract from displayed image.
     """
 
+    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) bf file selected signal
     bfFileSelected = QtCore.pyqtSignal(str)
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) use current image signal
     useCurrentImageAsBF = QtCore.pyqtSignal()

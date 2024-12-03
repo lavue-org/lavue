@@ -39,6 +39,10 @@ e.g.
 
    lavue -u diffractogram -s test --tool-configuration \{\"calibration\":\"test/images/eiger4n_al203_13.45kev.poni\",\"diff_number\":2,\"diff_ranges\":[[10,20,0,10],[-5,5,5,15]],\"diff_units\":\"r\ [mm]\",\"buffering\":true,\"buffer_size\":512\} --start
 
+A JSON dictionary with the **tool results** is passed to the **LavueController** or/and to **user functions plugins**. It contains the following keys:
+
+``tool`` : "diffractogram", ``imagename`` (string), ``timestamp`` (float), ``nrdiffs`` (int), ``calibration`` (str) [i.e a pyfai file name],  ``unit`` (str) [i.e. "q_nm^-1", "q_A^-1", "2th_deg", "2th_rad", "r_mm" or "r_pixel"], ``diff_%i`` ([[float, float], ..., [float, float]]) [i.e. "%i" goes from 1 to ``nrdiffs``], ``radial_range_%i`` ([float, float]) [i.e. "%i" goes from 1 to ``nrdiffs``], ``azimuth_range_%i`` ([float, float]) [i.e. "%i" goes from 1 to ``nrdiffs``], ``peaks_%i`` ([[float, ..., float], [float, ..., float]]) [i.e. "%i" goes from 1 to ``nrdiffs`` and it contains peak positions and  peak values lists]
+
 .. |br| raw:: html
 
      <br>

@@ -59,7 +59,7 @@ class LineCut(object):
                         "title": label}
             if "unit" in results:
                 userplot["bottom"] = results["unit"]
-                userplot["left"] = "intencity"
+                userplot["left"] = "intensity"
         return userplot
 
 
@@ -91,16 +91,28 @@ class LineCutFlat(object):
         """
         userplot = {}
         # print("RESULTS", results)
-        label = "linecut_%s" % self.__index
-        if label in results:
-            userplot = {"x": results[label][0],
-                        "y": [min(yy, self.__flat)
-                              for yy in results[label][1]],
-                        "title":
-                        "%s flatten at '%s'" % (label, self.__flat)}
+        if "tool" in results and results["tool"] == "linecut":
+            try:
+                nrplots = int(results["nrlinecuts"])
+            except Exception:
+                nrplots = 0
+            userplot["nrplots"] = nrplots
+            userplot["title"] = "Linecuts flatten at '%s'" % (self.__flat)
+
+            for i in range(nrplots):
+                xlabel = "x_%s" % (i + 1)
+                ylabel = "y_%s" % (i + 1)
+                label = "linecut_%s" % (i + 1)
+                cllabel = "hsvcolor_%s" % (i + 1)
+                if label in results:
+                    userplot[xlabel] = results[label][0]
+                    userplot[ylabel] = [min(yy, self.__flat)
+                                        for yy in results[label][1]]
+                    userplot[cllabel] = i/float(nrplots)
             if "unit" in results:
                 userplot["bottom"] = results["unit"]
-                userplot["left"] = "intencity"
+                userplot["left"] = "intensity"
+        # print("USERPLOT", userplot)
         return userplot
 
 
