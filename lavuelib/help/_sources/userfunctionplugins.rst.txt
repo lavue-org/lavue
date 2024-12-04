@@ -150,6 +150,8 @@ or
 
 .. code-block:: python
 
+    import json
+
 
     class LineCut(object):
 
@@ -203,6 +205,6 @@ or
 		    userplot["bottom"] = results["unit"]
 		    userplot["left"] = "intensity"
 	    return userplot
-	    
-	    
+
+
 To configure user functions see :ref:`user-function-plugins-settings`.
