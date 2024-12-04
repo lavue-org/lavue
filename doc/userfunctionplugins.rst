@@ -144,6 +144,65 @@ or
 		    "title": "DiffPDF: %s with %s" % (label, self.__configfile)
 		}
 	    return userplot
-    
+
+
+or
+
+.. code-block:: python
+
+
+    class LineCut(object):
+
+	""" LineCut selection"""
+
+	def __init__(self, configuration=None):
+	    """ constructor
+
+	    :param configuration: JSON list with horizontal gap pixels to add
+	    :type configuration: :obj:`str`
+	    """
+	    try:
+		#: (:obj: `int`) line cut index
+		self.__index = int(json.loads(configuration)[0])
+	    except Exception:
+		self.__index = 1
+	    try:
+		#: (:obj: `int`) buffer length
+		self.__buflen = max(int(json.loads(configuration)[1]), 1)
+	    except Exception:
+		self.__buflen = 20
+
+	    #: (:obj: `list`) buffer
+	    self.__buffer = []
+
+	def __call__(self, results):
+	    """ call method
+
+	    :param results: dictionary with tool results
+	    :type results: :obj:`dict`
+	    :returns: dictionary with user plot data
+	    :rtype: :obj:`dict`
+	    """
+	    userplot = {}
+	    label = "linecut_%s" % self.__index
+	    if label in results:
+		if len(self.__buffer) >= self.__buflen:
+		    self.__buffer.pop(0)
+		self.__buffer.append([results[label][0], results[label][1]])
+		userplot["nrplots"] = len(self.__buffer)
+		for i, xy in enumerate(self.__buffer):
+		    userplot["x_%s" % (i + 1)] = xy[0]
+		    userplot["y_%s" % (i + 1)] = xy[1]
+		    if i != len(self.__buffer) - 1:
+			userplot["color_%s" % (i + 1)] = i/float(self.__buflen)
+		    else:
+			userplot["color_%s" % (i + 1)] = 'r'
+
+		userplot["title"] = "History of %s" % label
+		if "unit" in results:
+		    userplot["bottom"] = results["unit"]
+		    userplot["left"] = "intensity"
+	    return userplot
 	    
-To configure filters see :ref:`user-function-plugins-settings`.
+	    
+To configure user functions see :ref:`user-function-plugins-settings`.
