@@ -778,7 +778,7 @@ class LiveViewer(QtWidgets.QDialog):
             # self.__ui.helpPushButton.setText("")
         self.__imagewg.roiCoordsChanged.connect(self._calcUpdateStatsSec)
         self.__imagewg.currentToolChanged.connect(self._setToolState)
-        # connecting signals from source widget:
+        self.__imagewg.stopSignal.connect(self._stopImageSources)
 
         # gradient selector
         self.__channelwg.rgbChanged.connect(self._setRGBState)
@@ -3063,6 +3063,14 @@ class LiveViewer(QtWidgets.QDialog):
         """ calcuates statistics without  sending security stream
         """
         self.__calcUpdateStats(secstream=False)
+
+    @debugmethod
+    @QtCore.pyqtSlot()
+    def _stopImageSources(self):
+        """ stop image source
+        """
+        if self.__sourcewg.isConnected():
+            self.__sourcewg.toggleServerConnection()
 
     # @debugmethod
     def __calcUpdateStats(self, secstream=True):

@@ -81,6 +81,75 @@ class LineCut(object):
         return userplot
 
 
+class LineCutHistory(object):
+
+    """ LineCut selection"""
+
+    def __init__(self, configuration=None):
+        """ constructor
+
+        :param configuration: JSON list with horizontal gap pixels to add
+        :type configuration: :obj:`str`
+        """
+        try:
+            #: (:obj: `int`) line cut index
+            self.__index = int(json.loads(configuration)[0])
+        except Exception:
+            self.__index = 1
+        try:
+            #: (:obj: `int`) history length
+            self.__maxhislen = max(int(json.loads(configuration)[1]), 1)
+        except Exception:
+            self.__maxhislen = 20
+
+        #: (:obj: `int`) history len
+        self.__hislen = 0
+
+        #: (:obj: `int`) history index
+        self.__bindex = -1
+
+    def __call__(self, results):
+        """ call method
+
+        :param results: dictionary with tool results
+        :type results: :obj:`dict`
+        :returns: dictionary with user plot data
+        :rtype: :obj:`dict`
+        """
+        userplot = {}
+        label = "linecut_%s" % self.__index
+        if label in results:
+            xx = results[label][0]
+            yy = results[label][1]
+
+            self.__bindex += 1
+            self.__bindex = self.__bindex % self.__maxhislen
+            if self.__bindex >= self.__hislen:
+                self.__hislen += 1
+            userplot["nrplots"] = self.__hislen
+
+            for i in range(self.__hislen):
+                if i == self.__bindex:
+                    userplot["x_%s" % (i + 1)] = xx
+                    userplot["y_%s" % (i + 1)] = yy
+                else:
+                    userplot["x_%s" % (i + 1)] = None
+                    userplot["y_%s" % (i + 1)] = None
+
+            for i in range(self.__maxhislen - self.__hislen,
+                           self.__maxhislen - 1):
+                uid = ((i - self.__maxhislen + self.__bindex + 1)
+                       % self.__maxhislen) + 1
+                userplot["color_%s" % uid] = i/float(self.__maxhislen)
+            userplot["color_%s" % (self.__bindex + 1)] = 'r'
+
+            userplot["title"] = "History of %s" % label
+            if "unit" in results:
+                userplot["bottom"] = results["unit"]
+                userplot["left"] = "intensity"
+        return userplot
+
+
 class LineCutFlat(object):
 
     """Flatten line cut"""

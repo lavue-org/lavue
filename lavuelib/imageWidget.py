@@ -114,6 +114,8 @@ class ImageWidget(QtWidgets.QWidget):
     colorsChanged = QtCore.pyqtSignal(str)
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) tool configuration changed signal
     toolConfigurationChanged = QtCore.pyqtSignal()
+    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) stop signal
+    stopSignal = QtCore.pyqtSignal()
 
     def __init__(self, parent=None, tooltypes=None, settings=None):
         """ constructor
@@ -420,6 +422,7 @@ class ImageWidget(QtWidgets.QWidget):
                         self, "lavue: problems in user function",
                         "%s" % str(e),
                         "%s" % value)
+                    self.stopSignal.emit()
                 break
 
     # @debugmethod

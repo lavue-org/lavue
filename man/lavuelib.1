@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "LAVUELIB" "1" "Dec 04, 2024" "2.92" "LaVue"
+.TH "LAVUELIB" "1" "Dec 05, 2024" "2.92" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .sp
@@ -2453,7 +2453,73 @@ class DiffPDF(object):
 .UNINDENT
 .UNINDENT
 .sp
-To configure filters see \fI\%User Functions settings\fP\&.
+or
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+import json
+
+
+class LineCut(object):
+
+    \(dq\(dq\(dq LineCut selection\(dq\(dq\(dq
+
+    def __init__(self, configuration=None):
+        \(dq\(dq\(dq constructor
+
+        :param configuration: JSON list with horizontal gap pixels to add
+        :type configuration: :obj:\(gastr\(ga
+        \(dq\(dq\(dq
+        try:
+            #: (:obj: \(gaint\(ga) line cut index
+            self.__index = int(json.loads(configuration)[0])
+        except Exception:
+            self.__index = 1
+        try:
+            #: (:obj: \(gaint\(ga) buffer length
+            self.__buflen = max(int(json.loads(configuration)[1]), 1)
+        except Exception:
+            self.__buflen = 20
+
+        #: (:obj: \(galist\(ga) buffer
+        self.__buffer = []
+
+    def __call__(self, results):
+        \(dq\(dq\(dq call method
+
+        :param results: dictionary with tool results
+        :type results: :obj:\(gadict\(ga
+        :returns: dictionary with user plot data
+        :rtype: :obj:\(gadict\(ga
+        \(dq\(dq\(dq
+        userplot = {}
+        label = \(dqlinecut_%s\(dq % self.__index
+        if label in results:
+            if len(self.__buffer) >= self.__buflen:
+                self.__buffer.pop(0)
+            self.__buffer.append([results[label][0], results[label][1]])
+            userplot[\(dqnrplots\(dq] = len(self.__buffer)
+            for i, xy in enumerate(self.__buffer):
+                userplot[\(dqx_%s\(dq % (i + 1)] = xy[0]
+                userplot[\(dqy_%s\(dq % (i + 1)] = xy[1]
+                if i != len(self.__buffer) \- 1:
+                    userplot[\(dqcolor_%s\(dq % (i + 1)] = i/float(self.__buflen)
+                else:
+                    userplot[\(dqcolor_%s\(dq % (i + 1)] = \(aqr\(aq
+
+            userplot[\(dqtitle\(dq] = \(dqHistory of %s\(dq % label
+            if \(dqunit\(dq in results:
+                userplot[\(dqbottom\(dq] = results[\(dqunit\(dq]
+                userplot[\(dqleft\(dq] = \(dqintensity\(dq
+        return userplot
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+To configure user functions see \fI\%User Functions settings\fP\&.
 .SH DEVELOPER GUIDE
 .SS API reference
 .SS lavuelib package
@@ -2552,6 +2618,20 @@ constructor
 Bases: \fI\%object\fP
 .sp
 Flatten line cut
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – JSON list with horizontal gap pixels to add
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  lavuelib.plugins.userfunctions.LineCutHistory(configuration=None)
+Bases: \fI\%object\fP
+.sp
+LineCut selection
 .sp
 constructor
 .INDENT 7.0
@@ -12254,6 +12334,11 @@ show door error
 .TP
 .B showTool(text)
 shows the current tool
+.UNINDENT
+.INDENT 7.0
+.TP
+.B stopSignal
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) stop signal
 .UNINDENT
 .INDENT 7.0
 .TP
