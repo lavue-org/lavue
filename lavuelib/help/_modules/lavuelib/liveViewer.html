@@ -825,7 +825,7 @@
             <span class="c1"># self.__ui.helpPushButton.setText(&quot;&quot;)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">roiCoordsChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_calcUpdateStatsSec</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">currentToolChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_setToolState</span><span class="p">)</span>
-        <span class="c1"># connecting signals from source widget:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__imagewg</span><span class="o">.</span><span class="n">stopSignal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_stopImageSources</span><span class="p">)</span>
 
         <span class="c1"># gradient selector</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__channelwg</span><span class="o">.</span><span class="n">rgbChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_setRGBState</span><span class="p">)</span>
@@ -3110,6 +3110,14 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; calcuates statistics without  sending security stream</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__calcUpdateStats</span><span class="p">(</span><span class="n">secstream</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="nd">@debugmethod</span>
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_stopImageSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; stop image source</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcewg</span><span class="o">.</span><span class="n">isConnected</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__sourcewg</span><span class="o">.</span><span class="n">toggleServerConnection</span><span class="p">()</span>
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__calcUpdateStats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">secstream</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
