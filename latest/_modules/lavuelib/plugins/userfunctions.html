@@ -128,6 +128,75 @@
         <span class="k">return</span> <span class="n">userplot</span></div>
 
 
+<div class="viewcode-block" id="LineCutHistory"><a class="viewcode-back" href="../../../develop/lavuelib/lavuelib.plugins.html#lavuelib.plugins.userfunctions.LineCutHistory">[docs]</a><span class="k">class</span> <span class="nc">LineCutHistory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; LineCut selection&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param configuration: JSON list with horizontal gap pixels to add</span>
+<span class="sd">        :type configuration: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1">#: (:obj: `int`) line cut index</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__index</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1">#: (:obj: `int`) history length</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__maxhislen</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">)[</span><span class="mi">1</span><span class="p">]),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__maxhislen</span> <span class="o">=</span> <span class="mi">20</span>
+
+        <span class="c1">#: (:obj: `int`) history len</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__hislen</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1">#: (:obj: `int`) history index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__bindex</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; call method</span>
+
+<span class="sd">        :param results: dictionary with tool results</span>
+<span class="sd">        :type results: :obj:`dict`</span>
+<span class="sd">        :returns: dictionary with user plot data</span>
+<span class="sd">        :rtype: :obj:`dict`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">userplot</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;linecut_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__index</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="n">xx</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">yy</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">__bindex</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__bindex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bindex</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxhislen</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bindex</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hislen</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__hislen</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;nrplots&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hislen</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__hislen</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bindex</span><span class="p">:</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;x_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">xx</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;y_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">yy</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;x_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;y_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__maxhislen</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hislen</span><span class="p">,</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">__maxhislen</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">uid</span> <span class="o">=</span> <span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxhislen</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bindex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                       <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxhislen</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;color_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">uid</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__maxhislen</span><span class="p">)</span>
+            <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;color_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__bindex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span>
+
+            <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;History of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">label</span>
+            <span class="k">if</span> <span class="s2">&quot;unit&quot;</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;bottom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span>
+                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;intensity&quot;</span>
+        <span class="k">return</span> <span class="n">userplot</span></div>
+
+
 <div class="viewcode-block" id="LineCutFlat"><a class="viewcode-back" href="../../../develop/lavuelib/lavuelib.plugins.html#lavuelib.plugins.userfunctions.LineCutFlat">[docs]</a><span class="k">class</span> <span class="nc">LineCutFlat</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Flatten line cut&quot;&quot;&quot;</span>
@@ -219,6 +288,7 @@
       <li><a class="reference external" href="../../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../../index/../../v2.92.2/index.html">v2.92.2</a></li>
       <li><a class="reference external" href="../../../index/../../v2.92.1/index.html">v2.92.1</a></li>
       <li><a class="reference external" href="../../../index/../../v2.92.0/index.html">v2.92.0</a></li>
       <li><a class="reference external" href="../../../index/../../v2.91.1/index.html">v2.91.1</a></li>
