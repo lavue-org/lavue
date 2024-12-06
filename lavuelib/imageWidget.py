@@ -156,6 +156,8 @@ class ImageWidget(QtWidgets.QWidget):
         self.__lasttext = ""
         #: (obj`str`) roi labels
         self.roilabels = ""
+        #: (obj`str`) roi type
+        self.roitype = "rectangle"
         #: (:class:`lavuelib.toolWidget.BaseToolWidget`) current tool
         self.__currenttool = None
 
@@ -850,21 +852,28 @@ class ImageWidget(QtWidgets.QWidget):
         self.scalesChanged.emit()
 
     @QtCore.pyqtSlot(int)
-    def updateROIs(self, rid, coords=None):
+    def updateROIs(self, rid, coords=None, types=None):
         """ update ROIs
 
         :param rid: roi id
         :type rid: :obj:`int`
         :param coords: roi coordinates
         :type coords: :obj:`list`
-                  < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
+        :      < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
+        :param types: roi types
+        :type types: :obj:`list` < [:obj:`str`] >
         """
         if self.__settings.labelrois:
             slabel = re.split(';|,| |\n', str(self.roilabels))
             slabel = [lb for lb in slabel if lb]
         else:
             slabel = []
-        self.__displaywidget.extension('rois').updateROIs(rid, coords, slabel)
+        types = list(self.__displaywidget.extension('rois').roiTypes() or [])
+        while len(types) < rid + 1:
+            types.append(self.roitype)
+        print("TYPES", types)
+        self.__displaywidget.extension('rois').updateROIs(
+            rid, coords, slabel, types)
         self.applyTipsChanged.emit(rid)
         self.roiCoordsChanged.emit()
         self.roiNumberChanged.emit(rid)

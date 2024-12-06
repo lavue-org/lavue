@@ -33,7 +33,7 @@ import json
 import time
 import logging
 import warnings
-from pyqtgraph.graphicsItems.ROI import ROI, LineROI, Handle
+from pyqtgraph.graphicsItems.ROI import ROI, LineROI, Handle, EllipseROI
 from pyqtgraph.graphicsItems.IsocurveItem import IsocurveItem
 
 _VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(".")[:3] \
@@ -292,9 +292,15 @@ class ROIExtension(DisplayExtension):
 
         #: (:obj:`int`) current roi id
         self.__current = 0
-        #: (:obj:`list` < [int, int, int, int] > )
+        #: (:obj:`list` <
+        #:      [ :obj:`int`, :obj:`int`, :obj:`int`, :obj:`int` ] >  or
+        #:     :obj:`list` < [:obj:`float`, :obj:`float`, :obj:`float`,
+        #:                    :obj:`float`, :obj:`float`] >)
         #: x1,y1,x2,y2 rois coordinates
         self.__coords = [[10, 10, 60, 60]]
+        #: (:obj:`list` < :obj:`str` > )
+        #: x1,y1,x2,y2 rois coordinates
+        self.__types = ["rectangle"]
         #: (:obj:`list` < (int, int, int) > ) list with roi colors
         self.__colors = []
 
@@ -341,28 +347,47 @@ class ROIExtension(DisplayExtension):
         """
         return "intensity"
 
-    def __addROI(self, coords=None, label=None):
+    def __addROI(self, coords=None, label=None, roitype="rectangle"):
         """ adds ROIs
 
         :param coords: roi coordinates
         :type coords: :obj:`list`
                  < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
+        :param roitype: roi type
+        :type roitype: :obj:`str`
         """
-        if not coords or not isinstance(coords, list) or len(coords) != 4:
-            pnt = 10 * len(self.__roi)
-            sz = 50
-            coords = [pnt, pnt, pnt + sz, pnt + sz]
-            spnt = _pg.Point(sz, sz)
-        else:
-            if not self._mainwidget.transformations()[0]:
-                pnt = _pg.Point(coords[0], coords[1])
-                spnt = _pg.Point(coords[2] - coords[0], coords[3] - coords[1])
+        if roitype == "ellipse":
+            if not coords or not isinstance(coords, list) or len(coords) != 4:
+                pnt = 50 + 10 * len(self.__roi)
+                sz = 50
+                coords = [pnt, pnt, sz, sz]
+                spnt = _pg.Point(sz, sz)
             else:
-                pnt = _pg.Point(coords[1], coords[0])
-                spnt = _pg.Point(coords[3] - coords[1], coords[2] - coords[0])
-        self.__roi.append(ROI(pnt, spnt))
-        self.__roi[-1].addScaleHandle([1, 1], [0, 0])
-        self.__roi[-1].addScaleHandle([0, 0], [1, 1])
+                if not self._mainwidget.transformations()[0]:
+                    pnt = _pg.Point(coords[0], coords[1])
+                    spnt = _pg.Point(coords[2], coords[3])
+                else:
+                    pnt = _pg.Point(coords[1], coords[0])
+                    spnt = _pg.Point(coords[3], coords[2])
+            self.__roi.append(EllipseROI(pnt, spnt))
+        else:
+            if not coords or not isinstance(coords, list) or len(coords) != 4:
+                pnt = 10 * len(self.__roi)
+                sz = 50
+                coords = [pnt, pnt, pnt + sz, pnt + sz]
+                spnt = _pg.Point(sz, sz)
+            else:
+                if not self._mainwidget.transformations()[0]:
+                    pnt = _pg.Point(coords[0], coords[1])
+                    spnt = _pg.Point(coords[2] - coords[0],
+                                     coords[3] - coords[1])
+                else:
+                    pnt = _pg.Point(coords[1], coords[0])
+                    spnt = _pg.Point(coords[3] - coords[1],
+                                     coords[2] - coords[0])
+            self.__roi.append(ROI(pnt, spnt))
+            self.__roi[-1].addScaleHandle([1, 1], [0, 0])
+            self.__roi[-1].addScaleHandle([0, 0], [1, 1])
         if label:
             text = _pg.TextItem("%s" % label, anchor=(1, 1))
         else:
@@ -372,6 +397,7 @@ class ROIExtension(DisplayExtension):
         self._mainwidget.viewbox().addItem(self.__roi[-1])
 
         self.__coords.append(coords)
+        self.__types.append(roitype)
         self.setColors()
 
     def __removeROI(self):
@@ -383,6 +409,7 @@ class ROIExtension(DisplayExtension):
         roitext.hide()
         self._mainwidget.viewbox().removeItem(roi)
         self.__coords.pop()
+        self.__types.pop()
 
     def _getROI(self, rid=-1):
         """ get the given or the last ROI
@@ -408,27 +435,57 @@ class ROIExtension(DisplayExtension):
             for roi in self.__roi:
                 roi.hide()
 
-    def __addROICoords(self, coords):
+    def __addROICoords(self, coords, types):
         """ adds ROI coorinates
 
         :param coords: roi coordinates
         :type coords: :obj:`list`
                 < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
+        :param types: roi types
+        :type types: :obj:`list` < [:obj:`str`] >
         """
         if coords:
             for i, crd in enumerate(self.__roi):
                 if i < len(coords):
+                    roitype = "rectangle"
+                    if types and i < len(types):
+                        roitype = types[i]
+                    roiremove = False
+                    if isinstance(crd, EllipseROI) and roitype != "ellipse":
+                        roiremove = True
+                    if not isinstance(crd, EllipseROI) and \
+                            roitype == "ellipse":
+                        roiremove = True
+                    if roiremove:
+                        while self._getROI(max(i, 0)) is not None:
+                            self.__currentroimapper.removeMappings(
+                                self._getROI())
+                            self.__roiregionmapper.removeMappings(
+                                self._getROI())
+                            self.__removeROI()
+                        break
                     self.__coords[i] = coords[i]
-                    if not self._mainwidget.transformations()[0]:
-                        crd.setPos([coords[i][0], coords[i][1]])
-                        crd.setSize(
-                            [coords[i][2] - coords[i][0],
-                             coords[i][3] - coords[i][1]])
+                    while len(self.__types) < i + 1:
+                        self.__types.append("rectangle")
+                    self.__types[i] = roitype
+                    if roitype == "ellipse":
+                        if not self._mainwidget.transformations()[0]:
+                            crd.setPos([coords[i][0], coords[i][1]])
+                            crd.setSize([coords[i][2], coords[i][3]])
+                        else:
+                            crd.setPos([coords[i][1], coords[i][0]])
+                            crd.setSize([coords[i][3], coords[i][2]])
                     else:
-                        crd.setPos([coords[i][1], coords[i][0]])
-                        crd.setSize(
-                            [coords[i][3] - coords[i][1],
-                             coords[i][2] - coords[i][0]])
+                        if not self._mainwidget.transformations()[0]:
+                            crd.setPos([coords[i][0], coords[i][1]])
+                            crd.setSize(
+                                [coords[i][2] - coords[i][0],
+                                 coords[i][3] - coords[i][1]])
+                        else:
+                            crd.setPos([coords[i][1], coords[i][0]])
+                            crd.setSize(
+                                [coords[i][3] - coords[i][1],
+                                 coords[i][2] - coords[i][0]])
 
     def __calcROIsum(self, rid):
         """calculates the current roi sum
@@ -443,40 +500,51 @@ class ROIExtension(DisplayExtension):
             if image is not None:
                 if self._enabled:
                     if rid >= 0:
-                        roicoords = self.__coords
-                        if not self._mainwidget.transformations()[0]:
-                            rcrds = list(roicoords[rid])
-                            if self._mainwidget.rangeWindowEnabled():
-                                tx, ty = self._mainwidget.descaledxy(
-                                    rcrds[0], rcrds[1], useraxes=False)
-                                if tx is not None:
-                                    tx2, ty2 = self._mainwidget.descaledxy(
-                                        rcrds[2], rcrds[3], useraxes=False)
-                                    rcrds = [tx, ty, tx2, ty2]
+                        roitype = "rectangle"
+                        if self.__types and rid < len(self.__types):
+                            roitype = self.__types[rid]
+                        if roitype == "rectangle":
+                            roicoords = self.__coords
+                            if not self._mainwidget.transformations()[0]:
+                                rcrds = list(roicoords[rid])
+                                if self._mainwidget.rangeWindowEnabled():
+                                    tx, ty = self._mainwidget.descaledxy(
+                                        rcrds[0], rcrds[1], useraxes=False)
+                                    if tx is not None:
+                                        tx2, ty2 = self._mainwidget.descaledxy(
+                                            rcrds[2], rcrds[3], useraxes=False)
+                                        rcrds = [tx, ty, tx2, ty2]
+                            else:
+                                rc = roicoords[rid]
+                                rcrds = [rc[1], rc[0], rc[3], rc[2]]
+                                if self._mainwidget.rangeWindowEnabled():
+                                    ty, tx = self._mainwidget.descaledxy(
+                                        rcrds[1], rcrds[0], useraxes=False)
+                                    if ty is not None:
+                                        ty2, tx2 = self._mainwidget.descaledxy(
+                                            rcrds[3], rcrds[2], useraxes=False)
+                                        rcrds = [tx, ty, tx2, ty2]
+                            for i in [0, 2]:
+                                if rcrds[i] > image.shape[0]:
+                                    rcrds[i] = image.shape[0]
+                                elif rcrds[i] < -i // 2:
+                                    rcrds[i] = -i // 2
+                            for i in [1, 3]:
+                                if rcrds[i] > image.shape[1]:
+                                    rcrds[i] = image.shape[1]
+                                elif rcrds[i] < - (i - 1) // 2:
+                                    rcrds[i] = - (i - 1) // 2
+                            roival = np.nansum(image[
+                                int(rcrds[0]):(int(rcrds[2]) + 1),
+                                int(rcrds[1]):(int(rcrds[3]) + 1)
+                            ])
                         else:
-                            rc = roicoords[rid]
-                            rcrds = [rc[1], rc[0], rc[3], rc[2]]
-                            if self._mainwidget.rangeWindowEnabled():
-                                ty, tx = self._mainwidget.descaledxy(
-                                    rcrds[1], rcrds[0], useraxes=False)
-                                if ty is not None:
-                                    ty2, tx2 = self._mainwidget.descaledxy(
-                                        rcrds[3], rcrds[2], useraxes=False)
-                                    rcrds = [tx, ty, tx2, ty2]
-                        for i in [0, 2]:
-                            if rcrds[i] > image.shape[0]:
-                                rcrds[i] = image.shape[0]
-                            elif rcrds[i] < -i // 2:
-                                rcrds[i] = -i // 2
-                        for i in [1, 3]:
-                            if rcrds[i] > image.shape[1]:
-                                rcrds[i] = image.shape[1]
-                            elif rcrds[i] < - (i - 1) // 2:
-                                rcrds[i] = - (i - 1) // 2
-                        roival = np.nansum(image[
-                            int(rcrds[0]):(int(rcrds[2]) + 1),
-                            int(rcrds[1]):(int(rcrds[3]) + 1)
-                        ])
+                            roival = np.nansum(
+                                self.__roi[rid].getArrayRegion(
+                                    self._mainwidget.rawData(),
+                                    self._mainwidget.image(),
+                                    axes=(0, 1)))
+                        # print("ROI", rid, roival, roival2, rcrds)
                     else:
                         roival = 0.
                 else:
@@ -516,23 +584,47 @@ class ROIExtension(DisplayExtension):
             rid = self.__current
             roi = self._getROI(rid)
             if roi is not None:
+                roitype = "rectangle"
+                if self.__types and rid < len(self.__types):
+                    roitype = self.__types[rid]
                 state = roi.state
-                rcrds = [
-                    state['pos'].x(),
-                    state['pos'].y(),
-                    state['pos'].x() + state['size'].x(),
-                    state['pos'].y() + state['size'].y()]
-                if not self._mainwidget.transformations()[0]:
-                    ptx1 = int(math.floor(rcrds[0]))
-                    pty1 = int(math.floor(rcrds[1]))
-                    ptx2 = int(math.floor(rcrds[2]))
-                    pty2 = int(math.floor(rcrds[3]))
+                print("STATE", state)
+                if roitype == "ellipse":
+                    rcrds = [
+                        state['pos'].x(),
+                        state['pos'].y(),
+                        state['size'].x(),
+                        state['size'].y(),
+                        state['angle']]
+                    if not self._mainwidget.transformations()[0]:
+                        ptx1 = float(math.floor(rcrds[0]))
+                        pty1 = float(math.floor(rcrds[1]))
+                        ptx2 = float(math.floor(rcrds[2]))
+                        pty2 = float(math.floor(rcrds[3]))
+                    else:
+                        pty1 = float(math.floor(rcrds[0]))
+                        ptx1 = float(math.floor(rcrds[1]))
+                        pty2 = float(math.floor(rcrds[2]))
+                        ptx2 = float(math.floor(rcrds[3]))
+                    crd = [ptx1, pty1, ptx2, pty2]
                 else:
-                    pty1 = int(math.floor(rcrds[0]))
-                    ptx1 = int(math.floor(rcrds[1]))
-                    pty2 = int(math.floor(rcrds[2]))
-                    ptx2 = int(math.floor(rcrds[3]))
-                crd = [ptx1, pty1, ptx2, pty2]
+                    rcrds = [
+                        state['pos'].x(),
+                        state['pos'].y(),
+                        state['pos'].x() + state['size'].x(),
+                        state['pos'].y() + state['size'].y()]
+                # ?? int for none rectangle ??
+                    if not self._mainwidget.transformations()[0]:
+                        ptx1 = int(math.floor(rcrds[0]))
+                        pty1 = int(math.floor(rcrds[1]))
+                        ptx2 = int(math.floor(rcrds[2]))
+                        pty2 = int(math.floor(rcrds[3]))
+                    else:
+                        pty1 = int(math.floor(rcrds[0]))
+                        ptx1 = int(math.floor(rcrds[1]))
+                        pty2 = int(math.floor(rcrds[2]))
+                        ptx2 = int(math.floor(rcrds[3]))
+                    crd = [ptx1, pty1, ptx2, pty2]
                 if self.__coords[rid] != crd:
                     self.__coords[rid] = crd
                     self.roiCoordsChanged.emit()
@@ -571,7 +663,7 @@ class ROIExtension(DisplayExtension):
             text.setParentItem(self.__roi[ri])
         self.setColors()
 
-    def updateROIs(self, rid, coords, roilabels=[]):
+    def updateROIs(self, rid, coords, roilabels=[], types=None):
         """ update ROIs
 
         :param rid: roi id
@@ -581,8 +673,10 @@ class ROIExtension(DisplayExtension):
                  < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
         :param roilabels: roi labels i.e. aliases
         :type roilabels: :obj:`list`< :obj:`str` >
+        :param types: roi types
+        :type types: :obj:`list` < [:obj:`str`] >
         """
-        self.__addROICoords(coords)
+        self.__addROICoords(coords, types)
         while rid > len(self.__roi):
             label = None
             if roilabels and len(roilabels) > len(self.__roi):
@@ -590,7 +684,10 @@ class ROIExtension(DisplayExtension):
             crd = None
             if coords and len(coords) >= len(self.__roi):
                 crd = coords[len(self.__roi)]
-            self.__addROI(crd, label)
+            rtype = "rectangle"
+            if types and len(types) >= len(self.__roi):
+                rtype = types[len(self.__roi)]
+            self.__addROI(crd, label, rtype)
             self._getROI().sigHoverEvent.connect(self.__currentroimapper.map)
             self._getROI().sigRegionChanged.connect(self.__roiregionmapper.map)
             self.__currentroimapper.setMapping(
@@ -653,6 +750,14 @@ class ROIExtension(DisplayExtension):
                < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
         """
         return self.__coords
+
+    def roiTypes(self):
+        """ provides rois types
+
+        :return: rois types
+        :rtype: :obj:`list` < :obj:`str >
+        """
+        return self.__types
 
     def isROIsEnabled(self):
         """ provides flag rois enabled
