@@ -53,9 +53,9 @@ class HandleWithSignals(Handle):
         """ constructor
 
         :param pos: position of handle
-        :type pos: [float, float]
+        :type pos: [:obj:`float`, :obj:`float`]
         :param center: center of handle
-        :type center: [float, float]
+        :type center: [:obj:`float`, :obj:`float`]
         :param parent: roi object
         :type parent: :class:`pyqtgraph.graphicsItems.ROI.ROI`
         """
@@ -86,9 +86,9 @@ class SimpleLineROI(LineROI):
         """ constructor
 
         :param pos1: start position
-        :type pos1: [float, float]
+        :type pos1: [:obj:`float`, :obj:`float`]
         :param pos2: end position
-        :type pos2: [float, float]
+        :type pos2: [:obj:`float`, :obj:`float`]
         :param args: dictionary with ROI parameters
         :type args: :obj:`dict`<:obj:`str`, :obj:`any`>
         """
@@ -236,36 +236,36 @@ class DisplayExtension(QtCore.QObject):
         """  sets vLine and hLine positions
 
         :param x: x coordinate
-        :type x: float
+        :type x: :obj:`float`
         :param y: y coordinate
-        :type y: float
+        :type y: :obj:`float`
         """
 
     def mouse_doubleclick(self, x, y, locked):
         """  sets vLine and hLine positions
 
         :param x: x coordinate
-        :type x: float
+        :type x: :obj:`float`
         :param y: y coordinate
-        :type y: float
+        :type y: :obj:`float`
         :param locked: double click lock
-        :type locked: bool
+        :type locked: :obj:`bool`
         """
 
     def mouse_click(self, x, y):
         """  sets vLine and hLine positions
 
         :param x: x coordinate
-        :type x: float
+        :type x: :obj:`float`
         :param y: y coordinate
-        :type y: float
+        :type y: :obj:`float`
         """
 
     def scalingLabel(self):
         """ provides scaling label
 
         :returns:  scaling label
-        :rtype: str
+        :rtype: :obj:`str`
         """
 
 
@@ -343,7 +343,7 @@ class ROIExtension(DisplayExtension):
         """ provides scaling label
 
         :returns:  scaling label
-        :rtype: str
+        :rtype: :obj:`str`
         """
         return "intensity"
 
@@ -501,7 +501,7 @@ class ROIExtension(DisplayExtension):
         :param rid: roi id
         :type rid: :obj:`int`
         :returns: sum roi value, roi id
-        :rtype: (float, int)
+        :rtype: (:obj:`float`, :obj:`int`)
         """
         if rid >= 0:
             image = self._mainwidget.rawData()
@@ -566,7 +566,7 @@ class ROIExtension(DisplayExtension):
         """calculates the current roi sum
 
         :returns: sum roi value, roi id
-        :rtype: (float, int)
+        :rtype: (:obj:`float`, :obj:`int`)
         """
         if self._enabled and self._getROI() is not None:
             rid = self.__current
@@ -577,7 +577,7 @@ class ROIExtension(DisplayExtension):
         """ calculates all roi sums
 
         :returns: sum roi value, roi id
-        :rtype: :obj:list < float >
+        :rtype: :obj:`list` < :obj:`float` >
         """
         if self._mainwidget.rawData() is None:
             return None
@@ -658,7 +658,7 @@ class ROIExtension(DisplayExtension):
         """ update ROIs
 
         :param roilabels: roi labels i.e. aliases
-        :type roilabels: :obj:`list`< :obj:`str` >
+        :type roilabels: :obj:`list` < :obj:`str` >
         """
         for ri, roi in enumerate(self.__roi):
             if len(roilabels) > ri:
@@ -764,7 +764,7 @@ class ROIExtension(DisplayExtension):
         """ provides rois types
 
         :return: rois types
-        :rtype: :obj:`list` < :obj:`str >
+        :rtype: :obj:`list` < :obj:`str` >
         """
         return self.__types
 
@@ -1135,7 +1135,7 @@ class MeshExtension(DisplayExtension):
         """ provides scaling label
 
         :returns:  scaling label
-        :rtype: str
+        :rtype: :obj:`str`
         """
         return "intensity"
 
@@ -1603,9 +1603,9 @@ class LockerExtension(DisplayExtension):
         """  sets vLine and hLine positions
 
         :param x: x coordinate
-        :type x: float
+        :type x: :obj:`float`
         :param y: y coordinate
-        :type y: float
+        :type y: :obj:`float`
         """
         if not self.__crosshairlocked:
             now = time.time()
@@ -1633,11 +1633,11 @@ class LockerExtension(DisplayExtension):
         """  sets vLine and hLine positions
 
         :param x: x coordinate
-        :type x: float
+        :type x: :obj:`float`
         :param y: y coordinate
-        :type y: float
+        :type y: :obj:`float`
         :param locked: double click lock
-        :type locked: bool
+        :type locked: :obj:`bool`
         """
         self.updateLocker(x, y)
 
@@ -1728,9 +1728,9 @@ class CenterExtension(DisplayExtension):
         """  sets vLine and hLine positions
 
         :param x: x coordinate
-        :type x: float
+        :type x: :obj:`float`
         :param y: y coordinate
-        :type y: float
+        :type y: :obj:`float`
         """
         if not self.__centercoordinates:
             now = time.time()
@@ -1747,11 +1747,11 @@ class CenterExtension(DisplayExtension):
         """  sets vLine and hLine positions
 
         :param x: x coordinate
-        :type x: float
+        :type x: :obj:`float`
         :param y: y coordinate
-        :type y: float
+        :type y: :obj:`float`
         :param locked: double click lock
-        :type locked: bool
+        :type locked: :obj:`bool`
         """
         self.updateCenter(x, y)
 
@@ -2014,9 +2014,9 @@ class MarkExtension(BaseMarkExtension):
         """  sets vLine and hLine positions
 
         :param x: x coordinate
-        :type x: float
+        :type x: :obj:`float`
         :param y: y coordinate
-        :type y: float
+        :type y: :obj:`float`
         """
         if not self._markcoordinates:
             now = time.time()
@@ -2042,11 +2042,11 @@ class MarkExtension(BaseMarkExtension):
         """  sets vLine and hLine positions
 
         :param x: x coordinate
-        :type x: float
+        :type x: :obj:`float`
         :param y: y coordinate
-        :type y: float
+        :type y: :obj:`float`
         :param locked: double click lock
-        :type locked: bool
+        :type locked: :obj:`bool`
         """
         if not locked:
             self.updatePositionMark(x, y)
@@ -2125,7 +2125,7 @@ class MaximaExtension(DisplayExtension):
         sets maxima postions
 
         :param positionlist: [(x1, y1), ... , (xn, yn)]
-        :type positionlist: :obj:`list` < (float, float) >
+        :type positionlist: :obj:`list` < (:obj:`float`, :obj:`float`) >
         :param offset: offset of position
         :type offset: [ :obj:`float`, :obj:`float`]
         """

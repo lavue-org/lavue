@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "LAVUELIB" "1" "Dec 05, 2024" "2.92" "LaVue"
+.TH "LAVUELIB" "1" "Dec 07, 2024" "2.93" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .sp
@@ -1072,17 +1072,19 @@ A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueControlle
 \fBtool\fP : “intensity”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBpixel\fP ([float, float]), \fBscaled_coordiantes\fP ([float, float]), \fBcoordiantes_units\fP ([str, str]), \fBintensity_scaling\fP (str) [i.e. “log”, “linear” or “sqrt”]
 .SS ROI Tool
 .sp
-\fBROI Tool\fP selects Regions Of Interest and culculates a sum of their pixel intensities
+\fBROI Tool\fP selects Regions Of Interest and culculates a sum of their pixel intensities.
 .INDENT 0.0
 .INDENT 2.5
 [image]
 .UNINDENT
 .UNINDENT
+.sp
+The user can use rectangle and ellipse ROI shapes. The rectangle bounds are represented by a list of four integer numbers,  [x1, y1, x2, y2].  The elliptic bounds are represented by a list of five float numbers, i.e. [x, y, width, height, angle].
 .INDENT 0.0
 .IP \(bu 2
 \fBROI alias(es)\fP for roi tango devices
 .IP \(bu 2
-\fBAdd\fP to or \fBFetch\fP from sardana environment (see below). If lavue is working with ANALYSISDEVICE , i.e. lavue \-n <device>,  \fBROIs\fP bounds are sending also to tango SPECTRUM  RoIs  attribute of the device, e.g. LambdaOnlineAnalysis server.
+\fBAdd\fP to or \fBFetch\fP from sardana environment (see below). If lavue is working with ANALYSISDEVICE , i.e. lavue \-n <device>,  \fBROIs\fP bounds are sending also to tango SPECTRUM  \fBRoIs\fP  attribute of the device, e.g. LambdaOnlineAnalysis server.
 .IP \(bu 2
 \fBSum of\fP the selected \fBROI\fP or all \fBROIs\fP\&. The used version can be selected in the configuration.
 .UNINDENT
@@ -1107,7 +1109,7 @@ After adding ROIs to sardana  the following environment variables are created or
 .sp
 The \fBconfiguration\fP of the tool can be set with a \fI\%JSON\fP dictionary passed in the  \fB\-\-tool\-configuration\fP  option in command line or a toolconfig variable of \fBLavueController.LavueState\fP with the following keys:
 .sp
-\fBaliases\fP (list of strings), \fBrois_number\fP (integer)
+\fBaliases\fP (list of strings), \fBrois_number\fP (integer), \fBrois_coords\fP (list of coordinates i.e. bound coordinates is a four int or five float list), \fBrois_types\fP (list of strings i.e. \fIrectangle\fP  or \fIellipse\fP)
 .sp
 e.g.
 .INDENT 0.0
@@ -2048,7 +2050,7 @@ The \fBDynamicROIsValues\fP device property can be set to true or false. When it
 .sp
 They names are defined by ROIs aliases from Lavue GUI.
 .sp
-The \fBDynamicROIs\fP device property can be set to true or false. When it is true dynamic attributes with ROIs bounds are added.
+The \fBDynamicROIs\fP or \fBFloatDynamicROIs\fP device property can be set to true or false. When it is true dynamic attributes with ROIs bounds are added. In the float case ROIs bounds are represented by float numbers.
 .sp
 They names are defined by ROIs aliases from Lavue GUI.
 .sp
@@ -4281,9 +4283,9 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpos\fP (\fI[\fP\fI\%float\fP\fI, \fP\fI\%float\fP\fI]\fP) – position of handle
+\fBpos\fP ([\fI\%float\fP, \fI\%float\fP]) – position of handle
 .IP \(bu 2
-\fBcenter\fP (\fI[\fP\fI\%float\fP\fI, \fP\fI\%float\fP\fI]\fP) – center of handle
+\fBcenter\fP ([\fI\%float\fP, \fI\%float\fP]) – center of handle
 .IP \(bu 2
 \fBparent\fP (\fI\%pyqtgraph.graphicsItems.ROI.ROI\fP) – roi object
 .UNINDENT
@@ -4472,7 +4474,7 @@ sets maxima postions
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpositionlist\fP (\fI\%list\fP < (float, float) >) – [(x1, y1), … , (xn, yn)]
+\fBpositionlist\fP (\fI\%list\fP < (\fI\%float\fP, \fI\%float\fP) >) – [(x1, y1), … , (xn, yn)]
 .IP \(bu 2
 \fBoffset\fP ([ \fI\%float\fP, \fI\%float\fP]) – offset of position
 .UNINDENT
@@ -4639,7 +4641,7 @@ calculates all roi sums
 sum roi value, roi id
 .TP
 .B Return type
-:obj:list < float >
+\fI\%list\fP < \fI\%float\fP >
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -4688,14 +4690,26 @@ provides rois coordinates
 rois coordinates
 .TP
 .B Return type
-\fI\%list\fP
-< [\fI\%float\fP, \fI\%float\fP, \fI\%float\fP, \fI\%float\fP] >
+\fI\%list\fP < [\fI\%list\fP <\fI\%float\fP> >
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B roiCoordsChanged
 (\fBpyqtgraph.QtCore.pyqtSignal\fP) roi coordinate changed signal
+.UNINDENT
+.INDENT 7.0
+.TP
+.B roiTypes()
+provides rois types
+.INDENT 7.0
+.TP
+.B Returns
+rois types
+.TP
+.B Return type
+\fI\%list\fP < \fI\%str\fP >
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -4748,12 +4762,12 @@ update ROIs
 .INDENT 7.0
 .TP
 .B Parameters
-\fBroilabels\fP (\fBlist\(ga< :obj:\(gastr\fP >) – roi labels i.e. aliases
+\fBroilabels\fP (\fI\%list\fP < \fI\%str\fP >) – roi labels i.e. aliases
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
-.B updateROIs(rid, coords, roilabels=[])
+.B updateROIs(rid, coords, roilabels=[], types=None)
 update ROIs
 .INDENT 7.0
 .TP
@@ -4766,6 +4780,8 @@ update ROIs
 < [\fI\%float\fP, \fI\%float\fP, \fI\%float\fP, \fI\%float\fP] >) – roi coordinates
 .IP \(bu 2
 \fBroilabels\fP (\fBlist\(ga< :obj:\(gastr\fP >) – roi labels i.e. aliases
+.IP \(bu 2
+\fBtypes\fP (\fI\%list\fP < [\fI\%str\fP] >) – roi types
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -4929,9 +4945,9 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpos1\fP (\fI[\fP\fI\%float\fP\fI, \fP\fI\%float\fP\fI]\fP) – start position
+\fBpos1\fP ([\fI\%float\fP, \fI\%float\fP]) – start position
 .IP \(bu 2
-\fBpos2\fP (\fI[\fP\fI\%float\fP\fI, \fP\fI\%float\fP\fI]\fP) – end position
+\fBpos2\fP ([\fI\%float\fP, \fI\%float\fP]) – end position
 .IP \(bu 2
 \fBargs\fP (\fBdict\(ga<:obj:\(gastr\fP, \fI\%any\fP>) – dictionary with ROI parameters
 .UNINDENT
@@ -10150,7 +10166,7 @@ exporter parameters
 set of image sources
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.ASAPO  =  True
+.B lavuelib.imageSource.ASAPO  =  False
 (\fI\%bool\fP) asapo imported
 .UNINDENT
 .INDENT 0.0
@@ -10475,7 +10491,7 @@ image name, image data, json dictionary with metadata
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.HIDRA  =  True
+.B lavuelib.imageSource.HIDRA  =  False
 (\fI\%bool\fP) hidra imported
 .UNINDENT
 .INDENT 0.0
@@ -11841,7 +11857,12 @@ rois coordinates
 .INDENT 7.0
 .TP
 .B roilabels
-(obj\(gastr\(ga) roi labels
+(\fI\%str\fP) roi labels
+.UNINDENT
+.INDENT 7.0
+.TP
+.B roitype
+(\fI\%str\fP) roi type
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -11982,7 +12003,7 @@ sets auto levels
 .INDENT 7.0
 .TP
 .B Parameters
-\fBautolevels\fP (\fI:obj:\(aqint\(ga\fP) – 2: auto levels enabled 1: with autofactor
+\fBautolevels\fP (\fI\%int\fP) – 2: auto levels enabled 1: with autofactor
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -12588,7 +12609,7 @@ updates the position tracking mark
 .UNINDENT
 .INDENT 7.0
 .TP
-.B updateROIs(rid, coords=None)
+.B updateROIs(rid, coords=None, types=None)
 update ROIs
 .INDENT 7.0
 .TP
@@ -12597,8 +12618,10 @@ update ROIs
 .IP \(bu 2
 \fBrid\fP (\fI\%int\fP) – roi id
 .IP \(bu 2
-\fBcoords\fP (\fI\%list\fP
-< [\fI\%float\fP, \fI\%float\fP, \fI\%float\fP, \fI\%float\fP] >) – roi coordinates
+\fBcoords\fP (\fBlist\(ga<
+[:obj:\(gafloat\fP, \fI\%float\fP, \fI\%float\fP, \fI\%float\fP] >) – roi coordinates
+.IP \(bu 2
+\fBtypes\fP (\fI\%list\fP < [\fI\%str\fP] >) – roi types
 .UNINDENT
 .UNINDENT
 .UNINDENT

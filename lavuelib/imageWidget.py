@@ -146,17 +146,17 @@ class ImageWidget(QtWidgets.QWidget):
         #: (:class:`lavuelib.controllerClient.ControllerClient`)
         #:   tango controller client
         self.__tangoclient = None
-        #: (obj`list`) collection of last writing rois
+        #: (:obj:`list`) collection of last writing rois
         self.__lastrois = []
-        #: (obj`list`) collection of last writing rois values
+        #: (:obj:`list`) collection of last writing rois values
         self.__lastroisvalues = []
-        #: (obj`list`) collection of last writing rois parameters
+        #: (:obj:`list`) collection of last writing rois parameters
         self.__lastroisparams = tuple()
-        #: (obj`str`) last text
+        #: (:obj:`str`) last text
         self.__lasttext = ""
-        #: (obj`str`) roi labels
+        #: (:obj:`str`) roi labels
         self.roilabels = ""
-        #: (obj`str`) roi type
+        #: (:obj:`str`) roi type
         self.roitype = "rectangle"
         #: (:class:`lavuelib.toolWidget.BaseToolWidget`) current tool
         self.__currenttool = None
@@ -858,8 +858,8 @@ class ImageWidget(QtWidgets.QWidget):
         :param rid: roi id
         :type rid: :obj:`int`
         :param coords: roi coordinates
-        :type coords: :obj:`list`
-        :      < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
+        :type coords: :obj:`list`<
+                 [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
         :param types: roi types
         :type types: :obj:`list` < [:obj:`str`] >
         """
@@ -1127,7 +1127,7 @@ class ImageWidget(QtWidgets.QWidget):
         """ sets auto levels
 
         :param autolevels: 2: auto levels enabled 1: with autofactor
-        :type autolevels: :obj:'int`
+        :type autolevels: :obj:`int`
         """
         self.__displaywidget.setAutoLevels(autolevels)
 
@@ -1686,8 +1686,8 @@ class ImageWidget(QtWidgets.QWidget):
         :param roicoords: lavue rois coordinates
         :type roicoords: :obj:`list`
                 < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
-        :returns:  detector rois coordinates
-        :rtype: :obj:`list` < :obj:`float` >
+        :returns:  rectangle rois coordinates, elliptic rois coordinages
+        :rtype: (:obj:`list` < :obj:`float` > , :obj:`list` < :obj:`float` >)
         """
         flatrois = []
         eflatrois = []
@@ -1939,8 +1939,10 @@ class ImageWidget(QtWidgets.QWidget):
     def _fromFlatROIs(self, flatrois, eflatrois=None):
         """ calculate lavue rois coordinates from source rois coordinates
 
-        :param roicoords: lavue rois coordinates
+        :param roicoords: lavue rois rectangualar coordinates
         :type roicoords: :obj:`list` < :obj:`float` >
+        :param eroicoords: lavue rois eliptic coordinates
+        :type eroicoords: :obj:`list` < :obj:`float` >
         :returns:  detector rois coordinates
         :rtype: :obj:`list`
                 < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
@@ -2056,7 +2058,7 @@ class ImageWidget(QtWidgets.QWidget):
         """ provides scaling label
 
         :returns:  scaling label
-        :rtype: str
+        :rtype: :obj:`str`
         """
         return self.__displaywidget.scalingLabel()
 
@@ -2064,7 +2066,7 @@ class ImageWidget(QtWidgets.QWidget):
         """ provides scaling type
 
         :returns:  scaling type
-        :rtype: str
+        :rtype: :obj:`str`
         """
         return self.__displaywidget.scaling()
 
@@ -2089,7 +2091,7 @@ class ImageWidget(QtWidgets.QWidget):
         :type useraxes: :obj:`bool`
         :param noNone: return values without None
         :type noNone: :obj:`bool`
-        :rtype: [int, int, int, int]
+        :rtype: [:obj:`int`, :obj:`int`, :obj:`int`, :obj:`int`]
         :returns: [posx, posy, scalex, scaley]
         """
         return self.__displaywidget.scale(useraxes, noNone)
