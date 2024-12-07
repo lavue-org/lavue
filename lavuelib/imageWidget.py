@@ -1572,6 +1572,7 @@ class ImageWidget(QtWidgets.QWidget):
             lastalias = None
 
             roicoords = self.__displaywidget.extension('rois').roiCoords()
+            # roitypes = self.__displaywidget.extension('rois').roiTypes()
             for alias in slabel:
                 if alias not in toadd:
                     rois["DetectorROIs"][alias] = []
@@ -1652,11 +1653,21 @@ class ImageWidget(QtWidgets.QWidget):
                             self, "lavue: Error in Setting Measurement group",
                             text, str(value))
             if self.__settings.analysisdevice:
-                flatrois = self._flattenROIs(roicoords)
+                flatrois, eflatrois = self._flattenROIs(roicoords)
+                # flatrois = self._flattenROIs(roicoords)
+                eflatrois = None
                 try:
                     adp = sardanaUtils.SardanaUtils.openProxy(
                         str(self.__settings.analysisdevice))
-                    adp.RoIs = flatrois
+                    if flatrois is not None:
+                        adp.RoIs = flatrois
+                    try:
+                        if eflatrois is not None:
+                            adp.EllipseRoIs = eflatrois
+                    except Exception as e:
+                        logger.warning(
+                            "Error in Setting EllipseRoIs %s" % str(e))
+
                 except Exception:
                     import traceback
                     value = traceback.format_exc()
@@ -1679,67 +1690,134 @@ class ImageWidget(QtWidgets.QWidget):
         :rtype: :obj:`list` < :obj:`float` >
         """
         flatrois = []
+        eflatrois = []
         if hasattr(self.__rawdata, "shape"):
             sh = self.__rawdata.shape
         else:
             sh = (0, 0)
         for crds in roicoords:
-            if self.__settings.keepcoords:
-                trans, leftright, updown, _ = \
-                    self.__displaywidget.transformations()
+            if len(crds) == 4:
+                if self.__settings.keepcoords:
+                    trans, leftright, updown, _ = \
+                        self.__displaywidget.transformations()
 
-                flatrois.extend(
-                    [crds[1], crds[3] + 1, crds[0], crds[2] + 1])
-            else:
-                trans, leftright, updown = self.__selectedtrans
-                if not trans and not leftright and not updown:
                     flatrois.extend(
-                        [crds[1], crds[3] + 1,
-                         crds[0], crds[2] + 1])
-                elif trans and not leftright and not updown:
-                    flatrois.extend(
-                        [crds[0], crds[2] + 1,
-                         crds[1], crds[3] + 1])
-                ###
-                elif not trans and leftright and not updown:
-                    flatrois.extend(
-                        [crds[1], crds[3] + 1,
-                         sh[0] - crds[2] - 1, sh[0] - crds[0]])
-                elif trans and leftright and not updown:
-                    flatrois.extend(
-                        [sh[0] - crds[2] - 1, sh[0] - crds[0],
-                         crds[1], crds[3] + 1])
-                ###
-                elif not trans and not leftright and updown:
-                    flatrois.extend(
-                        [sh[1] - crds[3] - 1, sh[1] - crds[1],
-                         crds[0], crds[2] + 1])
-                elif trans and not leftright and updown:
-                    flatrois.extend(
-                        [crds[0], crds[2] + 1,
-                         sh[1] - crds[3] - 1, sh[1] - crds[1]])
-                ###
-                elif not trans and leftright and updown:
-                    flatrois.extend(
-                        [sh[1] - crds[3] - 1, sh[1] - crds[1],
-                         sh[0] - crds[2] - 1, sh[0] - crds[0]])
-                elif trans and leftright and updown:
-                    flatrois.extend(
-                        [sh[0] - crds[2] - 1, sh[0] - crds[0],
-                         sh[1] - crds[3] - 1, sh[1] - crds[1]])
+                        [crds[1], crds[3] + 1, crds[0], crds[2] + 1])
                 else:
-                    raise Exception("Dead end")
-            flatrois = [max(cr, 0) for cr in flatrois]
-            if trans:
-                sha, shb = sh
-            else:
-                shb, sha = sh
-            for i in range(len(flatrois) // 4):
-                flatrois[4 * i] = min(flatrois[4 * i], sha)
-                flatrois[4 * i + 1] = min(flatrois[4 * i + 1], sha)
-                flatrois[4 * i + 2] = min(flatrois[4 * i + 2], shb)
-                flatrois[4 * i + 3] = min(flatrois[4 * i + 3], shb)
-        return flatrois
+                    trans, leftright, updown = self.__selectedtrans
+                    if not trans and not leftright and not updown:
+                        flatrois.extend(
+                            [crds[1], crds[3] + 1,
+                             crds[0], crds[2] + 1])
+                    elif trans and not leftright and not updown:
+                        flatrois.extend(
+                            [crds[0], crds[2] + 1,
+                             crds[1], crds[3] + 1])
+                    ###
+                    elif not trans and leftright and not updown:
+                        flatrois.extend(
+                            [crds[1], crds[3] + 1,
+                             sh[0] - crds[2] - 1, sh[0] - crds[0]])
+                    elif trans and leftright and not updown:
+                        flatrois.extend(
+                            [sh[0] - crds[2] - 1, sh[0] - crds[0],
+                             crds[1], crds[3] + 1])
+                    ###
+                    elif not trans and not leftright and updown:
+                        flatrois.extend(
+                            [sh[1] - crds[3] - 1, sh[1] - crds[1],
+                             crds[0], crds[2] + 1])
+                    elif trans and not leftright and updown:
+                        flatrois.extend(
+                            [crds[0], crds[2] + 1,
+                             sh[1] - crds[3] - 1, sh[1] - crds[1]])
+                    ###
+                    elif not trans and leftright and updown:
+                        flatrois.extend(
+                            [sh[1] - crds[3] - 1, sh[1] - crds[1],
+                             sh[0] - crds[2] - 1, sh[0] - crds[0]])
+                    elif trans and leftright and updown:
+                        flatrois.extend(
+                            [sh[0] - crds[2] - 1, sh[0] - crds[0],
+                             sh[1] - crds[3] - 1, sh[1] - crds[1]])
+                    else:
+                        raise Exception("Dead end")
+                flatrois = [max(cr, 0) for cr in flatrois]
+                if trans:
+                    sha, shb = sh
+                else:
+                    shb, sha = sh
+                for i in range(len(flatrois) // 4):
+                    flatrois[4 * i] = min(flatrois[4 * i], sha)
+                    flatrois[4 * i + 1] = min(flatrois[4 * i + 1], sha)
+                    flatrois[4 * i + 2] = min(flatrois[4 * i + 2], shb)
+                    flatrois[4 * i + 3] = min(flatrois[4 * i + 3], shb)
+                eflatrois.extend([0., 0., 0., 0., 0.])
+            elif len(crds) == 5:
+                flatrois.extend([0, 0, 0, 0])
+                if self.__settings.keepcoords:
+                    eflatrois.extend(
+                        [crds[0], crds[1], crds[2], crds[3], crds[4]])
+                else:
+                    trans, leftright, updown = self.__selectedtrans
+                    if not trans and not leftright and not updown:
+                        eflatrois.extend(
+                            [crds[0], crds[1],
+                             crds[2], crds[3],
+                             crds[4]])
+                    elif trans and not leftright and not updown:
+                        eflatrois.extend(
+                            [crds[1], crds[0],
+                             crds[3], crds[2],
+                             # ??
+                             -crds[4]])
+                    ###
+                    elif not trans and leftright and not updown:
+                        eflatrois.extend(
+                            [sh[0] - crds[0], crds[1],
+                             # ??
+                             crds[2], crds[3],
+                             -crds[4]])
+                    elif trans and leftright and not updown:
+                        eflatrois.extend(
+                            [crds[1], sh[0] - crds[0],
+                             crds[3], crds[2],
+                             # ??
+                             crds[4]])
+                    ###
+                    elif not trans and not leftright and updown:
+                        eflatrois.extend(
+                            [crds[0], sh[1] - crds[1],
+                             crds[2], crds[3],
+                             # ??
+                             -crds[4]])
+                    elif trans and not leftright and updown:
+                        eflatrois.extend(
+                            [sh[1] - crds[1], crds[0],
+                             crds[3], crds[2],
+                             # ??
+                             crds[4]])
+                    ###
+                    elif not trans and leftright and updown:
+                        eflatrois.extend(
+                            [sh[0] - crds[0], sh[1] - crds[1],
+                             crds[2], crds[3],
+                             # ??
+                             crds[4]])
+                    elif trans and leftright and updown:
+                        eflatrois.extend(
+                            [sh[1] - crds[1], sh[0] - crds[0],
+                             crds[3], crds[2],
+                             # ??
+                             - crds[4]])
+                    else:
+                        raise Exception("Dead end")
+
+        if not any(flatrois):
+            flatrois = None
+        if not any(eflatrois):
+            eflatrois = None
+        return flatrois, eflatrois
 
     @QtCore.pyqtSlot(str)
     def fetchROIs(self, rlabel):
@@ -1782,6 +1860,7 @@ class ImageWidget(QtWidgets.QWidget):
                             (k, v) for k, v in detrois.items() if k in slabel)
                 coords = []
                 aliases = []
+                types = []
                 if slabel:
                     for i, lb in enumerate(slabel):
                         if lb in detrois.keys():
@@ -1792,6 +1871,11 @@ class ImageWidget(QtWidgets.QWidget):
                                         if isinstance(cr, list):
                                             coords.append(cr)
                                             aliases.append(lb)
+                                            if len(cr) == 5:
+                                                types.append("ellipse")
+                                            else:
+                                                types.append("rectangle")
+
                                     break
                             else:
                                 v = detrois[lb]
@@ -1800,6 +1884,10 @@ class ImageWidget(QtWidgets.QWidget):
                                     if isinstance(cr, list):
                                         coords.append(cr)
                                         aliases.append(lb)
+                                        if len(cr) == 5:
+                                            types.append("ellipse")
+                                        else:
+                                            types.append("rectangle")
                                         detrois[lb] = v[1:]
                                 if not detrois[lb]:
                                     detrois.pop(lb)
@@ -1809,6 +1897,10 @@ class ImageWidget(QtWidgets.QWidget):
                             if isinstance(cr, list):
                                 coords.append(cr)
                                 aliases.append(k)
+                                if len(cr) == 5:
+                                    types.append("ellipse")
+                                else:
+                                    types.append("rectangle")
                 slabel = []
                 for i, al in enumerate(aliases):
                     if len(set(aliases[i:])) == 1:
@@ -1818,14 +1910,20 @@ class ImageWidget(QtWidgets.QWidget):
                         slabel.append(al)
                 self.roiAliasesChanged.emit(" ".join(slabel))
 
-                self.updateROIs(len(coords), coords)
+                self.updateROIs(len(coords), coords, types)
             elif self.__settings.analysisdevice:
                 try:
                     adp = sardanaUtils.SardanaUtils.openProxy(
                         str(self.__settings.analysisdevice))
                     flatrois = adp.RoIs
-                    coords = self._fromFlatROIs(flatrois)
-                    self.updateROIs(len(coords), coords)
+                    try:
+                        eflatrois = adp.EllipseRoIs
+                    except Exception:
+                        eflatrois = None
+                    coords = self._fromFlatROIs(flatrois, eflatrois)
+                    types = [("ellipse" if len(crd) == 5 else "rectangle")
+                             for crd in coords]
+                    self.updateROIs(len(coords), coords, types)
                 except Exception:
                     import traceback
                     value = traceback.format_exc()
@@ -1838,7 +1936,7 @@ class ImageWidget(QtWidgets.QWidget):
                 # print("Connection error")
                 logger.error("ImageWidget.fetchROIs: Connection error")
 
-    def _fromFlatROIs(self, flatrois):
+    def _fromFlatROIs(self, flatrois, eflatrois=None):
         """ calculate lavue rois coordinates from source rois coordinates
 
         :param roicoords: lavue rois coordinates
@@ -1848,44 +1946,102 @@ class ImageWidget(QtWidgets.QWidget):
                 < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
         """
         coords = []
+        eflatroilen = len(eflatrois) if eflatrois else 0
+        eflatroi5len = eflatroilen // 5
         if hasattr(self.__rawdata, "shape"):
             sh = self.__rawdata.shape
         else:
             sh = (0, 0)
         for crds in zip(flatrois[::4], flatrois[1::4],
                         flatrois[2::4], flatrois[3::4]):
-            if self.__settings.keepcoords:
-                trans, leftright, updown, _ = \
-                    self.__displaywidget.transformations()
-                coords.append([crds[2], crds[0], crds[3] - 1, crds[1] - 1])
-            else:
-                trans, leftright, updown = self.__selectedtrans
-                if not trans and not leftright and not updown:
+            if any(crds):
+                if self.__settings.keepcoords:
+                    trans, leftright, updown, _ = \
+                        self.__displaywidget.transformations()
                     coords.append([crds[2], crds[0], crds[3] - 1, crds[1] - 1])
-                elif trans and not leftright and not updown:
-                    coords.append([crds[0], crds[2], crds[1] - 1, crds[3] - 1])
-                ###
-                elif not trans and leftright and not updown:
-                    coords.append([sh[0] - crds[3], crds[0],
-                                   sh[0] - crds[2] - 1, crds[1] - 1])
-                elif trans and leftright and not updown:
-                    coords.append([sh[0] - crds[1], crds[2],
-                                   sh[0] - crds[0] - 1, crds[3] - 1])
-                elif not trans and not leftright and updown:
-                    coords.append([crds[2], sh[1] - crds[1],
-                                   crds[3] - 1, sh[1] - crds[0] - 1])
-                elif trans and not leftright and updown:
-                    coords.append([crds[0], sh[1] - crds[3],
-                                   crds[1] - 1, sh[1] - crds[2] - 1])
-                ###
-                elif not trans and leftright and updown:
-                    coords.append([sh[0] - crds[3], sh[1] - crds[1],
-                                   sh[0] - crds[2] - 1, sh[1] - crds[0] - 1])
-                elif trans and leftright and updown:
-                    coords.append([sh[0] - crds[1], sh[1] - crds[3],
-                                   sh[0] - crds[0] - 1, sh[1] - crds[2] - 1])
                 else:
-                    raise Exception("Dead end")
+                    trans, leftright, updown = self.__selectedtrans
+                    if not trans and not leftright and not updown:
+                        coords.append([crds[2], crds[0],
+                                       crds[3] - 1, crds[1] - 1])
+                    elif trans and not leftright and not updown:
+                        coords.append([crds[0], crds[2],
+                                       crds[1] - 1, crds[3] - 1])
+                    ###
+                    elif not trans and leftright and not updown:
+                        coords.append([sh[0] - crds[3], crds[0],
+                                       sh[0] - crds[2] - 1, crds[1] - 1])
+                    elif trans and leftright and not updown:
+                        coords.append([sh[0] - crds[1], crds[2],
+                                       sh[0] - crds[0] - 1, crds[3] - 1])
+                    elif not trans and not leftright and updown:
+                        coords.append([crds[2], sh[1] - crds[1],
+                                       crds[3] - 1, sh[1] - crds[0] - 1])
+                    elif trans and not leftright and updown:
+                        coords.append([crds[0], sh[1] - crds[3],
+                                       crds[1] - 1, sh[1] - crds[2] - 1])
+                    ###
+                    elif not trans and leftright and updown:
+                        coords.append([sh[0] - crds[3], sh[1] - crds[1],
+                                       sh[0] - crds[2] - 1,
+                                       sh[1] - crds[0] - 1])
+                    elif trans and leftright and updown:
+                        coords.append([sh[0] - crds[1], sh[1] - crds[3],
+                                       sh[0] - crds[0] - 1,
+                                       sh[1] - crds[2] - 1])
+                    else:
+                        raise Exception("Dead end")
+            elif len(coords) < eflatroi5len:
+                lcr = len(coords)
+                ecrds = eflatrois[5 * lcr: 5 * lcr + 5]
+                if any(ecrds):
+                    if self.__settings.keepcoords:
+                        coords.append(ecrds)
+                    else:
+                        trans, leftright, updown = self.__selectedtrans
+                        # coords.append(ecrds)
+                        if not trans and not leftright and not updown:
+                            coords.append([ecrds[0], ecrds[1],
+                                           ecrds[2], ecrds[3],
+                                           ecrds[4]])
+                        elif trans and not leftright and not updown:
+                            coords.append([ecrds[1], ecrds[0],
+                                           ecrds[3], ecrds[2],
+                                           -ecrds[4]])
+                        ###
+                        elif not trans and leftright and not updown:
+                            coords.append([sh[0] - ecrds[0], ecrds[1],
+                                           ecrds[2], ecrds[3],
+                                           # ??
+                                           -ecrds[4]])
+                        elif trans and leftright and not updown:
+                            coords.append([sh[0] - ecrds[1], ecrds[0],
+                                           ecrds[3], ecrds[2],
+                                           # ??
+                                           ecrds[4]])
+                        elif not trans and not leftright and updown:
+                            coords.append([ecrds[0], sh[1] - ecrds[1],
+                                           ecrds[2], ecrds[3],
+                                           # ??
+                                           -ecrds[4]])
+                        elif trans and not leftright and updown:
+                            coords.append([ecrds[1], sh[1] - ecrds[0],
+                                           ecrds[3], ecrds[2],
+                                           # ??
+                                           ecrds[4]])
+                        ###
+                        elif not trans and leftright and updown:
+                            coords.append([sh[0] - ecrds[0], sh[1] - ecrds[1],
+                                           ecrds[2], ecrds[3],
+                                           # ??
+                                           ecrds[4]])
+                        elif trans and leftright and updown:
+                            coords.append([sh[0] - ecrds[1], sh[1] - ecrds[0],
+                                           ecrds[3], ecrds[2],
+                                           # ??
+                                           -ecrds[4]])
+                        else:
+                            raise Exception("Dead end")
         return coords
 
     def currentIntensity(self):

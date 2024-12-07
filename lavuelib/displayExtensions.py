@@ -357,7 +357,8 @@ class ROIExtension(DisplayExtension):
         :type roitype: :obj:`str`
         """
         if roitype == "ellipse":
-            if not coords or not isinstance(coords, list) or len(coords) != 4:
+            angle = 0.0
+            if not coords or not isinstance(coords, list) or len(coords) < 4:
                 pnt = 50 + 10 * len(self.__roi)
                 sz = 50
                 coords = [pnt, pnt, sz, sz]
@@ -366,10 +367,15 @@ class ROIExtension(DisplayExtension):
                 if not self._mainwidget.transformations()[0]:
                     pnt = _pg.Point(coords[0], coords[1])
                     spnt = _pg.Point(coords[2], coords[3])
+                    if len(coords) > 4:
+                        angle = coords[5]
                 else:
                     pnt = _pg.Point(coords[1], coords[0])
                     spnt = _pg.Point(coords[3], coords[2])
-            self.__roi.append(EllipseROI(pnt, spnt))
+                    if len(coords) > 4:
+                        angle = -coords[5]
+
+            self.__roi.append(EllipseROI(pnt, spnt, angle=angle))
         else:
             if not coords or not isinstance(coords, list) or len(coords) != 4:
                 pnt = 10 * len(self.__roi)
@@ -472,9 +478,11 @@ class ROIExtension(DisplayExtension):
                         if not self._mainwidget.transformations()[0]:
                             crd.setPos([coords[i][0], coords[i][1]])
                             crd.setSize([coords[i][2], coords[i][3]])
+                            crd.setAngle(coords[i][4])
                         else:
                             crd.setPos([coords[i][1], coords[i][0]])
                             crd.setSize([coords[i][3], coords[i][2]])
+                            crd.setAngle(-coords[i][4])
                     else:
                         if not self._mainwidget.transformations()[0]:
                             crd.setPos([coords[i][0], coords[i][1]])
@@ -597,16 +605,18 @@ class ROIExtension(DisplayExtension):
                         state['size'].y(),
                         state['angle']]
                     if not self._mainwidget.transformations()[0]:
-                        ptx1 = float(math.floor(rcrds[0]))
-                        pty1 = float(math.floor(rcrds[1]))
-                        ptx2 = float(math.floor(rcrds[2]))
-                        pty2 = float(math.floor(rcrds[3]))
+                        ptx1 = float(rcrds[0])
+                        pty1 = float(rcrds[1])
+                        ptx2 = float(rcrds[2])
+                        pty2 = float(rcrds[3])
+                        angle = float(rcrds[4])
                     else:
-                        pty1 = float(math.floor(rcrds[0]))
-                        ptx1 = float(math.floor(rcrds[1]))
-                        pty2 = float(math.floor(rcrds[2]))
-                        ptx2 = float(math.floor(rcrds[3]))
-                    crd = [ptx1, pty1, ptx2, pty2]
+                        pty1 = float(rcrds[0])
+                        ptx1 = float(rcrds[1])
+                        pty2 = float(rcrds[2])
+                        ptx2 = float(rcrds[3])
+                        angle = float(-rcrds[4])
+                    crd = [ptx1, pty1, ptx2, pty2, angle]
                 else:
                     rcrds = [
                         state['pos'].x(),
@@ -746,8 +756,7 @@ class ROIExtension(DisplayExtension):
         """ provides rois coordinates
 
         :return: rois coordinates
-        :rtype: :obj:`list`
-               < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
+        :rtype: :obj:`list` < [:obj:`list` <:obj:`float`> >
         """
         return self.__coords
 
@@ -783,6 +792,7 @@ class ROIExtension(DisplayExtension):
             size = crd.size()
             crd.setPos([pos[1], pos[0]])
             crd.setSize([size[1], size[0]])
+            crd.setAngle(-crd.angle())
 
 
 class CutExtension(DisplayExtension):

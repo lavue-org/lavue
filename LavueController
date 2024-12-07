@@ -421,11 +421,13 @@ class LavueController (tango.LatestDeviceImpl):
             name = "__null__"
         detrois = json.loads(self.attr_DetectorROIs_read)
         if name in detrois.keys():
-            dtrois = [it for roi in detrois[name] for it in roi]
+            dtrois = [int(round(it))
+                      for roi in detrois[name] for it in roi]
         else:
             name = ("%s%s" % (name[0].lower(), name[1:]))
             if name in detrois.keys():
-                dtrois = [it for roi in detrois[name] for it in roi]
+                dtrois = [int(round(it))
+                          for roi in detrois[name] for it in roi]
             else:
                 dtrois = []
         attr.set_value(dtrois)

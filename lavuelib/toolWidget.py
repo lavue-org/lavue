@@ -1778,8 +1778,9 @@ class ROIToolWidget(ToolBaseWidget):
 
         self.parameters.rois = True
         self.parameters.infolineedit = ""
-        self.parameters.infolabel = "[x1, y1, x2, y2], sum: "
-        # self.parameters.infolabel = "[x, y, w, h, a], sum: "
+        self.parameters.infolabel = \
+            "[x1, y1, x2, y2] or [x, y, wd, ht, ang], sum: "
+        # self.parameters.infolabel = "[x, y, wd, ht, ang], sum: "
         self.parameters.infotips = \
             "coordinate info display for the mouse pointer"
 
@@ -1937,7 +1938,11 @@ class ROIToolWidget(ToolBaseWidget):
         current = self._mainwidget.currentROI()
         coords = self._mainwidget.roiCoords()
         if current > -1 and current < len(coords):
-            message = "%s" % coords[current]
+            if coords[current] and len(coords[current]) > 0 and \
+               isinstance(coords[current][0], float):
+                message = "%s" % [round(cr, 2) for cr in coords[current]]
+            else:
+                message = "%s" % coords[current]
         self._mainwidget.setDisplayedText(message)
 
     @QtCore.pyqtSlot()
