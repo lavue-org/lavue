@@ -424,7 +424,7 @@ class LavueController (tango.LatestDeviceImpl):
 
         if name not in detrois.keys():
             name = ("%s%s" % (name[0].lower(), name[1:]))
-        if name not in detrois.keys():
+        if name in detrois.keys():
             if self.FloatDynamicROIs:
                 dtrois = [float(it)
                           for roi in detrois[name] for it in roi]
