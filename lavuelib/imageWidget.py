@@ -1661,12 +1661,8 @@ class ImageWidget(QtWidgets.QWidget):
                         str(self.__settings.analysisdevice))
                     if flatrois is not None:
                         adp.RoIs = flatrois
-                    try:
-                        if eflatrois is not None:
-                            adp.EllipseRoIs = eflatrois
-                    except Exception as e:
-                        logger.warning(
-                            "Error in Setting EllipseRoIs %s" % str(e))
+                    if eflatrois is not None and hasattr(adp, "EllipseRoIs"):
+                        adp.EllipseRoIs = eflatrois
 
                 except Exception:
                     import traceback
@@ -1916,9 +1912,9 @@ class ImageWidget(QtWidgets.QWidget):
                     adp = sardanaUtils.SardanaUtils.openProxy(
                         str(self.__settings.analysisdevice))
                     flatrois = adp.RoIs
-                    try:
+                    if hasattr(adp, "EllipseRoIs"):
                         eflatrois = adp.EllipseRoIs
-                    except Exception:
+                    else:
                         eflatrois = None
                     coords = self._fromFlatROIs(flatrois, eflatrois)
                     types = [("ellipse" if len(crd) == 5 else "rectangle")
