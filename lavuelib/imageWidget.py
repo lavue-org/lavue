@@ -871,7 +871,7 @@ class ImageWidget(QtWidgets.QWidget):
         types = list(self.__displaywidget.extension('rois').roiTypes() or [])
         while len(types) < rid + 1:
             types.append(self.roitype)
-        print("TYPES", types)
+        # print("TYPES", types)
         self.__displaywidget.extension('rois').updateROIs(
             rid, coords, slabel, types)
         self.applyTipsChanged.emit(rid)
@@ -1546,7 +1546,8 @@ class ImageWidget(QtWidgets.QWidget):
                         "Door")
                 try:
                     rois = json.loads(self.__sardana.getScanEnv(
-                        str(self.__settings.doorname), ["DetectorROIs"]))
+                        str(self.__settings.doorname),
+                        ["DetectorROIs", "DetectorROIsTypes"]))
                 except Exception:
                     import traceback
                     value = traceback.format_exc()
@@ -1564,27 +1565,37 @@ class ImageWidget(QtWidgets.QWidget):
             slabel = [lb for lb in slabel if lb]
             rid = 0
             lastcrdlist = None
+            lasttypelist = None
             toremove = []
             toadd = []
             if "DetectorROIs" not in rois or not isinstance(
                     rois["DetectorROIs"], dict):
                 rois["DetectorROIs"] = {}
+            if "DetectorROIsTypes" not in rois or not isinstance(
+                    rois["DetectorROIsTypes"], dict):
+                rois["DetectorROIsTypes"] = {}
             lastalias = None
 
             roicoords = self.__displaywidget.extension('rois').roiCoords()
-            # roitypes = self.__displaywidget.extension('rois').roiTypes()
+            roitypes = self.__displaywidget.extension('rois').roiTypes()
             for alias in slabel:
                 if alias not in toadd:
                     rois["DetectorROIs"][alias] = []
+                if alias not in toadd:
+                    rois["DetectorROIsTypes"][alias] = []
                 lastcrdlist = rois["DetectorROIs"][alias]
+                lasttypelist = rois["DetectorROIsTypes"][alias]
                 if rid < len(roicoords):
                     lastcrdlist.append(roicoords[rid])
+                    lasttypelist.append(roitypes[rid])
                     rid += 1
                     if alias not in toadd:
                         toadd.append(alias)
                 if not lastcrdlist:
                     if alias in rois["DetectorROIs"].keys():
                         rois["DetectorROIs"].pop(alias)
+                    if alias in rois["DetectorROIsTypes"].keys():
+                        rois["DetectorROIsTypes"].pop(alias)
                     if roispin >= 0:
                         toadd.append(alias)
                     else:
@@ -1593,10 +1604,13 @@ class ImageWidget(QtWidgets.QWidget):
             if rid > 0:
                 while rid < len(roicoords):
                     lastcrdlist.append(roicoords[rid])
+                    lasttypelist.append(roitypes[rid])
                     rid += 1
                 if not lastcrdlist:
                     if lastalias in rois["DetectorROIs"].keys():
                         rois["DetectorROIs"].pop(lastalias)
+                    if lastalias in rois["DetectorROIsTypes"].keys():
+                        rois["DetectorROIsTypes"].pop(lastalias)
                     if roispin >= 0:
                         toadd.append(lastalias)
                     else:
@@ -1653,9 +1667,7 @@ class ImageWidget(QtWidgets.QWidget):
                             self, "lavue: Error in Setting Measurement group",
                             text, str(value))
             if self.__settings.analysisdevice:
-                flatrois, eflatrois = self._flattenROIs(roicoords)
-                # flatrois = self._flattenROIs(roicoords)
-                eflatrois = None
+                flatrois, eflatrois = self._flattenROIs(roicoords, roitypes)
                 try:
                     adp = sardanaUtils.SardanaUtils.openProxy(
                         str(self.__settings.analysisdevice))
@@ -1676,12 +1688,13 @@ class ImageWidget(QtWidgets.QWidget):
             # print("Connection error")
             logger.error("ImageWidget.applyROI: Connection error")
 
-    def _flattenROIs(self, roicoords):
+    def _flattenROIs(self, roicoords, roitypes):
         """ calculate source rois coordinates from lavue rois coordinates
 
         :param roicoords: lavue rois coordinates
-        :type roicoords: :obj:`list`
-                < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
+        :type roicoords: :obj:`list` < :obj:`list` < :obj:`float`> >
+        :param roitypes: lavue rois coordinates
+        :type roitypes: :obj:`list` < :obj:`str` >
         :returns:  rectangle rois coordinates, elliptic rois coordinages
         :rtype: (:obj:`list` < :obj:`float` > , :obj:`list` < :obj:`float` >)
         """
@@ -1691,8 +1704,11 @@ class ImageWidget(QtWidgets.QWidget):
             sh = self.__rawdata.shape
         else:
             sh = (0, 0)
-        for crds in roicoords:
-            if len(crds) == 4:
+        for ic, crds in enumerate(roicoords):
+            rtype = "rectangle"
+            if roitypes and len(roitypes) > ic:
+                rtype = roitypes[ic]
+            if rtype == "rectangle":
                 if self.__settings.keepcoords:
                     trans, leftright, updown, _ = \
                         self.__displaywidget.transformations()
@@ -1749,7 +1765,7 @@ class ImageWidget(QtWidgets.QWidget):
                     flatrois[4 * i + 2] = min(flatrois[4 * i + 2], shb)
                     flatrois[4 * i + 3] = min(flatrois[4 * i + 3], shb)
                 eflatrois.extend([0., 0., 0., 0., 0.])
-            elif len(crds) == 5:
+            if rtype == "ellipse":
                 flatrois.extend([0, 0, 0, 0])
                 if self.__settings.keepcoords:
                     eflatrois.extend(
@@ -1830,7 +1846,9 @@ class ImageWidget(QtWidgets.QWidget):
                 try:
                     rois = json.loads(self.__sardana.getScanEnv(
                         str(self.__settings.doorname),
-                        ["DetectorROIs", "DetectorROIsOrder"]))
+                        ["DetectorROIs",
+                         "DetectorROIsOrder",
+                         "DetectorROIsTypes"]))
                 except Exception:
                     import traceback
                     value = traceback.format_exc()
@@ -1854,6 +1872,13 @@ class ImageWidget(QtWidgets.QWidget):
                     if slabel:
                         detrois = dict(
                             (k, v) for k, v in detrois.items() if k in slabel)
+                if "DetectorROIsTypes" in rois and isinstance(
+                        rois["DetectorROIsTypes"], dict):
+                    detroistypes = rois["DetectorROIsTypes"]
+                    if slabel:
+                        detroistypes = dict(
+                            (k, v) for k, v in detroistypes.items()
+                            if k in slabel)
                 coords = []
                 aliases = []
                 types = []
@@ -1862,41 +1887,54 @@ class ImageWidget(QtWidgets.QWidget):
                         if lb in detrois.keys():
                             if len(set(slabel[i:])) == 1:
                                 v = detrois.pop(lb)
+                                rt = []
+                                if lb in detroistypes.keys():
+                                    rt = detroistypes.pop(lb)
                                 if isinstance(v, list):
-                                    for cr in v:
+                                    for iv, cr in enumerate(v):
                                         if isinstance(cr, list):
                                             coords.append(cr)
                                             aliases.append(lb)
-                                            if len(cr) == 5:
-                                                types.append("ellipse")
+                                            rt = "rectangle"
+                                            if len(rt) > iv:
+                                                types.append(rt[iv])
                                             else:
                                                 types.append("rectangle")
 
                                     break
                             else:
                                 v = detrois[lb]
+                                rt = []
+                                if lb in detroistypes.keys():
+                                    rt = detroistypes[lb]
                                 if isinstance(v, list) and v:
                                     cr = v[0]
                                     if isinstance(cr, list):
                                         coords.append(cr)
                                         aliases.append(lb)
-                                        if len(cr) == 5:
-                                            types.append("ellipse")
-                                        else:
-                                            types.append("rectangle")
+                                        rtype = "rectangle"
+                                        if isinstance(rt, list) and rt:
+                                            rtype = rt[0]
+                                            detroistypes[lb] = rt[1:]
+                                        types.append(rtype)
                                         detrois[lb] = v[1:]
                                 if not detrois[lb]:
                                     detrois.pop(lb)
+                                if not detroistypes[lb]:
+                                    detroistypes.pop(lb)
                 for k, v in detrois.items():
                     if isinstance(v, list):
-                        for cr in v:
+                        rt = []
+                        if detroistypes and k in detroistypes.keys():
+                            rt = detroistypes[k]
+                        for ic, cr in enumerate(v):
                             if isinstance(cr, list):
                                 coords.append(cr)
                                 aliases.append(k)
-                                if len(cr) == 5:
-                                    types.append("ellipse")
-                                else:
-                                    types.append("rectangle")
+                                rtype = "rectangle"
+                                if isinstance(rt, list) and len(rt) > ic:
+                                    rtype = rt[ic]
+                                types.append(rtype)
                 slabel = []
                 for i, al in enumerate(aliases):
                     if len(set(aliases[i:])) == 1:
@@ -1916,9 +1954,9 @@ class ImageWidget(QtWidgets.QWidget):
                         eflatrois = adp.EllipseRoIs
                     else:
                         eflatrois = None
-                    coords = self._fromFlatROIs(flatrois, eflatrois)
-                    types = [("ellipse" if len(crd) == 5 else "rectangle")
-                             for crd in coords]
+                    coords, types = self._fromFlatROIs(flatrois, eflatrois)
+                    # types = [("ellipse" if len(crd) == 5 else "rectangle")
+                    #          for crd in coords]
                     self.updateROIs(len(coords), coords, types)
                 except Exception:
                     import traceback
@@ -1940,10 +1978,12 @@ class ImageWidget(QtWidgets.QWidget):
         :param eroicoords: lavue rois eliptic coordinates
         :type eroicoords: :obj:`list` < :obj:`float` >
         :returns:  detector rois coordinates
-        :rtype: :obj:`list`
-                < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
+        :rtype: (:obj:`list` < :obj:`list` < :obj:`float` > > > ,
+                 < :obj:`list` < :obj:`str` > > )
+
         """
         coords = []
+        types = []
         eflatroilen = len(eflatrois) if eflatrois else 0
         eflatroi5len = eflatroilen // 5
         if hasattr(self.__rawdata, "shape"):
@@ -1953,6 +1993,7 @@ class ImageWidget(QtWidgets.QWidget):
         for crds in zip(flatrois[::4], flatrois[1::4],
                         flatrois[2::4], flatrois[3::4]):
             if any(crds):
+                types.append("rectangle")
                 if self.__settings.keepcoords:
                     trans, leftright, updown, _ = \
                         self.__displaywidget.transformations()
@@ -1993,6 +2034,7 @@ class ImageWidget(QtWidgets.QWidget):
                 lcr = len(coords)
                 ecrds = eflatrois[5 * lcr: 5 * lcr + 5]
                 if any(ecrds):
+                    types.append("ellipse")
                     if self.__settings.keepcoords:
                         coords.append(ecrds)
                     else:
@@ -2040,7 +2082,7 @@ class ImageWidget(QtWidgets.QWidget):
                                            -ecrds[4]])
                         else:
                             raise Exception("Dead end")
-        return coords
+        return coords, types
 
     def currentIntensity(self):
         """ provides intensity for current mouse position

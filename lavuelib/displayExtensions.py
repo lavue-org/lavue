@@ -359,9 +359,9 @@ class ROIExtension(DisplayExtension):
         if roitype == "ellipse":
             angle = 0.0
             if not coords or not isinstance(coords, list) or len(coords) < 4:
-                pnt = 50 + 10 * len(self.__roi)
-                sz = 50
-                coords = [pnt, pnt, sz, sz]
+                pnt = 50. + 10. * len(self.__roi)
+                sz = 50.
+                coords = [pnt, pnt, sz, sz, angle]
                 spnt = _pg.Point(sz, sz)
             else:
                 if not self._mainwidget.transformations()[0]:
@@ -596,7 +596,7 @@ class ROIExtension(DisplayExtension):
                 if self.__types and rid < len(self.__types):
                     roitype = self.__types[rid]
                 state = roi.state
-                print("STATE", state)
+                # print("STATE", state)
                 if roitype == "ellipse":
                     rcrds = [
                         state['pos'].x(),
