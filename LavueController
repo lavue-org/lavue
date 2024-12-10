@@ -71,6 +71,7 @@ class LavueController (tango.LatestDeviceImpl):
         self.current_rois_aliases = []
         self.current_attributes = set()
 
+        self.ROITypes = ["rectangle", "ellipse"]
         LavueController.init_device(self)
 
     def __unsubscribe(self):
@@ -291,14 +292,34 @@ class LavueController (tango.LatestDeviceImpl):
                 raise Exception(
                     "ROI %s is not a double list" % str(det))
             for roi in rois:
-                if not isinstance(roi, (list)):
+                if isinstance(roi, (list)):
+                    if len(roi) not in [4, 5]:
+                        raise Exception(
+                            "ROI %s len is not 4 or 5" % str(det))
+                    for cr in roi:
+                        float(cr)
+                elif isinstance(roi, (dict)):
+                    if "bounds" not in roi:
+                        raise Exception(
+                            "ROI bounds of %s not defined" % str(det))
+                    if not isinstance(roi["bounds"], (list)):
+                        raise Exception(
+                            "ROI %s is written in an unknown format"
+                            % str(det))
+                    if len(roi["bounds"]) not in [4, 5]:
+                        raise Exception(
+                            "ROI %s len is not 4 or 5" % str(det))
+                    for cr in roi["bounds"]:
+                        float(cr)
+                    if "type" in roi:
+                        if roi["type"] not in self.ROITypes:
+                            raise Exception(
+                                "ROI type %s for %s is unknown" % (
+                                    roi["type"], str(det)))
+                else:
                     raise Exception(
-                        "ROI %s is not a double list" % str(det))
-                if len(roi) != 4:
-                    raise Exception(
-                        "ROI %s len is not 4" % str(det))
-                for cr in roi:
-                    float(cr)
+                        "ROI %s is written in an unknown format" % str(det))
+
         if self.DynamicROIs or self.FloatDynamicROIs:
             self.requested_rois_aliases = []
             for det, rois in detrois.items():
@@ -424,15 +445,20 @@ class LavueController (tango.LatestDeviceImpl):
 
         if name not in detrois.keys():
             name = ("%s%s" % (name[0].lower(), name[1:]))
+        dtrois = []
         if name in detrois.keys():
-            if self.FloatDynamicROIs:
-                dtrois = [float(it)
-                          for roi in detrois[name] for it in roi]
-            else:
-                dtrois = [int(round(it))
-                          for roi in detrois[name] for it in roi]
-        else:
-            dtrois = []
+            for roi in detrois[name]:
+                if isinstance(roi, list):
+                    if self.FloatDynamicROIs:
+                        dtrois.extend([float(it) for it in roi])
+                    else:
+                        dtrois.extend([int(round(it)) for it in roi])
+                elif isinstance(roi, dict) and "bounds" in roi \
+                        and isinstance(roi["bounds"]):
+                    if self.FloatDynamicROIs:
+                        dtrois.extend([float(it) for it in roi["bounds"]])
+                    else:
+                        dtrois.extend([int(round(it)) for it in roi["bounds"]])
         attr.set_value(dtrois)
 
     def initialize_dynamic_rois_sums_attributes(self):

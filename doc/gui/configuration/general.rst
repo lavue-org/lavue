@@ -67,6 +67,7 @@ The first tab of the configuration dialog contains **General Settings**. It is d
 *    **Door:** Door tango device to communicate with Sardana
 *    **Add ROIs to MG:** causes the ROIs Apply button adds the corresponding ROIs aliases into the current Sardana Measurement Group
 *    **Fetch ROIs order:** read a ROIs order from Sardana environment variables
+*    **ROIs with Types:** sends DetectorROIs json containing dictionary with roi `bounds` and `type`
 
 
 

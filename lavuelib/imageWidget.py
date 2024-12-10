@@ -1546,8 +1546,7 @@ class ImageWidget(QtWidgets.QWidget):
                         "Door")
                 try:
                     rois = json.loads(self.__sardana.getScanEnv(
-                        str(self.__settings.doorname),
-                        ["DetectorROIs", "DetectorROIsTypes"]))
+                        str(self.__settings.doorname), ["DetectorROIs"]))
                 except Exception:
                     import traceback
                     value = traceback.format_exc()
@@ -1565,37 +1564,34 @@ class ImageWidget(QtWidgets.QWidget):
             slabel = [lb for lb in slabel if lb]
             rid = 0
             lastcrdlist = None
-            lasttypelist = None
             toremove = []
             toadd = []
             if "DetectorROIs" not in rois or not isinstance(
                     rois["DetectorROIs"], dict):
                 rois["DetectorROIs"] = {}
-            if "DetectorROIsTypes" not in rois or not isinstance(
-                    rois["DetectorROIsTypes"], dict):
-                rois["DetectorROIsTypes"] = {}
             lastalias = None
 
             roicoords = self.__displaywidget.extension('rois').roiCoords()
-            roitypes = self.__displaywidget.extension('rois').roiTypes()
+            roitypes = self.__displaywidget.extension('rois').roiTypes() or []
             for alias in slabel:
                 if alias not in toadd:
                     rois["DetectorROIs"][alias] = []
-                if alias not in toadd:
-                    rois["DetectorROIsTypes"][alias] = []
                 lastcrdlist = rois["DetectorROIs"][alias]
-                lasttypelist = rois["DetectorROIsTypes"][alias]
                 if rid < len(roicoords):
-                    lastcrdlist.append(roicoords[rid])
-                    lasttypelist.append(roitypes[rid])
+                    rtype = "rectangle"
+                    if self.__settings.typedrois:
+                        if len(roitypes) > rid:
+                            rtype = roitypes[rid]
+                        lastcrdlist.append(
+                            {"bounds": roicoords[rid], "type": rtype})
+                    else:
+                        lastcrdlist.append(roicoords[rid])
                     rid += 1
                     if alias not in toadd:
                         toadd.append(alias)
                 if not lastcrdlist:
                     if alias in rois["DetectorROIs"].keys():
                         rois["DetectorROIs"].pop(alias)
-                    if alias in rois["DetectorROIsTypes"].keys():
-                        rois["DetectorROIsTypes"].pop(alias)
                     if roispin >= 0:
                         toadd.append(alias)
                     else:
@@ -1603,14 +1599,17 @@ class ImageWidget(QtWidgets.QWidget):
                 lastalias = alias
             if rid > 0:
                 while rid < len(roicoords):
-                    lastcrdlist.append(roicoords[rid])
-                    lasttypelist.append(roitypes[rid])
+                    if self.__settings.typedrois:
+                        if len(roitypes) > rid:
+                            rtype = roitypes[rid]
+                        lastcrdlist.append(
+                            {"bounds": roicoords[rid], "type": rtype})
+                    else:
+                        lastcrdlist.append(roicoords[rid])
                     rid += 1
                 if not lastcrdlist:
                     if lastalias in rois["DetectorROIs"].keys():
                         rois["DetectorROIs"].pop(lastalias)
-                    if lastalias in rois["DetectorROIsTypes"].keys():
-                        rois["DetectorROIsTypes"].pop(lastalias)
                     if roispin >= 0:
                         toadd.append(lastalias)
                     else:
@@ -1846,9 +1845,7 @@ class ImageWidget(QtWidgets.QWidget):
                 try:
                     rois = json.loads(self.__sardana.getScanEnv(
                         str(self.__settings.doorname),
-                        ["DetectorROIs",
-                         "DetectorROIsOrder",
-                         "DetectorROIsTypes"]))
+                        ["DetectorROIs", "DetectorROIsOrder"]))
                 except Exception:
                     import traceback
                     value = traceback.format_exc()
@@ -1872,13 +1869,6 @@ class ImageWidget(QtWidgets.QWidget):
                     if slabel:
                         detrois = dict(
                             (k, v) for k, v in detrois.items() if k in slabel)
-                if "DetectorROIsTypes" in rois and isinstance(
-                        rois["DetectorROIsTypes"], dict):
-                    detroistypes = rois["DetectorROIsTypes"]
-                    if slabel:
-                        detroistypes = dict(
-                            (k, v) for k, v in detroistypes.items()
-                            if k in slabel)
                 coords = []
                 aliases = []
                 types = []
@@ -1887,54 +1877,87 @@ class ImageWidget(QtWidgets.QWidget):
                         if lb in detrois.keys():
                             if len(set(slabel[i:])) == 1:
                                 v = detrois.pop(lb)
-                                rt = []
-                                if lb in detroistypes.keys():
-                                    rt = detroistypes.pop(lb)
                                 if isinstance(v, list):
-                                    for iv, cr in enumerate(v):
+                                    for cr in v:
                                         if isinstance(cr, list):
-                                            coords.append(cr)
-                                            aliases.append(lb)
-                                            rt = "rectangle"
-                                            if len(rt) > iv:
-                                                types.append(rt[iv])
-                                            else:
-                                                types.append("rectangle")
-
+                                            if isinstance(cr, list):
+                                                if len(cr) == 5:
+                                                    types.append("ellipse")
+                                                else:
+                                                    types.append("rectangle")
+                                                coords.append(cr)
+                                                aliases.append(lb)
+                                            elif isinstance(cr, dict):
+                                                bcr = []
+                                                if "bounds" in cr.keys():
+                                                    bcr = cr["bounds"]
+                                                if "type" in cr.keys():
+                                                    rtype = cr["type"]
+                                                elif len(bcr) == 5:
+                                                    rtype = "ellipse"
+                                                else:
+                                                    rtype = "rectangle"
+                                                if bcr:
+                                                    coords.append(bcr)
+                                                    aliases.append(lb)
+                                                    types.append(rtype)
                                     break
                             else:
                                 v = detrois[lb]
-                                rt = []
-                                if lb in detroistypes.keys():
-                                    rt = detroistypes[lb]
                                 if isinstance(v, list) and v:
                                     cr = v[0]
+
                                     if isinstance(cr, list):
-                                        coords.append(cr)
-                                        aliases.append(lb)
-                                        rtype = "rectangle"
-                                        if isinstance(rt, list) and rt:
-                                            rtype = rt[0]
-                                            detroistypes[lb] = rt[1:]
-                                        types.append(rtype)
+                                        if isinstance(cr, list):
+                                            if len(cr) == 5:
+                                                types.append("ellipse")
+                                            else:
+                                                types.append("rectangle")
+                                            coords.append(cr)
+                                            aliases.append(lb)
+                                        elif isinstance(cr, dict):
+                                            bcr = []
+                                            if "bounds" in cr.keys():
+                                                bcr = cr["bounds"]
+                                            if "type" in cr.keys():
+                                                rtype = cr["type"]
+                                            elif len(bcr) == 5:
+                                                rtype = "ellipse"
+                                            else:
+                                                rtype = "rectangle"
+                                            if bcr:
+                                                coords.append(bcr)
+                                                aliases.append(lb)
+                                                types.append(rtype)
                                         detrois[lb] = v[1:]
+
                                 if not detrois[lb]:
                                     detrois.pop(lb)
-                                if not detroistypes[lb]:
-                                    detroistypes.pop(lb)
                 for k, v in detrois.items():
                     if isinstance(v, list):
-                        rt = []
-                        if detroistypes and k in detroistypes.keys():
-                            rt = detroistypes[k]
-                        for ic, cr in enumerate(v):
+                        for cr in v:
                             if isinstance(cr, list):
+                                if len(cr) == 5:
+                                    types.append("ellipse")
+                                else:
+                                    types.append("rectangle")
                                 coords.append(cr)
                                 aliases.append(k)
-                                rtype = "rectangle"
-                                if isinstance(rt, list) and len(rt) > ic:
-                                    rtype = rt[ic]
-                                types.append(rtype)
+                            elif isinstance(cr, dict):
+                                bcr = []
+                                if "bounds" in cr.keys():
+                                    bcr = cr["bounds"]
+                                if "type" in cr.keys():
+                                    rtype = cr["type"]
+                                elif len(bcr) == 5:
+                                    rtype = "ellipse"
+                                else:
+                                    rtype = "rectangle"
+                                if bcr:
+                                    coords.append(bcr)
+                                    aliases.append(k)
+                                    types.append(rtype)
+
                 slabel = []
                 for i, al in enumerate(aliases):
                     if len(set(aliases[i:])) == 1:
@@ -1955,8 +1978,6 @@ class ImageWidget(QtWidgets.QWidget):
                     else:
                         eflatrois = None
                     coords, types = self._fromFlatROIs(flatrois, eflatrois)
-                    # types = [("ellipse" if len(crd) == 5 else "rectangle")
-                    #          for crd in coords]
                     self.updateROIs(len(coords), coords, types)
                 except Exception:
                     import traceback
@@ -2442,6 +2463,7 @@ class ImageWidget(QtWidgets.QWidget):
 
         detrois = json.loads(str(rois))
         coords = []
+        types = []
         aliases = []
         found = set()
         llabels = str(self.roilabels).split(" ")
@@ -2452,8 +2474,27 @@ class ImageWidget(QtWidgets.QWidget):
                     found.add(k)
                     for cr in v:
                         if isinstance(cr, list):
+                            if len(cr) == 5:
+                                types.append("ellipse")
+                            else:
+                                types.append("rectangle")
                             coords.append(cr)
                             aliases.append(k)
+                        elif isinstance(cr, dict):
+                            bcr = []
+                            if "bounds" in cr.keys():
+                                bcr = cr["bounds"]
+                            if "type" in cr.keys():
+                                rtype = cr["type"]
+                            elif len(bcr) == 5:
+                                rtype = "ellipse"
+                            else:
+                                rtype = "rectangle"
+                            if bcr:
+                                coords.append(bcr)
+                                aliases.append(k)
+                                types.append(rtype)
+
         for k, v in detrois.items():
             if isinstance(v, list) and k not in found:
                 for cr in v:
@@ -2476,9 +2517,10 @@ class ImageWidget(QtWidgets.QWidget):
             self.roiAliasesChanged.emit(self.roilabels)
 
         oldcoords = self.__displaywidget.extension('rois').roiCoords()
+        oldtypes = self.__displaywidget.extension('rois').roiTypes()
         # print("UPDATE %s" % str(coords))
-        if oldcoords != coords:
-            self.updateROIs(len(coords), coords)
+        if oldcoords != coords or oldtypes != types:
+            self.updateROIs(len(coords), coords, types)
 
     def setToolScale(self, position=None, scale=None):
         """ get axes parameters

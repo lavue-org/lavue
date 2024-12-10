@@ -8,7 +8,7 @@ ROI Tool
 .. figure:: ../../_images/roilavue.png
 
 The user can use rectangle and ellipse ROI shapes. The rectangle bounds are represented by a list of four integer numbers,  [x1, y1, x2, y2].  The elliptic bounds are represented by a list of five float numbers, i.e. [x, y, width, height, angle].
-	    
+
 *    **ROI alias(es)** for roi tango devices
 *    **Add** to or **Fetch** from sardana environment (see below). If lavue is working with ANALYSISDEVICE , i.e. lavue -n <device>,  **ROIs** bounds are sending also to tango SPECTRUM  **RoIs**  attribute of the device, e.g. LambdaOnlineAnalysis server.
 *    **Sum of** the selected **ROI** or all **ROIs**. The used version can be selected in the configuration.

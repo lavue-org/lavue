@@ -59,6 +59,8 @@ class Settings(object):
         self.addrois = False
         #: (:obj:`bool`) fetch rois order enabled
         self.orderrois = False
+        #: (:obj:`bool`) fetch typed rois enabled
+        self.typedrois = False
         #: (:obj:`bool`) search for security stream port automatically
         self.secautoport = True
         #: (:obj:`bool`) show intensity hostogram
@@ -404,6 +406,9 @@ class Settings(object):
         qstval = str(settings.value("Configuration/OrderROIs", type=str))
         if qstval.lower() == "true":
             self.orderrois = True
+        qstval = str(settings.value("Configuration/TypedROIs", type=str))
+        if qstval.lower() == "true":
+            self.typedrois = True
         qstval = str(settings.value("Configuration/ImageChannels", type=str))
         if qstval.lower() == "true":
             self.imagechannels = True
@@ -1009,6 +1014,9 @@ class Settings(object):
         settings.setValue(
             "Configuration/OrderROIs",
             self.orderrois)
+        settings.setValue(
+            "Configuration/TypedROIs",
+            self.typedrois)
         settings.setValue(
             "Configuration/ImageChannels",
             self.imagechannels)

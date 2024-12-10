@@ -918,7 +918,7 @@
         <span class="n">types</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s1">&#39;rois&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">roiTypes</span><span class="p">()</span> <span class="ow">or</span> <span class="p">[])</span>
         <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">types</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">rid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">roitype</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TYPES&quot;</span><span class="p">,</span> <span class="n">types</span><span class="p">)</span>
+        <span class="c1"># print(&quot;TYPES&quot;, types)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s1">&#39;rois&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">updateROIs</span><span class="p">(</span>
             <span class="n">rid</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">slabel</span><span class="p">,</span> <span class="n">types</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">applyTipsChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">rid</span><span class="p">)</span>
@@ -1619,13 +1619,20 @@
             <span class="n">lastalias</span> <span class="o">=</span> <span class="kc">None</span>
 
             <span class="n">roicoords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s1">&#39;rois&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">roiCoords</span><span class="p">()</span>
-            <span class="c1"># roitypes = self.__displaywidget.extension(&#39;rois&#39;).roiTypes()</span>
+            <span class="n">roitypes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s1">&#39;rois&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">roiTypes</span><span class="p">()</span> <span class="ow">or</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">slabel</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">alias</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">toadd</span><span class="p">:</span>
                     <span class="n">rois</span><span class="p">[</span><span class="s2">&quot;DetectorROIs&quot;</span><span class="p">][</span><span class="n">alias</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="n">lastcrdlist</span> <span class="o">=</span> <span class="n">rois</span><span class="p">[</span><span class="s2">&quot;DetectorROIs&quot;</span><span class="p">][</span><span class="n">alias</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">rid</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">roicoords</span><span class="p">):</span>
-                    <span class="n">lastcrdlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">roicoords</span><span class="p">[</span><span class="n">rid</span><span class="p">])</span>
+                    <span class="n">rtype</span> <span class="o">=</span> <span class="s2">&quot;rectangle&quot;</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">typedrois</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">roitypes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">rid</span><span class="p">:</span>
+                            <span class="n">rtype</span> <span class="o">=</span> <span class="n">roitypes</span><span class="p">[</span><span class="n">rid</span><span class="p">]</span>
+                        <span class="n">lastcrdlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="p">{</span><span class="s2">&quot;bounds&quot;</span><span class="p">:</span> <span class="n">roicoords</span><span class="p">[</span><span class="n">rid</span><span class="p">],</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">rtype</span><span class="p">})</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">lastcrdlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">roicoords</span><span class="p">[</span><span class="n">rid</span><span class="p">])</span>
                     <span class="n">rid</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="k">if</span> <span class="n">alias</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">toadd</span><span class="p">:</span>
                         <span class="n">toadd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">alias</span><span class="p">)</span>
@@ -1639,7 +1646,13 @@
                 <span class="n">lastalias</span> <span class="o">=</span> <span class="n">alias</span>
             <span class="k">if</span> <span class="n">rid</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">while</span> <span class="n">rid</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">roicoords</span><span class="p">):</span>
-                    <span class="n">lastcrdlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">roicoords</span><span class="p">[</span><span class="n">rid</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">typedrois</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">roitypes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">rid</span><span class="p">:</span>
+                            <span class="n">rtype</span> <span class="o">=</span> <span class="n">roitypes</span><span class="p">[</span><span class="n">rid</span><span class="p">]</span>
+                        <span class="n">lastcrdlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="p">{</span><span class="s2">&quot;bounds&quot;</span><span class="p">:</span> <span class="n">roicoords</span><span class="p">[</span><span class="n">rid</span><span class="p">],</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">rtype</span><span class="p">})</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">lastcrdlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">roicoords</span><span class="p">[</span><span class="n">rid</span><span class="p">])</span>
                     <span class="n">rid</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">lastcrdlist</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">lastalias</span> <span class="ow">in</span> <span class="n">rois</span><span class="p">[</span><span class="s2">&quot;DetectorROIs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -1700,20 +1713,14 @@
                             <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;lavue: Error in Setting Measurement group&quot;</span><span class="p">,</span>
                             <span class="n">text</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">analysisdevice</span><span class="p">:</span>
-                <span class="n">flatrois</span><span class="p">,</span> <span class="n">eflatrois</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flattenROIs</span><span class="p">(</span><span class="n">roicoords</span><span class="p">)</span>
-                <span class="c1"># flatrois = self._flattenROIs(roicoords)</span>
-                <span class="n">eflatrois</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">flatrois</span><span class="p">,</span> <span class="n">eflatrois</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flattenROIs</span><span class="p">(</span><span class="n">roicoords</span><span class="p">,</span> <span class="n">roitypes</span><span class="p">)</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">adp</span> <span class="o">=</span> <span class="n">sardanaUtils</span><span class="o">.</span><span class="n">SardanaUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span>
                         <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">analysisdevice</span><span class="p">))</span>
                     <span class="k">if</span> <span class="n">flatrois</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="n">adp</span><span class="o">.</span><span class="n">RoIs</span> <span class="o">=</span> <span class="n">flatrois</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">eflatrois</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="n">adp</span><span class="o">.</span><span class="n">EllipseRoIs</span> <span class="o">=</span> <span class="n">eflatrois</span>
-                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                            <span class="s2">&quot;Error in Setting EllipseRoIs </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">eflatrois</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">adp</span><span class="p">,</span> <span class="s2">&quot;EllipseRoIs&quot;</span><span class="p">):</span>
+                        <span class="n">adp</span><span class="o">.</span><span class="n">EllipseRoIs</span> <span class="o">=</span> <span class="n">eflatrois</span>
 
                 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                     <span class="kn">import</span> <span class="nn">traceback</span>
@@ -1727,12 +1734,13 @@
             <span class="c1"># print(&quot;Connection error&quot;)</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;ImageWidget.applyROI: Connection error&quot;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_flattenROIs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">roicoords</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_flattenROIs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">roicoords</span><span class="p">,</span> <span class="n">roitypes</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; calculate source rois coordinates from lavue rois coordinates</span>
 
 <span class="sd">        :param roicoords: lavue rois coordinates</span>
-<span class="sd">        :type roicoords: :obj:`list`</span>
-<span class="sd">                &lt; [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] &gt;</span>
+<span class="sd">        :type roicoords: :obj:`list` &lt; :obj:`list` &lt; :obj:`float`&gt; &gt;</span>
+<span class="sd">        :param roitypes: lavue rois coordinates</span>
+<span class="sd">        :type roitypes: :obj:`list` &lt; :obj:`str` &gt;</span>
 <span class="sd">        :returns:  rectangle rois coordinates, elliptic rois coordinages</span>
 <span class="sd">        :rtype: (:obj:`list` &lt; :obj:`float` &gt; , :obj:`list` &lt; :obj:`float` &gt;)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1742,8 +1750,11 @@
             <span class="n">sh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rawdata</span><span class="o">.</span><span class="n">shape</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">sh</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">crds</span> <span class="ow">in</span> <span class="n">roicoords</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">crds</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">ic</span><span class="p">,</span> <span class="n">crds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">roicoords</span><span class="p">):</span>
+            <span class="n">rtype</span> <span class="o">=</span> <span class="s2">&quot;rectangle&quot;</span>
+            <span class="k">if</span> <span class="n">roitypes</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">roitypes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">ic</span><span class="p">:</span>
+                <span class="n">rtype</span> <span class="o">=</span> <span class="n">roitypes</span><span class="p">[</span><span class="n">ic</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">rtype</span> <span class="o">==</span> <span class="s2">&quot;rectangle&quot;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">keepcoords</span><span class="p">:</span>
                     <span class="n">trans</span><span class="p">,</span> <span class="n">leftright</span><span class="p">,</span> <span class="n">updown</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> \
                         <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()</span>
@@ -1800,7 +1811,7 @@
                     <span class="n">flatrois</span><span class="p">[</span><span class="mi">4</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">flatrois</span><span class="p">[</span><span class="mi">4</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">],</span> <span class="n">shb</span><span class="p">)</span>
                     <span class="n">flatrois</span><span class="p">[</span><span class="mi">4</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">flatrois</span><span class="p">[</span><span class="mi">4</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="p">],</span> <span class="n">shb</span><span class="p">)</span>
                 <span class="n">eflatrois</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])</span>
-            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">crds</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rtype</span> <span class="o">==</span> <span class="s2">&quot;ellipse&quot;</span><span class="p">:</span>
                 <span class="n">flatrois</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">keepcoords</span><span class="p">:</span>
                     <span class="n">eflatrois</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
@@ -1916,38 +1927,84 @@
                                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                                     <span class="k">for</span> <span class="n">cr</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
                                         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-                                            <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span>
-                                            <span class="n">aliases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lb</span><span class="p">)</span>
-                                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
-                                                <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;ellipse&quot;</span><span class="p">)</span>
-                                            <span class="k">else</span><span class="p">:</span>
-                                                <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;rectangle&quot;</span><span class="p">)</span>
-
+                                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                                                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                                                    <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;ellipse&quot;</span><span class="p">)</span>
+                                                <span class="k">else</span><span class="p">:</span>
+                                                    <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;rectangle&quot;</span><span class="p">)</span>
+                                                <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span>
+                                                <span class="n">aliases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lb</span><span class="p">)</span>
+                                            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                                                <span class="n">bcr</span> <span class="o">=</span> <span class="p">[]</span>
+                                                <span class="k">if</span> <span class="s2">&quot;bounds&quot;</span> <span class="ow">in</span> <span class="n">cr</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                                                    <span class="n">bcr</span> <span class="o">=</span> <span class="n">cr</span><span class="p">[</span><span class="s2">&quot;bounds&quot;</span><span class="p">]</span>
+                                                <span class="k">if</span> <span class="s2">&quot;type&quot;</span> <span class="ow">in</span> <span class="n">cr</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                                                    <span class="n">rtype</span> <span class="o">=</span> <span class="n">cr</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+                                                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">bcr</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                                                    <span class="n">rtype</span> <span class="o">=</span> <span class="s2">&quot;ellipse&quot;</span>
+                                                <span class="k">else</span><span class="p">:</span>
+                                                    <span class="n">rtype</span> <span class="o">=</span> <span class="s2">&quot;rectangle&quot;</span>
+                                                <span class="k">if</span> <span class="n">bcr</span><span class="p">:</span>
+                                                    <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bcr</span><span class="p">)</span>
+                                                    <span class="n">aliases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lb</span><span class="p">)</span>
+                                                    <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rtype</span><span class="p">)</span>
                                     <span class="k">break</span>
                             <span class="k">else</span><span class="p">:</span>
                                 <span class="n">v</span> <span class="o">=</span> <span class="n">detrois</span><span class="p">[</span><span class="n">lb</span><span class="p">]</span>
                                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="n">v</span><span class="p">:</span>
                                     <span class="n">cr</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
                                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-                                        <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span>
-                                        <span class="n">aliases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lb</span><span class="p">)</span>
-                                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
-                                            <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;ellipse&quot;</span><span class="p">)</span>
-                                        <span class="k">else</span><span class="p">:</span>
-                                            <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;rectangle&quot;</span><span class="p">)</span>
+                                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                                                <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;ellipse&quot;</span><span class="p">)</span>
+                                            <span class="k">else</span><span class="p">:</span>
+                                                <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;rectangle&quot;</span><span class="p">)</span>
+                                            <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span>
+                                            <span class="n">aliases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lb</span><span class="p">)</span>
+                                        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                                            <span class="n">bcr</span> <span class="o">=</span> <span class="p">[]</span>
+                                            <span class="k">if</span> <span class="s2">&quot;bounds&quot;</span> <span class="ow">in</span> <span class="n">cr</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                                                <span class="n">bcr</span> <span class="o">=</span> <span class="n">cr</span><span class="p">[</span><span class="s2">&quot;bounds&quot;</span><span class="p">]</span>
+                                            <span class="k">if</span> <span class="s2">&quot;type&quot;</span> <span class="ow">in</span> <span class="n">cr</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                                                <span class="n">rtype</span> <span class="o">=</span> <span class="n">cr</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+                                            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">bcr</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                                                <span class="n">rtype</span> <span class="o">=</span> <span class="s2">&quot;ellipse&quot;</span>
+                                            <span class="k">else</span><span class="p">:</span>
+                                                <span class="n">rtype</span> <span class="o">=</span> <span class="s2">&quot;rectangle&quot;</span>
+                                            <span class="k">if</span> <span class="n">bcr</span><span class="p">:</span>
+                                                <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bcr</span><span class="p">)</span>
+                                                <span class="n">aliases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lb</span><span class="p">)</span>
+                                                <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rtype</span><span class="p">)</span>
                                         <span class="n">detrois</span><span class="p">[</span><span class="n">lb</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
                                 <span class="k">if</span> <span class="ow">not</span> <span class="n">detrois</span><span class="p">[</span><span class="n">lb</span><span class="p">]:</span>
                                     <span class="n">detrois</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">lb</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">detrois</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                         <span class="k">for</span> <span class="n">cr</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
                             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-                                <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span>
-                                <span class="n">aliases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
                                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
                                     <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;ellipse&quot;</span><span class="p">)</span>
                                 <span class="k">else</span><span class="p">:</span>
                                     <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;rectangle&quot;</span><span class="p">)</span>
+                                <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span>
+                                <span class="n">aliases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                                <span class="n">bcr</span> <span class="o">=</span> <span class="p">[]</span>
+                                <span class="k">if</span> <span class="s2">&quot;bounds&quot;</span> <span class="ow">in</span> <span class="n">cr</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                                    <span class="n">bcr</span> <span class="o">=</span> <span class="n">cr</span><span class="p">[</span><span class="s2">&quot;bounds&quot;</span><span class="p">]</span>
+                                <span class="k">if</span> <span class="s2">&quot;type&quot;</span> <span class="ow">in</span> <span class="n">cr</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                                    <span class="n">rtype</span> <span class="o">=</span> <span class="n">cr</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+                                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">bcr</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                                    <span class="n">rtype</span> <span class="o">=</span> <span class="s2">&quot;ellipse&quot;</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="n">rtype</span> <span class="o">=</span> <span class="s2">&quot;rectangle&quot;</span>
+                                <span class="k">if</span> <span class="n">bcr</span><span class="p">:</span>
+                                    <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bcr</span><span class="p">)</span>
+                                    <span class="n">aliases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                                    <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rtype</span><span class="p">)</span>
+
                 <span class="n">slabel</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">al</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">aliases</span><span class="p">):</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">aliases</span><span class="p">[</span><span class="n">i</span><span class="p">:]))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -1963,13 +2020,11 @@
                     <span class="n">adp</span> <span class="o">=</span> <span class="n">sardanaUtils</span><span class="o">.</span><span class="n">SardanaUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span>
                         <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">analysisdevice</span><span class="p">))</span>
                     <span class="n">flatrois</span> <span class="o">=</span> <span class="n">adp</span><span class="o">.</span><span class="n">RoIs</span>
-                    <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">adp</span><span class="p">,</span> <span class="s2">&quot;EllipseRoIs&quot;</span><span class="p">):</span>
                         <span class="n">eflatrois</span> <span class="o">=</span> <span class="n">adp</span><span class="o">.</span><span class="n">EllipseRoIs</span>
-                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">else</span><span class="p">:</span>
                         <span class="n">eflatrois</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="n">coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fromFlatROIs</span><span class="p">(</span><span class="n">flatrois</span><span class="p">,</span> <span class="n">eflatrois</span><span class="p">)</span>
-                    <span class="n">types</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;ellipse&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">crd</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span> <span class="k">else</span> <span class="s2">&quot;rectangle&quot;</span><span class="p">)</span>
-                             <span class="k">for</span> <span class="n">crd</span> <span class="ow">in</span> <span class="n">coords</span><span class="p">]</span>
+                    <span class="n">coords</span><span class="p">,</span> <span class="n">types</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fromFlatROIs</span><span class="p">(</span><span class="n">flatrois</span><span class="p">,</span> <span class="n">eflatrois</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">updateROIs</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">),</span> <span class="n">coords</span><span class="p">,</span> <span class="n">types</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                     <span class="kn">import</span> <span class="nn">traceback</span>
@@ -1991,10 +2046,12 @@
 <span class="sd">        :param eroicoords: lavue rois eliptic coordinates</span>
 <span class="sd">        :type eroicoords: :obj:`list` &lt; :obj:`float` &gt;</span>
 <span class="sd">        :returns:  detector rois coordinates</span>
-<span class="sd">        :rtype: :obj:`list`</span>
-<span class="sd">                &lt; [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] &gt;</span>
+<span class="sd">        :rtype: (:obj:`list` &lt; :obj:`list` &lt; :obj:`float` &gt; &gt; &gt; ,</span>
+<span class="sd">                 &lt; :obj:`list` &lt; :obj:`str` &gt; &gt; )</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">coords</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">types</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">eflatroilen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">eflatrois</span><span class="p">)</span> <span class="k">if</span> <span class="n">eflatrois</span> <span class="k">else</span> <span class="mi">0</span>
         <span class="n">eflatroi5len</span> <span class="o">=</span> <span class="n">eflatroilen</span> <span class="o">//</span> <span class="mi">5</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__rawdata</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">):</span>
@@ -2004,6 +2061,7 @@
         <span class="k">for</span> <span class="n">crds</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">flatrois</span><span class="p">[::</span><span class="mi">4</span><span class="p">],</span> <span class="n">flatrois</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">4</span><span class="p">],</span>
                         <span class="n">flatrois</span><span class="p">[</span><span class="mi">2</span><span class="p">::</span><span class="mi">4</span><span class="p">],</span> <span class="n">flatrois</span><span class="p">[</span><span class="mi">3</span><span class="p">::</span><span class="mi">4</span><span class="p">]):</span>
             <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">crds</span><span class="p">):</span>
+                <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;rectangle&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">keepcoords</span><span class="p">:</span>
                     <span class="n">trans</span><span class="p">,</span> <span class="n">leftright</span><span class="p">,</span> <span class="n">updown</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> \
                         <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()</span>
@@ -2044,6 +2102,7 @@
                 <span class="n">lcr</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
                 <span class="n">ecrds</span> <span class="o">=</span> <span class="n">eflatrois</span><span class="p">[</span><span class="mi">5</span> <span class="o">*</span> <span class="n">lcr</span><span class="p">:</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">lcr</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span>
                 <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">ecrds</span><span class="p">):</span>
+                    <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;ellipse&quot;</span><span class="p">)</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">keepcoords</span><span class="p">:</span>
                         <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ecrds</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
@@ -2091,7 +2150,7 @@
                                            <span class="o">-</span><span class="n">ecrds</span><span class="p">[</span><span class="mi">4</span><span class="p">]])</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Dead end&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">coords</span>
+        <span class="k">return</span> <span class="n">coords</span><span class="p">,</span> <span class="n">types</span>
 
 <div class="viewcode-block" id="ImageWidget.currentIntensity"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.currentIntensity">[docs]</a>    <span class="k">def</span> <span class="nf">currentIntensity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides intensity for current mouse position</span>
@@ -2451,6 +2510,7 @@
 
         <span class="n">detrois</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">rois</span><span class="p">))</span>
         <span class="n">coords</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">types</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">aliases</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">found</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">llabels</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">roilabels</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
@@ -2461,8 +2521,27 @@
                     <span class="n">found</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
                     <span class="k">for</span> <span class="n">cr</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
                         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                                <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;ellipse&quot;</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;rectangle&quot;</span><span class="p">)</span>
                             <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span>
                             <span class="n">aliases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                            <span class="n">bcr</span> <span class="o">=</span> <span class="p">[]</span>
+                            <span class="k">if</span> <span class="s2">&quot;bounds&quot;</span> <span class="ow">in</span> <span class="n">cr</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                                <span class="n">bcr</span> <span class="o">=</span> <span class="n">cr</span><span class="p">[</span><span class="s2">&quot;bounds&quot;</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="s2">&quot;type&quot;</span> <span class="ow">in</span> <span class="n">cr</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                                <span class="n">rtype</span> <span class="o">=</span> <span class="n">cr</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+                            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">bcr</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                                <span class="n">rtype</span> <span class="o">=</span> <span class="s2">&quot;ellipse&quot;</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">rtype</span> <span class="o">=</span> <span class="s2">&quot;rectangle&quot;</span>
+                            <span class="k">if</span> <span class="n">bcr</span><span class="p">:</span>
+                                <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bcr</span><span class="p">)</span>
+                                <span class="n">aliases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                                <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rtype</span><span class="p">)</span>
+
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">detrois</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">found</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">cr</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
@@ -2485,9 +2564,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">roiAliasesChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">roilabels</span><span class="p">)</span>
 
         <span class="n">oldcoords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s1">&#39;rois&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">roiCoords</span><span class="p">()</span>
+        <span class="n">oldtypes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__displaywidget</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s1">&#39;rois&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">roiTypes</span><span class="p">()</span>
         <span class="c1"># print(&quot;UPDATE %s&quot; % str(coords))</span>
-        <span class="k">if</span> <span class="n">oldcoords</span> <span class="o">!=</span> <span class="n">coords</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">updateROIs</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">),</span> <span class="n">coords</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">oldcoords</span> <span class="o">!=</span> <span class="n">coords</span> <span class="ow">or</span> <span class="n">oldtypes</span> <span class="o">!=</span> <span class="n">types</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updateROIs</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">),</span> <span class="n">coords</span><span class="p">,</span> <span class="n">types</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ImageWidget.setToolScale"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.setToolScale">[docs]</a>    <span class="k">def</span> <span class="nf">setToolScale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; get axes parameters</span>

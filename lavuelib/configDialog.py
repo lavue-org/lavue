@@ -212,6 +212,8 @@ class ConfigDialog(QtWidgets.QDialog):
         self.addrois = False
         #: (:obj:`bool`) fetch rois order enabled
         self.orderrois = False
+        #: (:obj:`bool`) fetch typed rois enabled
+        self.typedrois = False
         #: (:obj:`bool`) security stream enabled
         self.secstream = False
         #: (:obj:`bool`) zmq colon configuration separator
@@ -479,6 +481,7 @@ class ConfigDialog(QtWidgets.QDialog):
         self.__ui.doorLineEdit.setText(self.door)
         self.__ui.addroisCheckBox.setChecked(self.addrois)
         self.__ui.orderroisCheckBox.setChecked(self.orderrois)
+        self.__ui.typedroisCheckBox.setChecked(self.typedrois)
         self.__ui.imagechannelsCheckBox.setChecked(self.imagechannels)
         self.__ui.secstreamCheckBox.setChecked(self.secstream)
         self.__ui.zmqcolonCheckBox.setChecked(self.zmqcolon)
@@ -994,6 +997,7 @@ class ConfigDialog(QtWidgets.QDialog):
         self.door = str(self.__ui.doorLineEdit.text()).strip()
         self.addrois = self.__ui.addroisCheckBox.isChecked()
         self.orderrois = self.__ui.orderroisCheckBox.isChecked()
+        self.typedrois = self.__ui.typedroisCheckBox.isChecked()
         self.imagechannels = self.__ui.imagechannelsCheckBox.isChecked()
         self.hidraport = str(self.__ui.hidraportLineEdit.text()).strip()
         self.maxmbuffersize = str(self.__ui.mbufsizeLineEdit.text()).strip()
