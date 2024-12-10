@@ -368,12 +368,12 @@ class ROIExtension(DisplayExtension):
                     pnt = _pg.Point(coords[0], coords[1])
                     spnt = _pg.Point(coords[2], coords[3])
                     if len(coords) > 4:
-                        angle = coords[5]
+                        angle = coords[4]
                 else:
                     pnt = _pg.Point(coords[1], coords[0])
                     spnt = _pg.Point(coords[3], coords[2])
                     if len(coords) > 4:
-                        angle = -coords[5]
+                        angle = -coords[4]
 
             self.__roi.append(EllipseROI(pnt, spnt, angle=angle))
         else:

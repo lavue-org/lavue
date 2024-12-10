@@ -148,6 +148,8 @@ class ImageWidget(QtWidgets.QWidget):
         self.__tangoclient = None
         #: (:obj:`list`) collection of last writing rois
         self.__lastrois = []
+        #: (:obj:`list`) collection of last writing rois types
+        self.__lastroistypes = []
         #: (:obj:`list`) collection of last writing rois values
         self.__lastroisvalues = []
         #: (:obj:`list`) collection of last writing rois parameters
@@ -533,14 +535,23 @@ class ImageWidget(QtWidgets.QWidget):
             lastalias = None
 
             roicoords = self.__displaywidget.extension('rois').roiCoords()
+            roitypes = self.__displaywidget.extension('rois').roiTypes()
 
             self.__lastrois = list(roicoords)
+            self.__lastroistypes = list(roitypes)
             for alias in slabel:
                 if alias not in toadd:
                     rois[alias] = []
                 lastcrdlist = rois[alias]
                 if rid < len(roicoords):
-                    lastcrdlist.append(roicoords[rid])
+                    if self.__settings.typedrois:
+                        rtype = "rectangle"
+                        if rid < len(roitypes):
+                            rtype = roitypes[rid]
+                        lastcrdlist.append({"bounds": roicoords[rid],
+                                            "type": rtype})
+                    else:
+                        lastcrdlist.append(roicoords[rid])
                     rid += 1
                     if alias not in toadd:
                         toadd.append(alias)
@@ -551,7 +562,14 @@ class ImageWidget(QtWidgets.QWidget):
                 lastalias = alias
             if rid > 0:
                 while rid < len(roicoords):
-                    lastcrdlist.append(roicoords[rid])
+                    if self.__settings.typedrois:
+                        rtype = "rectangle"
+                        if rid < len(roitypes):
+                            rtype = roitypes[rid]
+                        lastcrdlist.append({"bounds": roicoords[rid],
+                                            "type": rtype})
+                    else:
+                        lastcrdlist.append(roicoords[rid])
                     rid += 1
                 if not lastcrdlist:
                     if lastalias in rois.keys():
@@ -868,10 +886,11 @@ class ImageWidget(QtWidgets.QWidget):
             slabel = [lb for lb in slabel if lb]
         else:
             slabel = []
-        types = list(self.__displaywidget.extension('rois').roiTypes() or [])
+        if not types:
+            types = list(self.__displaywidget.extension('rois').roiTypes()
+                         or [])
         while len(types) < rid + 1:
             types.append(self.roitype)
-        # print("TYPES", types)
         self.__displaywidget.extension('rois').updateROIs(
             rid, coords, slabel, types)
         self.applyTipsChanged.emit(rid)
@@ -1325,6 +1344,9 @@ class ImageWidget(QtWidgets.QWidget):
             if self.__lastrois != self.__displaywidget.\
                extension('rois').roiCoords():
                 self.writeDetectorROIsAttribute()
+            # if self.__lastroistypes != self.__displaywidget.\
+            #    extension('rois').roiTypes():
+            #     self.writeDetectorROIsAttribute()
         self.mouseImagePositionChanged.emit()
 
     @QtCore.pyqtSlot(float, float)
@@ -1880,35 +1902,6 @@ class ImageWidget(QtWidgets.QWidget):
                                 if isinstance(v, list):
                                     for cr in v:
                                         if isinstance(cr, list):
-                                            if isinstance(cr, list):
-                                                if len(cr) == 5:
-                                                    types.append("ellipse")
-                                                else:
-                                                    types.append("rectangle")
-                                                coords.append(cr)
-                                                aliases.append(lb)
-                                            elif isinstance(cr, dict):
-                                                bcr = []
-                                                if "bounds" in cr.keys():
-                                                    bcr = cr["bounds"]
-                                                if "type" in cr.keys():
-                                                    rtype = cr["type"]
-                                                elif len(bcr) == 5:
-                                                    rtype = "ellipse"
-                                                else:
-                                                    rtype = "rectangle"
-                                                if bcr:
-                                                    coords.append(bcr)
-                                                    aliases.append(lb)
-                                                    types.append(rtype)
-                                    break
-                            else:
-                                v = detrois[lb]
-                                if isinstance(v, list) and v:
-                                    cr = v[0]
-
-                                    if isinstance(cr, list):
-                                        if isinstance(cr, list):
                                             if len(cr) == 5:
                                                 types.append("ellipse")
                                             else:
@@ -1929,7 +1922,33 @@ class ImageWidget(QtWidgets.QWidget):
                                                 coords.append(bcr)
                                                 aliases.append(lb)
                                                 types.append(rtype)
-                                        detrois[lb] = v[1:]
+                                    break
+                            else:
+                                v = detrois[lb]
+                                if isinstance(v, list) and v:
+                                    cr = v[0]
+                                    if isinstance(cr, list):
+                                        if len(cr) == 5:
+                                            types.append("ellipse")
+                                        else:
+                                            types.append("rectangle")
+                                        coords.append(cr)
+                                        aliases.append(lb)
+                                    elif isinstance(cr, dict):
+                                        bcr = []
+                                        if "bounds" in cr.keys():
+                                            bcr = cr["bounds"]
+                                        if "type" in cr.keys():
+                                            rtype = cr["type"]
+                                        elif len(bcr) == 5:
+                                            rtype = "ellipse"
+                                        else:
+                                            rtype = "rectangle"
+                                        if bcr:
+                                            coords.append(bcr)
+                                            aliases.append(lb)
+                                            types.append(rtype)
+                                    detrois[lb] = v[1:]
 
                                 if not detrois[lb]:
                                     detrois.pop(lb)
@@ -1966,7 +1985,6 @@ class ImageWidget(QtWidgets.QWidget):
                     else:
                         slabel.append(al)
                 self.roiAliasesChanged.emit(" ".join(slabel))
-
                 self.updateROIs(len(coords), coords, types)
             elif self.__settings.analysisdevice:
                 try:
@@ -2499,8 +2517,27 @@ class ImageWidget(QtWidgets.QWidget):
             if isinstance(v, list) and k not in found:
                 for cr in v:
                     if isinstance(cr, list):
+                        if len(cr) == 5:
+                            types.append("ellipse")
+                        else:
+                            types.append("rectangle")
                         coords.append(cr)
                         aliases.append(k)
+                    elif isinstance(cr, dict):
+                        bcr = []
+                        if "bounds" in cr.keys():
+                            bcr = cr["bounds"]
+                        if "type" in cr.keys():
+                            rtype = cr["type"]
+                        elif len(bcr) == 5:
+                            rtype = "ellipse"
+                        else:
+                            rtype = "rectangle"
+                        if bcr:
+                            coords.append(bcr)
+                            aliases.append(k)
+                            types.append(rtype)
+
         slabel = []
         for i, al in enumerate(aliases):
             if len(set(aliases[i:])) == 1:
@@ -2518,7 +2555,6 @@ class ImageWidget(QtWidgets.QWidget):
 
         oldcoords = self.__displaywidget.extension('rois').roiCoords()
         oldtypes = self.__displaywidget.extension('rois').roiTypes()
-        # print("UPDATE %s" % str(coords))
         if oldcoords != coords or oldtypes != types:
             self.updateROIs(len(coords), coords, types)
 
