@@ -1695,6 +1695,7 @@ class ImageWidget(QtWidgets.QWidget):
                     if flatrois is not None:
                         adp.RoIs = flatrois
                     if eflatrois is not None and hasattr(adp, "EllipseRoIs"):
+                        # print("EROI", eflatrois)
                         adp.EllipseRoIs = eflatrois
 
                 except Exception:
@@ -1995,6 +1996,7 @@ class ImageWidget(QtWidgets.QWidget):
                         eflatrois = adp.EllipseRoIs
                     else:
                         eflatrois = None
+                    # print("ELII", eflatrois)
                     coords, types = self._fromFlatROIs(flatrois, eflatrois)
                     self.updateROIs(len(coords), coords, types)
                 except Exception:
@@ -2023,7 +2025,7 @@ class ImageWidget(QtWidgets.QWidget):
         """
         coords = []
         types = []
-        eflatroilen = len(eflatrois) if eflatrois else 0
+        eflatroilen = len(eflatrois) if eflatrois is not None else 0
         eflatroi5len = eflatroilen // 5
         if hasattr(self.__rawdata, "shape"):
             sh = self.__rawdata.shape
@@ -2075,7 +2077,9 @@ class ImageWidget(QtWidgets.QWidget):
                 if any(ecrds):
                     types.append("ellipse")
                     if self.__settings.keepcoords:
-                        coords.append(ecrds)
+                        coords.append([ecrds[0], ecrds[1],
+                                       ecrds[2], ecrds[3],
+                                       ecrds[4]])
                     else:
                         trans, leftright, updown = self.__selectedtrans
                         # coords.append(ecrds)
