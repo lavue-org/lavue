@@ -2316,6 +2316,7 @@ class LiveViewer(QtWidgets.QDialog):
         cnfdlg.crosshairlocker = self.__settings.crosshairlocker
         cnfdlg.addrois = self.__settings.addrois
         cnfdlg.orderrois = self.__settings.orderrois
+        cnfdlg.typedrois = self.__settings.typedrois
         cnfdlg.imagechannels = self.__settings.imagechannels
         cnfdlg.showsub = self.__settings.showsub
         cnfdlg.showsubsf = self.__settings.showsubsf
@@ -2426,6 +2427,7 @@ class LiveViewer(QtWidgets.QDialog):
             self.__settings.sardana = dialog.sardana
         self.__settings.addrois = dialog.addrois
         self.__settings.orderrois = dialog.orderrois
+        self.__settings.typedrois = dialog.typedrois
         self.__settings.imagechannels = dialog.imagechannels
         self.__settings.floattype = dialog.floattype
         self.__settings.crosshairlocker = dialog.crosshairlocker

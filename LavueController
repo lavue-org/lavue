@@ -71,6 +71,7 @@ class LavueController (tango.LatestDeviceImpl):
         self.current_rois_aliases = []
         self.current_attributes = set()
 
+        self.ROITypes = ["rectangle", "ellipse"]
         LavueController.init_device(self)
 
     def __unsubscribe(self):
@@ -165,7 +166,8 @@ class LavueController (tango.LatestDeviceImpl):
                                      if at != aalias])
             self.current_spectrum_aliases = []
 
-        if not self.DynamicROIs and self.current_rois_aliases:
+        if not self.DynamicROIs and not self.FloatDynamicROIs \
+           and self.current_rois_aliases:
             for alias in self.current_rois_aliases:
                 aalias = "%sROI" % alias \
                          if alias != "__Null__" else "ROI"
@@ -290,22 +292,42 @@ class LavueController (tango.LatestDeviceImpl):
                 raise Exception(
                     "ROI %s is not a double list" % str(det))
             for roi in rois:
-                if not isinstance(roi, (list)):
+                if isinstance(roi, (list)):
+                    if len(roi) not in [4, 5]:
+                        raise Exception(
+                            "ROI %s len is not 4 or 5" % str(det))
+                    for cr in roi:
+                        float(cr)
+                elif isinstance(roi, (dict)):
+                    if "bounds" not in roi:
+                        raise Exception(
+                            "ROI bounds of %s not defined" % str(det))
+                    if not isinstance(roi["bounds"], (list)):
+                        raise Exception(
+                            "ROI %s is written in an unknown format"
+                            % str(det))
+                    if len(roi["bounds"]) not in [4, 5]:
+                        raise Exception(
+                            "ROI %s len is not 4 or 5" % str(det))
+                    for cr in roi["bounds"]:
+                        float(cr)
+                    if "type" in roi:
+                        if roi["type"] not in self.ROITypes:
+                            raise Exception(
+                                "ROI type %s for %s is unknown" % (
+                                    roi["type"], str(det)))
+                else:
                     raise Exception(
-                        "ROI %s is not a double list" % str(det))
-                if len(roi) != 4:
-                    raise Exception(
-                        "ROI %s len is not 4" % str(det))
-                for cr in roi:
-                    float(cr)
-        if self.DynamicROIs:
+                        "ROI %s is written in an unknown format" % str(det))
+
+        if self.DynamicROIs or self.FloatDynamicROIs:
             self.requested_rois_aliases = []
             for det, rois in detrois.items():
                 self.requested_rois_aliases.append(det.title())
 
         if self.attr_DetectorROIs_read != data:
             self.attr_DetectorROIs_read = data
-            if self.DynamicROIs:
+            if self.DynamicROIs or self.FloatDynamicROIs:
                 self.initialize_dynamic_attributes()
             self.__push_event(
                 "DetectorROIs", self.attr_DetectorROIs_read)
@@ -420,14 +442,23 @@ class LavueController (tango.LatestDeviceImpl):
         if not name:
             name = "__null__"
         detrois = json.loads(self.attr_DetectorROIs_read)
-        if name in detrois.keys():
-            dtrois = [it for roi in detrois[name] for it in roi]
-        else:
+
+        if name not in detrois.keys():
             name = ("%s%s" % (name[0].lower(), name[1:]))
-            if name in detrois.keys():
-                dtrois = [it for roi in detrois[name] for it in roi]
-            else:
-                dtrois = []
+        dtrois = []
+        if name in detrois.keys():
+            for roi in detrois[name]:
+                if isinstance(roi, list):
+                    if self.FloatDynamicROIs:
+                        dtrois.extend([float(it) for it in roi])
+                    else:
+                        dtrois.extend([int(round(it)) for it in roi])
+                elif isinstance(roi, dict) and "bounds" in roi \
+                        and isinstance(roi["bounds"]):
+                    if self.FloatDynamicROIs:
+                        dtrois.extend([float(it) for it in roi["bounds"]])
+                    else:
+                        dtrois.extend([int(round(it)) for it in roi["bounds"]])
         attr.set_value(dtrois)
 
     def initialize_dynamic_rois_sums_attributes(self):
@@ -509,13 +540,16 @@ class LavueController (tango.LatestDeviceImpl):
                              if alias != "__Null__" else "ROI"
                     if aalias not in self.ROIAttributesNames:
                         self.remove_attribute(str(aalias))
-
+            if self.FloatDynamicROIs:
+                dynamicROIType = tango.DevLong
+            else:
+                dynamicROIType = tango.DevDouble
             for alias in self.requested_rois_aliases:
                 if alias not in self.current_rois_aliases:
                     myAttr = tango.SpectrumAttr(
                         str("%sROI" % alias)
                         if alias != "__Null__" else "ROI",
-                        tango.DevLong,
+                        dynamicROIType,
                         tango.AttrWriteType.READ, 4096)
                     self.add_attribute(
                         myAttr, LavueController.read_ROIsDynamicAttr,
@@ -527,7 +561,7 @@ class LavueController (tango.LatestDeviceImpl):
                         salias = "__Null__"
                     if salias not in self.current_rois_aliases:
                         myAttr = tango.SpectrumAttr(
-                            str(alias), tango.DevLong,
+                            str(alias), dynamicROIType,
                             tango.AttrWriteType.READ, 4096)
                         self.add_attribute(
                             myAttr, LavueController.read_ROIsDynamicAttr,
@@ -624,8 +658,14 @@ class LavueControllerClass(tango.DeviceClass):
     device_property_list = {
         'DynamicROIs':
         [tango.DevBoolean,
-         "create dynamically Attributes for ROIs aliases with their bounds",
+         "create dynamically Attributes for ROIs aliases "
+         "with their (int) bounds",
          [True]],
+        'FloatDynamicROIs':
+        [tango.DevBoolean,
+         "create dynamically Attributes for ROIs aliases "
+         "with their float bounds",
+         [False]],
         'DynamicROIsValues':
         [tango.DevBoolean,
          "create dynamically Attributes for ROIs aliases with their sums",

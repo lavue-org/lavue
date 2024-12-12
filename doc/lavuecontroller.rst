@@ -102,7 +102,7 @@ The **DynamicROIsValues** device property can be set to true or false. When it i
 
 They names are defined by ROIs aliases from Lavue GUI.
 
-The **DynamicROIs** device property can be set to true or false. When it is true dynamic attributes with ROIs bounds are added.
+The **DynamicROIs** or **FloatDynamicROIs** device property can be set to true or false. When it is true dynamic attributes with ROIs bounds are added. In the float case ROIs bounds are represented by float numbers.
 
 They names are defined by ROIs aliases from Lavue GUI.
 

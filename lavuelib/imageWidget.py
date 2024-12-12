@@ -146,16 +146,20 @@ class ImageWidget(QtWidgets.QWidget):
         #: (:class:`lavuelib.controllerClient.ControllerClient`)
         #:   tango controller client
         self.__tangoclient = None
-        #: (obj`list`) collection of last writing rois
+        #: (:obj:`list`) collection of last writing rois
         self.__lastrois = []
-        #: (obj`list`) collection of last writing rois values
+        #: (:obj:`list`) collection of last writing rois types
+        self.__lastroistypes = []
+        #: (:obj:`list`) collection of last writing rois values
         self.__lastroisvalues = []
-        #: (obj`list`) collection of last writing rois parameters
+        #: (:obj:`list`) collection of last writing rois parameters
         self.__lastroisparams = tuple()
-        #: (obj`str`) last text
+        #: (:obj:`str`) last text
         self.__lasttext = ""
-        #: (obj`str`) roi labels
+        #: (:obj:`str`) roi labels
         self.roilabels = ""
+        #: (:obj:`str`) roi type
+        self.roitype = "rectangle"
         #: (:class:`lavuelib.toolWidget.BaseToolWidget`) current tool
         self.__currenttool = None
 
@@ -531,14 +535,22 @@ class ImageWidget(QtWidgets.QWidget):
             lastalias = None
 
             roicoords = self.__displaywidget.extension('rois').roiCoords()
-
+            roitypes = self.__displaywidget.extension('rois').roiTypes()
             self.__lastrois = list(roicoords)
+            self.__lastroistypes = list(roitypes)
             for alias in slabel:
                 if alias not in toadd:
                     rois[alias] = []
                 lastcrdlist = rois[alias]
                 if rid < len(roicoords):
-                    lastcrdlist.append(roicoords[rid])
+                    if self.__settings.typedrois:
+                        rtype = "rectangle"
+                        if rid < len(roitypes):
+                            rtype = roitypes[rid]
+                        lastcrdlist.append({"bounds": roicoords[rid],
+                                            "type": rtype})
+                    else:
+                        lastcrdlist.append(roicoords[rid])
                     rid += 1
                     if alias not in toadd:
                         toadd.append(alias)
@@ -549,7 +561,14 @@ class ImageWidget(QtWidgets.QWidget):
                 lastalias = alias
             if rid > 0:
                 while rid < len(roicoords):
-                    lastcrdlist.append(roicoords[rid])
+                    if self.__settings.typedrois:
+                        rtype = "rectangle"
+                        if rid < len(roitypes):
+                            rtype = roitypes[rid]
+                        lastcrdlist.append({"bounds": roicoords[rid],
+                                            "type": rtype})
+                    else:
+                        lastcrdlist.append(roicoords[rid])
                     rid += 1
                 if not lastcrdlist:
                     if lastalias in rois.keys():
@@ -850,21 +869,29 @@ class ImageWidget(QtWidgets.QWidget):
         self.scalesChanged.emit()
 
     @QtCore.pyqtSlot(int)
-    def updateROIs(self, rid, coords=None):
+    def updateROIs(self, rid, coords=None, types=None):
         """ update ROIs
 
         :param rid: roi id
         :type rid: :obj:`int`
         :param coords: roi coordinates
-        :type coords: :obj:`list`
-                  < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
+        :type coords: :obj:`list`<
+                 [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
+        :param types: roi types
+        :type types: :obj:`list` < [:obj:`str`] >
         """
         if self.__settings.labelrois:
             slabel = re.split(';|,| |\n', str(self.roilabels))
             slabel = [lb for lb in slabel if lb]
         else:
             slabel = []
-        self.__displaywidget.extension('rois').updateROIs(rid, coords, slabel)
+        if not types:
+            types = list(self.__displaywidget.extension('rois').roiTypes()
+                         or [])
+        while len(types) < rid + 1:
+            types.append(self.roitype)
+        self.__displaywidget.extension('rois').updateROIs(
+            rid, coords, slabel, types)
         self.applyTipsChanged.emit(rid)
         self.roiCoordsChanged.emit()
         self.roiNumberChanged.emit(rid)
@@ -1118,7 +1145,7 @@ class ImageWidget(QtWidgets.QWidget):
         """ sets auto levels
 
         :param autolevels: 2: auto levels enabled 1: with autofactor
-        :type autolevels: :obj:'int`
+        :type autolevels: :obj:`int`
         """
         self.__displaywidget.setAutoLevels(autolevels)
 
@@ -1316,6 +1343,9 @@ class ImageWidget(QtWidgets.QWidget):
             if self.__lastrois != self.__displaywidget.\
                extension('rois').roiCoords():
                 self.writeDetectorROIsAttribute()
+            # if self.__lastroistypes != self.__displaywidget.\
+            #    extension('rois').roiTypes():
+            #     self.writeDetectorROIsAttribute()
         self.mouseImagePositionChanged.emit()
 
     @QtCore.pyqtSlot(float, float)
@@ -1563,12 +1593,20 @@ class ImageWidget(QtWidgets.QWidget):
             lastalias = None
 
             roicoords = self.__displaywidget.extension('rois').roiCoords()
+            roitypes = self.__displaywidget.extension('rois').roiTypes() or []
             for alias in slabel:
                 if alias not in toadd:
                     rois["DetectorROIs"][alias] = []
                 lastcrdlist = rois["DetectorROIs"][alias]
                 if rid < len(roicoords):
-                    lastcrdlist.append(roicoords[rid])
+                    rtype = "rectangle"
+                    if self.__settings.typedrois:
+                        if len(roitypes) > rid:
+                            rtype = roitypes[rid]
+                        lastcrdlist.append(
+                            {"bounds": roicoords[rid], "type": rtype})
+                    else:
+                        lastcrdlist.append(roicoords[rid])
                     rid += 1
                     if alias not in toadd:
                         toadd.append(alias)
@@ -1582,7 +1620,13 @@ class ImageWidget(QtWidgets.QWidget):
                 lastalias = alias
             if rid > 0:
                 while rid < len(roicoords):
-                    lastcrdlist.append(roicoords[rid])
+                    if self.__settings.typedrois:
+                        if len(roitypes) > rid:
+                            rtype = roitypes[rid]
+                        lastcrdlist.append(
+                            {"bounds": roicoords[rid], "type": rtype})
+                    else:
+                        lastcrdlist.append(roicoords[rid])
                     rid += 1
                 if not lastcrdlist:
                     if lastalias in rois["DetectorROIs"].keys():
@@ -1643,11 +1687,16 @@ class ImageWidget(QtWidgets.QWidget):
                             self, "lavue: Error in Setting Measurement group",
                             text, str(value))
             if self.__settings.analysisdevice:
-                flatrois = self._flattenROIs(roicoords)
+                flatrois, eflatrois = self._flattenROIs(roicoords, roitypes)
                 try:
                     adp = sardanaUtils.SardanaUtils.openProxy(
                         str(self.__settings.analysisdevice))
-                    adp.RoIs = flatrois
+                    if flatrois is not None:
+                        adp.RoIs = flatrois
+                    if eflatrois is not None and hasattr(adp, "EllipseRoIs"):
+                        # print("EROI", eflatrois)
+                        adp.EllipseRoIs = eflatrois
+
                 except Exception:
                     import traceback
                     value = traceback.format_exc()
@@ -1660,77 +1709,148 @@ class ImageWidget(QtWidgets.QWidget):
             # print("Connection error")
             logger.error("ImageWidget.applyROI: Connection error")
 
-    def _flattenROIs(self, roicoords):
+    def _flattenROIs(self, roicoords, roitypes):
         """ calculate source rois coordinates from lavue rois coordinates
 
         :param roicoords: lavue rois coordinates
-        :type roicoords: :obj:`list`
-                < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
-        :returns:  detector rois coordinates
-        :rtype: :obj:`list` < :obj:`float` >
+        :type roicoords: :obj:`list` < :obj:`list` < :obj:`float`> >
+        :param roitypes: lavue rois coordinates
+        :type roitypes: :obj:`list` < :obj:`str` >
+        :returns:  rectangle rois coordinates, elliptic rois coordinages
+        :rtype: (:obj:`list` < :obj:`float` > , :obj:`list` < :obj:`float` >)
         """
         flatrois = []
+        eflatrois = []
         if hasattr(self.__rawdata, "shape"):
             sh = self.__rawdata.shape
         else:
             sh = (0, 0)
-        for crds in roicoords:
-            if self.__settings.keepcoords:
-                trans, leftright, updown, _ = \
-                    self.__displaywidget.transformations()
+        for ic, crds in enumerate(roicoords):
+            rtype = "rectangle"
+            if roitypes and len(roitypes) > ic:
+                rtype = roitypes[ic]
+            if rtype == "rectangle":
+                if self.__settings.keepcoords:
+                    trans, leftright, updown, _ = \
+                        self.__displaywidget.transformations()
 
-                flatrois.extend(
-                    [crds[1], crds[3] + 1, crds[0], crds[2] + 1])
-            else:
-                trans, leftright, updown = self.__selectedtrans
-                if not trans and not leftright and not updown:
                     flatrois.extend(
-                        [crds[1], crds[3] + 1,
-                         crds[0], crds[2] + 1])
-                elif trans and not leftright and not updown:
-                    flatrois.extend(
-                        [crds[0], crds[2] + 1,
-                         crds[1], crds[3] + 1])
-                ###
-                elif not trans and leftright and not updown:
-                    flatrois.extend(
-                        [crds[1], crds[3] + 1,
-                         sh[0] - crds[2] - 1, sh[0] - crds[0]])
-                elif trans and leftright and not updown:
-                    flatrois.extend(
-                        [sh[0] - crds[2] - 1, sh[0] - crds[0],
-                         crds[1], crds[3] + 1])
-                ###
-                elif not trans and not leftright and updown:
-                    flatrois.extend(
-                        [sh[1] - crds[3] - 1, sh[1] - crds[1],
-                         crds[0], crds[2] + 1])
-                elif trans and not leftright and updown:
-                    flatrois.extend(
-                        [crds[0], crds[2] + 1,
-                         sh[1] - crds[3] - 1, sh[1] - crds[1]])
-                ###
-                elif not trans and leftright and updown:
-                    flatrois.extend(
-                        [sh[1] - crds[3] - 1, sh[1] - crds[1],
-                         sh[0] - crds[2] - 1, sh[0] - crds[0]])
-                elif trans and leftright and updown:
-                    flatrois.extend(
-                        [sh[0] - crds[2] - 1, sh[0] - crds[0],
-                         sh[1] - crds[3] - 1, sh[1] - crds[1]])
+                        [crds[1], crds[3] + 1, crds[0], crds[2] + 1])
                 else:
-                    raise Exception("Dead end")
-            flatrois = [max(cr, 0) for cr in flatrois]
-            if trans:
-                sha, shb = sh
-            else:
-                shb, sha = sh
-            for i in range(len(flatrois) // 4):
-                flatrois[4 * i] = min(flatrois[4 * i], sha)
-                flatrois[4 * i + 1] = min(flatrois[4 * i + 1], sha)
-                flatrois[4 * i + 2] = min(flatrois[4 * i + 2], shb)
-                flatrois[4 * i + 3] = min(flatrois[4 * i + 3], shb)
-        return flatrois
+                    trans, leftright, updown = self.__selectedtrans
+                    if not trans and not leftright and not updown:
+                        flatrois.extend(
+                            [crds[1], crds[3] + 1,
+                             crds[0], crds[2] + 1])
+                    elif trans and not leftright and not updown:
+                        flatrois.extend(
+                            [crds[0], crds[2] + 1,
+                             crds[1], crds[3] + 1])
+                    ###
+                    elif not trans and leftright and not updown:
+                        flatrois.extend(
+                            [crds[1], crds[3] + 1,
+                             sh[0] - crds[2] - 1, sh[0] - crds[0]])
+                    elif trans and leftright and not updown:
+                        flatrois.extend(
+                            [sh[0] - crds[2] - 1, sh[0] - crds[0],
+                             crds[1], crds[3] + 1])
+                    ###
+                    elif not trans and not leftright and updown:
+                        flatrois.extend(
+                            [sh[1] - crds[3] - 1, sh[1] - crds[1],
+                             crds[0], crds[2] + 1])
+                    elif trans and not leftright and updown:
+                        flatrois.extend(
+                            [crds[0], crds[2] + 1,
+                             sh[1] - crds[3] - 1, sh[1] - crds[1]])
+                    ###
+                    elif not trans and leftright and updown:
+                        flatrois.extend(
+                            [sh[1] - crds[3] - 1, sh[1] - crds[1],
+                             sh[0] - crds[2] - 1, sh[0] - crds[0]])
+                    elif trans and leftright and updown:
+                        flatrois.extend(
+                            [sh[0] - crds[2] - 1, sh[0] - crds[0],
+                             sh[1] - crds[3] - 1, sh[1] - crds[1]])
+                    else:
+                        raise Exception("Dead end")
+                flatrois = [max(cr, 0) for cr in flatrois]
+                if trans:
+                    sha, shb = sh
+                else:
+                    shb, sha = sh
+                for i in range(len(flatrois) // 4):
+                    flatrois[4 * i] = min(flatrois[4 * i], sha)
+                    flatrois[4 * i + 1] = min(flatrois[4 * i + 1], sha)
+                    flatrois[4 * i + 2] = min(flatrois[4 * i + 2], shb)
+                    flatrois[4 * i + 3] = min(flatrois[4 * i + 3], shb)
+                eflatrois.extend([0., 0., 0., 0., 0.])
+            if rtype == "ellipse":
+                flatrois.extend([0, 0, 0, 0])
+                if self.__settings.keepcoords:
+                    eflatrois.extend(
+                        [crds[0], crds[1], crds[2], crds[3], crds[4]])
+                else:
+                    trans, leftright, updown = self.__selectedtrans
+                    if not trans and not leftright and not updown:
+                        eflatrois.extend(
+                            [crds[0], crds[1],
+                             crds[2], crds[3],
+                             crds[4]])
+                    elif trans and not leftright and not updown:
+                        eflatrois.extend(
+                            [crds[1], crds[0],
+                             crds[3], crds[2],
+                             # ??
+                             -crds[4]])
+                    ###
+                    elif not trans and leftright and not updown:
+                        eflatrois.extend(
+                            [sh[0] - crds[0], crds[1],
+                             # ??
+                             crds[2], crds[3],
+                             -crds[4]])
+                    elif trans and leftright and not updown:
+                        eflatrois.extend(
+                            [crds[1], sh[0] - crds[0],
+                             crds[3], crds[2],
+                             # ??
+                             crds[4]])
+                    ###
+                    elif not trans and not leftright and updown:
+                        eflatrois.extend(
+                            [crds[0], sh[1] - crds[1],
+                             crds[2], crds[3],
+                             # ??
+                             -crds[4]])
+                    elif trans and not leftright and updown:
+                        eflatrois.extend(
+                            [sh[1] - crds[1], crds[0],
+                             crds[3], crds[2],
+                             # ??
+                             crds[4]])
+                    ###
+                    elif not trans and leftright and updown:
+                        eflatrois.extend(
+                            [sh[0] - crds[0], sh[1] - crds[1],
+                             crds[2], crds[3],
+                             # ??
+                             crds[4]])
+                    elif trans and leftright and updown:
+                        eflatrois.extend(
+                            [sh[1] - crds[1], sh[0] - crds[0],
+                             crds[3], crds[2],
+                             # ??
+                             - crds[4]])
+                    else:
+                        raise Exception("Dead end")
+
+        if not any(flatrois):
+            flatrois = None
+        if not any(eflatrois):
+            eflatrois = None
+        return flatrois, eflatrois
 
     @QtCore.pyqtSlot(str)
     def fetchROIs(self, rlabel):
@@ -1773,6 +1893,7 @@ class ImageWidget(QtWidgets.QWidget):
                             (k, v) for k, v in detrois.items() if k in slabel)
                 coords = []
                 aliases = []
+                types = []
                 if slabel:
                     for i, lb in enumerate(slabel):
                         if lb in detrois.keys():
@@ -1781,25 +1902,81 @@ class ImageWidget(QtWidgets.QWidget):
                                 if isinstance(v, list):
                                     for cr in v:
                                         if isinstance(cr, list):
+                                            if len(cr) == 5:
+                                                types.append("ellipse")
+                                            else:
+                                                types.append("rectangle")
                                             coords.append(cr)
                                             aliases.append(lb)
+                                        elif isinstance(cr, dict):
+                                            bcr = []
+                                            if "bounds" in cr.keys():
+                                                bcr = cr["bounds"]
+                                            if "type" in cr.keys():
+                                                rtype = cr["type"]
+                                            elif len(bcr) == 5:
+                                                rtype = "ellipse"
+                                            else:
+                                                rtype = "rectangle"
+                                            if bcr:
+                                                coords.append(bcr)
+                                                aliases.append(lb)
+                                                types.append(rtype)
                                     break
                             else:
                                 v = detrois[lb]
                                 if isinstance(v, list) and v:
                                     cr = v[0]
                                     if isinstance(cr, list):
+                                        if len(cr) == 5:
+                                            types.append("ellipse")
+                                        else:
+                                            types.append("rectangle")
                                         coords.append(cr)
                                         aliases.append(lb)
-                                        detrois[lb] = v[1:]
+                                    elif isinstance(cr, dict):
+                                        bcr = []
+                                        if "bounds" in cr.keys():
+                                            bcr = cr["bounds"]
+                                        if "type" in cr.keys():
+                                            rtype = cr["type"]
+                                        elif len(bcr) == 5:
+                                            rtype = "ellipse"
+                                        else:
+                                            rtype = "rectangle"
+                                        if bcr:
+                                            coords.append(bcr)
+                                            aliases.append(lb)
+                                            types.append(rtype)
+                                    detrois[lb] = v[1:]
+
                                 if not detrois[lb]:
                                     detrois.pop(lb)
                 for k, v in detrois.items():
                     if isinstance(v, list):
                         for cr in v:
                             if isinstance(cr, list):
+                                if len(cr) == 5:
+                                    types.append("ellipse")
+                                else:
+                                    types.append("rectangle")
                                 coords.append(cr)
                                 aliases.append(k)
+                            elif isinstance(cr, dict):
+                                bcr = []
+                                if "bounds" in cr.keys():
+                                    bcr = cr["bounds"]
+                                if "type" in cr.keys():
+                                    rtype = cr["type"]
+                                elif len(bcr) == 5:
+                                    rtype = "ellipse"
+                                else:
+                                    rtype = "rectangle"
+                                if bcr:
+                                    coords.append(bcr)
+                                    aliases.append(k)
+                                    types.append(rtype)
+
                 slabel = []
                 for i, al in enumerate(aliases):
                     if len(set(aliases[i:])) == 1:
@@ -1808,15 +1985,19 @@ class ImageWidget(QtWidgets.QWidget):
                     else:
                         slabel.append(al)
                 self.roiAliasesChanged.emit(" ".join(slabel))
-
-                self.updateROIs(len(coords), coords)
+                self.updateROIs(len(coords), coords, types)
             elif self.__settings.analysisdevice:
                 try:
                     adp = sardanaUtils.SardanaUtils.openProxy(
                         str(self.__settings.analysisdevice))
                     flatrois = adp.RoIs
-                    coords = self._fromFlatROIs(flatrois)
-                    self.updateROIs(len(coords), coords)
+                    if hasattr(adp, "EllipseRoIs"):
+                        eflatrois = adp.EllipseRoIs
+                    else:
+                        eflatrois = None
+                    # print("ELII", eflatrois)
+                    coords, types = self._fromFlatROIs(flatrois, eflatrois)
+                    self.updateROIs(len(coords), coords, types)
                 except Exception:
                     import traceback
                     value = traceback.format_exc()
@@ -1829,55 +2010,121 @@ class ImageWidget(QtWidgets.QWidget):
                 # print("Connection error")
                 logger.error("ImageWidget.fetchROIs: Connection error")
 
-    def _fromFlatROIs(self, flatrois):
+    def _fromFlatROIs(self, flatrois, eflatrois=None):
         """ calculate lavue rois coordinates from source rois coordinates
 
-        :param roicoords: lavue rois coordinates
+        :param roicoords: lavue rois rectangualar coordinates
         :type roicoords: :obj:`list` < :obj:`float` >
+        :param eroicoords: lavue rois eliptic coordinates
+        :type eroicoords: :obj:`list` < :obj:`float` >
         :returns:  detector rois coordinates
-        :rtype: :obj:`list`
-                < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
+        :rtype: (:obj:`list` < :obj:`list` < :obj:`float` > > > ,
+                 < :obj:`list` < :obj:`str` > > )
+
         """
         coords = []
+        types = []
+        eflatroilen = len(eflatrois) if eflatrois is not None else 0
+        eflatroi5len = eflatroilen // 5
         if hasattr(self.__rawdata, "shape"):
             sh = self.__rawdata.shape
         else:
             sh = (0, 0)
         for crds in zip(flatrois[::4], flatrois[1::4],
                         flatrois[2::4], flatrois[3::4]):
-            if self.__settings.keepcoords:
-                trans, leftright, updown, _ = \
-                    self.__displaywidget.transformations()
-                coords.append([crds[2], crds[0], crds[3] - 1, crds[1] - 1])
-            else:
-                trans, leftright, updown = self.__selectedtrans
-                if not trans and not leftright and not updown:
+            if any(crds):
+                types.append("rectangle")
+                if self.__settings.keepcoords:
+                    trans, leftright, updown, _ = \
+                        self.__displaywidget.transformations()
                     coords.append([crds[2], crds[0], crds[3] - 1, crds[1] - 1])
-                elif trans and not leftright and not updown:
-                    coords.append([crds[0], crds[2], crds[1] - 1, crds[3] - 1])
-                ###
-                elif not trans and leftright and not updown:
-                    coords.append([sh[0] - crds[3], crds[0],
-                                   sh[0] - crds[2] - 1, crds[1] - 1])
-                elif trans and leftright and not updown:
-                    coords.append([sh[0] - crds[1], crds[2],
-                                   sh[0] - crds[0] - 1, crds[3] - 1])
-                elif not trans and not leftright and updown:
-                    coords.append([crds[2], sh[1] - crds[1],
-                                   crds[3] - 1, sh[1] - crds[0] - 1])
-                elif trans and not leftright and updown:
-                    coords.append([crds[0], sh[1] - crds[3],
-                                   crds[1] - 1, sh[1] - crds[2] - 1])
-                ###
-                elif not trans and leftright and updown:
-                    coords.append([sh[0] - crds[3], sh[1] - crds[1],
-                                   sh[0] - crds[2] - 1, sh[1] - crds[0] - 1])
-                elif trans and leftright and updown:
-                    coords.append([sh[0] - crds[1], sh[1] - crds[3],
-                                   sh[0] - crds[0] - 1, sh[1] - crds[2] - 1])
                 else:
-                    raise Exception("Dead end")
-        return coords
+                    trans, leftright, updown = self.__selectedtrans
+                    if not trans and not leftright and not updown:
+                        coords.append([crds[2], crds[0],
+                                       crds[3] - 1, crds[1] - 1])
+                    elif trans and not leftright and not updown:
+                        coords.append([crds[0], crds[2],
+                                       crds[1] - 1, crds[3] - 1])
+                    ###
+                    elif not trans and leftright and not updown:
+                        coords.append([sh[0] - crds[3], crds[0],
+                                       sh[0] - crds[2] - 1, crds[1] - 1])
+                    elif trans and leftright and not updown:
+                        coords.append([sh[0] - crds[1], crds[2],
+                                       sh[0] - crds[0] - 1, crds[3] - 1])
+                    elif not trans and not leftright and updown:
+                        coords.append([crds[2], sh[1] - crds[1],
+                                       crds[3] - 1, sh[1] - crds[0] - 1])
+                    elif trans and not leftright and updown:
+                        coords.append([crds[0], sh[1] - crds[3],
+                                       crds[1] - 1, sh[1] - crds[2] - 1])
+                    ###
+                    elif not trans and leftright and updown:
+                        coords.append([sh[0] - crds[3], sh[1] - crds[1],
+                                       sh[0] - crds[2] - 1,
+                                       sh[1] - crds[0] - 1])
+                    elif trans and leftright and updown:
+                        coords.append([sh[0] - crds[1], sh[1] - crds[3],
+                                       sh[0] - crds[0] - 1,
+                                       sh[1] - crds[2] - 1])
+                    else:
+                        raise Exception("Dead end")
+            elif len(coords) < eflatroi5len:
+                lcr = len(coords)
+                ecrds = eflatrois[5 * lcr: 5 * lcr + 5]
+                if any(ecrds):
+                    types.append("ellipse")
+                    if self.__settings.keepcoords:
+                        coords.append([ecrds[0], ecrds[1],
+                                       ecrds[2], ecrds[3],
+                                       ecrds[4]])
+                    else:
+                        trans, leftright, updown = self.__selectedtrans
+                        # coords.append(ecrds)
+                        if not trans and not leftright and not updown:
+                            coords.append([ecrds[0], ecrds[1],
+                                           ecrds[2], ecrds[3],
+                                           ecrds[4]])
+                        elif trans and not leftright and not updown:
+                            coords.append([ecrds[1], ecrds[0],
+                                           ecrds[3], ecrds[2],
+                                           -ecrds[4]])
+                        ###
+                        elif not trans and leftright and not updown:
+                            coords.append([sh[0] - ecrds[0], ecrds[1],
+                                           ecrds[2], ecrds[3],
+                                           # ??
+                                           -ecrds[4]])
+                        elif trans and leftright and not updown:
+                            coords.append([sh[0] - ecrds[1], ecrds[0],
+                                           ecrds[3], ecrds[2],
+                                           # ??
+                                           ecrds[4]])
+                        elif not trans and not leftright and updown:
+                            coords.append([ecrds[0], sh[1] - ecrds[1],
+                                           ecrds[2], ecrds[3],
+                                           # ??
+                                           -ecrds[4]])
+                        elif trans and not leftright and updown:
+                            coords.append([ecrds[1], sh[1] - ecrds[0],
+                                           ecrds[3], ecrds[2],
+                                           # ??
+                                           ecrds[4]])
+                        ###
+                        elif not trans and leftright and updown:
+                            coords.append([sh[0] - ecrds[0], sh[1] - ecrds[1],
+                                           ecrds[2], ecrds[3],
+                                           # ??
+                                           ecrds[4]])
+                        elif trans and leftright and updown:
+                            coords.append([sh[0] - ecrds[1], sh[1] - ecrds[0],
+                                           ecrds[3], ecrds[2],
+                                           # ??
+                                           -ecrds[4]])
+                        else:
+                            raise Exception("Dead end")
+        return coords, types
 
     def currentIntensity(self):
         """ provides intensity for current mouse position
@@ -1891,7 +2138,7 @@ class ImageWidget(QtWidgets.QWidget):
         """ provides scaling label
 
         :returns:  scaling label
-        :rtype: str
+        :rtype: :obj:`str`
         """
         return self.__displaywidget.scalingLabel()
 
@@ -1899,7 +2146,7 @@ class ImageWidget(QtWidgets.QWidget):
         """ provides scaling type
 
         :returns:  scaling type
-        :rtype: str
+        :rtype: :obj:`str`
         """
         return self.__displaywidget.scaling()
 
@@ -1924,7 +2171,7 @@ class ImageWidget(QtWidgets.QWidget):
         :type useraxes: :obj:`bool`
         :param noNone: return values without None
         :type noNone: :obj:`bool`
-        :rtype: [int, int, int, int]
+        :rtype: [:obj:`int`, :obj:`int`, :obj:`int`, :obj:`int`]
         :returns: [posx, posy, scalex, scaley]
         """
         return self.__displaywidget.scale(useraxes, noNone)
@@ -1949,10 +2196,17 @@ class ImageWidget(QtWidgets.QWidget):
         """ provides rois coordinates
 
         :return: rois coordinates
-        :rtype: :obj:`list`
-               < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
+        :rtype: :obj:`list` < :obj:`list` < :obj:`float` > >
         """
         return self.__displaywidget.extension('rois').roiCoords()
+
+    def roiTypes(self):
+        """ provides rois types
+
+        :return: rois types
+        :rtype: :obj:`list`< :obj:`str` >
+        """
+        return self.__displaywidget.extension('rois').roiTypes()
 
     def meshCoords(self):
         """ provides rois coordinates
@@ -2237,6 +2491,7 @@ class ImageWidget(QtWidgets.QWidget):
 
         detrois = json.loads(str(rois))
         coords = []
+        types = []
         aliases = []
         found = set()
         llabels = str(self.roilabels).split(" ")
@@ -2247,14 +2502,52 @@ class ImageWidget(QtWidgets.QWidget):
                     found.add(k)
                     for cr in v:
                         if isinstance(cr, list):
+                            if len(cr) == 5:
+                                types.append("ellipse")
+                            else:
+                                types.append("rectangle")
                             coords.append(cr)
                             aliases.append(k)
+                        elif isinstance(cr, dict):
+                            bcr = []
+                            if "bounds" in cr.keys():
+                                bcr = cr["bounds"]
+                            if "type" in cr.keys():
+                                rtype = cr["type"]
+                            elif len(bcr) == 5:
+                                rtype = "ellipse"
+                            else:
+                                rtype = "rectangle"
+                            if bcr:
+                                coords.append(bcr)
+                                aliases.append(k)
+                                types.append(rtype)
+
         for k, v in detrois.items():
             if isinstance(v, list) and k not in found:
                 for cr in v:
                     if isinstance(cr, list):
+                        if len(cr) == 5:
+                            types.append("ellipse")
+                        else:
+                            types.append("rectangle")
                         coords.append(cr)
                         aliases.append(k)
+                    elif isinstance(cr, dict):
+                        bcr = []
+                        if "bounds" in cr.keys():
+                            bcr = cr["bounds"]
+                        if "type" in cr.keys():
+                            rtype = cr["type"]
+                        elif len(bcr) == 5:
+                            rtype = "ellipse"
+                        else:
+                            rtype = "rectangle"
+                        if bcr:
+                            coords.append(bcr)
+                            aliases.append(k)
+                            types.append(rtype)
+
         slabel = []
         for i, al in enumerate(aliases):
             if len(set(aliases[i:])) == 1:
@@ -2271,9 +2564,9 @@ class ImageWidget(QtWidgets.QWidget):
             self.roiAliasesChanged.emit(self.roilabels)
 
         oldcoords = self.__displaywidget.extension('rois').roiCoords()
-        # print("UPDATE %s" % str(coords))
-        if oldcoords != coords:
-            self.updateROIs(len(coords), coords)
+        oldtypes = self.__displaywidget.extension('rois').roiTypes()
+        if oldcoords != coords or oldtypes != types:
+            self.updateROIs(len(coords), coords, types)
 
     def setToolScale(self, position=None, scale=None):
         """ get axes parameters
