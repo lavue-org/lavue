@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <pogoDsl:PogoSystem xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pogoDsl="http://tango.org/pogo/PogoDsl">
-  <classes name="LavueController" pogoRevision="9.9">
+  <classes name="LavueController" pogoRevision="9.8">
     <description description="tango server to change lavue setting in real time" title="Lavue Controller" sourcePath="/home/jkotan/ndts/lavue" language="Python" filestogenerate="XMI   file,Code files,Protected Regions,html Pages" license="GPL" copyright="GPL 2" hasMandatoryProperty="false" hasConcreteProperty="true" hasAbstractCommand="false" hasAbstractAttribute="false" descriptionHtmlExists="false">
       <inheritances classname="Device_Impl" sourcePath=""/>
       <identification contact="at desy.de - jan.kotanski" author="jan.kotanski" emailDomain="desy.de" classFamily="SoftwareSystem" siteSpecific="" platform="All Platforms" bus="Not Applicable" manufacturer="none" reference="">
@@ -18,6 +18,11 @@
       <type xsi:type="pogoDsl:BooleanType"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <DefaultPropValue>True</DefaultPropValue>
+    </deviceProperties>
+    <deviceProperties name="FloatDynamicROIs" description="create dynamically Attributes for ROIs aliases with their float bounds">
+      <type xsi:type="pogoDsl:BooleanType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <DefaultPropValue>False</DefaultPropValue>
     </deviceProperties>
     <deviceProperties name="DynamicROIsValues" description="create dynamically Attributes for ROIs aliases with their sums">
       <type xsi:type="pogoDsl:BooleanType"/>

@@ -247,6 +247,9 @@ class SpecializedToolTest(unittest.TestCase):
             cnf = {}
             cnf["toolconfig"] = '{' \
                 '"aliases": ["pilatus_roi1", "pilatus_roi2"],' \
+                '"rois_types": ["rectangle", "ellipse"],' \
+                '"rois_coords": ' \
+                '[[0, 10, 60, 80], [50.5, 6.2, 23.2, 10.0, 5.0]],' \
                 ' "rois_number": 2}'
             lavuestate1 = json.dumps(cnf)
             cnf2 = {}
