@@ -106,6 +106,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">addrois</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) fetch rois order enabled</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">orderrois</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) fetch typed rois enabled</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">typedrois</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) search for security stream port automatically</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">secautoport</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1">#: (:obj:`bool`) show intensity hostogram</span>
@@ -451,6 +453,9 @@
         <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/OrderROIs&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">orderrois</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/TypedROIs&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">typedrois</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/ImageChannels&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">imagechannels</span> <span class="o">=</span> <span class="kc">True</span>
@@ -1056,6 +1061,9 @@
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/OrderROIs&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">orderrois</span><span class="p">)</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
+            <span class="s2">&quot;Configuration/TypedROIs&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">typedrois</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/ImageChannels&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">imagechannels</span><span class="p">)</span>
@@ -1860,6 +1868,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.93.0/index.html">v2.93.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.92.2/index.html">v2.92.2</a></li>
       <li><a class="reference external" href="../../index/../../v2.92.1/index.html">v2.92.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.92.0/index.html">v2.92.0</a></li>
