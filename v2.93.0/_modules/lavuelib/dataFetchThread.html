@@ -1,0 +1,388 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lavuelib.dataFetchThread &#8212; LaVue  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lavuelib.dataFetchThread</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for lavuelib.dataFetchThread</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (C) 2017  DESY, Christoph Rosemann, Notkestr. 85, D-22607 Hamburg</span>
+<span class="c1">#</span>
+<span class="c1"># lavue is an image viewing program for photon science imaging detectors.</span>
+<span class="c1"># Its usual application is as a live viewer using hidra as data source.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is free software; you can redistribute it and/or</span>
+<span class="c1"># modify it under the terms of the GNU General Public License</span>
+<span class="c1"># as published by the Free Software Foundation in  version 2</span>
+<span class="c1"># of the License.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with this program; if not, write to the Free Software</span>
+<span class="c1"># Foundation, Inc., 51 Franklin Street, Fifth Floor,</span>
+<span class="c1"># Boston, MA  02110-1301, USA.</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:</span>
+<span class="c1">#     Christoph Rosemann &lt;christoph.rosemann@desy.de&gt;</span>
+<span class="c1">#     Jan Kotanski &lt;jan.kotanski@desy.de&gt;</span>
+<span class="c1">#</span>
+
+<span class="sd">&quot;&quot;&quot; data fetch thread &quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtCore</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">.omniQThread</span> <span class="kn">import</span> <span class="n">OmniQThread</span>
+
+<span class="c1">#: (:obj:`float`) refresh time in seconds</span>
+<span class="n">GLOBALREFRESHTIME</span> <span class="o">=</span> <span class="mf">.1</span>
+<span class="c1">#: (:obj:`bool`) auto enlarge time</span>
+<span class="n">GLOBALAUTOREFRESHTIME</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;lavue&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ExchangeList"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.ExchangeList">[docs]</a><span class="k">class</span> <span class="nc">ExchangeList</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;  subclass for data caching &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj:`str`, :class:`numpy.ndarray`, :obj:`str` &gt;)</span>
+        <span class="c1">#:      exchange object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__elist</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="c1">#: (:obj:`pyqtgraph.QtCore.QMutex`) mutex lock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutex</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ExchangeList.addData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.ExchangeList.addData">[docs]</a>    <span class="k">def</span> <span class="nf">addData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; write data into exchange object</span>
+
+<span class="sd">        :param name: image name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :param data: image data</span>
+<span class="sd">        :type data: :class:`numpy.ndarray`</span>
+<span class="sd">        :param metadata: json dictionary with image metadata</span>
+<span class="sd">        :type metadata: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__elist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__elist</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__elist</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span></div>
+
+<div class="viewcode-block" id="ExchangeList.readData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.ExchangeList.readData">[docs]</a>    <span class="k">def</span> <span class="nf">readData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; read data from exchange object</span>
+
+<span class="sd">        :returns: tuple of exchange object (name, data, metadata)</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`, :class:`numpy.ndarray`, :obj:`str` &gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
+            <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__elist</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__elist</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__elist</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span></div></div>
+
+
+<span class="c1"># subclass for threading</span>
+<div class="viewcode-block" id="DataFetchThread"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread">[docs]</a><span class="k">class</span> <span class="nc">DataFetchThread</span><span class="p">(</span><span class="n">OmniQThread</span><span class="p">):</span>
+
+    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) new data name signal</span>
+    <span class="n">newDataNameFetched</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasource</span><span class="p">,</span> <span class="n">alist</span><span class="p">,</span> <span class="n">tid</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param datasource: image source</span>
+<span class="sd">        :type datasource: :class:`lavuelib.imageSource.BaseSource`</span>
+<span class="sd">        :param alist: exchange object</span>
+<span class="sd">        :type alist: :class:`ExchangeList`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">OmniQThread</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1">#: (:class:`lavuelib.imageSource.BaseSource`) image source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datasource</span> <span class="o">=</span> <span class="n">datasource</span>
+        <span class="c1">#: (:class:`ExchangeList`) exchange list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__list</span> <span class="o">=</span> <span class="n">alist</span>
+        <span class="c1">#: (:obj:`bool`) connection flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__isConnected</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) execute loop flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) ready flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ready</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1">#: (:obj:`int`) thread id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tid</span> <span class="o">=</span> <span class="n">tid</span>
+        <span class="c1">#: (:class:`pyqtgraph.QtCore.QMutex`) thread mutex</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutex</span><span class="p">()</span>
+        <span class="c1">#: (:obj:`int`) current timestamp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="c1">#: (:obj:`int`) current timestamp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tm2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="c1">#: (:obj:`int`) current timestamp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dt</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1">#: (:obj:`int`) counter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1">#: (:obj:`int`) maximal counter value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__maxcounter</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="c1">#: (:obj:`int`) start time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__starttime</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1">#: (:obj:`float`) elapsed time factor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__factor</span> <span class="o">=</span> <span class="mf">2.0</span>
+
+    <span class="k">def</span> <span class="nf">_run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; run function of the fetching thread</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">global</span> <span class="n">GLOBALREFRESHTIME</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dt</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">skip</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__isConnected</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">msleep</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mi">1000</span><span class="o">*</span><span class="n">GLOBALREFRESHTIME</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">skip</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">msleep</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="n">GLOBALREFRESHTIME</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">msleep</span><span class="p">(</span>
+                        <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="mi">1000</span><span class="o">*</span><span class="n">GLOBALREFRESHTIME</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dt</span><span class="p">)</span><span class="o">/</span><span class="mf">4.</span><span class="p">),</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msleep</span><span class="p">(</span>
+                <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span>
+                    <span class="mi">1000</span><span class="o">*</span><span class="n">GLOBALREFRESHTIME</span>
+                    <span class="o">-</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.</span><span class="p">),</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__isConnected</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ready</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
+                        <span class="n">img</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datasource</span><span class="o">.</span><span class="n">getData</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tid</span> <span class="ow">and</span> <span class="n">GLOBALAUTOREFRESHTIME</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__starttime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxcounter</span><span class="p">:</span>
+                            <span class="n">etime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__starttime</span><span class="p">:</span>
+                                <span class="n">eltime</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">etime</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__starttime</span><span class="p">)</span> \
+                                    <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxcounter</span>
+                                <span class="c1"># print(eltime, GLOBALREFRESHTIME)</span>
+                                <span class="k">if</span> <span class="n">eltime</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__factor</span> <span class="o">*</span> <span class="n">GLOBALREFRESHTIME</span><span class="p">:</span>
+                                    <span class="n">GLOBALREFRESHTIME</span> <span class="o">=</span> <span class="n">GLOBALREFRESHTIME</span> <span class="o">*</span> \
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">__factor</span>
+                                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                                        <span class="s2">&quot;The Image refresh time changed to: &quot;</span>
+                                        <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> s&quot;</span> <span class="o">%</span> <span class="n">GLOBALREFRESHTIME</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;__ERROR__&quot;</span>
+                    <span class="n">img</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                    <span class="n">metadata</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__list</span><span class="o">.</span><span class="n">addData</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__ready</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="c1"># print(self.__tid, &quot;ADDED&quot;, time.time())</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">newDataNameFetched</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__ready</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">skip</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">skip</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__tm2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__dt</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tm2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.</span>
+            <span class="c1"># print(&quot;END&quot;, self.__tid, self.__dt)</span>
+
+<div class="viewcode-block" id="DataFetchThread.changeStatus"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.changeStatus">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">changeStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; change connection status</span>
+
+<span class="sd">        :param status: connection status</span>
+<span class="sd">        :type status: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__isConnected</span> <span class="o">=</span> <span class="n">status</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ready</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="DataFetchThread.setTimeStamp"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.setTimeStamp">[docs]</a>    <span class="k">def</span> <span class="nf">setTimeStamp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmstamp</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set time stamp</span>
+
+<span class="sd">        :param tmstamp: set timestamp</span>
+<span class="sd">        :type tmstamp: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span> <span class="o">=</span> <span class="n">tmstamp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dt</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tm2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span><span class="o">+</span><span class="mf">0.0010</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.</span></div>
+
+<div class="viewcode-block" id="DataFetchThread.getTimeStamp"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.getTimeStamp">[docs]</a>    <span class="k">def</span> <span class="nf">getTimeStamp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; get time stamp</span>
+
+<span class="sd">        :returns: time stamp</span>
+<span class="sd">        :rtype: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span></div>
+
+<div class="viewcode-block" id="DataFetchThread.setDataSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.setDataSource">[docs]</a>    <span class="k">def</span> <span class="nf">setDataSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasource</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets datasource</span>
+<span class="sd">        :param datasource: datasource object</span>
+<span class="sd">        :type datasource: :class:`lavuelib.imageSource.BaseSource`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datasource</span> <span class="o">=</span> <span class="n">datasource</span></div>
+
+<div class="viewcode-block" id="DataFetchThread.ready"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.ready">[docs]</a>    <span class="k">def</span> <span class="nf">ready</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; continue acquisition</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ready</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="DataFetchThread.fetching"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.fetching">[docs]</a>    <span class="k">def</span> <span class="nf">fetching</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides read flag</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ready</span></div>
+
+<div class="viewcode-block" id="DataFetchThread.stop"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; stop the thread</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__isConnected</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ready</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="DataFetchThread.isFetching"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.isFetching">[docs]</a>    <span class="k">def</span> <span class="nf">isFetching</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; is datasource source connected</span>
+
+<span class="sd">        :returns: if datasource source connected</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v2.93.0/index.html">v2.93.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.92.2/index.html">v2.92.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.92.1/index.html">v2.92.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.92.0/index.html">v2.92.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.91.1/index.html">v2.91.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.91.0/index.html">v2.91.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.90.2/index.html">v2.90.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.90.1/index.html">v2.90.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.90.0/index.html">v2.90.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.89.3/index.html">v2.89.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.89.2/index.html">v2.89.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.89.1/index.html">v2.89.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.89.0/index.html">v2.89.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.88.0/index.html">v2.88.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.87.0/index.html">v2.87.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.86.1/index.html">v2.86.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.86.0/index.html">v2.86.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.85.1/index.html">v2.85.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.85.0/index.html">v2.85.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.84.0/index.html">v2.84.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.4/index.html">v2.83.4</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.3/index.html">v2.83.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.2/index.html">v2.83.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.1/index.html">v2.83.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.0/index.html">v2.83.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.82.0/index.html">v2.82.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.81.0/index.html">v2.81.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.80.1/index.html">v2.80.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.80.0/index.html">v2.80.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.79.0/index.html">v2.79.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.76.0/index.html">v2.76.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.75.3/index.html">v2.75.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.75.1/index.html">v2.75.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.74.0/index.html">v2.74.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.73.0/index.html">v2.73.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.72.0/index.html">v2.72.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.71.1/index.html">v2.71.1</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lavuelib.dataFetchThread</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+
+GNU GENERAL PUBLIC LICENSE, version 2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>
