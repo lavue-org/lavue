@@ -1825,6 +1825,7 @@ class ROIToolWidget(ToolBaseWidget):
         """
         if configuration:
             cnf = json.loads(configuration)
+            changed = False
             if "aliases" in cnf.keys():
                 aliases = cnf["aliases"]
                 if isinstance(aliases, list):
@@ -1832,13 +1833,14 @@ class ROIToolWidget(ToolBaseWidget):
                 self.__ui.labelROILineEdit.setText(aliases)
                 self._mainwidget.roilabels = str(
                     self.__ui.labelROILineEdit.text())
-                self._mainwidget.writeDetectorROIsAttribute()
+                changed = True
             if "rois_number" in cnf.keys():
                 try:
                     self.__ui.roiSpinBox.setValue(int(cnf["rois_number"]))
                 except Exception as e:
                     logger.warning(str(e))
                     # print(str(e))
+                changed = True
             if "rois_coords" in cnf.keys():
                 if "rois_types" in cnf.keys():
                     rt = cnf["rois_types"]
@@ -1846,6 +1848,9 @@ class ROIToolWidget(ToolBaseWidget):
                     rt = None
                 self._mainwidget.updateROIs(
                     len(cnf["rois_coords"]), cnf["rois_coords"], rt)
+                changed = True
+            if changed:
+                self._mainwidget.writeDetectorROIsAttribute()
             if "apply" in cnf.keys():
                 if cnf["apply"]:
                     self._emitApplyROIPressed()
@@ -1864,6 +1869,7 @@ class ROIToolWidget(ToolBaseWidget):
         cnf["aliases"] = str(self.__ui.labelROILineEdit.text()).split(" ")
         cnf["rois_number"] = self.__ui.roiSpinBox.value()
         cnf["rois_coords"] = self._mainwidget.roiCoords()
+        cnf["rois_types"] = self._mainwidget.roiTypes()
         return json.dumps(cnf, cls=numpyEncoder)
 
     @QtCore.pyqtSlot(int)

@@ -536,7 +536,6 @@ class ImageWidget(QtWidgets.QWidget):
 
             roicoords = self.__displaywidget.extension('rois').roiCoords()
             roitypes = self.__displaywidget.extension('rois').roiTypes()
-
             self.__lastrois = list(roicoords)
             self.__lastroistypes = list(roitypes)
             for alias in slabel:
@@ -2197,10 +2196,17 @@ class ImageWidget(QtWidgets.QWidget):
         """ provides rois coordinates
 
         :return: rois coordinates
-        :rtype: :obj:`list`
-               < [:obj:`float`, :obj:`float`, :obj:`float`, :obj:`float`] >
+        :rtype: :obj:`list` < :obj:`list` < :obj:`float` > >
         """
         return self.__displaywidget.extension('rois').roiCoords()
+
+    def roiTypes(self):
+        """ provides rois types
+
+        :return: rois types
+        :rtype: :obj:`list`< :obj:`str` >
+        """
+        return self.__displaywidget.extension('rois').roiTypes()
 
     def meshCoords(self):
         """ provides rois coordinates
