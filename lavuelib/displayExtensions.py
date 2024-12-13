@@ -290,6 +290,9 @@ class ROIExtension(DisplayExtension):
         #: (:class:`pyqtgraph.QtCore.QSignalMapper`) roi region mapper
         self.__roiregionmapper = QtCore.QSignalMapper(self)
 
+        self.__drawing = -1
+        self.__drawpos = [0, 0]
+
         #: (:obj:`int`) current roi id
         self.__current = 0
         #: (:obj:`list` <
@@ -310,6 +313,8 @@ class ROIExtension(DisplayExtension):
         #: (:obj:`list` <:class:`pyqtgraph.graphicsItems.ROI`>)
         #:            list of roi widgets
         self.__roi = []
+        #: (:obj:`str`) current roi type
+        self.__roitype = "rectangle"
         self.__roi.append(ROI(0, _pg.Point(50, 50)))
         self.__roi[0].addScaleHandle([1, 1], [0, 0])
         self.__roi[0].addScaleHandle([0, 0], [1, 1])
@@ -752,6 +757,27 @@ class ROIExtension(DisplayExtension):
                         self.__roitext[it].color)
         return True
 
+    def setCurrentROIType(self, rtype):
+        """ sets current ROI type
+
+        :param rtype: roi type
+        :type rtype: :obj:`str`
+        :returns: change status
+        :rtype: :obj:`bool`
+        """
+        if self.__roitype != rtype:
+            self.__roitype = rtype
+            return True
+        return False
+
+    def currentROIType(self):
+        """ current ROI type
+
+        :returns: current roi type
+        :rtype: :obj:`str`
+        """
+        return self.__roitype
+
     def roiCoords(self):
         """ provides rois coordinates
 
@@ -793,6 +819,99 @@ class ROIExtension(DisplayExtension):
             crd.setPos([pos[1], pos[0]])
             crd.setSize([size[1], size[0]])
             crd.setAngle(-crd.angle())
+
+    def mouse_position(self, x, y):
+        """  sets vLine and hLine positions
+
+        :param x: x coordinate
+        :type x: :obj:`float`
+        :param y: y coordinate
+        :type y: :obj:`float`
+        """
+        # print("POS", x, y, self.__drawing , len(self.__roi) )
+        if self.__drawing >= 0 and len(self.__roi) > self.__drawing:
+            roi = self.__roi[self.__drawing]
+            x0, y0 = self.__drawpos
+            if self.__roitype == "ellipse":
+                roi.setSize([x - x0, y - y0])
+            else:
+                roi.setSize([int(x - x0), int(y - y0)])
+
+    def mouse_doubleclick(self, x, y, locked):
+        """  sets vLine and hLine positions
+
+        :param x: x coordinate
+        :type x: :obj:`float`
+        :param y: y coordinate
+        :type y: :obj:`float`
+        :param locked: double click lock
+        :type locked: :obj:`bool`
+        """
+        # print("DOUBLE", x, y)
+        if self.__drawing >= 0:
+            x0, y0 = self.__drawpos
+
+            roitype = self.__roitype
+            if roitype == "ellipse":
+                if not self._mainwidget.transformations()[0]:
+                    crd = [x0, y0, x - x0, y - y0, 0.0]
+                else:
+                    crd = [y0, x0, y - y0, x - x0, 0.0]
+            else:
+                if not self._mainwidget.transformations()[0]:
+                    crd = [int(x0), int(y0), int(x), int(y)]
+                else:
+                    crd = [int(y0), int(x0), int(y), int(x)]
+            self.__coords[-1] = crd
+            self.__types[-1] = roitype
+            # self._mainwidget.updateROIs(len(coords), coords, types)
+
+            self.__drawing = -1
+        else:
+            self.__drawing = len(self.__roi)
+            coords = list(self.roiCoords())
+            types = list(self.roiCoords())
+            roitype = self.__roitype
+            if roitype == "ellipse":
+                if not self._mainwidget.transformations()[0]:
+                    crd = [x, y, 0.0, 0.0, 0.0]
+                else:
+                    crd = [y, x, 0.0, 0.0, 0.0]
+            else:
+                if not self._mainwidget.transformations()[0]:
+                    crd = [int(x), int(y), int(x), int(y)]
+                else:
+                    crd = [int(y), int(x), int(y), int(x)]
+            types.append(roitype)
+            coords.append(crd)
+            self.updateROIs(len(coords), coords, [], types)
+            self.__drawpos = [x, y]
+
+    def mouse_click(self, x, y):
+        """  sets vLine and hLine positions
+
+        :param x: x coordinate
+        :type x: :obj:`float`
+        :param y: y coordinate
+        :type y: :obj:`float`
+        """
+        if self.__drawing >= 0:
+            x0, y0 = self.__drawpos
+
+            roitype = self.__roitype
+            if roitype == "ellipse":
+                if not self._mainwidget.transformations()[0]:
+                    crd = [x0, y0, x - x0, y - y0, 0.0]
+                else:
+                    crd = [y0, x0, y - y0, x - x0, 0.0]
+            else:
+                if not self._mainwidget.transformations()[0]:
+                    crd = [int(x0), int(y0), int(x), int(y)]
+                else:
+                    crd = [int(y0), int(x0), int(y), int(x)]
+            self.__coords[-1] = crd
+            self.__types[-1] = roitype
+            self.__drawing = -1
 
 
 class CutExtension(DisplayExtension):

@@ -158,8 +158,6 @@ class ImageWidget(QtWidgets.QWidget):
         self.__lasttext = ""
         #: (:obj:`str`) roi labels
         self.roilabels = ""
-        #: (:obj:`str`) roi type
-        self.roitype = "rectangle"
         #: (:class:`lavuelib.toolWidget.BaseToolWidget`) current tool
         self.__currenttool = None
 
@@ -889,12 +887,30 @@ class ImageWidget(QtWidgets.QWidget):
             types = list(self.__displaywidget.extension('rois').roiTypes()
                          or [])
         while len(types) < rid + 1:
-            types.append(self.roitype)
+            types.append(self.currentROIType())
         self.__displaywidget.extension('rois').updateROIs(
             rid, coords, slabel, types)
         self.applyTipsChanged.emit(rid)
         self.roiCoordsChanged.emit()
         self.roiNumberChanged.emit(rid)
+
+    def setCurrentROIType(self, rtype):
+        """ sets current ROI type
+
+        :param rtype: roi type
+        :type rtype: :obj:`str`
+        :returns: change status
+        :rtype: :obj:`bool`
+        """
+        return self.__displaywidget.extension('rois').setCurrentROIType(rtype)
+
+    def currentROIType(self):
+        """ current ROI type
+
+        :returns: current roi type
+        :rtype: :obj:`str`
+        """
+        return self.__displaywidget.extension('rois').currentROIType()
 
     @QtCore.pyqtSlot(int)
     def updateRegions(self, points=None, rid=None):

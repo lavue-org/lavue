@@ -1881,10 +1881,10 @@ class ROIToolWidget(ToolBaseWidget):
         """
         self.__roishapeindex = xindex
         if len(self.__roishapetypes) > max(0, self.__roishapeindex):
-            self._mainwidget.roitype = \
-                self.__roishapetypes[max(0, self.__roishapeindex)]
+            self._mainwidget.setCurrentROIType(
+                self.__roishapetypes[max(0, self.__roishapeindex)])
         else:
-            self._mainwidget.roitype = "rectangle"
+            self._mainwidget.setCurrentROIType("rectangle")
 
     def activate(self):
         """ activates tool widget
@@ -1930,10 +1930,10 @@ class ROIToolWidget(ToolBaseWidget):
         """
         self._mainwidget.roilabels = str(self.__ui.labelROILineEdit.text())
         if len(self.__roishapetypes) > max(0, self.__roishapeindex):
-            self._mainwidget.roitype = \
-                self.__roishapetypes[max(0, self.__roishapeindex)]
+            self._mainwidget.setCurrentROIType(
+                self.__roishapetypes[max(0, self.__roishapeindex)])
         else:
-            self._mainwidget.roitype = "rectangle"
+            self._mainwidget.setCurrentROIType("rectangle")
         self._mainwidget.writeDetectorROIsAttribute()
 
     @QtCore.pyqtSlot()
