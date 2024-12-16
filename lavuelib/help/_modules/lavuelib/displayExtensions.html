@@ -89,6 +89,23 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;lavue&quot;</span><span class="p">)</span>
 
 
+<div class="viewcode-block" id="nozero"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.displayExtensions.nozero">[docs]</a><span class="k">def</span> <span class="nf">nozero</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">minvalue</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;overrides by min value if absolute value is smaller the minvalue</span>
+
+<span class="sd">    :param value: numeric value</span>
+<span class="sd">    :type value: :obj:`float`</span>
+<span class="sd">    :param minvalue: minimal value</span>
+<span class="sd">    :type minvalue: :obj:`float`</span>
+<span class="sd">    :returns: non-zero value</span>
+<span class="sd">    :rtype: :obj:`float`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">minvalue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">minvalue</span>
+    <span class="k">elif</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="o">-</span><span class="n">minvalue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">minvalue</span>
+    <span class="k">return</span> <span class="n">value</span></div>
+
+
 <div class="viewcode-block" id="HandleWithSignals"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.displayExtensions.HandleWithSignals">[docs]</a><span class="k">class</span> <span class="nc">HandleWithSignals</span><span class="p">(</span><span class="n">Handle</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; handle with signals</span>
 
@@ -320,6 +337,8 @@
 
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) roi coordinate changed signal</span>
     <span class="n">roiCoordsChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) roi number changed signal</span>
+    <span class="n">roiNumberChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
@@ -336,6 +355,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__currentroimapper</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QSignalMapper</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="c1">#: (:class:`pyqtgraph.QtCore.QSignalMapper`) roi region mapper</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__roiregionmapper</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QSignalMapper</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__drawing</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__drawpos</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roionclick</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1">#: (:obj:`int`) current roi id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__current</span> <span class="o">=</span> <span class="mi">0</span>
@@ -386,7 +409,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">rois</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__showROIs</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">rois</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">rois</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">rois</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">roionclick</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__roionclick</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">roionclick</span></div>
 
 <div class="viewcode-block" id="ROIExtension.scalingLabel"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.displayExtensions.ROIExtension.scalingLabel">[docs]</a>    <span class="k">def</span> <span class="nf">scalingLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides scaling label</span>
@@ -415,12 +440,12 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
                     <span class="n">pnt</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-                    <span class="n">spnt</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">coords</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+                    <span class="n">spnt</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">nozero</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">nozero</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
                         <span class="n">angle</span> <span class="o">=</span> <span class="n">coords</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">pnt</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                    <span class="n">spnt</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                    <span class="n">spnt</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">nozero</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span> <span class="n">nozero</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
                         <span class="n">angle</span> <span class="o">=</span> <span class="o">-</span><span class="n">coords</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
 
@@ -862,7 +887,104 @@
             <span class="n">size</span> <span class="o">=</span> <span class="n">crd</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
             <span class="n">crd</span><span class="o">.</span><span class="n">setPos</span><span class="p">([</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
             <span class="n">crd</span><span class="o">.</span><span class="n">setSize</span><span class="p">([</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
-            <span class="n">crd</span><span class="o">.</span><span class="n">setAngle</span><span class="p">(</span><span class="o">-</span><span class="n">crd</span><span class="o">.</span><span class="n">angle</span><span class="p">())</span></div></div>
+            <span class="n">crd</span><span class="o">.</span><span class="n">setAngle</span><span class="p">(</span><span class="o">-</span><span class="n">crd</span><span class="o">.</span><span class="n">angle</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="ROIExtension.mouse_position"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.displayExtensions.ROIExtension.mouse_position">[docs]</a>    <span class="k">def</span> <span class="nf">mouse_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;  sets vLine and hLine positions</span>
+
+<span class="sd">        :param x: x coordinate</span>
+<span class="sd">        :type x: :obj:`float`</span>
+<span class="sd">        :param y: y coordinate</span>
+<span class="sd">        :type y: :obj:`float`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># print(&quot;POS&quot;, x, y, self.__drawing , len(self.__roi) )</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roionclick</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__drawing</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__roi</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__drawing</span><span class="p">:</span>
+                <span class="n">roi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roi</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__drawing</span><span class="p">]</span>
+                <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__drawpos</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roitype</span> <span class="o">==</span> <span class="s2">&quot;ellipse&quot;</span><span class="p">:</span>
+
+                    <span class="n">roi</span><span class="o">.</span><span class="n">setSize</span><span class="p">([</span><span class="n">nozero</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x0</span><span class="p">),</span> <span class="n">nozero</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y0</span><span class="p">)])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">roi</span><span class="o">.</span><span class="n">setSize</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x0</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y0</span><span class="p">)])</span></div>
+
+<div class="viewcode-block" id="ROIExtension.mouse_doubleclick"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.displayExtensions.ROIExtension.mouse_doubleclick">[docs]</a>    <span class="k">def</span> <span class="nf">mouse_doubleclick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">locked</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;  sets vLine and hLine positions</span>
+
+<span class="sd">        :param x: x coordinate</span>
+<span class="sd">        :type x: :obj:`float`</span>
+<span class="sd">        :param y: y coordinate</span>
+<span class="sd">        :type y: :obj:`float`</span>
+<span class="sd">        :param locked: double click lock</span>
+<span class="sd">        :type locked: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># print(&quot;DOUBLE&quot;, x, y)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roionclick</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__drawing</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__drawpos</span>
+
+                <span class="n">roitype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roitype</span>
+                <span class="k">if</span> <span class="n">roitype</span> <span class="o">==</span> <span class="s2">&quot;ellipse&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
+                        <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">nozero</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x0</span><span class="p">),</span> <span class="n">nozero</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y0</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="n">y0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">nozero</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y0</span><span class="p">),</span> <span class="n">nozero</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x0</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
+                        <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y0</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">)]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">y0</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__coords</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">crd</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__types</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">roitype</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__drawing</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">roiNumberChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__coords</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__drawing</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__roi</span><span class="p">)</span>
+                <span class="n">coords</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">roiCoords</span><span class="p">())</span>
+                <span class="n">types</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">roiTypes</span><span class="p">())</span>
+                <span class="n">roitype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roitype</span>
+                <span class="k">if</span> <span class="n">roitype</span> <span class="o">==</span> <span class="s2">&quot;ellipse&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
+                        <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
+                        <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">)]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span>
+                <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">roitype</span><span class="p">)</span>
+                <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">crd</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">updateROIs</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">),</span> <span class="n">coords</span><span class="p">,</span> <span class="p">[],</span> <span class="n">types</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__drawpos</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="ROIExtension.mouse_click"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.displayExtensions.ROIExtension.mouse_click">[docs]</a>    <span class="k">def</span> <span class="nf">mouse_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;  sets vLine and hLine positions</span>
+
+<span class="sd">        :param x: x coordinate</span>
+<span class="sd">        :type x: :obj:`float`</span>
+<span class="sd">        :param y: y coordinate</span>
+<span class="sd">        :type y: :obj:`float`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roionclick</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__drawing</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__drawpos</span>
+
+                <span class="n">roitype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roitype</span>
+                <span class="k">if</span> <span class="n">roitype</span> <span class="o">==</span> <span class="s2">&quot;ellipse&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
+                        <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">nozero</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x0</span><span class="p">),</span> <span class="n">nozero</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y0</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="n">y0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">nozero</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y0</span><span class="p">),</span> <span class="n">nozero</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x0</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
+                        <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y0</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">)]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">y0</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__coords</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">crd</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__types</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">roitype</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__drawing</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">roiNumberChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__coords</span><span class="p">))</span></div></div>
 
 
 <div class="viewcode-block" id="CutExtension"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.displayExtensions.CutExtension">[docs]</a><span class="k">class</span> <span class="nc">CutExtension</span><span class="p">(</span><span class="n">DisplayExtension</span><span class="p">):</span>
