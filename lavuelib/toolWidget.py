@@ -186,6 +186,8 @@ class ToolParameters(object):
         # self.lines = False
         #: (:obj:`bool`) rois enabled
         self.rois = False
+        #: (:obj:`bool`) create a roi on click
+        self.roionclick = False
         #: (:obj:`bool`) cuts enabled
         self.cuts = False
         #: (:obj:`bool`) mesh enabled
@@ -1777,6 +1779,7 @@ class ROIToolWidget(ToolBaseWidget):
         self.__roishapetypes = ["rectangle", "ellipse"]
 
         self.parameters.rois = True
+        self.parameters.roionclick = True
         self.parameters.infolineedit = ""
         self.parameters.infolabel = \
             "[x1, y1, x2, y2] or [x, y, wd, ht, ang], sum: "
@@ -6846,6 +6849,7 @@ class QROIProjToolWidget(ToolBaseWidget):
         self.parameters.bottomplot = True
         self.parameters.rightplot = True
         self.parameters.rois = True
+        self.parameters.roionclick = False
         self.parameters.infolineedit = ""
         self.parameters.infolabel = \
             "[x1, y1, x2, y2] or [x, y, wd, ht, ang], sum: "

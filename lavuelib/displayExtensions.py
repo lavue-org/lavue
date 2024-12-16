@@ -42,6 +42,23 @@ _VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(".")[:3] \
 logger = logging.getLogger("lavue")
 
 
+def nozero(value, minvalue=0.1):
+    """overrides by min value if absolute value is smaller the minvalue
+
+    :param value: numeric value
+    :type value: :obj:`float`
+    :param minvalue: minimal value
+    :type minvalue: :obj:`float`
+    :returns: non-zero value
+    :rtype: :obj:`float`
+    """
+    if value >= 0 and value < minvalue:
+        return minvalue
+    elif value < 0 and value > -minvalue:
+        return -minvalue
+    return value
+
+
 class HandleWithSignals(Handle):
     """ handle with signals
 
@@ -273,6 +290,8 @@ class ROIExtension(DisplayExtension):
 
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) roi coordinate changed signal
     roiCoordsChanged = QtCore.pyqtSignal()
+    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) roi number changed signal
+    roiNumberChanged = QtCore.pyqtSignal(int)
 
     def __init__(self, parent=None):
         """ constructor
@@ -292,6 +311,7 @@ class ROIExtension(DisplayExtension):
 
         self.__drawing = -1
         self.__drawpos = [0, 0]
+        self.__roionclick = False
 
         #: (:obj:`int`) current roi id
         self.__current = 0
@@ -343,6 +363,8 @@ class ROIExtension(DisplayExtension):
         if parameters.rois is not None:
             self.__showROIs(parameters.rois)
             self._enabled = parameters.rois
+        if parameters.roionclick is not None:
+            self.__roionclick = parameters.roionclick
 
     def scalingLabel(self):
         """ provides scaling label
@@ -371,12 +393,12 @@ class ROIExtension(DisplayExtension):
             else:
                 if not self._mainwidget.transformations()[0]:
                     pnt = _pg.Point(coords[0], coords[1])
-                    spnt = _pg.Point(coords[2], coords[3])
+                    spnt = _pg.Point(nozero(coords[2]), nozero(coords[3]))
                     if len(coords) > 4:
                         angle = coords[4]
                 else:
                     pnt = _pg.Point(coords[1], coords[0])
-                    spnt = _pg.Point(coords[3], coords[2])
+                    spnt = _pg.Point(nozero(coords[3]), nozero(coords[2]))
                     if len(coords) > 4:
                         angle = -coords[4]
 
@@ -829,13 +851,15 @@ class ROIExtension(DisplayExtension):
         :type y: :obj:`float`
         """
         # print("POS", x, y, self.__drawing , len(self.__roi) )
-        if self.__drawing >= 0 and len(self.__roi) > self.__drawing:
-            roi = self.__roi[self.__drawing]
-            x0, y0 = self.__drawpos
-            if self.__roitype == "ellipse":
-                roi.setSize([x - x0, y - y0])
-            else:
-                roi.setSize([int(x - x0), int(y - y0)])
+        if self.__roionclick:
+            if self.__drawing >= 0 and len(self.__roi) > self.__drawing:
+                roi = self.__roi[self.__drawing]
+                x0, y0 = self.__drawpos
+                if self.__roitype == "ellipse":
+
+                    roi.setSize([nozero(x - x0), nozero(y - y0)])
+                else:
+                    roi.setSize([int(x - x0), int(y - y0)])
 
     def mouse_doubleclick(self, x, y, locked):
         """  sets vLine and hLine positions
@@ -848,44 +872,44 @@ class ROIExtension(DisplayExtension):
         :type locked: :obj:`bool`
         """
         # print("DOUBLE", x, y)
-        if self.__drawing >= 0:
-            x0, y0 = self.__drawpos
+        if self.__roionclick:
+            if self.__drawing >= 0:
+                x0, y0 = self.__drawpos
 
-            roitype = self.__roitype
-            if roitype == "ellipse":
-                if not self._mainwidget.transformations()[0]:
-                    crd = [x0, y0, x - x0, y - y0, 0.0]
+                roitype = self.__roitype
+                if roitype == "ellipse":
+                    if not self._mainwidget.transformations()[0]:
+                        crd = [x0, y0, nozero(x - x0), nozero(y - y0), 0.0]
+                    else:
+                        crd = [y0, x0, nozero(y - y0), nozero(x - x0), 0.0]
                 else:
-                    crd = [y0, x0, y - y0, x - x0, 0.0]
+                    if not self._mainwidget.transformations()[0]:
+                        crd = [int(x0), int(y0), int(x), int(y)]
+                    else:
+                        crd = [int(y0), int(x0), int(y), int(x)]
+                self.__coords[-1] = crd
+                self.__types[-1] = roitype
+                self.__drawing = -1
+                self.roiNumberChanged.emit(len(self.__coords))
             else:
-                if not self._mainwidget.transformations()[0]:
-                    crd = [int(x0), int(y0), int(x), int(y)]
+                self.__drawing = len(self.__roi)
+                coords = list(self.roiCoords())
+                types = list(self.roiTypes())
+                roitype = self.__roitype
+                if roitype == "ellipse":
+                    if not self._mainwidget.transformations()[0]:
+                        crd = [x, y, 0.0, 0.0, 0.0]
+                    else:
+                        crd = [y, x, 0.0, 0.0, 0.0]
                 else:
-                    crd = [int(y0), int(x0), int(y), int(x)]
-            self.__coords[-1] = crd
-            self.__types[-1] = roitype
-            # self._mainwidget.updateROIs(len(coords), coords, types)
-
-            self.__drawing = -1
-        else:
-            self.__drawing = len(self.__roi)
-            coords = list(self.roiCoords())
-            types = list(self.roiCoords())
-            roitype = self.__roitype
-            if roitype == "ellipse":
-                if not self._mainwidget.transformations()[0]:
-                    crd = [x, y, 0.0, 0.0, 0.0]
-                else:
-                    crd = [y, x, 0.0, 0.0, 0.0]
-            else:
-                if not self._mainwidget.transformations()[0]:
-                    crd = [int(x), int(y), int(x), int(y)]
-                else:
-                    crd = [int(y), int(x), int(y), int(x)]
-            types.append(roitype)
-            coords.append(crd)
-            self.updateROIs(len(coords), coords, [], types)
-            self.__drawpos = [x, y]
+                    if not self._mainwidget.transformations()[0]:
+                        crd = [int(x), int(y), int(x), int(y)]
+                    else:
+                        crd = [int(y), int(x), int(y), int(x)]
+                types.append(roitype)
+                coords.append(crd)
+                self.updateROIs(len(coords), coords, [], types)
+                self.__drawpos = [x, y]
 
     def mouse_click(self, x, y):
         """  sets vLine and hLine positions
@@ -895,23 +919,25 @@ class ROIExtension(DisplayExtension):
         :param y: y coordinate
         :type y: :obj:`float`
         """
-        if self.__drawing >= 0:
-            x0, y0 = self.__drawpos
+        if self.__roionclick:
+            if self.__drawing >= 0:
+                x0, y0 = self.__drawpos
 
-            roitype = self.__roitype
-            if roitype == "ellipse":
-                if not self._mainwidget.transformations()[0]:
-                    crd = [x0, y0, x - x0, y - y0, 0.0]
+                roitype = self.__roitype
+                if roitype == "ellipse":
+                    if not self._mainwidget.transformations()[0]:
+                        crd = [x0, y0, nozero(x - x0), nozero(y - y0), 0.0]
+                    else:
+                        crd = [y0, x0, nozero(y - y0), nozero(x - x0), 0.0]
                 else:
-                    crd = [y0, x0, y - y0, x - x0, 0.0]
-            else:
-                if not self._mainwidget.transformations()[0]:
-                    crd = [int(x0), int(y0), int(x), int(y)]
-                else:
-                    crd = [int(y0), int(x0), int(y), int(x)]
-            self.__coords[-1] = crd
-            self.__types[-1] = roitype
-            self.__drawing = -1
+                    if not self._mainwidget.transformations()[0]:
+                        crd = [int(x0), int(y0), int(x), int(y)]
+                    else:
+                        crd = [int(y0), int(x0), int(y), int(x)]
+                self.__coords[-1] = crd
+                self.__types[-1] = roitype
+                self.__drawing = -1
+                self.roiNumberChanged.emit(len(self.__coords))
 
 
 class CutExtension(DisplayExtension):
