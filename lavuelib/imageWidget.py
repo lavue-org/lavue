@@ -291,6 +291,8 @@ class ImageWidget(QtWidgets.QWidget):
 
         self.__displaywidget.extension('cuts').cutCoordsChanged.connect(
             self.emitCutCoordsChanged)
+        self.__displaywidget.extension('rois').roiNumberChanged.connect(
+            self.updateROIs)
         self.__ui.toolComboBox.currentIndexChanged.connect(
             self.showCurrentTool)
         self.__displaywidget.aspectLockedToggled.connect(
