@@ -42,6 +42,23 @@ _VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(".")[:3] \
 logger = logging.getLogger("lavue")
 
 
+def nozero(value, minvalue=0.1):
+    """overrides by min value if absolute value is smaller the minvalue
+
+    :param value: numeric value
+    :type value: :obj:`float`
+    :param minvalue: minimal value
+    :type minvalue: :obj:`float`
+    :returns: non-zero value
+    :rtype: :obj:`float`
+    """
+    if value >= 0 and value < minvalue:
+        return minvalue
+    elif value < 0 and value > -minvalue:
+        return -minvalue
+    return value
+
+
 class HandleWithSignals(Handle):
     """ handle with signals
 
@@ -95,8 +112,8 @@ class SimpleLineROI(LineROI):
         pos1 = _pg.Point(pos1)
         pos2 = _pg.Point(pos2)
         d = pos2 - pos1
-        ln = d.length()
-        ang = _pg.Point(1, 0).angle(d)
+        ln = nozero(d.length())
+        ang = -_pg.Point(1, 0).angle(d)
 
         ROI.__init__(self, pos1, size=_pg.Point(ln, width), angle=ang, **args)
         h1pos = [0, 0.0]
@@ -273,6 +290,8 @@ class ROIExtension(DisplayExtension):
 
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) roi coordinate changed signal
     roiCoordsChanged = QtCore.pyqtSignal()
+    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) roi number changed signal
+    roiNumberChanged = QtCore.pyqtSignal(int)
 
     def __init__(self, parent=None):
         """ constructor
@@ -289,6 +308,17 @@ class ROIExtension(DisplayExtension):
         self.__currentroimapper = QtCore.QSignalMapper(self)
         #: (:class:`pyqtgraph.QtCore.QSignalMapper`) roi region mapper
         self.__roiregionmapper = QtCore.QSignalMapper(self)
+
+        #: (:obj:`int`) current roi drown id
+        self.__drawing = -1
+        #: (:obj:`int`) current roi drown position
+        self.__drawpos = [0, 0]
+        #: (:obj:`bool`) roi on clickcurrent roi drown id
+        self.__roionclick = False
+        #: (:obj:`float`) time lock
+        self.__timelock = 0
+        #: (:obj:`float`) time to lock
+        self.__timetolock = 0.5
 
         #: (:obj:`int`) current roi id
         self.__current = 0
@@ -310,6 +340,8 @@ class ROIExtension(DisplayExtension):
         #: (:obj:`list` <:class:`pyqtgraph.graphicsItems.ROI`>)
         #:            list of roi widgets
         self.__roi = []
+        #: (:obj:`str`) current roi type
+        self.__roitype = "rectangle"
         self.__roi.append(ROI(0, _pg.Point(50, 50)))
         self.__roi[0].addScaleHandle([1, 1], [0, 0])
         self.__roi[0].addScaleHandle([0, 0], [1, 1])
@@ -338,6 +370,8 @@ class ROIExtension(DisplayExtension):
         if parameters.rois is not None:
             self.__showROIs(parameters.rois)
             self._enabled = parameters.rois
+        if parameters.roionclick is not None:
+            self.__roionclick = parameters.roionclick
 
     def scalingLabel(self):
         """ provides scaling label
@@ -366,12 +400,12 @@ class ROIExtension(DisplayExtension):
             else:
                 if not self._mainwidget.transformations()[0]:
                     pnt = _pg.Point(coords[0], coords[1])
-                    spnt = _pg.Point(coords[2], coords[3])
+                    spnt = _pg.Point(nozero(coords[2]), nozero(coords[3]))
                     if len(coords) > 4:
                         angle = coords[4]
                 else:
                     pnt = _pg.Point(coords[1], coords[0])
-                    spnt = _pg.Point(coords[3], coords[2])
+                    spnt = _pg.Point(nozero(coords[3]), nozero(coords[2]))
                     if len(coords) > 4:
                         angle = -coords[4]
 
@@ -752,6 +786,27 @@ class ROIExtension(DisplayExtension):
                         self.__roitext[it].color)
         return True
 
+    def setCurrentROIType(self, rtype):
+        """ sets current ROI type
+
+        :param rtype: roi type
+        :type rtype: :obj:`str`
+        :returns: change status
+        :rtype: :obj:`bool`
+        """
+        if self.__roitype != rtype:
+            self.__roitype = rtype
+            return True
+        return False
+
+    def currentROIType(self):
+        """ current ROI type
+
+        :returns: current roi type
+        :rtype: :obj:`str`
+        """
+        return self.__roitype
+
     def roiCoords(self):
         """ provides rois coordinates
 
@@ -794,11 +849,94 @@ class ROIExtension(DisplayExtension):
             crd.setSize([size[1], size[0]])
             crd.setAngle(-crd.angle())
 
+    def mouse_position(self, x, y):
+        """  sets vLine and hLine positions
+
+        :param x: x coordinate
+        :type x: :obj:`float`
+        :param y: y coordinate
+        :type y: :obj:`float`
+        """
+        # print("POS", x, y, self.__drawing , len(self.__roi) )
+        if self.__roionclick:
+            if self.__drawing >= 0 and len(self.__roi) > self.__drawing:
+                roi = self.__roi[self.__drawing]
+                x0, y0 = self.__drawpos
+                if self.__roitype == "ellipse":
+                    roi.setSize([nozero(x - x0), nozero(y - y0)])
+                else:
+                    roi.setSize([int(x - x0), int(y - y0)])
+
+    def mouse_doubleclick(self, x, y, locked):
+        """  sets vLine and hLine positions
+
+        :param x: x coordinate
+        :type x: :obj:`float`
+        :param y: y coordinate
+        :type y: :obj:`float`
+        :param locked: double click lock
+        :type locked: :obj:`bool`
+        """
+        # print ("DOUBLE", x,y, locked, self.__drawing)
+        if self.__roionclick:
+            if self.__drawing < 0 and \
+                    (time.time() - self.__timelock) > self.__timetolock:
+                self.__drawing = len(self.__roi)
+                coords = list(self.roiCoords())
+                types = list(self.roiTypes())
+                roitype = self.__roitype
+                if roitype == "ellipse":
+                    if not self._mainwidget.transformations()[0]:
+                        crd = [x, y, 0.0, 0.0, 0.0]
+                    else:
+                        crd = [y, x, 0.0, 0.0, 0.0]
+                else:
+                    if not self._mainwidget.transformations()[0]:
+                        crd = [int(x), int(y), int(x), int(y)]
+                    else:
+                        crd = [int(y), int(x), int(y), int(x)]
+                types.append(roitype)
+                coords.append(crd)
+                self.updateROIs(len(coords), coords, [], types)
+                self.__drawpos = [x, y]
+
+    def mouse_click(self, x, y):
+        """  sets vLine and hLine positions
+
+        :param x: x coordinate
+        :type x: :obj:`float`
+        :param y: y coordinate
+        :type y: :obj:`float`
+        """
+        # print("CLICK", x, y, self.__drawing)
+        if self.__roionclick:
+            if self.__drawing >= 0:
+                self.__timelock = time.time()
+                x0, y0 = self.__drawpos
+
+                roitype = self.__roitype
+                if roitype == "ellipse":
+                    if not self._mainwidget.transformations()[0]:
+                        crd = [x0, y0, nozero(x - x0), nozero(y - y0), 0.0]
+                    else:
+                        crd = [y0, x0, nozero(y - y0), nozero(x - x0), 0.0]
+                else:
+                    if not self._mainwidget.transformations()[0]:
+                        crd = [int(x0), int(y0), int(x), int(y)]
+                    else:
+                        crd = [int(y0), int(x0), int(y), int(x)]
+                self.__coords[-1] = crd
+                self.__types[-1] = roitype
+                self.__drawing = -1
+                self.roiNumberChanged.emit(len(self.__coords))
+
 
 class CutExtension(DisplayExtension):
 
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) cut coordinate changed signal
     cutCoordsChanged = QtCore.pyqtSignal()
+    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) cut number changed signal
+    cutNumberChanged = QtCore.pyqtSignal(int)
 
     def __init__(self, parent=None):
         """ constructor
@@ -815,6 +953,15 @@ class CutExtension(DisplayExtension):
         self.__currentcutmapper = QtCore.QSignalMapper(self)
         #: (:class:`pyqtgraph.QtCore.QSignalMapper`) cut region mapper
         self.__cutregionmapper = QtCore.QSignalMapper(self)
+
+        #: (:obj:`int`) current cut drown id
+        self.__drawing = -1
+        #: (:obj:`int`) current cut drown position
+        self.__drawpos = [0, 0]
+        #: (:obj:`float`) time lock
+        self.__timelock = 0
+        #: (:obj:`float`) time to lock
+        self.__timetolock = 0.5
 
         #: (:obj:`int`) current cut id
         self.__current = 0
@@ -869,15 +1016,17 @@ class CutExtension(DisplayExtension):
                 if i < len(coords):
                     self.__coords[i] = coords[i]
                     if not self._mainwidget.transformations()[0]:
-                        crd.setPos([coords[i][0], coords[i][1]])
-                        crd.setSize(
-                            [coords[i][2] - coords[i][0],
-                             coords[i][3] - coords[i][1]])
+                        pos1 = _pg.Point([coords[i][0], coords[i][1]])
+                        pos2 = _pg.Point([coords[i][2], coords[i][3]])
                     else:
-                        crd.setPos([coords[i][1], coords[i][0]])
-                        crd.setSize(
-                            [coords[i][3] - coords[i][1],
-                             coords[i][2] - coords[i][0]])
+                        pos1 = _pg.Point([coords[i][1], coords[i][0]])
+                        pos2 = _pg.Point([coords[i][3], coords[i][2]])
+                    d = pos2 - pos1
+                    ln = nozero(d.length())
+                    ang = _pg.Point(1, 0).angle(d)
+                    crd.setPos(pos1)
+                    crd.setSize([ln, crd.size()[1]])
+                    crd.setAngle(-ang)
 
     def __addCut(self, coords=None):
         """ adds Cuts
@@ -1066,6 +1215,71 @@ class CutExtension(DisplayExtension):
                 [pos[1] + math.sin(ra) * size[0],
                  pos[0] + math.cos(ra) * size[0]])
             crd.setAngle(270-angle)
+
+    def mouse_position(self, x, y):
+        """  sets vLine and hLine positions
+
+        :param x: x coordinate
+        :type x: :obj:`float`
+        :param y: y coordinate
+        :type y: :obj:`float`
+        """
+        # print("POS", x, y, self.__drawing, len(self.__cut))
+        if self.__drawing >= 0 and len(self.__cut) > self.__drawing:
+            pos1 = _pg.Point(self.__drawpos)
+            pos2 = _pg.Point([x, y])
+            d = pos2 - pos1
+            cut = self.__cut[self.__drawing]
+            ln = nozero(d.length())
+            ang = _pg.Point(1, 0).angle(d)
+            # cut.setPos(pos1)
+            cut.setSize([ln, cut.size()[1]])
+            cut.setAngle(-ang)
+
+    def mouse_doubleclick(self, x, y, locked):
+        """  sets vLine and hLine positions
+
+        :param x: x coordinate
+        :type x: :obj:`float`
+        :param y: y coordinate
+        :type y: :obj:`float`
+        :param locked: double click lock
+        :type locked: :obj:`bool`
+        """
+        # print("DOUBLE", x, y, self.__drawing, locked)
+        if self.__drawing < 0 and \
+                (time.time() - self.__timelock) > self.__timetolock:
+            self.__drawing = len(self.__cut)
+            coords = list(self.cutCoords())
+            if not self._mainwidget.transformations()[0]:
+                crd = [x, y, x, y, 0.00001]
+            else:
+                crd = [y, x, y, x, 0.00001]
+            coords.append(crd)
+            self.updateCuts(len(coords), coords)
+            self.__drawpos = [x, y]
+
+    def mouse_click(self, x, y):
+        """  sets vLine and hLine positions
+
+        :param x: x coordinate
+        :type x: :obj:`float`
+        :param y: y coordinate
+        :type y: :obj:`float`
+        """
+        # print("SINGLE", x, y, self.__drawing)
+        if self.__drawing >= 0:
+            self.__timelock = time.time()
+            x0, y0 = self.__drawpos
+
+            if not self._mainwidget.transformations()[0]:
+                crd = [x0, y0, x, y, 0.00001]
+            else:
+                crd = [y0, x0, y, x, 0.00001]
+            self.__coords[-1] = crd
+            self.__drawing = -1
+            self.updateCuts(len(self.__coords), self.__coords)
+            self.cutNumberChanged.emit(len(self.__coords))
 
 
 class MeshExtension(DisplayExtension):
