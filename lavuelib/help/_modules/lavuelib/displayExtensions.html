@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.displayExtensions &#8212; LaVue 2.93.1 documentation</title>
+    <title>lavuelib.displayExtensions &#8212; LaVue 2.94.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
@@ -33,7 +33,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.93.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.94.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.displayExtensions</a></li> 
       </ul>
@@ -357,6 +357,8 @@
         <span class="c1">#: (:obj:`list` &lt;:class:`pyqtgraph.graphicsItems.ROI`&gt;)</span>
         <span class="c1">#:            list of roi widgets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__roi</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">#: (:obj:`str`) current roi type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roitype</span> <span class="o">=</span> <span class="s2">&quot;rectangle&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__roi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ROI</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">_pg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">addScaleHandle</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">addScaleHandle</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
@@ -798,6 +800,27 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">__roitext</span><span class="p">[</span><span class="n">it</span><span class="p">]</span><span class="o">.</span><span class="n">textItem</span><span class="o">.</span><span class="n">setDefaultTextColor</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__roitext</span><span class="p">[</span><span class="n">it</span><span class="p">]</span><span class="o">.</span><span class="n">color</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="ROIExtension.setCurrentROIType"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.displayExtensions.ROIExtension.setCurrentROIType">[docs]</a>    <span class="k">def</span> <span class="nf">setCurrentROIType</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rtype</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets current ROI type</span>
+
+<span class="sd">        :param rtype: roi type</span>
+<span class="sd">        :type rtype: :obj:`str`</span>
+<span class="sd">        :returns: change status</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roitype</span> <span class="o">!=</span> <span class="n">rtype</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__roitype</span> <span class="o">=</span> <span class="n">rtype</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="ROIExtension.currentROIType"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.displayExtensions.ROIExtension.currentROIType">[docs]</a>    <span class="k">def</span> <span class="nf">currentROIType</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; current ROI type</span>
+
+<span class="sd">        :returns: current roi type</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roitype</span></div>
 
 <div class="viewcode-block" id="ROIExtension.roiCoords"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.displayExtensions.ROIExtension.roiCoords">[docs]</a>    <span class="k">def</span> <span class="nf">roiCoords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides rois coordinates</span>
@@ -2223,7 +2246,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.93.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.94.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.displayExtensions</a></li> 
       </ul>

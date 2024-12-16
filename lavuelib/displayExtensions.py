@@ -310,6 +310,8 @@ class ROIExtension(DisplayExtension):
         #: (:obj:`list` <:class:`pyqtgraph.graphicsItems.ROI`>)
         #:            list of roi widgets
         self.__roi = []
+        #: (:obj:`str`) current roi type
+        self.__roitype = "rectangle"
         self.__roi.append(ROI(0, _pg.Point(50, 50)))
         self.__roi[0].addScaleHandle([1, 1], [0, 0])
         self.__roi[0].addScaleHandle([0, 0], [1, 1])
@@ -751,6 +753,27 @@ class ROIExtension(DisplayExtension):
                     self.__roitext[it].textItem.setDefaultTextColor(
                         self.__roitext[it].color)
         return True
+
+    def setCurrentROIType(self, rtype):
+        """ sets current ROI type
+
+        :param rtype: roi type
+        :type rtype: :obj:`str`
+        :returns: change status
+        :rtype: :obj:`bool`
+        """
+        if self.__roitype != rtype:
+            self.__roitype = rtype
+            return True
+        return False
+
+    def currentROIType(self):
+        """ current ROI type
+
+        :returns: current roi type
+        :rtype: :obj:`str`
+        """
+        return self.__roitype
 
     def roiCoords(self):
         """ provides rois coordinates
