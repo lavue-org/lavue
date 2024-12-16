@@ -1928,10 +1928,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__roishapeindex</span> <span class="o">=</span> <span class="n">xindex</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__roishapetypes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roishapeindex</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roitype</span> <span class="o">=</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">__roishapetypes</span><span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roishapeindex</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setCurrentROIType</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__roishapetypes</span><span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roishapeindex</span><span class="p">)])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roitype</span> <span class="o">=</span> <span class="s2">&quot;rectangle&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setCurrentROIType</span><span class="p">(</span><span class="s2">&quot;rectangle&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ROIToolWidget.activate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
@@ -1977,10 +1977,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roilabels</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">labelROILineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__roishapetypes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roishapeindex</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roitype</span> <span class="o">=</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">__roishapetypes</span><span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roishapeindex</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setCurrentROIType</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__roishapetypes</span><span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roishapeindex</span><span class="p">)])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roitype</span> <span class="o">=</span> <span class="s2">&quot;rectangle&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setCurrentROIType</span><span class="p">(</span><span class="s2">&quot;rectangle&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">writeDetectorROIsAttribute</span><span class="p">()</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
@@ -6885,10 +6885,17 @@
         <span class="c1">#: (:obj:`int`) ROI label length</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__textlength</span> <span class="o">=</span> <span class="mi">0</span>
 
+        <span class="c1">#: (:obj:`int`) current ROI shape index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roishapeindex</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1">#: (:obj:`list`&lt; :obj:`str`&gt;) ROI shape types</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roishapetypes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rectangle&quot;</span><span class="p">,</span> <span class="s2">&quot;ellipse&quot;</span><span class="p">]</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">bottomplot</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">rightplot</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">rois</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">infolineedit</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">infolabel</span> <span class="o">=</span> \
+            <span class="s2">&quot;[x1, y1, x2, y2] or [x, y, wd, ht, ang], sum: &quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">infotips</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">centerlines</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -6917,6 +6924,8 @@
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">roiInfoChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateDisplayedText</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">labelROILineEdit</span><span class="o">.</span><span class="n">textChanged</span><span class="p">,</span>
              <span class="bp">self</span><span class="o">.</span><span class="n">_updateApplyButton</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">roiShapeComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="p">,</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">_setROIShape</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">roiSpinBox</span><span class="o">.</span><span class="n">valueChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateROIs</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">roiSpinBox</span><span class="o">.</span><span class="n">valueChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">roiSpinBox</span><span class="o">.</span><span class="n">valueChanged</span><span class="p">,</span>
@@ -6950,26 +6959,38 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">configuration</span><span class="p">:</span>
             <span class="n">cnf</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
+            <span class="n">changed</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">if</span> <span class="s2">&quot;geometry&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_updateGeometry</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">])</span>
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                     <span class="c1"># print(str(e))</span>
                     <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">if</span> <span class="s2">&quot;aliases&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">aliases</span> <span class="o">=</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;aliases&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aliases</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">aliases</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">aliases</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">labelROILineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">aliases</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roilabels</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">labelROILineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+                <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">if</span> <span class="s2">&quot;rois_number&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">roiSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_number&quot;</span><span class="p">]))</span>
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                     <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
                     <span class="c1"># print(str(e))</span>
+                <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">if</span> <span class="s2">&quot;rois_coords&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="s2">&quot;rois_types&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">rt</span> <span class="o">=</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_types&quot;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">rt</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateROIs</span><span class="p">(</span>
-                    <span class="nb">len</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_coords&quot;</span><span class="p">]),</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_coords&quot;</span><span class="p">])</span>
-            <span class="k">if</span> <span class="s2">&quot;aliases&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">aliases</span> <span class="o">=</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;aliases&quot;</span><span class="p">]</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aliases</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-                    <span class="n">aliases</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">aliases</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">labelROILineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">aliases</span><span class="p">)</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_coords&quot;</span><span class="p">]),</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_coords&quot;</span><span class="p">],</span> <span class="n">rt</span><span class="p">)</span>
+                <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">changed</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">writeDetectorROIsAttribute</span><span class="p">()</span>
             <span class="k">if</span> <span class="s2">&quot;units&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">idxs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;angles&quot;</span><span class="p">,</span> <span class="s2">&quot;q-space&quot;</span><span class="p">]</span>
                 <span class="n">xcrd</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -7007,6 +7028,7 @@
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;aliases&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">labelROILineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">())</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">roiSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_coords&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roiCoords</span><span class="p">()</span>
+        <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_types&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roiTypes</span><span class="p">()</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;mapping&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">funComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rows&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">rowsliceLineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
@@ -7022,6 +7044,20 @@
             <span class="s2">&quot;detdistance&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">detdistance</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_setROIShape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xindex</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets roi shape index</span>
+
+<span class="sd">        :param xindex: roi shape index,</span>
+<span class="sd">        :type xindex: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roishapeindex</span> <span class="o">=</span> <span class="n">xindex</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__roishapetypes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roishapeindex</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setCurrentROIType</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__roishapetypes</span><span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roishapeindex</span><span class="p">)])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setCurrentROIType</span><span class="p">(</span><span class="s2">&quot;rectangle&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="QROIProjToolWidget.activate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
@@ -7373,7 +7409,11 @@
         <span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentROI</span><span class="p">()</span>
         <span class="n">coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roiCoords</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">current</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">current</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">):</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">coords</span><span class="p">[</span><span class="n">current</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">coords</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="n">current</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> \
+               <span class="nb">isinstance</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="n">current</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nb">float</span><span class="p">):</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">cr</span> <span class="ow">in</span> <span class="n">coords</span><span class="p">[</span><span class="n">current</span><span class="p">]]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">coords</span><span class="p">[</span><span class="n">current</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__setDisplayedText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
