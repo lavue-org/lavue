@@ -6838,10 +6838,17 @@ class QROIProjToolWidget(ToolBaseWidget):
         #: (:obj:`int`) ROI label length
         self.__textlength = 0
 
+        #: (:obj:`int`) current ROI shape index
+        self.__roishapeindex = 0
+        #: (:obj:`list`< :obj:`str`>) ROI shape types
+        self.__roishapetypes = ["rectangle", "ellipse"]
+
         self.parameters.bottomplot = True
         self.parameters.rightplot = True
         self.parameters.rois = True
         self.parameters.infolineedit = ""
+        self.parameters.infolabel = \
+            "[x1, y1, x2, y2] or [x, y, wd, ht, ang], sum: "
         self.parameters.infotips = ""
         self.parameters.centerlines = True
 
@@ -6870,6 +6877,8 @@ class QROIProjToolWidget(ToolBaseWidget):
             [self.roiInfoChanged, self._mainwidget.updateDisplayedText],
             [self.__ui.labelROILineEdit.textChanged,
              self._updateApplyButton],
+            [self.__ui.roiShapeComboBox.currentIndexChanged,
+             self._setROIShape],
             [self.__ui.roiSpinBox.valueChanged, self._mainwidget.updateROIs],
             [self.__ui.roiSpinBox.valueChanged, self._mainwidget.emitTCC],
             [self.__ui.roiSpinBox.valueChanged,
@@ -6903,26 +6912,38 @@ class QROIProjToolWidget(ToolBaseWidget):
         """
         if configuration:
             cnf = json.loads(configuration)
+            changed = False
             if "geometry" in cnf.keys():
                 try:
                     self._updateGeometry(cnf["geometry"])
                 except Exception as e:
                     # print(str(e))
                     logger.warning(str(e))
+            if "aliases" in cnf.keys():
+                aliases = cnf["aliases"]
+                if isinstance(aliases, list):
+                    aliases = " ".join(aliases)
+                self.__ui.labelROILineEdit.setText(aliases)
+                self._mainwidget.roilabels = str(
+                    self.__ui.labelROILineEdit.text())
+                changed = True
             if "rois_number" in cnf.keys():
                 try:
                     self.__ui.roiSpinBox.setValue(int(cnf["rois_number"]))
                 except Exception as e:
                     logger.warning(str(e))
                     # print(str(e))
+                changed = True
             if "rois_coords" in cnf.keys():
+                if "rois_types" in cnf.keys():
+                    rt = cnf["rois_types"]
+                else:
+                    rt = None
                 self._mainwidget.updateROIs(
-                    len(cnf["rois_coords"]), cnf["rois_coords"])
-            if "aliases" in cnf.keys():
-                aliases = cnf["aliases"]
-                if isinstance(aliases, list):
-                    aliases = " ".join(aliases)
-                self.__ui.labelROILineEdit.setText(aliases)
+                    len(cnf["rois_coords"]), cnf["rois_coords"], rt)
+                changed = True
+            if changed:
+                self._mainwidget.writeDetectorROIsAttribute()
             if "units" in cnf.keys():
                 idxs = ["angles", "q-space"]
                 xcrd = str(cnf["units"]).lower()
@@ -6960,6 +6981,7 @@ class QROIProjToolWidget(ToolBaseWidget):
         cnf["aliases"] = str(self.__ui.labelROILineEdit.text()).split(" ")
         cnf["rois_number"] = self.__ui.roiSpinBox.value()
         cnf["rois_coords"] = self._mainwidget.roiCoords()
+        cnf["rois_types"] = self._mainwidget.roiTypes()
         cnf["mapping"] = str(
             self.__ui.funComboBox.currentText()).lower()
         cnf["rows"] = self.__ui.rowsliceLineEdit.text()
@@ -6975,6 +6997,20 @@ class QROIProjToolWidget(ToolBaseWidget):
             "detdistance": self.__settings.detdistance,
         }
         return json.dumps(cnf, cls=numpyEncoder)
+
+    @QtCore.pyqtSlot(int)
+    def _setROIShape(self, xindex):
+        """ sets roi shape index
+
+        :param xindex: roi shape index,
+        :type xindex: :obj:`int`
+        """
+        self.__roishapeindex = xindex
+        if len(self.__roishapetypes) > max(0, self.__roishapeindex):
+            self._mainwidget.setCurrentROIType(
+                self.__roishapetypes[max(0, self.__roishapeindex)])
+        else:
+            self._mainwidget.setCurrentROIType("rectangle")
 
     def activate(self):
         """ activates tool widget
@@ -7326,7 +7362,11 @@ class QROIProjToolWidget(ToolBaseWidget):
         current = self._mainwidget.currentROI()
         coords = self._mainwidget.roiCoords()
         if current > -1 and current < len(coords):
-            message = "%s" % coords[current]
+            if coords[current] and len(coords[current]) > 0 and \
+               isinstance(coords[current][0], float):
+                message = "%s" % [round(cr, 2) for cr in coords[current]]
+            else:
+                message = "%s" % coords[current]
         self.__setDisplayedText(message)
 
     def __setDisplayedText(self, text=None):
