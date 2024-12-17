@@ -264,6 +264,15 @@ class ToolBaseWidget(QtWidgets.QWidget):
         """ command after plot
         """
         self._mainwidget.plotUserFunction()
+        # if self.__settings.sendresults or self.__settings.showuserplot:
+        #     results = {"tool": self.alias}
+        #     results["imagename"] = self._mainwidget.imageName()
+        #     results["timestamp"] = time.time()
+        #     if self.__settings.sendresults:
+        #         self._mainwidget.writeAttribute(
+        #             "ToolResults", json.dumps(results, cls=numpyEncoder))
+        #     if self.__settings.showuserplot:
+        #         self._mainwidget.plotUserFunction(results)
 
     def beforeplot(self, array, rawarray):
         """ command  before plot
@@ -6433,6 +6442,10 @@ class MaximaToolWidget(ToolBaseWidget):
         """ deactivates tool widget
         """
 
+    def afterplot(self):
+        """ command after plot
+        """
+
     def beforeplot(self, array, rawarray):
         """ command  before plot
 
@@ -6851,8 +6864,6 @@ class QROIProjToolWidget(ToolBaseWidget):
         self.parameters.rois = True
         self.parameters.roionclick = False
         self.parameters.infolineedit = ""
-        self.parameters.infolabel = \
-            "[x1, y1, x2, y2] or [x, y, wd, ht, ang], sum: "
         self.parameters.infotips = ""
         self.parameters.centerlines = True
 
