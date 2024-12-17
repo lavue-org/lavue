@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "LAVUELIB" "1" "Dec 16, 2024" "2.94" "LaVue"
+.TH "LAVUELIB" "1" "Dec 17, 2024" "2.94" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .sp
@@ -4097,6 +4097,11 @@ current cut data
 .UNINDENT
 .INDENT 7.0
 .TP
+.B cutNumberChanged
+(\fBpyqtgraph.QtCore.pyqtSignal\fP) cut number changed signal
+.UNINDENT
+.INDENT 7.0
+.TP
 .B isCutsEnabled()
 provides flag cuts enabled
 .INDENT 7.0
@@ -4106,6 +4111,53 @@ cut enabled flag
 .TP
 .B Return type
 \fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B mouse_click(x, y)
+sets vLine and hLine positions
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBx\fP (\fI\%float\fP) – x coordinate
+.IP \(bu 2
+\fBy\fP (\fI\%float\fP) – y coordinate
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B mouse_doubleclick(x, y, locked)
+sets vLine and hLine positions
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBx\fP (\fI\%float\fP) – x coordinate
+.IP \(bu 2
+\fBy\fP (\fI\%float\fP) – y coordinate
+.IP \(bu 2
+\fBlocked\fP (\fI\%bool\fP) – double click lock
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B mouse_position(x, y)
+sets vLine and hLine positions
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBx\fP (\fI\%float\fP) – x coordinate
+.IP \(bu 2
+\fBy\fP (\fI\%float\fP) – y coordinate
+.UNINDENT
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -18808,6 +18860,11 @@ constructor
 .TP
 .B activate()
 activates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B afterplot()
+command after plot
 .UNINDENT
 .INDENT 7.0
 .TP
