@@ -1885,12 +1885,14 @@ class ROIToolWidget(ToolBaseWidget):
         return json.dumps(cnf, cls=numpyEncoder)
 
     @QtCore.pyqtSlot(int)
-    def _setROIShape(self, xindex):
+    def _setROIShape(self, xindex=None):
         """ sets roi shape index
 
         :param xindex: roi shape index,
         :type xindex: :obj:`int`
         """
+        if xindex is None:
+            xindex = self.__ui.roiShapeComboBox.currentIndex()
         self.__roishapeindex = xindex
         if len(self.__roishapetypes) > max(0, self.__roishapeindex):
             self._mainwidget.setCurrentROIType(
@@ -1901,6 +1903,7 @@ class ROIToolWidget(ToolBaseWidget):
     def activate(self):
         """ activates tool widget
         """
+        self._setROIShape()
         self._mainwidget.changeROIRegion()
         self.setROIsNumber(len(self._mainwidget.roiCoords()))
         self.__aliases = self._mainwidget.getElementNames("ExpChannelList")
@@ -4182,7 +4185,7 @@ class AngleQToolWidget(ToolBaseWidget):
             self.parameters.toolscale = False
         if pindex is not None:
             self.__plotindex = pindex
-            if self.__ui.plotComboBox.currentIndex != pindex:
+            if self.__ui.plotComboBox.currentIndex() != pindex:
                 self.__ui.plotComboBox.setCurrentIndex(pindex)
         self._mainwidget.updateinfowidgets(self.parameters)
 
@@ -7014,12 +7017,14 @@ class QROIProjToolWidget(ToolBaseWidget):
         return json.dumps(cnf, cls=numpyEncoder)
 
     @QtCore.pyqtSlot(int)
-    def _setROIShape(self, xindex):
+    def _setROIShape(self, xindex=None):
         """ sets roi shape index
 
         :param xindex: roi shape index,
         :type xindex: :obj:`int`
         """
+        if xindex is None:
+            xindex = self.__ui.roiShapeComboBox.currentIndex()
         self.__roishapeindex = xindex
         if len(self.__roishapetypes) > max(0, self.__roishapeindex):
             self._mainwidget.setCurrentROIType(
@@ -7031,6 +7036,7 @@ class QROIProjToolWidget(ToolBaseWidget):
         """ activates tool widget
         """
         self.updateGeometryTip()
+        self._setROIShape()
         self._mainwidget.updateCenter(
             self.__settings.centerx, self.__settings.centery)
         self._mainwidget.changeROIRegion()
