@@ -6851,8 +6851,6 @@ class QROIProjToolWidget(ToolBaseWidget):
         self.parameters.rois = True
         self.parameters.roionclick = False
         self.parameters.infolineedit = ""
-        self.parameters.infolabel = \
-            "[x1, y1, x2, y2] or [x, y, wd, ht, ang], sum: "
         self.parameters.infotips = ""
         self.parameters.centerlines = True
 
