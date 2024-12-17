@@ -263,15 +263,16 @@ class ToolBaseWidget(QtWidgets.QWidget):
     def afterplot(self):
         """ command after plot
         """
-        if self.__settings.sendresults or self.__settings.showuserplot:
-            results = {"tool": self.alias}
-            results["imagename"] = self._mainwidget.imageName()
-            results["timestamp"] = time.time()
-            if self.__settings.sendresults:
-                self._mainwidget.writeAttribute(
-                    "ToolResults", json.dumps(results, cls=numpyEncoder))
-            if self.__settings.showuserplot:
-                self._mainwidget.plotUserFunction(results)
+        self._mainwidget.plotUserFunction()
+        # if self.__settings.sendresults or self.__settings.showuserplot:
+        #     results = {"tool": self.alias}
+        #     results["imagename"] = self._mainwidget.imageName()
+        #     results["timestamp"] = time.time()
+        #     if self.__settings.sendresults:
+        #         self._mainwidget.writeAttribute(
+        #             "ToolResults", json.dumps(results, cls=numpyEncoder))
+        #     if self.__settings.showuserplot:
+        #         self._mainwidget.plotUserFunction(results)
 
     def beforeplot(self, array, rawarray):
         """ command  before plot
