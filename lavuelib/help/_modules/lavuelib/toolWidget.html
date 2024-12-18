@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.toolWidget &#8212; LaVue 2.94.1 documentation</title>
+    <title>lavuelib.toolWidget &#8212; LaVue 2.94.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
@@ -33,7 +33,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.94.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.94.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.toolWidget</a></li> 
       </ul>
@@ -1932,12 +1932,14 @@
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">_setROIShape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xindex</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_setROIShape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xindex</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets roi shape index</span>
 
 <span class="sd">        :param xindex: roi shape index,</span>
 <span class="sd">        :type xindex: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">xindex</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">xindex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">roiShapeComboBox</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__roishapeindex</span> <span class="o">=</span> <span class="n">xindex</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__roishapetypes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roishapeindex</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setCurrentROIType</span><span class="p">(</span>
@@ -1948,6 +1950,7 @@
 <div class="viewcode-block" id="ROIToolWidget.activate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setROIShape</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">changeROIRegion</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setROIsNumber</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roiCoords</span><span class="p">()))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__aliases</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">(</span><span class="s2">&quot;ExpChannelList&quot;</span><span class="p">)</span>
@@ -4229,7 +4232,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">toolscale</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="n">pindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__plotindex</span> <span class="o">=</span> <span class="n">pindex</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">plotComboBox</span><span class="o">.</span><span class="n">currentIndex</span> <span class="o">!=</span> <span class="n">pindex</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">plotComboBox</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span> <span class="o">!=</span> <span class="n">pindex</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">plotComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">pindex</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateinfowidgets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
 
@@ -7061,12 +7064,14 @@
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">_setROIShape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xindex</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_setROIShape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xindex</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets roi shape index</span>
 
 <span class="sd">        :param xindex: roi shape index,</span>
 <span class="sd">        :type xindex: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">xindex</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">xindex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">roiShapeComboBox</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__roishapeindex</span> <span class="o">=</span> <span class="n">xindex</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__roishapetypes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roishapeindex</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setCurrentROIType</span><span class="p">(</span>
@@ -7078,6 +7083,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">updateGeometryTip</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setROIShape</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateCenter</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centerx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centery</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">changeROIRegion</span><span class="p">()</span>
@@ -7848,7 +7854,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.94.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.94.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.toolWidget</a></li> 
       </ul>
