@@ -1,0 +1,1273 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lavuelib.filewriter &#8212; LaVue  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lavuelib.filewriter</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for lavuelib.filewriter</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (C) 2017  DESY, Notkestr. 85, D-22607 Hamburg</span>
+<span class="c1">#</span>
+<span class="c1"># lavue is an image viewing program for photon science imaging detectors.</span>
+<span class="c1"># Its usual application is as a live viewer using hidra as data source.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is free software; you can redistribute it and/or</span>
+<span class="c1"># modify it under the terms of the GNU General Public License</span>
+<span class="c1"># as published by the Free Software Foundation in  version 2</span>
+<span class="c1"># of the License.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with this program; if not, write to the Free Software</span>
+<span class="c1"># Foundation, Inc., 51 Franklin Street, Fifth Floor,</span>
+<span class="c1"># Boston, MA  02110-1301, USA.</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:</span>
+<span class="c1">#     Jan Kotanski &lt;jan.kotanski@desy.de&gt;</span>
+<span class="c1">#</span>
+
+<span class="sd">&quot;&quot;&quot; Provides abstraction for file writer &quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">weakref</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+
+<span class="c1">#: (:mod:`H5PYWriter`or :mod:`H5CppWriter`)</span>
+<span class="c1">#    default writer module</span>
+<span class="n">writer</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1">#: (:class:`threading.Lock`) writer module</span>
+<span class="n">writerlock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="open_file"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.open_file">[docs]</a><span class="k">def</span> <span class="nf">open_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; open the new file</span>
+
+<span class="sd">    :param filename: file name</span>
+<span class="sd">    :type filename: :obj:`str`</span>
+<span class="sd">    :param readonly: readonly flag</span>
+<span class="sd">    :type readonly: :obj:`bool`</span>
+<span class="sd">    :param pars: parameters</span>
+<span class="sd">    :type pars: :obj:`dict` &lt; :obj:`str`, :obj:`str`&gt;</span>
+<span class="sd">    :returns: file object</span>
+<span class="sd">    :rtype: :class:`FTFile`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;writer&#39;</span> <span class="ow">in</span> <span class="n">pars</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">wr</span> <span class="o">=</span> <span class="n">pars</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;writer&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">writerlock</span><span class="p">:</span>
+            <span class="n">wr</span> <span class="o">=</span> <span class="n">writer</span>
+    <span class="n">fl</span> <span class="o">=</span> <span class="n">wr</span><span class="o">.</span><span class="n">open_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">readonly</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fl</span><span class="p">,</span> <span class="s2">&quot;writer&quot;</span><span class="p">):</span>
+        <span class="n">fl</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">wr</span>
+    <span class="k">return</span> <span class="n">fl</span></div>
+
+
+<div class="viewcode-block" id="create_file"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.create_file">[docs]</a><span class="k">def</span> <span class="nf">create_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; create a new file</span>
+
+<span class="sd">    :param filename: file name</span>
+<span class="sd">    :type filename: :obj:`str`</span>
+<span class="sd">    :param overwrite: overwrite flag</span>
+<span class="sd">    :type overwrite: :obj:`bool`</span>
+<span class="sd">    :param pars: parameters</span>
+<span class="sd">    :type pars: :obj:`dict` &lt; :obj:`str`, :obj:`str`&gt;</span>
+<span class="sd">    :returns: file object</span>
+<span class="sd">    :rtype: :class:`FTFile`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;writer&#39;</span> <span class="ow">in</span> <span class="n">pars</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">wr</span> <span class="o">=</span> <span class="n">pars</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;writer&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">writerlock</span><span class="p">:</span>
+            <span class="n">wr</span> <span class="o">=</span> <span class="n">writer</span>
+    <span class="n">fl</span> <span class="o">=</span> <span class="n">wr</span><span class="o">.</span><span class="n">create_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fl</span><span class="p">,</span> <span class="s2">&quot;writer&quot;</span><span class="p">):</span>
+        <span class="n">fl</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">wr</span>
+    <span class="k">return</span> <span class="n">fl</span></div>
+
+
+<div class="viewcode-block" id="load_file"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.load_file">[docs]</a><span class="k">def</span> <span class="nf">load_file</span><span class="p">(</span><span class="n">membuffer</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; load a file from memory byte buffer</span>
+
+<span class="sd">    :param membuffer: memory buffer</span>
+<span class="sd">    :type membuffer: :obj:`bytes` or :obj:`io.BytesIO`</span>
+<span class="sd">    :param filename: file name</span>
+<span class="sd">    :type filename: :obj:`str`</span>
+<span class="sd">    :param readonly: readonly flag</span>
+<span class="sd">    :type readonly: :obj:`bool`</span>
+<span class="sd">    :param pars: parameters</span>
+<span class="sd">    :type pars: :obj:`dict` &lt; :obj:`str`, :obj:`str`&gt;</span>
+<span class="sd">    :returns: file objects</span>
+<span class="sd">    :rtype: :class:`H5PYFile` or :class:`H5CppFile`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;writer&#39;</span> <span class="ow">in</span> <span class="n">pars</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">wr</span> <span class="o">=</span> <span class="n">pars</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;writer&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">writerlock</span><span class="p">:</span>
+            <span class="n">wr</span> <span class="o">=</span> <span class="n">writer</span>
+    <span class="n">fl</span> <span class="o">=</span> <span class="n">wr</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="n">membuffer</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">readonly</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fl</span><span class="p">,</span> <span class="s2">&quot;writer&quot;</span><span class="p">):</span>
+        <span class="n">fl</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">wr</span>
+    <span class="k">return</span> <span class="n">fl</span></div>
+
+
+<div class="viewcode-block" id="link"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.link">[docs]</a><span class="k">def</span> <span class="nf">link</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; create link</span>
+
+<span class="sd">    :param target: file name</span>
+<span class="sd">    :type target: :obj:`str`</span>
+<span class="sd">    :param parent: parent object</span>
+<span class="sd">    :type parent: :class:`FTObject`</span>
+<span class="sd">    :param name: link name</span>
+<span class="sd">    :type name: :obj:`str`</span>
+<span class="sd">    :returns: link object</span>
+<span class="sd">    :rtype: :class:`FTLink`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">parent</span>
+    <span class="n">wr</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">while</span> <span class="n">node</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;writer&quot;</span><span class="p">):</span>
+            <span class="n">wr</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">writer</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;parent&quot;</span><span class="p">):</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">wr</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">writerlock</span><span class="p">:</span>
+            <span class="n">wr</span> <span class="o">=</span> <span class="n">writer</span>
+    <span class="k">return</span> <span class="n">wr</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_links"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.get_links">[docs]</a><span class="k">def</span> <span class="nf">get_links</span><span class="p">(</span><span class="n">parent</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; get links</span>
+
+<span class="sd">    :param parent: parent object</span>
+<span class="sd">    :type parent: :class:`FTObject`</span>
+<span class="sd">    :returns: list of link objects</span>
+<span class="sd">    :rtype: :obj: `list` &lt;:class:`FTLink`&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">parent</span>
+    <span class="n">wr</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">while</span> <span class="n">node</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;writer&quot;</span><span class="p">):</span>
+            <span class="n">wr</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">writer</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;parent&quot;</span><span class="p">):</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">wr</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">writerlock</span><span class="p">:</span>
+            <span class="n">wr</span> <span class="o">=</span> <span class="n">writer</span>
+    <span class="k">return</span> <span class="n">wr</span><span class="o">.</span><span class="n">get_links</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="data_filter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.data_filter">[docs]</a><span class="k">def</span> <span class="nf">data_filter</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; create deflate filter</span>
+
+<span class="sd">    :param parent: parent object</span>
+<span class="sd">    :type parent: :class:`FTObject`</span>
+<span class="sd">    :returns: deflate filter object</span>
+<span class="sd">    :rtype: :class:`FTDeflate`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">parent</span>
+    <span class="n">wr</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">while</span> <span class="n">node</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;writer&quot;</span><span class="p">):</span>
+            <span class="n">wr</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">writer</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;parent&quot;</span><span class="p">):</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">wr</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">writerlock</span><span class="p">:</span>
+            <span class="n">wr</span> <span class="o">=</span> <span class="n">writer</span>
+    <span class="k">return</span> <span class="n">wr</span><span class="o">.</span><span class="n">data_filter</span><span class="p">()</span></div>
+
+
+<span class="n">deflate_filter</span> <span class="o">=</span> <span class="n">data_filter</span>
+
+
+<div class="viewcode-block" id="unlimited"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.unlimited">[docs]</a><span class="k">def</span> <span class="nf">unlimited</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; return dataspace UNLIMITED variable for the current writer module</span>
+
+<span class="sd">    :param parent: parent object</span>
+<span class="sd">    :type parent: :class:`FTObject`</span>
+<span class="sd">    :returns:  dataspace UNLIMITED variable</span>
+<span class="sd">    :rtype: :class:`h5cpp.dataspace.UNLIMITED` or :class:`h5py.UNLIMITED`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">parent</span>
+    <span class="n">wr</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">while</span> <span class="n">node</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;writer&quot;</span><span class="p">):</span>
+            <span class="n">wr</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">writer</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;parent&quot;</span><span class="p">):</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">wr</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">writerlock</span><span class="p">:</span>
+            <span class="n">wr</span> <span class="o">=</span> <span class="n">writer</span>
+    <span class="k">return</span> <span class="n">wr</span><span class="o">.</span><span class="n">unlimited</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="target_field_view"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.target_field_view">[docs]</a><span class="k">def</span> <span class="nf">target_field_view</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fieldpath</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span>
+                      <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; create target field view for VDS</span>
+
+<span class="sd">    :param filename: file name</span>
+<span class="sd">    :type filename: :obj:`str`</span>
+<span class="sd">    :param fieldpath: nexus field path</span>
+<span class="sd">    :type fieldpath: :obj:`str`</span>
+<span class="sd">    :param shape: shape</span>
+<span class="sd">    :type shape: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">    :param dtype: attribute type</span>
+<span class="sd">    :type dtype: :obj:`str`</span>
+<span class="sd">    :param maxshape: shape</span>
+<span class="sd">    :type maxshape: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">    :param parent: parent object</span>
+<span class="sd">    :type parent: :class:`FTObject`</span>
+<span class="sd">    :returns: target field object</span>
+<span class="sd">    :rtype: :class:`FTTargetFieldView`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">parent</span>
+    <span class="n">wr</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">while</span> <span class="n">node</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;writer&quot;</span><span class="p">):</span>
+            <span class="n">wr</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">writer</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;parent&quot;</span><span class="p">):</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">wr</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">writerlock</span><span class="p">:</span>
+            <span class="n">wr</span> <span class="o">=</span> <span class="n">writer</span>
+    <span class="k">return</span> <span class="n">wr</span><span class="o">.</span><span class="n">target_field_view</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fieldpath</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span>
+                                <span class="n">dtype</span><span class="p">,</span> <span class="n">maxshape</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="virtual_field_layout"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.virtual_field_layout">[docs]</a><span class="k">def</span> <span class="nf">virtual_field_layout</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; creates a virtual field layout for a VDS file</span>
+
+<span class="sd">    :param shape: shape</span>
+<span class="sd">    :type shape: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">    :param dtype: attribute type</span>
+<span class="sd">    :type dtype: :obj:`str`</span>
+<span class="sd">    :param maxshape: shape</span>
+<span class="sd">    :type maxshape: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">    :param parent: parent object</span>
+<span class="sd">    :type parent: :class:`FTObject`</span>
+<span class="sd">    :returns: virtual layout</span>
+<span class="sd">    :rtype: :class:`FTVirtualFieldLayout`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">parent</span>
+    <span class="n">wr</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">while</span> <span class="n">node</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;writer&quot;</span><span class="p">):</span>
+            <span class="n">wr</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">writer</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;parent&quot;</span><span class="p">):</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">wr</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">writerlock</span><span class="p">:</span>
+            <span class="n">wr</span> <span class="o">=</span> <span class="n">writer</span>
+    <span class="k">return</span> <span class="n">wr</span><span class="o">.</span><span class="n">virtual_field_layout</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">maxshape</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="setwriter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.setwriter">[docs]</a><span class="k">def</span> <span class="nf">setwriter</span><span class="p">(</span><span class="n">wr</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; sets writer</span>
+
+<span class="sd">    :param wr: writer module</span>
+<span class="sd">    :type wr: :mod:`H5PYWriter` or :mod:`H5CppWriter`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">writer</span>
+    <span class="k">with</span> <span class="n">writerlock</span><span class="p">:</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">wr</span></div>
+
+
+<div class="viewcode-block" id="FTHyperslab"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTHyperslab">[docs]</a><span class="k">class</span> <span class="nc">FTHyperslab</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; hyperslab class &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">block</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param offset: a list of offsets</span>
+<span class="sd">        :type offset: :obj:`tuple`</span>
+<span class="sd">        :param block: a list of blocks</span>
+<span class="sd">        :type block: :obj:`tuple`</span>
+<span class="sd">        :param count: a list of counts</span>
+<span class="sd">        :type count: :obj:`tuple`</span>
+<span class="sd">        :param stride: a list of strides</span>
+<span class="sd">        :type stride: :obj:`tuple`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">offset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block</span> <span class="o">=</span> <span class="n">block</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="n">count</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stride</span> <span class="o">=</span> <span class="n">stride</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; compares hyporslabs</span>
+
+<span class="sd">        :param other: hyperslab to compare</span>
+<span class="sd">        :type other: :class:`FTHyperslab`</span>
+<span class="sd">        :returns: if they are equal</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s1">&#39;offset&#39;</span><span class="p">)</span> <span class="ow">and</span> \
+            <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">)</span> <span class="ow">and</span> \
+            <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s1">&#39;count&#39;</span><span class="p">)</span> <span class="ow">and</span> \
+            <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s1">&#39;stride&#39;</span><span class="p">)</span> <span class="ow">and</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">offset</span> <span class="ow">and</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">block</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">block</span> <span class="ow">and</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">count</span> <span class="ow">and</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">stride</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">stride</span>
+
+    <span class="k">def</span> <span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; compares hyporslabs</span>
+
+<span class="sd">        :param other: hyperslab to compare</span>
+<span class="sd">        :type other: :class:`FTHyperslab`</span>
+<span class="sd">        :returns: if they are not equal</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__eq__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; dimension length of hyperslab</span>
+
+<span class="sd">        :returns: dimension length of hyperslab</span>
+<span class="sd">        :rtype: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="ow">or</span> <span class="p">[]),</span>
+                   <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block</span> <span class="ow">or</span> <span class="p">[]),</span>
+                   <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="ow">or</span> <span class="p">[]),</span>
+                   <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stride</span> <span class="ow">or</span> <span class="p">[]))</span></div>
+
+
+<div class="viewcode-block" id="FTObject"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTObject">[docs]</a><span class="k">class</span> <span class="nc">FTObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; virtual file tree object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param h5object: h5 object</span>
+<span class="sd">        :type h5object: :obj:`any`</span>
+<span class="sd">        :param tparent: tree parent</span>
+<span class="sd">        :type tparent: :obj:`FTObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#: (:obj:`any`) h5 object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span> <span class="o">=</span> <span class="n">h5object</span>
+        <span class="c1">#: (:obj:`FTObject`) tree parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tparent</span> <span class="o">=</span> <span class="n">tparent</span>
+        <span class="c1">#: (:obj:`list` &lt; :obj:`FTObject` &gt; ) weak references of children</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tchildren</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">tparent</span><span class="p">:</span>
+            <span class="n">tparent</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FTObject.append"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTObject.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">child</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; append child weakref</span>
+
+<span class="sd">        :param tparent: tree parent</span>
+<span class="sd">        :type tparent: :obj:`FTObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tchildren</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">weakref</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span><span class="n">child</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; removes weakref in parent object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tparent</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tparent</span><span class="o">.</span><span class="n">reload</span><span class="p">()</span>
+
+<div class="viewcode-block" id="FTObject.reload"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTObject.reload">[docs]</a>    <span class="k">def</span> <span class="nf">reload</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reload a list of valid children</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tchildren</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__tchildren</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">kd</span> <span class="k">for</span> <span class="n">kd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tchildren</span> <span class="k">if</span> <span class="n">kd</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="FTObject.close"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTObject.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; close element</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tchildren</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ch</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ch</span><span class="p">()</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reopen elements and children</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tchildren</span> <span class="o">=</span> <span class="p">[</span><span class="n">ch</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tchildren</span> <span class="k">if</span> <span class="n">ch</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tchildren</span><span class="p">:</span>
+            <span class="n">ch</span><span class="p">()</span><span class="o">.</span><span class="n">reopen</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return the parent object</span>
+
+<span class="sd">        :returns: file tree group</span>
+<span class="sd">        :rtype: :class:`FTGroup`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tparent</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">h5object</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provide object of native library</span>
+
+<span class="sd">        :returns: h5 object</span>
+<span class="sd">        :rtype: :obj:`any`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; check if attribute is valid</span>
+
+<span class="sd">        :returns: valid flag</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="first"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.first">[docs]</a><span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;  get first element if the only</span>
+
+<span class="sd">    :param array: numpy array</span>
+<span class="sd">    :type array: :class:`numpy.ndarray`</span>
+<span class="sd">    :returns: first element of the array</span>
+<span class="sd">    :type array: :obj:`any`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">return</span> <span class="n">array</span></div>
+
+
+<div class="viewcode-block" id="FTFile"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTFile">[docs]</a><span class="k">class</span> <span class="nc">FTFile</span><span class="p">(</span><span class="n">FTObject</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; file tree file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param h5object: h5 object</span>
+<span class="sd">        :type h5object: :obj:`any`</span>
+<span class="sd">        :param filename:  file name</span>
+<span class="sd">        :type filename: :obj:`str`</span>
+<span class="sd">        :param writer: writer module</span>
+<span class="sd">        :type writer: :mod:`H5PYWriter` or :mod:`H5CppWriter`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FTObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="c1">#: (:obj:`str`) file name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="c1">#: (:mod:`H5PYWriter` or :mod:`H5CppWriter`)</span>
+        <span class="c1"># writer module</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="FTFile.root"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTFile.root">[docs]</a>    <span class="k">def</span> <span class="nf">root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; root object</span>
+
+<span class="sd">        :returns: parent object</span>
+<span class="sd">        :rtype: :class:`FTGroup`</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="FTFile.flush"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTFile.flush">[docs]</a>    <span class="k">def</span> <span class="nf">flush</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; flash the data</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">readonly</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; check if file is readonly</span>
+
+<span class="sd">        :returns: readonly flag</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FTFile.hasswmr"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTFile.hasswmr">[docs]</a>    <span class="k">def</span> <span class="nf">hasswmr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; if has swmr_mode</span>
+
+<span class="sd">        :returns: has swmr_mode</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="FTFile.reopen"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTFile.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">swmr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">libver</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reopen attribute</span>
+
+<span class="sd">        :param readonly: readonly flag</span>
+<span class="sd">        :type readonly: :obj:`bool`</span>
+<span class="sd">        :param swmr: swmr flag</span>
+<span class="sd">        :type swmr: :obj:`bool`</span>
+<span class="sd">        :param libver:  library version, default: &#39;latest&#39;</span>
+<span class="sd">        :type libver: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FTObject</span><span class="o">.</span><span class="n">_reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FTFile.currenttime"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTFile.currenttime">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">currenttime</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; returns current time string</span>
+
+<span class="sd">        :returns: current time</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tzone</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">tzname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S.</span><span class="si">%f</span><span class="s1">%z&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+                <span class="kn">import</span> <span class="nn">zoneinfo</span>
+                <span class="n">tz</span> <span class="o">=</span> <span class="n">zoneinfo</span><span class="o">.</span><span class="n">ZoneInfo</span><span class="p">(</span><span class="n">tzone</span><span class="p">)</span>
+                <span class="n">starttime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">tz</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="kn">import</span> <span class="nn">pytz</span>
+                <span class="n">tz</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">tzone</span><span class="p">)</span>
+                <span class="n">starttime</span> <span class="o">=</span> <span class="n">tz</span><span class="o">.</span><span class="n">localize</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">tzlocal</span>
+            <span class="n">tz</span> <span class="o">=</span> <span class="n">tzlocal</span><span class="o">.</span><span class="n">get_localzone</span><span class="p">()</span>
+            <span class="n">starttime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">tz</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">starttime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">fmt</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="FTFile.default_field"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTFile.default_field">[docs]</a>    <span class="k">def</span> <span class="nf">default_field</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; field pointed by default attributes</span>
+
+<span class="sd">        :returns: field pointed by default attributes</span>
+<span class="sd">        :rtype: :class:`FTField`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">()</span>
+        <span class="n">searching</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">while</span> <span class="n">searching</span><span class="p">:</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attributes</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;default&quot;</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                <span class="n">nname</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nname</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">nname</span><span class="p">):</span>
+                    <span class="n">nname</span> <span class="o">=</span> <span class="n">nname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">nname</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                    <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">nname</span><span class="p">)</span>
+                    <span class="k">continue</span>
+            <span class="n">searching</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attributes</span>
+            <span class="k">if</span> <span class="s2">&quot;signal&quot;</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                <span class="n">nname</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nname</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">nname</span><span class="p">):</span>
+                    <span class="n">nname</span> <span class="o">=</span> <span class="n">nname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">nname</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                    <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">nname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">node</span>
+
+        <span class="k">for</span> <span class="n">cnm</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;NXentry&quot;</span><span class="p">,</span> <span class="s2">&quot;NXdata&quot;</span><span class="p">,</span> <span class="s2">&quot;NXmonitor&quot;</span><span class="p">,</span> <span class="s2">&quot;NXlog&quot;</span><span class="p">]:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">cnm</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="n">snames</span> <span class="o">=</span> <span class="p">[</span><span class="n">cnm</span><span class="p">[</span><span class="mi">2</span><span class="p">:]]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">snames</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">snames</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="n">nm</span> <span class="k">for</span> <span class="n">nm</span> <span class="ow">in</span> <span class="n">names</span> <span class="k">if</span> <span class="n">nm</span> <span class="o">!=</span> <span class="n">cnm</span><span class="p">[</span><span class="mi">2</span><span class="p">:]]))</span>
+            <span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">snames</span><span class="p">:</span>
+                <span class="n">nd</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">nn</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">nd</span><span class="p">,</span> <span class="s2">&quot;attributes&quot;</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="n">attrs</span> <span class="o">=</span> <span class="n">nd</span><span class="o">.</span><span class="n">attributes</span>
+                <span class="k">if</span> <span class="s2">&quot;NX_class&quot;</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                    <span class="n">nname</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;NX_class&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nname</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">nname</span><span class="p">):</span>
+                        <span class="n">nname</span> <span class="o">=</span> <span class="n">nname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">nname</span> <span class="ow">in</span> <span class="n">cnm</span><span class="p">:</span>
+                        <span class="n">node</span> <span class="o">=</span> <span class="n">nd</span>
+                        <span class="k">break</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;attributes&quot;</span><span class="p">):</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attributes</span>
+            <span class="k">if</span> <span class="s2">&quot;signal&quot;</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                <span class="n">nname</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nname</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">nname</span><span class="p">):</span>
+                    <span class="n">nname</span> <span class="o">=</span> <span class="n">nname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">nname</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                    <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">nname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">node</span>
+        <span class="k">while</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;data&quot;</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">()):</span>
+                <span class="n">nd</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">nn</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">nd</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
+                    <span class="n">node</span> <span class="o">=</span> <span class="n">nd</span>
+                    <span class="k">break</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">node</span>
+        <span class="k">return</span> <span class="kc">None</span></div></div>
+
+
+<div class="viewcode-block" id="FTGroup"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTGroup">[docs]</a><span class="k">class</span> <span class="nc">FTGroup</span><span class="p">(</span><span class="n">FTObject</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; file tree group</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param h5object: h5 object</span>
+<span class="sd">        :type h5object: :obj:`any`</span>
+<span class="sd">        :param tparent: treee parent</span>
+<span class="sd">        :type tparent: :obj:`FTObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FTObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="p">)</span>
+        <span class="c1"># : (:obj:`int`) current file id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">currentfileid</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1">#: (:obj:`int`) steps per file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stepsperfile</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="FTGroup.open"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTGroup.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; open a file tree element</span>
+
+<span class="sd">        :param name: element name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :returns: file tree object</span>
+<span class="sd">        :rtype: :class:`FTObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="FTGroup.open_link"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTGroup.open_link">[docs]</a>    <span class="k">def</span> <span class="nf">open_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; open a file tree element as link</span>
+
+<span class="sd">        :param name: element name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :returns: file tree object</span>
+<span class="sd">        :rtype: :class:`FTObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="FTGroup.create_group"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTGroup.create_group">[docs]</a>    <span class="k">def</span> <span class="nf">create_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">nxclass</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; open a file tree element</span>
+
+<span class="sd">        :param n: group name</span>
+<span class="sd">        :type n: :obj:`str`</span>
+<span class="sd">        :param nxclass: group type</span>
+<span class="sd">        :type nxclass: :obj:`str`</span>
+<span class="sd">        :returns: file tree group</span>
+<span class="sd">        :rtype: :class:`FTGroup`</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="FTGroup.create_virtual_field"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTGroup.create_virtual_field">[docs]</a>    <span class="k">def</span> <span class="nf">create_virtual_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">layout</span><span class="p">,</span> <span class="n">fillvalue</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; creates a virtual filed tres element</span>
+
+<span class="sd">        :param name: group name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :param layout: virual field layout</span>
+<span class="sd">        :type layout: :class:`H5CppFieldLayout`</span>
+<span class="sd">        :param fillvalue:  fill value</span>
+<span class="sd">        :type fillvalue: :obj:`int` or :class:`np.ndarray`</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="FTGroup.create_field"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTGroup.create_field">[docs]</a>    <span class="k">def</span> <span class="nf">create_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type_code</span><span class="p">,</span>
+                     <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chunk</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dfilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; open a file tree element</span>
+
+<span class="sd">        :param n: group name</span>
+<span class="sd">        :type n: :obj:`str`</span>
+<span class="sd">        :param type_code: nexus field type</span>
+<span class="sd">        :type type_code: :obj:`str`</span>
+<span class="sd">        :param shape: shape</span>
+<span class="sd">        :type shape: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">        :param chunk: chunk</span>
+<span class="sd">        :type chunk: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">        :param dfilter: filter deflater</span>
+<span class="sd">        :type dfilter: :class:`FTDeflate`</span>
+<span class="sd">        :returns: file tree field</span>
+<span class="sd">        :rtype: :class:`FTField`</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; group size</span>
+
+<span class="sd">        :returns: group size</span>
+<span class="sd">        :rtype: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return the attribute manager</span>
+
+<span class="sd">        :returns: attribute manager</span>
+<span class="sd">        :rtype: :class:`FTAttributeManager`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FTGroup.exists"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTGroup.exists">[docs]</a>    <span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; if child exists</span>
+
+<span class="sd">        :param name: child name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :returns: existing flag</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="FTGroup.names"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTGroup.names">[docs]</a>    <span class="k">def</span> <span class="nf">names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; read the child names</span>
+
+<span class="sd">        :returns: h5 object</span>
+<span class="sd">        :rtype: :obj:`list` &lt;`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="FTGroup.reopen"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTGroup.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reopen attribute</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FTObject</span><span class="o">.</span><span class="n">_reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="FTVirtualFieldLayout"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTVirtualFieldLayout">[docs]</a><span class="k">class</span> <span class="nc">FTVirtualFieldLayout</span><span class="p">(</span><span class="n">FTObject</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; virtual field layout &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param h5object: h5 object</span>
+<span class="sd">        :type h5object: :obj:`any`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FTObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; add target field view to layout</span>
+
+<span class="sd">        :param key: slide or selection</span>
+<span class="sd">        :type key: :obj:`tuple`</span>
+<span class="sd">        :param source: target field view</span>
+<span class="sd">        :type source: :class:`FTTargetFieldView`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">_h5object</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FTVirtualFieldLayout.add"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTVirtualFieldLayout.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">sourcekey</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; add target field to layout</span>
+
+<span class="sd">        :param key: slide or selection</span>
+<span class="sd">        :type key: :obj:`tuple`</span>
+<span class="sd">        :param source: target field</span>
+<span class="sd">        :type source: :class:`FTTargetFieldView`</span>
+<span class="sd">        :param sourcekey: slide or selection</span>
+<span class="sd">        :type sourcekey: :obj:`tuple`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">sourcekey</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="FTTargetFieldView"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTTargetFieldView">[docs]</a><span class="k">class</span> <span class="nc">FTTargetFieldView</span><span class="p">(</span><span class="n">FTObject</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; target field view for VDS&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param h5object: h5 object</span>
+<span class="sd">        :type h5object: :obj:`any`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FTObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FTField"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTField">[docs]</a><span class="k">class</span> <span class="nc">FTField</span><span class="p">(</span><span class="n">FTObject</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; file writer field</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param h5object: h5 object</span>
+<span class="sd">        :type h5object: :obj:`any`</span>
+<span class="sd">        :param tparent: treee parent</span>
+<span class="sd">        :type tparent: :obj:`FTObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FTObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return the attribute manager</span>
+
+<span class="sd">        :returns: attribute manager</span>
+<span class="sd">        :rtype: :class:`FTAttributeManager`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FTField.grow"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTField.grow">[docs]</a>    <span class="k">def</span> <span class="nf">grow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; grow the field</span>
+
+<span class="sd">        :param dim: growing dimension</span>
+<span class="sd">        :type dim: :obj:`int`</span>
+<span class="sd">        :param dim: size of the grow</span>
+<span class="sd">        :type dim: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="FTField.refresh"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTField.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; refresh the field</span>
+
+<span class="sd">        :returns: refreshed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="FTField.read"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTField.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; read the field value</span>
+
+<span class="sd">        :returns: h5 object</span>
+<span class="sd">        :rtype: :obj:`any`</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="FTField.write"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTField.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; write the field value</span>
+
+<span class="sd">        :param o: h5 object</span>
+<span class="sd">        :type o: :obj:`any`</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set value</span>
+
+<span class="sd">        :param t: slice tuple</span>
+<span class="sd">        :type t: :obj:`tuple`</span>
+<span class="sd">        :param o: h5 object</span>
+<span class="sd">        :type o: :obj:`any`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; get value</span>
+
+<span class="sd">        :param t: slice tuple</span>
+<span class="sd">        :type t: :obj:`tuple`</span>
+<span class="sd">        :returns: h5 object</span>
+<span class="sd">        :rtype: :obj:`any`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dtype</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; field data type</span>
+
+<span class="sd">        :returns: field data type</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; field shape</span>
+
+<span class="sd">        :returns: field shape</span>
+<span class="sd">        :rtype: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; field size</span>
+
+<span class="sd">        :returns: field size</span>
+<span class="sd">        :rtype: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FTField.reopen"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTField.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reopen attribute</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FTObject</span><span class="o">.</span><span class="n">_reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="FTLink"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTLink">[docs]</a><span class="k">class</span> <span class="nc">FTLink</span><span class="p">(</span><span class="n">FTObject</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; file tree link</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param h5object: h5 object</span>
+<span class="sd">        :type h5object: :obj:`any`</span>
+<span class="sd">        :param tparent: treee parent</span>
+<span class="sd">        :type tparent: :obj:`FTObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FTObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">target_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; target path</span>
+
+<span class="sd">        :returns: target path</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FTLink.refresh"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTLink.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; refresh the link</span>
+
+<span class="sd">        :returns: refreshed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="FTLink.reopen"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTLink.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reopen attribute</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FTObject</span><span class="o">.</span><span class="n">_reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="FTDataFilter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTDataFilter">[docs]</a><span class="k">class</span> <span class="nc">FTDataFilter</span><span class="p">(</span><span class="n">FTObject</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; file tree data filter</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param h5object: h5 object</span>
+<span class="sd">        :type h5object: :obj:`any`</span>
+<span class="sd">        :param tparent: treee parent</span>
+<span class="sd">        :type tparent: :obj:`FTObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FTObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="p">)</span>
+        <span class="c1">#: (:obj:`bool`) compression shuffle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shuffle</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`int`) compression rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rate</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1">#: (:obj:`int`) compression filter id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filterid</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c1">#: (:obj:`tuple` &lt;:obj:`int`&gt;) compression options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; getter for compression options</span>
+
+<span class="sd">        :returns: compression options</span>
+<span class="sd">        :rtype: :obj:`tuple` &lt;:obj:`int`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span>
+
+    <span class="nd">@options</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; setter for compression options</span>
+
+<span class="sd">        :param value: compression options</span>
+<span class="sd">        :type value: :obj:`tuple` &lt;:obj:`int`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; getter for compression rate</span>
+
+<span class="sd">        :returns: compression rate</span>
+<span class="sd">        :rtype: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rate</span>
+
+    <span class="nd">@rate</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; setter for compression rate</span>
+
+<span class="sd">        :param value: compression rate</span>
+<span class="sd">        :type value: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rate</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">filterid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; getter for compression filter id</span>
+
+<span class="sd">        :returns: compression rate</span>
+<span class="sd">        :rtype: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filterid</span>
+
+    <span class="nd">@filterid</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">filterid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; setter for compression filter id</span>
+
+<span class="sd">        :param value: compression filter id</span>
+<span class="sd">        :type value: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filterid</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">shuffle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; getter for compression shuffle</span>
+
+<span class="sd">        :returns: compression shuffle</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shuffle</span>
+
+    <span class="nd">@shuffle</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">shuffle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; setter for compression shuffle</span>
+
+<span class="sd">        :param value: compression shuffle</span>
+<span class="sd">        :type value: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shuffle</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="FTDataFilter.reopen"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTDataFilter.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reopen attribute</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FTObject</span><span class="o">.</span><span class="n">_reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="FTDeflate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTDeflate">[docs]</a><span class="k">class</span> <span class="nc">FTDeflate</span><span class="p">(</span><span class="n">FTDataFilter</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="FTAttributeManager"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTAttributeManager">[docs]</a><span class="k">class</span> <span class="nc">FTAttributeManager</span><span class="p">(</span><span class="n">FTObject</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; file tree attribute</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param h5object: h5 object</span>
+<span class="sd">        :type h5object: :obj:`any`</span>
+<span class="sd">        :param tparent: treee parent</span>
+<span class="sd">        :type tparent: :obj:`FTObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FTObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FTAttributeManager.create"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTAttributeManager.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; create a new attribute</span>
+
+<span class="sd">        :param name: attribute name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :param dtype: attribute type</span>
+<span class="sd">        :type dtype: :obj:`str`</span>
+<span class="sd">        :param shape: attribute shape</span>
+<span class="sd">        :type shape: :obj:`list`&lt; :obj:`int`&gt;</span>
+<span class="sd">        :param overwrite: overwrite flag</span>
+<span class="sd">        :type overwrite: :obj:`bool`</span>
+<span class="sd">        :returns: attribute object</span>
+<span class="sd">        :rtype: :class:`FTAtribute`</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; number of attributes</span>
+
+<span class="sd">        :returns: number of attributes</span>
+<span class="sd">        :rtype: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; get value</span>
+
+<span class="sd">        :param name: attribute name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :returns: attribute object</span>
+<span class="sd">        :rtype: :class:`FTAtribute`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FTAttributeManager.names"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTAttributeManager.names">[docs]</a>    <span class="k">def</span> <span class="nf">names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; key values</span>
+
+<span class="sd">        :returns: attribute names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="FTAttributeManager.reopen"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTAttributeManager.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reopen attribute</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FTObject</span><span class="o">.</span><span class="n">_reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="FTAttribute"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTAttribute">[docs]</a><span class="k">class</span> <span class="nc">FTAttribute</span><span class="p">(</span><span class="n">FTObject</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; virtual file tree attribute</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param h5object: h5 object</span>
+<span class="sd">        :type h5object: :obj:`any`</span>
+<span class="sd">        :param tparent: treee parent</span>
+<span class="sd">        :type tparent: :obj:`FTObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FTObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">tparent</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FTAttribute.read"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTAttribute.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; read attribute value</span>
+
+<span class="sd">        :returns: python object</span>
+<span class="sd">        :rtype: :obj:`any`</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="FTAttribute.write"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTAttribute.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; write attribute value</span>
+
+<span class="sd">        :param o: python object</span>
+<span class="sd">        :type o: :obj:`any`</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; write attribute value</span>
+
+<span class="sd">        :param t: slice tuple</span>
+<span class="sd">        :type t: :obj:`tuple`</span>
+<span class="sd">        :param o: python object</span>
+<span class="sd">        :type o: :obj:`any`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; read attribute value</span>
+
+<span class="sd">        :param t: slice tuple</span>
+<span class="sd">        :type t: :obj:`tuple`</span>
+<span class="sd">        :returns: python object</span>
+<span class="sd">        :rtype: :obj:`any`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dtype</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; attribute data type</span>
+
+<span class="sd">        :returns: attribute data type</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; attribute shape</span>
+
+<span class="sd">        :returns: attribute shape</span>
+<span class="sd">        :rtype: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FTAttribute.reopen"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTAttribute.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; reopen attribute</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FTObject</span><span class="o">.</span><span class="n">_reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v2.94.2/index.html">v2.94.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.94.1/index.html">v2.94.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.94.0/index.html">v2.94.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.93.1/index.html">v2.93.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.92.2/index.html">v2.92.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.91.1/index.html">v2.91.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.90.2/index.html">v2.90.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.89.3/index.html">v2.89.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.88.0/index.html">v2.88.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.87.0/index.html">v2.87.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.86.1/index.html">v2.86.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.85.1/index.html">v2.85.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.84.0/index.html">v2.84.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.4/index.html">v2.83.4</a></li>
+      <li><a class="reference external" href="../../index/../../v2.82.0/index.html">v2.82.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.81.0/index.html">v2.81.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.80.1/index.html">v2.80.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.79.0/index.html">v2.79.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.75.3/index.html">v2.75.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.74.0/index.html">v2.74.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.73.0/index.html">v2.73.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.72.0/index.html">v2.72.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.71.1/index.html">v2.71.1</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lavuelib.filewriter</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+
+GNU GENERAL PUBLIC LICENSE, version 2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>
