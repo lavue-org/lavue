@@ -1,4 +1,4 @@
-# Copyright (C) 2017  DESY, Christoph Rosemann, Notkestr. 85, D-22607 Hamburg
+# Copyright (C) 2017  DESY, Notkestr. 85, D-22607 Hamburg
 #
 # lavue is an image viewing program for photon science imaging detectors.
 # Its usual application is as a live viewer using hidra as data source.
@@ -19,12 +19,30 @@
 # Boston, MA  02110-1301, USA.
 #
 # Authors:
-#     Christoph Rosemann <christoph.rosemann@desy.de>
 #     Jan Kotanski <jan.kotanski@desy.de>
 #
 
-""" release version """
+import numpy as np
 
-#: (:obj:`str`) the live viewer version
-__version__ = "2.95.0"
-# __version__ = "2.95"
+
+initial_parameters = [3, 100, 100, 20, 40, 0, 10]
+initial_parameters = [3, 100, 100, 20, 40, 0]
+
+parameters_names = ["Amp", "x0", "y0", "sigma_x", "sigma_y",
+                    "offset", "theta (optional)"]
+
+
+def function(xy, amplitude, x0, y0, sigma_x, sigma_y, offset=0.0, theta=0.0):
+    (x, y) = xy
+    x0 = float(x0)
+    y0 = float(y0)
+    a = (np.sin(theta) ** 2) / (2*sigma_y ** 2) \
+        + (np.cos(theta) ** 2) / (2 * sigma_x ** 2)
+    b = (np.sin(2 * theta)) / (4 * sigma_y ** 2) \
+        - (np.sin(2 * theta)) / (4 * sigma_x ** 2)
+    c = (np.cos(theta) ** 2) / (2 * sigma_y ** 2) \
+        + (np.sin(theta)**2)/(2*sigma_x**2)
+    g = amplitude * np.exp(
+        -(a * ((x - x0) ** 2) + 2 * b * (x - x0) * (y - y0)
+          + c * ((y - y0) ** 2))) + offset
+    return g.ravel()

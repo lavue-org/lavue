@@ -50,6 +50,7 @@ except Exception:
     from pyqtgraph import QtGui as QtWidgets
 
 from . import geometryDialog
+from . import fitParamDialog
 from . import rangeDialog
 from . import diffRangeDialog
 from . import takeMotorsDialog
@@ -7803,12 +7804,22 @@ class TwoDFitToolWidget(ToolBaseWidget):
         self.parameters.infotips = \
             "fitted parameters"
 
+        from lavuelib.plugins import gaussianfit
+        self.fit_function_module = gaussianfit
+
+        self.initial_params = self.fit_function_module.initial_parameters
+        self.param_names = self.fit_function_module.parameters_names
+        # self.initial_params = [3, 100, 100, 20, 40, 0]
+        self.last_initial_params = None
+        self.last_params = None
+        self.last_pcov = None
+        self.last_errors = None
+
         #: (:obj:`list` < [:class:`pyqtgraph.QtCore.pyqtSignal`, :obj:`str`] >)
         #: list of [signal, slot] object to connect
         self.signal2slot = [
             [self.__ui.paramsPushButton.clicked, self._setParams],
         ]
-
 
     # @debugmethod
     @QtCore.pyqtSlot()
@@ -7818,42 +7829,106 @@ class TwoDFitToolWidget(ToolBaseWidget):
         :returns: apply status
         :rtype: :obj:`bool`
         """
-        # cnfdlg = geometryDialog.GeometryDialog()
-        # cnfdlg.centerx = self.__settings.centerx
-        # cnfdlg.centery = self.__settings.centery
-        # cnfdlg.energy = self.__settings.energy
-        # cnfdlg.pixelsizex = self.__settings.pixelsizex
-        # cnfdlg.pixelsizey = self.__settings.pixelsizey
-        # cnfdlg.detdistance = self.__settings.detdistance
-        # cnfdlg.createGUI()
-        # if cnfdlg.exec_():
-        #     self.__settings.centerx = cnfdlg.centerx
-        #     self.__settings.centery = cnfdlg.centery
-        #     self.__settings.energy = cnfdlg.energy
-        #     self.__settings.pixelsizex = cnfdlg.pixelsizex
-        #     self.__settings.pixelsizey = cnfdlg.pixelsizey
-        #     self.__settings.detdistance = cnfdlg.detdistance
-        #     self._mainwidget.writeAttribute(
-        #         "BeamCenterX", float(self.__settings.centerx))
-        #     self._mainwidget.writeAttribute(
-        #         "BeamCenterY", float(self.__settings.centery))
-        #     self._mainwidget.writeAttribute(
-        #         "Energy", float(self.__settings.energy))
-        #     self._mainwidget.writeAttribute(
-        #         "DetectorDistance",
-        #         float(self.__settings.detdistance))
-        #     self.updateGeometryTip()
-        #     self._mainwidget.updateCenter(
-        #         self.__settings.centerx, self.__settings.centery)
-        #     if self.__plotindex:
-        #         self._mainwidget.emitReplotImage()
-        #     self._mainwidget.emitTCC()
-        
+        cnfdlg = fitParamDialog.FitParamDialog()
+        cnfdlg.parameters = self.initial_params \
+            if self.initial_params is not None else []
+        cnfdlg.last_parameters = self.last_params \
+            if self.last_params is not None else []
+        cnfdlg.parameters_names = self.param_names \
+            if self.param_names is not None else []
+        cnfdlg.createGUI()
+        if cnfdlg.exec_():
+            self.initial_params = cnfdlg.parameters
+            self.last_params = cnfdlg.parameters
+            print(self.initial_params)
+
+    def beforeplot(self, array, rawarray):
+        """ command  before plot
+
+        :param array: 2d image array
+        :type array: :class:`numpy.ndarray`
+        :param rawarray: 2d raw image array
+        :type rawarray: :class:`numpy.ndarray`
+        :return: 2d image array and raw image
+        :rtype: (:class:`numpy.ndarray`, :class:`numpy.ndarray`)
+        """
+
+        dts = rawarray
+        while dts.ndim > 2:
+            dts = np.nanmean(dts, axis=2)
+        dts = np.transpose(dts)
+
+        xm, ym = dts.shape
+        x = np.linspace(0, xm, xm)
+        y = np.linspace(0, ym, ym)
+        x, y = np.meshgrid(x, y)
+        rdts = dts.ravel()
+        # print("SHAPE", dts.shape)
+        try:
+            cond = np.linalg.cond(self.last_pcov)
+            if cond > 10000:
+                self.last_params = None
+        except Exception:
+            self.last_params = None
+        if self.last_params is not None:
+            self.last_initial_params = self.last_params
+        else:
+            self.last_initial_params = self.initial_params
+        try:
+            popt, pcov = scipy.optimize.curve_fit(
+                self.fit_function_module.function, (x, y), rdts,
+                p0=self.last_initial_params)
+        except Exception:
+            try:
+                self.last_initial_params = self.initial_params
+                popt, pcov = scipy.optimize.curve_fit(
+                    self.fit_function_module.function, (x, y), rdts,
+                    p0=self.last_initial_params)
+            except Exception as e:
+                self.last_params = None
+                logger.warning(str(e))
+                # print(str(e))
+        self.last_params = popt
+        self.last_pcov = pcov
+        self.last_errors = np.sqrt(np.diag(pcov))
+        try:
+            self.last_cond = np.linalg.cond(self.last_pcov)
+        except Exception:
+            self.last_cond = None
+        # print("FIT POPT", popt)
+        # try:
+        #     print("FIT cond", np.linalg.cond(self.last_pcov))
+        # except Exception:
+        #      print("FIT cond ERROR")
+        # print("FIT ERR", self.last_errors)
+        # print("FIT COV", pcov)
+        message = ""
+        for ii, par in enumerate(popt):
+            dg = "0"
+            if ii < len(self.last_errors):
+                err = self.last_errors[ii]
+                if not np.isinf(err):
+                    dg = str(max(int(np.ceil(-np.log10(err))), 0))
+                else:
+                    break
+            # print("DIG", ii, dg )
+            if ii < len(self.param_names):
+                nm = self.param_names[ii]
+                if " " in nm:
+                    nm = nm.split(" ")[0]
+                message += ("%s: %." + dg + "f, ") % (nm, par)
+            else:
+                message += ("p_%s: %." + dg + "f, ") % (ii, par)
+        if len(message) > 1:
+            message = message[:-2]
+
+        self._mainwidget.setDisplayedText(message)
+        if self.__settings.sendresults or self.__settings.showuserplot:
+            self.__sendresults()
+
     def afterplot(self):
         """ command after plot
         """
-        if self.__settings.sendresults or self.__settings.showuserplot:
-            self.__sendresults()
 
     def configure(self, configuration):
         """ set configuration for the current tool
@@ -7864,11 +7939,7 @@ class TwoDFitToolWidget(ToolBaseWidget):
         if configuration:
             cnf = json.loads(configuration)
             if "parameters" in cnf.keys():
-                parameters = cnf["parameters"]
-            # pars = ["position", "scale",
-            #         "xtext", "ytext", "xunits", "yunits"]
-            # if any(par in cnf.keys() for par in pars):
-            #     self._mainwidget.updateTicks(cnf)
+                self.initial_params = cnf["initial_parameters"]
 
     def configuration(self):
         """ provides configuration for the current tool
@@ -7877,6 +7948,7 @@ class TwoDFitToolWidget(ToolBaseWidget):
         :rtype configuration: :obj:`str`
         """
         cnf = {}
+        cnf["initial_parameters"] = self.initial_params
         return json.dumps(cnf, cls=numpyEncoder)
 
     def __sendresults(self):
@@ -7885,13 +7957,18 @@ class TwoDFitToolWidget(ToolBaseWidget):
         results = {"tool": self.alias}
         results["imagename"] = self._mainwidget.imageName()
         results["timestamp"] = time.time()
+        results["user_initial_parameters"] = self.initial_params
+        results["initial_parameters"] = self.last_initial_params
+        results["fitted_parameters"] = self.last_params
+        results["parameters_errors"] = self.last_errors
+        results["covariance_matrix"] = self.last_pcov
+        results["condition_number"] = self.last_cond
+        # print(results)
         if self.__settings.sendresults:
             self._mainwidget.writeAttribute(
                 "ToolResults", json.dumps(results, cls=numpyEncoder))
         self._mainwidget.plotUserFunction(results)
 
-
-        
 
 #: ( :obj:`dict` < :obj:`str`, any > ) tool widget properties
 twproperties = []
