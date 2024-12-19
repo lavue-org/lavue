@@ -7840,7 +7840,7 @@ class TwoDFitToolWidget(ToolBaseWidget):
         if cnfdlg.exec_():
             self.initial_params = cnfdlg.parameters
             self.last_params = cnfdlg.parameters
-            print(self.initial_params)
+            # print(self.initial_params)
 
     def beforeplot(self, array, rawarray):
         """ command  before plot
@@ -7856,7 +7856,7 @@ class TwoDFitToolWidget(ToolBaseWidget):
         dts = rawarray
         while dts.ndim > 2:
             dts = np.nanmean(dts, axis=2)
-        dts = np.transpose(dts)
+        dts = np.nan_to_num(np.transpose(dts))
 
         xm, ym = dts.shape
         x = np.linspace(0, xm, xm)
@@ -7870,7 +7870,9 @@ class TwoDFitToolWidget(ToolBaseWidget):
                 self.last_params = None
         except Exception:
             self.last_params = None
+        init = True
         if self.last_params is not None:
+            init = False
             self.last_initial_params = self.last_params
         else:
             self.last_initial_params = self.initial_params
@@ -7878,19 +7880,26 @@ class TwoDFitToolWidget(ToolBaseWidget):
             popt, pcov = scipy.optimize.curve_fit(
                 self.fit_function_module.function, (x, y), rdts,
                 p0=self.last_initial_params)
-        except Exception:
+        except Exception as e:
+            if init:
+                raise e
             try:
                 self.last_initial_params = self.initial_params
                 popt, pcov = scipy.optimize.curve_fit(
                     self.fit_function_module.function, (x, y), rdts,
                     p0=self.last_initial_params)
             except Exception as e:
+                popt = None
+                pcov = None
                 self.last_params = None
                 logger.warning(str(e))
                 # print(str(e))
         self.last_params = popt
         self.last_pcov = pcov
-        self.last_errors = np.sqrt(np.diag(pcov))
+        try:
+            self.last_errors = np.sqrt(np.diag(pcov))
+        except Exception:
+            self.last_errors = None
         try:
             self.last_cond = np.linalg.cond(self.last_pcov)
         except Exception:
@@ -7903,24 +7912,25 @@ class TwoDFitToolWidget(ToolBaseWidget):
         # print("FIT ERR", self.last_errors)
         # print("FIT COV", pcov)
         message = ""
-        for ii, par in enumerate(popt):
-            dg = "0"
-            if ii < len(self.last_errors):
-                err = self.last_errors[ii]
-                if not np.isinf(err):
-                    dg = str(max(int(np.ceil(-np.log10(err))), 0))
+        if popt is not None:
+            for ii, par in enumerate(popt):
+                dg = "0"
+                if ii < len(self.last_errors):
+                    err = self.last_errors[ii]
+                    if not np.isinf(err):
+                        dg = str(max(int(np.ceil(-np.log10(err))), 0))
+                    else:
+                        break
+                # print("DIG", ii, dg )
+                if ii < len(self.param_names):
+                    nm = self.param_names[ii]
+                    if " " in nm:
+                        nm = nm.split(" ")[0]
+                    message += ("%s: %." + dg + "f, ") % (nm, par)
                 else:
-                    break
-            # print("DIG", ii, dg )
-            if ii < len(self.param_names):
-                nm = self.param_names[ii]
-                if " " in nm:
-                    nm = nm.split(" ")[0]
-                message += ("%s: %." + dg + "f, ") % (nm, par)
-            else:
-                message += ("p_%s: %." + dg + "f, ") % (ii, par)
-        if len(message) > 1:
-            message = message[:-2]
+                    message += ("p_%s: %." + dg + "f, ") % (ii, par)
+            if len(message) > 1:
+                message = message[:-2]
 
         self._mainwidget.setDisplayedText(message)
         if self.__settings.sendresults or self.__settings.showuserplot:

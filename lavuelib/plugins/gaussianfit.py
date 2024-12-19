@@ -29,7 +29,7 @@ initial_parameters = [3, 100, 100, 20, 40, 0, 10]
 initial_parameters = [3, 100, 100, 20, 40, 0]
 
 parameters_names = ["Amp", "x0", "y0", "sigma_x", "sigma_y",
-                    "offset", "theta (optional)"]
+                    "offset (optional)", "theta (optional)"]
 
 
 def function(xy, amplitude, x0, y0, sigma_x, sigma_y, offset=0.0, theta=0.0):
