@@ -131,6 +131,11 @@ _qroiprojformclass, _qroiprojbaseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  "ui", "QROIProjToolWidget.ui"))
 
+_twodfitformclass, _twodfitbaseclass = uic.loadUiType(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                 "ui", "TwoDFitToolWidget.ui"))
+
+
 __all__ = [
     'IntensityToolWidget',
     'ROIToolWidget',
@@ -144,6 +149,7 @@ __all__ = [
     'ParametersToolWidget',
     'DiffractogramToolWidget',
     'QROIProjToolWidget',
+    'TwoDFitToolWidget',
     'twproperties',
 ]
 
@@ -7763,6 +7769,129 @@ class QROIProjToolWidget(ToolBaseWidget):
         self.__ui.toolLabel.setToolTip(
             "coordinate info display for the mouse pointer\n%s" % message)
 
+
+class TwoDFitToolWidget(ToolBaseWidget):
+    """ two dimension fit tool widget
+    """
+
+    #: (:obj:`str`) tool name
+    name = "TwoDFit"
+    #: (:obj:`str`) tool name alias
+    alias = "twodfit"
+    #: (:obj:`tuple` <:obj:`str`>) capitalized required packages
+    requires = ()
+
+    def __init__(self, parent=None):
+        """ constructor
+
+        :param parent: parent object
+        :type parent: :class:`pyqtgraph.QtCore.QObject`
+        """
+        ToolBaseWidget.__init__(self, parent)
+
+        #: (:class:`Ui_IntensityToolWidget')
+        #:        ui_toolwidget object from qtdesigner
+        self.__ui = _twodfitformclass()
+        self.__ui.setupUi(self)
+
+        #: (:class:`lavuelib.settings.Settings`) configuration settings
+        self.__settings = self._mainwidget.settings()
+
+        self.parameters.scale = False
+        self.parameters.crosshairlocker = False
+        self.parameters.infolineedit = ""
+        self.parameters.infotips = \
+            "fitted parameters"
+
+        #: (:obj:`list` < [:class:`pyqtgraph.QtCore.pyqtSignal`, :obj:`str`] >)
+        #: list of [signal, slot] object to connect
+        self.signal2slot = [
+            [self.__ui.paramsPushButton.clicked, self._setParams],
+        ]
+
+
+    # @debugmethod
+    @QtCore.pyqtSlot()
+    def _setParams(self):
+        """ launches params widget
+
+        :returns: apply status
+        :rtype: :obj:`bool`
+        """
+        # cnfdlg = geometryDialog.GeometryDialog()
+        # cnfdlg.centerx = self.__settings.centerx
+        # cnfdlg.centery = self.__settings.centery
+        # cnfdlg.energy = self.__settings.energy
+        # cnfdlg.pixelsizex = self.__settings.pixelsizex
+        # cnfdlg.pixelsizey = self.__settings.pixelsizey
+        # cnfdlg.detdistance = self.__settings.detdistance
+        # cnfdlg.createGUI()
+        # if cnfdlg.exec_():
+        #     self.__settings.centerx = cnfdlg.centerx
+        #     self.__settings.centery = cnfdlg.centery
+        #     self.__settings.energy = cnfdlg.energy
+        #     self.__settings.pixelsizex = cnfdlg.pixelsizex
+        #     self.__settings.pixelsizey = cnfdlg.pixelsizey
+        #     self.__settings.detdistance = cnfdlg.detdistance
+        #     self._mainwidget.writeAttribute(
+        #         "BeamCenterX", float(self.__settings.centerx))
+        #     self._mainwidget.writeAttribute(
+        #         "BeamCenterY", float(self.__settings.centery))
+        #     self._mainwidget.writeAttribute(
+        #         "Energy", float(self.__settings.energy))
+        #     self._mainwidget.writeAttribute(
+        #         "DetectorDistance",
+        #         float(self.__settings.detdistance))
+        #     self.updateGeometryTip()
+        #     self._mainwidget.updateCenter(
+        #         self.__settings.centerx, self.__settings.centery)
+        #     if self.__plotindex:
+        #         self._mainwidget.emitReplotImage()
+        #     self._mainwidget.emitTCC()
+        
+    def afterplot(self):
+        """ command after plot
+        """
+        if self.__settings.sendresults or self.__settings.showuserplot:
+            self.__sendresults()
+
+    def configure(self, configuration):
+        """ set configuration for the current tool
+
+        :param configuration: configuration string
+        :type configuration: :obj:`str`
+        """
+        if configuration:
+            cnf = json.loads(configuration)
+            if "parameters" in cnf.keys():
+                parameters = cnf["parameters"]
+            # pars = ["position", "scale",
+            #         "xtext", "ytext", "xunits", "yunits"]
+            # if any(par in cnf.keys() for par in pars):
+            #     self._mainwidget.updateTicks(cnf)
+
+    def configuration(self):
+        """ provides configuration for the current tool
+
+        :returns configuration: configuration string
+        :rtype configuration: :obj:`str`
+        """
+        cnf = {}
+        return json.dumps(cnf, cls=numpyEncoder)
+
+    def __sendresults(self):
+        """ send results to LavueController
+        """
+        results = {"tool": self.alias}
+        results["imagename"] = self._mainwidget.imageName()
+        results["timestamp"] = time.time()
+        if self.__settings.sendresults:
+            self._mainwidget.writeAttribute(
+                "ToolResults", json.dumps(results, cls=numpyEncoder))
+        self._mainwidget.plotUserFunction(results)
+
+
+        
 
 #: ( :obj:`dict` < :obj:`str`, any > ) tool widget properties
 twproperties = []
