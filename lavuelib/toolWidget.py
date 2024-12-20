@@ -8030,6 +8030,17 @@ class TwoDFitToolWidget(ToolBaseWidget):
                     self.__ui.modeComboBox.setCurrentIndex(idx)
                 except Exception:
                     pass
+            if "fit" in cnf.keys():
+                if cnf["fit"]:
+                    if str(self.__ui.fitPushButton.text()) == "Fit":
+                        self._fitstopParams()
+                else:
+                    if str(self.__ui.fitPushButton.text()) == "Stop":
+                        self._fitstopParams()
+            if "next" in cnf.keys():
+                if cnf["next"]:
+                    if str(self.__ui.nextPushButton.text()) == "Next":
+                        self._nextParams()
 
     def configuration(self):
         """ provides configuration for the current tool
