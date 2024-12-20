@@ -7805,17 +7805,19 @@ class TwoDFitToolWidget(ToolBaseWidget):
             "fitted parameters"
 
         from lavuelib.plugins import gaussianfit
-        # (:mod:`lavuelib.plugins.gaussianfit`) fitting function module
-        self.__fit_function_module = gaussianfit
+        # self.__fit_function_class = gaussianfit
+        #: (:class:`lavuelib.plugins.gaussianfit.GaussianFit`)
+        #:       fitting function class
+        self.__fit_function_class = gaussianfit.GaussianFit
 
         #: (:obj:`list` <:obj:`float`>) initial parameters
-        self.__initial_params = self.__fit_function_module.initial_parameters
+        self.__initial_params = self.__fit_function_class.initial_parameters
         #: (:obj:`list` <:obj:`str`>) parameters names
-        self.__param_names = self.__fit_function_module.parameters_names
+        self.__param_names = self.__fit_function_class.parameters_names
         #: (:fun:`lavuelib.plugins.gaussianfit.generator`) generator function
         self.__generator = None
         if hasattr(gaussianfit, "generator"):
-            self.__generator = self.__fit_function_module.generator
+            self.__generator = self.__fit_function_class.generator
 
         #: (:obj:`list` <:obj:`float`>) last initial parameters
         self.__last_initial_params = None
@@ -7952,7 +7954,7 @@ class TwoDFitToolWidget(ToolBaseWidget):
             if gparam is not None and mode != "nofit":
                 try:
                     popt, pcov = scipy.optimize.curve_fit(
-                        self.__fit_function_moduleo.function, (x, y), rdts,
+                        self.__fit_function_class.function, (x, y), rdts,
                         p0=gparam)
                 except Exception as e:
                     popt = None
