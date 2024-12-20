@@ -8051,6 +8051,7 @@ class TwoDFitToolWidget(ToolBaseWidget):
         cnf = {}
         cnf["initial_parameters"] = self.__initial_params
         cnf["parameters_mode"] = self.__parametersmode
+        cnf["fit"] = self.__fitparams
         return json.dumps(cnf, cls=numpyEncoder)
 
     def __sendresults(self):
