@@ -62,7 +62,7 @@ def generator(dts, length=None):
     mean_y = (y * dts).sum() / (dts.sum())
     sigma_x = np.sqrt((dts * (x - mean_x) ** 2).sum() / (dts.sum()))
     sigma_y = np.sqrt((dts * (y - mean_y) ** 2).sum() / (dts.sum()))
-    print("GEN", np.max(dts), mean_x, mean_y, sigma_x, sigma_y, 0., 0.)
+    # print("GEN", np.max(dts), mean_x, mean_y, sigma_x, sigma_y, 0., 0.)
     res = [np.max(dts), mean_x, mean_y, sigma_x, sigma_y, 0., 0.]
     if length is not None and length < len(res):
         res = res[:length]
