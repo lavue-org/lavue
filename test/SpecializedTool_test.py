@@ -364,6 +364,14 @@ class SpecializedToolTest(unittest.TestCase):
             cnf9["tool"] = "parameters"
             lavuestate9 = json.dumps(cnf9)
 
+            cnf10 = {}
+            cnf10["tool"] = "twodfit"
+            toolcnf10 = {
+                'initial_parameters': [30, 105, 102, 30, 20],
+                'parameters_mode': 'user'}
+            cnf10["toolconfig"] = json.dumps(toolcnf10)
+            lavuestate10 = json.dumps(cnf10)
+
             qtck1 = QtChecker(app, dialog, True, sleep=100,
                               withitem=EnsureOmniThread)
             qtck2 = QtChecker(app, dialog, True, sleep=100,
@@ -385,6 +393,8 @@ class SpecializedToolTest(unittest.TestCase):
             qtck10 = QtChecker(app, dialog, True, sleep=100,
                                withitem=EnsureOmniThread)
             qtck11 = QtChecker(app, dialog, True, sleep=100,
+                               withitem=EnsureOmniThread)
+            qtck12 = QtChecker(app, dialog, True, sleep=100,
                                withitem=EnsureOmniThread)
             qtck1.setChecks([
                 CmdCheck(
@@ -425,8 +435,12 @@ class SpecializedToolTest(unittest.TestCase):
             ])
             qtck10.setChecks([
                 ExtCmdCheck(self, "getLavueStatePar"),
+                ExtCmdCheck(self, "setLavueStatePar", [lavuestate10])
             ])
-            qtck11.setChecks([])
+            qtck11.setChecks([
+                ExtCmdCheck(self, "getLavueStatePar"),
+            ])
+            qtck12.setChecks([])
 
             print("execute")
             qtck1.executeChecks(delay=6000)
@@ -439,7 +453,8 @@ class SpecializedToolTest(unittest.TestCase):
             qtck8.executeChecks(delay=48000)
             qtck9.executeChecks(delay=54000)
             qtck10.executeChecks(delay=60000)
-            status = qtck11.executeChecksAndClose(delay=67000)
+            qtck11.executeChecks(delay=67000)
+            status = qtck12.executeChecksAndClose(delay=74000)
 
             self.assertEqual(status, 0)
             qtck1.compareResults(self, [False, None])
@@ -460,6 +475,7 @@ class SpecializedToolTest(unittest.TestCase):
             res8 = qtck8.results()
             res9 = qtck9.results()
             res10 = qtck10.results()
+            res11 = qtck11.results()
             # res11 = qtck11.results()
 
             ls = json.loads(res2[0])
@@ -534,6 +550,13 @@ class SpecializedToolTest(unittest.TestCase):
             tc2 = json.loads(cnf9["toolconfig"])
             self.compareStates(tc1, tc2, ['tango_det_attrs'])
             self.compareStates(tc1['tango_det_attrs'], tc2['tango_det_attrs'])
+
+            ls = json.loads(res11[0])
+            tc1 = json.loads(ls["toolconfig"])
+            tc2 = json.loads(cnf10["toolconfig"])
+            # print("TC1", tc1)
+            # print("TC2", tc2)
+            self.compareStates(tc1, tc2)
         finally:
             tisu.tearDown()
 
