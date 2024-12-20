@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.toolWidget &#8212; LaVue 2.94.2 documentation</title>
+    <title>lavuelib.toolWidget &#8212; LaVue 2.95.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
@@ -33,7 +33,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.94.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.95.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.toolWidget</a></li> 
       </ul>
@@ -97,6 +97,7 @@
     <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtGui</span> <span class="k">as</span> <span class="n">QtWidgets</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">geometryDialog</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">fitParamDialog</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">rangeDialog</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">diffRangeDialog</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">takeMotorsDialog</span>
@@ -178,6 +179,11 @@
     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span>
                  <span class="s2">&quot;ui&quot;</span><span class="p">,</span> <span class="s2">&quot;QROIProjToolWidget.ui&quot;</span><span class="p">))</span>
 
+<span class="n">_twodfitformclass</span><span class="p">,</span> <span class="n">_twodfitbaseclass</span> <span class="o">=</span> <span class="n">uic</span><span class="o">.</span><span class="n">loadUiType</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span>
+                 <span class="s2">&quot;ui&quot;</span><span class="p">,</span> <span class="s2">&quot;TwoDFitToolWidget.ui&quot;</span><span class="p">))</span>
+
+
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;IntensityToolWidget&#39;</span><span class="p">,</span>
     <span class="s1">&#39;ROIToolWidget&#39;</span><span class="p">,</span>
@@ -191,6 +197,7 @@
     <span class="s1">&#39;ParametersToolWidget&#39;</span><span class="p">,</span>
     <span class="s1">&#39;DiffractogramToolWidget&#39;</span><span class="p">,</span>
     <span class="s1">&#39;QROIProjToolWidget&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;TwoDFitToolWidget&#39;</span><span class="p">,</span>
     <span class="s1">&#39;twproperties&#39;</span><span class="p">,</span>
 <span class="p">]</span>
 
@@ -3412,9 +3419,9 @@
         <span class="c1">#: (:obj:`bool`) old lock value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__oldlocked</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="c1">#: (:class:`numpy.array`) radial array cache</span>
+        <span class="c1">#: (:class:`numpy.ndarray`) radial array cache</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__lastradial</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="c1">#: (:class:`numpy.array`) angle array cache</span>
+        <span class="c1">#: (:class:`numpy.ndarray`) angle array cache</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__lastangle</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1">#: (:obj:`float`) energy cache</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__lastenergy</span> <span class="o">=</span> <span class="kc">None</span>
@@ -3432,9 +3439,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__lastpsizex</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1">#: (:obj:`float`) pixelsizey cache</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__lastpsizey</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="c1">#: (:class:`numpy.array`) x array cache</span>
+        <span class="c1">#: (:class:`numpy.ndarray`) x array cache</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__lastx</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="c1">#: (:class:`numpy.array`) y array cache</span>
+        <span class="c1">#: (:class:`numpy.ndarray`) y array cache</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__lasty</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1">#: (:obj:`float`) maxdim cache</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__lastmaxdim</span> <span class="o">=</span> <span class="kc">None</span>
@@ -3605,9 +3612,9 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; if xy changed</span>
 
 <span class="sd">        :param radial: radial coordinate</span>
-<span class="sd">        :type radial: :obj:`float` or :class:`numpy.array`</span>
+<span class="sd">        :type radial: :obj:`float` or :class:`numpy.ndarray`</span>
 <span class="sd">        :param angle: polar angle coordinate</span>
-<span class="sd">        :type angle: :obj:`float` or :class:`numpy.array`</span>
+<span class="sd">        :type angle: :obj:`float` or :class:`numpy.ndarray`</span>
 <span class="sd">        :returns: flag if (x, y) have changed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -3652,11 +3659,11 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; intensity interpolation function</span>
 
 <span class="sd">        :param radial: radial coordinate</span>
-<span class="sd">        :type radial: :obj:`float` or :class:`numpy.array`</span>
+<span class="sd">        :type radial: :obj:`float` or :class:`numpy.ndarray`</span>
 <span class="sd">        :param angle: polar angle coordinate</span>
-<span class="sd">        :type angle: :obj:`float` or :class:`numpy.array`</span>
+<span class="sd">        :type angle: :obj:`float` or :class:`numpy.ndarray`</span>
 <span class="sd">        :return: interpolated intensity</span>
-<span class="sd">        :rtype: :obj:`float` or :class:`numpy.array`</span>
+<span class="sd">        :rtype: :obj:`float` or :class:`numpy.ndarray`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rangechanged</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__havexychanged</span><span class="p">(</span><span class="n">radial</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__plotindex</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -7811,6 +7818,307 @@
             <span class="s2">&quot;coordinate info display for the mouse pointer</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">message</span><span class="p">)</span></div></div>
 
 
+<div class="viewcode-block" id="TwoDFitToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.TwoDFitToolWidget">[docs]</a><span class="k">class</span> <span class="nc">TwoDFitToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; two dimension fit tool widget</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: (:obj:`str`) tool name</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;TwoDFit&quot;</span>
+    <span class="c1">#: (:obj:`str`) tool name alias</span>
+    <span class="n">alias</span> <span class="o">=</span> <span class="s2">&quot;twodfit&quot;</span>
+    <span class="c1">#: (:obj:`tuple` &lt;:obj:`str`&gt;) capitalized required packages</span>
+    <span class="n">requires</span> <span class="o">=</span> <span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param parent: parent object</span>
+<span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ToolBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+
+        <span class="c1">#: (:class:`Ui_IntensityToolWidget&#39;)</span>
+        <span class="c1">#:        ui_toolwidget object from qtdesigner</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span> <span class="o">=</span> <span class="n">_twodfitformclass</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1">#: (:class:`lavuelib.settings.Settings`) configuration settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">crosshairlocker</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">infolineedit</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">infotips</span> <span class="o">=</span> \
+            <span class="s2">&quot;fitted parameters&quot;</span>
+
+        <span class="kn">from</span> <span class="nn">lavuelib.plugins</span> <span class="kn">import</span> <span class="n">gaussianfit</span>
+        <span class="c1"># (:mod:`lavuelib.plugins.gaussianfit`) fitting function module</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__fit_function_module</span> <span class="o">=</span> <span class="n">gaussianfit</span>
+
+        <span class="c1">#: (:obj:`list` &lt;:obj:`float`&gt;) initial parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__initial_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fit_function_module</span><span class="o">.</span><span class="n">initial_parameters</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) parameters names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__param_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fit_function_module</span><span class="o">.</span><span class="n">parameters_names</span>
+        <span class="c1">#: (:fun:`lavuelib.plugins.gaussianfit.generator`) generator function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__generator</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gaussianfit</span><span class="p">,</span> <span class="s2">&quot;generator&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__generator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fit_function_module</span><span class="o">.</span><span class="n">generator</span>
+
+        <span class="c1">#: (:obj:`list` &lt;:obj:`float`&gt;) last initial parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__last_initial_params</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj:`float`&gt;) last fitted parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__last_params</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`numpy.ndarray`) last covariance matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__last_pcov</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`numpy.ndarray`) last parameters errors list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__last_errors</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`numpy.ndarray`) last image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__last_array</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`float`) condition number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__last_cond</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1">#: (:obj:`bool`) fit parameters flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__fitparams</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) list of units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__modestexts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;generator&quot;</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;last_generator&quot;</span><span class="p">,</span> <span class="s2">&quot;last_user&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;nofit&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__parametersmode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__modestexts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1">#: (:obj:`list` &lt; [:class:`pyqtgraph.QtCore.pyqtSignal`, :obj:`str`] &gt;)</span>
+        <span class="c1">#: list of [signal, slot] object to connect</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal2slot</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">paramsPushButton</span><span class="o">.</span><span class="n">clicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_setParams</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">fitPushButton</span><span class="o">.</span><span class="n">clicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fitstopParams</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">nextPushButton</span><span class="o">.</span><span class="n">clicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nextParams</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">modeComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="p">,</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">_setParametersMode</span><span class="p">],</span>
+        <span class="p">]</span>
+
+    <span class="c1"># @debugmethod</span>
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_fitstopParams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; show or hide diffractogram</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fitparams</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__fitparams</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">fitPushButton</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Stop&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fit</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__fitparams</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">fitPushButton</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Fit&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">()</span>
+
+    <span class="c1"># @debugmethod</span>
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_setParams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; launches params widget</span>
+
+<span class="sd">        :returns: apply status</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cnfdlg</span> <span class="o">=</span> <span class="n">fitParamDialog</span><span class="o">.</span><span class="n">FitParamDialog</span><span class="p">()</span>
+        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__initial_params</span> \
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__initial_params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">last_parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__last_params</span> \
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__last_params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">parameters_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__param_names</span> \
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__param_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="n">cnfdlg</span><span class="o">.</span><span class="n">createGUI</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">cnfdlg</span><span class="o">.</span><span class="n">exec_</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__initial_params</span> <span class="o">=</span> <span class="n">cnfdlg</span><span class="o">.</span><span class="n">parameters</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__last_params</span> <span class="o">=</span> <span class="n">cnfdlg</span><span class="o">.</span><span class="n">parameters</span>
+            <span class="c1"># print(self.__initial_params)</span>
+
+    <span class="c1"># @debugmethod</span>
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_nextParams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; plot all diffractograms and update</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">()</span>
+
+<div class="viewcode-block" id="TwoDFitToolWidget.beforeplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.TwoDFitToolWidget.beforeplot">[docs]</a>    <span class="k">def</span> <span class="nf">beforeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">rawarray</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; command  before plot</span>
+
+<span class="sd">        :param array: 2d image array</span>
+<span class="sd">        :type array: :class:`numpy.ndarray`</span>
+<span class="sd">        :param rawarray: 2d raw image array</span>
+<span class="sd">        :type rawarray: :class:`numpy.ndarray`</span>
+<span class="sd">        :return: 2d image array and raw image</span>
+<span class="sd">        :rtype: (:class:`numpy.ndarray`, :class:`numpy.ndarray`)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__last_array</span> <span class="o">=</span> <span class="n">rawarray</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fitparams</span><span class="p">:</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fit</span><span class="p">()</span>
+            <span class="k">if</span> <span class="mi">10</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshtime</span> <span class="o">&lt;</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">st</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_fitstopParams</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; command  before plot</span>
+
+<span class="sd">        :param rawarray: 2d raw image array</span>
+<span class="sd">        :type rawarray: :class:`numpy.ndarray`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__last_array</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__last_array</span>
+            <span class="k">while</span> <span class="n">dts</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">dts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">dts</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">dts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">dts</span><span class="p">))</span>
+
+            <span class="n">ym</span><span class="p">,</span> <span class="n">xm</span> <span class="o">=</span> <span class="n">dts</span><span class="o">.</span><span class="n">shape</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">xm</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">xm</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ym</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ym</span><span class="p">)</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="n">rdts</span> <span class="o">=</span> <span class="n">dts</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+            <span class="c1"># print(&quot;SHAPE&quot;, dts.shape)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cond</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__last_pcov</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">cond</span> <span class="o">&gt;</span> <span class="mi">10000</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__last_params</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__last_params</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parametersmode</span>
+            <span class="n">gparam</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">mode</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;last_&quot;</span><span class="p">)</span> <span class="ow">and</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__last_initial_params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">gparam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__last_initial_params</span>
+            <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;generator&quot;</span> <span class="ow">or</span> \
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__last_initial_params</span> <span class="ow">is</span> <span class="kc">None</span>
+                     <span class="ow">and</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;last_generator&quot;</span><span class="p">)</span> <span class="ow">or</span> \
+                    <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;nofit&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__generator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">gparam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__generator</span><span class="p">(</span><span class="n">dts</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__initial_params</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__last_initial_params</span> <span class="o">=</span> <span class="n">gparam</span>
+            <span class="k">if</span> <span class="n">gparam</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">mode</span> <span class="o">!=</span> <span class="s2">&quot;nofit&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__last_initial_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__initial_params</span>
+                <span class="n">gparam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__last_initial_params</span>
+            <span class="c1"># print(&quot;GPARAM&quot;, gparam, mode)</span>
+            <span class="k">if</span> <span class="n">gparam</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">mode</span> <span class="o">!=</span> <span class="s2">&quot;nofit&quot;</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">popt</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">curve_fit</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__fit_function_moduleo</span><span class="o">.</span><span class="n">function</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">rdts</span><span class="p">,</span>
+                        <span class="n">p0</span><span class="o">=</span><span class="n">gparam</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">popt</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="n">pcov</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__last_params</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                    <span class="c1"># print(str(e))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">popt</span> <span class="o">=</span> <span class="n">gparam</span>
+                <span class="n">pcov</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__last_params</span> <span class="o">=</span> <span class="n">popt</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__last_pcov</span> <span class="o">=</span> <span class="n">pcov</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__last_errors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">pcov</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__last_errors</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__last_cond</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__last_pcov</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__last_cond</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_message</span><span class="p">()</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_message</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides 2dfit message</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__last_params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">par</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__last_params</span><span class="p">):</span>
+                <span class="n">dg</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__last_errors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">dg</span> <span class="o">=</span> <span class="s2">&quot;2&quot;</span>
+                <span class="k">elif</span> <span class="n">ii</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__last_errors</span><span class="p">):</span>
+                    <span class="n">err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__last_errors</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">err</span><span class="p">):</span>
+                        <span class="n">dg</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">err</span><span class="p">))),</span> <span class="mi">0</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">break</span>
+                <span class="c1"># print(&quot;DIG&quot;, ii, dg )</span>
+                <span class="k">if</span> <span class="n">ii</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__param_names</span><span class="p">):</span>
+                    <span class="n">nm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__param_names</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="s2">&quot; &quot;</span> <span class="ow">in</span> <span class="n">nm</span><span class="p">:</span>
+                        <span class="n">nm</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">message</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> = %.&quot;</span> <span class="o">+</span> <span class="n">dg</span> <span class="o">+</span> <span class="s2">&quot;f, &quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">nm</span><span class="p">,</span> <span class="n">par</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">message</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;p_</span><span class="si">%s</span><span class="s2"> = %.&quot;</span> <span class="o">+</span> <span class="n">dg</span> <span class="o">+</span> <span class="s2">&quot;f, &quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">ii</span><span class="p">,</span> <span class="n">par</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="n">message</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sendresults</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showuserplot</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__sendresults</span><span class="p">()</span>
+
+<div class="viewcode-block" id="TwoDFitToolWidget.afterplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.TwoDFitToolWidget.afterplot">[docs]</a>    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; command after plot</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="TwoDFitToolWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.TwoDFitToolWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current tool</span>
+
+<span class="sd">        :param configuration: configuration string</span>
+<span class="sd">        :type configuration: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">configuration</span><span class="p">:</span>
+            <span class="n">cnf</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;initial_parameters&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__initial_params</span> <span class="o">=</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;initial_parameters&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">&quot;parameters_mode&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">mode</span> <span class="o">=</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;parameters_mode&quot;</span><span class="p">]</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__modestexts</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">parameters_mode</span> <span class="o">=</span> <span class="n">mode</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">modeComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="TwoDFitToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.TwoDFitToolWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current tool</span>
+
+<span class="sd">        :returns configuration: configuration string</span>
+<span class="sd">        :rtype configuration: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cnf</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;initial_parameters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__initial_params</span>
+        <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;parameters_mode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parametersmode</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__sendresults</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; send results to LavueController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;tool&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">alias</span><span class="p">}</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;imagename&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">imageName</span><span class="p">()</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;user_initial_parameters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__initial_params</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;initial_parameters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__last_initial_params</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;fitted_parameters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__last_params</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;parameters_errors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__last_errors</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;covariance_matrix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__last_pcov</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;condition_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__last_cond</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;parameters_mode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parametersmode</span>
+        <span class="c1"># print(results)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sendresults</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">writeAttribute</span><span class="p">(</span>
+                <span class="s2">&quot;ToolResults&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">plotUserFunction</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_setParametersMode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xindex</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets roi shape index</span>
+
+<span class="sd">        :param xindex: roi shape index,</span>
+<span class="sd">        :type xindex: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">xindex</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">xindex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">modeComboBox</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__parametersmode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__modestexts</span><span class="p">[</span>
+            <span class="n">xindex</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__modestexts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">xindex</span> <span class="k">else</span> <span class="mi">0</span><span class="p">]</span></div>
+
+
 <span class="c1">#: ( :obj:`dict` &lt; :obj:`str`, any &gt; ) tool widget properties</span>
 <span class="n">twproperties</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">nm</span> <span class="ow">in</span> <span class="n">__all__</span><span class="p">:</span>
@@ -7854,7 +8162,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.94.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.95.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.toolWidget</a></li> 
       </ul>

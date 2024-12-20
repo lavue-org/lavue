@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>lavuelib.plugins package &#8212; LaVue 2.94.2 documentation</title>
+    <title>lavuelib.plugins package &#8212; LaVue 2.95.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="lavuelib.html" title="lavuelib package"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.94.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.95.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Developer Guide</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="lavuelib.html" accesskey="U">lavuelib package</a> &#187;</li>
@@ -115,6 +115,61 @@
 <dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> or <cite>None</cite></p>
 </dd>
 </dl>
+</dd></dl>
+
+</section>
+<section id="module-lavuelib.plugins.gaussianfit">
+<span id="lavuelib-plugins-gaussianfit-module"></span><h2>lavuelib.plugins.gaussianfit module<a class="headerlink" href="#module-lavuelib.plugins.gaussianfit" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="lavuelib.plugins.gaussianfit.function">
+<span class="sig-prename descclassname"><span class="pre">lavuelib.plugins.gaussianfit.</span></span><span class="sig-name descname"><span class="pre">function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/plugins/gaussianfit.html#function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.plugins.gaussianfit.function" title="Permalink to this definition">¶</a></dt>
+<dd><p>2d guasian function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xy</strong> ((<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>)) – 2d gausian x,y coordinates</p></li>
+<li><p><strong>amplitude</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – gaussian amplitude parameter</p></li>
+<li><p><strong>x0</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – gaussian x_0 parameter</p></li>
+<li><p><strong>y0</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – gaussian y_0 parameter</p></li>
+<li><p><strong>sigma_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – gaussian sigma_x parameter</p></li>
+<li><p><strong>sigma_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – gausian sigma_x parameter</p></li>
+<li><p><strong>offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – gaussian offset parameter</p></li>
+<li><p><strong>theta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – gaussian theta parameter</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>gaussian function value</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lavuelib.plugins.gaussianfit.generator">
+<span class="sig-prename descclassname"><span class="pre">lavuelib.plugins.gaussianfit.</span></span><span class="sig-name descname"><span class="pre">generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/plugins/gaussianfit.html#generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.plugins.gaussianfit.generator" title="Permalink to this definition">¶</a></dt>
+<dd><p>2d guasian parameter generator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dts</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – 2d image</p></li>
+<li><p><strong>length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – number of parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of generated paramters</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>&gt;</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lavuelib.plugins.gaussianfit.initial_parameters">
+<span class="sig-prename descclassname"><span class="pre">lavuelib.plugins.gaussianfit.</span></span><span class="sig-name descname"><span class="pre">initial_parameters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[30,</span> <span class="pre">100,</span> <span class="pre">100,</span> <span class="pre">20,</span> <span class="pre">40]</span></em><a class="headerlink" href="#lavuelib.plugins.gaussianfit.initial_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>&gt;) initial parameters</p>
 </dd></dl>
 
 </section>
@@ -215,6 +270,12 @@
 <li><a class="reference internal" href="#lavuelib.plugins.filters.rot45"><code class="docutils literal notranslate"><span class="pre">rot45()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#module-lavuelib.plugins.gaussianfit">lavuelib.plugins.gaussianfit module</a><ul>
+<li><a class="reference internal" href="#lavuelib.plugins.gaussianfit.function"><code class="docutils literal notranslate"><span class="pre">function()</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.plugins.gaussianfit.generator"><code class="docutils literal notranslate"><span class="pre">generator()</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.plugins.gaussianfit.initial_parameters"><code class="docutils literal notranslate"><span class="pre">initial_parameters</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-lavuelib.plugins.userfunctions">lavuelib.plugins.userfunctions module</a><ul>
 <li><a class="reference internal" href="#lavuelib.plugins.userfunctions.LineCut"><code class="docutils literal notranslate"><span class="pre">LineCut</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.plugins.userfunctions.LineCutFlat"><code class="docutils literal notranslate"><span class="pre">LineCutFlat</span></code></a></li>
@@ -262,7 +323,7 @@
         <li class="right" >
           <a href="lavuelib.html" title="lavuelib package"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.94.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.95.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Developer Guide</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="lavuelib.html" >lavuelib package</a> &#187;</li>
