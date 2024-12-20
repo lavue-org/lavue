@@ -7809,17 +7809,38 @@ class TwoDFitToolWidget(ToolBaseWidget):
 
         self.initial_params = self.fit_function_module.initial_parameters
         self.param_names = self.fit_function_module.parameters_names
+        self.generator = None
+        if hasattr(gaussianfit, "generator"):
+            self.generator = self.fit_function_module.generator
         # self.initial_params = [3, 100, 100, 20, 40, 0]
         self.last_initial_params = None
         self.last_params = None
         self.last_pcov = None
         self.last_errors = None
+        self.__last_array = None
+        self.__fitparams = False
 
         #: (:obj:`list` < [:class:`pyqtgraph.QtCore.pyqtSignal`, :obj:`str`] >)
         #: list of [signal, slot] object to connect
         self.signal2slot = [
             [self.__ui.paramsPushButton.clicked, self._setParams],
+            [self.__ui.fitPushButton.clicked, self._fitstopParams],
+            [self.__ui.nextPushButton.clicked, self._nextParams],
         ]
+
+    # @debugmethod
+    @QtCore.pyqtSlot()
+    def _fitstopParams(self):
+        """ show or hide diffractogram
+        """
+        if not self.__fitparams:
+            self.__fitparams = True
+            self.__ui.fitPushButton.setText("Stop")
+            self._fit()
+        else:
+            self.__fitparams = False
+            self.__ui.fitPushButton.setText("Fit")
+        self._mainwidget.emitTCC()
 
     # @debugmethod
     @QtCore.pyqtSlot()
@@ -7842,6 +7863,14 @@ class TwoDFitToolWidget(ToolBaseWidget):
             self.last_params = cnfdlg.parameters
             # print(self.initial_params)
 
+    # @debugmethod
+    @QtCore.pyqtSlot()
+    def _nextParams(self):
+        """ plot all diffractograms and update
+        """
+        self._fit()
+        self._mainwidget.emitTCC()
+
     def beforeplot(self, array, rawarray):
         """ command  before plot
 
@@ -7852,68 +7881,99 @@ class TwoDFitToolWidget(ToolBaseWidget):
         :return: 2d image array and raw image
         :rtype: (:class:`numpy.ndarray`, :class:`numpy.ndarray`)
         """
+        self.__last_array = rawarray
+        if self.__fitparams:
+            st = time.time()
+            self._fit()
+            if 10 * self.__settings.refreshtime < time.time() - st:
+                self._fitstopParams()
 
-        dts = rawarray
-        while dts.ndim > 2:
-            dts = np.nanmean(dts, axis=2)
-        dts = np.nan_to_num(np.transpose(dts))
+    def _fit(self):
+        """ command  before plot
 
-        xm, ym = dts.shape
-        x = np.linspace(0, xm, xm)
-        y = np.linspace(0, ym, ym)
-        x, y = np.meshgrid(x, y)
-        rdts = dts.ravel()
-        # print("SHAPE", dts.shape)
-        try:
-            cond = np.linalg.cond(self.last_pcov)
-            if cond > 10000:
-                self.last_params = None
-        except Exception:
-            self.last_params = None
-        init = True
-        if self.last_params is not None:
-            init = False
-            self.last_initial_params = self.last_params
-        else:
-            self.last_initial_params = self.initial_params
-        try:
-            popt, pcov = scipy.optimize.curve_fit(
-                self.fit_function_module.function, (x, y), rdts,
-                p0=self.last_initial_params)
-        except Exception as e:
-            if init:
-                raise e
+        :param rawarray: 2d raw image array
+        :type rawarray: :class:`numpy.ndarray`
+        """
+        if self.__last_array is not None:
+            dts = self.__last_array
+            while dts.ndim > 2:
+                dts = np.nanmean(dts, axis=2)
+            dts = np.nan_to_num(np.transpose(dts))
+
+            ym, xm = dts.shape
+            x = np.linspace(0, xm - 1, xm)
+            y = np.linspace(0, ym - 1, ym)
+            x, y = np.meshgrid(x, y)
+            rdts = dts.ravel()
+            # print("SHAPE", dts.shape)
             try:
+                cond = np.linalg.cond(self.last_pcov)
+                if cond > 10000:
+                    self.last_params = None
+            except Exception:
+                self.last_params = None
+            init = True
+            gparam = None
+            if self.generator is not None:
+                gparam = self.generator(dts, len(self.initial_params))
+                self.last_initial_params = gparam
+            if gparam is not None:
+                init = True
+            elif self.last_params is not None:
+                init = False
+                self.last_initial_params = self.last_params
+            else:
                 self.last_initial_params = self.initial_params
+            # mean_x = (x * dts).sum() / (dts.sum())
+            # mean_y = (y * dts).sum() / (dts.sum())
+            # sigma_x =  np.sqrt((dts * (x - mean_x) ** 2).sum() / (dts.sum()))
+            # sigma_y =  np.sqrt((dts * (y - mean_y) ** 2).sum() / (dts.sum()))
+            # print("GEN", np.max(dts),
+            #       mean_x, mean_y, sigma_x, sigma_y, 0., 0.)
+            try:
                 popt, pcov = scipy.optimize.curve_fit(
                     self.fit_function_module.function, (x, y), rdts,
                     p0=self.last_initial_params)
             except Exception as e:
-                popt = None
-                pcov = None
-                self.last_params = None
-                logger.warning(str(e))
-                # print(str(e))
-        self.last_params = popt
-        self.last_pcov = pcov
-        try:
-            self.last_errors = np.sqrt(np.diag(pcov))
-        except Exception:
-            self.last_errors = None
-        try:
-            self.last_cond = np.linalg.cond(self.last_pcov)
-        except Exception:
-            self.last_cond = None
-        # print("FIT POPT", popt)
-        # try:
-        #     print("FIT cond", np.linalg.cond(self.last_pcov))
-        # except Exception:
-        #      print("FIT cond ERROR")
-        # print("FIT ERR", self.last_errors)
-        # print("FIT COV", pcov)
+                if init:
+                    raise e
+                try:
+                    self.last_initial_params = self.initial_params
+                    popt, pcov = scipy.optimize.curve_fit(
+                        self.fit_function_module.function, (x, y), rdts,
+                        p0=self.last_initial_params)
+                except Exception as e:
+                    popt = None
+                    pcov = None
+                    self.last_params = None
+                    logger.warning(str(e))
+                    # print(str(e))
+            self.last_params = popt
+            self.last_pcov = pcov
+            try:
+                self.last_errors = np.sqrt(np.diag(pcov))
+            except Exception:
+                self.last_errors = None
+            try:
+                self.last_cond = np.linalg.cond(self.last_pcov)
+            except Exception:
+                self.last_cond = None
+            # print("FIT POPT", popt)
+            # try:
+            #     print("FIT cond", np.linalg.cond(self.last_pcov))
+            # except Exception:
+            #      print("FIT cond ERROR")
+            # print("FIT ERR", self.last_errors)
+            # print("FIT COV", pcov)
+            self._message()
+
+    @QtCore.pyqtSlot()
+    def _message(self):
+        """ provides 2dfit message
+        """
         message = ""
-        if popt is not None:
-            for ii, par in enumerate(popt):
+        if self.last_params is not None:
+            for ii, par in enumerate(self.last_params):
                 dg = "0"
                 if ii < len(self.last_errors):
                     err = self.last_errors[ii]
@@ -7926,9 +7986,9 @@ class TwoDFitToolWidget(ToolBaseWidget):
                     nm = self.param_names[ii]
                     if " " in nm:
                         nm = nm.split(" ")[0]
-                    message += ("%s: %." + dg + "f, ") % (nm, par)
+                    message += ("%s = %." + dg + "f, ") % (nm, par)
                 else:
-                    message += ("p_%s: %." + dg + "f, ") % (ii, par)
+                    message += ("p_%s = %." + dg + "f, ") % (ii, par)
             if len(message) > 1:
                 message = message[:-2]
 

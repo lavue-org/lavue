@@ -25,14 +25,17 @@
 import numpy as np
 
 
-initial_parameters = [3, 100, 100, 20, 40, 0, 10]
-initial_parameters = [3, 100, 100, 20, 40, 0]
+initial_parameters = [30, 100, 100, 20, 40, 10, 0]
+initial_parameters = [30, 100, 100, 20, 40, 0]
+initial_parameters = [30, 100, 100, 20, 40]
 
-parameters_names = ["Amp", "x0", "y0", "sigma_x", "sigma_y",
+parameters_names = ["Amp", "x_0", "y_0", "sigma_x", "sigma_y",
                     "offset (optional)", "theta (optional)"]
 
 
 def function(xy, amplitude, x0, y0, sigma_x, sigma_y, offset=0.0, theta=0.0):
+    """2d guasian function
+    """
     (x, y) = xy
     x0 = float(x0)
     y0 = float(y0)
@@ -46,3 +49,21 @@ def function(xy, amplitude, x0, y0, sigma_x, sigma_y, offset=0.0, theta=0.0):
         -(a * ((x - x0) ** 2) + 2 * b * (x - x0) * (y - y0)
           + c * ((y - y0) ** 2))) + offset
     return g.ravel()
+
+
+def generator(dts, length=None):
+    """2d guasian parameter generator
+    """
+    ym, xm = dts.shape
+    x = np.linspace(0, xm - 1, xm)
+    y = np.linspace(0, ym - 1, ym)
+    x, y = np.meshgrid(x, y)
+    mean_x = (x * dts).sum() / (dts.sum())
+    mean_y = (y * dts).sum() / (dts.sum())
+    sigma_x = np.sqrt((dts * (x - mean_x) ** 2).sum() / (dts.sum()))
+    sigma_y = np.sqrt((dts * (y - mean_y) ** 2).sum() / (dts.sum()))
+    print("GEN", np.max(dts), mean_x, mean_y, sigma_x, sigma_y, 0., 0.)
+    res = [np.max(dts), mean_x, mean_y, sigma_x, sigma_y, 0., 0.]
+    if length is not None and length < len(res):
+        res = res[:length]
+    return res
