@@ -3372,9 +3372,9 @@ class AngleQToolWidget(ToolBaseWidget):
         #: (:obj:`bool`) old lock value
         self.__oldlocked = None
 
-        #: (:class:`numpy.array`) radial array cache
+        #: (:class:`numpy.ndarray`) radial array cache
         self.__lastradial = None
-        #: (:class:`numpy.array`) angle array cache
+        #: (:class:`numpy.ndarray`) angle array cache
         self.__lastangle = None
         #: (:obj:`float`) energy cache
         self.__lastenergy = None
@@ -3392,9 +3392,9 @@ class AngleQToolWidget(ToolBaseWidget):
         self.__lastpsizex = None
         #: (:obj:`float`) pixelsizey cache
         self.__lastpsizey = None
-        #: (:class:`numpy.array`) x array cache
+        #: (:class:`numpy.ndarray`) x array cache
         self.__lastx = None
-        #: (:class:`numpy.array`) y array cache
+        #: (:class:`numpy.ndarray`) y array cache
         self.__lasty = None
         #: (:obj:`float`) maxdim cache
         self.__lastmaxdim = None
@@ -3565,9 +3565,9 @@ class AngleQToolWidget(ToolBaseWidget):
         """ if xy changed
 
         :param radial: radial coordinate
-        :type radial: :obj:`float` or :class:`numpy.array`
+        :type radial: :obj:`float` or :class:`numpy.ndarray`
         :param angle: polar angle coordinate
-        :type angle: :obj:`float` or :class:`numpy.array`
+        :type angle: :obj:`float` or :class:`numpy.ndarray`
         :returns: flag if (x, y) have changed
         :rtype: :obj:`bool`
         """
@@ -3612,11 +3612,11 @@ class AngleQToolWidget(ToolBaseWidget):
         """ intensity interpolation function
 
         :param radial: radial coordinate
-        :type radial: :obj:`float` or :class:`numpy.array`
+        :type radial: :obj:`float` or :class:`numpy.ndarray`
         :param angle: polar angle coordinate
-        :type angle: :obj:`float` or :class:`numpy.array`
+        :type angle: :obj:`float` or :class:`numpy.ndarray`
         :return: interpolated intensity
-        :rtype: :obj:`float` or :class:`numpy.array`
+        :rtype: :obj:`float` or :class:`numpy.ndarray`
         """
         if self.__rangechanged or self.__havexychanged(radial, angle):
             if self.__plotindex == 1:
@@ -7805,19 +7805,32 @@ class TwoDFitToolWidget(ToolBaseWidget):
             "fitted parameters"
 
         from lavuelib.plugins import gaussianfit
-        self.fit_function_module = gaussianfit
+        # (:mod:`lavuelib.plugins.gaussianfit`) fitting function module
+        self.__fit_function_module = gaussianfit
 
-        self.initial_params = self.fit_function_module.initial_parameters
-        self.param_names = self.fit_function_module.parameters_names
-        self.generator = None
+        #: (:obj:`list` <:obj:`float`>) initial parameters
+        self.__initial_params = self.__fit_function_module.initial_parameters
+        #: (:obj:`list` <:obj:`str`>) parameters names
+        self.__param_names = self.__fit_function_module.parameters_names
+        #: (:fun:`lavuelib.plugins.gaussianfit.generator`) generator function
+        self.__generator = None
         if hasattr(gaussianfit, "generator"):
-            self.generator = self.fit_function_module.generator
-        # self.initial_params = [3, 100, 100, 20, 40, 0]
-        self.last_initial_params = None
-        self.last_params = None
-        self.last_pcov = None
-        self.last_errors = None
+            self.__generator = self.__fit_function_module.generator
+
+        #: (:obj:`list` <:obj:`float`>) last initial parameters
+        self.__last_initial_params = None
+        #: (:obj:`list` <:obj:`float`>) last fitted parameters
+        self.__last_params = None
+        #: (:obj:`numpy.ndarray`) last covariance matrix
+        self.__last_pcov = None
+        #: (:obj:`numpy.ndarray`) last parameters errors list
+        self.__last_errors = None
+        #: (:obj:`numpy.ndarray`) last image
         self.__last_array = None
+        #: (:obj:`float`) condition number
+        self.__last_cond = None
+
+        #: (:obj:`bool`) fit parameters flag
         self.__fitparams = False
 
         #: (:obj:`list` <:obj:`str`>) list of units
@@ -7859,17 +7872,17 @@ class TwoDFitToolWidget(ToolBaseWidget):
         :rtype: :obj:`bool`
         """
         cnfdlg = fitParamDialog.FitParamDialog()
-        cnfdlg.parameters = self.initial_params \
-            if self.initial_params is not None else []
-        cnfdlg.last_parameters = self.last_params \
-            if self.last_params is not None else []
-        cnfdlg.parameters_names = self.param_names \
-            if self.param_names is not None else []
+        cnfdlg.parameters = self.__initial_params \
+            if self.__initial_params is not None else []
+        cnfdlg.last_parameters = self.__last_params \
+            if self.__last_params is not None else []
+        cnfdlg.parameters_names = self.__param_names \
+            if self.__param_names is not None else []
         cnfdlg.createGUI()
         if cnfdlg.exec_():
-            self.initial_params = cnfdlg.parameters
-            self.last_params = cnfdlg.parameters
-            # print(self.initial_params)
+            self.__initial_params = cnfdlg.parameters
+            self.__last_params = cnfdlg.parameters
+            # print(self.__initial_params)
 
     # @debugmethod
     @QtCore.pyqtSlot()
@@ -7915,51 +7928,51 @@ class TwoDFitToolWidget(ToolBaseWidget):
             rdts = dts.ravel()
             # print("SHAPE", dts.shape)
             try:
-                cond = np.linalg.cond(self.last_pcov)
+                cond = np.linalg.cond(self.__last_pcov)
                 if cond > 10000:
-                    self.last_params = None
+                    self.__last_params = None
             except Exception:
-                self.last_params = None
+                self.__last_params = None
             mode = self.__parametersmode
             gparam = None
             if mode.startswith("last_") and \
-                    self.last_initial_params is not None:
-                gparam = self.last_initial_params
+                    self.__last_initial_params is not None:
+                gparam = self.__last_initial_params
             elif mode == "generator" or \
-                    (self.last_initial_params is None
+                    (self.__last_initial_params is None
                      and mode == "last_generator") or \
                     mode == "nofit":
-                if self.generator is not None:
-                    gparam = self.generator(dts, len(self.initial_params))
-                    self.last_initial_params = gparam
+                if self.__generator is not None:
+                    gparam = self.__generator(dts, len(self.__initial_params))
+                    self.__last_initial_params = gparam
             if gparam is None and mode != "nofit":
-                self.last_initial_params = self.initial_params
-                gparam = self.last_initial_params
+                self.__last_initial_params = self.__initial_params
+                gparam = self.__last_initial_params
             # print("GPARAM", gparam, mode)
             if gparam is not None and mode != "nofit":
                 try:
                     popt, pcov = scipy.optimize.curve_fit(
-                        self.fit_function_module.function, (x, y), rdts,
+                        self.__fit_function_moduleo.function, (x, y), rdts,
                         p0=gparam)
                 except Exception as e:
                     popt = None
                     pcov = None
-                    self.last_params = None
+                    self.__last_params = None
                     logger.warning(str(e))
                     # print(str(e))
             else:
                 popt = gparam
                 pcov = None
-            self.last_params = popt
-            self.last_pcov = pcov
+            self.__last_params = popt
+            self.__last_pcov = pcov
             try:
-                self.last_errors = np.sqrt(np.diag(pcov))
+                self.__last_errors = np.sqrt(np.diag(pcov))
             except Exception:
-                self.last_errors = None
+                self.__last_errors = None
             try:
-                self.last_cond = np.linalg.cond(self.last_pcov)
+                self.__last_cond = np.linalg.cond(self.__last_pcov)
             except Exception:
-                self.last_cond = None
+                self.__last_cond = None
             self._message()
 
     @QtCore.pyqtSlot()
@@ -7967,20 +7980,20 @@ class TwoDFitToolWidget(ToolBaseWidget):
         """ provides 2dfit message
         """
         message = ""
-        if self.last_params is not None:
-            for ii, par in enumerate(self.last_params):
+        if self.__last_params is not None:
+            for ii, par in enumerate(self.__last_params):
                 dg = "0"
-                if self.last_errors is None:
+                if self.__last_errors is None:
                     dg = "2"
-                elif ii < len(self.last_errors):
-                    err = self.last_errors[ii]
+                elif ii < len(self.__last_errors):
+                    err = self.__last_errors[ii]
                     if not np.isinf(err):
                         dg = str(max(int(np.ceil(-np.log10(err))), 0))
                     else:
                         break
                 # print("DIG", ii, dg )
-                if ii < len(self.param_names):
-                    nm = self.param_names[ii]
+                if ii < len(self.__param_names):
+                    nm = self.__param_names[ii]
                     if " " in nm:
                         nm = nm.split(" ")[0]
                     message += ("%s = %." + dg + "f, ") % (nm, par)
@@ -8006,7 +8019,7 @@ class TwoDFitToolWidget(ToolBaseWidget):
         if configuration:
             cnf = json.loads(configuration)
             if "initial_parameters" in cnf.keys():
-                self.initial_params = cnf["initial_parameters"]
+                self.__initial_params = cnf["initial_parameters"]
             if "parameters_mode" in cnf.keys():
                 mode = cnf["parameters_mode"]
                 try:
@@ -8023,7 +8036,7 @@ class TwoDFitToolWidget(ToolBaseWidget):
         :rtype configuration: :obj:`str`
         """
         cnf = {}
-        cnf["initial_parameters"] = self.initial_params
+        cnf["initial_parameters"] = self.__initial_params
         cnf["parameters_mode"] = self.__parametersmode
         return json.dumps(cnf, cls=numpyEncoder)
 
@@ -8033,12 +8046,12 @@ class TwoDFitToolWidget(ToolBaseWidget):
         results = {"tool": self.alias}
         results["imagename"] = self._mainwidget.imageName()
         results["timestamp"] = time.time()
-        results["user_initial_parameters"] = self.initial_params
-        results["initial_parameters"] = self.last_initial_params
-        results["fitted_parameters"] = self.last_params
-        results["parameters_errors"] = self.last_errors
-        results["covariance_matrix"] = self.last_pcov
-        results["condition_number"] = self.last_cond
+        results["user_initial_parameters"] = self.__initial_params
+        results["initial_parameters"] = self.__last_initial_params
+        results["fitted_parameters"] = self.__last_params
+        results["parameters_errors"] = self.__last_errors
+        results["covariance_matrix"] = self.__last_pcov
+        results["condition_number"] = self.__last_cond
         results["parameters_mode"] = self.__parametersmode
         # print(results)
         if self.__settings.sendresults:

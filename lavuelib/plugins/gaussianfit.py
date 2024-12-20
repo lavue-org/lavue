@@ -25,6 +25,7 @@
 import numpy as np
 
 
+#: (:obj:`list` <:obj:`float`>) initial parameters
 initial_parameters = [30, 100, 100, 20, 40, 10, 0]
 initial_parameters = [30, 100, 100, 20, 40, 0]
 initial_parameters = [30, 100, 100, 20, 40]
@@ -35,6 +36,25 @@ parameters_names = ["Amp", "x_0", "y_0", "sigma_x", "sigma_y",
 
 def function(xy, amplitude, x0, y0, sigma_x, sigma_y, offset=0.0, theta=0.0):
     """2d guasian function
+
+    :param xy: 2d gausian x,y coordinates
+    :type xy: (:obj:`float`, :obj:`float`)
+    :param amplitude: gaussian amplitude parameter
+    :type amplitude: :obj:`float`
+    :param x0: gaussian x_0 parameter
+    :type x0: :obj:`float`
+    :param y0: gaussian y_0 parameter
+    :type y0: :obj:`float`
+    :param sigma_x: gaussian sigma_x parameter
+    :type sigma_x: :obj:`float`
+    :param sigma_y: gausian sigma_x parameter
+    :type sigma_y: :obj:`float`
+    :param offset: gaussian offset parameter
+    :type offset: :obj:`float`
+    :param theta: gaussian theta parameter
+    :type theta: :obj:`float`
+    :returns: gaussian function value
+    :rtype: :obj:`float`
     """
     (x, y) = xy
     x0 = float(x0)
@@ -53,6 +73,13 @@ def function(xy, amplitude, x0, y0, sigma_x, sigma_y, offset=0.0, theta=0.0):
 
 def generator(dts, length=None):
     """2d guasian parameter generator
+
+    :param dts: 2d image
+    :type dts: :obj:`numpy.ndarray`
+    :param length: number of parameters
+    :type length: :obj:`int`
+    :returns: list of generated paramters
+    :rtype: :obj:`list` <:obj:`float`>
     """
     ym, xm = dts.shape
     x = np.linspace(0, xm - 1, xm)
