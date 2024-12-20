@@ -7820,12 +7820,20 @@ class TwoDFitToolWidget(ToolBaseWidget):
         self.__last_array = None
         self.__fitparams = False
 
+        #: (:obj:`list` <:obj:`str`>) list of units
+        self.__modestexts = ["generator", "user",
+                             "last_generator", "last_user",
+                             "nofit"]
+        self.__parametersmode = self.__modestexts[0]
+
         #: (:obj:`list` < [:class:`pyqtgraph.QtCore.pyqtSignal`, :obj:`str`] >)
         #: list of [signal, slot] object to connect
         self.signal2slot = [
             [self.__ui.paramsPushButton.clicked, self._setParams],
             [self.__ui.fitPushButton.clicked, self._fitstopParams],
             [self.__ui.nextPushButton.clicked, self._nextParams],
+            [self.__ui.modeComboBox.currentIndexChanged,
+             self._setParametersMode],
         ]
 
     # @debugmethod
@@ -7912,42 +7920,36 @@ class TwoDFitToolWidget(ToolBaseWidget):
                     self.last_params = None
             except Exception:
                 self.last_params = None
-            init = True
+            mode = self.__parametersmode
             gparam = None
-            if self.generator is not None:
-                gparam = self.generator(dts, len(self.initial_params))
-                self.last_initial_params = gparam
-            if gparam is not None:
-                init = True
-            elif self.last_params is not None:
-                init = False
-                self.last_initial_params = self.last_params
-            else:
+            if mode.startswith("last_") and \
+                    self.last_initial_params is not None:
+                gparam = self.last_initial_params
+            elif mode == "generator" or \
+                    (self.last_initial_params is None
+                     and mode == "last_generator") or \
+                    mode == "nofit":
+                if self.generator is not None:
+                    gparam = self.generator(dts, len(self.initial_params))
+                    self.last_initial_params = gparam
+            if gparam is None and mode != "nofit":
                 self.last_initial_params = self.initial_params
-            # mean_x = (x * dts).sum() / (dts.sum())
-            # mean_y = (y * dts).sum() / (dts.sum())
-            # sigma_x =  np.sqrt((dts * (x - mean_x) ** 2).sum() / (dts.sum()))
-            # sigma_y =  np.sqrt((dts * (y - mean_y) ** 2).sum() / (dts.sum()))
-            # print("GEN", np.max(dts),
-            #       mean_x, mean_y, sigma_x, sigma_y, 0., 0.)
-            try:
-                popt, pcov = scipy.optimize.curve_fit(
-                    self.fit_function_module.function, (x, y), rdts,
-                    p0=self.last_initial_params)
-            except Exception as e:
-                if init:
-                    raise e
+                gparam = self.last_initial_params
+            # print("GPARAM", gparam, mode)
+            if gparam is not None and mode != "nofit":
                 try:
-                    self.last_initial_params = self.initial_params
                     popt, pcov = scipy.optimize.curve_fit(
                         self.fit_function_module.function, (x, y), rdts,
-                        p0=self.last_initial_params)
+                        p0=gparam)
                 except Exception as e:
                     popt = None
                     pcov = None
                     self.last_params = None
                     logger.warning(str(e))
                     # print(str(e))
+            else:
+                popt = gparam
+                pcov = None
             self.last_params = popt
             self.last_pcov = pcov
             try:
@@ -7958,13 +7960,6 @@ class TwoDFitToolWidget(ToolBaseWidget):
                 self.last_cond = np.linalg.cond(self.last_pcov)
             except Exception:
                 self.last_cond = None
-            # print("FIT POPT", popt)
-            # try:
-            #     print("FIT cond", np.linalg.cond(self.last_pcov))
-            # except Exception:
-            #      print("FIT cond ERROR")
-            # print("FIT ERR", self.last_errors)
-            # print("FIT COV", pcov)
             self._message()
 
     @QtCore.pyqtSlot()
@@ -7975,7 +7970,9 @@ class TwoDFitToolWidget(ToolBaseWidget):
         if self.last_params is not None:
             for ii, par in enumerate(self.last_params):
                 dg = "0"
-                if ii < len(self.last_errors):
+                if self.last_errors is None:
+                    dg = "2"
+                elif ii < len(self.last_errors):
                     err = self.last_errors[ii]
                     if not np.isinf(err):
                         dg = str(max(int(np.ceil(-np.log10(err))), 0))
@@ -8008,8 +8005,16 @@ class TwoDFitToolWidget(ToolBaseWidget):
         """
         if configuration:
             cnf = json.loads(configuration)
-            if "parameters" in cnf.keys():
+            if "initial_parameters" in cnf.keys():
                 self.initial_params = cnf["initial_parameters"]
+            if "parameters_mode" in cnf.keys():
+                mode = cnf["parameters_mode"]
+                try:
+                    idx = self.__modestexts.index(mode)
+                    self.parameters_mode = mode
+                    self.__ui.modeComboBox.setCurrentIndex(idx)
+                except Exception:
+                    pass
 
     def configuration(self):
         """ provides configuration for the current tool
@@ -8019,6 +8024,7 @@ class TwoDFitToolWidget(ToolBaseWidget):
         """
         cnf = {}
         cnf["initial_parameters"] = self.initial_params
+        cnf["parameters_mode"] = self.__parametersmode
         return json.dumps(cnf, cls=numpyEncoder)
 
     def __sendresults(self):
@@ -8033,11 +8039,24 @@ class TwoDFitToolWidget(ToolBaseWidget):
         results["parameters_errors"] = self.last_errors
         results["covariance_matrix"] = self.last_pcov
         results["condition_number"] = self.last_cond
+        results["parameters_mode"] = self.__parametersmode
         # print(results)
         if self.__settings.sendresults:
             self._mainwidget.writeAttribute(
                 "ToolResults", json.dumps(results, cls=numpyEncoder))
         self._mainwidget.plotUserFunction(results)
+
+    @QtCore.pyqtSlot(int)
+    def _setParametersMode(self, xindex=None):
+        """ sets roi shape index
+
+        :param xindex: roi shape index,
+        :type xindex: :obj:`int`
+        """
+        if xindex is None:
+            xindex = self.__ui.modeComboBox.currentIndex()
+        self.__parametersmode = self.__modestexts[
+            xindex if len(self.__modestexts) > xindex else 0]
 
 
 #: ( :obj:`dict` < :obj:`str`, any > ) tool widget properties
