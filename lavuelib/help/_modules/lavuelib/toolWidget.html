@@ -7852,17 +7852,19 @@
             <span class="s2">&quot;fitted parameters&quot;</span>
 
         <span class="kn">from</span> <span class="nn">lavuelib.plugins</span> <span class="kn">import</span> <span class="n">gaussianfit</span>
-        <span class="c1"># (:mod:`lavuelib.plugins.gaussianfit`) fitting function module</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__fit_function_module</span> <span class="o">=</span> <span class="n">gaussianfit</span>
+        <span class="c1"># self.__fit_function_class = gaussianfit</span>
+        <span class="c1">#: (:class:`lavuelib.plugins.gaussianfit.GaussianFit`)</span>
+        <span class="c1">#:       fitting function class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__fit_function_class</span> <span class="o">=</span> <span class="n">gaussianfit</span><span class="o">.</span><span class="n">GaussianFit</span>
 
         <span class="c1">#: (:obj:`list` &lt;:obj:`float`&gt;) initial parameters</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__initial_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fit_function_module</span><span class="o">.</span><span class="n">initial_parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__initial_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fit_function_class</span><span class="o">.</span><span class="n">initial_parameters</span>
         <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) parameters names</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__param_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fit_function_module</span><span class="o">.</span><span class="n">parameters_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__param_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fit_function_class</span><span class="o">.</span><span class="n">parameters_names</span>
         <span class="c1">#: (:fun:`lavuelib.plugins.gaussianfit.generator`) generator function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__generator</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gaussianfit</span><span class="p">,</span> <span class="s2">&quot;generator&quot;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__generator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fit_function_module</span><span class="o">.</span><span class="n">generator</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__fit_function_class</span><span class="p">,</span> <span class="s2">&quot;generator&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__generator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fit_function_class</span><span class="o">.</span><span class="n">generator</span>
 
         <span class="c1">#: (:obj:`list` &lt;:obj:`float`&gt;) last initial parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__last_initial_params</span> <span class="o">=</span> <span class="kc">None</span>
@@ -7954,7 +7956,11 @@
             <span class="n">st</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_fit</span><span class="p">()</span>
             <span class="k">if</span> <span class="mi">10</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">refreshtime</span> <span class="o">&lt;</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">st</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_fitstopParams</span><span class="p">()</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_fitstopParams</span><span class="p">()</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Too long fitting time &quot;</span>
+                               <span class="s2">&quot;with respect the refresh time. &quot;</span>
+                               <span class="s2">&quot;Initial parameters or fitting function &quot;</span>
+                               <span class="s2">&quot;do not match to the image data&quot;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; command  before plot</span>
@@ -7999,7 +8005,7 @@
             <span class="k">if</span> <span class="n">gparam</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">mode</span> <span class="o">!=</span> <span class="s2">&quot;nofit&quot;</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">popt</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">curve_fit</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__fit_function_moduleo</span><span class="o">.</span><span class="n">function</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">rdts</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__fit_function_class</span><span class="o">.</span><span class="n">function</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">rdts</span><span class="p">,</span>
                         <span class="n">p0</span><span class="o">=</span><span class="n">gparam</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                     <span class="n">popt</span> <span class="o">=</span> <span class="kc">None</span>
@@ -8074,7 +8080,18 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">parameters_mode</span> <span class="o">=</span> <span class="n">mode</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">modeComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                    <span class="k">pass</span></div>
+                    <span class="k">pass</span>
+            <span class="k">if</span> <span class="s2">&quot;fit&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;fit&quot;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">fitPushButton</span><span class="o">.</span><span class="n">text</span><span class="p">())</span> <span class="o">==</span> <span class="s2">&quot;Fit&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_fitstopParams</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">fitPushButton</span><span class="o">.</span><span class="n">text</span><span class="p">())</span> <span class="o">==</span> <span class="s2">&quot;Stop&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_fitstopParams</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s2">&quot;next&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">nextPushButton</span><span class="o">.</span><span class="n">text</span><span class="p">())</span> <span class="o">==</span> <span class="s2">&quot;Next&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_nextParams</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TwoDFitToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.TwoDFitToolWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current tool</span>
@@ -8085,6 +8102,7 @@
         <span class="n">cnf</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;initial_parameters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__initial_params</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;parameters_mode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parametersmode</span>
+        <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;fit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fitparams</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__sendresults</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

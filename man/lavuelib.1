@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "LAVUELIB" "1" "Dec 20, 2024" "2.95" "LaVue"
+.TH "LAVUELIB" "1" "Dec 21, 2024" "2.95" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .sp
@@ -1016,6 +1016,8 @@ In the bottom\-right corner \fIComboBox\fP the user selects one of the \fBSpecia
 \fI\%Parameters\fP \- reads and writes tango attributes to change detector settings
 .IP \(bu 2
 \fI\%Diffractogram\fP \- shows a result of azimuth integration on 1d plot
+.IP \(bu 2
+\fI\%TwoD\-Fit\fP \- fits two\-dimensional  function tohe the current raw image
 .UNINDENT
 .sp
 The \fBconfiguration\fP of tools can be set with a JSON dictionary passed in the  \fB\-\-tool\-configuration\fP  option in command line or as a \fBtoolconfig\fP variable in the \fBLavueState\fP attribute of \fI\%LaVueController server\fP, e.g.
@@ -1535,6 +1537,46 @@ lavue \-u diffractogram \-s test \-\-tool\-configuration \e{\e\(dqcalibration\e\
 A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
 .sp
 \fBtool\fP : “diffractogram”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBnrdiffs\fP (int), \fBcalibration\fP (str) [i.e a pyfai file name],  \fBunit\fP (str) [i.e. “q_nm^\-1”, “q_A^\-1”, “2th_deg”, “2th_rad”, “r_mm” or “r_pixel”], \fBdiff_%i\fP ([[float, float], …, [float, float]]) [i.e. “%i” goes from 1 to \fBnrdiffs\fP], \fBradial_range_%i\fP ([float, float]) [i.e. “%i” goes from 1 to \fBnrdiffs\fP], \fBazimuth_range_%i\fP ([float, float]) [i.e. “%i” goes from 1 to \fBnrdiffs\fP], \fBpeaks_%i\fP ([[float, …, float], [float, …, float]]) [i.e. “%i” goes from 1 to \fBnrdiffs\fP and it contains peak positions and  peak values lists]
+.SS TwoDFit Tool
+.sp
+\fBTwoDFit Tool\fP performs a fit of 2D function e.g. Guassian.
+.INDENT 0.0
+.INDENT 2.5
+[image]
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.IP \(bu 2
+combobox with a \fBfitting function\fP, i.e. 2D Gaussian
+.IP \(bu 2
+\fBFit/Stop\fP \- switches on/off continuous mode of 2d fitting
+.IP \(bu 2
+\fBNext\fP \- (re\-)computes a diffractogram for the current image
+.IP \(bu 2
+combobox with a initial parameter \fBfitting mode\fP i.e. generator, user, last_generator, last_user, nofit.
+.IP \(bu 2
+\fBParameters..\fP user initial parameters.
+.UNINDENT
+.sp
+The \fBconfiguration\fP of the tool can be set with a JSON dictionary passed in the  \fB\-\-tool\-configuration\fP  option in command line or a toolconfig variable of \fBLavueController.LavueState\fP with the following keys:
+.sp
+\fBinitial parameters\fP  (float list), \fBparameters_mode\fP  (\fBgenerator\fP, \fBuser\fP, \fBlast_generator\fP, \fBlast_user\fP or \fBnofit\fP string), \fBfit\fP (bool), \fBnext\fP (bool)
+.sp
+e.g.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+lavue \-u twodfit \-s test \-\-tool\-configuration \e{\e\(dqinitial_parameters\e\(dq:[30,100,100,20,20,0,0],\e\(dqparameters_mode\e\(dq:\e\(dquser\e\(dq,\e\(dqfit\e\(dq:true\e} \-\-start
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
+.sp
+\fBtool\fP : “twodfit”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBuser_initial_parameters\fP ([float, float,… ,float]), \fBinitial_parameters\fP ([float, float,… ,float]), \fBfitted_parameters\fP ([float, float,… ,float]), \fBparameters_mode\fP ([float, float,… ,float]), \fBcovariance_matrix\fP ([[float, float,… ,float], …]), \fBcondition_number\fP (float), \fBparameters_mode\fP (string)
 .SS Images from FileSystem
 .sp
 By pressing the \fBLoad\fP button user can open the existing file.
@@ -2604,7 +2646,11 @@ numpy array with an image
 .SS lavuelib.plugins.gaussianfit module
 .INDENT 0.0
 .TP
-.B lavuelib.plugins.gaussianfit.function(xy, amplitude, x0, y0, sigma_x, sigma_y, offset=0.0, theta=0.0)
+.B class  lavuelib.plugins.gaussianfit.GaussianFit
+Bases: \fI\%object\fP
+.INDENT 7.0
+.TP
+.B classmethod  function(xy, amplitude, x0, y0, sigma_x, sigma_y, offset=0.0, theta=0.0)
 2d guasian function
 .INDENT 7.0
 .TP
@@ -2635,9 +2681,9 @@ gaussian function value
 \fI\%float\fP
 .UNINDENT
 .UNINDENT
-.INDENT 0.0
+.INDENT 7.0
 .TP
-.B lavuelib.plugins.gaussianfit.generator(dts, length=None)
+.B classmethod  generator(dts, length=None)
 2d guasian parameter generator
 .INDENT 7.0
 .TP
@@ -2656,10 +2702,15 @@ list of generated paramters
 \fI\%list\fP <\fI\%float\fP>
 .UNINDENT
 .UNINDENT
-.INDENT 0.0
+.INDENT 7.0
 .TP
-.B lavuelib.plugins.gaussianfit.initial_parameters  =  [30, 100, 100, 20, 40]
+.B initial_parameters  =  [30, 100, 100, 20, 40]
 (\fI\%list\fP <\fI\%float\fP>) initial parameters
+.UNINDENT
+.INDENT 7.0
+.TP
+.B parameters_names  =  [\(aqAmp\(aq, \(aqx_0\(aq, \(aqy_0\(aq, \(aqsigma_x\(aq, \(aqsigma_y\(aq, \(aqoffset (optional)\(aq, \(aqtheta (optional)\(aq]
+.UNINDENT
 .UNINDENT
 .SS lavuelib.plugins.userfunctions module
 .sp
