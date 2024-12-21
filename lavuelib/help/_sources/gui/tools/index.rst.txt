@@ -18,6 +18,7 @@ In the bottom-right corner `ComboBox` the user selects one of the **Specialized 
 *    :ref:`Maxima <maxima>` - points pixels with the highest intensity
 *    :ref:`Parameters <parameters>` - reads and writes tango attributes to change detector settings
 *    :ref:`Diffractogram <diffractogram>` - shows a result of azimuth integration on 1d plot
+*    :ref:`TwoD-Fit <twodfit>` - fits two-dimensional  function tohe the current raw image
 
 The **configuration** of tools can be set with a JSON dictionary passed in the  ``--tool-configuration``  option in command line or as a ``toolconfig`` variable in the ``LavueState`` attribute of :ref:`lavuecontroller`, e.g.
 
@@ -47,3 +48,4 @@ The **configuration** of tools can be set with a JSON dictionary passed in the  
    maxima
    parameters
    diffractogram
+   twodfit

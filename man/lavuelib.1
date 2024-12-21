@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "LAVUELIB" "1" "Dec 17, 2024" "2.94" "LaVue"
+.TH "LAVUELIB" "1" "Dec 21, 2024" "2.95" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .sp
@@ -1016,6 +1016,8 @@ In the bottom\-right corner \fIComboBox\fP the user selects one of the \fBSpecia
 \fI\%Parameters\fP \- reads and writes tango attributes to change detector settings
 .IP \(bu 2
 \fI\%Diffractogram\fP \- shows a result of azimuth integration on 1d plot
+.IP \(bu 2
+\fI\%TwoD\-Fit\fP \- fits two\-dimensional  function tohe the current raw image
 .UNINDENT
 .sp
 The \fBconfiguration\fP of tools can be set with a JSON dictionary passed in the  \fB\-\-tool\-configuration\fP  option in command line or as a \fBtoolconfig\fP variable in the \fBLavueState\fP attribute of \fI\%LaVueController server\fP, e.g.
@@ -1535,6 +1537,46 @@ lavue \-u diffractogram \-s test \-\-tool\-configuration \e{\e\(dqcalibration\e\
 A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
 .sp
 \fBtool\fP : “diffractogram”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBnrdiffs\fP (int), \fBcalibration\fP (str) [i.e a pyfai file name],  \fBunit\fP (str) [i.e. “q_nm^\-1”, “q_A^\-1”, “2th_deg”, “2th_rad”, “r_mm” or “r_pixel”], \fBdiff_%i\fP ([[float, float], …, [float, float]]) [i.e. “%i” goes from 1 to \fBnrdiffs\fP], \fBradial_range_%i\fP ([float, float]) [i.e. “%i” goes from 1 to \fBnrdiffs\fP], \fBazimuth_range_%i\fP ([float, float]) [i.e. “%i” goes from 1 to \fBnrdiffs\fP], \fBpeaks_%i\fP ([[float, …, float], [float, …, float]]) [i.e. “%i” goes from 1 to \fBnrdiffs\fP and it contains peak positions and  peak values lists]
+.SS TwoDFit Tool
+.sp
+\fBTwoDFit Tool\fP performs a fit of 2D function e.g. Guassian.
+.INDENT 0.0
+.INDENT 2.5
+[image]
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.IP \(bu 2
+combobox with a \fBfitting function\fP, i.e. 2D Gaussian
+.IP \(bu 2
+\fBFit/Stop\fP \- switches on/off continuous mode of 2d fitting
+.IP \(bu 2
+\fBNext\fP \- (re\-)computes a diffractogram for the current image
+.IP \(bu 2
+combobox with a initial parameter \fBfitting mode\fP i.e. generator, user, last_generator, last_user, nofit.
+.IP \(bu 2
+\fBParameters..\fP user initial parameters.
+.UNINDENT
+.sp
+The \fBconfiguration\fP of the tool can be set with a JSON dictionary passed in the  \fB\-\-tool\-configuration\fP  option in command line or a toolconfig variable of \fBLavueController.LavueState\fP with the following keys:
+.sp
+\fBinitial parameters\fP  (float list), \fBparameters_mode\fP  (\fBgenerator\fP, \fBuser\fP, \fBlast_generator\fP, \fBlast_user\fP or \fBnofit\fP string), \fBfit\fP (bool), \fBnext\fP (bool)
+.sp
+e.g.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+lavue \-u twodfit \-s test \-\-tool\-configuration \e{\e\(dqinitial_parameters\e\(dq:[30,100,100,20,20,0,0],\e\(dqparameters_mode\e\(dq:\e\(dquser\e\(dq,\e\(dqfit\e\(dq:true\e} \-\-start
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
+.sp
+\fBtool\fP : “twodfit”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBuser_initial_parameters\fP ([float, float,… ,float]), \fBinitial_parameters\fP ([float, float,… ,float]), \fBfitted_parameters\fP ([float, float,… ,float]), \fBparameters_mode\fP ([float, float,… ,float]), \fBcovariance_matrix\fP ([[float, float,… ,float], …]), \fBcondition_number\fP (float), \fBparameters_mode\fP (string)
 .SS Images from FileSystem
 .sp
 By pressing the \fBLoad\fP button user can open the existing file.
@@ -2599,6 +2641,75 @@ numpy array with an image
 .TP
 .B Return type
 \fI\%numpy.ndarray\fP or \fINone\fP
+.UNINDENT
+.UNINDENT
+.SS lavuelib.plugins.gaussianfit module
+.INDENT 0.0
+.TP
+.B class  lavuelib.plugins.gaussianfit.GaussianFit
+Bases: \fI\%object\fP
+.INDENT 7.0
+.TP
+.B classmethod  function(xy, amplitude, x0, y0, sigma_x, sigma_y, offset=0.0, theta=0.0)
+2d guasian function
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBxy\fP ((\fI\%float\fP, \fI\%float\fP)) – 2d gausian x,y coordinates
+.IP \(bu 2
+\fBamplitude\fP (\fI\%float\fP) – gaussian amplitude parameter
+.IP \(bu 2
+\fBx0\fP (\fI\%float\fP) – gaussian x_0 parameter
+.IP \(bu 2
+\fBy0\fP (\fI\%float\fP) – gaussian y_0 parameter
+.IP \(bu 2
+\fBsigma_x\fP (\fI\%float\fP) – gaussian sigma_x parameter
+.IP \(bu 2
+\fBsigma_y\fP (\fI\%float\fP) – gausian sigma_x parameter
+.IP \(bu 2
+\fBoffset\fP (\fI\%float\fP) – gaussian offset parameter
+.IP \(bu 2
+\fBtheta\fP (\fI\%float\fP) – gaussian theta parameter
+.UNINDENT
+.TP
+.B Returns
+gaussian function value
+.TP
+.B Return type
+\fI\%float\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod  generator(dts, length=None)
+2d guasian parameter generator
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBdts\fP (\fI\%numpy.ndarray\fP) – 2d image
+.IP \(bu 2
+\fBlength\fP (\fI\%int\fP) – number of parameters
+.UNINDENT
+.TP
+.B Returns
+list of generated paramters
+.TP
+.B Return type
+\fI\%list\fP <\fI\%float\fP>
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B initial_parameters  =  [30, 100, 100, 20, 40]
+(\fI\%list\fP <\fI\%float\fP>) initial parameters
+.UNINDENT
+.INDENT 7.0
+.TP
+.B parameters_names  =  [\(aqAmp\(aq, \(aqx_0\(aq, \(aqy_0\(aq, \(aqsigma_x\(aq, \(aqsigma_y\(aq, \(aqoffset (optional)\(aq, \(aqtheta (optional)\(aq]
 .UNINDENT
 .UNINDENT
 .SS lavuelib.plugins.userfunctions module
@@ -6539,6 +6650,63 @@ sets filter label
 .B Parameters
 \fBtext\fP (\fI\%str\fP) – tool tip text
 .UNINDENT
+.UNINDENT
+.UNINDENT
+.SS lavuelib.fitParamDialog module
+.sp
+initial fit parameters widget
+.INDENT 0.0
+.TP
+.B class  lavuelib.fitParamDialog.FitParamDialog(parent=None)
+Bases: \fBQDialog\fP
+.sp
+initial fit parameters widget class
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.INDENT 7.0
+.TP
+.B accept()
+updates class variables with the form content
+.UNINDENT
+.INDENT 7.0
+.TP
+.B createGUI()
+create GUI
+.UNINDENT
+.INDENT 7.0
+.TP
+.B last_parameters
+(\fI\%list\fP <:obj: \fIfloat\fP>) last parameters
+.UNINDENT
+.INDENT 7.0
+.TP
+.B parameters
+(\fI\%list\fP <:obj: \fIfloat\fP>) initial parameters
+.UNINDENT
+.INDENT 7.0
+.TP
+.B parameters_names
+(\fI\%list\fP <:obj: \fIstr\fP>) parameters names
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  lavuelib.fitParamDialog.PWD(value, names=None, *, module=None, qualname=None, type=None, start=1, boundary=None)
+Bases: \fI\%Enum\fP
+.sp
+Enum with Parameter Widget positions
+.INDENT 7.0
+.TP
+.B label  =  0
+.UNINDENT
+.INDENT 7.0
+.TP
+.B write  =  1
 .UNINDENT
 .UNINDENT
 .SS lavuelib.geometryDialog module
@@ -19627,7 +19795,91 @@ updates ROI line edit text
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.toolWidget.twproperties  =  [{\(aqalias\(aq: \(aqintensity\(aq, \(aqname\(aq: \(aqIntensity\(aq, \(aqwidget\(aq: \(aqIntensityToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqroi\(aq, \(aqname\(aq: \(aqROI\(aq, \(aqwidget\(aq: \(aqROIToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqlinecut\(aq, \(aqname\(aq: \(aqLineCut\(aq, \(aqwidget\(aq: \(aqLineCutToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqangle/q\(aq, \(aqname\(aq: \(aqAngle/Q\(aq, \(aqwidget\(aq: \(aqAngleQToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqmovemotors\(aq, \(aqname\(aq: \(aqMoveMotors\(aq, \(aqwidget\(aq: \(aqMotorsToolWidget\(aq, \(aqrequires\(aq: (\(aqTANGO\(aq,)}, {\(aqalias\(aq: \(aqmeshscan\(aq, \(aqname\(aq: \(aqMeshScan\(aq, \(aqwidget\(aq: \(aqMeshToolWidget\(aq, \(aqrequires\(aq: (\(aqTANGO\(aq,)}, {\(aqalias\(aq: \(aq1d\-plot\(aq, \(aqname\(aq: \(aq1d\-Plot\(aq, \(aqwidget\(aq: \(aqOneDToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqprojections\(aq, \(aqname\(aq: \(aqProjections\(aq, \(aqwidget\(aq: \(aqProjectionToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqmaxima\(aq, \(aqname\(aq: \(aqMaxima\(aq, \(aqwidget\(aq: \(aqMaximaToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqparameters\(aq, \(aqname\(aq: \(aqParameters\(aq, \(aqwidget\(aq: \(aqParametersToolWidget\(aq, \(aqrequires\(aq: (\(aqTANGO\(aq,)}, {\(aqalias\(aq: \(aqdiffractogram\(aq, \(aqname\(aq: \(aqDiffractogram\(aq, \(aqwidget\(aq: \(aqDiffractogramToolWidget\(aq, \(aqrequires\(aq: (\(aqPYFAI\(aq,)}, {\(aqalias\(aq: \(aqq+roi+proj\(aq, \(aqname\(aq: \(aqQ+ROI+Proj\(aq, \(aqwidget\(aq: \(aqQROIProjToolWidget\(aq, \(aqrequires\(aq: ()}]
+.B class  lavuelib.toolWidget.TwoDFitToolWidget(parent=None)
+Bases: \fBToolBaseWidget\fP
+.sp
+two dimension fit tool widget
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.INDENT 7.0
+.TP
+.B afterplot()
+command after plot
+.UNINDENT
+.INDENT 7.0
+.TP
+.B alias  =  \(aqtwodfit\(aq
+(\fI\%str\fP) tool name alias
+.UNINDENT
+.INDENT 7.0
+.TP
+.B beforeplot(array, rawarray)
+command  before plot
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBarray\fP (\fI\%numpy.ndarray\fP) – 2d image array
+.IP \(bu 2
+\fBrawarray\fP (\fI\%numpy.ndarray\fP) – 2d raw image array
+.UNINDENT
+.TP
+.B Returns
+2d image array and raw image
+.TP
+.B Return type
+(\fI\%numpy.ndarray\fP, \fI\%numpy.ndarray\fP)
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configuration()
+provides configuration for the current tool
+.INDENT 7.0
+.TP
+.B Returns configuration
+configuration string
+.TP
+.B Rtype configuration
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configure(configuration)
+set configuration for the current tool
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – configuration string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name  =  \(aqTwoDFit\(aq
+(\fI\%str\fP) tool name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B requires  =  ()
+(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
+.UNINDENT
+.INDENT 7.0
+.TP
+.B signal2slot
+(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
+list of [signal, slot] object to connect
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B lavuelib.toolWidget.twproperties  =  [{\(aqalias\(aq: \(aqintensity\(aq, \(aqname\(aq: \(aqIntensity\(aq, \(aqwidget\(aq: \(aqIntensityToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqroi\(aq, \(aqname\(aq: \(aqROI\(aq, \(aqwidget\(aq: \(aqROIToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqlinecut\(aq, \(aqname\(aq: \(aqLineCut\(aq, \(aqwidget\(aq: \(aqLineCutToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqangle/q\(aq, \(aqname\(aq: \(aqAngle/Q\(aq, \(aqwidget\(aq: \(aqAngleQToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqmovemotors\(aq, \(aqname\(aq: \(aqMoveMotors\(aq, \(aqwidget\(aq: \(aqMotorsToolWidget\(aq, \(aqrequires\(aq: (\(aqTANGO\(aq,)}, {\(aqalias\(aq: \(aqmeshscan\(aq, \(aqname\(aq: \(aqMeshScan\(aq, \(aqwidget\(aq: \(aqMeshToolWidget\(aq, \(aqrequires\(aq: (\(aqTANGO\(aq,)}, {\(aqalias\(aq: \(aq1d\-plot\(aq, \(aqname\(aq: \(aq1d\-Plot\(aq, \(aqwidget\(aq: \(aqOneDToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqprojections\(aq, \(aqname\(aq: \(aqProjections\(aq, \(aqwidget\(aq: \(aqProjectionToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqmaxima\(aq, \(aqname\(aq: \(aqMaxima\(aq, \(aqwidget\(aq: \(aqMaximaToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqparameters\(aq, \(aqname\(aq: \(aqParameters\(aq, \(aqwidget\(aq: \(aqParametersToolWidget\(aq, \(aqrequires\(aq: (\(aqTANGO\(aq,)}, {\(aqalias\(aq: \(aqdiffractogram\(aq, \(aqname\(aq: \(aqDiffractogram\(aq, \(aqwidget\(aq: \(aqDiffractogramToolWidget\(aq, \(aqrequires\(aq: (\(aqPYFAI\(aq,)}, {\(aqalias\(aq: \(aqq+roi+proj\(aq, \(aqname\(aq: \(aqQ+ROI+Proj\(aq, \(aqwidget\(aq: \(aqQROIProjToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqtwodfit\(aq, \(aqname\(aq: \(aqTwoDFit\(aq, \(aqwidget\(aq: \(aqTwoDFitToolWidget\(aq, \(aqrequires\(aq: ()}]
 ( \fI\%dict\fP < \fI\%str\fP, any > ) tool widget properties
 .UNINDENT
 .SS lavuelib.transformationsWidget module

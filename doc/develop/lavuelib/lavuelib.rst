@@ -124,6 +124,14 @@ lavuelib.filtersGroupBox module
     :undoc-members:
     :show-inheritance:
 
+lavuelib.fitParamDialog module
+==============================
+
+.. automodule:: lavuelib.fitParamDialog
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 lavuelib.geometryDialog module
 ==============================
 
