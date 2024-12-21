@@ -7816,7 +7816,7 @@ class TwoDFitToolWidget(ToolBaseWidget):
         self.__param_names = self.__fit_function_class.parameters_names
         #: (:fun:`lavuelib.plugins.gaussianfit.generator`) generator function
         self.__generator = None
-        if hasattr(gaussianfit, "generator"):
+        if hasattr(self.__fit_function_class, "generator"):
             self.__generator = self.__fit_function_class.generator
 
         #: (:obj:`list` <:obj:`float`>) last initial parameters
