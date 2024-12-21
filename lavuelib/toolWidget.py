@@ -7910,6 +7910,10 @@ class TwoDFitToolWidget(ToolBaseWidget):
             self._fit()
             if 10 * self.__settings.refreshtime < time.time() - st:
                 self._fitstopParams()
+                logger.warning("Too long fitting time "
+                               "with respect the refresh time. "
+                               "Initial parameters or fitting function "
+                               "do not match to the image data")
 
     def _fit(self):
         """ command  before plot
