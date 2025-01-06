@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>ZMQ stream &#8212; LaVue  documentation</title>
+    <title>TwoDFit Tool &#8212; LaVue  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
@@ -20,8 +20,8 @@
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="NeXus File" href="nexusfile.html" />
-    <link rel="prev" title="DOOCS property" href="doocsprop.html" />
+    <link rel="next" title="Images from FileSystem" href="../images.html" />
+    <link rel="prev" title="Diffractogram Tool" href="diffractogram.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <!--[if lt IE 9]>
     <script src="_static/css3-mediaqueries.js"></script>
@@ -37,15 +37,15 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="nexusfile.html" title="NeXus File"
+          <a href="../images.html" title="Images from FileSystem"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="doocsprop.html" title="DOOCS property"
+          <a href="diffractogram.html" title="Diffractogram Tool"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >GUI User Guide</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Image Sources and stitching images</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">ZMQ stream</a></li> 
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Specialized Tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">TwoDFit Tool</a></li> 
       </ul>
     </div>  
 
@@ -54,20 +54,27 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="zmq-stream">
-<span id="id1"></span><h1>ZMQ stream<a class="headerlink" href="#zmq-stream" title="Permalink to this heading">¶</a></h1>
-<p>Images from a simple ZMQ server, e.g. lavuezmqstreamfromtango SERVER. It is used to send <em>post-processed images</em></p>
+  <section id="twodfit-tool">
+<span id="twodfit"></span><h1>TwoDFit Tool<a class="headerlink" href="#twodfit-tool" title="Permalink to this heading">¶</a></h1>
+<p><strong>TwoDFit Tool</strong> performs a fit of 2D function e.g. Guassian.</p>
 <figure class="align-default">
-<img alt="../../_images/zmqstreamlavue.png" src="../../_images/zmqstreamlavue.png" />
+<img alt="../../_images/lavue_twodfit.png" src="../../_images/lavue_twodfit.png" />
 </figure>
-<p>The <strong>ZMQ Stream</strong> image source frame contains the following fields:</p>
 <ul class="simple">
-<li><p><strong>ZMQ Server:</strong> selects the zmq server host and zmq  data port. Moreover the user can also select the required zmq topic and ZMQ HWM (how many images is in buffer), i.e. <cite>host:port[/topic[/HWM]]</cite> or <cite>host:port[:topic[:HWM]]</cite> (with the ZMQ configuration colon separator)</p></li>
-<li><p><strong>DataSource:</strong> name of zmq topic. Possible datasources can be predefined in the configuration or sent in ZMQ metadata.</p></li>
-<li><p><strong>Status:</strong> shows the connection status. It also displays a port of ZMQ security stream if it is enabled.</p></li>
-<li><p><strong>Start/Stop</strong> button to launch or interrupt image querying</p></li>
+<li><p>combobox with a <strong>fitting function</strong>, i.e. 2D Gaussian</p></li>
+<li><p><strong>Fit/Stop</strong> - switches on/off continuous mode of 2d fitting</p></li>
+<li><p><strong>Next</strong> - (re-)computes a diffractogram for the current image</p></li>
+<li><p>combobox with a initial parameter <strong>fitting mode</strong> i.e. generator, user, last_generator, last_user, nofit.</p></li>
+<li><p><strong>Parameters..</strong> user initial parameters.</p></li>
 </ul>
-<p>The <strong>ZMQ Stream</strong> metadata part can also contain other informations like axes labels or axes start position and scale.</p>
+<p>The <strong>configuration</strong> of the tool can be set with a JSON dictionary passed in the  <code class="docutils literal notranslate"><span class="pre">--tool-configuration</span></code>  option in command line or a toolconfig variable of <code class="docutils literal notranslate"><span class="pre">LavueController.LavueState</span></code> with the following keys:</p>
+<p><code class="docutils literal notranslate"><span class="pre">initial</span> <span class="pre">parameters</span></code>  (float list), <code class="docutils literal notranslate"><span class="pre">parameters_mode</span></code>  (<code class="docutils literal notranslate"><span class="pre">generator</span></code>, <code class="docutils literal notranslate"><span class="pre">user</span></code>, <code class="docutils literal notranslate"><span class="pre">last_generator</span></code>, <code class="docutils literal notranslate"><span class="pre">last_user</span></code> or <code class="docutils literal notranslate"><span class="pre">nofit</span></code> string), <code class="docutils literal notranslate"><span class="pre">fit</span></code> (bool), <code class="docutils literal notranslate"><span class="pre">next</span></code> (bool)</p>
+<p>e.g.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">lavue -u twodfit -s test --tool-configuration \{\&quot;initial_parameters\&quot;:[30,100,100,20,20,0,0],\&quot;parameters_mode\&quot;:\&quot;user\&quot;,\&quot;fit\&quot;:true\} --start</span>
+</pre></div>
+</div>
+<p>A JSON dictionary with the <strong>tool results</strong> is passed to the <strong>LavueController</strong> or/and to <strong>user functions plugins</strong>. It contains the following keys:</p>
+<p><code class="docutils literal notranslate"><span class="pre">tool</span></code> : “twodfit”, <code class="docutils literal notranslate"><span class="pre">imagename</span></code> (string), <code class="docutils literal notranslate"><span class="pre">timestamp</span></code> (float), <code class="docutils literal notranslate"><span class="pre">user_initial_parameters</span></code> ([float, float,… ,float]), <code class="docutils literal notranslate"><span class="pre">initial_parameters</span></code> ([float, float,… ,float]), <code class="docutils literal notranslate"><span class="pre">fitted_parameters</span></code> ([float, float,… ,float]), <code class="docutils literal notranslate"><span class="pre">parameters_mode</span></code> ([float, float,… ,float]), <code class="docutils literal notranslate"><span class="pre">covariance_matrix</span></code> ([[float, float,… ,float], …]), <code class="docutils literal notranslate"><span class="pre">condition_number</span></code> (float), <code class="docutils literal notranslate"><span class="pre">parameters_mode</span></code> (string)</p>
 </section>
 
 
@@ -79,13 +86,13 @@
         <div class="sphinxsidebarwrapper">
   <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="doocsprop.html"
-                          title="previous chapter">DOOCS property</a></p>
+    <p class="topless"><a href="diffractogram.html"
+                          title="previous chapter">Diffractogram Tool</a></p>
   </div>
   <div>
     <h4>Next topic</h4>
-    <p class="topless"><a href="nexusfile.html"
-                          title="next chapter">NeXus File</a></p>
+    <p class="topless"><a href="../images.html"
+                          title="next chapter">Images from FileSystem</a></p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
@@ -146,15 +153,15 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="nexusfile.html" title="NeXus File"
+          <a href="../images.html" title="Images from FileSystem"
              >next</a> |</li>
         <li class="right" >
-          <a href="doocsprop.html" title="DOOCS property"
+          <a href="diffractogram.html" title="Diffractogram Tool"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >GUI User Guide</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Image Sources and stitching images</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">ZMQ stream</a></li> 
+          <li class="nav-item nav-item-2"><a href="index.html" >Specialized Tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">TwoDFit Tool</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

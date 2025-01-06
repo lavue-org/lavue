@@ -118,6 +118,72 @@
 </dd></dl>
 
 </section>
+<section id="module-lavuelib.plugins.gaussianfit">
+<span id="lavuelib-plugins-gaussianfit-module"></span><h2>lavuelib.plugins.gaussianfit module<a class="headerlink" href="#module-lavuelib.plugins.gaussianfit" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="lavuelib.plugins.gaussianfit.GaussianFit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lavuelib.plugins.gaussianfit.</span></span><span class="sig-name descname"><span class="pre">GaussianFit</span></span><a class="reference internal" href="../../_modules/lavuelib/plugins/gaussianfit.html#GaussianFit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.plugins.gaussianfit.GaussianFit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lavuelib.plugins.gaussianfit.GaussianFit.function">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/plugins/gaussianfit.html#GaussianFit.function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.plugins.gaussianfit.GaussianFit.function" title="Permalink to this definition">¶</a></dt>
+<dd><p>2d guasian function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xy</strong> ((<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>)) – 2d gausian x,y coordinates</p></li>
+<li><p><strong>amplitude</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – gaussian amplitude parameter</p></li>
+<li><p><strong>x0</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – gaussian x_0 parameter</p></li>
+<li><p><strong>y0</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – gaussian y_0 parameter</p></li>
+<li><p><strong>sigma_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – gaussian sigma_x parameter</p></li>
+<li><p><strong>sigma_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – gausian sigma_x parameter</p></li>
+<li><p><strong>offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – gaussian offset parameter</p></li>
+<li><p><strong>theta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – gaussian theta parameter</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>gaussian function value</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lavuelib.plugins.gaussianfit.GaussianFit.generator">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/plugins/gaussianfit.html#GaussianFit.generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.plugins.gaussianfit.GaussianFit.generator" title="Permalink to this definition">¶</a></dt>
+<dd><p>2d guasian parameter generator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dts</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – 2d image</p></li>
+<li><p><strong>length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – number of parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of generated paramters</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>&gt;</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lavuelib.plugins.gaussianfit.GaussianFit.initial_parameters">
+<span class="sig-name descname"><span class="pre">initial_parameters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[30,</span> <span class="pre">100,</span> <span class="pre">100,</span> <span class="pre">20,</span> <span class="pre">40]</span></em><a class="headerlink" href="#lavuelib.plugins.gaussianfit.GaussianFit.initial_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>&gt;) initial parameters</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lavuelib.plugins.gaussianfit.GaussianFit.parameters_names">
+<span class="sig-name descname"><span class="pre">parameters_names</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['Amp',</span> <span class="pre">'x_0',</span> <span class="pre">'y_0',</span> <span class="pre">'sigma_x',</span> <span class="pre">'sigma_y',</span> <span class="pre">'offset</span> <span class="pre">(optional)',</span> <span class="pre">'theta</span> <span class="pre">(optional)']</span></em><a class="headerlink" href="#lavuelib.plugins.gaussianfit.GaussianFit.parameters_names" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="module-lavuelib.plugins.userfunctions">
 <span id="lavuelib-plugins-userfunctions-module"></span><h2>lavuelib.plugins.userfunctions module<a class="headerlink" href="#module-lavuelib.plugins.userfunctions" title="Permalink to this heading">¶</a></h2>
 <p>set of image sources</p>
@@ -215,6 +281,16 @@
 <li><a class="reference internal" href="#lavuelib.plugins.filters.rot45"><code class="docutils literal notranslate"><span class="pre">rot45()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#module-lavuelib.plugins.gaussianfit">lavuelib.plugins.gaussianfit module</a><ul>
+<li><a class="reference internal" href="#lavuelib.plugins.gaussianfit.GaussianFit"><code class="docutils literal notranslate"><span class="pre">GaussianFit</span></code></a><ul>
+<li><a class="reference internal" href="#lavuelib.plugins.gaussianfit.GaussianFit.function"><code class="docutils literal notranslate"><span class="pre">GaussianFit.function()</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.plugins.gaussianfit.GaussianFit.generator"><code class="docutils literal notranslate"><span class="pre">GaussianFit.generator()</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.plugins.gaussianfit.GaussianFit.initial_parameters"><code class="docutils literal notranslate"><span class="pre">GaussianFit.initial_parameters</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.plugins.gaussianfit.GaussianFit.parameters_names"><code class="docutils literal notranslate"><span class="pre">GaussianFit.parameters_names</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-lavuelib.plugins.userfunctions">lavuelib.plugins.userfunctions module</a><ul>
 <li><a class="reference internal" href="#lavuelib.plugins.userfunctions.LineCut"><code class="docutils literal notranslate"><span class="pre">LineCut</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.plugins.userfunctions.LineCutFlat"><code class="docutils literal notranslate"><span class="pre">LineCutFlat</span></code></a></li>
@@ -252,45 +328,27 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
-      <li><a class="reference external" href="../../index/../../v2.94.1/index.html">v2.94.1</a></li>
-      <li><a class="reference external" href="../../index/../../v2.94.0/index.html">v2.94.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.95.0/index.html">v2.95.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.94.2/index.html">v2.94.2</a></li>
       <li><a class="reference external" href="../../index/../../v2.93.1/index.html">v2.93.1</a></li>
-      <li><a class="reference external" href="../../index/../../v2.93.0/index.html">v2.93.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.92.2/index.html">v2.92.2</a></li>
-      <li><a class="reference external" href="../../index/../../v2.92.1/index.html">v2.92.1</a></li>
-      <li><a class="reference external" href="../../index/../../v2.92.0/index.html">v2.92.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.91.1/index.html">v2.91.1</a></li>
-      <li><a class="reference external" href="../../index/../../v2.91.0/index.html">v2.91.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.90.2/index.html">v2.90.2</a></li>
-      <li><a class="reference external" href="../../index/../../v2.90.1/index.html">v2.90.1</a></li>
-      <li><a class="reference external" href="../../index/../../v2.90.0/index.html">v2.90.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.89.3/index.html">v2.89.3</a></li>
-      <li><a class="reference external" href="../../index/../../v2.89.2/index.html">v2.89.2</a></li>
-      <li><a class="reference external" href="../../index/../../v2.89.1/index.html">v2.89.1</a></li>
-      <li><a class="reference external" href="../../index/../../v2.89.0/index.html">v2.89.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.88.0/index.html">v2.88.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.87.0/index.html">v2.87.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.86.1/index.html">v2.86.1</a></li>
-      <li><a class="reference external" href="../../index/../../v2.86.0/index.html">v2.86.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.85.1/index.html">v2.85.1</a></li>
-      <li><a class="reference external" href="../../index/../../v2.85.0/index.html">v2.85.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.84.0/index.html">v2.84.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.83.4/index.html">v2.83.4</a></li>
-      <li><a class="reference external" href="../../index/../../v2.83.3/index.html">v2.83.3</a></li>
-      <li><a class="reference external" href="../../index/../../v2.83.2/index.html">v2.83.2</a></li>
-      <li><a class="reference external" href="../../index/../../v2.83.1/index.html">v2.83.1</a></li>
-      <li><a class="reference external" href="../../index/../../v2.83.0/index.html">v2.83.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.82.0/index.html">v2.82.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.81.0/index.html">v2.81.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.80.1/index.html">v2.80.1</a></li>
-      <li><a class="reference external" href="../../index/../../v2.80.0/index.html">v2.80.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.79.0/index.html">v2.79.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
-      <li><a class="reference external" href="../../index/../../v2.76.0/index.html">v2.76.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.75.3/index.html">v2.75.3</a></li>
-      <li><a class="reference external" href="../../index/../../v2.75.1/index.html">v2.75.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.74.0/index.html">v2.74.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.73.0/index.html">v2.73.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.72.0/index.html">v2.72.0</a></li>
