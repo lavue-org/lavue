@@ -50,6 +50,7 @@ except Exception:
     from pyqtgraph import QtGui as QtWidgets
 
 from . import geometryDialog
+from . import fitParamDialog
 from . import rangeDialog
 from . import diffRangeDialog
 from . import takeMotorsDialog
@@ -131,6 +132,11 @@ _qroiprojformclass, _qroiprojbaseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  "ui", "QROIProjToolWidget.ui"))
 
+_twodfitformclass, _twodfitbaseclass = uic.loadUiType(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                 "ui", "TwoDFitToolWidget.ui"))
+
+
 __all__ = [
     'IntensityToolWidget',
     'ROIToolWidget',
@@ -144,6 +150,7 @@ __all__ = [
     'ParametersToolWidget',
     'DiffractogramToolWidget',
     'QROIProjToolWidget',
+    'TwoDFitToolWidget',
     'twproperties',
 ]
 
@@ -3365,9 +3372,9 @@ class AngleQToolWidget(ToolBaseWidget):
         #: (:obj:`bool`) old lock value
         self.__oldlocked = None
 
-        #: (:class:`numpy.array`) radial array cache
+        #: (:class:`numpy.ndarray`) radial array cache
         self.__lastradial = None
-        #: (:class:`numpy.array`) angle array cache
+        #: (:class:`numpy.ndarray`) angle array cache
         self.__lastangle = None
         #: (:obj:`float`) energy cache
         self.__lastenergy = None
@@ -3385,9 +3392,9 @@ class AngleQToolWidget(ToolBaseWidget):
         self.__lastpsizex = None
         #: (:obj:`float`) pixelsizey cache
         self.__lastpsizey = None
-        #: (:class:`numpy.array`) x array cache
+        #: (:class:`numpy.ndarray`) x array cache
         self.__lastx = None
-        #: (:class:`numpy.array`) y array cache
+        #: (:class:`numpy.ndarray`) y array cache
         self.__lasty = None
         #: (:obj:`float`) maxdim cache
         self.__lastmaxdim = None
@@ -3558,9 +3565,9 @@ class AngleQToolWidget(ToolBaseWidget):
         """ if xy changed
 
         :param radial: radial coordinate
-        :type radial: :obj:`float` or :class:`numpy.array`
+        :type radial: :obj:`float` or :class:`numpy.ndarray`
         :param angle: polar angle coordinate
-        :type angle: :obj:`float` or :class:`numpy.array`
+        :type angle: :obj:`float` or :class:`numpy.ndarray`
         :returns: flag if (x, y) have changed
         :rtype: :obj:`bool`
         """
@@ -3605,11 +3612,11 @@ class AngleQToolWidget(ToolBaseWidget):
         """ intensity interpolation function
 
         :param radial: radial coordinate
-        :type radial: :obj:`float` or :class:`numpy.array`
+        :type radial: :obj:`float` or :class:`numpy.ndarray`
         :param angle: polar angle coordinate
-        :type angle: :obj:`float` or :class:`numpy.array`
+        :type angle: :obj:`float` or :class:`numpy.ndarray`
         :return: interpolated intensity
-        :rtype: :obj:`float` or :class:`numpy.array`
+        :rtype: :obj:`float` or :class:`numpy.ndarray`
         """
         if self.__rangechanged or self.__havexychanged(radial, angle):
             if self.__plotindex == 1:
@@ -7762,6 +7769,325 @@ class QROIProjToolWidget(ToolBaseWidget):
             "Select the display space\n%s" % message)
         self.__ui.toolLabel.setToolTip(
             "coordinate info display for the mouse pointer\n%s" % message)
+
+
+class TwoDFitToolWidget(ToolBaseWidget):
+    """ two dimension fit tool widget
+    """
+
+    #: (:obj:`str`) tool name
+    name = "TwoDFit"
+    #: (:obj:`str`) tool name alias
+    alias = "twodfit"
+    #: (:obj:`tuple` <:obj:`str`>) capitalized required packages
+    requires = ()
+
+    def __init__(self, parent=None):
+        """ constructor
+
+        :param parent: parent object
+        :type parent: :class:`pyqtgraph.QtCore.QObject`
+        """
+        ToolBaseWidget.__init__(self, parent)
+
+        #: (:class:`Ui_IntensityToolWidget')
+        #:        ui_toolwidget object from qtdesigner
+        self.__ui = _twodfitformclass()
+        self.__ui.setupUi(self)
+
+        #: (:class:`lavuelib.settings.Settings`) configuration settings
+        self.__settings = self._mainwidget.settings()
+
+        self.parameters.scale = False
+        self.parameters.crosshairlocker = False
+        self.parameters.infolineedit = ""
+        self.parameters.infotips = \
+            "fitted parameters"
+
+        from lavuelib.plugins import gaussianfit
+        # self.__fit_function_class = gaussianfit
+        #: (:class:`lavuelib.plugins.gaussianfit.GaussianFit`)
+        #:       fitting function class
+        self.__fit_function_class = gaussianfit.GaussianFit
+
+        #: (:obj:`list` <:obj:`float`>) initial parameters
+        self.__initial_params = self.__fit_function_class.initial_parameters
+        #: (:obj:`list` <:obj:`str`>) parameters names
+        self.__param_names = self.__fit_function_class.parameters_names
+        #: (:fun:`lavuelib.plugins.gaussianfit.generator`) generator function
+        self.__generator = None
+        if hasattr(self.__fit_function_class, "generator"):
+            self.__generator = self.__fit_function_class.generator
+
+        #: (:obj:`list` <:obj:`float`>) last initial parameters
+        self.__last_initial_params = None
+        #: (:obj:`list` <:obj:`float`>) last fitted parameters
+        self.__last_params = None
+        #: (:obj:`numpy.ndarray`) last covariance matrix
+        self.__last_pcov = None
+        #: (:obj:`numpy.ndarray`) last parameters errors list
+        self.__last_errors = None
+        #: (:obj:`numpy.ndarray`) last image
+        self.__last_array = None
+        #: (:obj:`float`) condition number
+        self.__last_cond = None
+
+        #: (:obj:`bool`) fit parameters flag
+        self.__fitparams = False
+
+        #: (:obj:`list` <:obj:`str`>) list of units
+        self.__modestexts = ["generator", "user",
+                             "last_generator", "last_user",
+                             "nofit"]
+        self.__parametersmode = self.__modestexts[0]
+
+        #: (:obj:`list` < [:class:`pyqtgraph.QtCore.pyqtSignal`, :obj:`str`] >)
+        #: list of [signal, slot] object to connect
+        self.signal2slot = [
+            [self.__ui.paramsPushButton.clicked, self._setParams],
+            [self.__ui.fitPushButton.clicked, self._fitstopParams],
+            [self.__ui.nextPushButton.clicked, self._nextParams],
+            [self.__ui.modeComboBox.currentIndexChanged,
+             self._setParametersMode],
+        ]
+
+    # @debugmethod
+    @QtCore.pyqtSlot()
+    def _fitstopParams(self):
+        """ show or hide diffractogram
+        """
+        if not self.__fitparams:
+            self.__fitparams = True
+            self.__ui.fitPushButton.setText("Stop")
+            self._fit()
+        else:
+            self.__fitparams = False
+            self.__ui.fitPushButton.setText("Fit")
+        self._mainwidget.emitTCC()
+
+    # @debugmethod
+    @QtCore.pyqtSlot()
+    def _setParams(self):
+        """ launches params widget
+
+        :returns: apply status
+        :rtype: :obj:`bool`
+        """
+        cnfdlg = fitParamDialog.FitParamDialog()
+        cnfdlg.parameters = self.__initial_params \
+            if self.__initial_params is not None else []
+        cnfdlg.last_parameters = self.__last_params \
+            if self.__last_params is not None else []
+        cnfdlg.parameters_names = self.__param_names \
+            if self.__param_names is not None else []
+        cnfdlg.createGUI()
+        if cnfdlg.exec_():
+            self.__initial_params = cnfdlg.parameters
+            self.__last_params = cnfdlg.parameters
+            # print(self.__initial_params)
+
+    # @debugmethod
+    @QtCore.pyqtSlot()
+    def _nextParams(self):
+        """ plot all diffractograms and update
+        """
+        self._fit()
+        self._mainwidget.emitTCC()
+
+    def beforeplot(self, array, rawarray):
+        """ command  before plot
+
+        :param array: 2d image array
+        :type array: :class:`numpy.ndarray`
+        :param rawarray: 2d raw image array
+        :type rawarray: :class:`numpy.ndarray`
+        :return: 2d image array and raw image
+        :rtype: (:class:`numpy.ndarray`, :class:`numpy.ndarray`)
+        """
+        self.__last_array = rawarray
+        if self.__fitparams:
+            st = time.time()
+            self._fit()
+            if 10 * self.__settings.refreshtime < time.time() - st:
+                self._fitstopParams()
+                logger.warning("Too long fitting time "
+                               "with respect the refresh time. "
+                               "Initial parameters or fitting function "
+                               "do not match to the image data")
+
+    def _fit(self):
+        """ command  before plot
+
+        :param rawarray: 2d raw image array
+        :type rawarray: :class:`numpy.ndarray`
+        """
+        if self.__last_array is not None:
+            dts = self.__last_array
+            while dts.ndim > 2:
+                dts = np.nanmean(dts, axis=2)
+            dts = np.nan_to_num(np.transpose(dts))
+
+            ym, xm = dts.shape
+            x = np.linspace(0, xm - 1, xm)
+            y = np.linspace(0, ym - 1, ym)
+            x, y = np.meshgrid(x, y)
+            rdts = dts.ravel()
+            # print("SHAPE", dts.shape)
+            try:
+                cond = np.linalg.cond(self.__last_pcov)
+                if cond > 10000:
+                    self.__last_params = None
+            except Exception:
+                self.__last_params = None
+            mode = self.__parametersmode
+            gparam = None
+            if mode.startswith("last_") and \
+                    self.__last_initial_params is not None:
+                gparam = self.__last_initial_params
+            elif mode == "generator" or \
+                    (self.__last_initial_params is None
+                     and mode == "last_generator") or \
+                    mode == "nofit":
+                if self.__generator is not None:
+                    gparam = self.__generator(dts, len(self.__initial_params))
+                    self.__last_initial_params = gparam
+            if gparam is None and mode != "nofit":
+                self.__last_initial_params = self.__initial_params
+                gparam = self.__last_initial_params
+            # print("GPARAM", gparam, mode)
+            if gparam is not None and mode != "nofit":
+                try:
+                    popt, pcov = scipy.optimize.curve_fit(
+                        self.__fit_function_class.function, (x, y), rdts,
+                        p0=gparam)
+                except Exception as e:
+                    popt = None
+                    pcov = None
+                    self.__last_params = None
+                    logger.warning(str(e))
+                    # print(str(e))
+            else:
+                popt = gparam
+                pcov = None
+            self.__last_params = popt
+            self.__last_pcov = pcov
+            try:
+                self.__last_errors = np.sqrt(np.diag(pcov))
+            except Exception:
+                self.__last_errors = None
+            try:
+                self.__last_cond = np.linalg.cond(self.__last_pcov)
+            except Exception:
+                self.__last_cond = None
+            self._message()
+
+    @QtCore.pyqtSlot()
+    def _message(self):
+        """ provides 2dfit message
+        """
+        message = ""
+        if self.__last_params is not None:
+            for ii, par in enumerate(self.__last_params):
+                dg = "0"
+                if self.__last_errors is None:
+                    dg = "2"
+                elif ii < len(self.__last_errors):
+                    err = self.__last_errors[ii]
+                    if not np.isinf(err):
+                        dg = str(max(int(np.ceil(-np.log10(err))), 0))
+                    else:
+                        break
+                # print("DIG", ii, dg )
+                if ii < len(self.__param_names):
+                    nm = self.__param_names[ii]
+                    if " " in nm:
+                        nm = nm.split(" ")[0]
+                    message += ("%s = %." + dg + "f, ") % (nm, par)
+                else:
+                    message += ("p_%s = %." + dg + "f, ") % (ii, par)
+            if len(message) > 1:
+                message = message[:-2]
+
+        self._mainwidget.setDisplayedText(message)
+        if self.__settings.sendresults or self.__settings.showuserplot:
+            self.__sendresults()
+
+    def afterplot(self):
+        """ command after plot
+        """
+
+    def configure(self, configuration):
+        """ set configuration for the current tool
+
+        :param configuration: configuration string
+        :type configuration: :obj:`str`
+        """
+        if configuration:
+            cnf = json.loads(configuration)
+            if "initial_parameters" in cnf.keys():
+                self.__initial_params = cnf["initial_parameters"]
+            if "parameters_mode" in cnf.keys():
+                mode = cnf["parameters_mode"]
+                try:
+                    idx = self.__modestexts.index(mode)
+                    self.parameters_mode = mode
+                    self.__ui.modeComboBox.setCurrentIndex(idx)
+                except Exception:
+                    pass
+            if "fit" in cnf.keys():
+                if cnf["fit"]:
+                    if str(self.__ui.fitPushButton.text()) == "Fit":
+                        self._fitstopParams()
+                else:
+                    if str(self.__ui.fitPushButton.text()) == "Stop":
+                        self._fitstopParams()
+            if "next" in cnf.keys():
+                if cnf["next"]:
+                    if str(self.__ui.nextPushButton.text()) == "Next":
+                        self._nextParams()
+
+    def configuration(self):
+        """ provides configuration for the current tool
+
+        :returns configuration: configuration string
+        :rtype configuration: :obj:`str`
+        """
+        cnf = {}
+        cnf["initial_parameters"] = self.__initial_params
+        cnf["parameters_mode"] = self.__parametersmode
+        cnf["fit"] = self.__fitparams
+        return json.dumps(cnf, cls=numpyEncoder)
+
+    def __sendresults(self):
+        """ send results to LavueController
+        """
+        results = {"tool": self.alias}
+        results["imagename"] = self._mainwidget.imageName()
+        results["timestamp"] = time.time()
+        results["user_initial_parameters"] = self.__initial_params
+        results["initial_parameters"] = self.__last_initial_params
+        results["fitted_parameters"] = self.__last_params
+        results["parameters_errors"] = self.__last_errors
+        results["covariance_matrix"] = self.__last_pcov
+        results["condition_number"] = self.__last_cond
+        results["parameters_mode"] = self.__parametersmode
+        # print(results)
+        if self.__settings.sendresults:
+            self._mainwidget.writeAttribute(
+                "ToolResults", json.dumps(results, cls=numpyEncoder))
+        self._mainwidget.plotUserFunction(results)
+
+    @QtCore.pyqtSlot(int)
+    def _setParametersMode(self, xindex=None):
+        """ sets roi shape index
+
+        :param xindex: roi shape index,
+        :type xindex: :obj:`int`
+        """
+        if xindex is None:
+            xindex = self.__ui.modeComboBox.currentIndex()
+        self.__parametersmode = self.__modestexts[
+            xindex if len(self.__modestexts) > xindex else 0]
 
 
 #: ( :obj:`dict` < :obj:`str`, any > ) tool widget properties

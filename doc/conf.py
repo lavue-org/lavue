@@ -261,7 +261,8 @@ if os.getenv("LAVUE_HIDE_VERSIONS") != 'TRUE':
 
 html_context = {
     "docs_versions" : [
-        "v2.94.2", "v2.94.1", "v2.94.0",
+        "v2.95.0",
+        "v2.94.2",
         "v2.93.1", # "v2.93.0",
         "v2.92.2", # "v2.92.1", "v2.92.0",
         "v2.91.1", # "v2.91.0",

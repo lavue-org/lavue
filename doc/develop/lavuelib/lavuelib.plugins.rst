@@ -9,6 +9,14 @@ lavuelib.plugins.filters module
     :undoc-members:
     :show-inheritance:
 
+lavuelib.plugins.gaussianfit module
+-----------------------------------
+
+.. automodule:: lavuelib.plugins.gaussianfit
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 lavuelib.plugins.userfunctions module
 -------------------------------------
 
