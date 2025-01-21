@@ -2359,3 +2359,97 @@ class MaximaExtension(DisplayExtension):
         """
         positionlist = [(pos[1], pos[0]) for pos in self.__positions]
         self.setMaximaPos(positionlist)
+
+
+class EllipseExtension(DisplayExtension):
+
+    def __init__(self, parent=None):
+        """ constructor
+
+        :param parent: parent object
+        :type parent: :class:`pyqtgraph.QtCore.QObject`
+        """
+        DisplayExtension.__init__(self, parent)
+
+        #: (:obj:`str`) tool name
+        self.name = "ellipse"
+
+        #: (:obj:`list` < > ) ellipse parameters
+        self.__positions = []
+
+        #: (:obj:`list` < > ) ellipse objects
+        self.__ellipse = []
+
+    def show(self, parameters):
+        """ set subwidget properties
+
+        :param parameters: tool parameters
+        :type parameters: :class:`lavuelib.toolWidget.ToolParameters`
+        """
+        if parameters.ellipse is not None:
+            self.__showEllipse(parameters.ellipse)
+            self._enabled = parameters.ellipse
+
+    def __showEllipse(self, status):
+        """ shows or hides ellipse
+
+        :param status: will be shown
+        :type status: :obj:`bool`
+        """
+        if status:
+            if self.__positions:
+                for el in self.__ellipse:
+                    el.show()
+        else:
+            for el in self.__ellipse:
+                el.hide()
+
+    def setEllipsePos(self, positionlist, offset=None):
+        """
+        sets ellipse positions
+
+        :param positionlist: [(x1, y1), ... , (xn, yn)]
+        :type positionlist: :obj:`list` < (:obj:`float`, :obj:`float`) >
+        :param offset: offset of position
+        :type offset: [ :obj:`float`, :obj:`float`]
+        """
+        if offset is None:
+            offset = [0.5, 0.5]
+        self.__positions = positionlist or []
+        eid = len(self.__positions)
+        # print("POS", self.__positions)
+
+        for ei in range(min(eid, len(self.__ellipse))):
+            coords = self.__positions[ei]
+            self.__ellipse[ei].setPos([coords[0] + offset[0] - coords[2],
+                                       coords[1] + offset[1] - coords[3]])
+            self.__ellipse[ei].setSize([2 * coords[2], 2 * coords[3]])
+            self.__ellipse[ei].setAngle(coords[4])
+            if self._enabled:
+                self.__ellipse[ei].show()
+        while eid > len(self.__ellipse):
+            ie = len(self.__ellipse)
+            coords = self.__positions[ie]
+
+            el = _pg.EllipseROI([coords[0] + offset[0] - coords[2],
+                                 coords[1] + offset[1] - coords[3]],
+                                [2 * coords[2], 2 * coords[3]],
+                                angle=coords[4],
+                                movable=False,
+                                resizable=False,
+                                rotatable=False)
+            if self._enabled:
+                el.show()
+            self._mainwidget.viewbox().addItem(el)
+            while el.handles:
+                el.removeHandle(0)
+            self.__ellipse.append(el)
+        for ei in range(eid, len(self.__ellipse)):
+            self.__ellipse[ei].hide()
+
+    def transpose(self):
+        """ transposes maxima
+        """
+        positionlist = [(pos[1], pos[0], pos[3], pos[2], pos[4])
+                        for pos in self.__positions]
+        self.setEllipsePos(positionlist)

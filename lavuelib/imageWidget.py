@@ -207,6 +207,7 @@ class ImageWidget(QtWidgets.QWidget):
                 displayExtensions.MaximaExtension,
                 displayExtensions.VHBoundsExtension,
                 displayExtensions.RegionsExtension,
+                displayExtensions.EllipseExtension,
             ]
         )
 
@@ -2625,6 +2626,18 @@ class ImageWidget(QtWidgets.QWidget):
         """
         return self.__displaywidget.extension('maxima').\
             setMaximaPos(positionlist, offset)
+
+    def setEllipsePos(self, positionlist, offset=None):
+        """
+        sets ellipse postions
+
+        :param positionlist: [(x1, y1), ... , (xn, yn)]
+        :type positionlist: :obj:`list` < (float, float) >
+        :param offset: offset of position
+        :type offset: [ :obj:`float`, :obj:`float`]
+        """
+        return self.__displaywidget.extension('ellipse').\
+            setEllipsePos(positionlist, offset)
 
     def setrgb(self, status=True):
         """ sets RGB on/off
