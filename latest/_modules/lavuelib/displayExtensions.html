@@ -2406,6 +2406,100 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">positionlist</span> <span class="o">=</span> <span class="p">[(</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__positions</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setMaximaPos</span><span class="p">(</span><span class="n">positionlist</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="EllipseExtension"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.displayExtensions.EllipseExtension">[docs]</a><span class="k">class</span> <span class="nc">EllipseExtension</span><span class="p">(</span><span class="n">DisplayExtension</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param parent: parent object</span>
+<span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">DisplayExtension</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+
+        <span class="c1">#: (:obj:`str`) tool name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;ellipse&quot;</span>
+
+        <span class="c1">#: (:obj:`list` &lt; &gt; ) ellipse parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__positions</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1">#: (:obj:`list` &lt; &gt; ) ellipse objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ellipse</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="EllipseExtension.show"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.displayExtensions.EllipseExtension.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set subwidget properties</span>
+
+<span class="sd">        :param parameters: tool parameters</span>
+<span class="sd">        :type parameters: :class:`lavuelib.toolWidget.ToolParameters`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">ellipse</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__showEllipse</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">ellipse</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">ellipse</span></div>
+
+    <span class="k">def</span> <span class="nf">__showEllipse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; shows or hides ellipse</span>
+
+<span class="sd">        :param status: will be shown</span>
+<span class="sd">        :type status: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__positions</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ellipse</span><span class="p">:</span>
+                    <span class="n">el</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ellipse</span><span class="p">:</span>
+                <span class="n">el</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+
+<div class="viewcode-block" id="EllipseExtension.setEllipsePos"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.displayExtensions.EllipseExtension.setEllipsePos">[docs]</a>    <span class="k">def</span> <span class="nf">setEllipsePos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">positionlist</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        sets ellipse positions</span>
+
+<span class="sd">        :param positionlist: [(x1, y1), ... , (xn, yn)]</span>
+<span class="sd">        :type positionlist: :obj:`list` &lt; (:obj:`float`, :obj:`float`) &gt;</span>
+<span class="sd">        :param offset: offset of position</span>
+<span class="sd">        :type offset: [ :obj:`float`, :obj:`float`]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">offset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__positions</span> <span class="o">=</span> <span class="n">positionlist</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">eid</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__positions</span><span class="p">)</span>
+        <span class="c1"># print(&quot;POS&quot;, self.__positions)</span>
+
+        <span class="k">for</span> <span class="n">ei</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">eid</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ellipse</span><span class="p">))):</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__positions</span><span class="p">[</span><span class="n">ei</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ellipse</span><span class="p">[</span><span class="n">ei</span><span class="p">]</span><span class="o">.</span><span class="n">setPos</span><span class="p">([</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                                       <span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">coords</span><span class="p">[</span><span class="mi">3</span><span class="p">]])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ellipse</span><span class="p">[</span><span class="n">ei</span><span class="p">]</span><span class="o">.</span><span class="n">setSize</span><span class="p">([</span><span class="mi">2</span> <span class="o">*</span> <span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">coords</span><span class="p">[</span><span class="mi">3</span><span class="p">]])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ellipse</span><span class="p">[</span><span class="n">ei</span><span class="p">]</span><span class="o">.</span><span class="n">setAngle</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__ellipse</span><span class="p">[</span><span class="n">ei</span><span class="p">]</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">eid</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ellipse</span><span class="p">):</span>
+            <span class="n">ie</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ellipse</span><span class="p">)</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__positions</span><span class="p">[</span><span class="n">ie</span><span class="p">]</span>
+
+            <span class="n">el</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">EllipseROI</span><span class="p">([</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                                 <span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">coords</span><span class="p">[</span><span class="mi">3</span><span class="p">]],</span>
+                                <span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">coords</span><span class="p">[</span><span class="mi">3</span><span class="p">]],</span>
+                                <span class="n">angle</span><span class="o">=</span><span class="n">coords</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+                                <span class="n">movable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                <span class="n">resizable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                <span class="n">rotatable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span><span class="p">:</span>
+                <span class="n">el</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">viewbox</span><span class="p">()</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">el</span><span class="o">.</span><span class="n">handles</span><span class="p">:</span>
+                <span class="n">el</span><span class="o">.</span><span class="n">removeHandle</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ellipse</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ei</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">eid</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ellipse</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ellipse</span><span class="p">[</span><span class="n">ei</span><span class="p">]</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EllipseExtension.transpose"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.displayExtensions.EllipseExtension.transpose">[docs]</a>    <span class="k">def</span> <span class="nf">transpose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; transposes maxima</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">positionlist</span> <span class="o">=</span> <span class="p">[(</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+                        <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__positions</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setEllipsePos</span><span class="p">(</span><span class="n">positionlist</span><span class="p">)</span></div></div>
 </pre></div>
 
             <div class="clearer"></div>
@@ -2430,6 +2524,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.96.0/index.html">v2.96.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.95.0/index.html">v2.95.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.94.2/index.html">v2.94.2</a></li>
       <li><a class="reference external" href="../../index/../../v2.93.1/index.html">v2.93.1</a></li>
