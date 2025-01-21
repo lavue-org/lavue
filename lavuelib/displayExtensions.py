@@ -2419,10 +2419,10 @@ class EllipseExtension(DisplayExtension):
         eid = len(self.__positions)
         # print("POS", self.__positions)
 
-        for ei in range(min(eid,len(self.__ellipse))):
+        for ei in range(min(eid, len(self.__ellipse))):
             coords = self.__positions[ei]
             self.__ellipse[ei].setPos([coords[0] + offset[0] - coords[2],
-                                   coords[1] + offset[1] - coords[3]])
+                                       coords[1] + offset[1] - coords[3]])
             self.__ellipse[ei].setSize([2 * coords[2], 2 * coords[3]])
             self.__ellipse[ei].setAngle(coords[4])
             if self._enabled:
@@ -2432,13 +2432,12 @@ class EllipseExtension(DisplayExtension):
             coords = self.__positions[ie]
 
             el = _pg.EllipseROI([coords[0] + offset[0] - coords[2],
-                               coords[1] + offset[1] - coords[3]],
-                              [2 * coords[2], 2 * coords[3]],
+                                 coords[1] + offset[1] - coords[3]],
+                                [2 * coords[2], 2 * coords[3]],
                                 angle=coords[4],
                                 movable=False,
                                 resizable=False,
-                                rotatable=False
-                                )
+                                rotatable=False)
             if self._enabled:
                 el.show()
             self._mainwidget.viewbox().addItem(el)

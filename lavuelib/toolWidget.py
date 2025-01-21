@@ -7987,10 +7987,10 @@ class TwoDFitToolWidget(ToolBaseWidget):
             if self.__last_params is not None and self.__param_names and \
                     "x_0" in self.__param_names and \
                     "y_0" in self.__param_names:
-                ix = self.__param_names.index("x_0") 
+                ix = self.__param_names.index("x_0")
                 iy = self.__param_names.index("y_0")
-                if len(self.__last_params) > ix  and \
-                         len(self.__last_params) > iy:
+                if len(self.__last_params) > ix and \
+                        len(self.__last_params) > iy:
                     self._mainwidget.setMaximaPos(
                         [[self.__last_params[ix], self.__last_params[iy]]])
                 else:
@@ -8009,22 +8009,24 @@ class TwoDFitToolWidget(ToolBaseWidget):
                 isy = self.__param_names.index("sigma_y")
                 ia = self.__param_names.index("theta (optional)")
                 # print("WE", ix,iy,isx,isy,ia)
-                if len(self.__last_params) > ix  and \
-                        len(self.__last_params) > iy  and \
-                        len(self.__last_params) > isx  and \
+                if len(self.__last_params) > ix and \
+                        len(self.__last_params) > iy and \
+                        len(self.__last_params) > isx and \
                         len(self.__last_params) > isy:
-                    theta =  0.0
+                    theta = 0.0
                     if len(self.__last_params) > ia:
-                      theta = self.__last_params[ia]
+                        theta = self.__last_params[ia]
                     self._mainwidget.setEllipsePos(
                         [[self.__last_params[ix], self.__last_params[iy],
                           self.__last_params[isx], self.__last_params[isy],
                           theta],
                          [self.__last_params[ix], self.__last_params[iy],
-                          2 * self.__last_params[isx], 2 * self.__last_params[isy],
+                          2 * self.__last_params[isx],
+                          2 * self.__last_params[isy],
                           theta],
                          [self.__last_params[ix], self.__last_params[iy],
-                          3 * self.__last_params[isx], 3 * self.__last_params[isy],
+                          3 * self.__last_params[isx],
+                          3 * self.__last_params[isy],
                           theta]])
                 else:
                     self._mainwidget.setEllipsePos([])
