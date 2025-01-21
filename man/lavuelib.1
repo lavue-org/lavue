@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "LAVUELIB" "1" "Dec 21, 2024" "2.95" "LaVue"
+.TH "LAVUELIB" "1" "Jan 21, 2025" "2.96" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .sp
@@ -4440,6 +4440,53 @@ set subwidget properties
 .TP
 .B transpose()
 transposes subwidget
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  lavuelib.displayExtensions.EllipseExtension(parent=None)
+Bases: \fI\%DisplayExtension\fP
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name
+(\fI\%str\fP) tool name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setEllipsePos(positionlist, offset=None)
+sets ellipse positions
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBpositionlist\fP (\fI\%list\fP < (\fI\%float\fP, \fI\%float\fP) >) – [(x1, y1), … , (xn, yn)]
+.IP \(bu 2
+\fBoffset\fP ([ \fI\%float\fP, \fI\%float\fP]) – offset of position
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B show(parameters)
+set subwidget properties
+.INDENT 7.0
+.TP
+.B Parameters
+\fBparameters\fP (\fBlavuelib.toolWidget.ToolParameters\fP) – tool parameters
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B transpose()
+transposes maxima
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -10497,7 +10544,7 @@ exporter parameters
 set of image sources
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.ASAPO  =  False
+.B lavuelib.imageSource.ASAPO  =  True
 (\fI\%bool\fP) asapo imported
 .UNINDENT
 .INDENT 0.0
@@ -10822,7 +10869,7 @@ image name, image data, json dictionary with metadata
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.HIDRA  =  False
+.B lavuelib.imageSource.HIDRA  =  True
 (\fI\%bool\fP) hidra imported
 .UNINDENT
 .INDENT 0.0
@@ -12431,6 +12478,21 @@ sets double click lock
 .TP
 .B Parameters
 \fBstatus\fP (\fI\%bool\fP) – status flag
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setEllipsePos(positionlist, offset=None)
+sets ellipse postions
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBpositionlist\fP (\fI\%list\fP < (float, float) >) – [(x1, y1), … , (xn, yn)]
+.IP \(bu 2
+\fBoffset\fP ([ \fI\%float\fP, \fI\%float\fP]) – offset of position
+.UNINDENT
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
