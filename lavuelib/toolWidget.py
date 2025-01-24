@@ -227,6 +227,8 @@ class ToolParameters(object):
         self.vhbounds = False
         #: (:obj:`bool`) angle range enabled
         self.regions = False
+        #: (:obj:`str`) show ellipse
+        self.ellipse = False
 
 
 class ToolBaseWidget(QtWidgets.QWidget):
@@ -7800,6 +7802,8 @@ class TwoDFitToolWidget(ToolBaseWidget):
 
         self.parameters.scale = False
         self.parameters.crosshairlocker = False
+        self.parameters.maxima = True
+        self.parameters.ellipse = True
         self.parameters.infolineedit = ""
         self.parameters.infotips = \
             "fitted parameters"
@@ -7979,6 +7983,55 @@ class TwoDFitToolWidget(ToolBaseWidget):
                 self.__last_cond = np.linalg.cond(self.__last_pcov)
             except Exception:
                 self.__last_cond = None
+
+            if self.__last_params is not None and self.__param_names and \
+                    "x_0" in self.__param_names and \
+                    "y_0" in self.__param_names:
+                ix = self.__param_names.index("x_0")
+                iy = self.__param_names.index("y_0")
+                if len(self.__last_params) > ix and \
+                        len(self.__last_params) > iy:
+                    self._mainwidget.setMaximaPos(
+                        [[self.__last_params[ix], self.__last_params[iy]]])
+                else:
+                    self._mainwidget.setMaximaPos([])
+            else:
+                self._mainwidget.setMaximaPos([])
+            if self.__last_params is not None and self.__param_names and \
+                    "x_0" in self.__param_names and \
+                    "y_0" in self.__param_names and \
+                    "sigma_x" in self.__param_names and \
+                    "sigma_y" in self.__param_names and \
+                    "theta (optional)" in self.__param_names:
+                ix = self.__param_names.index("x_0")
+                iy = self.__param_names.index("y_0")
+                isx = self.__param_names.index("sigma_x")
+                isy = self.__param_names.index("sigma_y")
+                ia = self.__param_names.index("theta (optional)")
+                # print("WE", ix,iy,isx,isy,ia)
+                if len(self.__last_params) > ix and \
+                        len(self.__last_params) > iy and \
+                        len(self.__last_params) > isx and \
+                        len(self.__last_params) > isy:
+                    theta = 0.0
+                    if len(self.__last_params) > ia:
+                        theta = self.__last_params[ia]
+                    self._mainwidget.setEllipsePos(
+                        [[self.__last_params[ix], self.__last_params[iy],
+                          self.__last_params[isx], self.__last_params[isy],
+                          theta],
+                         [self.__last_params[ix], self.__last_params[iy],
+                          2 * self.__last_params[isx],
+                          2 * self.__last_params[isy],
+                          theta],
+                         [self.__last_params[ix], self.__last_params[iy],
+                          3 * self.__last_params[isx],
+                          3 * self.__last_params[isy],
+                          theta]])
+                else:
+                    self._mainwidget.setEllipsePos([])
+            else:
+                self._mainwidget.setEllipsePos([])
             self._message()
 
     @QtCore.pyqtSlot()
