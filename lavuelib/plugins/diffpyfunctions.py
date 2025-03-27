@@ -82,3 +82,107 @@ class DiffPDF(object):
             #     userplot["left"] = ""
             # print("USERPLOT", len(qq), len(x))
         return userplot
+
+
+class DiffPDFHistory(object):
+
+    """diffpy PDF user function"""
+
+    def __init__(self, configuration=None):
+        """ constructor
+
+        :param configuration: JSON list with config file and diff index
+        :type configuration: :obj:`str`
+        """
+        #: (:obj:`list` <:obj: `str`>) list of indexes for gap
+        self.__configfile = None
+
+        #: (:obj: `int`) buffer length
+        self.__buflen = 20
+        #: (:obj: `float`) waterfall plot shift
+        self.__shift = 1.0
+        #: (:obj: `int`) diff label index
+        self.__index = 1
+        #: (:obj: `float`) number of characters cut from the image name
+        self.__cut = -28
+        #: (:obj: `list`) buffer
+        self.__buffer = []
+        #: (:obj: `int`) plot counter
+        self.__counter = -1
+
+        try:
+            config = json.loads(configuration)
+            self.__configfile = str(config[0])
+            try:
+                self.__index = int(config[1])
+            except Exception:
+                pass
+
+            try:
+                self.__buflen = max(int(config[2]), 1)
+            except Exception:
+                pass
+
+            try:
+                #: (:obj: `float`) buffer length
+                self.__shift = float(config[3])
+            except Exception:
+                pass
+
+            try:
+                #: (:obj: `float`) buffer length
+                self.__cut = int(config[4])
+            except Exception:
+                pass
+        except Exception:
+            self.__configfile = str(configuration)
+
+        from diffpy.pdfgetx import loadPDFConfig
+        #: configuration
+        self.__cfg = loadPDFConfig(self.__configfile)
+
+    def __call__(self, results):
+        """ call method
+
+        :param results: dictionary with tool results
+        :type results: :obj:`dict`
+        :returns: dictionary with user plot data
+        :rtype: :obj:`dict`
+        """
+        userplot = {}
+        from diffpy.pdfgetx import PDFGetter
+        self.__pg = PDFGetter(config=self.__cfg)
+        label = "diff_%s" % self.__index
+
+        if label in results and self.__configfile and "imagename" in results:
+            qq = results[label][0]
+            df = results[label][1]
+            data_gr = self.__pg(qq, df)
+            x = data_gr[0]
+            y = data_gr[1]
+
+            if len(self.__buffer) >= self.__buflen:
+                self.__buffer.pop(0)
+                self.__counter += 1
+            if self.__shift:
+                for i in range(len(self.__buffer)):
+                    self.__buffer[i][1] = [(y + self.__shift)
+                                           for y in self.__buffer[i][1]]
+            self.__buffer.append([x, y, results["imagename"]])
+
+            userplot["nrplots"] = len(self.__buffer)
+            for i, xy in enumerate(self.__buffer):
+                userplot["x_%s" % (i + 1)] = xy[0]
+                userplot["y_%s" % (i + 1)] = xy[1]
+                userplot["name_%s" % (i + 1)] = "%s (+ %s)" % (
+                    xy[2][self.__cut:],
+                    ((len(self.__buffer) - i - 1) * self.__shift))
+                userplot["hsvcolor_%s" % (i + 1)] = \
+                    ((i + self.__counter) % self.__buflen)/float(self.__buflen)
+
+            userplot["title"] = "History of %s" % label
+            userplot["legend"] = True
+            userplot["legend_offset"] = -1
+            userplot["title"] = "DiffPDFHistory: %s with %s" % (
+                label, self.__configfile)
+        return userplot

@@ -48,8 +48,22 @@ class LineCut(object):
         except Exception:
             self.__buflen = 20
 
+        try:
+            #: (:obj: `float`) buffer length
+            self.__shift = float(json.loads(configuration)[2])
+        except Exception:
+            self.__shift = 1.0
+
+        try:
+            #: (:obj: `float`) buffer length
+            self.__cut = int(json.loads(configuration)[3])
+        except Exception:
+            self.__cut = -28
+
         #: (:obj: `list`) buffer
         self.__buffer = []
+
+        self.__counter = -1
 
     def __call__(self, results):
         """ call method
@@ -61,23 +75,33 @@ class LineCut(object):
         """
         userplot = {}
         label = "linecut_%s" % self.__index
-        if label in results:
+        label = "linecut_%s" % self.__index
+        if label in results and "imagename" in results:
             if len(self.__buffer) >= self.__buflen:
                 self.__buffer.pop(0)
-            self.__buffer.append([results[label][0], results[label][1]])
+                self.__counter += 1
+            if self.__shift:
+                for i in range(len(self.__buffer)):
+                    self.__buffer[i][1] = [(y + self.__shift)
+                                           for y in self.__buffer[i][1]]
+            self.__buffer.append([results[label][0], results[label][1],
+                                  results["imagename"]])
             userplot["nrplots"] = len(self.__buffer)
             for i, xy in enumerate(self.__buffer):
                 userplot["x_%s" % (i + 1)] = xy[0]
                 userplot["y_%s" % (i + 1)] = xy[1]
-                if i != len(self.__buffer) - 1:
-                    userplot["color_%s" % (i + 1)] = i/float(self.__buflen)
-                else:
-                    userplot["color_%s" % (i + 1)] = 'r'
+                userplot["name_%s" % (i + 1)] = "%s (+ %s)" % (
+                    xy[2][self.__cut:],
+                    ((len(self.__buffer) - i - 1) * self.__shift))
+                userplot["hsvcolor_%s" % (i + 1)] = \
+                    ((i + self.__counter) % self.__buflen)/float(self.__buflen)
 
             userplot["title"] = "History of %s" % label
             if "unit" in results:
                 userplot["bottom"] = results["unit"]
                 userplot["left"] = "intensity"
+            userplot["legend"] = True
+            userplot["legend_offset"] = -1
         return userplot
 
 

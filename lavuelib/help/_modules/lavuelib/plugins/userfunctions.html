@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.plugins.userfunctions &#8212; LaVue 2.96.0 documentation</title>
+    <title>lavuelib.plugins.userfunctions &#8212; LaVue 2.97.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css" />
     
@@ -33,7 +33,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">LaVue 2.96.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">LaVue 2.97.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.plugins.userfunctions</a></li> 
       </ul>
@@ -95,8 +95,22 @@
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span> <span class="o">=</span> <span class="mi">20</span>
 
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1">#: (:obj: `float`) buffer length</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__shift</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">)[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__shift</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1">#: (:obj: `float`) buffer length</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__cut</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">)[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__cut</span> <span class="o">=</span> <span class="o">-</span><span class="mi">28</span>
+
         <span class="c1">#: (:obj: `list`) buffer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; call method</span>
@@ -108,23 +122,33 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">userplot</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;linecut_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__index</span>
-        <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;linecut_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__index</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">results</span> <span class="ow">and</span> <span class="s2">&quot;imagename&quot;</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">1</span><span class="p">]])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__shift</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">)):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__shift</span><span class="p">)</span>
+                                           <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                                  <span class="n">results</span><span class="p">[</span><span class="s2">&quot;imagename&quot;</span><span class="p">]])</span>
             <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;nrplots&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">xy</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">):</span>
                 <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;x_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;y_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;color_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">i</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;color_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span>
+                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;name_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> (+ </span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">xy</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">__cut</span><span class="p">:],</span>
+                    <span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__shift</span><span class="p">))</span>
+                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;hsvcolor_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> \
+                    <span class="p">((</span><span class="n">i</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span><span class="p">)</span>
 
             <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;History of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">label</span>
             <span class="k">if</span> <span class="s2">&quot;unit&quot;</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
                 <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;bottom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span>
                 <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;intensity&quot;</span>
+            <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;legend&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;legend_offset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="k">return</span> <span class="n">userplot</span></div>
 
 
@@ -295,7 +319,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">LaVue 2.96.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">LaVue 2.97.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.plugins.userfunctions</a></li> 
       </ul>
