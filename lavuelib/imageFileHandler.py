@@ -30,6 +30,7 @@
 import struct
 import numpy as np
 import sys
+import os
 import json
 import logging
 
@@ -439,6 +440,8 @@ class ImageFileHandler(object):
         self.__metadata = ""
 
         try:
+            if not os.path.isfile(fname):
+                raise Exception("File '%s' cannot be opened \n" % (fname))
             if FABIO:
                 self.__image = fabio.open(fname)
                 self.__data = self.__image.data
