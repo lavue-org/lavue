@@ -333,6 +333,14 @@ class ImageWidget(QtWidgets.QWidget):
                 try:
                     userplot = ufun(results)
                     if userplot:
+                        if "legend" in userplot and userplot["legend"]:
+                            self.__userplot.plotItem.legend.show()
+                            if isinstance(userplot["legend"], (int, float)):
+                                if "legend_offset" in userplot:
+                                    self.__userplot.plotItem.legend.setOffset(
+                                        userplot["legend_offset"])
+                        else:
+                            self.__userplot.plotItem.legend.hide()
                         try:
                             nrplots = max(int(userplot["nrplots"]), 0)
                         except Exception:
@@ -345,7 +353,13 @@ class ImageWidget(QtWidgets.QWidget):
                                 self.__usercurves[i].show()
                             for i in range(nrplots, len(self.__usercurves)):
                                 self.__usercurves[i].hide()
+                                self.__userplot.plotItem.legend.removeItem(
+                                    self.__usercurves[0])
                             self.__nrplots = nrplots
+
+                        for curve in self.__usercurves:
+                            self.__userplot.plotItem.legend.removeItem(
+                                curve)
 
                         if "x" in userplot and "y" in userplot:
                             self.__usercurves[0].setVisible(False)
@@ -370,10 +384,15 @@ class ImageWidget(QtWidgets.QWidget):
                         if "hsvcolor" in userplot:
                             self.__usercurves[0].setPen(
                                 _pg.hsvColor(userplot["hsvcolor"]))
+                        if "legend" in userplot and userplot["legend"]:
+                            if 'name' in userplot:
+                                self.__userplot.plotItem.legend.addItem(
+                                    self.__usercurves[0], userplot['name'])
 
                         for i in range(nrplots):
                             xilabel = "x_%s" % (i + 1)
                             yilabel = "y_%s" % (i + 1)
+                            yiname = "name_%s" % (i + 1)
                             rgblabel = "color_%s" % (i + 1)
                             hsvlabel = "hsvcolor_%s" % (i + 1)
                             if xilabel in userplot and yilabel in userplot:
@@ -390,7 +409,7 @@ class ImageWidget(QtWidgets.QWidget):
                                     self.__usercurves[i].setPen(
                                         _pg.hsvColor(userplot[hsvlabel]))
                                 self.__usercurves[i].setVisible(True)
-                            elif "y" in userplot:
+                            elif yilabel in userplot:
                                 self.__usercurves[i].setVisible(False)
                                 yy = userplot[yilabel]
                                 if isinstance(yy, list) or \
@@ -405,6 +424,10 @@ class ImageWidget(QtWidgets.QWidget):
                                 self.__usercurves[i].setVisible(True)
                             else:
                                 self.__usercurves[i].setVisible(False)
+                            if "legend" in userplot and userplot["legend"]:
+                                if yiname in userplot:
+                                    self.__userplot.plotItem.legend.addItem(
+                                        self.__usercurves[i], userplot[yiname])
 
                         pars = {"title": "", "bottom": "", "left": ""}
                         if "title" in userplot:
