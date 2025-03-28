@@ -251,6 +251,12 @@ class ImageWidget(QtWidgets.QWidget):
         #: (:obj:`int`) current plot number
         self.__nrplots = 0
 
+        self.__userimageplot = _pg.PlotWidget(self)
+        self.__userimage = _pg.ImageItem()
+        self.__userimageplot.getViewBox().addItem(self.__userimage)
+        # self.__userimage.hide()
+        self.__userimageplot.hide()
+
         #: (:class:`pyqtgraph.PlotWidget`) right 1D plot widget
         self.__rightplot = memoExportDialog.MemoPlotWidget(self)
         self.__rightplot.getViewBox().menu.ctrl[0].mouseCheck.hide()
@@ -268,6 +274,7 @@ class ImageWidget(QtWidgets.QWidget):
         self.__ui.twoDVerticalLayout.addWidget(self.__displaywidget)
         self.__ui.oneDBottomVerticalLayout.addWidget(self.__bottomplot)
         self.__ui.userBottomVerticalLayout.addWidget(self.__userplot)
+        self.__ui.userBottomVerticalLayout.addWidget(self.__userimageplot)
 
         self.__ui.oneDRightHorizontalLayout.addWidget(self.__rightplot)
 
@@ -321,122 +328,28 @@ class ImageWidget(QtWidgets.QWidget):
         """ plot user function
 
         :param results: tool results
-        :type results: :obj:`str`
+        :type results: :obj:`dict`
         """
         if results is None or not self.__settings.showuserplot \
            or not self.__userfunctions:
             self.onedshowuserplot(False)
+            self.twodshowuserplot(False)
         else:
-            self.onedshowuserplot(True)
             for ufun in self.__userfunctions:
                 #  if True:
                 try:
                     userplot = ufun(results)
                     if userplot:
-                        if "legend" in userplot and userplot["legend"]:
-                            self.__userplot.plotItem.legend.show()
-                            if isinstance(userplot["legend"], (int, float)):
-                                if "legend_offset" in userplot:
-                                    self.__userplot.plotItem.legend.setOffset(
-                                        userplot["legend_offset"])
-                        else:
-                            self.__userplot.plotItem.legend.hide()
-                        try:
-                            nrplots = max(int(userplot["nrplots"]), 0)
-                        except Exception:
-                            nrplots = 0
-
-                        if self.__nrplots != nrplots:
-                            while nrplots > len(self.__usercurves):
-                                self.__usercurves.append(self.oneduserplot())
-                            for i in range(nrplots):
-                                self.__usercurves[i].show()
-                            for i in range(nrplots, len(self.__usercurves)):
-                                self.__usercurves[i].hide()
-                                self.__userplot.plotItem.legend.removeItem(
-                                    self.__usercurves[0])
-                            self.__nrplots = nrplots
-
-                        for curve in self.__usercurves:
-                            self.__userplot.plotItem.legend.removeItem(
-                                curve)
-
-                        if "x" in userplot and "y" in userplot:
-                            self.__usercurves[0].setVisible(False)
-                            xx = userplot["x"]
-                            yy = userplot["y"]
-                            if isinstance(yy, list) or \
-                                    isinstance(yy, np.ndarray):
-                                self.__usercurves[0].setData(x=xx, y=yy)
-                            self.__usercurves[0].setVisible(True)
-                        elif "y" in userplot:
-                            self.__usercurves[0].setVisible(False)
-                            yy = userplot["y"]
-                            if isinstance(yy, list) or \
-                                    isinstance(yy, np.ndarray):
-                                self.__usercurves[0].setData(y=yy)
-                            self.__usercurves[0].setVisible(True)
-                        else:
-                            self.__usercurves[0].setVisible(False)
-                        if "color" in userplot:
-                            self.__usercurves[0].setPen(
-                                _pg.mkColor(userplot["color"]))
-                        if "hsvcolor" in userplot:
-                            self.__usercurves[0].setPen(
-                                _pg.hsvColor(userplot["hsvcolor"]))
-                        if "legend" in userplot and userplot["legend"]:
-                            if 'name' in userplot:
-                                self.__userplot.plotItem.legend.addItem(
-                                    self.__usercurves[0], userplot['name'])
-
-                        for i in range(nrplots):
-                            xilabel = "x_%s" % (i + 1)
-                            yilabel = "y_%s" % (i + 1)
-                            yiname = "name_%s" % (i + 1)
-                            rgblabel = "color_%s" % (i + 1)
-                            hsvlabel = "hsvcolor_%s" % (i + 1)
-                            if xilabel in userplot and yilabel in userplot:
-                                self.__usercurves[i].setVisible(False)
-                                xx = userplot[xilabel]
-                                yy = userplot[yilabel]
-                                if isinstance(yy, list) or \
-                                        isinstance(yy, np.ndarray):
-                                    self.__usercurves[i].setData(x=xx, y=yy)
-                                if rgblabel in userplot:
-                                    self.__usercurves[i].setPen(
-                                        _pg.mkColor(userplot[rgblabel]))
-                                if hsvlabel in userplot:
-                                    self.__usercurves[i].setPen(
-                                        _pg.hsvColor(userplot[hsvlabel]))
-                                self.__usercurves[i].setVisible(True)
-                            elif yilabel in userplot:
-                                self.__usercurves[i].setVisible(False)
-                                yy = userplot[yilabel]
-                                if isinstance(yy, list) or \
-                                        isinstance(yy, np.ndarray):
-                                    self.__usercurves[i].setData(y=yy)
-                                if rgblabel in userplot:
-                                    self.__usercurves[i].setPen(
-                                        _pg.mkColor(userplot[rgblabel]))
-                                if hsvlabel in userplot:
-                                    self.__usercurves[i].setPen(
-                                        _pg.hsvColor(userplot[hsvlabel]))
-                                self.__usercurves[i].setVisible(True)
-                            else:
-                                self.__usercurves[i].setVisible(False)
-                            if "legend" in userplot and userplot["legend"]:
-                                if yiname in userplot:
-                                    self.__userplot.plotItem.legend.addItem(
-                                        self.__usercurves[i], userplot[yiname])
-
-                        pars = {"title": "", "bottom": "", "left": ""}
-                        if "title" in userplot:
-                            pars["title"] = userplot["title"]
-                        if "bottom" in userplot:
-                            pars["bottom"] = userplot["bottom"]
-                        if "left" in userplot:
-                            pars["left"] = userplot["left"]
-                        self.__userplot.setLabels(**pars)
+                        if "image" in userplot:
+                            self.twodshowuserplot(True)
+                            if "function" not in userplot:
+                                self.onedshowuserplot(False)
+                            self.plotUser2DFunction(userplot)
+                        if "image" not in userplot or "function" in userplot:
+                            self.onedshowuserplot(True)
+                            if "image" not in userplot:
+                                self.twodshowuserplot(False)
+                            self.plotUser1DFunction(userplot)
                     else:
                         for ucr in self.__usercurves:
                             ucr.setVisible(False)
@@ -454,6 +367,157 @@ class ImageWidget(QtWidgets.QWidget):
                         "%s" % value)
                     self.stopSignal.emit()
                 break
+
+    def plotUser2DFunction(self, userplot):
+        """ plot user image
+
+        :param userplot: tool results
+        :type userplot: :obj:`dict`
+        """
+        if "image" not in userplot:
+            return
+        if isinstance(userplot["image"], np.ndarray):
+            self.__userimage.setImage(userplot["image"])
+        if "toolscale" in userplot and isinstance(userplot["toolscale"], list):
+            self.setUserImageScale(userplot["toolscale"])
+
+    def setUserImageScale(self, tscale):
+        """set user image scale
+
+        :param tscale: user position and scale
+        :type tscale: :obj:`list`
+        """
+        px = 0.0
+        py = 0.0
+        sx = 1.0
+        sy = 1.0
+        try:
+            if isinstance(tscale, list):
+                if len(tscale) > 0 and len(tscale[0]) > 0:
+                    px = tscale[0][0]
+                if len(tscale) > 0 and len(tscale[1]) > 1:
+                    py = tscale[0][1]
+                if len(tscale) > 1 and len(tscale[1]) > 0:
+                    sx = tscale[1][0]
+                if len(tscale) > 1 and len(tscale[1]) > 1:
+                    sx = tscale[1][1]
+        except Exception:
+            pass
+        tr = self.__userimage.transform()
+        self.__userimage.setPos(px, py)
+        tr.scale(sx, sy)
+        self.__userimage.setTransform(tr)
+
+    def plotUser1DFunction(self, userplot):
+        """ plot user functions
+
+        :param userplot: tool results
+        :type userplot: :obj:`str`
+        """
+        if "legend" in userplot and userplot["legend"]:
+            self.__userplot.plotItem.legend.show()
+            if isinstance(userplot["legend"], (int, float)):
+                if "legend_offset" in userplot:
+                    self.__userplot.plotItem.legend.setOffset(
+                        userplot["legend_offset"])
+        else:
+            self.__userplot.plotItem.legend.hide()
+        try:
+            nrplots = max(int(userplot["nrplots"]), 0)
+        except Exception:
+            nrplots = 0
+
+        if self.__nrplots != nrplots:
+            while nrplots > len(self.__usercurves):
+                self.__usercurves.append(self.oneduserplot())
+            for i in range(nrplots):
+                self.__usercurves[i].show()
+            for i in range(nrplots, len(self.__usercurves)):
+                self.__usercurves[i].hide()
+                self.__userplot.plotItem.legend.removeItem(
+                    self.__usercurves[0])
+            self.__nrplots = nrplots
+
+        for curve in self.__usercurves:
+            self.__userplot.plotItem.legend.removeItem(
+                curve)
+
+        if "x" in userplot and "y" in userplot:
+            self.__usercurves[0].setVisible(False)
+            xx = userplot["x"]
+            yy = userplot["y"]
+            if isinstance(yy, list) or \
+                    isinstance(yy, np.ndarray):
+                self.__usercurves[0].setData(x=xx, y=yy)
+            self.__usercurves[0].setVisible(True)
+        elif "y" in userplot:
+            self.__usercurves[0].setVisible(False)
+            yy = userplot["y"]
+            if isinstance(yy, list) or \
+                    isinstance(yy, np.ndarray):
+                self.__usercurves[0].setData(y=yy)
+            self.__usercurves[0].setVisible(True)
+        else:
+            self.__usercurves[0].setVisible(False)
+        if "color" in userplot:
+            self.__usercurves[0].setPen(
+                _pg.mkColor(userplot["color"]))
+        if "hsvcolor" in userplot:
+            self.__usercurves[0].setPen(
+                _pg.hsvColor(userplot["hsvcolor"]))
+        if "legend" in userplot and userplot["legend"]:
+            if 'name' in userplot:
+                self.__userplot.plotItem.legend.addItem(
+                    self.__usercurves[0], userplot['name'])
+
+        for i in range(nrplots):
+            xilabel = "x_%s" % (i + 1)
+            yilabel = "y_%s" % (i + 1)
+            yiname = "name_%s" % (i + 1)
+            rgblabel = "color_%s" % (i + 1)
+            hsvlabel = "hsvcolor_%s" % (i + 1)
+            if xilabel in userplot and yilabel in userplot:
+                self.__usercurves[i].setVisible(False)
+                xx = userplot[xilabel]
+                yy = userplot[yilabel]
+                if isinstance(yy, list) or \
+                        isinstance(yy, np.ndarray):
+                    self.__usercurves[i].setData(x=xx, y=yy)
+                if rgblabel in userplot:
+                    self.__usercurves[i].setPen(
+                        _pg.mkColor(userplot[rgblabel]))
+                if hsvlabel in userplot:
+                    self.__usercurves[i].setPen(
+                        _pg.hsvColor(userplot[hsvlabel]))
+                self.__usercurves[i].setVisible(True)
+            elif yilabel in userplot:
+                self.__usercurves[i].setVisible(False)
+                yy = userplot[yilabel]
+                if isinstance(yy, list) or \
+                        isinstance(yy, np.ndarray):
+                    self.__usercurves[i].setData(y=yy)
+                if rgblabel in userplot:
+                    self.__usercurves[i].setPen(
+                        _pg.mkColor(userplot[rgblabel]))
+                if hsvlabel in userplot:
+                    self.__usercurves[i].setPen(
+                        _pg.hsvColor(userplot[hsvlabel]))
+                self.__usercurves[i].setVisible(True)
+            else:
+                self.__usercurves[i].setVisible(False)
+            if "legend" in userplot and userplot["legend"]:
+                if yiname in userplot:
+                    self.__userplot.plotItem.legend.addItem(
+                        self.__usercurves[i], userplot[yiname])
+
+        pars = {"title": "", "bottom": "", "left": ""}
+        if "title" in userplot:
+            pars["title"] = userplot["title"]
+        if "bottom" in userplot:
+            pars["bottom"] = userplot["bottom"]
+        if "left" in userplot:
+            pars["left"] = userplot["left"]
+        self.__userplot.setLabels(**pars)
 
     # @debugmethod
     def resetUserFunctions(self, userfunctions):
@@ -757,6 +821,21 @@ class ImageWidget(QtWidgets.QWidget):
             self.__userplot.show()
         else:
             self.__userplot.hide()
+            self.__ui.toolSplitter.setStretchFactor(0, 2000)
+            self.__ui.toolSplitter.setStretchFactor(1, 1)
+
+    def twodshowuserplot(self, show=True):
+        """ shows/hides 2d bottom plot legend
+
+        :param status: show flag
+        :type status: :obj:`bool`
+        :returns: 1d bottom plot
+        :rtype: :class:`pyqtgraph.PlotDataItem`
+        """
+        if show:
+            self.__userimageplot.show()
+        else:
+            self.__userimageplot.hide()
             self.__ui.toolSplitter.setStretchFactor(0, 2000)
             self.__ui.toolSplitter.setStretchFactor(1, 1)
 

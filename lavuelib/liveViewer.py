@@ -875,6 +875,7 @@ class LiveViewer(QtWidgets.QDialog):
 
         self.__imagewg.resetUserFunctions(self.__settings.userfunctions)
         self.__imagewg.onedshowuserplot(self.__settings.showuserplot)
+        self.__imagewg.twodshowuserplot(False)
         self.__updateframeratetip(self.__settings.refreshtime)
         self.__imagewg.setExtensionsRefreshTime(
             self.__settings.toolrefreshtime)
@@ -2511,6 +2512,7 @@ class LiveViewer(QtWidgets.QDialog):
         if self.__settings.showuserplot != dialog.showuserplot:
             self.__settings.showuserplot = dialog.showuserplot
             self.__imagewg.onedshowuserplot(dialog.showuserplot)
+            self.__imagewg.twodshowuserplot(False)
         statschanged = False
         if self.__settings.showstats != dialog.showstats:
             self.__settings.showstats = dialog.showstats

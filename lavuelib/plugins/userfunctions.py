@@ -25,6 +25,7 @@
 """ set of image sources """
 
 import json
+import numpy as np
 
 
 class LineCut(object):
@@ -102,6 +103,128 @@ class LineCut(object):
                 userplot["left"] = "intensity"
             userplot["legend"] = True
             userplot["legend_offset"] = -1
+        return userplot
+
+
+class LineCutImage(object):
+
+    """ LineCut selection"""
+
+    def __init__(self, configuration=None):
+        """ constructor
+
+        :param configuration: JSON list with horizontal gap pixels to add
+        :type configuration: :obj:`str`
+        """
+        try:
+            #: (:obj: `int`) line cut index
+            self.__index = int(json.loads(configuration)[0])
+        except Exception:
+            self.__index = 1
+        try:
+            #: (:obj: `int`) buffer length
+            self.__buflen = max(int(json.loads(configuration)[1]), 1)
+        except Exception:
+            self.__buflen = 20
+
+        try:
+            #: (:obj: `float`) buffer length
+            self.__shift = float(json.loads(configuration)[2])
+        except Exception:
+            self.__shift = 1.0
+
+        try:
+            #: (:obj: `float`) buffer length
+            self.__cut = int(json.loads(configuration)[3])
+        except Exception:
+            self.__cut = -28
+
+        try:
+            #: (:obj: `float`) buffer length
+            self.__mode = str(json.loads(configuration)[4])
+        except Exception:
+            self.__mode = "all"
+
+        #: (:obj: `list`) buffer
+        self.__buffer = []
+
+        self.__counter = - self.__buflen
+
+        self.__imgbuffer = None
+        self.__ximgbuffer = None
+
+    def __call__(self, results):
+        """ call method
+
+        :param results: dictionary with tool results
+        :type results: :obj:`dict`
+        :returns: dictionary with user plot data
+        :rtype: :obj:`dict`
+        """
+        userplot = {}
+        label = "linecut_%s" % self.__index
+        label = "linecut_%s" % self.__index
+        if label in results and "imagename" in results:
+            self.__counter += 1
+
+            if self.__mode != "image":
+                if len(self.__buffer) >= self.__buflen:
+                    self.__buffer.pop(0)
+                if self.__shift:
+                    for i in range(len(self.__buffer)):
+                        self.__buffer[i][1] = [(y + self.__shift)
+                                               for y in self.__buffer[i][1]]
+                self.__buffer.append([results[label][0], results[label][1],
+                                      results["imagename"]])
+                userplot["nrplots"] = len(self.__buffer)
+                for i, xy in enumerate(self.__buffer):
+                    userplot["x_%s" % (i + 1)] = xy[0]
+                    userplot["y_%s" % (i + 1)] = xy[1]
+                    userplot["name_%s" % (i + 1)] = "%s (+ %s)" % (
+                        xy[2][self.__cut:],
+                        ((len(self.__buffer) - i - 1) * self.__shift))
+                    userplot["hsvcolor_%s" % (i + 1)] = \
+                        ((i + max(0, self.__counter)) % self.__buflen) \
+                        / float(self.__buflen)
+
+                userplot["title"] = "History of %s" % label
+                if "unit" in results:
+                    userplot["bottom"] = results["unit"]
+                    userplot["left"] = "intensity"
+                userplot["legend"] = True
+                userplot["legend_offset"] = -1
+                userplot["function"] = True
+
+            if self.__mode != "function":
+                newrow = np.array(results[label][1])
+                if self.__imgbuffer is not None and \
+                   self.__imgbuffer.shape[1] == newrow.shape[0]:
+                    if self.__imgbuffer.shape[0] >= self.__buflen:
+                        self.__imgbuffer = np.vstack(
+                            [self.__imgbuffer[
+                                self.__imgbuffer.shape[0]
+                                - self.__buflen + 1:,
+                                :],
+                             newrow]
+                        )
+                    else:
+                        self.__imgbuffer = np.vstack(
+                            [self.__imgbuffer, newrow])
+                else:
+                    self.__imgbuffer = np.array([results[label][1]])
+                if self.__imgbuffer is not None:
+                    userplot["image"] = self.__imgbuffer.T
+                    xbuf = np.array(results[label][0])
+                    pos = 0.0
+                    sc = 1.0
+                    if len(xbuf) > 0:
+                        pos = xbuf[0]
+                    if len(xbuf) > 1:
+                        sc = (xbuf[-1] - xbuf[0])/(len(xbuf) - 1)
+                    self.__ximgbuffer = results[label][0]
+                    userplot["toolscale"] = [
+                        [pos, max(0, self.__counter)], [sc, 1]]
+
         return userplot
 
 
