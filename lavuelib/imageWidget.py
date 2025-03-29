@@ -400,7 +400,7 @@ class ImageWidget(QtWidgets.QWidget):
                 if len(tscale) > 1 and len(tscale[1]) > 0:
                     sx = tscale[1][0]
                 if len(tscale) > 1 and len(tscale[1]) > 1:
-                    sx = tscale[1][1]
+                    sy = tscale[1][1]
         except Exception:
             pass
         tr = self.__userimage.transform()

@@ -343,7 +343,7 @@ class DiffPDFImage(object):
                     if len(xbuf) > 0:
                         pos = xbuf[0]
                     if len(xbuf) > 1:
-                        sc = (xbuf[-1] - xbuf[0])/(len(xbuf) - 1)
+                        sc = float(xbuf[-1] - xbuf[0])/(len(xbuf) - 1)
                     self.__ximgbuffer = results[label][0]
                     userplot["toolscale"] = [
                         [pos, max(0, self.__counter)], [sc, 1]]
