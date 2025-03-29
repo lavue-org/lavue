@@ -254,6 +254,10 @@ class ImageWidget(QtWidgets.QWidget):
         self.__userimageplot = _pg.PlotWidget(self)
         self.__userimage = _pg.ImageItem()
         self.__userimageplot.getViewBox().addItem(self.__userimage)
+        self.__userimagecolorbar = self.__userimageplot.addColorBar(
+            self.__userimage, colorMap='viridis')
+        # self.__userimagecolorbar.setColorMap('viridis')
+        # self.__userimagecolorbar.setLevels(values=None, low=None, high=None)
         # self.__userimage.hide()
         self.__userimageplot.hide()
 
@@ -403,10 +407,9 @@ class ImageWidget(QtWidgets.QWidget):
                     sy = tscale[1][1]
         except Exception:
             pass
-        tr = self.__userimage.transform()
         self.__userimage.setPos(px, py)
-        tr.scale(sx, sy)
-        self.__userimage.setTransform(tr)
+        tr = self.__userimage.transform()
+        self.__userimage.setTransform(tr.fromScale(sx, sy))
 
     def plotUser1DFunction(self, userplot):
         """ plot user functions
