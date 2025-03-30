@@ -41,8 +41,8 @@ def get(address, property, timeout):
     global gladdress
     global glproperty
     global gltimeout
-    global filename
-    global header
+    # global filename
+    # global header
     gladdress = address
     glproperty = property
     gltimeout = timeout

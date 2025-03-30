@@ -47,8 +47,8 @@ def ImageStack(image, imagename, metadata, imagewg):
     :returns: numpy array with an image
     :rtype: :class:`numpy.ndarray` or `None`
     """
-    global imagestack
-    global imagenamestack
+    # global imagestack
+    # global imagenamestack
     imagestack.append(image)
     print("Image name: '%s'" % imagename)
     imagenamestack.append(imagename)

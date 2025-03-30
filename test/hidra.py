@@ -47,8 +47,8 @@ class Transfer(object):
         self.state = "RUNNING"
 
     def get(self, timeout):
-        global filename
-        global filename2
+        # global filename
+        # global filename2
         self.timeout = timeout
         self.data = None
         metadata = None

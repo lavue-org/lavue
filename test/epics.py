@@ -38,7 +38,7 @@ class PV(object):
         self.data = None
 
     def get(self, as_numpy, timeout):
-        global filename
+        # global filename
         self.timeout = timeout
         self.as_numpy = as_numpy
         if filename:
