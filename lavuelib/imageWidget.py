@@ -258,7 +258,7 @@ class ImageWidget(QtWidgets.QWidget):
         # self.__userimagecolorbar = self.__userimageplot.addColorBar(
         #     self.__userimage, colorMap='inferno')
 
-        if hasattr(_pg, "colormap"):
+        if hasattr(_pg, "colormap") and hasattr(_pg.colormap, "get"):
             colorMap = _pg.colormap.get('inferno')
         else:
             colors = [
