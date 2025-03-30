@@ -7,7 +7,7 @@ A **User Function plugin** can be defined by a **class** or a **function** in a 
 
 A **user function plugin** defined by a **function** is a simple python function with one argument: `results` which contain a python dictionary of **ToolResults**.
 
-This function **returns** a python dictionary with `x` and  `y` *(list)* data to plot , `title`, `bottom` and `left` *(string)* labels  `color` and `hvscolor` *(string)*  or *(int)* . For user plots with mutli-curves the python dictionary can contains `nrplots` *(int)* , `x_%i`,  `y_%i` *(list)* data to plot `name_%i`  *(list)* names of plots, `color_%i` and `hvscolor_%i` *(string)*  or *(int)* where `%i` runs from 1 to `nrplots`. If `y_%i` is set to ``None`` the previous plot will stay shown. Also if `legend` is set to ``True`` plots are discribed by its names in legend. A location of legend can be adjusted by `lengend_offset` *(int)*
+This function **returns** a python dictionary with `x` and  `y` *(list)* data to plot , `title`, `bottom` and `left` *(string)* labels  `color` and `hvscolor` *(string)*  or *(int)* . For user plots with mutli-curves the python dictionary can contains `nrplots` *(int)* , `x_%i`,  `y_%i` *(list)* data to plot, `name_%i`  *(list)* names of plots, `color_%i` and `hvscolor_%i` *(string)*  or *(int)* where `%i` runs from 1 to `nrplots`. If `y_%i` is set to ``None`` the previous plot will stay shown. Also if `legend` is set to ``True`` plots are discribed by its names in legend. A location of legend can be adjusted by `lengend_offset` *(int)*
 , e.g.
 
 .. code-block:: python
@@ -208,7 +208,7 @@ or
 
 
 If `image` *(numpy.array)* is provided the user image is also plotted.
-When you want to see both image and function plots
+When both image and function plots need to be displayed
 `function` has to be set to ``true``.
 Also position and scale of the image can be set by
 `toolscale` namely ``[position_x, postion_y, scale_x, scale_y]`` .
