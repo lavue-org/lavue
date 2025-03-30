@@ -254,8 +254,15 @@ class ImageWidget(QtWidgets.QWidget):
         self.__userimageplot = _pg.PlotWidget(self)
         self.__userimage = _pg.ImageItem()
         self.__userimageplot.getViewBox().addItem(self.__userimage)
-        self.__userimagecolorbar = self.__userimageplot.addColorBar(
-            self.__userimage, colorMap='viridis')
+        # # does not work for older pyqtgraph e.g. deb11
+        # self.__userimagecolorbar = self.__userimageplot.addColorBar(
+        #     self.__userimage, colorMap='inferno')
+
+        colorMap = _pg.colormap.get('inferno')
+        self.__userimagecolorbar = _pg.ColorBarItem(colorMap=colorMap)
+        self.__userimagecolorbar.setImageItem(
+            self.__userimage, insert_in=self.__userimageplot.plotItem)
+
         # self.__userimagecolorbar.setColorMap('viridis')
         # self.__userimagecolorbar.setLevels(values=None, low=None, high=None)
         # self.__userimage.hide()
