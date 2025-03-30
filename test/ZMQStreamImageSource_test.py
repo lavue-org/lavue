@@ -219,7 +219,7 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         self.__lcsu.proxy.LavueState = arg
 
     def setZMQDataSources(self, *datasources):
-        global app
+        # global app
         with QtCore.QMutexLocker(self.__mutex):
             socket = self.__socket
         # value = np.transpose(
@@ -254,7 +254,7 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         return message
 
     def takeNewJSONImageWithTopic(self, topic):
-        global app
+        # global app
         with QtCore.QMutexLocker(self.__mutex):
             socket = self.__socket
         value = np.transpose(
@@ -282,7 +282,7 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         return message
 
     def takeNewJSONImage(self):
-        global app
+        # global app
         with QtCore.QMutexLocker(self.__mutex):
             socket = self.__socket
         value = np.transpose(
@@ -310,7 +310,7 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         return message
 
     def takeNewPickleImage(self):
-        global app
+        # global app
         with QtCore.QMutexLocker(self.__mutex):
             socket = self.__socket
         value = np.transpose(

@@ -139,7 +139,7 @@ class HidraImageSourceH5CppTest(unittest.TestCase):
         print("tearing down ...")
 
     def takeDefaultNewImage(self):
-        global app
+        # global app
         self.__counter += 1
 
         hidra.filename = self._fname

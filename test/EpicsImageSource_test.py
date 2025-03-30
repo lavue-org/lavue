@@ -133,7 +133,7 @@ class EpicsImageSourceTest(unittest.TestCase):
         print("tearing down ...")
 
     def takeNewImage(self):
-        global app
+        # global app
         self.__counter += 1
 
         self.__tangoimgcounter += 1

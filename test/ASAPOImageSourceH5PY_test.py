@@ -144,7 +144,7 @@ class ASAPOImageSourceH5PYTest(unittest.TestCase):
         print("tearing down ...")
 
     def takeDefaultNewImage(self):
-        global app
+        # global app
         self.__counter += 1
 
         asapo_consumer.filename = self._fname
@@ -155,7 +155,7 @@ class ASAPOImageSourceH5PYTest(unittest.TestCase):
         return li
 
     def takeNewPathImage(self):
-        global app
+        # global app
         self.__counter += 1
 
         asapo_consumer.filename = self._fname

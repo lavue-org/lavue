@@ -62,7 +62,6 @@ def get(address, property, timeout):
         prop["data"] = {"frameHeader": fheader,
                         "imageBytes": data.tobytes()}
     else:
-        global filename
         data = None
         if filename:
             image = fabio.open(filename)
