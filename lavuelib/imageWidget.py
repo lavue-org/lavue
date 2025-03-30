@@ -260,10 +260,6 @@ class ImageWidget(QtWidgets.QWidget):
                 self.__userimage, colorMap='inferno')
         else:
             self.__userimagecolorbar = None
-
-        # self.__userimagecolorbar.setColorMap('viridis')
-        # self.__userimagecolorbar.setLevels(values=None, low=None, high=None)
-        # self.__userimage.hide()
         self.__userimageplot.hide()
 
         #: (:class:`pyqtgraph.PlotWidget`) right 1D plot widget
@@ -389,6 +385,24 @@ class ImageWidget(QtWidgets.QWidget):
             self.__userimage.setImage(userplot["image"])
         if "toolscale" in userplot and isinstance(userplot["toolscale"], list):
             self.setUserImageScale(userplot["toolscale"])
+        if "colormap" in userplot and \
+                hasattr(self.__userimagecolorbar, "setColorMap"):
+            self.__userimagecolorbar.setColorMap('viridis')
+        if "colormap" in userplot and \
+                hasattr(self.__userimagecolorbar, "setColorMap"):
+            self.__userimagecolorbar.setColorMap(userplot["colormap"])
+        if "colormap_values" in userplot and \
+                hasattr(self.__userimagecolorbar, "setLevels"):
+            self.__userimagecolorbar.setLevels(
+                values=userplot["colormap_values"])
+        if "colormap_low" in userplot and \
+                hasattr(self.__userimagecolorbar, "setLevels"):
+            self.__userimagecolorbar.setLevels(
+                values=userplot["colormap_low"])
+        if "colormap_high" in userplot and \
+                hasattr(self.__userimagecolorbar, "setLevels"):
+            self.__userimagecolorbar.setLevels(
+                values=userplot["colormap_high"])
 
     def setUserImageScale(self, tscale):
         """set user image scale
