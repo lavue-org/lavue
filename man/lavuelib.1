@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "LAVUELIB" "1" "Mar 27, 2025" "2.97" "LaVue"
+.TH "LAVUELIB" "1" "Mar 30, 2025" "2.98" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .sp
@@ -2346,7 +2346,7 @@ A \fBUser Function plugin\fP can be defined by a \fBclass\fP or a \fBfunction\fP
 .sp
 A \fBuser function plugin\fP defined by a \fBfunction\fP is a simple python function with one argument: \fIresults\fP which contain a python dictionary of \fBToolResults\fP\&.
 .sp
-This function \fBreturns\fP a python dictionary with \fIx\fP and  \fIy\fP \fI(list)\fP data to plot , \fItitle\fP, \fIbottom\fP and \fIleft\fP \fI(string)\fP labels  \fIcolor\fP and \fIhvscolor\fP \fI(string)\fP  or \fI(int)\fP . For user plots with mutli\-curves the python dictionary can contains \fInrplots\fP \fI(int)\fP , \fIx_%i\fP,  \fIy_%i\fP \fI(list)\fP data to plot, \fIcolor_%i\fP and \fIhvscolor_%i\fP \fI(string)\fP  or \fI(int)\fP where \fI%i\fP runs from 1 to \fInrplots\fP\&. If \fIy_%i\fP is set to \fBNone\fP the previous plot will stay shown.
+This function \fBreturns\fP a python dictionary with \fIx\fP and  \fIy\fP \fI(list)\fP data to plot , \fItitle\fP, \fIbottom\fP and \fIleft\fP \fI(string)\fP labels  \fIcolor\fP and \fIhvscolor\fP \fI(string)\fP  or \fI(int)\fP . For user plots with mutli\-curves the python dictionary can contains \fInrplots\fP \fI(int)\fP , \fIx_%i\fP,  \fIy_%i\fP \fI(list)\fP data to plot \fIname_%i\fP  \fI(list)\fP names of plots, \fIcolor_%i\fP and \fIhvscolor_%i\fP \fI(string)\fP  or \fI(int)\fP where \fI%i\fP runs from 1 to \fInrplots\fP\&. If \fIy_%i\fP is set to \fBNone\fP the previous plot will stay shown. Also if \fIlegend\fP is set to \fBTrue\fP plots are discribed by its names in legend. A location of legend can be adjusted by \fIlengend_offset\fP \fI(int)\fP
 , e.g.
 .INDENT 0.0
 .INDENT 3.5
@@ -2567,6 +2567,179 @@ class LineCut(object):
 .UNINDENT
 .UNINDENT
 .sp
+If \fIimage\fP \fI(numpy.array)\fP is provided the user image is also plotted.
+When you want to see both image and function plots
+\fIfunction\fP has to be set to \fBtrue\fP\&.
+Also position and scale of the image can be set by
+\fItoolscale\fP namely \fB[position_x, postion_y, scale_x, scale_y]\fP .
+The \fIcolormap\fP \fI(string)\fP sets a name of color maps.
+The levels of colormap can be set by tuple \fIcolormap_values\fP \fB(low, high)\fP
+or separately \fIcolormap_low\fP \fI(float)\fP and \fIcolormap_high\fP \fI(float)\fP
+, e.g.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+import json
+import numpy as np
+
+
+class DiffPDFImage(object):
+
+    \(dq\(dq\(dqdiffpy PDF user function\(dq\(dq\(dq
+
+    def __init__(self, configuration=None):
+        \(dq\(dq\(dq constructor
+
+        :param configuration: JSON list with config file and diff index
+        :type configuration: :obj:\(gastr\(ga
+        \(dq\(dq\(dq
+        #: (:obj:\(galist\(ga <:obj: \(gastr\(ga>) list of indexes for gap
+        self.__configfile = None
+
+        #: (:obj: \(gaint\(ga) buffer length
+        self.__buflen = 20
+        #: (:obj: \(gafloat\(ga) waterfall plot shift
+        self.__shift = 1.0
+        #: (:obj: \(gaint\(ga) diff label index
+        self.__index = 1
+        #: (:obj: \(gafloat\(ga) number of characters cut from the image name
+        self.__cut = \-28
+        #: (:obj: \(galist\(ga) buffer
+        self.__buffer = []
+        #: (:obj: \(gaint\(ga) plot counter
+        self.__counter = \-1
+        #: (:obj: \(gastr\(ga) plot mode i.e. all, image, function
+        self.__mode = \(dqall\(dq
+
+        self.__imgbuffer = None
+        self.__ximgbuffer = None
+
+        try:
+            config = json.loads(configuration)
+            self.__configfile = str(config[0])
+            try:
+                self.__index = int(config[1])
+            except Exception:
+                pass
+
+            try:
+                self.__buflen = max(int(config[2]), 1)
+            except Exception:
+                pass
+
+            try:
+                #: (:obj: \(gafloat\(ga) buffer length
+                self.__shift = float(config[3])
+            except Exception:
+                pass
+
+            try:
+                #: (:obj: \(gafloat\(ga) buffer length
+                self.__cut = int(config[4])
+            except Exception:
+                pass
+
+            try:
+                #: (:obj: \(gafloat\(ga) buffer length
+                self.__mode = str(config[5])
+            except Exception:
+                pass
+        except Exception:
+            self.__configfile = str(configuration)
+
+        self.__counter = \- self.__buflen
+
+        from diffpy.pdfgetx import loadPDFConfig
+        #: configuration
+        self.__cfg = loadPDFConfig(self.__configfile)
+
+    def __call__(self, results):
+        \(dq\(dq\(dq call method
+
+        :param results: dictionary with tool results
+        :type results: :obj:\(gadict\(ga
+        :returns: dictionary with user plot data
+        :rtype: :obj:\(gadict\(ga
+        \(dq\(dq\(dq
+        userplot = {}
+        from diffpy.pdfgetx import PDFGetter
+        self.__pg = PDFGetter(config=self.__cfg)
+        label = \(dqdiff_%s\(dq % self.__index
+
+        if label in results and self.__configfile and \(dqimagename\(dq in results:
+            qq = results[label][0]
+            df = results[label][1]
+            data_gr = self.__pg(qq, df)
+            x = data_gr[0]
+            y = data_gr[1]
+
+            self.__counter += 1
+
+            if self.__mode != \(dqimage\(dq:
+                if len(self.__buffer) >= self.__buflen:
+                    self.__buffer.pop(0)
+                if self.__shift:
+                    for i in range(len(self.__buffer)):
+                        self.__buffer[i][1] = [(y + self.__shift)
+                                               for y in self.__buffer[i][1]]
+                self.__buffer.append([x, y, results[\(dqimagename\(dq]])
+
+                userplot[\(dqnrplots\(dq] = len(self.__buffer)
+                for i, xy in enumerate(self.__buffer):
+                    userplot[\(dqx_%s\(dq % (i + 1)] = xy[0]
+                    userplot[\(dqy_%s\(dq % (i + 1)] = xy[1]
+                    userplot[\(dqname_%s\(dq % (i + 1)] = \(dq%s (+ %s)\(dq % (
+                        xy[2][self.__cut:],
+                        ((len(self.__buffer) \- i \- 1) * self.__shift))
+                    userplot[\(dqhsvcolor_%s\(dq % (i + 1)] = \e
+                        ((i + max(0, self.__counter)) % self.__buflen) \e
+                        / float(self.__buflen)
+
+                userplot[\(dqtitle\(dq] = \(dqHistory of %s\(dq % label
+                userplot[\(dqlegend\(dq] = True
+                userplot[\(dqlegend_offset\(dq] = \-1
+                userplot[\(dqtitle\(dq] = \(dqDiffPDFImage: %s with %s\(dq % (
+                    label, self.__configfile)
+                userplot[\(dqfunction\(dq] = True
+
+            if self.__mode != \(dqfunction\(dq:
+                newrow = np.array(y)
+                if self.__imgbuffer is not None and \e
+                   self.__imgbuffer.shape[1] == newrow.shape[0]:
+                    if self.__imgbuffer.shape[0] >= self.__buflen:
+                        self.__imgbuffer = np.vstack(
+                            [self.__imgbuffer[
+                                self.__imgbuffer.shape[0]
+                                \- self.__buflen + 1:,
+                                :],
+                             newrow]
+                        )
+                    else:
+                        self.__imgbuffer = np.vstack(
+                            [self.__imgbuffer, newrow])
+                else:
+                    self.__imgbuffer = np.array([y])
+                if self.__imgbuffer is not None:
+                    userplot[\(dqimage\(dq] = self.__imgbuffer.T
+                    xbuf = np.array(x)
+                    pos = 0.0
+                    sc = 1.0
+                    if len(xbuf) > 0:
+                        pos = xbuf[0]
+                    if len(xbuf) > 1:
+                        sc = float(xbuf[\-1] \- xbuf[0])/(len(xbuf) \- 1)
+                    self.__ximgbuffer = results[label][0]
+                    userplot[\(dqtoolscale\(dq] = [
+                        [pos, max(0, self.__counter)], [sc, 1]]
+
+        return userplot
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
 To configure user functions see \fI\%User Functions settings\fP\&.
 .SH DEVELOPER GUIDE
 .SS API reference
@@ -2759,6 +2932,20 @@ constructor
 .UNINDENT
 .INDENT 0.0
 .TP
+.B class  lavuelib.plugins.userfunctions.LineCutImage(configuration=None)
+Bases: \fI\%object\fP
+.sp
+LineCut selection
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – JSON list with horizontal gap pixels to add
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
 .B lavuelib.plugins.userfunctions.linecut_1(results)
 line rotate image by 45 deg
 .INDENT 7.0
@@ -2793,6 +2980,20 @@ constructor
 .INDENT 0.0
 .TP
 .B class  lavuelib.plugins.diffpyfunctions.DiffPDFHistory(configuration=None)
+Bases: \fI\%object\fP
+.sp
+diffpy PDF user function
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – JSON list with config file and diff index
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  lavuelib.plugins.diffpyfunctions.DiffPDFImage(configuration=None)
 Bases: \fI\%object\fP
 .sp
 diffpy PDF user function
@@ -10558,7 +10759,7 @@ exporter parameters
 set of image sources
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.ASAPO  =  True
+.B lavuelib.imageSource.ASAPO  =  False
 (\fI\%bool\fP) asapo imported
 .UNINDENT
 .INDENT 0.0
@@ -10883,7 +11084,7 @@ image name, image data, json dictionary with metadata
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.HIDRA  =  True
+.B lavuelib.imageSource.HIDRA  =  False
 (\fI\%bool\fP) hidra imported
 .UNINDENT
 .INDENT 0.0
@@ -12125,12 +12326,32 @@ plots the image
 .UNINDENT
 .INDENT 7.0
 .TP
+.B plotUser1DFunction(userplot)
+plot user functions
+.INDENT 7.0
+.TP
+.B Parameters
+\fBuserplot\fP (\fI\%str\fP) – tool results
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B plotUser2DFunction(userplot)
+plot user image
+.INDENT 7.0
+.TP
+.B Parameters
+\fBuserplot\fP (\fI\%dict\fP) – tool results
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B plotUserFunction(results=None)
 plot user function
 .INDENT 7.0
 .TP
 .B Parameters
-\fBresults\fP (\fI\%str\fP) – tool results
+\fBresults\fP (\fI\%dict\fP) – tool results
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -12753,6 +12974,16 @@ sets coordinate transformations
 .UNINDENT
 .INDENT 7.0
 .TP
+.B setUserImageScale(tscale)
+set user image scale
+.INDENT 7.0
+.TP
+.B Parameters
+\fBtscale\fP (\fI\%list\fP) – user position and scale
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B setViewRange(rangelist)
 set view range values
 .INDENT 7.0
@@ -12844,6 +13075,22 @@ original transpose
 .TP
 .B Return type
 (\fI\%bool\fP, \fI\%bool\fP, \fI\%bool\fP, \fI\%bool\fP)
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B twodshowuserplot(show=True)
+shows/hides 2d bottom plot legend
+.INDENT 7.0
+.TP
+.B Parameters
+\fBstatus\fP (\fI\%bool\fP) – show flag
+.TP
+.B Returns
+1d bottom plot
+.TP
+.B Return type
+\fI\%pyqtgraph.PlotDataItem\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0

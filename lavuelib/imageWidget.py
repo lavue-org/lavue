@@ -248,6 +248,8 @@ class ImageWidget(QtWidgets.QWidget):
         self.__usercurves[0].hide()
         self.__usercurves[0].setVisible(False)
 
+        self.__lastuserparams = {}
+
         #: (:obj:`int`) current plot number
         self.__nrplots = 0
 
@@ -385,9 +387,10 @@ class ImageWidget(QtWidgets.QWidget):
             self.__userimage.setImage(userplot["image"])
         if "toolscale" in userplot and isinstance(userplot["toolscale"], list):
             self.setUserImageScale(userplot["toolscale"])
-        if "colormap" in userplot and \
-                hasattr(self.__userimagecolorbar, "setColorMap"):
-            self.__userimagecolorbar.setColorMap('viridis')
+            # if "toolscale" not in self.__lastuserparams or \
+            #    self.__lastuserparams["toolscale"] != userplot["toolscale"]:
+            #     self.setUserImageScale(userplot["toolscale"])
+            #     self.__lastuserparams["toolscale"] = userplot["toolscale"]
         if "colormap" in userplot and \
                 hasattr(self.__userimagecolorbar, "setColorMap"):
             self.__userimagecolorbar.setColorMap(userplot["colormap"])
