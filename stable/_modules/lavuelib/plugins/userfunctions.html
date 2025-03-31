@@ -72,6 +72,7 @@
 <span class="sd">&quot;&quot;&quot; set of image sources &quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
 <div class="viewcode-block" id="LineCut"><a class="viewcode-back" href="../../../develop/lavuelib/lavuelib.plugins.html#lavuelib.plugins.userfunctions.LineCut">[docs]</a><span class="k">class</span> <span class="nc">LineCut</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -149,6 +150,128 @@
                 <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;intensity&quot;</span>
             <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;legend&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;legend_offset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">return</span> <span class="n">userplot</span></div>
+
+
+<div class="viewcode-block" id="LineCutImage"><a class="viewcode-back" href="../../../develop/lavuelib/lavuelib.plugins.html#lavuelib.plugins.userfunctions.LineCutImage">[docs]</a><span class="k">class</span> <span class="nc">LineCutImage</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; LineCut selection&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param configuration: JSON list with horizontal gap pixels to add</span>
+<span class="sd">        :type configuration: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1">#: (:obj: `int`) line cut index</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__index</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1">#: (:obj: `int`) buffer length</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">)[</span><span class="mi">1</span><span class="p">]),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span> <span class="o">=</span> <span class="mi">20</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1">#: (:obj: `float`) buffer length</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__shift</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">)[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__shift</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1">#: (:obj: `float`) buffer length</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__cut</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">)[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__cut</span> <span class="o">=</span> <span class="o">-</span><span class="mi">28</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1">#: (:obj: `float`) buffer length</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__mode</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">)[</span><span class="mi">4</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__mode</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+
+        <span class="c1">#: (:obj: `list`) buffer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">=</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ximgbuffer</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; call method</span>
+
+<span class="sd">        :param results: dictionary with tool results</span>
+<span class="sd">        :type results: :obj:`dict`</span>
+<span class="sd">        :returns: dictionary with user plot data</span>
+<span class="sd">        :rtype: :obj:`dict`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">userplot</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;linecut_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__index</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;linecut_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__index</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">results</span> <span class="ow">and</span> <span class="s2">&quot;imagename&quot;</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mode</span> <span class="o">!=</span> <span class="s2">&quot;image&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__shift</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">)):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__shift</span><span class="p">)</span>
+                                               <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                                      <span class="n">results</span><span class="p">[</span><span class="s2">&quot;imagename&quot;</span><span class="p">]])</span>
+                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;nrplots&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">xy</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">):</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;x_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;y_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;name_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> (+ </span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                        <span class="n">xy</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">__cut</span><span class="p">:],</span>
+                        <span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__shift</span><span class="p">))</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;hsvcolor_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> \
+                        <span class="p">((</span><span class="n">i</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span><span class="p">))</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span><span class="p">)</span> \
+                        <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span><span class="p">)</span>
+
+                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;History of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">label</span>
+                <span class="k">if</span> <span class="s2">&quot;unit&quot;</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;bottom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;intensity&quot;</span>
+                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;legend&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;legend_offset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mode</span> <span class="o">!=</span> <span class="s2">&quot;function&quot;</span><span class="p">:</span>
+                <span class="n">newrow</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+                   <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">newrow</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+                            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span><span class="p">[</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                                <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:,</span>
+                                <span class="p">:],</span>
+                             <span class="n">newrow</span><span class="p">]</span>
+                        <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+                            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span><span class="p">,</span> <span class="n">newrow</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">1</span><span class="p">]])</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span><span class="o">.</span><span class="n">T</span>
+                    <span class="n">xbuf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">pos</span> <span class="o">=</span> <span class="mf">0.0</span>
+                    <span class="n">sc</span> <span class="o">=</span> <span class="mf">1.0</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">xbuf</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">pos</span> <span class="o">=</span> <span class="n">xbuf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">xbuf</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">sc</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">xbuf</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">xbuf</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xbuf</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__ximgbuffer</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;image_scale&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="p">[</span><span class="n">pos</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span><span class="p">)],</span> <span class="p">[</span><span class="n">sc</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+
         <span class="k">return</span> <span class="n">userplot</span></div>
 
 
@@ -312,6 +435,7 @@
       <li><a class="reference external" href="../../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../../index/../../v2.98.0/index.html">v2.98.0</a></li>
       <li><a class="reference external" href="../../../index/../../v2.97.0/index.html">v2.97.0</a></li>
       <li><a class="reference external" href="../../../index/../../v2.96.0/index.html">v2.96.0</a></li>
       <li><a class="reference external" href="../../../index/../../v2.95.0/index.html">v2.95.0</a></li>
