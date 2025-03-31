@@ -248,7 +248,9 @@ class ImageWidget(QtWidgets.QWidget):
         self.__usercurves[0].hide()
         self.__usercurves[0].setVisible(False)
 
-        self.__lastuserparams = {}
+        self.__userlevels = [0, 1]
+        self.__userimageposition = [0.0, 0.0]
+        self.__userimagescale = [1.0, 1.0]
 
         #: (:obj:`int`) current plot number
         self.__nrplots = 0
@@ -260,6 +262,8 @@ class ImageWidget(QtWidgets.QWidget):
         if hasattr(self.__userimageplot, "addColorBar"):
             self.__userimagecolorbar = self.__userimageplot.addColorBar(
                 self.__userimage, colorMap='inferno')
+            self.__userimagecolorbar.sigLevelsChangeFinished.connect(
+                self._onUserLevelsChanged)
         else:
             self.__userimagecolorbar = None
         self.__userimageplot.hide()
@@ -325,10 +329,14 @@ class ImageWidget(QtWidgets.QWidget):
         self.__bottomplot.clearClicked.connect(
             self._emitClearBottomPlotClicked)
         self.__sardana = None
-
         self.__connectsplitters()
 
         self.roiLineEditChanged.emit()
+
+    @QtCore.pyqtSlot(object)
+    def _onUserLevelsChanged(self, colorbaritem=None):
+        self.__userimagecolorbar = colorbaritem
+        self.__userlevels = self.__userimagecolorbar.levels()
 
     # @debugmethod
     def plotUserFunction(self, results=None):
@@ -383,14 +391,7 @@ class ImageWidget(QtWidgets.QWidget):
         """
         if "image" not in userplot:
             return
-        if isinstance(userplot["image"], np.ndarray):
-            self.__userimage.setImage(userplot["image"])
-        if "toolscale" in userplot and isinstance(userplot["toolscale"], list):
-            self.setUserImageScale(userplot["toolscale"])
-            # if "toolscale" not in self.__lastuserparams or \
-            #    self.__lastuserparams["toolscale"] != userplot["toolscale"]:
-            #     self.setUserImageScale(userplot["toolscale"])
-            #     self.__lastuserparams["toolscale"] = userplot["toolscale"]
+
         if "colormap" in userplot and \
                 hasattr(self.__userimagecolorbar, "setColorMap"):
             self.__userimagecolorbar.setColorMap(userplot["colormap"])
@@ -398,14 +399,23 @@ class ImageWidget(QtWidgets.QWidget):
                 hasattr(self.__userimagecolorbar, "setLevels"):
             self.__userimagecolorbar.setLevels(
                 values=userplot["colormap_values"])
+            self.__userlevels = self.__userimagecolorbar.levels()
         if "colormap_low" in userplot and \
                 hasattr(self.__userimagecolorbar, "setLevels"):
             self.__userimagecolorbar.setLevels(
-                values=userplot["colormap_low"])
+                low=userplot["colormap_low"])
+            self.__userlevels = self.__userimagecolorbar.levels()
         if "colormap_high" in userplot and \
                 hasattr(self.__userimagecolorbar, "setLevels"):
             self.__userimagecolorbar.setLevels(
-                values=userplot["colormap_high"])
+                high=userplot["colormap_high"])
+            self.__userlevels = self.__userimagecolorbar.levels()
+        if isinstance(userplot["image"], np.ndarray):
+            self.__userimage.setImage(
+                userplot["image"], levels=self.__userlevels)
+        if "image_scale" in userplot and \
+                isinstance(userplot["image_scale"], list):
+            self.setUserImageScale(userplot["image_scale"])
 
     def setUserImageScale(self, tscale):
         """set user image scale
@@ -417,21 +427,31 @@ class ImageWidget(QtWidgets.QWidget):
         py = 0.0
         sx = 1.0
         sy = 1.0
+        posChanged = False
+        scaleChanged = False
         try:
             if isinstance(tscale, list):
                 if len(tscale) > 0 and len(tscale[0]) > 0:
                     px = tscale[0][0]
                 if len(tscale) > 0 and len(tscale[1]) > 1:
                     py = tscale[0][1]
+                if [px, py] != self.__userimageposition:
+                    self.__userimageposition = [px, py]
+                    posChanged = True
                 if len(tscale) > 1 and len(tscale[1]) > 0:
                     sx = tscale[1][0]
                 if len(tscale) > 1 and len(tscale[1]) > 1:
                     sy = tscale[1][1]
+                if [sx, sy] != self.__userimagescale:
+                    self.__userimagescale = [sx, sy]
+                    scaleChanged = True
         except Exception:
             pass
-        self.__userimage.setPos(px, py)
-        tr = self.__userimage.transform()
-        self.__userimage.setTransform(tr.fromScale(sx, sy))
+        if posChanged:
+            self.__userimage.setPos(px, py)
+        if scaleChanged:
+            tr = self.__userimage.transform()
+            self.__userimage.setTransform(tr.fromScale(sx, sy))
 
     def plotUser1DFunction(self, userplot):
         """ plot user functions

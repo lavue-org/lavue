@@ -211,7 +211,7 @@ If `image` *(numpy.array)* is provided the user image is also plotted.
 When both image and function plots need to be displayed
 `function` has to be set to ``true``.
 Also position and scale of the image can be set by
-`toolscale` namely ``[position_x, postion_y, scale_x, scale_y]`` .
+`image_scale` namely ``[position_x, postion_y, scale_x, scale_y]`` .
 The `colormap` *(string)* sets a name of color maps.
 The levels of colormap can be set by tuple `colormap_values` ``(low, high)``
 or separately `colormap_low` *(float)* and `colormap_high` *(float)*
@@ -369,7 +369,7 @@ or separately `colormap_low` *(float)* and `colormap_high` *(float)*
 			if len(xbuf) > 1:
 			    sc = float(xbuf[-1] - xbuf[0])/(len(xbuf) - 1)
 			self.__ximgbuffer = results[label][0]
-			userplot["toolscale"] = [
+			userplot["iamge_scale"] = [
 			    [pos, max(0, self.__counter)], [sc, 1]]
 
 	    return userplot

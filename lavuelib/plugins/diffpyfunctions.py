@@ -345,7 +345,9 @@ class DiffPDFImage(object):
                     if len(xbuf) > 1:
                         sc = float(xbuf[-1] - xbuf[0])/(len(xbuf) - 1)
                     self.__ximgbuffer = results[label][0]
-                    userplot["toolscale"] = [
+                    userplot["image_scale"] = [
                         [pos, max(0, self.__counter)], [sc, 1]]
+                # userplot["colormap"] = 'plasma'
+                # userplot["colormap_values"] = [0,1]
 
         return userplot
