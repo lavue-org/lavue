@@ -4824,14 +4824,12 @@ class DiffractogramToolWidget(ToolBaseWidget):
                     if len(xbuf) > 0:
                         pos = xbuf[0]
                     if len(xbuf) > 1:
-                        sc = (xbuf[-1] - xbuf[0])/(len(xbuf) - 1)
+                        sc = float(xbuf[-1] - xbuf[0])/(len(xbuf) - 1)
                     self.__xbuffers[i] = [pos, sc]
                     if (self.__ui.mainplotComboBox.currentIndex() -
                        1 == i):
                         self._mainwidget.setToolScale(
                             [pos, 0], [sc, 1])
-                        # self._mainwidget.setToolScale(
-                        #    [0, 0], [1, 1])
             self.__resetscale = False
 
     # @debugmethod

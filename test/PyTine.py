@@ -41,8 +41,8 @@ def get(address, property, timeout):
     global gladdress
     global glproperty
     global gltimeout
-    global filename
-    global header
+    # global filename
+    # global header
     gladdress = address
     glproperty = property
     gltimeout = timeout
@@ -62,7 +62,6 @@ def get(address, property, timeout):
         prop["data"] = {"frameHeader": fheader,
                         "imageBytes": data.tobytes()}
     else:
-        global filename
         data = None
         if filename:
             image = fabio.open(filename)

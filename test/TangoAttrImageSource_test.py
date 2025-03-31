@@ -235,7 +235,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         self.__lavuestate = self.__lcsu.proxy.LavueState
 
     def takeNewImage(self):
-        global app
+        # global app
         self.__tisu.proxy.StartAcq()
         li = self.__tisu.proxy.LastImage
         app.sendPostedEvents()
@@ -243,7 +243,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         return li
 
     def takeNewEncodedImage(self):
-        global app
+        # global app
         self.__tangoimgcounter += 1
         if self.__tangoimgcounter % 2:
             self.__tisu.proxy.StartAcq()
@@ -256,7 +256,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         return li
 
     def takeNewSpectra(self):
-        global app
+        # global app
         self.__tisu.proxy.StartAcq()
         l1 = self.__tisu.proxy.Spectrum1
         l2 = self.__tisu.proxy.Spectrum2
@@ -265,7 +265,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         return l1, l2
 
     def takeNewChangeEventImage(self):
-        global app
+        # global app
         self.__tisu.proxy.ChangeEventAcq()
         li = self.__tisu.proxy.ChangeEventImage
         app.sendPostedEvents()
@@ -273,7 +273,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         return li
 
     def takeNewReadyEventImage(self):
-        global app
+        # global app
         self.__tisu.proxy.ReadyEventAcq()
         li = self.__tisu.proxy.ReadyEventImage
         app.sendPostedEvents()

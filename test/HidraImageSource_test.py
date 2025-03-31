@@ -135,7 +135,7 @@ class HidraImageSourceTest(unittest.TestCase):
         print("tearing down ...")
 
     def takeNewImage(self):
-        global app
+        # global app
         self.__counter += 1
 
         self.__tangoimgcounter += 1
@@ -154,7 +154,7 @@ class HidraImageSourceTest(unittest.TestCase):
         return li
 
     def takeNewImage2(self):
-        global app
+        # global app
         self.__counter += 1
 
         # self.__tangoimgcounter2 += 1

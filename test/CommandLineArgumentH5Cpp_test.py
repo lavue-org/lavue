@@ -103,7 +103,7 @@ class CommandLineArgumentH5CppTest(unittest.TestCase):
             self.__file.close()
 
     def takeNewImage(self):
-        global app
+        # global app
         amn = np.random.randint(0, 1000, self.__shape)
         self.__datamn.grow()
         self.__datamn[-1, :, :] = amn

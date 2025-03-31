@@ -322,7 +322,7 @@ class TangoFileImageSourceTest(unittest.TestCase):
         self.__lavuestate = self.__lcsu.proxy.LavueState
 
     def takeNewImage(self):
-        global app
+        # global app
         self.__tisu.proxy.StartAcq()
         li = self.__tisu.proxy.LastImage
         app.sendPostedEvents()
@@ -330,7 +330,7 @@ class TangoFileImageSourceTest(unittest.TestCase):
         return li
 
     def takeNewEncodedImage(self):
-        global app
+        # global app
         self.__tangoimgcounter += 1
         if self.__tangoimgcounter % 2:
             self.__tisu.proxy.StartAcq()
@@ -343,7 +343,7 @@ class TangoFileImageSourceTest(unittest.TestCase):
         return li
 
     def takeNewSpectra(self):
-        global app
+        # global app
         self.__tisu.proxy.StartAcq()
         l1 = self.__tisu.proxy.Spectrum1
         l2 = self.__tisu.proxy.Spectrum2
@@ -352,7 +352,7 @@ class TangoFileImageSourceTest(unittest.TestCase):
         return l1, l2
 
     def takeNewTangoFileImage(self):
-        global app
+        # global app
         self.__tangoimgcounter += 1
         self.__tisu.proxy.LastImagePath = self.__tangofilepath
         self.__tisu.proxy.LastImageTaken = \
@@ -367,7 +367,7 @@ class TangoFileImageSourceTest(unittest.TestCase):
         return li
 
     def takeNewTangoFileNXSURLImage(self):
-        global app
+        # global app
         fname = "%s::%s" % (
             self.__tangofilepath, self.__tangofilepattern)
         self.__tisu.proxy.LastImagePath = ""
@@ -380,7 +380,7 @@ class TangoFileImageSourceTest(unittest.TestCase):
         return amn
 
     def takeNewTangoFileURLImage(self):
-        global app
+        # global app
         self.__tangoimgcounter += 1
         fname = "%s/%s" % (
             self.__tangofilepath,
@@ -394,7 +394,7 @@ class TangoFileImageSourceTest(unittest.TestCase):
         return li
 
     def takeNewTangoFileHTTPImage(self):
-        global app
+        # global app
         self.__tangoimgcounter += 1
         ipath = self.__tangofilepath
         iname = \
@@ -414,7 +414,7 @@ class TangoFileImageSourceTest(unittest.TestCase):
         return li
 
     def takeNewChangeEventImage(self):
-        global app
+        # global app
         self.__tisu.proxy.ChangeEventAcq()
         li = self.__tisu.proxy.ChangeEventImage
         app.sendPostedEvents()
@@ -422,7 +422,7 @@ class TangoFileImageSourceTest(unittest.TestCase):
         return li
 
     def takeNewReadyEventImage(self):
-        global app
+        # global app
         self.__tisu.proxy.ReadyEventAcq()
         li = self.__tisu.proxy.ReadyEventImage
         app.sendPostedEvents()

@@ -132,7 +132,7 @@ class PyTineImageSourceTest(unittest.TestCase):
         print("tearing down ...")
 
     def takeNewImage(self):
-        global app
+        # global app
         self.__tangoimgcounter += 1
         ipath = self.__tangofilepath
         iname = \
@@ -145,7 +145,7 @@ class PyTineImageSourceTest(unittest.TestCase):
         return li
 
     def takeFlatImage(self):
-        global app
+        # global app
         self.__tangoimgcounter += 1
         width = 245
         height = 124

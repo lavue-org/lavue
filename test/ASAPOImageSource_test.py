@@ -155,7 +155,7 @@ class ASAPOImageSourceTest(unittest.TestCase):
                 self.assertEqual(state[ky], vl)
 
     def takeNewImage(self):
-        global app
+        # global app
         self.__counter += 1
 
         self.__tangoimgcounter += 1

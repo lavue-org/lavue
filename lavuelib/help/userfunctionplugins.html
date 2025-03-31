@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>User Function plugins &#8212; LaVue 2.97.0 documentation</title>
+    <title>User Function plugins &#8212; LaVue 2.98.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
     
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="filterplugins.html" title="Filter plugins"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">LaVue 2.97.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LaVue 2.98.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">User Function plugins</a></li> 
       </ul>
     </div>  
@@ -56,7 +56,7 @@
 <span id="id1"></span><h1>User Function plugins<a class="headerlink" href="#user-function-plugins" title="Permalink to this heading">¶</a></h1>
 <p>A <strong>User Function plugin</strong> can be defined by a <strong>class</strong> or a <strong>function</strong> in a python package.</p>
 <p>A <strong>user function plugin</strong> defined by a <strong>function</strong> is a simple python function with one argument: <cite>results</cite> which contain a python dictionary of <strong>ToolResults</strong>.</p>
-<p>This function <strong>returns</strong> a python dictionary with <cite>x</cite> and  <cite>y</cite> <em>(list)</em> data to plot , <cite>title</cite>, <cite>bottom</cite> and <cite>left</cite> <em>(string)</em> labels  <cite>color</cite> and <cite>hvscolor</cite> <em>(string)</em>  or <em>(int)</em> . For user plots with mutli-curves the python dictionary can contains <cite>nrplots</cite> <em>(int)</em> , <cite>x_%i</cite>,  <cite>y_%i</cite> <em>(list)</em> data to plot, <cite>color_%i</cite> and <cite>hvscolor_%i</cite> <em>(string)</em>  or <em>(int)</em> where <cite>%i</cite> runs from 1 to <cite>nrplots</cite>. If <cite>y_%i</cite> is set to <code class="docutils literal notranslate"><span class="pre">None</span></code> the previous plot will stay shown.
+<p>This function <strong>returns</strong> a python dictionary with <cite>x</cite> and  <cite>y</cite> <em>(list)</em> data to plot , <cite>title</cite>, <cite>bottom</cite> and <cite>left</cite> <em>(string)</em> labels  <cite>color</cite> and <cite>hvscolor</cite> <em>(string)</em>  or <em>(int)</em> . For user plots with mutli-curves the python dictionary can contains <cite>nrplots</cite> <em>(int)</em> , <cite>x_%i</cite>,  <cite>y_%i</cite> <em>(list)</em> data to plot, <cite>name_%i</cite>  <em>(list)</em> names of plots, <cite>color_%i</cite> and <cite>hvscolor_%i</cite> <em>(string)</em>  or <em>(int)</em> where <cite>%i</cite> runs from 1 to <cite>nrplots</cite>. If <cite>y_%i</cite> is set to <code class="docutils literal notranslate"><span class="pre">None</span></code> the previous plot will stay shown. Also if <cite>legend</cite> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code> plots are discribed by its names in legend. A location of legend can be adjusted by <cite>lengend_offset</cite> <em>(int)</em>
 , e.g.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">positive</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; plot positive function values on the LineCut tool</span>
@@ -243,6 +243,171 @@
         <span class="k">return</span> <span class="n">userplot</span>
 </pre></div>
 </div>
+<p>If <cite>image</cite> <em>(numpy.array)</em> is provided the user image is also plotted.
+When both image and function plots need to be displayed
+<cite>function</cite> has to be set to <code class="docutils literal notranslate"><span class="pre">true</span></code>.
+Also position and scale of the image can be set by
+<cite>image_scale</cite> namely <code class="docutils literal notranslate"><span class="pre">[position_x,</span> <span class="pre">postion_y,</span> <span class="pre">scale_x,</span> <span class="pre">scale_y]</span></code> .
+The <cite>colormap</cite> <em>(string)</em> sets a name of color maps.
+The levels of colormap can be set by tuple <cite>colormap_values</cite> <code class="docutils literal notranslate"><span class="pre">(low,</span> <span class="pre">high)</span></code>
+or separately <cite>colormap_low</cite> <em>(float)</em> and <cite>colormap_high</cite> <em>(float)</em>
+, e.g.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<span class="k">class</span> <span class="nc">DiffPDFImage</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;diffpy PDF user function&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param configuration: JSON list with config file and diff index</span>
+<span class="sd">        :type configuration: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj: `str`&gt;) list of indexes for gap</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__configfile</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1">#: (:obj: `int`) buffer length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span> <span class="o">=</span> <span class="mi">20</span>
+        <span class="c1">#: (:obj: `float`) waterfall plot shift</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__shift</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="c1">#: (:obj: `int`) diff label index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__index</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c1">#: (:obj: `float`) number of characters cut from the image name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cut</span> <span class="o">=</span> <span class="o">-</span><span class="mi">28</span>
+        <span class="c1">#: (:obj: `list`) buffer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">#: (:obj: `int`) plot counter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="c1">#: (:obj: `str`) plot mode i.e. all, image, function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__mode</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ximgbuffer</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__configfile</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1">#: (:obj: `float`) buffer length</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__shift</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1">#: (:obj: `float`) buffer length</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__cut</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1">#: (:obj: `float`) buffer length</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__mode</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__configfile</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">=</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span>
+
+        <span class="kn">from</span> <span class="nn">diffpy.pdfgetx</span> <span class="kn">import</span> <span class="n">loadPDFConfig</span>
+        <span class="c1">#: configuration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cfg</span> <span class="o">=</span> <span class="n">loadPDFConfig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__configfile</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; call method</span>
+
+<span class="sd">        :param results: dictionary with tool results</span>
+<span class="sd">        :type results: :obj:`dict`</span>
+<span class="sd">        :returns: dictionary with user plot data</span>
+<span class="sd">        :rtype: :obj:`dict`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">userplot</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="kn">from</span> <span class="nn">diffpy.pdfgetx</span> <span class="kn">import</span> <span class="n">PDFGetter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pg</span> <span class="o">=</span> <span class="n">PDFGetter</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__cfg</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;diff_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__index</span>
+
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">results</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__configfile</span> <span class="ow">and</span> <span class="s2">&quot;imagename&quot;</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="n">qq</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">data_gr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pg</span><span class="p">(</span><span class="n">qq</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">data_gr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">data_gr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mode</span> <span class="o">!=</span> <span class="s2">&quot;image&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__shift</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">)):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__shift</span><span class="p">)</span>
+                                               <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;imagename&quot;</span><span class="p">]])</span>
+
+                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;nrplots&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">xy</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">):</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;x_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;y_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;name_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> (+ </span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                        <span class="n">xy</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">__cut</span><span class="p">:],</span>
+                        <span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__shift</span><span class="p">))</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;hsvcolor_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> \
+                        <span class="p">((</span><span class="n">i</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span><span class="p">))</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span><span class="p">)</span> \
+                        <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span><span class="p">)</span>
+
+                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;History of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">label</span>
+                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;legend&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;legend_offset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;DiffPDFImage: </span><span class="si">%s</span><span class="s2"> with </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__configfile</span><span class="p">)</span>
+                <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mode</span> <span class="o">!=</span> <span class="s2">&quot;function&quot;</span><span class="p">:</span>
+                <span class="n">newrow</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+                   <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">newrow</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+                            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span><span class="p">[</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                                <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buflen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:,</span>
+                                <span class="p">:],</span>
+                             <span class="n">newrow</span><span class="p">]</span>
+                        <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+                            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span><span class="p">,</span> <span class="n">newrow</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">y</span><span class="p">])</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imgbuffer</span><span class="o">.</span><span class="n">T</span>
+                    <span class="n">xbuf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                    <span class="n">pos</span> <span class="o">=</span> <span class="mf">0.0</span>
+                    <span class="n">sc</span> <span class="o">=</span> <span class="mf">1.0</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">xbuf</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">pos</span> <span class="o">=</span> <span class="n">xbuf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">xbuf</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">sc</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">xbuf</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">xbuf</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xbuf</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__ximgbuffer</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;iamge_scale&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="p">[</span><span class="n">pos</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span><span class="p">)],</span> <span class="p">[</span><span class="n">sc</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+
+        <span class="k">return</span> <span class="n">userplot</span>
+</pre></div>
+</div>
 <p>To configure user functions see <a class="reference internal" href="gui/configuration/userfunctionsettings.html#user-function-plugins-settings"><span class="std std-ref">User Functions settings</span></a>.</p>
 </section>
 
@@ -292,7 +457,7 @@
         <li class="right" >
           <a href="filterplugins.html" title="Filter plugins"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">LaVue 2.97.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LaVue 2.98.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">User Function plugins</a></li> 
       </ul>
     </div>

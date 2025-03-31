@@ -89,7 +89,7 @@ class Broker(object):
 
     def get_last(self, meta_only=True, stream="default"):
         print("Broker.get_last(%s, %s)" % (stream, meta_only))
-        global filename
+        # global filename
         # self.gid = gid
         self.metaonly = meta_only
         self.data = None
