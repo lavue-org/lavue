@@ -4871,14 +4871,12 @@
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">xbuf</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                         <span class="n">pos</span> <span class="o">=</span> <span class="n">xbuf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">xbuf</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                        <span class="n">sc</span> <span class="o">=</span> <span class="p">(</span><span class="n">xbuf</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">xbuf</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xbuf</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="n">sc</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">xbuf</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">xbuf</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xbuf</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__xbuffers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">pos</span><span class="p">,</span> <span class="n">sc</span><span class="p">]</span>
                     <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">mainplotComboBox</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span> <span class="o">-</span>
                        <span class="mi">1</span> <span class="o">==</span> <span class="n">i</span><span class="p">):</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setToolScale</span><span class="p">(</span>
                             <span class="p">[</span><span class="n">pos</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">sc</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-                        <span class="c1"># self._mainwidget.setToolScale(</span>
-                        <span class="c1">#    [0, 0], [1, 1])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__resetscale</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="c1"># @debugmethod</span>
@@ -8226,6 +8224,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.98.0/index.html">v2.98.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.97.0/index.html">v2.97.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.96.0/index.html">v2.96.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.95.0/index.html">v2.95.0</a></li>
