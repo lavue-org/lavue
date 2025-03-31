@@ -4830,6 +4830,8 @@ class DiffractogramToolWidget(ToolBaseWidget):
                        1 == i):
                         self._mainwidget.setToolScale(
                             [pos, 0], [sc, 1])
+                        self._mainwidget.updateinfowidgets(self.parameters)
+                        self._mainwidget.emitReplotImage()
             self.__resetscale = False
 
     # @debugmethod
