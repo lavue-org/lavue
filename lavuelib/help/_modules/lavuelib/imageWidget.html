@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.imageWidget &#8212; LaVue 2.98.0 documentation</title>
+    <title>lavuelib.imageWidget &#8212; LaVue 2.98.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
@@ -33,7 +33,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.98.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.98.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageWidget</a></li> 
       </ul>
@@ -382,7 +382,6 @@
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_onUserLevelsChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">colorbaritem</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Levels&quot;</span><span class="p">,</span> <span class="n">colorbaritem</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">colorbaritem</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__userimagecolorbar</span> <span class="o">=</span> <span class="n">colorbaritem</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__userlevels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userimagecolorbar</span><span class="o">.</span><span class="n">levels</span><span class="p">()</span>
 
@@ -439,7 +438,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s2">&quot;image&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">userplot</span><span class="p">:</span>
             <span class="k">return</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;L1&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userimagecolorbar</span><span class="o">.</span><span class="n">levels</span><span class="p">())</span>
 
         <span class="k">if</span> <span class="s2">&quot;colormap&quot;</span> <span class="ow">in</span> <span class="n">userplot</span> <span class="ow">and</span> \
                 <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__userimagecolorbar</span><span class="p">,</span> <span class="s2">&quot;setColorMap&quot;</span><span class="p">):</span>
@@ -452,18 +450,16 @@
         <span class="k">if</span> <span class="s2">&quot;colormap_low&quot;</span> <span class="ow">in</span> <span class="n">userplot</span> <span class="ow">and</span> \
                 <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__userimagecolorbar</span><span class="p">,</span> <span class="s2">&quot;setLevels&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__userimagecolorbar</span><span class="o">.</span><span class="n">setLevels</span><span class="p">(</span>
-                <span class="n">values</span><span class="o">=</span><span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;colormap_low&quot;</span><span class="p">])</span>
+                <span class="n">low</span><span class="o">=</span><span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;colormap_low&quot;</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__userlevels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userimagecolorbar</span><span class="o">.</span><span class="n">levels</span><span class="p">()</span>
         <span class="k">if</span> <span class="s2">&quot;colormap_high&quot;</span> <span class="ow">in</span> <span class="n">userplot</span> <span class="ow">and</span> \
                 <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__userimagecolorbar</span><span class="p">,</span> <span class="s2">&quot;setLevels&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__userimagecolorbar</span><span class="o">.</span><span class="n">setLevels</span><span class="p">(</span>
-                <span class="n">values</span><span class="o">=</span><span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;colormap_high&quot;</span><span class="p">])</span>
+                <span class="n">high</span><span class="o">=</span><span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;colormap_high&quot;</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__userlevels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userimagecolorbar</span><span class="o">.</span><span class="n">levels</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;L2&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userimagecolorbar</span><span class="o">.</span><span class="n">levels</span><span class="p">())</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__userimage</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
                 <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">],</span> <span class="n">levels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__userlevels</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;L3&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userimagecolorbar</span><span class="o">.</span><span class="n">levels</span><span class="p">())</span>
         <span class="k">if</span> <span class="s2">&quot;image_scale&quot;</span> <span class="ow">in</span> <span class="n">userplot</span> <span class="ow">and</span> \
                 <span class="nb">isinstance</span><span class="p">(</span><span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;image_scale&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">setUserImageScale</span><span class="p">(</span><span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;image_scale&quot;</span><span class="p">])</span></div>
@@ -3037,7 +3033,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.98.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.98.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageWidget</a></li> 
       </ul>
