@@ -5430,7 +5430,15 @@ class DiffractogramToolWidget(ToolBaseWidget):
         :rtype: (:obj:`list` <float>, :obj:`list` <float>, :obj:`float`)
         """
         f = scipy.interpolate.InterpolatedUnivariateSpline(x, y, k=4)
-        xml = f.derivative().roots()
+        spl = f.derivative()
+        with warnings.catch_warnings():
+            warnings.filterwarnings(
+                "ignore", r'The number of zeros exceeds mest')
+            try:
+                from scipy.interpolate import _fitpack_impl
+                xml = _fitpack_impl.sproot(spl._eval_args, mest=nr)
+            except Exception:
+                xml = spl.roots()
         yml = f(xml)
         er = max([(x[i+1] - x[i]) for i in range(len(x) - 1)])
         nr = min(nr, len(yml))
