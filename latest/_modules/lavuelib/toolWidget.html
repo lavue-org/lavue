@@ -5477,7 +5477,15 @@
 <span class="sd">        :rtype: (:obj:`list` &lt;float&gt;, :obj:`list` &lt;float&gt;, :obj:`float`)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">InterpolatedUnivariateSpline</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-        <span class="n">xml</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">derivative</span><span class="p">()</span><span class="o">.</span><span class="n">roots</span><span class="p">()</span>
+        <span class="n">spl</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">derivative</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
+                <span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;The number of zeros exceeds mest&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">_fitpack_impl</span>
+                <span class="n">xml</span> <span class="o">=</span> <span class="n">_fitpack_impl</span><span class="o">.</span><span class="n">sproot</span><span class="p">(</span><span class="n">spl</span><span class="o">.</span><span class="n">_eval_args</span><span class="p">,</span> <span class="n">mest</span><span class="o">=</span><span class="n">nr</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">xml</span> <span class="o">=</span> <span class="n">spl</span><span class="o">.</span><span class="n">roots</span><span class="p">()</span>
         <span class="n">yml</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">xml</span><span class="p">)</span>
         <span class="n">er</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)])</span>
         <span class="n">nr</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">nr</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">yml</span><span class="p">))</span>
@@ -8226,6 +8234,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.98.2/index.html">v2.98.2</a></li>
       <li><a class="reference external" href="../../index/../../v2.98.1/index.html">v2.98.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.98.0/index.html">v2.98.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.97.0/index.html">v2.97.0</a></li>
