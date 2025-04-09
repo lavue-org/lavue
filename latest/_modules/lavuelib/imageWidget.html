@@ -276,6 +276,7 @@
 
         <span class="c1">#: (:class:`pyqtgraph.PlotWidget`) user 1D plot widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span> <span class="o">=</span> <span class="n">memoExportDialog</span><span class="o">.</span><span class="n">MemoPlotWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">showMenu</span><span class="p">(</span><span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">addLegend</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">getViewBox</span><span class="p">()</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">invertCheck</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
@@ -302,7 +303,8 @@
         <span class="c1">#: (:obj:`int`) current plot number</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nrplots</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">__userimageplot</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">PlotWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userimageplot</span> <span class="o">=</span> <span class="n">memoExportDialog</span><span class="o">.</span><span class="n">MemoPlotWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userimageplot</span><span class="o">.</span><span class="n">showMenu</span><span class="p">(</span><span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__userimage</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">ImageItem</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__userimageplot</span><span class="o">.</span><span class="n">getViewBox</span><span class="p">()</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__userimage</span><span class="p">)</span>
 
@@ -375,6 +377,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_emitFreezeBottomPlotClicked</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__bottomplot</span><span class="o">.</span><span class="n">clearClicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_emitClearBottomPlotClicked</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">resetClicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_resetUserPlot</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__userimageplot</span><span class="o">.</span><span class="n">resetClicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_resetUserPlot</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">__sardana</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__connectsplitters</span><span class="p">()</span>
 
@@ -415,6 +423,8 @@
                     <span class="k">else</span><span class="p">:</span>
                         <span class="k">for</span> <span class="n">ucr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__usercurves</span><span class="p">:</span>
                             <span class="n">ucr</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__userplot</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__userimage</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__nrplots</span> <span class="o">=</span> <span class="mi">0</span>
 
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -458,6 +468,7 @@
                 <span class="n">high</span><span class="o">=</span><span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;colormap_high&quot;</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__userlevels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userimagecolorbar</span><span class="o">.</span><span class="n">levels</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__userimage</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__userimage</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span>
                 <span class="n">userplot</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">],</span> <span class="n">levels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__userlevels</span><span class="p">)</span>
         <span class="k">if</span> <span class="s2">&quot;image_scale&quot;</span> <span class="ow">in</span> <span class="n">userplot</span> <span class="ow">and</span> \
@@ -499,6 +510,13 @@
         <span class="k">if</span> <span class="n">scaleChanged</span><span class="p">:</span>
             <span class="n">tr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__userimage</span><span class="o">.</span><span class="n">transform</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__userimage</span><span class="o">.</span><span class="n">setTransform</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">fromScale</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">))</span></div>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_resetUserPlot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;reset user plot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resetUserFunctions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">userfunctions</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plotUserFunction</span><span class="p">({})</span>
 
 <div class="viewcode-block" id="ImageWidget.plotUser1DFunction"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.plotUser1DFunction">[docs]</a>    <span class="k">def</span> <span class="nf">plotUser1DFunction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">userplot</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; plot user functions</span>
@@ -3026,6 +3044,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.99.0/index.html">v2.99.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.98.2/index.html">v2.98.2</a></li>
       <li><a class="reference external" href="../../index/../../v2.98.1/index.html">v2.98.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.98.0/index.html">v2.98.0</a></li>

@@ -91,6 +91,8 @@
     <span class="n">freezeClicked</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) clear clicked signal</span>
     <span class="n">clearClicked</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) reset clicked signal</span>
+    <span class="n">resetClicked</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
         <span class="n">_pg</span><span class="o">.</span><span class="n">PlotWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -111,6 +113,10 @@
             <span class="s2">&quot;Clear&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__menu</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__clearaction</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__clearaction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_clear</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__resetaction</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span>
+            <span class="s2">&quot;Reset&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__menu</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__resetaction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__resetaction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reset</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">showMenu</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_freeze</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -123,17 +129,25 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">clearClicked</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
 
-<div class="viewcode-block" id="MemoPlotWidget.showMenu"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoExportDialog.MemoPlotWidget.showMenu">[docs]</a>    <span class="k">def</span> <span class="nf">showMenu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freeze</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="n">clear</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; emits resetClicked signal</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resetClicked</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+
+<div class="viewcode-block" id="MemoPlotWidget.showMenu"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoExportDialog.MemoPlotWidget.showMenu">[docs]</a>    <span class="k">def</span> <span class="nf">showMenu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freeze</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reset</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; shows freeze or/and clear action in the menu</span>
 
 <span class="sd">        :param freeze: freeze show status</span>
 <span class="sd">        :type freeze: :obj:`bool`</span>
-<span class="sd">        :param freeze: clear show status</span>
-<span class="sd">        :type freeze: :obj:`bool`</span>
+<span class="sd">        :param clear: clear show status</span>
+<span class="sd">        :type clear: :obj:`bool`</span>
+<span class="sd">        :param reset: reset show status</span>
+<span class="sd">        :type reset: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__freezeaction</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">freeze</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__clearaction</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">clear</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__separator</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">freeze</span> <span class="ow">or</span> <span class="n">clear</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__resetaction</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__separator</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">freeze</span> <span class="ow">or</span> <span class="n">clear</span> <span class="ow">or</span> <span class="n">reset</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="MemoExportDialog"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoExportDialog.MemoExportDialog">[docs]</a><span class="k">class</span> <span class="nc">MemoExportDialog</span><span class="p">(</span><span class="n">exportDialog</span><span class="o">.</span><span class="n">ExportDialog</span><span class="p">):</span>
@@ -204,6 +218,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v2.99.0/index.html">v2.99.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.98.2/index.html">v2.98.2</a></li>
       <li><a class="reference external" href="../../index/../../v2.98.1/index.html">v2.98.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.98.0/index.html">v2.98.0</a></li>
