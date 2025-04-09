@@ -229,6 +229,7 @@ class ImageWidget(QtWidgets.QWidget):
 
         #: (:class:`pyqtgraph.PlotWidget`) user 1D plot widget
         self.__userplot = memoExportDialog.MemoPlotWidget(self)
+        self.__userplot.showMenu(reset=True)
         self.__userplot.addLegend()
         self.__userplot.plotItem.legend.hide()
         self.__userplot.getViewBox().menu.ctrl[0].invertCheck.hide()
@@ -255,7 +256,8 @@ class ImageWidget(QtWidgets.QWidget):
         #: (:obj:`int`) current plot number
         self.__nrplots = 0
 
-        self.__userimageplot = _pg.PlotWidget(self)
+        self.__userimageplot = memoExportDialog.MemoPlotWidget(self)
+        self.__userimageplot.showMenu(reset=True)
         self.__userimage = _pg.ImageItem()
         self.__userimageplot.getViewBox().addItem(self.__userimage)
 
@@ -328,6 +330,12 @@ class ImageWidget(QtWidgets.QWidget):
             self._emitFreezeBottomPlotClicked)
         self.__bottomplot.clearClicked.connect(
             self._emitClearBottomPlotClicked)
+
+        self.__userplot.resetClicked.connect(
+            self._resetUserPlot)
+        self.__userimageplot.resetClicked.connect(
+            self._resetUserPlot)
+
         self.__sardana = None
         self.__connectsplitters()
 
@@ -368,6 +376,8 @@ class ImageWidget(QtWidgets.QWidget):
                     else:
                         for ucr in self.__usercurves:
                             ucr.setVisible(False)
+                        self.__userplot.plotItem.legend.hide()
+                        self.__userimage.hide()
                         self.__nrplots = 0
 
                 except Exception as e:
@@ -411,6 +421,7 @@ class ImageWidget(QtWidgets.QWidget):
                 high=userplot["colormap_high"])
             self.__userlevels = self.__userimagecolorbar.levels()
         if isinstance(userplot["image"], np.ndarray):
+            self.__userimage.show()
             self.__userimage.setImage(
                 userplot["image"], levels=self.__userlevels)
         if "image_scale" in userplot and \
@@ -452,6 +463,13 @@ class ImageWidget(QtWidgets.QWidget):
         if scaleChanged:
             tr = self.__userimage.transform()
             self.__userimage.setTransform(tr.fromScale(sx, sy))
+
+    @QtCore.pyqtSlot()
+    def _resetUserPlot(self):
+        """reset user plot
+        """
+        self.resetUserFunctions(self.__settings.userfunctions)
+        self.plotUserFunction({})
 
     def plotUser1DFunction(self, userplot):
         """ plot user functions
