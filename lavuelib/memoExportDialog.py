@@ -44,6 +44,8 @@ class MemoPlotWidget(_pg.PlotWidget):
     freezeClicked = QtCore.pyqtSignal()
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) clear clicked signal
     clearClicked = QtCore.pyqtSignal()
+    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) reset clicked signal
+    resetClicked = QtCore.pyqtSignal()
 
     def __init__(self, parent=None, background='default', **kargs):
         _pg.PlotWidget.__init__(
@@ -64,6 +66,10 @@ class MemoPlotWidget(_pg.PlotWidget):
             "Clear", self.__menu)
         self.__menu.addAction(self.__clearaction)
         self.__clearaction.triggered.connect(self._clear)
+        self.__resetaction = QtWidgets.QAction(
+            "Reset", self.__menu)
+        self.__menu.addAction(self.__resetaction)
+        self.__resetaction.triggered.connect(self._reset)
         self.showMenu()
 
     def _freeze(self):
@@ -76,17 +82,25 @@ class MemoPlotWidget(_pg.PlotWidget):
         """
         self.clearClicked.emit()
 
-    def showMenu(self, freeze=False,  clear=False):
+    def _reset(self):
+        """ emits resetClicked signal
+        """
+        self.resetClicked.emit()
+
+    def showMenu(self, freeze=False, clear=False, reset=False):
         """ shows freeze or/and clear action in the menu
 
         :param freeze: freeze show status
         :type freeze: :obj:`bool`
-        :param freeze: clear show status
-        :type freeze: :obj:`bool`
+        :param clear: clear show status
+        :type clear: :obj:`bool`
+        :param reset: reset show status
+        :type reset: :obj:`bool`
         """
         self.__freezeaction.setVisible(freeze)
         self.__clearaction.setVisible(clear)
-        self.__separator.setVisible(freeze or clear)
+        self.__resetaction.setVisible(reset)
+        self.__separator.setVisible(freeze or clear or reset)
 
 
 class MemoExportDialog(exportDialog.ExportDialog):
