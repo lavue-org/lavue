@@ -304,11 +304,14 @@ class ImageWidget(QtWidgets.QWidget):
         #     self.__bottomplot.setMinimumSize(QtCore.QSize(0, 170))
 
         self.__addToolWidgets()
-
         self.__ui.plotSplitter.setStretchFactor(0, 50)
         self.__ui.plotSplitter.setStretchFactor(1, 1)
         self.__ui.toolSplitter.setStretchFactor(0, 2000)
         self.__ui.toolSplitter.setStretchFactor(1, 1)
+        self.__ui.userToolSplitter.setStretchFactor(0, 2000)
+        self.__ui.userToolSplitter.setStretchFactor(1, 1)
+        self.__ui.toolSplitter.updateGeometry()
+        self.__ui.plotSplitter.updateGeometry()
 
         self.__displaywidget.extension('cuts').cutCoordsChanged.connect(
             self.emitCutCoordsChanged)
@@ -357,6 +360,7 @@ class ImageWidget(QtWidgets.QWidget):
            or not self.__userfunctions:
             self.onedshowuserplot(False)
             self.twodshowuserplot(False)
+            self.__ui.userWidget.hide()
         else:
             for ufun in self.__userfunctions:
                 #  if True:
@@ -882,10 +886,9 @@ class ImageWidget(QtWidgets.QWidget):
         """
         if show:
             self.__userplot.show()
+            self.__ui.userWidget.show()
         else:
             self.__userplot.hide()
-            self.__ui.toolSplitter.setStretchFactor(0, 2000)
-            self.__ui.toolSplitter.setStretchFactor(1, 1)
 
     def twodshowuserplot(self, show=True):
         """ shows/hides 2d bottom plot legend
@@ -897,10 +900,9 @@ class ImageWidget(QtWidgets.QWidget):
         """
         if show:
             self.__userimageplot.show()
+            self.__ui.userWidget.show()
         else:
             self.__userimageplot.hide()
-            self.__ui.toolSplitter.setStretchFactor(0, 2000)
-            self.__ui.toolSplitter.setStretchFactor(1, 1)
 
     def bottomplotShowMenu(self, freeze=False, clear=False):
         """ shows freeze or/and clean action in the menu
