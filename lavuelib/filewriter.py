@@ -526,6 +526,8 @@ class FTFile(FTObject):
         :rtype: :obj:`str`
         """
         tzone = time.tzname[0]
+        if tzone in ['CET', 'CEST']:
+            tzone = 'Europe/Berlin'
         fmt = '%Y-%m-%dT%H:%M:%S.%f%z'
         try:
             if sys.version_info >= (3, 9):
