@@ -2698,7 +2698,7 @@ class FileWriterH5CppTest(unittest.TestCase):
             # dt =
             entry.create_group("data", "NXdata")
 
-            df0 = FileWriter.data_filter() 
+            df0 = FileWriter.data_filter()
             df0.rate = 0
             df1 = FileWriter.data_filter()
             df1.rate = 2
