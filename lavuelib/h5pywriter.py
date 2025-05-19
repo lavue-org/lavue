@@ -401,16 +401,60 @@ def get_links(parent):
         for name in parent.names()]
 
 
-def data_filter():
-    """ create deflate filter
+def data_filter(filterid=None, name=None, options=None, availability=None,
+                shuffle=None, rate=None):
+    """ create data filter
 
+    :param filterid: hdf5 filter id
+    :type filterid: :obj:`int`
+    :param name: filter name
+    :type name: :obj:`str`
+    :param options: filter cd values
+    :type options: :obj:`tuple` <:obj:`int`>
+    :param availability: filter availability i.e. 'optional' or 'mandatory'
+    :type availability: :obj:`str`
+    :param shuffle: filter shuffle
+    :type shuffle: :obj:`bool`
+    :param rate: filter shuffle
+    :type rate: :obj:`bool`
     :returns: deflate filter object
     :rtype: :class:`H5PYDataFilter`
     """
-    return H5PYDataFilter()
+    dtf = H5PYDataFilter()
+    if filterid:
+        dtf.filterid = filterid
+    if name:
+        dtf.name = name
+    if shuffle:
+        dtf.shuffle = shuffle
+    if rate:
+        dtf.rate = rate
+    if options:
+        dtf.options = options
+    if availability:
+        dtf.availability = availability
+    return dtf
 
 
-deflate_filter = data_filter
+def deflate_filter(rate=None, shuffle=None, availability=None):
+    """ create data filter
+
+    :param rate: filter shuffle
+    :type rate: :obj:`bool`
+    :param shuffle: filter shuffle
+    :type shuffle: :obj:`bool`
+    :returns: deflate filter object
+    :rtype: :class:`H5CppDataFilter`
+    """
+    dtf = H5PYDataFilter()
+    dtf.filterid = 1
+    dtf.name = "deflate"
+    if shuffle:
+        dtf.shuffle = shuffle
+    dtf.rate = rate or 2
+    if availability:
+        dtf.availability = availability
+    return dtf
 
 
 def target_field_view(filename, fieldpath, shape,
@@ -729,12 +773,28 @@ class H5PYGroup(filewriter.FTGroup):
         if type_code == h5py.special_dtype(vlen=unicode) and \
            shape is None and chunk is None:
             return H5PYField(
-                self._h5object.create_dataset(name, (), type_code), self)
+                self._h5object.create_dataset(name,  (), type_code), self)
 
         shape = shape or [1]
+        f = None
         mshape = [None for _ in shape] or (None,)
         if dfilter:
-            if dfilter.filterid == 1:
+            if isinstance(dfilter, list):
+                if len(dfilter) == 2 and dfilter[0] and \
+                   (dfilter[0].shuffle or dfilter[0].name == "shuffle"
+                        or dfilter[0].filterid == 4) \
+                        and not dfilter[0].rate:
+                    dfilter = dfilter[1]
+                    dfilter.shuffle = True
+                elif len(dfilter) == 1:
+                    dfilter = dfilter[0]
+                else:
+                    raise Exception("Filter pipes not supported by h5py. "
+                                    "Please change to h5cpp")
+            if dfilter.filterid == 1 or dfilter.name == "deflate" or \
+               dfilter.rate:
+                if dfilter.options and dfilter.options[0]:
+                    dfilter.rate = dfilter.options[0]
                 f = H5PYField(
                     self._h5object.create_dataset(
                         name, shape, type_code,
@@ -748,18 +808,27 @@ class H5PYGroup(filewriter.FTGroup):
                         shuffle=dfilter.shuffle, maxshape=mshape
                     ),
                     self)
-            else:
+            elif dfilter.filterid == 0 or dfilter.name == 'shuffle':
                 f = H5PYField(
                     self._h5object.create_dataset(
                         name, shape, type_code,
                         chunks=(tuple(chunk)
                                 if chunk is not None else None),
-                        compression=dfilter.filterid,
+                        shuffle=True, maxshape=mshape
+                    ),
+                    self)
+            elif dfilter.filterid > 0 or dfilter.name:
+                f = H5PYField(
+                    self._h5object.create_dataset(
+                        name, shape, type_code,
+                        chunks=(tuple(chunk)
+                                if chunk is not None else None),
+                        compression=(dfilter.filterid or dfilter.name),
                         compression_opts=tuple(dfilter.options),
                         shuffle=dfilter.shuffle, maxshape=mshape
                     ),
                     self)
-        else:
+        if not f:
             f = H5PYField(
                 self._h5object.create_dataset(
                     name, shape, type_code,
@@ -1193,8 +1262,11 @@ class H5PYVirtualFieldLayout(filewriter.FTVirtualFieldLayout):
             else:
                 sourcekey = _selection2slice(sourcekey, source.shape)
             self._h5object.__setitem__(key, source._h5object[sourcekey])
-        elif key is not None:
-            usel = unlimited_selection(key, shape)
+        elif key is not None and not isinstance(key, int):
+            try:
+                usel = unlimited_selection(key, shape)
+            except Exception:
+                usel = None
             if usel is not None:
                 self._h5object[key] = source._h5object[usel]
             else:

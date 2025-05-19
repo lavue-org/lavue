@@ -22,20 +22,28 @@
 #     Jan Kotanski <jan.kotanski@desy.de>
 #
 
-
 """ Provides h5cpp file writer """
 
 import math
 import os
 import sys
-import logging
 import numpy as np
 from pninexus import h5cpp
 
 from . import filewriter
 # from .Types import nptype
 
-logger = logging.getLogger("lavue")
+
+try:
+    _npver = np.version.version.split(".")
+    NPMAJOR = int(_npver[0])
+    if NPMAJOR > 1:
+        npunicode = np.str_
+    else:
+        npunicode = np.unicode_
+except Exception:
+    NPMAJOR = 1
+    npunicode = np.unicode_
 
 
 def nptype(dtype):
@@ -190,6 +198,11 @@ def _slice2selection(t, shape):
                 offset=(start,),
                 count=int(math.ceil((stop - start) / float(t.step))),
                 stride=(t.step,))
+    elif isinstance(t, (int, long)) and shape and len(shape) > 1:
+        offset = [0] * len(shape)
+        offset[0] = t
+        return h5cpp.dataspace.Hyperslab(
+            offset=tuple(offset), block=tuple(shape))
     elif isinstance(t, (int, long)):
         return h5cpp.dataspace.Hyperslab(
             offset=(t,), block=(1,))
@@ -483,16 +496,60 @@ def get_links(parent):
     return links
 
 
-def data_filter():
-    """ create deflate filter
+def data_filter(filterid=None, name=None, options=None, availability=None,
+                shuffle=None, rate=None):
+    """ create data filter
 
+    :param filterid: hdf5 filter id
+    :type filterid: :obj:`int`
+    :param name: filter name
+    :type name: :obj:`str`
+    :param options: filter cd values
+    :type options: :obj:`tuple` <:obj:`int`>
+    :param availability: filter availability i.e. 'optional' or 'mandatory'
+    :type availability: :obj:`str`
+    :param shuffle: filter shuffle
+    :type shuffle: :obj:`bool`
+    :param rate: filter shuffle
+    :type rate: :obj:`bool`
+    :returns: data filter object
+    :rtype: :class:`H5CppDataFilter`
+    """
+    dtf = H5CppDataFilter()
+    if filterid:
+        dtf.filterid = filterid
+    if name:
+        dtf.name = name
+    if shuffle:
+        dtf.shuffle = shuffle
+    if rate:
+        dtf.rate = rate
+    if options:
+        dtf.options = options
+    if availability:
+        dtf.availability = availability
+    return dtf
+
+
+def deflate_filter(rate=None, shuffle=None, availability=None):
+    """ create data filter
+
+    :param rate: filter shuffle
+    :type rate: :obj:`bool`
+    :param shuffle: filter shuffle
+    :type shuffle: :obj:`bool`
     :returns: deflate filter object
     :rtype: :class:`H5CppDataFilter`
     """
-    return H5CppDataFilter(h5cpp.filter.Deflate())
-
-
-deflate_filter = data_filter
+    dtf = H5CppDataFilter()
+    dtf.filterid = 1
+    dtf.name = "deflate"
+    if shuffle:
+        dtf.shuffle = shuffle
+    dtf.rate = rate or 2
+    if availability:
+        dtf.availability = availability
+    return dtf
 
 
 def target_field_view(filename, fieldpath, shape,
@@ -551,6 +608,8 @@ class H5CppFile(filewriter.FTFile):
         filewriter.FTFile.__init__(self, h5object, filename)
         #: (:obj:`str`) object nexus path
         self.path = None
+        #: (:obj:`str`) nexus file name
+        self.filename = filename
         if hasattr(h5object, "path"):
             self.path = h5object.path
 
@@ -662,7 +721,7 @@ class H5CppGroup(filewriter.FTGroup):
         if hasattr(h5object, "link"):
             self.name = h5object.link.path.name
             if tparent and tparent.path:
-                if isinstance(tparent, H5CppFile):
+                if hasattr(tparent, "root"):
                     if self.name == ".":
                         self.path = u"/"
                     else:
@@ -708,8 +767,7 @@ class H5CppGroup(filewriter.FTGroup):
                      if lk.path.name == name][0], self)
 
         except Exception as e:
-            logger.warning(str(e))
-            # print(str(e))
+            print(str(e))
             return H5CppLink(
                 [lk for lk in self._h5object.links
                  if lk.path.name == name][0], self)
@@ -806,16 +864,48 @@ class H5CppGroup(filewriter.FTGroup):
             dataspace = h5cpp.dataspace.Simple(
                 tuple(shape), tuple([h5cpp.dataspace.UNLIMITED] * len(shape)))
             if dfilter:
-                if dfilter.filterid == 1:
-                    h5object = dfilter.h5object
-                    h5object.level = dfilter.rate
-                else:
-                    h5object = h5cpp.filter.ExternalFilter(
-                        dfilter.filterid, list(dfilter.options))
-                h5object(dcpl)
-                if dfilter.shuffle:
-                    sfilter = h5cpp.filter.Shuffle()
-                    sfilter(dcpl)
+                if not isinstance(dfilter, list):
+                    dfilter = [dfilter]
+                for dfl in dfilter:
+                    if dfl.shuffle:
+                        sfilter = h5cpp.filter.Shuffle()
+                        sfilter(dcpl)
+                    h5object = None
+                    if dfl.rate:
+                        h5object = h5cpp.filter.Deflate(dfl.rate)
+                    elif dfl.filterid > 0:
+                        h5object = h5cpp.filter.ExternalFilter(
+                            dfl.filterid, list(dfl.options), dfl.name)
+                    elif dfl.name == "shuffle":
+                        h5object = h5cpp.filter.Shuffle()
+                    elif dfl.name == "deflate":
+                        if dfl.options:
+                            dfl.rate = dfl.options[0]
+                        h5object = h5cpp.filter.Deflate(dfl.rate)
+                    elif dfl.name == "nbit":
+                        h5object = h5cpp.filter.NBit()
+                    elif dfl.name == "fletcher32":
+                        h5object = h5cpp.filter.Fletcher32()
+                    elif dfl.name == "szip":
+                        h5object = h5cpp.filter.SZip()
+                        if dfl.options:
+                            h5object.option_mask = dfl.options[0]
+                        if len(dfl.options) > 1:
+                            h5object.pixel_per_block = dfl.options[1]
+                    elif dfl.name == "scaleoffset":
+                        h5object = h5cpp.filter.ScaleOffset()
+                        if dfl.options:
+                            h5object.scale_type = dfl.options[0]
+                        if len(dfl.options) > 1:
+                            h5object.scale_factor = dfl.options[1]
+
+                    if h5object:
+                        if dfl.availability:
+                            h5object(dcpl)
+                        elif dfl.availability == "optional":
+                            h5object(dcpl, h5cpp.filter.Availability.OPTIONALY)
+                        else:
+                            h5object(dcpl, h5cpp.filter.Availability.MANDATORY)
             if chunk is None and shape is not None:
                 chunk = [(dm if dm != 0 else 1) for dm in shape]
             dcpl.layout = h5cpp.property.DatasetLayout.CHUNKED
@@ -854,15 +944,14 @@ class H5CppGroup(filewriter.FTGroup):
     def reopen(self):
         """ reopen group
         """
-        if isinstance(self._tparent, H5CppFile):
+        if hasattr(self._tparent.h5object, "root"):
             self._h5object = self._tparent.h5object.root()
         else:
             try:
                 self._h5object = self._tparent.h5object.get_group(
                     h5cpp.Path(self.name))
             except Exception as e:
-                logger.warning(str(e))
-                # print(str(e))
+                print(str(e))
                 self._h5object = [lk for lk in self._tparent.h5object.links
                                   if lk.path.name == self.name][0]
         filewriter.FTGroup.reopen(self)
@@ -1288,8 +1377,8 @@ class H5CppLink(filewriter.FTLink):
             par = obj.parent
             if par is None:
                 break
-            if isinstance(par, H5CppFile):
-                filename = par.name
+            if hasattr(par, "filename"):
+                filename = par.filename
                 break
             else:
                 obj = par
@@ -1484,11 +1573,12 @@ class H5CppAttributeManager(filewriter.FTAttributeManager):
         if name in names:
             if overwrite:
                 try:
-                    if str(self[name].dtype) == _tostr(dtype):
+                    pass
+                    if str(self[name].dtype) == _tostr(dtype) \
+                       and self[name].shape == shape:
                         at = self._h5object[name]
                 except Exception as e:
-                    logger.warning(str(e))
-                    # print(str(e))
+                    print(str(e))
                 if at is None:
                     self._h5object.remove(name)
             else:
@@ -1631,7 +1721,7 @@ class H5CppAttribute(filewriter.FTAttribute):
                 if isinstance(o, str):
                     self._h5object.write(unicode(o))
                 else:
-                    dtype = np.unicode_
+                    dtype = npunicode
                     self._h5object.write(np.array(o, dtype=dtype))
             else:
                 self._h5object.write(np.array(o, dtype=self.dtype))
@@ -1640,13 +1730,13 @@ class H5CppAttribute(filewriter.FTAttribute):
             if self.dtype not in ['string', b'string']:
                 var[t] = np.array(o, dtype=nptype(self.dtype))
             else:
-                dtype = np.unicode_
+                dtype = npunicode
                 var[t] = np.array(o, dtype=dtype)
                 var = var.astype(dtype)
             try:
                 self._h5object.write(var)
             except Exception:
-                dtype = np.unicode_
+                dtype = npunicode
                 tvar = np.array(var, dtype=dtype)
                 self._h5object[0][self.name] = tvar
 
@@ -1655,7 +1745,7 @@ class H5CppAttribute(filewriter.FTAttribute):
             if self.dtype not in ['string', b'string']:
                 var[t] = np.array(o, dtype=nptype(self.dtype))
             else:
-                dtype = np.unicode_
+                dtype = npunicode
                 if hasattr(var, "flatten"):
                     vv = var.flatten().tolist() + \
                         np.array(o, dtype=dtype).flatten().tolist()
