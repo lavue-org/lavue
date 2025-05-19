@@ -3124,6 +3124,20 @@ and reset the display</p>
 </dd>
 </dl>
 <dl class="py property">
+<dt class="sig sig-object py" id="lavuelib.filewriter.FTDataFilter.availability">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">availability</span></span><a class="headerlink" href="#lavuelib.filewriter.FTDataFilter.availability" title="Permalink to this definition">¶</a></dt>
+<dd><p>getter for filter availability</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>filter availability</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="lavuelib.filewriter.FTDataFilter.filterid">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">filterid</span></span><a class="headerlink" href="#lavuelib.filewriter.FTDataFilter.filterid" title="Permalink to this definition">¶</a></dt>
 <dd><p>getter for compression filter id</p>
@@ -3133,6 +3147,20 @@ and reset the display</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="lavuelib.filewriter.FTDataFilter.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#lavuelib.filewriter.FTDataFilter.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>getter for filter name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>filter name</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3344,7 +3372,8 @@ and reset the display</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>h5object</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#any" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">any</span></code></a>) – h5 object</p></li>
 <li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – file name</p></li>
-<li><p><strong>writer</strong> (<code class="xref py py-mod docutils literal notranslate"><span class="pre">H5PYWriter</span></code> or <code class="xref py py-mod docutils literal notranslate"><span class="pre">H5CppWriter</span></code>) – writer module</p></li>
+<li><p><strong>writer</strong> (<code class="xref py py-mod docutils literal notranslate"><span class="pre">PNIWriter</span></code> or <code class="xref py py-mod docutils literal notranslate"><span class="pre">H5PYWriter</span></code>
+or <code class="xref py py-mod docutils literal notranslate"><span class="pre">H5CppWriter</span></code>) – writer module</p></li>
 </ul>
 </dd>
 </dl>
@@ -3534,6 +3563,26 @@ and reset the display</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="lavuelib.filewriter.FTGroup.default_field">
+<span class="sig-name descname"><span class="pre">default_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nexuspath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/filewriter.html#FTGroup.default_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.filewriter.FTGroup.default_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>field pointed by default attributes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – axes names</p></li>
+<li><p><strong>entryname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – base nexus path to be opened</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>field pointed by default attributes</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lavuelib.filewriter.FTField" title="lavuelib.filewriter.FTField"><code class="xref py py-class docutils literal notranslate"><span class="pre">FTField</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="lavuelib.filewriter.FTGroup.exists">
 <span class="sig-name descname"><span class="pre">exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/filewriter.html#FTGroup.exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.filewriter.FTGroup.exists" title="Permalink to this definition">¶</a></dt>
 <dd><p>if child exists</p>
@@ -3635,10 +3684,10 @@ and reset the display</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a>) – a list of offsets</p></li>
-<li><p><strong>block</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a>) – a list of blocks</p></li>
-<li><p><strong>count</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a>) – a list of counts</p></li>
-<li><p><strong>stride</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a>) – a list of strides</p></li>
+<li><p><strong>offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>&gt;) – a list of offsets</p></li>
+<li><p><strong>block</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>&gt;) – a list of blocks</p></li>
+<li><p><strong>count</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>&gt;) – a list of counts</p></li>
+<li><p><strong>stride</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>&gt;) – a list of strides</p></li>
 </ul>
 </dd>
 </dl>
@@ -3977,7 +4026,7 @@ and reset the display</p>
 <dd><p>sets writer</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>wr</strong> (<code class="xref py py-mod docutils literal notranslate"><span class="pre">H5PYWriter</span></code> or <code class="xref py py-mod docutils literal notranslate"><span class="pre">H5CppWriter</span></code>) – writer module</p>
+<dd class="field-odd"><p><strong>wr</strong> (<code class="xref py py-mod docutils literal notranslate"><span class="pre">PNIWriter</span></code> or <code class="xref py py-mod docutils literal notranslate"><span class="pre">H5PYWriter</span></code> or <code class="xref py py-mod docutils literal notranslate"><span class="pre">H5CppWriter</span></code>) – writer module</p>
 </dd>
 </dl>
 </dd></dl>
@@ -4762,6 +4811,12 @@ and reset the display</p>
 <dd><p>close file</p>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lavuelib.h5cppwriter.H5CppFile.filename">
+<span class="sig-name descname"><span class="pre">filename</span></span><a class="headerlink" href="#lavuelib.h5cppwriter.H5CppFile.filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) nexus file name</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="lavuelib.h5cppwriter.H5CppFile.flush">
 <span class="sig-name descname"><span class="pre">flush</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/h5cppwriter.html#H5CppFile.flush"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.h5cppwriter.H5CppFile.flush" title="Permalink to this definition">¶</a></dt>
@@ -5275,28 +5330,44 @@ and reset the display</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lavuelib.h5cppwriter.data_filter">
-<span class="sig-prename descclassname"><span class="pre">lavuelib.h5cppwriter.</span></span><span class="sig-name descname"><span class="pre">data_filter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/h5cppwriter.html#data_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.h5cppwriter.data_filter" title="Permalink to this definition">¶</a></dt>
-<dd><p>create deflate filter</p>
+<span class="sig-prename descclassname"><span class="pre">lavuelib.h5cppwriter.</span></span><span class="sig-name descname"><span class="pre">data_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filterid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">availability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/h5cppwriter.html#data_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.h5cppwriter.data_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>create data filter</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>deflate filter object</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filterid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – hdf5 filter id</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – filter name</p></li>
+<li><p><strong>options</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>&gt;) – filter cd values</p></li>
+<li><p><strong>availability</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – filter availability i.e. ‘optional’ or ‘mandatory’</p></li>
+<li><p><strong>shuffle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – filter shuffle</p></li>
+<li><p><strong>rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – filter shuffle</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#lavuelib.h5cppwriter.H5CppDataFilter" title="lavuelib.h5cppwriter.H5CppDataFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">H5CppDataFilter</span></code></a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>data filter object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lavuelib.h5cppwriter.H5CppDataFilter" title="lavuelib.h5cppwriter.H5CppDataFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">H5CppDataFilter</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lavuelib.h5cppwriter.deflate_filter">
-<span class="sig-prename descclassname"><span class="pre">lavuelib.h5cppwriter.</span></span><span class="sig-name descname"><span class="pre">deflate_filter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lavuelib.h5cppwriter.deflate_filter" title="Permalink to this definition">¶</a></dt>
-<dd><p>create deflate filter</p>
+<span class="sig-prename descclassname"><span class="pre">lavuelib.h5cppwriter.</span></span><span class="sig-name descname"><span class="pre">deflate_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">availability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/h5cppwriter.html#deflate_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.h5cppwriter.deflate_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>create data filter</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>deflate filter object</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – filter shuffle</p></li>
+<li><p><strong>shuffle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – filter shuffle</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#lavuelib.h5cppwriter.H5CppDataFilter" title="lavuelib.h5cppwriter.H5CppDataFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">H5CppDataFilter</span></code></a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>deflate filter object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lavuelib.h5cppwriter.H5CppDataFilter" title="lavuelib.h5cppwriter.H5CppDataFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">H5CppDataFilter</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -6440,28 +6511,44 @@ and reset the display</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lavuelib.h5pywriter.data_filter">
-<span class="sig-prename descclassname"><span class="pre">lavuelib.h5pywriter.</span></span><span class="sig-name descname"><span class="pre">data_filter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/h5pywriter.html#data_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.h5pywriter.data_filter" title="Permalink to this definition">¶</a></dt>
-<dd><p>create deflate filter</p>
+<span class="sig-prename descclassname"><span class="pre">lavuelib.h5pywriter.</span></span><span class="sig-name descname"><span class="pre">data_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filterid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">availability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/h5pywriter.html#data_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.h5pywriter.data_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>create data filter</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>deflate filter object</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filterid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – hdf5 filter id</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – filter name</p></li>
+<li><p><strong>options</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>&gt;) – filter cd values</p></li>
+<li><p><strong>availability</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – filter availability i.e. ‘optional’ or ‘mandatory’</p></li>
+<li><p><strong>shuffle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – filter shuffle</p></li>
+<li><p><strong>rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – filter shuffle</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#lavuelib.h5pywriter.H5PYDataFilter" title="lavuelib.h5pywriter.H5PYDataFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">H5PYDataFilter</span></code></a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>deflate filter object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lavuelib.h5pywriter.H5PYDataFilter" title="lavuelib.h5pywriter.H5PYDataFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">H5PYDataFilter</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lavuelib.h5pywriter.deflate_filter">
-<span class="sig-prename descclassname"><span class="pre">lavuelib.h5pywriter.</span></span><span class="sig-name descname"><span class="pre">deflate_filter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lavuelib.h5pywriter.deflate_filter" title="Permalink to this definition">¶</a></dt>
-<dd><p>create deflate filter</p>
+<span class="sig-prename descclassname"><span class="pre">lavuelib.h5pywriter.</span></span><span class="sig-name descname"><span class="pre">deflate_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">availability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/h5pywriter.html#deflate_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.h5pywriter.deflate_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>create data filter</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>deflate filter object</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – filter shuffle</p></li>
+<li><p><strong>shuffle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – filter shuffle</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#lavuelib.h5pywriter.H5PYDataFilter" title="lavuelib.h5pywriter.H5PYDataFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">H5PYDataFilter</span></code></a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>deflate filter object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">H5CppDataFilter</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -18684,7 +18771,9 @@ list of [signal, slot] object to connect</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#lavuelib.filewriter.FTDataFilter"><code class="docutils literal notranslate"><span class="pre">FTDataFilter</span></code></a><ul>
+<li><a class="reference internal" href="#lavuelib.filewriter.FTDataFilter.availability"><code class="docutils literal notranslate"><span class="pre">FTDataFilter.availability</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.filewriter.FTDataFilter.filterid"><code class="docutils literal notranslate"><span class="pre">FTDataFilter.filterid</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.filewriter.FTDataFilter.name"><code class="docutils literal notranslate"><span class="pre">FTDataFilter.name</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.filewriter.FTDataFilter.options"><code class="docutils literal notranslate"><span class="pre">FTDataFilter.options</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.filewriter.FTDataFilter.rate"><code class="docutils literal notranslate"><span class="pre">FTDataFilter.rate</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.filewriter.FTDataFilter.reopen"><code class="docutils literal notranslate"><span class="pre">FTDataFilter.reopen()</span></code></a></li>
@@ -18720,6 +18809,7 @@ list of [signal, slot] object to connect</p>
 <li><a class="reference internal" href="#lavuelib.filewriter.FTGroup.create_field"><code class="docutils literal notranslate"><span class="pre">FTGroup.create_field()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.filewriter.FTGroup.create_group"><code class="docutils literal notranslate"><span class="pre">FTGroup.create_group()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.filewriter.FTGroup.create_virtual_field"><code class="docutils literal notranslate"><span class="pre">FTGroup.create_virtual_field()</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.filewriter.FTGroup.default_field"><code class="docutils literal notranslate"><span class="pre">FTGroup.default_field()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.filewriter.FTGroup.exists"><code class="docutils literal notranslate"><span class="pre">FTGroup.exists()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.filewriter.FTGroup.names"><code class="docutils literal notranslate"><span class="pre">FTGroup.names()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.filewriter.FTGroup.open"><code class="docutils literal notranslate"><span class="pre">FTGroup.open()</span></code></a></li>
@@ -18871,6 +18961,7 @@ list of [signal, slot] object to connect</p>
 </li>
 <li><a class="reference internal" href="#lavuelib.h5cppwriter.H5CppFile"><code class="docutils literal notranslate"><span class="pre">H5CppFile</span></code></a><ul>
 <li><a class="reference internal" href="#lavuelib.h5cppwriter.H5CppFile.close"><code class="docutils literal notranslate"><span class="pre">H5CppFile.close()</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.h5cppwriter.H5CppFile.filename"><code class="docutils literal notranslate"><span class="pre">H5CppFile.filename</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.h5cppwriter.H5CppFile.flush"><code class="docutils literal notranslate"><span class="pre">H5CppFile.flush()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.h5cppwriter.H5CppFile.is_valid"><code class="docutils literal notranslate"><span class="pre">H5CppFile.is_valid</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.h5cppwriter.H5CppFile.path"><code class="docutils literal notranslate"><span class="pre">H5CppFile.path</span></code></a></li>

@@ -69,20 +69,28 @@
 <span class="c1">#     Jan Kotanski &lt;jan.kotanski@desy.de&gt;</span>
 <span class="c1">#</span>
 
-
 <span class="sd">&quot;&quot;&quot; Provides h5cpp file writer &quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">pninexus</span> <span class="kn">import</span> <span class="n">h5cpp</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">filewriter</span>
 <span class="c1"># from .Types import nptype</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;lavue&quot;</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">_npver</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+    <span class="n">NPMAJOR</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">_npver</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">NPMAJOR</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">npunicode</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">str_</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">npunicode</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unicode_</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="n">NPMAJOR</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">npunicode</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unicode_</span>
 
 
 <div class="viewcode-block" id="nptype"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5cppwriter.nptype">[docs]</a><span class="k">def</span> <span class="nf">nptype</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
@@ -237,6 +245,11 @@
                 <span class="n">offset</span><span class="o">=</span><span class="p">(</span><span class="n">start</span><span class="p">,),</span>
                 <span class="n">count</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">stop</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">step</span><span class="p">))),</span>
                 <span class="n">stride</span><span class="o">=</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">step</span><span class="p">,))</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">))</span> <span class="ow">and</span> <span class="n">shape</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+        <span class="k">return</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">dataspace</span><span class="o">.</span><span class="n">Hyperslab</span><span class="p">(</span>
+            <span class="n">offset</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">offset</span><span class="p">),</span> <span class="n">block</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">shape</span><span class="p">))</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">)):</span>
         <span class="k">return</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">dataspace</span><span class="o">.</span><span class="n">Hyperslab</span><span class="p">(</span>
             <span class="n">offset</span><span class="o">=</span><span class="p">(</span><span class="n">t</span><span class="p">,),</span> <span class="n">block</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,))</span>
@@ -530,16 +543,60 @@
     <span class="k">return</span> <span class="n">links</span></div>
 
 
-<div class="viewcode-block" id="data_filter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5cppwriter.data_filter">[docs]</a><span class="k">def</span> <span class="nf">data_filter</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; create deflate filter</span>
+<div class="viewcode-block" id="data_filter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5cppwriter.data_filter">[docs]</a><span class="k">def</span> <span class="nf">data_filter</span><span class="p">(</span><span class="n">filterid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">availability</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">shuffle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; create data filter</span>
 
+<span class="sd">    :param filterid: hdf5 filter id</span>
+<span class="sd">    :type filterid: :obj:`int`</span>
+<span class="sd">    :param name: filter name</span>
+<span class="sd">    :type name: :obj:`str`</span>
+<span class="sd">    :param options: filter cd values</span>
+<span class="sd">    :type options: :obj:`tuple` &lt;:obj:`int`&gt;</span>
+<span class="sd">    :param availability: filter availability i.e. &#39;optional&#39; or &#39;mandatory&#39;</span>
+<span class="sd">    :type availability: :obj:`str`</span>
+<span class="sd">    :param shuffle: filter shuffle</span>
+<span class="sd">    :type shuffle: :obj:`bool`</span>
+<span class="sd">    :param rate: filter shuffle</span>
+<span class="sd">    :type rate: :obj:`bool`</span>
+<span class="sd">    :returns: data filter object</span>
+<span class="sd">    :rtype: :class:`H5CppDataFilter`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dtf</span> <span class="o">=</span> <span class="n">H5CppDataFilter</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">filterid</span><span class="p">:</span>
+        <span class="n">dtf</span><span class="o">.</span><span class="n">filterid</span> <span class="o">=</span> <span class="n">filterid</span>
+    <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+        <span class="n">dtf</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="k">if</span> <span class="n">shuffle</span><span class="p">:</span>
+        <span class="n">dtf</span><span class="o">.</span><span class="n">shuffle</span> <span class="o">=</span> <span class="n">shuffle</span>
+    <span class="k">if</span> <span class="n">rate</span><span class="p">:</span>
+        <span class="n">dtf</span><span class="o">.</span><span class="n">rate</span> <span class="o">=</span> <span class="n">rate</span>
+    <span class="k">if</span> <span class="n">options</span><span class="p">:</span>
+        <span class="n">dtf</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
+    <span class="k">if</span> <span class="n">availability</span><span class="p">:</span>
+        <span class="n">dtf</span><span class="o">.</span><span class="n">availability</span> <span class="o">=</span> <span class="n">availability</span>
+    <span class="k">return</span> <span class="n">dtf</span></div>
+
+
+<div class="viewcode-block" id="deflate_filter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5cppwriter.deflate_filter">[docs]</a><span class="k">def</span> <span class="nf">deflate_filter</span><span class="p">(</span><span class="n">rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">availability</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; create data filter</span>
+
+<span class="sd">    :param rate: filter shuffle</span>
+<span class="sd">    :type rate: :obj:`bool`</span>
+<span class="sd">    :param shuffle: filter shuffle</span>
+<span class="sd">    :type shuffle: :obj:`bool`</span>
 <span class="sd">    :returns: deflate filter object</span>
 <span class="sd">    :rtype: :class:`H5CppDataFilter`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">H5CppDataFilter</span><span class="p">(</span><span class="n">h5cpp</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">Deflate</span><span class="p">())</span></div>
-
-
-<span class="n">deflate_filter</span> <span class="o">=</span> <span class="n">data_filter</span>
+    <span class="n">dtf</span> <span class="o">=</span> <span class="n">H5CppDataFilter</span><span class="p">()</span>
+    <span class="n">dtf</span><span class="o">.</span><span class="n">filterid</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">dtf</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;deflate&quot;</span>
+    <span class="k">if</span> <span class="n">shuffle</span><span class="p">:</span>
+        <span class="n">dtf</span><span class="o">.</span><span class="n">shuffle</span> <span class="o">=</span> <span class="n">shuffle</span>
+    <span class="n">dtf</span><span class="o">.</span><span class="n">rate</span> <span class="o">=</span> <span class="n">rate</span> <span class="ow">or</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="n">availability</span><span class="p">:</span>
+        <span class="n">dtf</span><span class="o">.</span><span class="n">availability</span> <span class="o">=</span> <span class="n">availability</span>
+    <span class="k">return</span> <span class="n">dtf</span></div>
 
 
 <div class="viewcode-block" id="target_field_view"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5cppwriter.target_field_view">[docs]</a><span class="k">def</span> <span class="nf">target_field_view</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fieldpath</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span>
@@ -598,6 +655,8 @@
         <span class="n">filewriter</span><span class="o">.</span><span class="n">FTFile</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
         <span class="c1">#: (:obj:`str`) object nexus path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`str`) nexus file name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">h5object</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">h5object</span><span class="o">.</span><span class="n">path</span>
 
@@ -709,7 +768,7 @@
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">h5object</span><span class="p">,</span> <span class="s2">&quot;link&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">h5object</span><span class="o">.</span><span class="n">link</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">name</span>
             <span class="k">if</span> <span class="n">tparent</span> <span class="ow">and</span> <span class="n">tparent</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tparent</span><span class="p">,</span> <span class="n">H5CppFile</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">tparent</span><span class="p">,</span> <span class="s2">&quot;root&quot;</span><span class="p">):</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;.&quot;</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;/&quot;</span>
                     <span class="k">else</span><span class="p">:</span>
@@ -755,8 +814,7 @@
                      <span class="k">if</span> <span class="n">lk</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="p">)</span>
 
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-            <span class="c1"># print(str(e))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
             <span class="k">return</span> <span class="n">H5CppLink</span><span class="p">(</span>
                 <span class="p">[</span><span class="n">lk</span> <span class="k">for</span> <span class="n">lk</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">links</span>
                  <span class="k">if</span> <span class="n">lk</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="p">)</span></div>
@@ -853,16 +911,48 @@
             <span class="n">dataspace</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">dataspace</span><span class="o">.</span><span class="n">Simple</span><span class="p">(</span>
                 <span class="nb">tuple</span><span class="p">(</span><span class="n">shape</span><span class="p">),</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">h5cpp</span><span class="o">.</span><span class="n">dataspace</span><span class="o">.</span><span class="n">UNLIMITED</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)))</span>
             <span class="k">if</span> <span class="n">dfilter</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">dfilter</span><span class="o">.</span><span class="n">filterid</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">h5object</span> <span class="o">=</span> <span class="n">dfilter</span><span class="o">.</span><span class="n">h5object</span>
-                    <span class="n">h5object</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">dfilter</span><span class="o">.</span><span class="n">rate</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">h5object</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">ExternalFilter</span><span class="p">(</span>
-                        <span class="n">dfilter</span><span class="o">.</span><span class="n">filterid</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">dfilter</span><span class="o">.</span><span class="n">options</span><span class="p">))</span>
-                <span class="n">h5object</span><span class="p">(</span><span class="n">dcpl</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">dfilter</span><span class="o">.</span><span class="n">shuffle</span><span class="p">:</span>
-                    <span class="n">sfilter</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">Shuffle</span><span class="p">()</span>
-                    <span class="n">sfilter</span><span class="p">(</span><span class="n">dcpl</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dfilter</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">dfilter</span> <span class="o">=</span> <span class="p">[</span><span class="n">dfilter</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">dfl</span> <span class="ow">in</span> <span class="n">dfilter</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">dfl</span><span class="o">.</span><span class="n">shuffle</span><span class="p">:</span>
+                        <span class="n">sfilter</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">Shuffle</span><span class="p">()</span>
+                        <span class="n">sfilter</span><span class="p">(</span><span class="n">dcpl</span><span class="p">)</span>
+                    <span class="n">h5object</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">if</span> <span class="n">dfl</span><span class="o">.</span><span class="n">rate</span><span class="p">:</span>
+                        <span class="n">h5object</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">Deflate</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">rate</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">dfl</span><span class="o">.</span><span class="n">filterid</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">h5object</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">ExternalFilter</span><span class="p">(</span>
+                            <span class="n">dfl</span><span class="o">.</span><span class="n">filterid</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">options</span><span class="p">),</span> <span class="n">dfl</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">dfl</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;shuffle&quot;</span><span class="p">:</span>
+                        <span class="n">h5object</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">Shuffle</span><span class="p">()</span>
+                    <span class="k">elif</span> <span class="n">dfl</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;deflate&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">dfl</span><span class="o">.</span><span class="n">options</span><span class="p">:</span>
+                            <span class="n">dfl</span><span class="o">.</span><span class="n">rate</span> <span class="o">=</span> <span class="n">dfl</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">h5object</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">Deflate</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">rate</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">dfl</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;nbit&quot;</span><span class="p">:</span>
+                        <span class="n">h5object</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">NBit</span><span class="p">()</span>
+                    <span class="k">elif</span> <span class="n">dfl</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;fletcher32&quot;</span><span class="p">:</span>
+                        <span class="n">h5object</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">Fletcher32</span><span class="p">()</span>
+                    <span class="k">elif</span> <span class="n">dfl</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;szip&quot;</span><span class="p">:</span>
+                        <span class="n">h5object</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">SZip</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">dfl</span><span class="o">.</span><span class="n">options</span><span class="p">:</span>
+                            <span class="n">h5object</span><span class="o">.</span><span class="n">option_mask</span> <span class="o">=</span> <span class="n">dfl</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">options</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">h5object</span><span class="o">.</span><span class="n">pixel_per_block</span> <span class="o">=</span> <span class="n">dfl</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="n">dfl</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;scaleoffset&quot;</span><span class="p">:</span>
+                        <span class="n">h5object</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">ScaleOffset</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">dfl</span><span class="o">.</span><span class="n">options</span><span class="p">:</span>
+                            <span class="n">h5object</span><span class="o">.</span><span class="n">scale_type</span> <span class="o">=</span> <span class="n">dfl</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">options</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">h5object</span><span class="o">.</span><span class="n">scale_factor</span> <span class="o">=</span> <span class="n">dfl</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+                    <span class="k">if</span> <span class="n">h5object</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">dfl</span><span class="o">.</span><span class="n">availability</span><span class="p">:</span>
+                            <span class="n">h5object</span><span class="p">(</span><span class="n">dcpl</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">dfl</span><span class="o">.</span><span class="n">availability</span> <span class="o">==</span> <span class="s2">&quot;optional&quot;</span><span class="p">:</span>
+                            <span class="n">h5object</span><span class="p">(</span><span class="n">dcpl</span><span class="p">,</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">Availability</span><span class="o">.</span><span class="n">OPTIONALY</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">h5object</span><span class="p">(</span><span class="n">dcpl</span><span class="p">,</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">Availability</span><span class="o">.</span><span class="n">MANDATORY</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">chunk</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">shape</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">chunk</span> <span class="o">=</span> <span class="p">[(</span><span class="n">dm</span> <span class="k">if</span> <span class="n">dm</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">dm</span> <span class="ow">in</span> <span class="n">shape</span><span class="p">]</span>
             <span class="n">dcpl</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">h5cpp</span><span class="o">.</span><span class="n">property</span><span class="o">.</span><span class="n">DatasetLayout</span><span class="o">.</span><span class="n">CHUNKED</span>
@@ -901,15 +991,14 @@
 <div class="viewcode-block" id="H5CppGroup.reopen"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5cppwriter.H5CppGroup.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; reopen group</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tparent</span><span class="p">,</span> <span class="n">H5CppFile</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tparent</span><span class="o">.</span><span class="n">h5object</span><span class="p">,</span> <span class="s2">&quot;root&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tparent</span><span class="o">.</span><span class="n">h5object</span><span class="o">.</span><span class="n">root</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tparent</span><span class="o">.</span><span class="n">h5object</span><span class="o">.</span><span class="n">get_group</span><span class="p">(</span>
                     <span class="n">h5cpp</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-                <span class="c1"># print(str(e))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span> <span class="o">=</span> <span class="p">[</span><span class="n">lk</span> <span class="k">for</span> <span class="n">lk</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tparent</span><span class="o">.</span><span class="n">h5object</span><span class="o">.</span><span class="n">links</span>
                                   <span class="k">if</span> <span class="n">lk</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">filewriter</span><span class="o">.</span><span class="n">FTGroup</span><span class="o">.</span><span class="n">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
@@ -1335,8 +1424,8 @@
             <span class="n">par</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">parent</span>
             <span class="k">if</span> <span class="n">par</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">break</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">par</span><span class="p">,</span> <span class="n">H5CppFile</span><span class="p">):</span>
-                <span class="n">filename</span> <span class="o">=</span> <span class="n">par</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">par</span><span class="p">,</span> <span class="s2">&quot;filename&quot;</span><span class="p">):</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">par</span><span class="o">.</span><span class="n">filename</span>
                 <span class="k">break</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">obj</span> <span class="o">=</span> <span class="n">par</span>
@@ -1531,11 +1620,12 @@
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">overwrite</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="o">==</span> <span class="n">_tostr</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
+                    <span class="k">pass</span>
+                    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="o">==</span> <span class="n">_tostr</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span> \
+                       <span class="ow">and</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">shape</span><span class="p">:</span>
                         <span class="n">at</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-                    <span class="c1"># print(str(e))</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
                 <span class="k">if</span> <span class="n">at</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -1678,7 +1768,7 @@
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">unicode</span><span class="p">(</span><span class="n">o</span><span class="p">))</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unicode_</span>
+                    <span class="n">dtype</span> <span class="o">=</span> <span class="n">npunicode</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">))</span>
@@ -1687,13 +1777,13 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;string&#39;</span><span class="p">]:</span>
                 <span class="n">var</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">nptype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unicode_</span>
+                <span class="n">dtype</span> <span class="o">=</span> <span class="n">npunicode</span>
                 <span class="n">var</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
                 <span class="n">var</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unicode_</span>
+                <span class="n">dtype</span> <span class="o">=</span> <span class="n">npunicode</span>
                 <span class="n">tvar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">tvar</span>
 
@@ -1702,7 +1792,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;string&#39;</span><span class="p">]:</span>
                 <span class="n">var</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">nptype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unicode_</span>
+                <span class="n">dtype</span> <span class="o">=</span> <span class="n">npunicode</span>
                 <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="s2">&quot;flatten&quot;</span><span class="p">):</span>
                     <span class="n">vv</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">+</span> \
                         <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>

@@ -277,6 +277,8 @@
     <span class="c1"># does not work on py2 and old py3</span>
     <span class="c1"># return datetime.datetime.utcnow().astimezone().isoformat()</span>
     <span class="n">tzone</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">tzname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">tzone</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;CET&#39;</span><span class="p">,</span> <span class="s1">&#39;CEST&#39;</span><span class="p">]:</span>
+        <span class="n">tzone</span> <span class="o">=</span> <span class="s1">&#39;Europe/Berlin&#39;</span>
     <span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S.</span><span class="si">%f</span><span class="s1">%z&#39;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
