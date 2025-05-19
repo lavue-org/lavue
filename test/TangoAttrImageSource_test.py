@@ -47,6 +47,19 @@ except Exception:
 from qtchecker.qtChecker import (
     QtChecker, CmdCheck, ExtCmdCheck, WrapAttrCheck)
 
+
+try:
+    _npver = np.version.version.split(".")
+    NPMAJOR = int(_npver[0])
+    if NPMAJOR > 1:
+        npnan = np.nan
+    else:
+        npnan = np.NaN
+except Exception:
+    NPMAJOR = 1
+    npnan = np.NaN
+
+
 #  Qt-application
 app = None
 
@@ -554,7 +567,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         l1 = self.__tisu.proxy.Spectrum1
         l2 = self.__tisu.proxy.Spectrum2
         zs = np.zeros(dtype="float64", shape=l1.shape)
-        zs[:] = np.NaN
+        zs[:] = npnan
         lastimage = np.stack([l1, zs, zs, l2], 1)
         options = argparse.Namespace(
             mode='expert',
