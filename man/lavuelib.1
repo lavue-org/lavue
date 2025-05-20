@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "LAVUELIB" "1" "Apr 11, 2025" "2.99" "LaVue"
+.TH "LAVUELIB" "1" "May 20, 2025" "3.0" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .sp
@@ -5856,6 +5856,19 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
+.B property  availability
+getter for filter availability
+.INDENT 7.0
+.TP
+.B Returns
+filter availability
+.TP
+.B Return type
+\fI\%tuple\fP <\fI\%str\fP>
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B property  filterid
 getter for compression filter id
 .INDENT 7.0
@@ -5865,6 +5878,19 @@ compression rate
 .TP
 .B Return type
 \fI\%int\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B property  name
+getter for filter name
+.INDENT 7.0
+.TP
+.B Returns
+filter name
+.TP
+.B Return type
+\fI\%tuple\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -6073,7 +6099,8 @@ constructor
 .IP \(bu 2
 \fBfilename\fP (\fI\%str\fP) \-\- file name
 .IP \(bu 2
-\fBwriter\fP (\fBH5PYWriter\fP or \fBH5CppWriter\fP) \-\- writer module
+\fBwriter\fP (\fBPNIWriter\fP or \fBH5PYWriter\fP
+or \fBH5CppWriter\fP) \-\- writer module
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -6267,6 +6294,27 @@ creates a virtual filed tres element
 .UNINDENT
 .INDENT 7.0
 .TP
+.B default_field(signals=None, nexuspath=None)
+field pointed by default attributes
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBaxes\fP \-\- axes names
+.IP \(bu 2
+\fBentryname\fP (\fI\%str\fP) \-\- base nexus path to be opened
+.UNINDENT
+.TP
+.B Returns
+field pointed by default attributes
+.TP
+.B Return type
+\fI\%FTField\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B exists(name)
 if child exists
 .INDENT 7.0
@@ -6363,13 +6411,13 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBoffset\fP (\fI\%tuple\fP) \-\- a list of offsets
+\fBoffset\fP (\fI\%tuple\fP <\fI\%int\fP>) \-\- a list of offsets
 .IP \(bu 2
-\fBblock\fP (\fI\%tuple\fP) \-\- a list of blocks
+\fBblock\fP (\fI\%tuple\fP <\fI\%int\fP>) \-\- a list of blocks
 .IP \(bu 2
-\fBcount\fP (\fI\%tuple\fP) \-\- a list of counts
+\fBcount\fP (\fI\%tuple\fP <\fI\%int\fP>) \-\- a list of counts
 .IP \(bu 2
-\fBstride\fP (\fI\%tuple\fP) \-\- a list of strides
+\fBstride\fP (\fI\%tuple\fP <\fI\%int\fP>) \-\- a list of strides
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -6713,7 +6761,7 @@ sets writer
 .INDENT 7.0
 .TP
 .B Parameters
-\fBwr\fP (\fBH5PYWriter\fP or \fBH5CppWriter\fP) \-\- writer module
+\fBwr\fP (\fBPNIWriter\fP or \fBH5PYWriter\fP or \fBH5CppWriter\fP) \-\- writer module
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -7472,6 +7520,11 @@ close file
 .UNINDENT
 .INDENT 7.0
 .TP
+.B filename
+(\fI\%str\fP) nexus file name
+.UNINDENT
+.INDENT 7.0
+.TP
 .B flush()
 flash the data
 .UNINDENT
@@ -7982,12 +8035,28 @@ file object
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.h5cppwriter.data_filter()
-create deflate filter
+.B lavuelib.h5cppwriter.data_filter(filterid=None, name=None, options=None, availability=None, shuffle=None, rate=None)
+create data filter
 .INDENT 7.0
 .TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBfilterid\fP (\fI\%int\fP) \-\- hdf5 filter id
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- filter name
+.IP \(bu 2
+\fBoptions\fP (\fI\%tuple\fP <\fI\%int\fP>) \-\- filter cd values
+.IP \(bu 2
+\fBavailability\fP (\fI\%str\fP) \-\- filter availability i.e. \(aqoptional\(aq or \(aqmandatory\(aq
+.IP \(bu 2
+\fBshuffle\fP (\fI\%bool\fP) \-\- filter shuffle
+.IP \(bu 2
+\fBrate\fP (\fI\%bool\fP) \-\- filter shuffle
+.UNINDENT
+.TP
 .B Returns
-deflate filter object
+data filter object
 .TP
 .B Return type
 \fI\%H5CppDataFilter\fP
@@ -7995,9 +8064,17 @@ deflate filter object
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.h5cppwriter.deflate_filter()
-create deflate filter
+.B lavuelib.h5cppwriter.deflate_filter(rate=None, shuffle=None, availability=None)
+create data filter
 .INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBrate\fP (\fI\%bool\fP) \-\- filter shuffle
+.IP \(bu 2
+\fBshuffle\fP (\fI\%bool\fP) \-\- filter shuffle
+.UNINDENT
 .TP
 .B Returns
 deflate filter object
@@ -9148,9 +9225,25 @@ file object
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.h5pywriter.data_filter()
-create deflate filter
+.B lavuelib.h5pywriter.data_filter(filterid=None, name=None, options=None, availability=None, shuffle=None, rate=None)
+create data filter
 .INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBfilterid\fP (\fI\%int\fP) \-\- hdf5 filter id
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- filter name
+.IP \(bu 2
+\fBoptions\fP (\fI\%tuple\fP <\fI\%int\fP>) \-\- filter cd values
+.IP \(bu 2
+\fBavailability\fP (\fI\%str\fP) \-\- filter availability i.e. \(aqoptional\(aq or \(aqmandatory\(aq
+.IP \(bu 2
+\fBshuffle\fP (\fI\%bool\fP) \-\- filter shuffle
+.IP \(bu 2
+\fBrate\fP (\fI\%bool\fP) \-\- filter shuffle
+.UNINDENT
 .TP
 .B Returns
 deflate filter object
@@ -9161,15 +9254,23 @@ deflate filter object
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.h5pywriter.deflate_filter()
-create deflate filter
+.B lavuelib.h5pywriter.deflate_filter(rate=None, shuffle=None, availability=None)
+create data filter
 .INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBrate\fP (\fI\%bool\fP) \-\- filter shuffle
+.IP \(bu 2
+\fBshuffle\fP (\fI\%bool\fP) \-\- filter shuffle
+.UNINDENT
 .TP
 .B Returns
 deflate filter object
 .TP
 .B Return type
-\fI\%H5PYDataFilter\fP
+\fBH5CppDataFilter\fP
 .UNINDENT
 .UNINDENT
 .INDENT 0.0

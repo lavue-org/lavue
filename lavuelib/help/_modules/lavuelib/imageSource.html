@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.imageSource &#8212; LaVue 2.99.1 documentation</title>
+    <title>lavuelib.imageSource &#8212; LaVue 3.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
@@ -33,7 +33,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.99.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.0.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageSource</a></li> 
       </ul>
@@ -277,6 +277,8 @@
     <span class="c1"># does not work on py2 and old py3</span>
     <span class="c1"># return datetime.datetime.utcnow().astimezone().isoformat()</span>
     <span class="n">tzone</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">tzname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">tzone</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;CET&#39;</span><span class="p">,</span> <span class="s1">&#39;CEST&#39;</span><span class="p">]:</span>
+        <span class="n">tzone</span> <span class="o">=</span> <span class="s1">&#39;Europe/Berlin&#39;</span>
     <span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S.</span><span class="si">%f</span><span class="s1">%z&#39;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
@@ -2881,7 +2883,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 2.99.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.0.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageSource</a></li> 
       </ul>
