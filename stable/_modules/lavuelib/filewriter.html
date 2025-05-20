@@ -79,12 +79,19 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 
 
-<span class="c1">#: (:mod:`H5PYWriter`or :mod:`H5CppWriter`)</span>
+<span class="c1">#: (:mod:`PNIWriter` or :mod:`H5PYWriter`or :mod:`H5CppWriter`)</span>
 <span class="c1">#    default writer module</span>
 <span class="n">writer</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="c1">#: (:class:`threading.Lock`) writer module</span>
 <span class="n">writerlock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">_npver</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+    <span class="n">NPMAJOR</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">_npver</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="n">NPMAJOR</span> <span class="o">=</span> <span class="mi">1</span>
 
 
 <div class="viewcode-block" id="open_file"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.open_file">[docs]</a><span class="k">def</span> <span class="nf">open_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">):</span>
@@ -337,7 +344,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; sets writer</span>
 
 <span class="sd">    :param wr: writer module</span>
-<span class="sd">    :type wr: :mod:`H5PYWriter` or :mod:`H5CppWriter`</span>
+<span class="sd">    :type wr: :mod:`PNIWriter` or :mod:`H5PYWriter` or :mod:`H5CppWriter`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">writer</span>
     <span class="k">with</span> <span class="n">writerlock</span><span class="p">:</span>
@@ -351,13 +358,13 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param offset: a list of offsets</span>
-<span class="sd">        :type offset: :obj:`tuple`</span>
+<span class="sd">        :type offset: :obj:`tuple` &lt;:obj:`int`&gt;</span>
 <span class="sd">        :param block: a list of blocks</span>
-<span class="sd">        :type block: :obj:`tuple`</span>
+<span class="sd">        :type block: :obj:`tuple` &lt;:obj:`int`&gt;</span>
 <span class="sd">        :param count: a list of counts</span>
-<span class="sd">        :type count: :obj:`tuple`</span>
+<span class="sd">        :type count: :obj:`tuple` &lt;:obj:`int`&gt;</span>
 <span class="sd">        :param stride: a list of strides</span>
-<span class="sd">        :type stride: :obj:`tuple`</span>
+<span class="sd">        :type stride: :obj:`tuple` &lt;:obj:`int`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">offset</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">block</span> <span class="o">=</span> <span class="n">block</span>
@@ -500,7 +507,14 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-        <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">NPMAJOR</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">array</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="s2">&quot;decode&quot;</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="n">array</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
     <span class="k">return</span> <span class="n">array</span></div>
 
 
@@ -517,12 +531,13 @@
 <span class="sd">        :param filename:  file name</span>
 <span class="sd">        :type filename: :obj:`str`</span>
 <span class="sd">        :param writer: writer module</span>
-<span class="sd">        :type writer: :mod:`H5PYWriter` or :mod:`H5CppWriter`</span>
+<span class="sd">        :type writer: :mod:`PNIWriter` or :mod:`H5PYWriter`</span>
+<span class="sd">                        or :mod:`H5CppWriter`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">FTObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5object</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="c1">#: (:obj:`str`) file name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">filename</span>
-        <span class="c1">#: (:mod:`H5PYWriter` or :mod:`H5CppWriter`)</span>
+        <span class="c1">#: (:mod:`PNIWriter` or :mod:`H5PYWriter` or :mod:`H5CppWriter`)</span>
         <span class="c1"># writer module</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -573,6 +588,8 @@
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tzone</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">tzname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">tzone</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;CET&#39;</span><span class="p">,</span> <span class="s1">&#39;CEST&#39;</span><span class="p">]:</span>
+            <span class="n">tzone</span> <span class="o">=</span> <span class="s1">&#39;Europe/Berlin&#39;</span>
         <span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S.</span><span class="si">%f</span><span class="s1">%z&#39;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
@@ -595,69 +612,7 @@
 <span class="sd">        :returns: field pointed by default attributes</span>
 <span class="sd">        :rtype: :class:`FTField`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">()</span>
-        <span class="n">searching</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">while</span> <span class="n">searching</span><span class="p">:</span>
-            <span class="n">attrs</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attributes</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;default&quot;</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
-                <span class="n">nname</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nname</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">nname</span><span class="p">):</span>
-                    <span class="n">nname</span> <span class="o">=</span> <span class="n">nname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">nname</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
-                    <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">nname</span><span class="p">)</span>
-                    <span class="k">continue</span>
-            <span class="n">searching</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
-            <span class="n">attrs</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attributes</span>
-            <span class="k">if</span> <span class="s2">&quot;signal&quot;</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
-                <span class="n">nname</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nname</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">nname</span><span class="p">):</span>
-                    <span class="n">nname</span> <span class="o">=</span> <span class="n">nname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">nname</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
-                    <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">nname</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">node</span>
-
-        <span class="k">for</span> <span class="n">cnm</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;NXentry&quot;</span><span class="p">,</span> <span class="s2">&quot;NXdata&quot;</span><span class="p">,</span> <span class="s2">&quot;NXmonitor&quot;</span><span class="p">,</span> <span class="s2">&quot;NXlog&quot;</span><span class="p">]:</span>
-            <span class="n">names</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">cnm</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
-                <span class="n">snames</span> <span class="o">=</span> <span class="p">[</span><span class="n">cnm</span><span class="p">[</span><span class="mi">2</span><span class="p">:]]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">snames</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">snames</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="n">nm</span> <span class="k">for</span> <span class="n">nm</span> <span class="ow">in</span> <span class="n">names</span> <span class="k">if</span> <span class="n">nm</span> <span class="o">!=</span> <span class="n">cnm</span><span class="p">[</span><span class="mi">2</span><span class="p">:]]))</span>
-            <span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">snames</span><span class="p">:</span>
-                <span class="n">nd</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">nn</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">nd</span><span class="p">,</span> <span class="s2">&quot;attributes&quot;</span><span class="p">):</span>
-                    <span class="k">continue</span>
-                <span class="n">attrs</span> <span class="o">=</span> <span class="n">nd</span><span class="o">.</span><span class="n">attributes</span>
-                <span class="k">if</span> <span class="s2">&quot;NX_class&quot;</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
-                    <span class="n">nname</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;NX_class&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nname</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">nname</span><span class="p">):</span>
-                        <span class="n">nname</span> <span class="o">=</span> <span class="n">nname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="n">nname</span> <span class="ow">in</span> <span class="n">cnm</span><span class="p">:</span>
-                        <span class="n">node</span> <span class="o">=</span> <span class="n">nd</span>
-                        <span class="k">break</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;attributes&quot;</span><span class="p">):</span>
-            <span class="n">attrs</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attributes</span>
-            <span class="k">if</span> <span class="s2">&quot;signal&quot;</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
-                <span class="n">nname</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nname</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">nname</span><span class="p">):</span>
-                    <span class="n">nname</span> <span class="o">=</span> <span class="n">nname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">nname</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
-                    <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">nname</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">node</span>
-        <span class="k">while</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;data&quot;</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
-            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">()):</span>
-                <span class="n">nd</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">nn</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">nd</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
-                    <span class="n">node</span> <span class="o">=</span> <span class="n">nd</span>
-                    <span class="k">break</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">node</span>
-        <span class="k">return</span> <span class="kc">None</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">()</span><span class="o">.</span><span class="n">default_field</span><span class="p">()</span></div></div>
 
 
 <div class="viewcode-block" id="FTGroup"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTGroup">[docs]</a><span class="k">class</span> <span class="nc">FTGroup</span><span class="p">(</span><span class="n">FTObject</span><span class="p">):</span>
@@ -772,7 +727,112 @@
 <div class="viewcode-block" id="FTGroup.reopen"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTGroup.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; reopen attribute</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">FTObject</span><span class="o">.</span><span class="n">_reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+        <span class="n">FTObject</span><span class="o">.</span><span class="n">_reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FTGroup.default_field"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTGroup.default_field">[docs]</a>    <span class="k">def</span> <span class="nf">default_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nexuspath</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; field pointed by default attributes</span>
+
+<span class="sd">        :type signals: :obj:`list`&lt;:obj:`str`&gt;</span>
+<span class="sd">        :param axes: axes names</span>
+<span class="sd">        :param entryname: base nexus path to be opened</span>
+<span class="sd">        :type entryname: :obj:`str`</span>
+<span class="sd">        :returns: field pointed by default attributes</span>
+<span class="sd">        :rtype: :class:`FTField`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="n">searching</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">nexuspath</span> <span class="o">=</span> <span class="n">nexuspath</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">groups</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nexuspath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">n</span><span class="p">]</span>
+        <span class="k">while</span> <span class="n">searching</span><span class="p">:</span>
+            <span class="n">nname</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
+                <span class="n">gname</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">if</span> <span class="n">groups</span><span class="p">:</span>
+                    <span class="n">gname</span> <span class="o">=</span> <span class="n">groups</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">gname</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                    <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">groups</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">attrs</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attributes</span>
+                <span class="k">if</span> <span class="s2">&quot;default&quot;</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                    <span class="n">nname</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nname</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">nname</span><span class="p">):</span>
+                        <span class="n">nname</span> <span class="o">=</span> <span class="n">nname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">nname</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">nname</span><span class="p">)</span>
+                        <span class="k">continue</span>
+            <span class="n">searching</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">node</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">groups</span><span class="p">:</span>
+                <span class="n">gname</span> <span class="o">=</span> <span class="n">groups</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">gname</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="n">node</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">groups</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">attrs</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attributes</span>
+                <span class="k">if</span> <span class="s2">&quot;signal&quot;</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                    <span class="n">nname</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nname</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">nname</span><span class="p">):</span>
+                        <span class="n">nname</span> <span class="o">=</span> <span class="n">nname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">nname</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">nname</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="n">node</span>
+
+        <span class="k">for</span> <span class="n">cnm</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;NXentry&quot;</span><span class="p">,</span> <span class="s2">&quot;NXdata&quot;</span><span class="p">,</span> <span class="s2">&quot;NXmonitor&quot;</span><span class="p">,</span> <span class="s2">&quot;NXlog&quot;</span><span class="p">]:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">cnm</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="n">snames</span> <span class="o">=</span> <span class="p">[</span><span class="n">cnm</span><span class="p">[</span><span class="mi">2</span><span class="p">:]]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">snames</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">snames</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="n">nm</span> <span class="k">for</span> <span class="n">nm</span> <span class="ow">in</span> <span class="n">names</span> <span class="k">if</span> <span class="n">nm</span> <span class="o">!=</span> <span class="n">cnm</span><span class="p">[</span><span class="mi">2</span><span class="p">:]]))</span>
+            <span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">snames</span><span class="p">:</span>
+                <span class="n">nd</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">nn</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">nd</span><span class="p">,</span> <span class="s2">&quot;attributes&quot;</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="n">attrs</span> <span class="o">=</span> <span class="n">nd</span><span class="o">.</span><span class="n">attributes</span>
+                <span class="k">if</span> <span class="s2">&quot;NX_class&quot;</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                    <span class="n">nname</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;NX_class&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nname</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">nname</span><span class="p">):</span>
+                        <span class="n">nname</span> <span class="o">=</span> <span class="n">nname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">nname</span> <span class="ow">in</span> <span class="n">cnm</span><span class="p">:</span>
+                        <span class="n">node</span> <span class="o">=</span> <span class="n">nd</span>
+                        <span class="k">break</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;attributes&quot;</span><span class="p">):</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attributes</span>
+            <span class="k">if</span> <span class="s2">&quot;signal&quot;</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                <span class="n">nname</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nname</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">nname</span><span class="p">):</span>
+                    <span class="n">nname</span> <span class="o">=</span> <span class="n">nname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">nname</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                    <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">nname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">node</span>
+        <span class="k">while</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;data&quot;</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">signals</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">signal</span> <span class="ow">in</span> <span class="n">signals</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">signal</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+                        <span class="n">nd</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
+                            <span class="n">node</span> <span class="o">=</span> <span class="n">nd</span>
+                            <span class="k">break</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">()):</span>
+                <span class="n">nd</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">nn</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">nd</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
+                    <span class="n">node</span> <span class="o">=</span> <span class="n">nd</span>
+                    <span class="k">break</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;names&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">node</span>
+        <span class="k">return</span> <span class="kc">None</span></div></div>
 
 
 <div class="viewcode-block" id="FTVirtualFieldLayout"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTVirtualFieldLayout">[docs]</a><span class="k">class</span> <span class="nc">FTVirtualFieldLayout</span><span class="p">(</span><span class="n">FTObject</span><span class="p">):</span>
@@ -979,9 +1039,49 @@
         <span class="c1">#: (:obj:`int`) compression rate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rate</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1">#: (:obj:`int`) compression filter id</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_filterid</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filterid</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1">#: (:obj:`tuple` &lt;:obj:`int`&gt;) compression options</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>
+        <span class="c1">#: (:obj:`str`) filter name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1">#: (:obj:`str`) filter availability</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_availability</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; getter for filter name</span>
+
+<span class="sd">        :returns: filter name</span>
+<span class="sd">        :rtype: :obj:`tuple` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+
+    <span class="nd">@name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; setter for filter name</span>
+
+<span class="sd">        :param value: filter name</span>
+<span class="sd">        :type value: :obj:`tuple` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">availability</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; getter for filter availability</span>
+
+<span class="sd">        :returns: filter availability</span>
+<span class="sd">        :rtype: :obj:`tuple` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_availability</span>
+
+    <span class="nd">@availability</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">availability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; setter for filter availability</span>
+
+<span class="sd">        :param value: filter availability</span>
+<span class="sd">        :type value: :obj:`tuple` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_availability</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1157,7 +1257,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; write attribute value</span>
 
 <span class="sd">        :param t: slice tuple</span>
-<span class="sd">        :type t: :obj:`tuple`</span>
+<span class="sd">        :type t: :obj:`tuple` &lt;:obj:`int`&gt;</span>
 <span class="sd">        :param o: python object</span>
 <span class="sd">        :type o: :obj:`any`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1166,7 +1266,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; read attribute value</span>
 
 <span class="sd">        :param t: slice tuple</span>
-<span class="sd">        :type t: :obj:`tuple`</span>
+<span class="sd">        :type t: :obj:`tuple` &lt;:obj:`int`&gt;</span>
 <span class="sd">        :returns: python object</span>
 <span class="sd">        :rtype: :obj:`any`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1215,6 +1315,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v3.0.0/index.html">v3.0.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.99.1/index.html">v2.99.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.99.0/index.html">v2.99.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.98.2/index.html">v2.98.2</a></li>

@@ -448,16 +448,60 @@
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">parent</span><span class="o">.</span><span class="n">names</span><span class="p">()]</span></div>
 
 
-<div class="viewcode-block" id="data_filter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.data_filter">[docs]</a><span class="k">def</span> <span class="nf">data_filter</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; create deflate filter</span>
+<div class="viewcode-block" id="data_filter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.data_filter">[docs]</a><span class="k">def</span> <span class="nf">data_filter</span><span class="p">(</span><span class="n">filterid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">availability</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">shuffle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; create data filter</span>
 
+<span class="sd">    :param filterid: hdf5 filter id</span>
+<span class="sd">    :type filterid: :obj:`int`</span>
+<span class="sd">    :param name: filter name</span>
+<span class="sd">    :type name: :obj:`str`</span>
+<span class="sd">    :param options: filter cd values</span>
+<span class="sd">    :type options: :obj:`tuple` &lt;:obj:`int`&gt;</span>
+<span class="sd">    :param availability: filter availability i.e. &#39;optional&#39; or &#39;mandatory&#39;</span>
+<span class="sd">    :type availability: :obj:`str`</span>
+<span class="sd">    :param shuffle: filter shuffle</span>
+<span class="sd">    :type shuffle: :obj:`bool`</span>
+<span class="sd">    :param rate: filter shuffle</span>
+<span class="sd">    :type rate: :obj:`bool`</span>
 <span class="sd">    :returns: deflate filter object</span>
 <span class="sd">    :rtype: :class:`H5PYDataFilter`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">H5PYDataFilter</span><span class="p">()</span></div>
+    <span class="n">dtf</span> <span class="o">=</span> <span class="n">H5PYDataFilter</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">filterid</span><span class="p">:</span>
+        <span class="n">dtf</span><span class="o">.</span><span class="n">filterid</span> <span class="o">=</span> <span class="n">filterid</span>
+    <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+        <span class="n">dtf</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="k">if</span> <span class="n">shuffle</span><span class="p">:</span>
+        <span class="n">dtf</span><span class="o">.</span><span class="n">shuffle</span> <span class="o">=</span> <span class="n">shuffle</span>
+    <span class="k">if</span> <span class="n">rate</span><span class="p">:</span>
+        <span class="n">dtf</span><span class="o">.</span><span class="n">rate</span> <span class="o">=</span> <span class="n">rate</span>
+    <span class="k">if</span> <span class="n">options</span><span class="p">:</span>
+        <span class="n">dtf</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
+    <span class="k">if</span> <span class="n">availability</span><span class="p">:</span>
+        <span class="n">dtf</span><span class="o">.</span><span class="n">availability</span> <span class="o">=</span> <span class="n">availability</span>
+    <span class="k">return</span> <span class="n">dtf</span></div>
 
 
-<span class="n">deflate_filter</span> <span class="o">=</span> <span class="n">data_filter</span>
+<div class="viewcode-block" id="deflate_filter"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.deflate_filter">[docs]</a><span class="k">def</span> <span class="nf">deflate_filter</span><span class="p">(</span><span class="n">rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">availability</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; create data filter</span>
+
+<span class="sd">    :param rate: filter shuffle</span>
+<span class="sd">    :type rate: :obj:`bool`</span>
+<span class="sd">    :param shuffle: filter shuffle</span>
+<span class="sd">    :type shuffle: :obj:`bool`</span>
+<span class="sd">    :returns: deflate filter object</span>
+<span class="sd">    :rtype: :class:`H5CppDataFilter`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dtf</span> <span class="o">=</span> <span class="n">H5PYDataFilter</span><span class="p">()</span>
+    <span class="n">dtf</span><span class="o">.</span><span class="n">filterid</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">dtf</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;deflate&quot;</span>
+    <span class="k">if</span> <span class="n">shuffle</span><span class="p">:</span>
+        <span class="n">dtf</span><span class="o">.</span><span class="n">shuffle</span> <span class="o">=</span> <span class="n">shuffle</span>
+    <span class="n">dtf</span><span class="o">.</span><span class="n">rate</span> <span class="o">=</span> <span class="n">rate</span> <span class="ow">or</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="n">availability</span><span class="p">:</span>
+        <span class="n">dtf</span><span class="o">.</span><span class="n">availability</span> <span class="o">=</span> <span class="n">availability</span>
+    <span class="k">return</span> <span class="n">dtf</span></div>
 
 
 <div class="viewcode-block" id="target_field_view"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.target_field_view">[docs]</a><span class="k">def</span> <span class="nf">target_field_view</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fieldpath</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span>
@@ -776,12 +820,28 @@
         <span class="k">if</span> <span class="n">type_code</span> <span class="o">==</span> <span class="n">h5py</span><span class="o">.</span><span class="n">special_dtype</span><span class="p">(</span><span class="n">vlen</span><span class="o">=</span><span class="n">unicode</span><span class="p">)</span> <span class="ow">and</span> \
            <span class="n">shape</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chunk</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">H5PYField</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">(),</span> <span class="n">type_code</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">,</span>  <span class="p">(),</span> <span class="n">type_code</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>
 
         <span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span> <span class="ow">or</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">mshape</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">shape</span><span class="p">]</span> <span class="ow">or</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span>
         <span class="k">if</span> <span class="n">dfilter</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">dfilter</span><span class="o">.</span><span class="n">filterid</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dfilter</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dfilter</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">dfilter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> \
+                   <span class="p">(</span><span class="n">dfilter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shuffle</span> <span class="ow">or</span> <span class="n">dfilter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;shuffle&quot;</span>
+                        <span class="ow">or</span> <span class="n">dfilter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">filterid</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span> \
+                        <span class="ow">and</span> <span class="ow">not</span> <span class="n">dfilter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rate</span><span class="p">:</span>
+                    <span class="n">dfilter</span> <span class="o">=</span> <span class="n">dfilter</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">dfilter</span><span class="o">.</span><span class="n">shuffle</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">dfilter</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">dfilter</span> <span class="o">=</span> <span class="n">dfilter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Filter pipes not supported by h5py. &quot;</span>
+                                    <span class="s2">&quot;Please change to h5cpp&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dfilter</span><span class="o">.</span><span class="n">filterid</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">dfilter</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;deflate&quot;</span> <span class="ow">or</span> \
+               <span class="n">dfilter</span><span class="o">.</span><span class="n">rate</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">dfilter</span><span class="o">.</span><span class="n">options</span> <span class="ow">and</span> <span class="n">dfilter</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">dfilter</span><span class="o">.</span><span class="n">rate</span> <span class="o">=</span> <span class="n">dfilter</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">f</span> <span class="o">=</span> <span class="n">H5PYField</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span>
                         <span class="n">name</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">type_code</span><span class="p">,</span>
@@ -795,18 +855,27 @@
                         <span class="n">shuffle</span><span class="o">=</span><span class="n">dfilter</span><span class="o">.</span><span class="n">shuffle</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="n">mshape</span>
                     <span class="p">),</span>
                     <span class="bp">self</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">dfilter</span><span class="o">.</span><span class="n">filterid</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">dfilter</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;shuffle&#39;</span><span class="p">:</span>
                 <span class="n">f</span> <span class="o">=</span> <span class="n">H5PYField</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span>
                         <span class="n">name</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">type_code</span><span class="p">,</span>
                         <span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
                                 <span class="k">if</span> <span class="n">chunk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span>
-                        <span class="n">compression</span><span class="o">=</span><span class="n">dfilter</span><span class="o">.</span><span class="n">filterid</span><span class="p">,</span>
+                        <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="n">mshape</span>
+                    <span class="p">),</span>
+                    <span class="bp">self</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">dfilter</span><span class="o">.</span><span class="n">filterid</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">dfilter</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="n">H5PYField</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span>
+                        <span class="n">name</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">type_code</span><span class="p">,</span>
+                        <span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                                <span class="k">if</span> <span class="n">chunk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span>
+                        <span class="n">compression</span><span class="o">=</span><span class="p">(</span><span class="n">dfilter</span><span class="o">.</span><span class="n">filterid</span> <span class="ow">or</span> <span class="n">dfilter</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
                         <span class="n">compression_opts</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">dfilter</span><span class="o">.</span><span class="n">options</span><span class="p">),</span>
                         <span class="n">shuffle</span><span class="o">=</span><span class="n">dfilter</span><span class="o">.</span><span class="n">shuffle</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="n">mshape</span>
                     <span class="p">),</span>
                     <span class="bp">self</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">f</span> <span class="o">=</span> <span class="n">H5PYField</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span>
                     <span class="n">name</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">type_code</span><span class="p">,</span>
@@ -1240,8 +1309,11 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">sourcekey</span> <span class="o">=</span> <span class="n">_selection2slice</span><span class="p">(</span><span class="n">sourcekey</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">_h5object</span><span class="p">[</span><span class="n">sourcekey</span><span class="p">])</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">usel</span> <span class="o">=</span> <span class="n">unlimited_selection</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">usel</span> <span class="o">=</span> <span class="n">unlimited_selection</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">usel</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">if</span> <span class="n">usel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">_h5object</span><span class="p">[</span><span class="n">usel</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
@@ -1637,6 +1709,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v3.0.0/index.html">v3.0.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.99.1/index.html">v2.99.1</a></li>
       <li><a class="reference external" href="../../index/../../v2.99.0/index.html">v2.99.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.98.2/index.html">v2.98.2</a></li>
