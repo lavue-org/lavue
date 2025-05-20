@@ -300,6 +300,15 @@
         <span class="k">if</span> <span class="n">_PQGVER</span> <span class="o">&lt;</span> <span class="mi">1009</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__viewonetoone</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__viewonetoone</span><span class="p">)</span>
+
+        <span class="c1">#: (:class:`PyQt5.QtWidgets.QAction`) auto range action</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__autorange</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span>
+            <span class="s2">&quot;Auto range&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">menu</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__autorange</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_autoRange</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_PQGVER</span> <span class="o">&lt;</span> <span class="mi">1009</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__autorange</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__autorange</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">invertCheck</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">mouseCheck</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">linkCombo</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
@@ -423,6 +432,14 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__setaspectlocked</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__setaspectlocked</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__setaspectlocked</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_autoRange</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set auto range</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__viewbox</span><span class="o">.</span><span class="n">enableAutoRange</span><span class="p">()</span>
+        <span class="c1"># if not self.__setaspectlocked.isChecked():</span>
+        <span class="c1">#     self.__setaspectlocked.setChecked(True)</span>
+        <span class="c1">#     self.__setaspectlocked.triggered.emit(True)</span>
 
 <div class="viewcode-block" id="ImageDisplayWidget.setViewRange"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageDisplayWidget.ImageDisplayWidget.setViewRange">[docs]</a>    <span class="k">def</span> <span class="nf">setViewRange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rangelist</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set view range values</span>
