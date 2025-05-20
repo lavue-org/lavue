@@ -390,9 +390,9 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         """ set auto range
         """
         self.__viewbox.enableAutoRange()
-        if not self.__setaspectlocked.isChecked():
-            self.__setaspectlocked.setChecked(True)
-            self.__setaspectlocked.triggered.emit(True)
+        # if not self.__setaspectlocked.isChecked():
+        #     self.__setaspectlocked.setChecked(True)
+        #     self.__setaspectlocked.triggered.emit(True)
 
     def setViewRange(self, rangelist):
         """ set view range values
