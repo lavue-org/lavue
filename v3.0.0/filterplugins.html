@@ -1,0 +1,224 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Filter plugins &#8212; LaVue  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="User Function plugins" href="userfunctionplugins.html" />
+    <link rel="prev" title="ZMQ Stream server examples" href="zmqserver.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="userfunctionplugins.html" title="User Function plugins"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="zmqserver.html" title="ZMQ Stream server examples"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LaVue  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Filter plugins</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="filter-plugins">
+<span id="id1"></span><h1>Filter plugins<a class="headerlink" href="#filter-plugins" title="Permalink to this heading">¶</a></h1>
+<p>A user <strong>Filter plugin</strong> can be defined by a <strong>class</strong> or a <strong>function</strong> in a python package.</p>
+<p>A <strong>filter plugin</strong> defined by a <strong>function</strong> is a simple python function with four arguments: <cite>numpy_image</cite>, <cite>image_name</cite>, <cite>JSON_metadata</cite>, <cite>ImageWidget</cite>.</p>
+<p>This function <strong>returns</strong> <cite>new_numpy_image</cite> or <cite>None</cite> or <em>tuple</em> (<cite>new_numpy_image</cite>, <cite>filtermetadata_dict</cite>) , e.g.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">ndimage</span>
+
+<span class="k">def</span> <span class="nf">rot45</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">imagename</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">imagewg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; rotate image by 45 deg</span>
+
+<span class="sd">    :param image: numpy array with an image</span>
+<span class="sd">    :type image: :class:`numpy.ndarray`</span>
+<span class="sd">    :param imagename: image name</span>
+<span class="sd">    :type imagename: :obj:`str`</span>
+<span class="sd">    :param metadata: JSON dictionary with metadata</span>
+<span class="sd">    :type metadata: :obj:`str`</span>
+<span class="sd">    :param imagewg: image wigdet</span>
+<span class="sd">    :type imagewg: :class:`lavuelib.imageWidget.ImageWidget`</span>
+<span class="sd">    :returns: numpy array with an image</span>
+<span class="sd">    :rtype: :class:`numpy.ndarray` or `None`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="mi">45</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A <strong>filter plugin</strong> defined by a <strong>class</strong> it should have defined <strong>__call__</strong> method with four arguments: <cite>numpy_image</cite>, <cite>image_name</cite>, <cite>JSON_metadata</cite>, <cite>ImageWidget</cite>.</p>
+<p>This <strong>__call__</strong> function returns <cite>new_numpy_image</cite> or <cite>None</cite> or <em>tuple</em>  (<cite>new_numpy_image</cite>, <cite>filtermetadata_dict</cite>) .</p>
+<p>Moreover, the class <em>constructor</em> has one configuration string argument initialized by an initialization parameter, e.g.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+
+<span class="k">class</span> <span class="nc">HGap</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="sd">&quot;&quot;&quot; Horizontal gap filter&quot;&quot;&quot;</span>
+
+<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; converts the configuration string into a list of indexes</span>
+
+<span class="sd">    :param configuration: JSON list with horizontal gap pixels to add</span>
+<span class="sd">    :type configuration: :obj:`str`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#: (:obj:`list` &lt;:obj: `str`&gt;) list of indexes for gap</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__indexes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">)]</span>
+
+<span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">imagename</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">imagewg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; inserts rows into the image</span>
+
+<span class="sd">    :param image: numpy array with an image</span>
+<span class="sd">    :type image: :class:`numpy.ndarray`</span>
+<span class="sd">    :param imagename: image name</span>
+<span class="sd">    :type imagename: :obj:`str`</span>
+<span class="sd">    :param metadata: JSON dictionary with metadata</span>
+<span class="sd">    :type metadata: :obj:`str`</span>
+<span class="sd">    :param imagewg: image wigdet</span>
+<span class="sd">    :type imagewg: :class:`lavuelib.imageWidget.ImageWidget`</span>
+<span class="sd">    :returns: numpy array with an image</span>
+<span class="sd">    :rtype: :class:`numpy.ndarray` or `None`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__indexes</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Furthermore, it can have an <strong>initialize()</strong> or <strong>terminate()</strong> method to perform an action of switching <strong>on</strong> or <strong>off</strong> filters respectively.</p>
+<p>More sophisticated examples can be found at <a class="reference external" href="https://github.com/lavue-org/lavue-filters/tree/develop/lavuefilters">lavuefilters</a>:</p>
+<ul class="simple">
+<li><p><cite>lavuefilters.memoplugins.HistoryDump</cite> contains a filter which collects distinct images displayed by lavue in memory</p></li>
+<li><p><cite>lavuefilters.h5pyplugins.H5PYdumpdiff</cite> contains a filter which dumps distict images displayed by lavue to an hdf5 file</p></li>
+<li><p><cite>lavuefilters.h5pyplugins.H5PYdump</cite> contains a filter which dumps images displayed by lavue to an hdf5 file</p></li>
+</ul>
+<p>To configure filters see <a class="reference internal" href="gui/configuration/filtersettings.html#filter-plugins-settings"><span class="std std-ref">Filter plugins settings</span></a>.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="zmqserver.html"
+                          title="previous chapter">ZMQ Stream server examples</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="userfunctionplugins.html"
+                          title="next chapter">User Function plugins</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="index/../../v3.0.0/index.html">v3.0.0</a></li>
+      <li><a class="reference external" href="index/../../v2.99.1/index.html">v2.99.1</a></li>
+      <li><a class="reference external" href="index/../../v2.99.0/index.html">v2.99.0</a></li>
+      <li><a class="reference external" href="index/../../v2.98.2/index.html">v2.98.2</a></li>
+      <li><a class="reference external" href="index/../../v2.97.0/index.html">v2.97.0</a></li>
+      <li><a class="reference external" href="index/../../v2.96.0/index.html">v2.96.0</a></li>
+      <li><a class="reference external" href="index/../../v2.95.0/index.html">v2.95.0</a></li>
+      <li><a class="reference external" href="index/../../v2.94.2/index.html">v2.94.2</a></li>
+      <li><a class="reference external" href="index/../../v2.93.1/index.html">v2.93.1</a></li>
+      <li><a class="reference external" href="index/../../v2.92.2/index.html">v2.92.2</a></li>
+      <li><a class="reference external" href="index/../../v2.91.1/index.html">v2.91.1</a></li>
+      <li><a class="reference external" href="index/../../v2.90.2/index.html">v2.90.2</a></li>
+      <li><a class="reference external" href="index/../../v2.89.3/index.html">v2.89.3</a></li>
+      <li><a class="reference external" href="index/../../v2.88.0/index.html">v2.88.0</a></li>
+      <li><a class="reference external" href="index/../../v2.87.0/index.html">v2.87.0</a></li>
+      <li><a class="reference external" href="index/../../v2.86.1/index.html">v2.86.1</a></li>
+      <li><a class="reference external" href="index/../../v2.85.1/index.html">v2.85.1</a></li>
+      <li><a class="reference external" href="index/../../v2.84.0/index.html">v2.84.0</a></li>
+      <li><a class="reference external" href="index/../../v2.83.4/index.html">v2.83.4</a></li>
+      <li><a class="reference external" href="index/../../v2.82.0/index.html">v2.82.0</a></li>
+      <li><a class="reference external" href="index/../../v2.81.0/index.html">v2.81.0</a></li>
+      <li><a class="reference external" href="index/../../v2.80.1/index.html">v2.80.1</a></li>
+      <li><a class="reference external" href="index/../../v2.79.0/index.html">v2.79.0</a></li>
+      <li><a class="reference external" href="index/../../v2.78.0/index.html">v2.78.0</a></li>
+      <li><a class="reference external" href="index/../../v2.77.0/index.html">v2.77.0</a></li>
+      <li><a class="reference external" href="index/../../v2.76.1/index.html">v2.76.1</a></li>
+      <li><a class="reference external" href="index/../../v2.75.3/index.html">v2.75.3</a></li>
+      <li><a class="reference external" href="index/../../v2.74.0/index.html">v2.74.0</a></li>
+      <li><a class="reference external" href="index/../../v2.73.0/index.html">v2.73.0</a></li>
+      <li><a class="reference external" href="index/../../v2.72.0/index.html">v2.72.0</a></li>
+      <li><a class="reference external" href="index/../../v2.71.1/index.html">v2.71.1</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="userfunctionplugins.html" title="User Function plugins"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="zmqserver.html" title="ZMQ Stream server examples"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LaVue  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Filter plugins</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+
+GNU GENERAL PUBLIC LICENSE, version 2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>
