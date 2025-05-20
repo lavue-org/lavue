@@ -253,6 +253,15 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         if _PQGVER < 1009:
             self.__viewbox.menu.axes.insert(0, self.__viewonetoone)
         self.__viewbox.menu.addAction(self.__viewonetoone)
+
+        #: (:class:`PyQt5.QtWidgets.QAction`) auto range action
+        self.__autorange = QtWidgets.QAction(
+            "Auto range", self.__viewbox.menu)
+        self.__autorange.triggered.connect(self._autoRange)
+        if _PQGVER < 1009:
+            self.__viewbox.menu.axes.insert(0, self.__autorange)
+        self.__viewbox.menu.addAction(self.__autorange)
+
         self.__viewbox.menu.ctrl[0].invertCheck.hide()
         self.__viewbox.menu.ctrl[0].mouseCheck.hide()
         self.__viewbox.menu.ctrl[0].linkCombo.hide()
@@ -376,6 +385,14 @@ class ImageDisplayWidget(_pg.GraphicsLayoutWidget):
         if self.__setaspectlocked.isChecked():
             self.__setaspectlocked.setChecked(False)
             self.__setaspectlocked.triggered.emit(False)
+
+    def _autoRange(self):
+        """ set auto range
+        """
+        self.__viewbox.enableAutoRange()
+        if not self.__setaspectlocked.isChecked():
+            self.__setaspectlocked.setChecked(True)
+            self.__setaspectlocked.triggered.emit(True)
 
     def setViewRange(self, rangelist):
         """ set view range values
