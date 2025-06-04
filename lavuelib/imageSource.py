@@ -950,7 +950,8 @@ class DATAARRAYdecoder(object):
         #: ([:obj:`str`, :obj:`str`]) header and image data
         self.__data = None
         #: (:obj:`str`) struct header format
-        self.__headerFormat = '<IHHIIHHHHHHHHIIIIIIII'
+        self.__headerFormat123 = '<IHHIIHHHHHHHHIIIIIIII'
+        self.__headerFormat = '<IHHIIHHHHHHHHIIIIIIQQII'
         #: (:obj:`dict` <:obj:`str`, :obj:`any` > ) header data
         self.__header = {}
         #: (:obj:`dict` <:obj:`int`, :obj:`str` > ) format modes
@@ -988,6 +989,8 @@ class DATAARRAYdecoder(object):
         :type headerData: :obj:`str`
         """
         hdr = struct.unpack(self.__headerFormat, headerData)
+        if hdr[1] < 4:
+            hdr = struct.unpack(self.__headerFormat123, headerData)
         self.__header = {}
         self.__header['magic'] = hdr[0]
         self.__header['headerVersion'] = hdr[1]
@@ -1001,7 +1004,14 @@ class DATAARRAYdecoder(object):
         self.__header['steps'] = [
             hdr[13], hdr[14], hdr[15], hdr[16], hdr[17], hdr[18]]
 
-        self.__header['padding'] = hdr[19:]
+        if hdr[1] > 3:
+            self.__header['imageNumber'] = hdr[19]
+            self.__header['acqTag'] = hdr[20]
+            self.__header['padding'] = hdr[21:]
+        else:
+            self.__header['padding'] = hdr[19:]
+            self.__header['imageNumber'] = -1
+            self.__header['acqTag'] = -1
 
         self.dtype = self.__dtypeID[self.__header['imageMode']]
 
