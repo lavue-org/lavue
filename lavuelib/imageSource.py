@@ -988,9 +988,13 @@ class DATAARRAYdecoder(object):
         :param headerData: buffer with header data
         :type headerData: :obj:`str`
         """
-        hdr = struct.unpack(self.__headerFormat, headerData)
-        if hdr[1] < 4:
+        try:
+            hdr = struct.unpack(self.__headerFormat, headerData)
+            if hdr[1] < 4:
+                hdr = struct.unpack(self.__headerFormat123, headerData)
+        except Exception:
             hdr = struct.unpack(self.__headerFormat123, headerData)
+
         self.__header = {}
         self.__header['magic'] = hdr[0]
         self.__header['headerVersion'] = hdr[1]
