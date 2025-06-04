@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.imageSource &#8212; LaVue 3.0.0 documentation</title>
+    <title>lavuelib.imageSource &#8212; LaVue 3.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
@@ -33,7 +33,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.1.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageSource</a></li> 
       </ul>
@@ -997,7 +997,8 @@
         <span class="c1">#: ([:obj:`str`, :obj:`str`]) header and image data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1">#: (:obj:`str`) struct header format</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__headerFormat</span> <span class="o">=</span> <span class="s1">&#39;&lt;IHHIIHHHHHHHHIIIIIIII&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__headerFormat123</span> <span class="o">=</span> <span class="s1">&#39;&lt;IHHIIHHHHHHHHIIIIIIII&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__headerFormat</span> <span class="o">=</span> <span class="s1">&#39;&lt;IHHIIHHHHHHHHIIIIIIQQII&#39;</span>
         <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, :obj:`any` &gt; ) header data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__header</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1">#: (:obj:`dict` &lt;:obj:`int`, :obj:`str` &gt; ) format modes</span>
@@ -1035,6 +1036,8 @@
 <span class="sd">        :type headerData: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">hdr</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__headerFormat</span><span class="p">,</span> <span class="n">headerData</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">hdr</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__headerFormat123</span><span class="p">,</span> <span class="n">headerData</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__header</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;magic&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;headerVersion&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -1048,7 +1051,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;steps&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">hdr</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">16</span><span class="p">],</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">17</span><span class="p">],</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">18</span><span class="p">]]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;padding&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">19</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;imageNumber&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">19</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;acqTag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;padding&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">21</span><span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;padding&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">19</span><span class="p">:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;imageNumber&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;acqTag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dtypeID</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;imageMode&#39;</span><span class="p">]]</span>
 
@@ -2883,7 +2893,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.1.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageSource</a></li> 
       </ul>

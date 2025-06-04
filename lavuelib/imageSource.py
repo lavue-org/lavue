@@ -949,8 +949,10 @@ class DATAARRAYdecoder(object):
         self.__value = None
         #: ([:obj:`str`, :obj:`str`]) header and image data
         self.__data = None
-        #: (:obj:`str`) struct header format
-        self.__headerFormat = '<IHHIIHHHHHHHHIIIIIIII'
+        #: (:obj:`str`) struct header format ver < 4
+        self.__headerFormat123 = '<IHHIIHHHHHHHHIIIIIIII'
+        #: (:obj:`str`) struct header format ver >= 4
+        self.__headerFormat = '<IHHIIHHHHHHHHIIIIIIQQII'
         #: (:obj:`dict` <:obj:`str`, :obj:`any` > ) header data
         self.__header = {}
         #: (:obj:`dict` <:obj:`int`, :obj:`str` > ) format modes
@@ -977,7 +979,7 @@ class DATAARRAYdecoder(object):
             "lavuelib.imageSource.DATAARRAYdecoder.load:  %s" % str(data[0]))
         self.__data = data
         self.format = data[0]
-        self._loadHeader(data[1][:struct.calcsize(self.__headerFormat)])
+        self._loadHeader(data[1])
         self.__value = None
 
     @debugmethod
@@ -987,7 +989,16 @@ class DATAARRAYdecoder(object):
         :param headerData: buffer with header data
         :type headerData: :obj:`str`
         """
-        hdr = struct.unpack(self.__headerFormat, headerData)
+        try:
+            hData = headerData[:struct.calcsize(self.__headerFormat)]
+            hdr = struct.unpack(self.__headerFormat, hData)
+            if hdr[1] < 4:
+                hData = headerData[:struct.calcsize(self.__headerFormat123)]
+                hdr = struct.unpack(self.__headerFormat123, hData)
+        except Exception:
+            hData = headerData[:struct.calcsize(self.__headerFormat123)]
+            hdr = struct.unpack(self.__headerFormat123, headerData)
+
         self.__header = {}
         self.__header['magic'] = hdr[0]
         self.__header['headerVersion'] = hdr[1]
@@ -1001,13 +1012,24 @@ class DATAARRAYdecoder(object):
         self.__header['steps'] = [
             hdr[13], hdr[14], hdr[15], hdr[16], hdr[17], hdr[18]]
 
-        self.__header['padding'] = hdr[19:]
+        if hdr[1] > 3:
+            self.__header['imageNumber'] = hdr[19]
+            self.__header['acqTag'] = hdr[20]
+            self.__header['padding'] = hdr[21:]
+        else:
+            self.__header['padding'] = hdr[19:]
 
         self.dtype = self.__dtypeID[self.__header['imageMode']]
 
     @debugmethod
     def frameNumber(self):
-        """ no data """
+        """ provides the frame number
+
+        :returns: the frame number
+        :rtype: :obj:`int`
+        """
+        if 'imageNumber' in self.__header.keys():
+            return self.__header['imageNumber']
 
     @debugmethod
     def shape(self):
@@ -1043,7 +1065,15 @@ class DATAARRAYdecoder(object):
         if not self.__header or not self.__data:
             return
         if self.__value is None:
-            image = self.__data[1][struct.calcsize(self.__headerFormat):]
+            if 'headerVersion' in self.__header and \
+               self.__header['headerVersion'] >= 4:
+                image = self.__data[1][struct.calcsize(self.__headerFormat):]
+                image = self.__data[1][struct.calcsize(self.__headerFormat):]
+            else:
+                image = self.__data[1][
+                    struct.calcsize(self.__headerFormat123):]
+                image = self.__data[1][
+                    struct.calcsize(self.__headerFormat123):]
             dformat = self.__formatID[self.__header['imageMode']]
             fSize = struct.calcsize(dformat)
             self.__value = np.array(
@@ -1153,7 +1183,10 @@ class TangoAttrSource(BaseSource):
                 else:
                     dec = self.__decoders[avalue[0]]
                     dec.load(avalue)
-                    fnumber = dec.frameNumber() or ""
+                    if dec.frameNumber() is not None:
+                        fnumber = dec.frameNumber()
+                    else:
+                        fnumber = ""
                     shape = dec.shape()
                     if shape is None or shape[0] <= 0 or shape[1] <= 0:
                         return None, None, None
@@ -1382,12 +1415,17 @@ class TangoEventsSource(BaseSource):
                         dec = self.__decoders[avalue[0]]
                         dec.load(avalue)
                         shape = dec.shape()
+                        if dec.frameNumber() is not None:
+                            fnumber = dec.frameNumber()
+                        else:
+                            fnumber = ""
                         if shape is None or shape[0] <= 0 or shape[1] <= 0:
                             return None, None, None
                         return (dec.decode().T,
-                                '%s  (%s)' % (
-                                    self._configuration, str(self.attr.time)),
-                                "")
+                                '%s %s (%s)' % (
+                                    self._configuration,
+                                    fnumber,
+                                    str(self.attr.time)), "")
                 else:
                     if self.attr.value is not None:
                         if hasattr(self.attr.value, "size"):
