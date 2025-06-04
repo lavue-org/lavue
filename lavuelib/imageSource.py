@@ -1010,14 +1010,18 @@ class DATAARRAYdecoder(object):
             self.__header['padding'] = hdr[21:]
         else:
             self.__header['padding'] = hdr[19:]
-            self.__header['imageNumber'] = -1
-            self.__header['acqTag'] = -1
 
         self.dtype = self.__dtypeID[self.__header['imageMode']]
 
     @debugmethod
     def frameNumber(self):
-        """ no data """
+        """ provides the frame number
+
+        :returns: the frame number
+        :rtype: :obj:`int`
+        """
+        if 'imageNumber' in self.__header.keys():
+            return self.__header['imageNumber']
 
     @debugmethod
     def shape(self):
@@ -1163,7 +1167,10 @@ class TangoAttrSource(BaseSource):
                 else:
                     dec = self.__decoders[avalue[0]]
                     dec.load(avalue)
-                    fnumber = dec.frameNumber() or ""
+                    if dec.frameNumber() is not None:
+                        fnumber = dec.frameNumber()
+                    else:
+                        fnumber = ""
                     shape = dec.shape()
                     if shape is None or shape[0] <= 0 or shape[1] <= 0:
                         return None, None, None
