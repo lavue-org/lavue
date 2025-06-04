@@ -949,8 +949,9 @@ class DATAARRAYdecoder(object):
         self.__value = None
         #: ([:obj:`str`, :obj:`str`]) header and image data
         self.__data = None
-        #: (:obj:`str`) struct header format
+        #: (:obj:`str`) struct header format ver < 4
         self.__headerFormat123 = '<IHHIIHHHHHHHHIIIIIIII'
+        #: (:obj:`str`) struct header format ver >= 4
         self.__headerFormat = '<IHHIIHHHHHHHHIIIIIIQQII'
         #: (:obj:`dict` <:obj:`str`, :obj:`any` > ) header data
         self.__header = {}
@@ -978,7 +979,7 @@ class DATAARRAYdecoder(object):
             "lavuelib.imageSource.DATAARRAYdecoder.load:  %s" % str(data[0]))
         self.__data = data
         self.format = data[0]
-        self._loadHeader(data[1][:struct.calcsize(self.__headerFormat)])
+        self._loadHeader(data[1])
         self.__value = None
 
     @debugmethod
@@ -989,10 +990,13 @@ class DATAARRAYdecoder(object):
         :type headerData: :obj:`str`
         """
         try:
-            hdr = struct.unpack(self.__headerFormat, headerData)
+            hData = headerData[:struct.calcsize(self.__headerFormat)]
+            hdr = struct.unpack(self.__headerFormat, hData)
             if hdr[1] < 4:
-                hdr = struct.unpack(self.__headerFormat123, headerData)
+                hData = headerData[:struct.calcsize(self.__headerFormat123)]
+                hdr = struct.unpack(self.__headerFormat123, hData)
         except Exception:
+            hData = headerData[:struct.calcsize(self.__headerFormat123)]
             hdr = struct.unpack(self.__headerFormat123, headerData)
 
         self.__header = {}
