@@ -1065,6 +1065,12 @@ class DATAARRAYdecoder(object):
         if not self.__header or not self.__data:
             return
         if self.__value is None:
+            if 'headerVersion' in self.__header and \
+               self.__header['headerVersion'] >= 4:
+                image = self.__data[1][struct.calcsize(self.__headerFormat):]
+            else:
+                image = self.__data[1][
+                    struct.calcsize(self.__headerFormat123):]
             image = self.__data[1][struct.calcsize(self.__headerFormat):]
             dformat = self.__formatID[self.__header['imageMode']]
             fSize = struct.calcsize(dformat)
