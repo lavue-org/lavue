@@ -8129,6 +8129,7 @@ class TwoDFitToolWidget(ToolBaseWidget):
         results["initial_parameters"] = self.__last_initial_params
         results["fitted_parameters"] = self.__last_params
         results["parameters_errors"] = self.__last_errors
+        results["parameters_names"] = self.__param_names
         results["covariance_matrix"] = self.__last_pcov
         results["condition_number"] = self.__last_cond
         results["parameters_mode"] = self.__parametersmode

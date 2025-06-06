@@ -15,7 +15,7 @@ TwoDFit Tool
 
 The **configuration** of the tool can be set with a JSON dictionary passed in the  ``--tool-configuration``  option in command line or a toolconfig variable of ``LavueController.LavueState`` with the following keys:
 
-``initial parameters``  (float list), ``parameters_mode``  (``generator``, ``user``, ``last_generator``, ``last_user`` or ``nofit`` string), ``fit`` (bool), ``next`` (bool)
+``initial_parameters``  (float list), ``parameters_mode``  (``generator``, ``user``, ``last_generator``, ``last_user`` or ``nofit`` string), ``fit`` (bool), ``next`` (bool)
 
 e.g.
 
@@ -25,7 +25,7 @@ e.g.
 
 A JSON dictionary with the **tool results** is passed to the **LavueController** or/and to **user functions plugins**. It contains the following keys:
 
-``tool`` : "twodfit", ``imagename`` (string), ``timestamp`` (float), ``user_initial_parameters`` ([float, float,... ,float]), ``initial_parameters`` ([float, float,... ,float]), ``fitted_parameters`` ([float, float,... ,float]), ``parameters_mode`` ([float, float,... ,float]), ``covariance_matrix`` ([[float, float,... ,float], ...]), ``condition_number`` (float), ``parameters_mode`` (string)
+``tool`` : "twodfit", ``imagename`` (string), ``timestamp`` (float), ``user_initial_parameters`` ([float, float,... ,float]), ``initial_parameters`` ([float, float,... ,float]),, ``parameters_names`` ([str, str,... ,str]), ``fitted_parameters`` ([float, float,... ,float]), ``parameters_mode`` ([float, float,... ,float]), ``covariance_matrix`` ([[float, float,... ,float], ...]), ``condition_number`` (float), ``parameters_mode`` (string)
 
 .. |br| raw:: html
 
