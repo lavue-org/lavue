@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "LAVUELIB" "1" "Jun 04, 2025" "3.1" "LaVue"
+.TH "LAVUELIB" "1" "Jun 12, 2025" "3.1" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .sp
@@ -1560,7 +1560,7 @@ combobox with a initial parameter \fBfitting mode\fP i.e. generator, user, last_
 .sp
 The \fBconfiguration\fP of the tool can be set with a JSON dictionary passed in the  \fB\-\-tool\-configuration\fP  option in command line or a toolconfig variable of \fBLavueController.LavueState\fP with the following keys:
 .sp
-\fBinitial parameters\fP  (float list), \fBparameters_mode\fP  (\fBgenerator\fP, \fBuser\fP, \fBlast_generator\fP, \fBlast_user\fP or \fBnofit\fP string), \fBfit\fP (bool), \fBnext\fP (bool)
+\fBinitial_parameters\fP  (float list), \fBparameters_mode\fP  (\fBgenerator\fP, \fBuser\fP, \fBlast_generator\fP, \fBlast_user\fP or \fBnofit\fP string), \fBfit\fP (bool), \fBnext\fP (bool)
 .sp
 e.g.
 .INDENT 0.0
@@ -1576,7 +1576,7 @@ lavue \-u twodfit \-s test \-\-tool\-configuration \e{\e\(dqinitial_parameters\e
 .sp
 A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
 .sp
-\fBtool\fP : “twodfit”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBuser_initial_parameters\fP ([float, float,… ,float]), \fBinitial_parameters\fP ([float, float,… ,float]), \fBfitted_parameters\fP ([float, float,… ,float]), \fBparameters_mode\fP ([float, float,… ,float]), \fBcovariance_matrix\fP ([[float, float,… ,float], …]), \fBcondition_number\fP (float), \fBparameters_mode\fP (string)
+\fBtool\fP : “twodfit”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBuser_initial_parameters\fP ([float, float,… ,float]), \fBinitial_parameters\fP ([float, float,… ,float]),, \fBparameters_names\fP ([str, str,… ,str]), \fBfitted_parameters\fP ([float, float,… ,float]), \fBparameters_mode\fP ([float, float,… ,float]), \fBcovariance_matrix\fP ([[float, float,… ,float], …]), \fBcondition_number\fP (float), \fBparameters_mode\fP (string)
 .SS Images from FileSystem
 .sp
 By pressing the \fBLoad\fP button user can open the existing file.
@@ -2890,6 +2890,42 @@ list of generated paramters
 set of image sources
 .INDENT 0.0
 .TP
+.B class  lavuelib.plugins.userfunctions.FitParameters(configuration=None)
+Bases: \fI\%object\fP
+.sp
+Show Fitted parameters
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – JSON list with horizontal gap pixels to add
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  lavuelib.plugins.userfunctions.FitProjections(configuration=None)
+Bases: \fI\%object\fP
+.sp
+Fit projection parameters
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – JSON list with horizontal gap pixels to add
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod  gauss(x, amplitude, x0, sigma, offset=0.0)
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod  generator(x, val)
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
 .B class  lavuelib.plugins.userfunctions.LineCut(configuration=None)
 Bases: \fI\%object\fP
 .sp
@@ -2963,6 +2999,20 @@ dictionary with user plot data
 .SS lavuelib.plugins.diffpyfunctions module
 .sp
 set of image sources
+.INDENT 0.0
+.TP
+.B class  lavuelib.plugins.diffpyfunctions.DiffHistory(configuration=None)
+Bases: \fI\%object\fP
+.sp
+diffpy PDF user function
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – JSON list with config file and diff index
+.UNINDENT
+.UNINDENT
 .INDENT 0.0
 .TP
 .B class  lavuelib.plugins.diffpyfunctions.DiffPDF(configuration=None)
@@ -10860,7 +10910,7 @@ exporter parameters
 set of image sources
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.ASAPO  =  True
+.B lavuelib.imageSource.ASAPO  =  False
 (\fI\%bool\fP) asapo imported
 .UNINDENT
 .INDENT 0.0
@@ -11037,7 +11087,15 @@ the decoded data if data was loaded
 .INDENT 7.0
 .TP
 .B frameNumber()
-no data
+provides the frame number
+.INDENT 7.0
+.TP
+.B Returns
+the frame number
+.TP
+.B Return type
+\fI\%int\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -11185,7 +11243,7 @@ image name, image data, json dictionary with metadata
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.HIDRA  =  True
+.B lavuelib.imageSource.HIDRA  =  False
 (\fI\%bool\fP) hidra imported
 .UNINDENT
 .INDENT 0.0
