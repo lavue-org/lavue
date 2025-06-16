@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "LAVUELIB" "1" "Jun 12, 2025" "3.1" "LaVue"
+.TH "LAVUELIB" "1" "Jun 16, 2025" "3.3" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .sp
@@ -1137,13 +1137,15 @@ lavue \-u roi \-\-tool\-configuration \e{\e\(dqrois_number\e\(dq:2,\e\(dqaliases
 \fBX in 1d:\fP Points, X\-Pixels, Y\-Pixels
 .IP \(bu 2
 \fBAll Cuts:\fP displays all cuts on the 1d\-plot
+.IP \(bu 2
+\fBConnect:\fP connect line cut curves separated by NaN
 .UNINDENT
 .sp
 The \fBwidth\fP of the line\-cut can be set the handle in the middle of the line\-cut selector.
 .sp
 The \fBconfiguration\fP of the tool can be set with a JSON dictionary passed in the  \fB\-\-tool\-configuration\fP option in command line or a toolconfig variable of \fBLavueController.LavueState\fP with the following keys:
 .sp
-\fBx_coordinates\fP (points, x\-pixels  or y\-pixels string), \fBcuts_number\fP (integer), \fBall_cuts\fP (boolean)
+\fBx_coordinates\fP (points, x\-pixels  or y\-pixels string), \fBcuts_number\fP (integer), \fBall_cuts\fP (boolean), \fBconnect_nan\fP (boolean)
 .INDENT 0.0
 .INDENT 3.5
 .sp
