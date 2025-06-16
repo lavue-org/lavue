@@ -2131,8 +2131,10 @@ class LineCutToolWidget(ToolBaseWidget):
         #: (:obj:`int`) 1d x-coorindate index,
         #:          i.e. {0:Points, 1:"X-Pixels", 2:"Y-Pixels"}
         self.__xindex = 0
-        #: (:obj:`bool`) plot cuts
+        #: (:obj:`bool`) plot all cuts
         self.__allcuts = False
+        #: (:obj:`bool`) connect nan points in cuts
+        self.__connectnan = True
         #: (:obj:`list`<:class:`pyqtgraph.PlotDataItem`>) 1D plot freezed
         self.__freezed = []
 
@@ -2157,7 +2159,11 @@ class LineCutToolWidget(ToolBaseWidget):
              self._mainwidget.emitTCC],
             [self._mainwidget.mouseImagePositionChanged, self._message],
             [self.__ui.allcutsCheckBox.stateChanged, self._updateAllCuts],
+            [self.__ui.connectnanCheckBox.stateChanged,
+             self._updateConnectNaN],
             [self.__ui.allcutsCheckBox.stateChanged,
+             self._mainwidget.emitTCC],
+            [self.__ui.connectnanCheckBox.stateChanged,
              self._mainwidget.emitTCC],
             [self._mainwidget.freezeBottomPlotClicked, self._freezeplot],
             [self._mainwidget.clearBottomPlotClicked, self._clearplot],
@@ -2179,6 +2185,9 @@ class LineCutToolWidget(ToolBaseWidget):
                     # print(str(e))
             if "all_cuts" in cnf.keys():
                 self.__ui.allcutsCheckBox.setChecked(bool(cnf["all_cuts"]))
+            if "connect_nan" in cnf.keys():
+                self.__ui.connectnanCheckBox.setChecked(
+                    bool(cnf["connect_nan"]))
             if "x_coordinates" in cnf.keys():
                 idxs = ["points", "x-pixels", "y-pixels"]
                 xcrd = str(cnf["x_coordinates"]).lower()
@@ -2198,6 +2207,7 @@ class LineCutToolWidget(ToolBaseWidget):
         cnf["x_coordinates"] = str(
             self.__ui.xcoordsComboBox.currentText()).lower()
         cnf["all_cuts"] = self.__ui.allcutsCheckBox.isChecked()
+        cnf["connect_nan"] = self.__ui.connectnanCheckBox.isChecked()
         cnf["cuts_number"] = self.__ui.cutSpinBox.value()
         return json.dumps(cnf, cls=numpyEncoder)
 
@@ -2239,6 +2249,10 @@ class LineCutToolWidget(ToolBaseWidget):
             self.__allcuts = True
         else:
             self.__allcuts = False
+        if self.__connectnan:
+            self.__connectnan = True
+        else:
+            self.__connectnan = False
 
         self._mainwidget.updateCuts(cid)
 
@@ -2257,6 +2271,7 @@ class LineCutToolWidget(ToolBaseWidget):
             curve.show()
             curve.setVisible(True)
         self._updateAllCuts(self.__allcuts)
+        self._updateConnectNaN(self.__connectnan)
         self._plotCuts()
         self._mainwidget.bottomplotShowMenu(True, True)
 
@@ -2283,6 +2298,16 @@ class LineCutToolWidget(ToolBaseWidget):
         :param value: :obj:`int` or  :obj:`bool`
         """
         self.__allcuts = value
+        self._updateCuts(self.__ui.cutSpinBox.value())
+
+    @QtCore.pyqtSlot(int)
+    def _updateConnectNaN(self, value):
+        """ updates connect nan checkbox
+
+        :param value: if True connect nan values
+        :param value: :obj:`int` or  :obj:`bool`
+        """
+        self.__connectnan = value
         self._updateCuts(self.__ui.cutSpinBox.value())
 
     @QtCore.pyqtSlot(int)
@@ -2331,7 +2356,8 @@ class LineCutToolWidget(ToolBaseWidget):
                 dt = self._mainwidget.cutData(i)
                 if dt is not None:
                     if self.__settings.nanmask:
-                        if dt.dtype.kind == 'f' and np.isnan(dt.min()):
+                        if dt.dtype.kind == 'f' and np.isnan(dt.min()) \
+                                and self.__connectnan:
                             dt = np.nan_to_num(dt)
                     if self.__xindex:
                         if i < len(coords):
@@ -2342,7 +2368,11 @@ class LineCutToolWidget(ToolBaseWidget):
                             dx = np.linspace(crds[1], crds[3], len(dt))
                         else:
                             dx = np.linspace(crds[0], crds[2], len(dt))
-                        self.__curves[i].setData(x=dx, y=dt)
+                        if self.__connectnan:
+                            self.__curves[i].setData(x=dx, y=dt)
+                        else:
+                            self.__curves[i].setData(
+                                x=dx, y=dt, connect="finite")
                         if self.__settings.sendresults or \
                                 self.__settings.showuserplot:
                             xl.append([float(e) for e in dx])
@@ -2350,13 +2380,21 @@ class LineCutToolWidget(ToolBaseWidget):
                     else:
                         if rws > 1.0:
                             dx = np.linspace(0, len(dt - 1) * rws, len(dt))
-                            self.__curves[i].setData(x=dx, y=dt)
+                            if self.__connectnan:
+                                self.__curves[i].setData(x=dx, y=dt)
+                            else:
+                                self.__curves[i].setData(
+                                    x=dx, y=dt, connect="finite")
                             if self.__settings.sendresults \
                                     or self.__settings.showuserplot:
                                 xl.append([float(e) for e in dx])
                                 yl.append([float(e) for e in dt])
                         else:
-                            self.__curves[i].setData(y=dt)
+                            if self.__connectnan:
+                                self.__curves[i].setData(y=dt)
+                            else:
+                                self.__curves[i].setData(
+                                    y=dt, connect="finite")
                             if self.__settings.sendresults \
                                     or self.__settings.showuserplot:
                                 xl.append(list(range(len(dt))))
@@ -2384,7 +2422,8 @@ class LineCutToolWidget(ToolBaseWidget):
             self.__curves[0].setPen(_pg.mkColor('r'))
             if dt is not None:
                 if self.__settings.nanmask:
-                    if dt.dtype.kind == 'f' and np.isnan(dt.min()):
+                    if dt.dtype.kind == 'f' and np.isnan(dt.min()) \
+                            and self.__connectnan:
                         dt = np.nan_to_num(dt)
                 if self.__xindex:
                     crds = [0, 0, 1, 1, 0.00001]
@@ -2395,7 +2434,10 @@ class LineCutToolWidget(ToolBaseWidget):
                         dx = np.linspace(crds[1], crds[3], len(dt))
                     else:
                         dx = np.linspace(crds[0], crds[2], len(dt))
-                    self.__curves[0].setData(x=dx, y=dt)
+                    if self.__connectnan:
+                        self.__curves[0].setData(x=dx, y=dt)
+                    else:
+                        self.__curves[0].setData(x=dx, y=dt, connect="finite")
                     if self.__settings.sendresults or \
                             self.__settings.showuserplot:
                         xl.append([float(e) for e in dx])
@@ -2404,13 +2446,20 @@ class LineCutToolWidget(ToolBaseWidget):
                     rws = self._mainwidget.rangeWindowScale()
                     if rws > 1.0:
                         dx = np.linspace(0, len(dt - 1) * rws, len(dt))
-                        self.__curves[0].setData(x=dx, y=dt)
+                        if self.__connectnan:
+                            self.__curves[0].setData(x=dx, y=dt)
+                        else:
+                            self.__curves[0].setData(
+                                x=dx, y=dt, connect="finite")
                         if self.__settings.sendresults or \
                                 self.__settings.showuserplot:
                             xl.append([float(e) for e in dx])
                             yl.append([float(e) for e in dt])
                     else:
-                        self.__curves[0].setData(y=dt)
+                        if self.__connectnan:
+                            self.__curves[0].setData(y=dt)
+                        else:
+                            self.__curves[0].setData(y=dt, connect="finite")
                         if self.__settings.sendresults \
                                 or self.__settings.showuserplot:
                             xl.append(list(range(len(dt))))
