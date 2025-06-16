@@ -10,6 +10,7 @@ LineCut Tool
 
 *    **X in 1d:** Points, X-Pixels, Y-Pixels
 *    **All Cuts:** displays all cuts on the 1d-plot
+*    **Connect:** connect line cut curves separated by NaN
 
 The **width** of the line-cut can be set the handle in the middle of the line-cut selector.
 
