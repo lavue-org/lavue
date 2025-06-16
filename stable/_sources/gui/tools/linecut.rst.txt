@@ -10,13 +10,14 @@ LineCut Tool
 
 *    **X in 1d:** Points, X-Pixels, Y-Pixels
 *    **All Cuts:** displays all cuts on the 1d-plot
+*    **Connect:** connect line cut curves separated by NaN
 
 The **width** of the line-cut can be set the handle in the middle of the line-cut selector.
 
 
 The **configuration** of the tool can be set with a JSON dictionary passed in the  ``--tool-configuration`` option in command line or a toolconfig variable of ``LavueController.LavueState`` with the following keys:
 
-``x_coordinates`` (points, x-pixels  or y-pixels string), ``cuts_number`` (integer), ``all_cuts`` (boolean)
+``x_coordinates`` (points, x-pixels  or y-pixels string), ``cuts_number`` (integer), ``all_cuts`` (boolean), ``connect_nan`` (boolean)
 
 .. code-block:: console
 
