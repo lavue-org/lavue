@@ -541,9 +541,9 @@ class LavueController (tango.LatestDeviceImpl):
                     if aalias not in self.ROIAttributesNames:
                         self.remove_attribute(str(aalias))
             if self.FloatDynamicROIs:
-                dynamicROIType = tango.DevLong
-            else:
                 dynamicROIType = tango.DevDouble
+            else:
+                dynamicROIType = tango.DevLong
             for alias in self.requested_rois_aliases:
                 if alias not in self.current_rois_aliases:
                     myAttr = tango.SpectrumAttr(
