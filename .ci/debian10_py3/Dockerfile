@@ -6,6 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # add the HDRI repository
 # RUN /bin/bash -c 'echo "deb http://ftp.de.debian.org/debian buster main" > /etc/apt/sources.list.d/debian_de.list'
+RUN /bin/bash -c 'echo "deb https://archive.debian.org/debian buster main" > /etc/apt/sources.list.d/debian9de.list'
 RUN apt-get -qq update && apt-get -qq install apt-utils dialog -y
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 RUN apt-get -qq update && apt-get -qq install -y libterm-readline-gnu-perl software-properties-common coreutils gnupg2 procps curl apt-transport-https gnupg2 ca-certificates wget
