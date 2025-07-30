@@ -1,0 +1,223 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>ZMQ Stream server examples &#8212; LaVue  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Filter plugins" href="filterplugins.html" />
+    <link rel="prev" title="LaVue Monitor" href="lavuemonitor.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="filterplugins.html" title="Filter plugins"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="lavuemonitor.html" title="LaVue Monitor"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LaVue  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ZMQ Stream server examples</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="zmq-stream-server-examples">
+<h1>ZMQ Stream server examples<a class="headerlink" href="#zmq-stream-server-examples" title="Permalink to this heading">¶</a></h1>
+<p>An example of ZMQ Stream server (lavuezmqstreamfromtango) which sends images from TANGO attribribute to lavue via a PICKLE protocol is deployed with the GUI.</p>
+<p>It can be launched by, e.g.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>lavuezmqstreamfromtango<span class="w">  </span>--port<span class="w"> </span><span class="m">5535</span>
+</pre></div>
+</div>
+<p>Another example of ZMQ Stream server (lavuezmqstreamtest) which sends random images to lavue via a JSON protocol (from v1.27.1) can be launched by, e.g.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>lavuezmqstreamtest<span class="w">  </span>--port<span class="w"> </span><span class="m">5535</span>
+</pre></div>
+</div>
+<p>To get all possible command-line parameters</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>lavuezmqstreamfromtango<span class="w"> </span>-h
+
+<span class="go">usage: lavuezmqstreamfromtango [-h] [-g TIMEGAP] [-p PORT] [-t TOPIC]</span>
+<span class="go">                               [-n PREFIX] [-a ATTRIBUTE] [--no-dict]</span>
+<span class="go">                               [--debug]</span>
+
+
+<span class="go">ZMQ Pickle test server</span>
+
+
+<span class="go">optional arguments:</span>
+
+<span class="go">  -h, --help            show this help message and exit</span>
+<span class="go">  -g TIMEGAP, --time-gap TIMEGAP</span>
+<span class="go">                        maximal time gap in seconds (default: 0.1)</span>
+<span class="go">  -p PORT, --port PORT  zmq port (default: automatic)</span>
+<span class="go">  -t TOPIC, --topic TOPIC</span>
+<span class="go">                        zmq topic (default: first one from datasources)</span>
+<span class="go">  -n PREFIX, --name-prefix PREFIX</span>
+<span class="go">                        image name prefix</span>
+<span class="go">  -a ATTRIBUTE, --attribute ATTRIBUTE</span>
+<span class="go">                        tango attribute (default: sys/tg_test/1/double_image_ro)</span>
+<span class="go">  --no-dict             create zmq stream without dictionary</span>
+<span class="go">  --debug               debug mode</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>lavuezmqstreamtest<span class="w"> </span>-h
+
+
+<span class="go">usage: lavuezmqstreamtest [-h] [-g TIMEGAP] [-p PORT] [-t TOPIC]</span>
+<span class="go">                               [-n PREFIX] [--no-dict][--debug]</span>
+
+<span class="go">ZMQ JSON test server</span>
+
+<span class="go">optional arguments:</span>
+
+<span class="go">  -h, --help            show this help message and exit</span>
+<span class="go">  -g TIMEGAP, --time-gap TIMEGAP</span>
+<span class="go">                        maximal time gap in seconds (default: 0.1)</span>
+<span class="go">  -p PORT, --port PORT  zmq port (default: automatic)</span>
+<span class="go">  -t TOPIC, --topic TOPIC</span>
+<span class="go">                        zmq topic (default: first one from datasources)</span>
+<span class="go">  -n PREFIX, --name-prefix PREFIX</span>
+<span class="go">                        image name prefix</span>
+<span class="go">  --no-dict             create zmq stream without dictionary</span>
+<span class="go">  --debug               debug mode</span>
+</pre></div>
+</div>
+<p>On debian systems the above scripts are installed at <cite>/usr/bin/lavuezmqstreamfromtango</cite> .  Based on it the user can write its own servers.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="lavuemonitor.html"
+                          title="previous chapter">LaVue Monitor</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="filterplugins.html"
+                          title="next chapter">Filter plugins</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="index/../../v3.4.0/index.html">v3.4.0</a></li>
+      <li><a class="reference external" href="index/../../v3.3.0/index.html">v3.3.0</a></li>
+      <li><a class="reference external" href="index/../../v3.3.1/index.html">v3.3.1</a></li>
+      <li><a class="reference external" href="index/../../v3.3.0/index.html">v3.3.0</a></li>
+      <li><a class="reference external" href="index/../../v3.2.0/index.html">v3.2.0</a></li>
+      <li><a class="reference external" href="index/../../v3.1.0/index.html">v3.1.0</a></li>
+      <li><a class="reference external" href="index/../../v3.0.0/index.html">v3.0.0</a></li>
+      <li><a class="reference external" href="index/../../v2.99.1/index.html">v2.99.1</a></li>
+      <li><a class="reference external" href="index/../../v2.99.0/index.html">v2.99.0</a></li>
+      <li><a class="reference external" href="index/../../v2.98.2/index.html">v2.98.2</a></li>
+      <li><a class="reference external" href="index/../../v2.97.0/index.html">v2.97.0</a></li>
+      <li><a class="reference external" href="index/../../v2.96.0/index.html">v2.96.0</a></li>
+      <li><a class="reference external" href="index/../../v2.95.0/index.html">v2.95.0</a></li>
+      <li><a class="reference external" href="index/../../v2.94.2/index.html">v2.94.2</a></li>
+      <li><a class="reference external" href="index/../../v2.93.1/index.html">v2.93.1</a></li>
+      <li><a class="reference external" href="index/../../v2.92.2/index.html">v2.92.2</a></li>
+      <li><a class="reference external" href="index/../../v2.91.1/index.html">v2.91.1</a></li>
+      <li><a class="reference external" href="index/../../v2.90.2/index.html">v2.90.2</a></li>
+      <li><a class="reference external" href="index/../../v2.89.3/index.html">v2.89.3</a></li>
+      <li><a class="reference external" href="index/../../v2.88.0/index.html">v2.88.0</a></li>
+      <li><a class="reference external" href="index/../../v2.87.0/index.html">v2.87.0</a></li>
+      <li><a class="reference external" href="index/../../v2.86.1/index.html">v2.86.1</a></li>
+      <li><a class="reference external" href="index/../../v2.85.1/index.html">v2.85.1</a></li>
+      <li><a class="reference external" href="index/../../v2.84.0/index.html">v2.84.0</a></li>
+      <li><a class="reference external" href="index/../../v2.83.4/index.html">v2.83.4</a></li>
+      <li><a class="reference external" href="index/../../v2.82.0/index.html">v2.82.0</a></li>
+      <li><a class="reference external" href="index/../../v2.81.0/index.html">v2.81.0</a></li>
+      <li><a class="reference external" href="index/../../v2.80.1/index.html">v2.80.1</a></li>
+      <li><a class="reference external" href="index/../../v2.79.0/index.html">v2.79.0</a></li>
+      <li><a class="reference external" href="index/../../v2.78.0/index.html">v2.78.0</a></li>
+      <li><a class="reference external" href="index/../../v2.77.0/index.html">v2.77.0</a></li>
+      <li><a class="reference external" href="index/../../v2.76.1/index.html">v2.76.1</a></li>
+      <li><a class="reference external" href="index/../../v2.75.3/index.html">v2.75.3</a></li>
+      <li><a class="reference external" href="index/../../v2.74.0/index.html">v2.74.0</a></li>
+      <li><a class="reference external" href="index/../../v2.73.0/index.html">v2.73.0</a></li>
+      <li><a class="reference external" href="index/../../v2.72.0/index.html">v2.72.0</a></li>
+      <li><a class="reference external" href="index/../../v2.71.1/index.html">v2.71.1</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="filterplugins.html" title="Filter plugins"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="lavuemonitor.html" title="LaVue Monitor"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LaVue  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ZMQ Stream server examples</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+
+GNU GENERAL PUBLIC LICENSE, version 2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>
