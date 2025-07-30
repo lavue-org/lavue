@@ -197,6 +197,8 @@ class ToolParameters(object):
         self.roionclick = False
         #: (:obj:`bool`) cuts enabled
         self.cuts = False
+        #: (:obj:`bool`) create a cut on click
+        self.cutonclick = False
         #: (:obj:`bool`) mesh enabled
         self.mesh = False
         #: (:obj:`bool`) axes scale enabled
@@ -2123,6 +2125,7 @@ class LineCutToolWidget(ToolBaseWidget):
         self.__ui.setupUi(self)
 
         self.parameters.cuts = True
+        self.parameters.cutonclick = True
         self.parameters.bottomplot = True
         self.parameters.infolineedit = ""
         self.parameters.infotips = \
@@ -2163,6 +2166,8 @@ class LineCutToolWidget(ToolBaseWidget):
             [self.__ui.allcutsCheckBox.stateChanged, self._updateAllCuts],
             [self.__ui.connectnanCheckBox.stateChanged,
              self._updateConnectNaN],
+            [self.__ui.centeringCheckBox.stateChanged,
+             self._updateCentering],
             [self.__ui.allcutsCheckBox.stateChanged,
              self._mainwidget.emitTCC],
             [self.__ui.connectnanCheckBox.stateChanged,
@@ -2248,9 +2253,9 @@ class LineCutToolWidget(ToolBaseWidget):
                     xdata = txdata
                     ydata = tydata
             # print("CORD", xdata, ydata)
-            coords = self._mainwidget.cutCoords()
-            # print("CUTT", coords)
-            nrcut = min(len(coords), self.__ui.cutSpinBox.value())
+            coords = list(self._mainwidget.cutCoords())
+            # nrcut = min(len(coords), self.__ui.cutSpinBox.value())
+            nrcut = len(coords)
             for ic in range(nrcut):
                 if len(coords[ic]) > 1:
                     coords[ic][0] = xdata
@@ -2345,7 +2350,8 @@ class LineCutToolWidget(ToolBaseWidget):
         :param value: :obj:`int` or  :obj:`bool`
         """
         self.__centering = value
-        self._updateCuts(self.__ui.cutSpinBox.value())
+        self.parameters.cutonclick = not bool(value)
+        self._mainwidget.updateinfowidgets(self.parameters)
 
     @QtCore.pyqtSlot(int)
     def _setXCoords(self, xindex):
@@ -2387,7 +2393,7 @@ class LineCutToolWidget(ToolBaseWidget):
                     for i, cr in enumerate(self.__curves):
                         if i < nrplots:
                             cr.setPen(_pg.hsvColor(i/float(nrplots)))
-            coords = self._mainwidget.cutCoords()
+            coords = list(self._mainwidget.cutCoords())
             rws = self._mainwidget.rangeWindowScale()
             for i in range(nrplots):
                 dt = self._mainwidget.cutData(i)
