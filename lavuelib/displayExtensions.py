@@ -962,6 +962,8 @@ class CutExtension(DisplayExtension):
         self.__timelock = 0
         #: (:obj:`float`) time to lock
         self.__timetolock = 0.5
+        #: (:obj:`bool`) cut on clickcurrent roi drown id
+        self.__cutonclick = True
 
         #: (:obj:`int`) current cut id
         self.__current = 0
@@ -1003,6 +1005,8 @@ class CutExtension(DisplayExtension):
         if parameters.cuts is not None:
             self.__showCuts(parameters.cuts)
             self._enabled = parameters.cuts
+        if parameters.cutonclick is not None:
+            self.__cutonclick = parameters.cutonclick
 
     def __addCutCoords(self, coords):
         """ adds Cut coordinates
@@ -1247,17 +1251,18 @@ class CutExtension(DisplayExtension):
         :type locked: :obj:`bool`
         """
         # print("DOUBLE", x, y, self.__drawing, locked)
-        if self.__drawing < 0 and \
-                (time.time() - self.__timelock) > self.__timetolock:
-            self.__drawing = len(self.__cut)
-            coords = list(self.cutCoords())
-            if not self._mainwidget.transformations()[0]:
-                crd = [x, y, x, y, 0.00001]
-            else:
-                crd = [y, x, y, x, 0.00001]
-            coords.append(crd)
-            self.updateCuts(len(coords), coords)
-            self.__drawpos = [x, y]
+        if self.__cutonclick:
+            if self.__drawing < 0 and \
+                    (time.time() - self.__timelock) > self.__timetolock:
+                self.__drawing = len(self.__cut)
+                coords = list(self.cutCoords())
+                if not self._mainwidget.transformations()[0]:
+                    crd = [x, y, x, y, 0.00001]
+                else:
+                    crd = [y, x, y, x, 0.00001]
+                coords.append(crd)
+                self.updateCuts(len(coords), coords)
+                self.__drawpos = [x, y]
 
     def mouse_click(self, x, y):
         """  sets vLine and hLine positions
@@ -1268,18 +1273,19 @@ class CutExtension(DisplayExtension):
         :type y: :obj:`float`
         """
         # print("SINGLE", x, y, self.__drawing)
-        if self.__drawing >= 0:
-            self.__timelock = time.time()
-            x0, y0 = self.__drawpos
+        if self.__cutonclick:
+            if self.__drawing >= 0:
+                self.__timelock = time.time()
+                x0, y0 = self.__drawpos
 
-            if not self._mainwidget.transformations()[0]:
-                crd = [x0, y0, x, y, 0.00001]
-            else:
-                crd = [y0, x0, y, x, 0.00001]
-            self.__coords[-1] = crd
-            self.__drawing = -1
-            self.updateCuts(len(self.__coords), self.__coords)
-            self.cutNumberChanged.emit(len(self.__coords))
+                if not self._mainwidget.transformations()[0]:
+                    crd = [x0, y0, x, y, 0.00001]
+                else:
+                    crd = [y0, x0, y, x, 0.00001]
+                self.__coords[-1] = crd
+                self.__drawing = -1
+                self.updateCuts(len(self.__coords), self.__coords)
+                self.cutNumberChanged.emit(len(self.__coords))
 
 
 class MeshExtension(DisplayExtension):
