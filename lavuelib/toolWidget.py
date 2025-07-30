@@ -2135,6 +2135,8 @@ class LineCutToolWidget(ToolBaseWidget):
         self.__allcuts = False
         #: (:obj:`bool`) connect nan points in cuts
         self.__connectnan = True
+        #: (:obj:`bool`) centering line cuts
+        self.__centering = False
         #: (:obj:`list`<:class:`pyqtgraph.PlotDataItem`>) 1D plot freezed
         self.__freezed = []
 
@@ -2165,6 +2167,7 @@ class LineCutToolWidget(ToolBaseWidget):
              self._mainwidget.emitTCC],
             [self.__ui.connectnanCheckBox.stateChanged,
              self._mainwidget.emitTCC],
+            [self._mainwidget.mouseImageSingleClicked, self._updateCenter],
             [self._mainwidget.freezeBottomPlotClicked, self._freezeplot],
             [self._mainwidget.clearBottomPlotClicked, self._clearplot],
         ]
@@ -2188,6 +2191,9 @@ class LineCutToolWidget(ToolBaseWidget):
             if "connect_nan" in cnf.keys():
                 self.__ui.connectnanCheckBox.setChecked(
                     bool(cnf["connect_nan"]))
+            if "centering" in cnf.keys():
+                self.__ui.connectnanCheckBox.setChecked(
+                    bool(cnf["centering"]))
             if "x_coordinates" in cnf.keys():
                 idxs = ["points", "x-pixels", "y-pixels"]
                 xcrd = str(cnf["x_coordinates"]).lower()
@@ -2208,6 +2214,7 @@ class LineCutToolWidget(ToolBaseWidget):
             self.__ui.xcoordsComboBox.currentText()).lower()
         cnf["all_cuts"] = self.__ui.allcutsCheckBox.isChecked()
         cnf["connect_nan"] = self.__ui.connectnanCheckBox.isChecked()
+        cnf["centering"] = self.__ui.centeringCheckBox.isChecked()
         cnf["cuts_number"] = self.__ui.cutSpinBox.value()
         return json.dumps(cnf, cls=numpyEncoder)
 
@@ -2230,6 +2237,26 @@ class LineCutToolWidget(ToolBaseWidget):
         for i in range(nrplots, len(self.__freezed)):
             self.__freezed[i].hide()
             self.__freezed[i].setVisible(True)
+
+    @QtCore.pyqtSlot(float, float)
+    def _updateCenter(self, xdata, ydata):
+        if self.__ui.centeringCheckBox.isChecked():
+            if self._mainwidget.rangeWindowEnabled():
+                txdata, tydata = self._mainwidget.scaledxy(
+                    xdata, ydata, useraxes=False)
+                if txdata is not None:
+                    xdata = txdata
+                    ydata = tydata
+            # print("CORD", xdata, ydata)
+            coords = self._mainwidget.cutCoords()
+            # print("CUTT", coords)
+            nrcut = min(len(coords), self.__ui.cutSpinBox.value())
+            for ic in range(nrcut):
+                if len(coords[ic]) > 1:
+                    coords[ic][0] = xdata
+                    coords[ic][1] = ydata
+            self._mainwidget.updateCuts(nrcut, coords)
+            self._plotCuts()
 
     @QtCore.pyqtSlot()
     def _clearplot(self):
@@ -2308,6 +2335,16 @@ class LineCutToolWidget(ToolBaseWidget):
         :param value: :obj:`int` or  :obj:`bool`
         """
         self.__connectnan = value
+        self._updateCuts(self.__ui.cutSpinBox.value())
+
+    @QtCore.pyqtSlot(int)
+    def _updateCentering(self, value):
+        """ updates centering checkbox
+
+        :param value: if True connect nan values
+        :param value: :obj:`int` or  :obj:`bool`
+        """
+        self.__centering = value
         self._updateCuts(self.__ui.cutSpinBox.value())
 
     @QtCore.pyqtSlot(int)
