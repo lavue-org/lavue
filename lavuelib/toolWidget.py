@@ -7847,7 +7847,7 @@ class CenterCheckToolWidget(ToolBaseWidget):
     #: (:obj:`str`) tool name
     name = "CenterCheck"
     #: (:obj:`str`) tool name alias
-    alias = "centering"
+    alias = "centercheck"
     #: (:obj:`tuple` <:obj:`str`>) capitalized required packages
     requires = ()
 
