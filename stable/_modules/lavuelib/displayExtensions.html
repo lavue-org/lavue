@@ -1009,6 +1009,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__timelock</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1">#: (:obj:`float`) time to lock</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__timetolock</span> <span class="o">=</span> <span class="mf">0.5</span>
+        <span class="c1">#: (:obj:`bool`) cut on clickcurrent roi drown id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cutonclick</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1">#: (:obj:`int`) current cut id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__current</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1049,7 +1051,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">cuts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__showCuts</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">cuts</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">cuts</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">cuts</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">cutonclick</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__cutonclick</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">cutonclick</span></div>
 
     <span class="k">def</span> <span class="nf">__addCutCoords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coords</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; adds Cut coordinates</span>
@@ -1294,17 +1298,18 @@
 <span class="sd">        :type locked: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># print(&quot;DOUBLE&quot;, x, y, self.__drawing, locked)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__drawing</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> \
-                <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__timelock</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__timetolock</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__drawing</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__cut</span><span class="p">)</span>
-            <span class="n">coords</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutCoords</span><span class="p">())</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mf">0.00001</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="mf">0.00001</span><span class="p">]</span>
-            <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">crd</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">updateCuts</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">),</span> <span class="n">coords</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__drawpos</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cutonclick</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__drawing</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> \
+                    <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__timelock</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__timetolock</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__drawing</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__cut</span><span class="p">)</span>
+                <span class="n">coords</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutCoords</span><span class="p">())</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mf">0.00001</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="mf">0.00001</span><span class="p">]</span>
+                <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">crd</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">updateCuts</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">),</span> <span class="n">coords</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__drawpos</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="CutExtension.mouse_click"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.displayExtensions.CutExtension.mouse_click">[docs]</a>    <span class="k">def</span> <span class="nf">mouse_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;  sets vLine and hLine positions</span>
@@ -1315,18 +1320,19 @@
 <span class="sd">        :type y: :obj:`float`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># print(&quot;SINGLE&quot;, x, y, self.__drawing)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__drawing</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__timelock</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-            <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__drawpos</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cutonclick</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__drawing</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__timelock</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+                <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__drawpos</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mf">0.00001</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="n">y0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="mf">0.00001</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__coords</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">crd</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__drawing</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">updateCuts</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__coords</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">__coords</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cutNumberChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__coords</span><span class="p">))</span></div></div>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mf">0.00001</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">crd</span> <span class="o">=</span> <span class="p">[</span><span class="n">y0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="mf">0.00001</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__coords</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">crd</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__drawing</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">updateCuts</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__coords</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">__coords</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cutNumberChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__coords</span><span class="p">))</span></div></div>
 
 
 <div class="viewcode-block" id="MeshExtension"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.displayExtensions.MeshExtension">[docs]</a><span class="k">class</span> <span class="nc">MeshExtension</span><span class="p">(</span><span class="n">DisplayExtension</span><span class="p">):</span>
@@ -2524,6 +2530,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v3.4.1/index.html">v3.4.1</a></li>
       <li><a class="reference external" href="../../index/../../v3.4.0/index.html">v3.4.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.3.1/index.html">v3.3.1</a></li>
       <li><a class="reference external" href="../../index/../../v3.3.0/index.html">v3.3.0</a></li>
