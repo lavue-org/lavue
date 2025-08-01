@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.settings &#8212; LaVue 3.4.1 documentation</title>
+    <title>lavuelib.settings &#8212; LaVue 3.5.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
@@ -33,7 +33,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.4.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.5.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.settings</a></li> 
       </ul>
@@ -315,6 +315,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">centerx</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="c1">#: (:obj:`float`) y-coordinates of the center of the image</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">centery</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="c1">#: (:obj:`float`) line cut length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linecutlength</span> <span class="o">=</span> <span class="mf">200.0</span>
         <span class="c1">#: (:obj:`float`) energy in eV</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="c1">#: (:obj:`float`) pixel x-size in um</span>
@@ -935,6 +937,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">sourcedisplay</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">linecutlength</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Tools/LineCutLength&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">centerx</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
                 <span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Tools/CenterX&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
@@ -1351,6 +1358,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">detponi1</span> <span class="o">=</span> <span class="mf">0.0</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">detponi2</span> <span class="o">=</span> <span class="mf">0.0</span>
 
+        <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
+            <span class="s2">&quot;Tools/LineCutLength&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">linecutlength</span><span class="p">)</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
             <span class="s2">&quot;Tools/CenterX&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">centerx</span><span class="p">)</span>
@@ -1875,7 +1885,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.4.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.5.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.settings</a></li> 
       </ul>
