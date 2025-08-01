@@ -183,6 +183,10 @@
     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span>
                  <span class="s2">&quot;ui&quot;</span><span class="p">,</span> <span class="s2">&quot;TwoDFitToolWidget.ui&quot;</span><span class="p">))</span>
 
+<span class="n">_centercheckformclass</span><span class="p">,</span> <span class="n">_centercheckbaseclass</span> <span class="o">=</span> <span class="n">uic</span><span class="o">.</span><span class="n">loadUiType</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span>
+                 <span class="s2">&quot;ui&quot;</span><span class="p">,</span> <span class="s2">&quot;CenterCheckToolWidget.ui&quot;</span><span class="p">))</span>
+
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;IntensityToolWidget&#39;</span><span class="p">,</span>
@@ -196,8 +200,9 @@
     <span class="s1">&#39;MaximaToolWidget&#39;</span><span class="p">,</span>
     <span class="s1">&#39;ParametersToolWidget&#39;</span><span class="p">,</span>
     <span class="s1">&#39;DiffractogramToolWidget&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;QROIProjToolWidget&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;CenterCheckToolWidget&#39;</span><span class="p">,</span>
     <span class="s1">&#39;TwoDFitToolWidget&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;QROIProjToolWidget&#39;</span><span class="p">,</span>
     <span class="s1">&#39;twproperties&#39;</span><span class="p">,</span>
 <span class="p">]</span>
 
@@ -246,6 +251,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cuts</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) create a cut on click</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cutonclick</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) linecut centering</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">centering</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) mesh enabled</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) axes scale enabled</span>
@@ -2185,8 +2192,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__allcuts</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) connect nan points in cuts</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="c1">#: (:obj:`bool`) centering line cuts</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__centering</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`list`&lt;:class:`pyqtgraph.PlotDataItem`&gt;) 1D plot freezed</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -2213,13 +2218,10 @@
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">allcutsCheckBox</span><span class="o">.</span><span class="n">stateChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updateAllCuts</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">connectnanCheckBox</span><span class="o">.</span><span class="n">stateChanged</span><span class="p">,</span>
              <span class="bp">self</span><span class="o">.</span><span class="n">_updateConnectNaN</span><span class="p">],</span>
-            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">centeringCheckBox</span><span class="o">.</span><span class="n">stateChanged</span><span class="p">,</span>
-             <span class="bp">self</span><span class="o">.</span><span class="n">_updateCentering</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">allcutsCheckBox</span><span class="o">.</span><span class="n">stateChanged</span><span class="p">,</span>
              <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">connectnanCheckBox</span><span class="o">.</span><span class="n">stateChanged</span><span class="p">,</span>
              <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">],</span>
-            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">mouseImageSingleClicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updateCenter</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">freezeBottomPlotClicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_freezeplot</span><span class="p">],</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">clearBottomPlotClicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clearplot</span><span class="p">],</span>
         <span class="p">]</span>
@@ -2243,9 +2245,6 @@
             <span class="k">if</span> <span class="s2">&quot;connect_nan&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">connectnanCheckBox</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span>
                     <span class="nb">bool</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;connect_nan&quot;</span><span class="p">]))</span>
-            <span class="k">if</span> <span class="s2">&quot;centering&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">connectnanCheckBox</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span>
-                    <span class="nb">bool</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;centering&quot;</span><span class="p">]))</span>
             <span class="k">if</span> <span class="s2">&quot;x_coordinates&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">idxs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;points&quot;</span><span class="p">,</span> <span class="s2">&quot;x-pixels&quot;</span><span class="p">,</span> <span class="s2">&quot;y-pixels&quot;</span><span class="p">]</span>
                 <span class="n">xcrd</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;x_coordinates&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -2266,7 +2265,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">xcoordsComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;all_cuts&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">allcutsCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;connect_nan&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">connectnanCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
-        <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;centering&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">centeringCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;cuts_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">cutSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
 
@@ -2289,26 +2287,6 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrplots</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span><span class="p">)):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">_updateCenter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">centeringCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">rangeWindowEnabled</span><span class="p">():</span>
-                <span class="n">txdata</span><span class="p">,</span> <span class="n">tydata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scaledxy</span><span class="p">(</span>
-                    <span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">,</span> <span class="n">useraxes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">txdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">xdata</span> <span class="o">=</span> <span class="n">txdata</span>
-                    <span class="n">ydata</span> <span class="o">=</span> <span class="n">tydata</span>
-            <span class="c1"># print(&quot;CORD&quot;, xdata, ydata)</span>
-            <span class="n">coords</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">cutCoords</span><span class="p">())</span>
-            <span class="c1"># nrcut = min(len(coords), self.__ui.cutSpinBox.value())</span>
-            <span class="n">nrcut</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">ic</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrcut</span><span class="p">):</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="n">ic</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">coords</span><span class="p">[</span><span class="n">ic</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">xdata</span>
-                    <span class="n">coords</span><span class="p">[</span><span class="n">ic</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ydata</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateCuts</span><span class="p">(</span><span class="n">nrcut</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_plotCuts</span><span class="p">()</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_clearplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2388,17 +2366,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span> <span class="o">=</span> <span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateCuts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">cutSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
-
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">_updateCentering</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates centering checkbox</span>
-
-<span class="sd">        :param value: if True connect nan values</span>
-<span class="sd">        :param value: :obj:`int` or  :obj:`bool`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__centering</span> <span class="o">=</span> <span class="n">value</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">cutonclick</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateinfowidgets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_setXCoords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xindex</span><span class="p">):</span>
@@ -7918,6 +7885,541 @@
             <span class="s2">&quot;Select the display space</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">message</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolLabel</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span>
             <span class="s2">&quot;coordinate info display for the mouse pointer</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">message</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CenterCheckToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget">[docs]</a><span class="k">class</span> <span class="nc">CenterCheckToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; line-cut tool widget</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: (:obj:`str`) tool name</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;CenterCheck&quot;</span>
+    <span class="c1">#: (:obj:`str`) tool name alias</span>
+    <span class="n">alias</span> <span class="o">=</span> <span class="s2">&quot;centercheck&quot;</span>
+    <span class="c1">#: (:obj:`tuple` &lt;:obj:`str`&gt;) capitalized required packages</span>
+    <span class="n">requires</span> <span class="o">=</span> <span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param parent: parent object</span>
+<span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ToolBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+
+        <span class="c1">#: (:class:`Ui_CenterCheckToolWidget&#39;) ui_toolwidget object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span> <span class="o">=</span> <span class="n">_centercheckformclass</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">cuts</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">cutonclick</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">centering</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">bottomplot</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">infolineedit</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">infotips</span> <span class="o">=</span> \
+            <span class="s2">&quot;coordinate info display for the mouse pointer&quot;</span>
+
+        <span class="c1">#: (:obj:`int`) 1d x-coorindate index,</span>
+        <span class="c1">#:          i.e. {0:Points, 1:&quot;X-Pixels&quot;, 2:&quot;Y-Pixels&quot;}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__xindex</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1">#: (:obj:`bool`) plot all cuts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__allcuts</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1">#: (:obj:`bool`) connect nan points in cuts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1">#: (:obj:`bool`) centering line cuts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__centering</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1">#: (:obj:`list`&lt;:class:`pyqtgraph.PlotDataItem`&gt;) 1D plot freezed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1">#: (:obj:`list`&lt;:class:`pyqtgraph.PlotDataItem`&gt;) 1D plot</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">#: (:obj:`int`) current plot number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__nrplots</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1">#: (:class:`lavuelib.settings.Settings`) configuration settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span>
+
+        <span class="c1">#: (:obj:`list` &lt; [:class:`pyqtgraph.QtCore.pyqtSignal`, :obj:`str`] &gt;)</span>
+        <span class="c1">#: list of [signal, slot] object to connect</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal2slot</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">cutSpinBox</span><span class="o">.</span><span class="n">valueChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updateCuts</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">cutSpinBox</span><span class="o">.</span><span class="n">valueChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">lengthSpinBox</span><span class="o">.</span><span class="n">valueChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updateLength</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">lengthSpinBox</span><span class="o">.</span><span class="n">valueChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">resetPushButton</span><span class="o">.</span><span class="n">clicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resetCuts</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">resetPushButton</span><span class="o">.</span><span class="n">clicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">cutNumberChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_setCutsNumber</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">cutCoordsChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_plotCuts</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">mouseImagePositionChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_message</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">connectnanCheckBox</span><span class="o">.</span><span class="n">stateChanged</span><span class="p">,</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">_updateConnectNaN</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">connectnanCheckBox</span><span class="o">.</span><span class="n">stateChanged</span><span class="p">,</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">mouseImageSingleClicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updateCenter</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">freezeBottomPlotClicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_freezeplot</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">clearBottomPlotClicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clearplot</span><span class="p">],</span>
+        <span class="p">]</span>
+
+    <span class="c1"># @debugmethod</span>
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_updateGeometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geometry</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update geometry widget</span>
+
+<span class="sd">        :param geometry: geometry dictionary</span>
+<span class="sd">        :type geometry: :obj:`dict` &lt; :obj:`str`, :obj:`list`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;centerx&quot;</span> <span class="ow">in</span> <span class="n">geometry</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centerx</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">geometry</span><span class="p">[</span><span class="s2">&quot;centerx&quot;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">writeAttribute</span><span class="p">(</span>
+                    <span class="s2">&quot;BeamCenterX&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centerx</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;centery&quot;</span> <span class="ow">in</span> <span class="n">geometry</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centery</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">geometry</span><span class="p">[</span><span class="s2">&quot;centery&quot;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">writeAttribute</span><span class="p">(</span>
+                    <span class="s2">&quot;BeamCenterY&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centery</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">if</span> <span class="n">geometry</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_updateCenter</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centerx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centery</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">()</span>
+
+<div class="viewcode-block" id="CenterCheckToolWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current tool</span>
+
+<span class="sd">        :param configuration: configuration string</span>
+<span class="sd">        :type configuration: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">configuration</span><span class="p">:</span>
+            <span class="n">cnf</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;cuts_number&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">cutSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;cuts_number&quot;</span><span class="p">]))</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                    <span class="c1"># print(str(e))</span>
+            <span class="k">if</span> <span class="s2">&quot;connect_nan&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">connectnanCheckBox</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span>
+                    <span class="nb">bool</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;connect_nan&quot;</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="s2">&quot;cuts_length&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">linecutlength</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;cuts_length&quot;</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">lengthSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
+                        <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">linecutlength</span><span class="p">))</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="c1"># print(str(e))</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">if</span> <span class="s2">&quot;geometry&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_updateGeometry</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">])</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="c1"># print(str(e))</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CenterCheckToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current tool</span>
+
+<span class="sd">        :returns configuration: configuration string</span>
+<span class="sd">        :rtype configuration: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cnf</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;connect_nan&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">connectnanCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+        <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;cuts_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">cutSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;cuts_length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">linecutlength</span>
+        <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;centerx&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centerx</span><span class="p">,</span>
+            <span class="s2">&quot;centery&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centery</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_freezeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; freeze plot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clearplot</span><span class="p">()</span>
+        <span class="n">nrplots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nrplots</span>
+        <span class="k">while</span> <span class="n">nrplots</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span><span class="p">):</span>
+            <span class="n">cr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">onedbottomplot</span><span class="p">()</span>
+            <span class="n">cr</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">_pg</span><span class="o">.</span><span class="n">mkColor</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrplots</span><span class="p">):</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">xData</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">yData</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="o">*</span><span class="n">dt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrplots</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_updateCenter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">rangeWindowEnabled</span><span class="p">():</span>
+            <span class="n">txdata</span><span class="p">,</span> <span class="n">tydata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scaledxy</span><span class="p">(</span>
+                <span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">,</span> <span class="n">useraxes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">txdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">xdata</span> <span class="o">=</span> <span class="n">txdata</span>
+                <span class="n">ydata</span> <span class="o">=</span> <span class="n">tydata</span>
+        <span class="c1"># print(&quot;CORD&quot;, xdata, ydata)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centerx</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">xdata</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centery</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ydata</span><span class="p">)</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">cutCoords</span><span class="p">())</span>
+        <span class="c1"># nrcut = min(len(coords), self.__ui.cutSpinBox.value())</span>
+        <span class="n">nrcut</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ic</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrcut</span><span class="p">):</span>
+            <span class="n">coords</span><span class="p">[</span><span class="n">ic</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">xdata</span> <span class="o">-</span> <span class="n">coords</span><span class="p">[</span><span class="n">ic</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">coords</span><span class="p">[</span><span class="n">ic</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span> <span class="o">+=</span> <span class="n">ydata</span> <span class="o">-</span> <span class="n">coords</span><span class="p">[</span><span class="n">ic</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">coords</span><span class="p">[</span><span class="n">ic</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">xdata</span>
+            <span class="n">coords</span><span class="p">[</span><span class="n">ic</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ydata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateCuts</span><span class="p">(</span><span class="n">nrcut</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_plotCuts</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">writeAttribute</span><span class="p">(</span><span class="s2">&quot;BeamCenterX&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">xdata</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">writeAttribute</span><span class="p">(</span><span class="s2">&quot;BeamCenterY&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">ydata</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_message</span><span class="p">()</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_clearplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; clear plot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">cr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span><span class="p">:</span>
+            <span class="n">cr</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_resetCuts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updateCuts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">cutSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_updateLength</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update linecut length</span>
+
+<span class="sd">        :param cid: cut id</span>
+<span class="sd">        :type cid: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">linecutlength</span> <span class="o">=</span> <span class="n">length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resetCuts</span><span class="p">()</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_updateCuts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cid</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update Cuts</span>
+
+<span class="sd">        :param cid: cut id</span>
+<span class="sd">        :type cid: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">cid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">cutSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">cutCoords</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">coords</span> <span class="ow">and</span> <span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centerx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centery</span><span class="p">)</span>
+
+        <span class="n">nrcut</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">cutSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">ncoords</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ic</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrcut</span><span class="p">):</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">ic</span> <span class="o">/</span> <span class="n">nrcut</span>
+            <span class="n">ncoords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span>
+                 <span class="n">cx</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">linecutlength</span><span class="p">,</span>
+                 <span class="n">cy</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">linecutlength</span><span class="p">,</span>
+                 <span class="mf">0.00001</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateCuts</span><span class="p">(</span><span class="n">nrcut</span><span class="p">,</span> <span class="n">ncoords</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_plotCuts</span><span class="p">()</span>
+
+<div class="viewcode-block" id="CenterCheckToolWidget.afterplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget.afterplot">[docs]</a>    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; command after plot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_plotCuts</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CenterCheckToolWidget.activate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">onedbottomplot</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__nrplots</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">curve</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">:</span>
+            <span class="n">curve</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="n">curve</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updateConnectNaN</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">lengthSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
+            <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">linecutlength</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updateCenter</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centerx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centery</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_plotCuts</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">bottomplotShowMenu</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CenterCheckToolWidget.deactivate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget.deactivate">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">bottomplotShowMenu</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">curve</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">:</span>
+            <span class="n">curve</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+            <span class="n">curve</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">removebottomplot</span><span class="p">(</span><span class="n">curve</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">freezed</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span><span class="p">:</span>
+            <span class="n">freezed</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+            <span class="n">freezed</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">removebottomplot</span><span class="p">(</span><span class="n">freezed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_updateAllCuts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates X row status</span>
+
+<span class="sd">        :param value: if True or not 0 x-cooridnates taken from the first row</span>
+<span class="sd">        :param value: :obj:`int` or  :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__allcuts</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updateCuts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">cutSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_updateConnectNaN</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates connect nan checkbox</span>
+
+<span class="sd">        :param value: if True connect nan values</span>
+<span class="sd">        :param value: :obj:`int` or  :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updateCuts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">cutSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_updateCentering</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; updates centering checkbox</span>
+
+<span class="sd">        :param value: if True connect nan values</span>
+<span class="sd">        :param value: :obj:`int` or  :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__centering</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">cutonclick</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateinfowidgets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_setXCoords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xindex</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets x-coodinates for 1d plot</span>
+
+<span class="sd">        :param xindex: 1d x-coorindate index,</span>
+<span class="sd">        :type xindex: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__xindex</span> <span class="o">=</span> <span class="n">xindex</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_plotCuts</span><span class="p">()</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_plotCuts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; plots the current 1d Cut</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__allcuts</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_plotAllCuts</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_plotCut</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_plotAllCuts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; plot all 1d Cuts</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentTool</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sendresults</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showuserplot</span><span class="p">:</span>
+                <span class="n">xl</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">yl</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">nrplots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">cutSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nrplots</span> <span class="o">!=</span> <span class="n">nrplots</span><span class="p">:</span>
+                <span class="k">while</span> <span class="n">nrplots</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">onedbottomplot</span><span class="p">())</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrplots</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrplots</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">)):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__nrplots</span> <span class="o">=</span> <span class="n">nrplots</span>
+                <span class="k">if</span> <span class="n">nrplots</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">cr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nrplots</span><span class="p">:</span>
+                            <span class="n">cr</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">_pg</span><span class="o">.</span><span class="n">hsvColor</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">nrplots</span><span class="p">)))</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">cutCoords</span><span class="p">())</span>
+            <span class="n">rws</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">rangeWindowScale</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrplots</span><span class="p">):</span>
+                <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">cutData</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">dt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">nanmask</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">dt</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;f&#39;</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> \
+                                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span><span class="p">:</span>
+                            <span class="n">dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xindex</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">):</span>
+                            <span class="n">crds</span> <span class="o">=</span> <span class="n">coords</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">crds</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.00001</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xindex</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                            <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">crds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">crds</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">crds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">crds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span>
+                                <span class="n">x</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">connect</span><span class="o">=</span><span class="s2">&quot;finite&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sendresults</span> <span class="ow">or</span> \
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showuserplot</span><span class="p">:</span>
+                            <span class="n">xl</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">dx</span><span class="p">])</span>
+                            <span class="n">yl</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">dt</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">rws</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+                            <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">rws</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span>
+                                    <span class="n">x</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">connect</span><span class="o">=</span><span class="s2">&quot;finite&quot;</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sendresults</span> \
+                                    <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showuserplot</span><span class="p">:</span>
+                                <span class="n">xl</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">dx</span><span class="p">])</span>
+                                <span class="n">yl</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">dt</span><span class="p">])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span>
+                                    <span class="n">y</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">connect</span><span class="o">=</span><span class="s2">&quot;finite&quot;</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sendresults</span> \
+                                    <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showuserplot</span><span class="p">:</span>
+                                <span class="n">xl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dt</span><span class="p">))))</span>
+                                <span class="n">yl</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">dt</span><span class="p">])</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sendresults</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showuserplot</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__sendresults</span><span class="p">(</span><span class="n">xl</span><span class="p">,</span> <span class="n">yl</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_plotCut</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; plot the current 1d Cut</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nrplots</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__nrplots</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentTool</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sendresults</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showuserplot</span><span class="p">:</span>
+                <span class="n">xl</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">yl</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">cutData</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">_pg</span><span class="o">.</span><span class="n">mkColor</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">dt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">nanmask</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">dt</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;f&#39;</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> \
+                            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span><span class="p">:</span>
+                        <span class="n">dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xindex</span><span class="p">:</span>
+                    <span class="n">crds</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.00001</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentCut</span><span class="p">()</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="n">crds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">cutCoords</span><span class="p">()[</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentCut</span><span class="p">()]</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xindex</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">crds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">crds</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">crds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">crds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">connect</span><span class="o">=</span><span class="s2">&quot;finite&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sendresults</span> <span class="ow">or</span> \
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showuserplot</span><span class="p">:</span>
+                        <span class="n">xl</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">dx</span><span class="p">])</span>
+                        <span class="n">yl</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">dt</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">rws</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">rangeWindowScale</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">rws</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+                        <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">rws</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span>
+                                <span class="n">x</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">connect</span><span class="o">=</span><span class="s2">&quot;finite&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sendresults</span> <span class="ow">or</span> \
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showuserplot</span><span class="p">:</span>
+                            <span class="n">xl</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">dx</span><span class="p">])</span>
+                            <span class="n">yl</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">dt</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connectnan</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">connect</span><span class="o">=</span><span class="s2">&quot;finite&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sendresults</span> \
+                                <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showuserplot</span><span class="p">:</span>
+                            <span class="n">xl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dt</span><span class="p">))))</span>
+                            <span class="n">yl</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">dt</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sendresults</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showuserplot</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__sendresults</span><span class="p">(</span><span class="n">xl</span><span class="p">,</span> <span class="n">yl</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__sendresults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xl</span><span class="p">,</span> <span class="n">yl</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; send results to LavueController</span>
+
+<span class="sd">        :param xl:  list of x&#39;s for each diffractogram</span>
+<span class="sd">        :type xl: :obj:`list` &lt; :obj:`list` &lt;float&gt;&gt;</span>
+<span class="sd">        :param yl:  list of values for each diffractogram</span>
+<span class="sd">        :type yl: :obj:`list` &lt; :obj:`list` &lt;float&gt;&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;tool&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">alias</span><span class="p">}</span>
+        <span class="n">npl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xl</span><span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;imagename&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">imageName</span><span class="p">()</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;nrlinecuts&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xl</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">npl</span><span class="p">):</span>
+            <span class="n">results</span><span class="p">[</span><span class="s2">&quot;linecut_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[</span><span class="n">xl</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">yl</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;linecutlength&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settinges</span><span class="o">.</span><span class="n">linecutlength</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sendresults</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">writeAttribute</span><span class="p">(</span>
+                <span class="s2">&quot;ToolResults&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">plotUserFunction</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_setCutsNumber</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cid</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;sets a number of cuts</span>
+
+<span class="sd">        :param cid: number of cuts</span>
+<span class="sd">        :type cid: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">cutSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">cid</span><span class="p">)</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_message</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides cut message</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">intensity</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentIntensity</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">intensity</span><span class="p">):</span>
+            <span class="n">intensity</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">ilabel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scalingLabel</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentCut</span><span class="p">()</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">crds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">cutCoords</span><span class="p">()[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentCut</span><span class="p">()]</span>
+            <span class="n">crds</span> <span class="o">=</span> <span class="s2">&quot;[[</span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">], [</span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">], width=</span><span class="si">%.2f</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">crds</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">crds</span> <span class="o">=</span> <span class="s2">&quot;[[0, 0], [0, 0], width=0]&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> \
+           <span class="n">intensity</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">itn</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">it</span><span class="p">))</span>
+                   <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">it</span><span class="p">)</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">intensity</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">itn</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, x = </span><span class="si">%.2f</span><span class="s2">, y = </span><span class="si">%.2f</span><span class="s2">, &quot;</span> \
+                    <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> = (</span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                        <span class="n">crds</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ilabel</span><span class="p">,</span>
+                        <span class="n">itn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">itn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">itn</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, x = </span><span class="si">%.2f</span><span class="s2">, y = </span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">crds</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ilabel</span><span class="p">,</span> <span class="n">intensity</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TwoDFitToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.TwoDFitToolWidget">[docs]</a><span class="k">class</span> <span class="nc">TwoDFitToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>

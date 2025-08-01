@@ -1011,6 +1011,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__timetolock</span> <span class="o">=</span> <span class="mf">0.5</span>
         <span class="c1">#: (:obj:`bool`) cut on clickcurrent roi drown id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__cutonclick</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1">#: (:obj:`bool`) centering flakg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__centering</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1">#: (:obj:`int`) current cut id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__current</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1053,7 +1055,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__showCuts</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">cuts</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">cuts</span>
         <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">cutonclick</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__cutonclick</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">cutonclick</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__cutonclick</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">cutonclick</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">centering</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__centering</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">centering</span></div>
 
     <span class="k">def</span> <span class="nf">__addCutCoords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coords</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; adds Cut coordinates</span>
@@ -1076,7 +1080,10 @@
                     <span class="n">ln</span> <span class="o">=</span> <span class="n">nozero</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">length</span><span class="p">())</span>
                     <span class="n">ang</span> <span class="o">=</span> <span class="n">_pg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
                     <span class="n">crd</span><span class="o">.</span><span class="n">setPos</span><span class="p">(</span><span class="n">pos1</span><span class="p">)</span>
-                    <span class="n">crd</span><span class="o">.</span><span class="n">setSize</span><span class="p">([</span><span class="n">ln</span><span class="p">,</span> <span class="n">crd</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">1</span><span class="p">]])</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+                        <span class="n">crd</span><span class="o">.</span><span class="n">setSize</span><span class="p">([</span><span class="n">ln</span><span class="p">,</span> <span class="n">coords</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">4</span><span class="p">]])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">crd</span><span class="o">.</span><span class="n">setSize</span><span class="p">([</span><span class="n">ln</span><span class="p">,</span> <span class="n">crd</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">1</span><span class="p">]])</span>
                     <span class="n">crd</span><span class="o">.</span><span class="n">setAngle</span><span class="p">(</span><span class="o">-</span><span class="n">ang</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__addCut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>

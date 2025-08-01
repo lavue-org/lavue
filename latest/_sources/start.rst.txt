@@ -148,7 +148,7 @@ To get all possible command-line parameters
 			       where 'm' is '-'
      -x, --start           connect the image source
      -u TOOL, --tool TOOL  utility tool, i.e. intensity, roi, movemotors, meshscan, maxima,
-			     linecut, projections, 1d-plot, angle/q, q+roi+proj, parameters, diffractogram
+			     linecut, projections, 1d-plot, angle/q, q+roi+proj, parameters, diffractogram, twodfit, centercheck
      --tool-configuration TOOLCONFIG
 			     JSON dictionary with tool configuration, e.g. {"rows_to_plot":"0,1","buffer_size":512}
      -a TANGODEVICE, --tango-device TANGODEVICE

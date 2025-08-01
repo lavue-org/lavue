@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Specialized Tools &#8212; LaVue  documentation</title>
+    <title>CenterCheck Tool &#8212; LaVue  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
@@ -20,8 +20,8 @@
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Intensity Tool" href="intensity.html" />
-    <link rel="prev" title="2D Plot" href="../plot.html" />
+    <link rel="next" title="TwoDFit Tool" href="twodfit.html" />
+    <link rel="prev" title="Diffractogram Tool" href="diffractogram.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <!--[if lt IE 9]>
     <script src="_static/css3-mediaqueries.js"></script>
@@ -37,14 +37,15 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="intensity.html" title="Intensity Tool"
+          <a href="twodfit.html" title="TwoDFit Tool"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../plot.html" title="2D Plot"
+          <a href="diffractogram.html" title="Diffractogram Tool"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">GUI User Guide</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Specialized Tools</a></li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" >GUI User Guide</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Specialized Tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CenterCheck Tool</a></li> 
       </ul>
     </div>  
 
@@ -53,53 +54,25 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="specialized-tools">
-<span id="special-tools"></span><h1>Specialized Tools<a class="headerlink" href="#specialized-tools" title="Permalink to this heading">¶</a></h1>
-<p>In the bottom-right corner <cite>ComboBox</cite> the user selects one of the <strong>Specialized Image Tools</strong>:</p>
+  <section id="centercheck-tool">
+<span id="centercheck"></span><h1>CenterCheck Tool<a class="headerlink" href="#centercheck-tool" title="Permalink to this heading">¶</a></h1>
+<p><strong>CenterCheck Tool</strong> selects redial symetric Line Cuts and shows their 1d intensity plots to check the center of the image</p>
+<figure class="align-default">
+<img alt="../../_images/centerchecklavue.png" src="../../_images/centerchecklavue.png" />
+</figure>
 <ul class="simple">
-<li><p><a class="reference internal" href="intensity.html#intensity"><span class="std std-ref">Intensity</span></a> - shows intensity of the selected pixels</p></li>
-<li><p><a class="reference internal" href="roi.html#roi"><span class="std std-ref">ROI</span></a> - selects Regions Of Interest and culculates a sum of their pixel intensities</p></li>
-<li><p><a class="reference internal" href="linecut.html#linecut"><span class="std std-ref">LineCut</span></a> - selects Line Cuts and shows their 1d intensity plots</p></li>
-<li><p><a class="reference internal" href="angleq.html#angleq"><span class="std std-ref">Angle/Q</span></a> - shows pixel coordinates in q-space or theta-angles</p></li>
-<li><p><a class="reference internal" href="movemotor.html#move-motor"><span class="std std-ref">MoveMotor</span></a> - moves the selected motors to the position pointed by mouse</p></li>
-<li><p><a class="reference internal" href="meshscan.html#mesh-scan"><span class="std std-ref">MeshScan</span></a> - performs sardana mesh scan on the selected ROI region</p></li>
-<li><p><a class="reference internal" href="onedplot.html#d-plot"><span class="std std-ref">1d-Plot</span></a> - plots 1d-plots of the selected image rows</p></li>
-<li><p><a class="reference internal" href="projections.html#projections"><span class="std std-ref">Projections</span></a> - plots horizontal and vertical projections of the current image</p></li>
-<li><p><a class="reference internal" href="qroiproj.html#q-roi-proj"><span class="std std-ref">Q+ROI+Proj</span></a> - combines <a class="reference internal" href="angleq.html#angleq"><span class="std std-ref">Angle/Q</span></a>, <a class="reference internal" href="roi.html#roi"><span class="std std-ref">ROI</span></a> and <a class="reference internal" href="projections.html#projections"><span class="std std-ref">Projections</span></a></p></li>
-<li><p><a class="reference internal" href="maxima.html#maxima"><span class="std std-ref">Maxima</span></a> - points pixels with the highest intensity</p></li>
-<li><p><a class="reference internal" href="parameters.html#parameters"><span class="std std-ref">Parameters</span></a> - reads and writes tango attributes to change detector settings</p></li>
-<li><p><a class="reference internal" href="diffractogram.html#diffractogram"><span class="std std-ref">Diffractogram</span></a> - shows a result of azimuth integration on 1d plot</p></li>
-<li><p><a class="reference internal" href="twodfit.html#twodfit"><span class="std std-ref">TwoD-Fit</span></a> - fits two-dimensional  function tohe the current raw image</p></li>
-<li><p><a class="reference internal" href="centercheck.html#centercheck"><span class="std std-ref">CenterCheck</span></a> - checks image centers with 1d-plot symetric radial line cuts</p></li>
+<li><p><strong>All Cuts:</strong> displays all cuts on the 1d-plot</p></li>
+<li><p><strong>Length</strong> default length of the line-cuts</p></li>
+<li><p><strong>Reset</strong> reset to symetric structure</p></li>
 </ul>
-<p>The <strong>configuration</strong> of tools can be set with a JSON dictionary passed in the  <code class="docutils literal notranslate"><span class="pre">--tool-configuration</span></code>  option in command line or as a <code class="docutils literal notranslate"><span class="pre">toolconfig</span></code> variable in the <code class="docutils literal notranslate"><span class="pre">LavueState</span></code> attribute of <a class="reference internal" href="../../lavuecontroller.html#lavuecontroller"><span class="std std-ref">LaVueController server</span></a>, e.g.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tango</span>
-<span class="kn">import</span> <span class="nn">json</span>
-
-<span class="n">lc</span> <span class="o">=</span> <span class="n">tango</span><span class="o">.</span><span class="n">DeviceProxy</span><span class="p">(</span><span class="s2">&quot;p09/lavuecontroller/1&quot;</span><span class="p">)</span>
-
-<span class="n">lc</span><span class="o">.</span><span class="n">LavueState</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;tool&quot;</span><span class="p">:</span><span class="s2">&quot;intensity&quot;</span><span class="p">,</span> <span class="s2">&quot;toolconfig&quot;</span><span class="p">:</span><span class="s1">&#39;{&quot;crosshair_locker&quot;:true}&#39;</span><span class="p">})</span>
+<p>The <strong>width</strong> of the line-cut can be set the handle in the middle of the line-cut selector.</p>
+<p>The <strong>configuration</strong> of the tool can be set with a JSON dictionary passed in the  <code class="docutils literal notranslate"><span class="pre">--tool-configuration</span></code> option in command line or a toolconfig variable of <code class="docutils literal notranslate"><span class="pre">LavueController.LavueState</span></code> with the following keys:</p>
+<p><code class="docutils literal notranslate"><span class="pre">cuts_number</span></code> (integer), <code class="docutils literal notranslate"><span class="pre">cuts_length</span></code> (integer),  <code class="docutils literal notranslate"><span class="pre">connect_nan</span></code> (boolean),  <code class="docutils literal notranslate"><span class="pre">geometry</span></code> (string:float dictionary with the <code class="docutils literal notranslate"><span class="pre">centerx</span></code>, <code class="docutils literal notranslate"><span class="pre">centery</span></code> keywords)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">lavue -u centercheck --tool-configuration \{\&quot;cuts_number\&quot;:2,\&quot;cuts_length\&quot;:600,\&quot;connect_nan\&quot;:true}</span>
 </pre></div>
 </div>
-<div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="intensity.html">Intensity Tool</a></li>
-<li class="toctree-l1"><a class="reference internal" href="roi.html">ROI Tool</a></li>
-<li class="toctree-l1"><a class="reference internal" href="linecut.html">LineCut Tool</a></li>
-<li class="toctree-l1"><a class="reference internal" href="angleq.html">Angle/Q Tool</a></li>
-<li class="toctree-l1"><a class="reference internal" href="movemotor.html">MoveMotor Tool</a></li>
-<li class="toctree-l1"><a class="reference internal" href="meshscan.html">MeshScan Tool</a></li>
-<li class="toctree-l1"><a class="reference internal" href="onedplot.html">1d-Plot Tool</a></li>
-<li class="toctree-l1"><a class="reference internal" href="projections.html">Projections Tool</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maxima.html">Maxima Tool</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters Tool</a></li>
-<li class="toctree-l1"><a class="reference internal" href="diffractogram.html">Diffractogram Tool</a></li>
-<li class="toctree-l1"><a class="reference internal" href="centercheck.html">CenterCheck Tool</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twodfit.html">TwoDFit Tool</a></li>
-<li class="toctree-l1"><a class="reference internal" href="qroiproj.html">Q+ROI+Proj Tool</a></li>
-</ul>
-</div>
+<p>A JSON dictionary with the <strong>tool results</strong> is passed to the <strong>LavueController</strong> or/and to <strong>user functions plugins</strong>. It contains the following keys:</p>
+<p><code class="docutils literal notranslate"><span class="pre">tool</span></code> : “centercheck”, <code class="docutils literal notranslate"><span class="pre">imagename</span></code> (string), <code class="docutils literal notranslate"><span class="pre">timestamp</span></code> (float), <code class="docutils literal notranslate"><span class="pre">linecutlength</span></code> (float),  <code class="docutils literal notranslate"><span class="pre">nrlinecuts</span></code> (int), <code class="docutils literal notranslate"><span class="pre">linecut_%i</span></code> ([[float, float], …, [float, float]]) [i.e. “%i” goes from 1 to <code class="docutils literal notranslate"><span class="pre">nrlinecuts</span></code>]</p>
 </section>
 
 
@@ -111,13 +84,13 @@
         <div class="sphinxsidebarwrapper">
   <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="../plot.html"
-                          title="previous chapter">2D Plot</a></p>
+    <p class="topless"><a href="diffractogram.html"
+                          title="previous chapter">Diffractogram Tool</a></p>
   </div>
   <div>
     <h4>Next topic</h4>
-    <p class="topless"><a href="intensity.html"
-                          title="next chapter">Intensity Tool</a></p>
+    <p class="topless"><a href="twodfit.html"
+                          title="next chapter">TwoDFit Tool</a></p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
@@ -190,14 +163,15 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="intensity.html" title="Intensity Tool"
+          <a href="twodfit.html" title="TwoDFit Tool"
              >next</a> |</li>
         <li class="right" >
-          <a href="../plot.html" title="2D Plot"
+          <a href="diffractogram.html" title="Diffractogram Tool"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >GUI User Guide</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Specialized Tools</a></li> 
+          <li class="nav-item nav-item-2"><a href="index.html" >Specialized Tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CenterCheck Tool</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
