@@ -7887,8 +7887,6 @@ class CenterCheckToolWidget(ToolBaseWidget):
         self.__curves = []
         #: (:obj:`int`) current plot number
         self.__nrplots = 0
-        #: (:obj:`float`) current line cut length
-        self.__length = 200.
 
         #: (:class:`lavuelib.settings.Settings`) configuration settings
         self.__settings = self._mainwidget.settings()
@@ -7914,6 +7912,33 @@ class CenterCheckToolWidget(ToolBaseWidget):
             [self._mainwidget.clearBottomPlotClicked, self._clearplot],
         ]
 
+    # @debugmethod
+    @QtCore.pyqtSlot()
+    def _updateGeometry(self, geometry):
+        """ update geometry widget
+
+        :param geometry: geometry dictionary
+        :type geometry: :obj:`dict` < :obj:`str`, :obj:`list`>
+        """
+        try:
+            if "centerx" in geometry.keys():
+                self.__settings.centerx = float(geometry["centerx"])
+                self._mainwidget.writeAttribute(
+                    "BeamCenterX", float(self.__settings.centerx))
+        except Exception:
+            pass
+        try:
+            if "centery" in geometry.keys():
+                self.__settings.centery = float(geometry["centery"])
+                self._mainwidget.writeAttribute(
+                    "BeamCenterY", float(self.__settings.centery))
+        except Exception:
+            pass
+        if geometry:
+            self._updateCenter(
+                self.__settings.centerx, self.__settings.centery)
+            self._mainwidget.emitTCC()
+
     def configure(self, configuration):
         """ set configuration for the current tool
 
@@ -7931,6 +7956,20 @@ class CenterCheckToolWidget(ToolBaseWidget):
             if "connect_nan" in cnf.keys():
                 self.__ui.connectnanCheckBox.setChecked(
                     bool(cnf["connect_nan"]))
+            if "cuts_length" in cnf.keys():
+                try:
+                    self.__settings.linecutlength = float(cnf["cuts_length"])
+                    self.__ui.lengthSpinBox.setValue(
+                        int(self.__settings.linecutlength))
+                except Exception as e:
+                    # print(str(e))
+                    logger.warning(str(e))
+            if "geometry" in cnf.keys():
+                try:
+                    self._updateGeometry(cnf["geometry"])
+                except Exception as e:
+                    # print(str(e))
+                    logger.warning(str(e))
 
     def configuration(self):
         """ provides configuration for the current tool
@@ -7941,6 +7980,11 @@ class CenterCheckToolWidget(ToolBaseWidget):
         cnf = {}
         cnf["connect_nan"] = self.__ui.connectnanCheckBox.isChecked()
         cnf["cuts_number"] = self.__ui.cutSpinBox.value()
+        cnf["cuts_length"] = self.__settings.linecutlength
+        cnf["geometry"] = {
+            "centerx": self.__settings.centerx,
+            "centery": self.__settings.centery,
+        }
         return json.dumps(cnf, cls=numpyEncoder)
 
     @QtCore.pyqtSlot()
@@ -7972,6 +8016,8 @@ class CenterCheckToolWidget(ToolBaseWidget):
                 xdata = txdata
                 ydata = tydata
         # print("CORD", xdata, ydata)
+        self.__settings.centerx = float(xdata)
+        self.__settings.centery = float(ydata)
         coords = list(self._mainwidget.cutCoords())
         # nrcut = min(len(coords), self.__ui.cutSpinBox.value())
         nrcut = len(coords)
@@ -7982,6 +8028,9 @@ class CenterCheckToolWidget(ToolBaseWidget):
             coords[ic][1] = ydata
         self._mainwidget.updateCuts(nrcut, coords)
         self._plotCuts()
+        self._mainwidget.writeAttribute("BeamCenterX", float(xdata))
+        self._mainwidget.writeAttribute("BeamCenterY", float(ydata))
+        self._message()
 
     @QtCore.pyqtSlot()
     def _clearplot(self):
@@ -8005,7 +8054,7 @@ class CenterCheckToolWidget(ToolBaseWidget):
             self.__connectnan = True
         else:
             self.__connectnan = False
-        self.__length = length
+        self.__settings.linecutlength = length
         self._resetCuts()
 
     @QtCore.pyqtSlot(int)
@@ -8025,16 +8074,17 @@ class CenterCheckToolWidget(ToolBaseWidget):
         if coords and coords[0]:
             cx, cy = (coords[0][0], coords[0][1])
         else:
-            cx, cy = (self.__length, self.__length)
+            cx, cy = (self.__settings.centerx, self.__settings.centery)
 
         nrcut = self.__ui.cutSpinBox.value()
         ncoords = []
         for ic in range(nrcut):
             alpha = 2 * math.pi * ic / nrcut
-            ncoords.append([cx, cy,
-                            cx + math.sin(alpha) * self.__length,
-                            cy + math.cos(alpha) * self.__length,
-                            0.00001])
+            ncoords.append(
+                [cx, cy,
+                 cx + math.sin(alpha) * self.__settings.linecutlength,
+                 cy + math.cos(alpha) * self.__settings.linecutlength,
+                 0.00001])
         self._mainwidget.updateCuts(nrcut, ncoords)
         self._plotCuts()
 
@@ -8052,8 +8102,11 @@ class CenterCheckToolWidget(ToolBaseWidget):
         for curve in self.__curves:
             curve.show()
             curve.setVisible(True)
-        self._updateAllCuts(self.__allcuts)
         self._updateConnectNaN(self.__connectnan)
+        self.__ui.lengthSpinBox.setValue(
+            int(self.__settings.linecutlength))
+        self._updateCenter(
+            self.__settings.centerx, self.__settings.centery)
         self._plotCuts()
         self._mainwidget.bottomplotShowMenu(True, True)
 
