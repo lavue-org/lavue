@@ -8331,7 +8331,7 @@ class CenterCheckToolWidget(ToolBaseWidget):
         results["nrlinecuts"] = len(xl)
         for i in range(npl):
             results["linecut_%s" % (i + 1)] = [xl[i], yl[i]]
-        results["linecutlength"] = self.__settinges.linecutlength
+        results["linecutlength"] = self.__settings.linecutlength
         if self.__settings.sendresults:
             self._mainwidget.writeAttribute(
                 "ToolResults", json.dumps(results, cls=numpyEncoder))
