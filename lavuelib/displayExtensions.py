@@ -964,6 +964,8 @@ class CutExtension(DisplayExtension):
         self.__timetolock = 0.5
         #: (:obj:`bool`) cut on clickcurrent roi drown id
         self.__cutonclick = True
+        #: (:obj:`bool`) centering flakg
+        self.__centering = True
 
         #: (:obj:`int`) current cut id
         self.__current = 0
@@ -1007,6 +1009,8 @@ class CutExtension(DisplayExtension):
             self._enabled = parameters.cuts
         if parameters.cutonclick is not None:
             self.__cutonclick = parameters.cutonclick
+        if parameters.centering is not None:
+            self.__centering = parameters.centering
 
     def __addCutCoords(self, coords):
         """ adds Cut coordinates
@@ -1029,7 +1033,10 @@ class CutExtension(DisplayExtension):
                     ln = nozero(d.length())
                     ang = _pg.Point(1, 0).angle(d)
                     crd.setPos(pos1)
-                    crd.setSize([ln, crd.size()[1]])
+                    if len(coords[i]) > 4:
+                        crd.setSize([ln, coords[i][4]])
+                    else:
+                        crd.setSize([ln, crd.size()[1]])
                     crd.setAngle(-ang)
 
     def __addCut(self, coords=None):

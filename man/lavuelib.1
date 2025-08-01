@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "LAVUELIB" "1" "Jun 16, 2025" "3.3" "LaVue"
+.TH "LAVUELIB" "1" "Aug 01, 2025" "3.5" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .sp
@@ -391,7 +391,7 @@ optional arguments:
                             where \(aqm\(aq is \(aq\-\(aq
   \-x, \-\-start           connect the image source
   \-u TOOL, \-\-tool TOOL  utility tool, i.e. intensity, roi, movemotors, meshscan, maxima,
-                          linecut, projections, 1d\-plot, angle/q, q+roi+proj, parameters, diffractogram
+                          linecut, projections, 1d\-plot, angle/q, q+roi+proj, parameters, diffractogram, twodfit, centercheck
   \-\-tool\-configuration TOOLCONFIG
                           JSON dictionary with tool configuration, e.g. {\(dqrows_to_plot\(dq:\(dq0,1\(dq,\(dqbuffer_size\(dq:512}
   \-a TANGODEVICE, \-\-tango\-device TANGODEVICE
@@ -1018,6 +1018,8 @@ In the bottom\-right corner \fIComboBox\fP the user selects one of the \fBSpecia
 \fI\%Diffractogram\fP \- shows a result of azimuth integration on 1d plot
 .IP \(bu 2
 \fI\%TwoD\-Fit\fP \- fits two\-dimensional  function tohe the current raw image
+.IP \(bu 2
+\fI\%CenterCheck\fP \- checks image centers with 1d\-plot symetric radial line cuts
 .UNINDENT
 .sp
 The \fBconfiguration\fP of tools can be set with a JSON dictionary passed in the  \fB\-\-tool\-configuration\fP  option in command line or as a \fBtoolconfig\fP variable in the \fBLavueState\fP attribute of \fI\%LaVueController server\fP, e.g.
@@ -1348,64 +1350,6 @@ lavue \-u projections \-s test \-\-tool\-configuration \e{\e\(dqmapping\e\(dq:\e
 A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
 .sp
 \fBtool\fP : “projections”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBxx\fP ([float, .., float]), \fBsx\fP ([float, .., float]), \fByy\fP ([float, .., float]), \fBsy\fP ([float, .., float]), \fBxscale\fP (float), \fBxslice\fP ([float, float, float]), \fByscale\fP (float), \fByslice\fP ([float, float, float]), fun (str) [i.e. “mean” or “sum”]
-.SS Q+ROI+Proj Tool
-.sp
-\fBQ+ROI+Proj Tool\fP combines Angle/Q, ROI and Projections
-.INDENT 0.0
-.INDENT 2.5
-[image]
-.UNINDENT
-.UNINDENT
-.sp
-Projections:
-.INDENT 0.0
-.IP \(bu 2
-\fBRow/Column slice\fP e.g. \fB9:10\fP or \fB100:120:2\fP, \fB<empty>\fP for all
-.IP \(bu 2
-\fBMapping:\fP mean or sum
-.UNINDENT
-.sp
-ROI:
-.sp
-The user can use rectangle and ellipse ROI shapes. The rectangle bounds are represented by a list of four integer numbers,  [x1, y1, x2, y2].  The elliptic bounds are represented by a list of five float numbers, i.e. [x, y, width, height, angle].
-.INDENT 0.0
-.IP \(bu 2
-\fBROI alias(es)\fP for roi tango devices
-.IP \(bu 2
-\fBAdd\fP to or \fBFetch\fP from sardana environment (see below). If lavue is working with ANALYSISDEVICE , i.e. lavue \-n <device>,  \fBROIs\fP bounds are sending also to tango SPECTRUM  \fBRoIs\fP  attribute of the device, e.g. LambdaOnlineAnalysis server.
-.IP \(bu 2
-\fBSum of\fP the selected \fBROI\fP or all \fBROIs\fP\&. The used version can be selected in the configuration.
-.UNINDENT
-.sp
-Geometry:
-.INDENT 0.0
-.IP \(bu 2
-\fBGeometry: detector geometry parameters.  They can be pass in both ways via **LavueController\fP tango server
-.IP \(bu 2
-\fBtheta angles\fP or \fBq\-space\fP selects the radial transformation
-.IP \(bu 2
-\fBPixel intensity\fP pointed by mouse and its position
-.UNINDENT
-.sp
-The \fBconfiguration\fP of the tool can be set with a JSON dictionary passed in the  \fB\-\-tool\-configuration\fP  option in command line or a toolconfig variable of \fBLavueController.LavueState\fP with the following keys:
-.sp
-\fBaliases\fP (list of strings), \fBrois_number\fP (integer), \fBmapping\fP (\fBsum\fP or \fBmean\fP string), \fBrows\fP (string with a python slice), \fBcolumns\fP (string with a python slice), \fBunits\fP (\fBangles\fP  or \fBq\-spaces\fP string), \fBgeometry\fP (string:float dictionary with the  \fBcenterx\fP, \fBcentery\fP, \fBenergy\fP, \fBpixelsizex\fP, \fBpixelsizey\fP, \fBdetdistance\fP keywords)
-.sp
-e.g.
-.INDENT 0.0
-.INDENT 3.5
-.sp
-.nf
-.ft C
-lavue \-u q+roi+proj \-s test \-\-tool\-configuration \e{\e\(dqrois_number\e\(dq:2,\e\(dqaliases\e\(dq:[\e\(dqpilatus_roi1\e\(dq,\e\(dqpolatus_roi2\e\(dq],\e\(dqmapping\e\(dq:\e\(dqsum\e\(dq,\e\(dqrows\e\(dq:\e\(dq10:200:5\e\(dq,\e\(dqcolumns\e\(dq:\e\(dq50:150\e\(dq,\e\(dqunits\e\(dq:\e\(dqangles\e\(dq,\e\(dqgeometry\e\(dq:\e{\e\(dqcenterx\e\(dq:123.4,\e\(dqcentery\e\(dq:93.4,\e\(dqpixelsizex\e\(dq:70,\e\(dqpixelsizey\e\(dq:70.2,\e\(dqenergy\e\(dq:5050,\e\(dqdetdistance\e\(dq:50.5\e}\e} \-\-start
-.ft P
-.fi
-.UNINDENT
-.UNINDENT
-.sp
-A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
-.sp
-\fBtool\fP : “q+roi+proj”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBxx\fP ([float, .., float]), \fBsx\fP ([float, .., float]), \fByy\fP ([float, .., float]), \fBsy\fP ([float, .., float]), \fBxscale\fP (float), \fBxslice\fP ([float, float, float]), \fByscale\fP (float), \fByslice\fP ([float, float, float]), fun (str) [i.e. “mean” or “sum”]
 .SS Maxima Tool
 .sp
 \fBMaxima Tool\fP points pixels with the highest intensity
@@ -1539,6 +1483,42 @@ lavue \-u diffractogram \-s test \-\-tool\-configuration \e{\e\(dqcalibration\e\
 A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
 .sp
 \fBtool\fP : “diffractogram”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBnrdiffs\fP (int), \fBcalibration\fP (str) [i.e a pyfai file name],  \fBunit\fP (str) [i.e. “q_nm^\-1”, “q_A^\-1”, “2th_deg”, “2th_rad”, “r_mm” or “r_pixel”], \fBdiff_%i\fP ([[float, float], …, [float, float]]) [i.e. “%i” goes from 1 to \fBnrdiffs\fP], \fBradial_range_%i\fP ([float, float]) [i.e. “%i” goes from 1 to \fBnrdiffs\fP], \fBazimuth_range_%i\fP ([float, float]) [i.e. “%i” goes from 1 to \fBnrdiffs\fP], \fBpeaks_%i\fP ([[float, …, float], [float, …, float]]) [i.e. “%i” goes from 1 to \fBnrdiffs\fP and it contains peak positions and  peak values lists]
+.SS CenterCheck Tool
+.sp
+\fBCenterCheck Tool\fP selects redial symetric Line Cuts and shows their 1d intensity plots to check the center of the image
+.INDENT 0.0
+.INDENT 2.5
+[image]
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.IP \(bu 2
+\fBAll Cuts:\fP displays all cuts on the 1d\-plot
+.IP \(bu 2
+\fBLength\fP default length of the line\-cuts
+.IP \(bu 2
+\fBReset\fP reset to symetric structure
+.UNINDENT
+.sp
+The \fBwidth\fP of the line\-cut can be set the handle in the middle of the line\-cut selector.
+.sp
+The \fBconfiguration\fP of the tool can be set with a JSON dictionary passed in the  \fB\-\-tool\-configuration\fP option in command line or a toolconfig variable of \fBLavueController.LavueState\fP with the following keys:
+.sp
+\fBcuts_number\fP (integer), \fBcuts_length\fP (integer),  \fBconnect_nan\fP (boolean),  \fBgeometry\fP (string:float dictionary with the \fBcenterx\fP, \fBcentery\fP keywords)
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+lavue \-u centercheck \-\-tool\-configuration \e{\e\(dqcuts_number\e\(dq:2,\e\(dqcuts_length\e\(dq:600,\e\(dqconnect_nan\e\(dq:true}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
+.sp
+\fBtool\fP : “centercheck”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBlinecutlength\fP (float),  \fBnrlinecuts\fP (int), \fBlinecut_%i\fP ([[float, float], …, [float, float]]) [i.e. “%i” goes from 1 to \fBnrlinecuts\fP]
 .SS TwoDFit Tool
 .sp
 \fBTwoDFit Tool\fP performs a fit of 2D function e.g. Guassian.
@@ -1579,6 +1559,64 @@ lavue \-u twodfit \-s test \-\-tool\-configuration \e{\e\(dqinitial_parameters\e
 A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
 .sp
 \fBtool\fP : “twodfit”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBuser_initial_parameters\fP ([float, float,… ,float]), \fBinitial_parameters\fP ([float, float,… ,float]),, \fBparameters_names\fP ([str, str,… ,str]), \fBfitted_parameters\fP ([float, float,… ,float]), \fBparameters_mode\fP ([float, float,… ,float]), \fBcovariance_matrix\fP ([[float, float,… ,float], …]), \fBcondition_number\fP (float), \fBparameters_mode\fP (string)
+.SS Q+ROI+Proj Tool
+.sp
+\fBQ+ROI+Proj Tool\fP combines Angle/Q, ROI and Projections
+.INDENT 0.0
+.INDENT 2.5
+[image]
+.UNINDENT
+.UNINDENT
+.sp
+Projections:
+.INDENT 0.0
+.IP \(bu 2
+\fBRow/Column slice\fP e.g. \fB9:10\fP or \fB100:120:2\fP, \fB<empty>\fP for all
+.IP \(bu 2
+\fBMapping:\fP mean or sum
+.UNINDENT
+.sp
+ROI:
+.sp
+The user can use rectangle and ellipse ROI shapes. The rectangle bounds are represented by a list of four integer numbers,  [x1, y1, x2, y2].  The elliptic bounds are represented by a list of five float numbers, i.e. [x, y, width, height, angle].
+.INDENT 0.0
+.IP \(bu 2
+\fBROI alias(es)\fP for roi tango devices
+.IP \(bu 2
+\fBAdd\fP to or \fBFetch\fP from sardana environment (see below). If lavue is working with ANALYSISDEVICE , i.e. lavue \-n <device>,  \fBROIs\fP bounds are sending also to tango SPECTRUM  \fBRoIs\fP  attribute of the device, e.g. LambdaOnlineAnalysis server.
+.IP \(bu 2
+\fBSum of\fP the selected \fBROI\fP or all \fBROIs\fP\&. The used version can be selected in the configuration.
+.UNINDENT
+.sp
+Geometry:
+.INDENT 0.0
+.IP \(bu 2
+\fBGeometry: detector geometry parameters.  They can be pass in both ways via **LavueController\fP tango server
+.IP \(bu 2
+\fBtheta angles\fP or \fBq\-space\fP selects the radial transformation
+.IP \(bu 2
+\fBPixel intensity\fP pointed by mouse and its position
+.UNINDENT
+.sp
+The \fBconfiguration\fP of the tool can be set with a JSON dictionary passed in the  \fB\-\-tool\-configuration\fP  option in command line or a toolconfig variable of \fBLavueController.LavueState\fP with the following keys:
+.sp
+\fBaliases\fP (list of strings), \fBrois_number\fP (integer), \fBmapping\fP (\fBsum\fP or \fBmean\fP string), \fBrows\fP (string with a python slice), \fBcolumns\fP (string with a python slice), \fBunits\fP (\fBangles\fP  or \fBq\-spaces\fP string), \fBgeometry\fP (string:float dictionary with the  \fBcenterx\fP, \fBcentery\fP, \fBenergy\fP, \fBpixelsizex\fP, \fBpixelsizey\fP, \fBdetdistance\fP keywords)
+.sp
+e.g.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+lavue \-u q+roi+proj \-s test \-\-tool\-configuration \e{\e\(dqrois_number\e\(dq:2,\e\(dqaliases\e\(dq:[\e\(dqpilatus_roi1\e\(dq,\e\(dqpolatus_roi2\e\(dq],\e\(dqmapping\e\(dq:\e\(dqsum\e\(dq,\e\(dqrows\e\(dq:\e\(dq10:200:5\e\(dq,\e\(dqcolumns\e\(dq:\e\(dq50:150\e\(dq,\e\(dqunits\e\(dq:\e\(dqangles\e\(dq,\e\(dqgeometry\e\(dq:\e{\e\(dqcenterx\e\(dq:123.4,\e\(dqcentery\e\(dq:93.4,\e\(dqpixelsizex\e\(dq:70,\e\(dqpixelsizey\e\(dq:70.2,\e\(dqenergy\e\(dq:5050,\e\(dqdetdistance\e\(dq:50.5\e}\e} \-\-start
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+A JSON dictionary with the \fBtool results\fP is passed to the \fBLavueController\fP or/and to \fBuser functions plugins\fP\&. It contains the following keys:
+.sp
+\fBtool\fP : “q+roi+proj”, \fBimagename\fP (string), \fBtimestamp\fP (float), \fBxx\fP ([float, .., float]), \fBsx\fP ([float, .., float]), \fByy\fP ([float, .., float]), \fBsy\fP ([float, .., float]), \fBxscale\fP (float), \fBxslice\fP ([float, float, float]), \fByscale\fP (float), \fByslice\fP ([float, float, float]), fun (str) [i.e. “mean” or “sum”]
 .SS Images from FileSystem
 .sp
 By pressing the \fBLoad\fP button user can open the existing file.
@@ -10912,7 +10950,7 @@ exporter parameters
 set of image sources
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.ASAPO  =  False
+.B lavuelib.imageSource.ASAPO  =  True
 (\fI\%bool\fP) asapo imported
 .UNINDENT
 .INDENT 0.0
@@ -11245,7 +11283,7 @@ image name, image data, json dictionary with metadata
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.imageSource.HIDRA  =  False
+.B lavuelib.imageSource.HIDRA  =  True
 (\fI\%bool\fP) hidra imported
 .UNINDENT
 .INDENT 0.0
@@ -16178,6 +16216,11 @@ energy in eV
 .UNINDENT
 .INDENT 7.0
 .TP
+.B linecutlength
+(\fI\%float\fP) line cut length
+.UNINDENT
+.INDENT 7.0
+.TP
 .B load(settings)
 load settings
 .INDENT 7.0
@@ -19221,6 +19264,79 @@ update geometry tips
 .UNINDENT
 .INDENT 0.0
 .TP
+.B class  lavuelib.toolWidget.CenterCheckToolWidget(parent=None)
+Bases: \fBToolBaseWidget\fP
+.sp
+line\-cut tool widget
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBparent\fP (\fBpyqtgraph.QtCore.QObject\fP) – parent object
+.UNINDENT
+.INDENT 7.0
+.TP
+.B activate()
+activates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B afterplot()
+command after plot
+.UNINDENT
+.INDENT 7.0
+.TP
+.B alias  =  \(aqcentercheck\(aq
+(\fI\%str\fP) tool name alias
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configuration()
+provides configuration for the current tool
+.INDENT 7.0
+.TP
+.B Returns configuration
+configuration string
+.TP
+.B Rtype configuration
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B configure(configuration)
+set configuration for the current tool
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfiguration\fP (\fI\%str\fP) – configuration string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B deactivate()
+activates tool widget
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name  =  \(aqCenterCheck\(aq
+(\fI\%str\fP) tool name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B requires  =  ()
+(\fI\%tuple\fP <\fI\%str\fP>) capitalized required packages
+.UNINDENT
+.INDENT 7.0
+.TP
+.B signal2slot
+(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
+list of [signal, slot] object to connect
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
 .B class  lavuelib.toolWidget.DiffractogramToolWidget(parent=None)
 Bases: \fBToolBaseWidget\fP
 .sp
@@ -20370,7 +20486,7 @@ list of [signal, slot] object to connect
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.toolWidget.twproperties  =  [{\(aqalias\(aq: \(aqintensity\(aq, \(aqname\(aq: \(aqIntensity\(aq, \(aqwidget\(aq: \(aqIntensityToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqroi\(aq, \(aqname\(aq: \(aqROI\(aq, \(aqwidget\(aq: \(aqROIToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqlinecut\(aq, \(aqname\(aq: \(aqLineCut\(aq, \(aqwidget\(aq: \(aqLineCutToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqangle/q\(aq, \(aqname\(aq: \(aqAngle/Q\(aq, \(aqwidget\(aq: \(aqAngleQToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqmovemotors\(aq, \(aqname\(aq: \(aqMoveMotors\(aq, \(aqwidget\(aq: \(aqMotorsToolWidget\(aq, \(aqrequires\(aq: (\(aqTANGO\(aq,)}, {\(aqalias\(aq: \(aqmeshscan\(aq, \(aqname\(aq: \(aqMeshScan\(aq, \(aqwidget\(aq: \(aqMeshToolWidget\(aq, \(aqrequires\(aq: (\(aqTANGO\(aq,)}, {\(aqalias\(aq: \(aq1d\-plot\(aq, \(aqname\(aq: \(aq1d\-Plot\(aq, \(aqwidget\(aq: \(aqOneDToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqprojections\(aq, \(aqname\(aq: \(aqProjections\(aq, \(aqwidget\(aq: \(aqProjectionToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqmaxima\(aq, \(aqname\(aq: \(aqMaxima\(aq, \(aqwidget\(aq: \(aqMaximaToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqparameters\(aq, \(aqname\(aq: \(aqParameters\(aq, \(aqwidget\(aq: \(aqParametersToolWidget\(aq, \(aqrequires\(aq: (\(aqTANGO\(aq,)}, {\(aqalias\(aq: \(aqdiffractogram\(aq, \(aqname\(aq: \(aqDiffractogram\(aq, \(aqwidget\(aq: \(aqDiffractogramToolWidget\(aq, \(aqrequires\(aq: (\(aqPYFAI\(aq,)}, {\(aqalias\(aq: \(aqq+roi+proj\(aq, \(aqname\(aq: \(aqQ+ROI+Proj\(aq, \(aqwidget\(aq: \(aqQROIProjToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqtwodfit\(aq, \(aqname\(aq: \(aqTwoDFit\(aq, \(aqwidget\(aq: \(aqTwoDFitToolWidget\(aq, \(aqrequires\(aq: ()}]
+.B lavuelib.toolWidget.twproperties  =  [{\(aqalias\(aq: \(aqintensity\(aq, \(aqname\(aq: \(aqIntensity\(aq, \(aqwidget\(aq: \(aqIntensityToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqroi\(aq, \(aqname\(aq: \(aqROI\(aq, \(aqwidget\(aq: \(aqROIToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqlinecut\(aq, \(aqname\(aq: \(aqLineCut\(aq, \(aqwidget\(aq: \(aqLineCutToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqangle/q\(aq, \(aqname\(aq: \(aqAngle/Q\(aq, \(aqwidget\(aq: \(aqAngleQToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqmovemotors\(aq, \(aqname\(aq: \(aqMoveMotors\(aq, \(aqwidget\(aq: \(aqMotorsToolWidget\(aq, \(aqrequires\(aq: (\(aqTANGO\(aq,)}, {\(aqalias\(aq: \(aqmeshscan\(aq, \(aqname\(aq: \(aqMeshScan\(aq, \(aqwidget\(aq: \(aqMeshToolWidget\(aq, \(aqrequires\(aq: (\(aqTANGO\(aq,)}, {\(aqalias\(aq: \(aq1d\-plot\(aq, \(aqname\(aq: \(aq1d\-Plot\(aq, \(aqwidget\(aq: \(aqOneDToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqprojections\(aq, \(aqname\(aq: \(aqProjections\(aq, \(aqwidget\(aq: \(aqProjectionToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqmaxima\(aq, \(aqname\(aq: \(aqMaxima\(aq, \(aqwidget\(aq: \(aqMaximaToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqparameters\(aq, \(aqname\(aq: \(aqParameters\(aq, \(aqwidget\(aq: \(aqParametersToolWidget\(aq, \(aqrequires\(aq: (\(aqTANGO\(aq,)}, {\(aqalias\(aq: \(aqdiffractogram\(aq, \(aqname\(aq: \(aqDiffractogram\(aq, \(aqwidget\(aq: \(aqDiffractogramToolWidget\(aq, \(aqrequires\(aq: (\(aqPYFAI\(aq,)}, {\(aqalias\(aq: \(aqcentercheck\(aq, \(aqname\(aq: \(aqCenterCheck\(aq, \(aqwidget\(aq: \(aqCenterCheckToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqtwodfit\(aq, \(aqname\(aq: \(aqTwoDFit\(aq, \(aqwidget\(aq: \(aqTwoDFitToolWidget\(aq, \(aqrequires\(aq: ()}, {\(aqalias\(aq: \(aqq+roi+proj\(aq, \(aqname\(aq: \(aqQ+ROI+Proj\(aq, \(aqwidget\(aq: \(aqQROIProjToolWidget\(aq, \(aqrequires\(aq: ()}]
 ( \fI\%dict\fP < \fI\%str\fP, any > ) tool widget properties
 .UNINDENT
 .SS lavuelib.transformationsWidget module

@@ -372,6 +372,18 @@ class SpecializedToolTest(unittest.TestCase):
             cnf10["toolconfig"] = json.dumps(toolcnf10)
             lavuestate10 = json.dumps(cnf10)
 
+            cnf11 = {}
+            cnf11["tool"] = "centercheck"
+            toolcnf11 = {"connect_nan": True,
+                         "cuts_number": 3,
+                         "cuts_length": 600.}
+            toolcnf11["geometry"] = {
+                "centerx": 234.,
+                "centery": 23.34,
+            }
+            cnf11["toolconfig"] = json.dumps(toolcnf11)
+            lavuestate11 = json.dumps(cnf11)
+
             qtck1 = QtChecker(app, dialog, True, sleep=100,
                               withitem=EnsureOmniThread)
             qtck2 = QtChecker(app, dialog, True, sleep=100,
@@ -395,6 +407,8 @@ class SpecializedToolTest(unittest.TestCase):
             qtck11 = QtChecker(app, dialog, True, sleep=100,
                                withitem=EnsureOmniThread)
             qtck12 = QtChecker(app, dialog, True, sleep=100,
+                               withitem=EnsureOmniThread)
+            qtck13 = QtChecker(app, dialog, True, sleep=100,
                                withitem=EnsureOmniThread)
             qtck1.setChecks([
                 CmdCheck(
@@ -439,8 +453,12 @@ class SpecializedToolTest(unittest.TestCase):
             ])
             qtck11.setChecks([
                 ExtCmdCheck(self, "getLavueStatePar"),
+                ExtCmdCheck(self, "setLavueStatePar", [lavuestate11])
             ])
-            qtck12.setChecks([])
+            qtck12.setChecks([
+                ExtCmdCheck(self, "getLavueStatePar"),
+            ])
+            qtck13.setChecks([])
 
             print("execute")
             qtck1.executeChecks(delay=6000)
@@ -454,7 +472,8 @@ class SpecializedToolTest(unittest.TestCase):
             qtck9.executeChecks(delay=54000)
             qtck10.executeChecks(delay=60000)
             qtck11.executeChecks(delay=67000)
-            status = qtck12.executeChecksAndClose(delay=74000)
+            qtck12.executeChecks(delay=74000)
+            status = qtck13.executeChecksAndClose(delay=81000)
 
             self.assertEqual(status, 0)
             qtck1.compareResults(self, [False, None])
@@ -476,6 +495,7 @@ class SpecializedToolTest(unittest.TestCase):
             res9 = qtck9.results()
             res10 = qtck10.results()
             res11 = qtck11.results()
+            res12 = qtck12.results()
             # res11 = qtck11.results()
 
             ls = json.loads(res2[0])
@@ -557,6 +577,13 @@ class SpecializedToolTest(unittest.TestCase):
             # print("TC1", tc1)
             # print("TC2", tc2)
             self.compareStates(tc1, tc2)
+
+            ls = json.loads(res12[0])
+            tc1 = json.loads(ls["toolconfig"])
+            tc2 = json.loads(cnf11["toolconfig"])
+            self.compareStates(tc1, tc2, ['geometry'])
+            self.compareStates(tc1['geometry'], tc2['geometry'])
+
         finally:
             tisu.tearDown()
 

@@ -268,6 +268,8 @@ class Settings(object):
         self.centerx = 0.0
         #: (:obj:`float`) y-coordinates of the center of the image
         self.centery = 0.0
+        #: (:obj:`float`) line cut length
+        self.linecutlength = 200.0
         #: (:obj:`float`) energy in eV
         self.energy = 0.0
         #: (:obj:`float`) pixel x-size in um
@@ -888,6 +890,11 @@ class Settings(object):
             self.sourcedisplay = True
 
         try:
+            self.linecutlength = float(
+                settings.value("Tools/LineCutLength", type=str))
+        except Exception:
+            pass
+        try:
             self.centerx = float(
                 settings.value("Tools/CenterX", type=str))
         except Exception:
@@ -1304,6 +1311,9 @@ class Settings(object):
             self.detponi1 = 0.0
             self.detponi2 = 0.0
 
+        settings.setValue(
+            "Tools/LineCutLength",
+            self.linecutlength)
         settings.setValue(
             "Tools/CenterX",
             self.centerx)

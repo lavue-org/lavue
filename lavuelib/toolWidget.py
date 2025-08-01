@@ -136,6 +136,10 @@ _twodfitformclass, _twodfitbaseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  "ui", "TwoDFitToolWidget.ui"))
 
+_centercheckformclass, _centercheckbaseclass = uic.loadUiType(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                 "ui", "CenterCheckToolWidget.ui"))
+
 
 __all__ = [
     'IntensityToolWidget',
@@ -149,8 +153,9 @@ __all__ = [
     'MaximaToolWidget',
     'ParametersToolWidget',
     'DiffractogramToolWidget',
-    'QROIProjToolWidget',
+    'CenterCheckToolWidget',
     'TwoDFitToolWidget',
+    'QROIProjToolWidget',
     'twproperties',
 ]
 
@@ -199,6 +204,8 @@ class ToolParameters(object):
         self.cuts = False
         #: (:obj:`bool`) create a cut on click
         self.cutonclick = False
+        #: (:obj:`bool`) linecut centering
+        self.centering = False
         #: (:obj:`bool`) mesh enabled
         self.mesh = False
         #: (:obj:`bool`) axes scale enabled
@@ -2138,8 +2145,6 @@ class LineCutToolWidget(ToolBaseWidget):
         self.__allcuts = False
         #: (:obj:`bool`) connect nan points in cuts
         self.__connectnan = True
-        #: (:obj:`bool`) centering line cuts
-        self.__centering = False
         #: (:obj:`list`<:class:`pyqtgraph.PlotDataItem`>) 1D plot freezed
         self.__freezed = []
 
@@ -2166,13 +2171,10 @@ class LineCutToolWidget(ToolBaseWidget):
             [self.__ui.allcutsCheckBox.stateChanged, self._updateAllCuts],
             [self.__ui.connectnanCheckBox.stateChanged,
              self._updateConnectNaN],
-            [self.__ui.centeringCheckBox.stateChanged,
-             self._updateCentering],
             [self.__ui.allcutsCheckBox.stateChanged,
              self._mainwidget.emitTCC],
             [self.__ui.connectnanCheckBox.stateChanged,
              self._mainwidget.emitTCC],
-            [self._mainwidget.mouseImageSingleClicked, self._updateCenter],
             [self._mainwidget.freezeBottomPlotClicked, self._freezeplot],
             [self._mainwidget.clearBottomPlotClicked, self._clearplot],
         ]
@@ -2196,9 +2198,6 @@ class LineCutToolWidget(ToolBaseWidget):
             if "connect_nan" in cnf.keys():
                 self.__ui.connectnanCheckBox.setChecked(
                     bool(cnf["connect_nan"]))
-            if "centering" in cnf.keys():
-                self.__ui.connectnanCheckBox.setChecked(
-                    bool(cnf["centering"]))
             if "x_coordinates" in cnf.keys():
                 idxs = ["points", "x-pixels", "y-pixels"]
                 xcrd = str(cnf["x_coordinates"]).lower()
@@ -2219,7 +2218,6 @@ class LineCutToolWidget(ToolBaseWidget):
             self.__ui.xcoordsComboBox.currentText()).lower()
         cnf["all_cuts"] = self.__ui.allcutsCheckBox.isChecked()
         cnf["connect_nan"] = self.__ui.connectnanCheckBox.isChecked()
-        cnf["centering"] = self.__ui.centeringCheckBox.isChecked()
         cnf["cuts_number"] = self.__ui.cutSpinBox.value()
         return json.dumps(cnf, cls=numpyEncoder)
 
@@ -2242,26 +2240,6 @@ class LineCutToolWidget(ToolBaseWidget):
         for i in range(nrplots, len(self.__freezed)):
             self.__freezed[i].hide()
             self.__freezed[i].setVisible(True)
-
-    @QtCore.pyqtSlot(float, float)
-    def _updateCenter(self, xdata, ydata):
-        if self.__ui.centeringCheckBox.isChecked():
-            if self._mainwidget.rangeWindowEnabled():
-                txdata, tydata = self._mainwidget.scaledxy(
-                    xdata, ydata, useraxes=False)
-                if txdata is not None:
-                    xdata = txdata
-                    ydata = tydata
-            # print("CORD", xdata, ydata)
-            coords = list(self._mainwidget.cutCoords())
-            # nrcut = min(len(coords), self.__ui.cutSpinBox.value())
-            nrcut = len(coords)
-            for ic in range(nrcut):
-                if len(coords[ic]) > 1:
-                    coords[ic][0] = xdata
-                    coords[ic][1] = ydata
-            self._mainwidget.updateCuts(nrcut, coords)
-            self._plotCuts()
 
     @QtCore.pyqtSlot()
     def _clearplot(self):
@@ -2341,17 +2319,6 @@ class LineCutToolWidget(ToolBaseWidget):
         """
         self.__connectnan = value
         self._updateCuts(self.__ui.cutSpinBox.value())
-
-    @QtCore.pyqtSlot(int)
-    def _updateCentering(self, value):
-        """ updates centering checkbox
-
-        :param value: if True connect nan values
-        :param value: :obj:`int` or  :obj:`bool`
-        """
-        self.__centering = value
-        self.parameters.cutonclick = not bool(value)
-        self._mainwidget.updateinfowidgets(self.parameters)
 
     @QtCore.pyqtSlot(int)
     def _setXCoords(self, xindex):
@@ -7871,6 +7838,541 @@ class QROIProjToolWidget(ToolBaseWidget):
             "Select the display space\n%s" % message)
         self.__ui.toolLabel.setToolTip(
             "coordinate info display for the mouse pointer\n%s" % message)
+
+
+class CenterCheckToolWidget(ToolBaseWidget):
+    """ line-cut tool widget
+    """
+
+    #: (:obj:`str`) tool name
+    name = "CenterCheck"
+    #: (:obj:`str`) tool name alias
+    alias = "centercheck"
+    #: (:obj:`tuple` <:obj:`str`>) capitalized required packages
+    requires = ()
+
+    def __init__(self, parent=None):
+        """ constructor
+
+        :param parent: parent object
+        :type parent: :class:`pyqtgraph.QtCore.QObject`
+        """
+        ToolBaseWidget.__init__(self, parent)
+
+        #: (:class:`Ui_CenterCheckToolWidget') ui_toolwidget object
+        self.__ui = _centercheckformclass()
+        self.__ui.setupUi(self)
+
+        self.parameters.cuts = True
+        self.parameters.cutonclick = True
+        self.parameters.centering = True
+        self.parameters.bottomplot = True
+        self.parameters.infolineedit = ""
+        self.parameters.infotips = \
+            "coordinate info display for the mouse pointer"
+
+        #: (:obj:`int`) 1d x-coorindate index,
+        #:          i.e. {0:Points, 1:"X-Pixels", 2:"Y-Pixels"}
+        self.__xindex = 0
+        #: (:obj:`bool`) plot all cuts
+        self.__allcuts = True
+        #: (:obj:`bool`) connect nan points in cuts
+        self.__connectnan = True
+        #: (:obj:`bool`) centering line cuts
+        self.__centering = True
+        #: (:obj:`list`<:class:`pyqtgraph.PlotDataItem`>) 1D plot freezed
+        self.__freezed = []
+
+        #: (:obj:`list`<:class:`pyqtgraph.PlotDataItem`>) 1D plot
+        self.__curves = []
+        #: (:obj:`int`) current plot number
+        self.__nrplots = 0
+
+        #: (:class:`lavuelib.settings.Settings`) configuration settings
+        self.__settings = self._mainwidget.settings()
+
+        #: (:obj:`list` < [:class:`pyqtgraph.QtCore.pyqtSignal`, :obj:`str`] >)
+        #: list of [signal, slot] object to connect
+        self.signal2slot = [
+            [self.__ui.cutSpinBox.valueChanged, self._updateCuts],
+            [self.__ui.cutSpinBox.valueChanged, self._mainwidget.emitTCC],
+            [self.__ui.lengthSpinBox.valueChanged, self._updateLength],
+            [self.__ui.lengthSpinBox.valueChanged, self._mainwidget.emitTCC],
+            [self.__ui.resetPushButton.clicked, self._resetCuts],
+            [self.__ui.resetPushButton.clicked, self._mainwidget.emitTCC],
+            [self._mainwidget.cutNumberChanged, self._setCutsNumber],
+            [self._mainwidget.cutCoordsChanged, self._plotCuts],
+            [self._mainwidget.mouseImagePositionChanged, self._message],
+            [self.__ui.connectnanCheckBox.stateChanged,
+             self._updateConnectNaN],
+            [self.__ui.connectnanCheckBox.stateChanged,
+             self._mainwidget.emitTCC],
+            [self._mainwidget.mouseImageSingleClicked, self._updateCenter],
+            [self._mainwidget.freezeBottomPlotClicked, self._freezeplot],
+            [self._mainwidget.clearBottomPlotClicked, self._clearplot],
+        ]
+
+    # @debugmethod
+    @QtCore.pyqtSlot()
+    def _updateGeometry(self, geometry):
+        """ update geometry widget
+
+        :param geometry: geometry dictionary
+        :type geometry: :obj:`dict` < :obj:`str`, :obj:`list`>
+        """
+        try:
+            if "centerx" in geometry.keys():
+                self.__settings.centerx = float(geometry["centerx"])
+                self._mainwidget.writeAttribute(
+                    "BeamCenterX", float(self.__settings.centerx))
+        except Exception:
+            pass
+        try:
+            if "centery" in geometry.keys():
+                self.__settings.centery = float(geometry["centery"])
+                self._mainwidget.writeAttribute(
+                    "BeamCenterY", float(self.__settings.centery))
+        except Exception:
+            pass
+        if geometry:
+            self._updateCenter(
+                self.__settings.centerx, self.__settings.centery)
+            self._mainwidget.emitTCC()
+
+    def configure(self, configuration):
+        """ set configuration for the current tool
+
+        :param configuration: configuration string
+        :type configuration: :obj:`str`
+        """
+        if configuration:
+            cnf = json.loads(configuration)
+            if "cuts_number" in cnf.keys():
+                try:
+                    self.__ui.cutSpinBox.setValue(int(cnf["cuts_number"]))
+                except Exception as e:
+                    logger.warning(str(e))
+                    # print(str(e))
+            if "connect_nan" in cnf.keys():
+                self.__ui.connectnanCheckBox.setChecked(
+                    bool(cnf["connect_nan"]))
+            if "cuts_length" in cnf.keys():
+                try:
+                    self.__settings.linecutlength = float(cnf["cuts_length"])
+                    self.__ui.lengthSpinBox.setValue(
+                        int(self.__settings.linecutlength))
+                except Exception as e:
+                    # print(str(e))
+                    logger.warning(str(e))
+            if "geometry" in cnf.keys():
+                try:
+                    self._updateGeometry(cnf["geometry"])
+                except Exception as e:
+                    # print(str(e))
+                    logger.warning(str(e))
+
+    def configuration(self):
+        """ provides configuration for the current tool
+
+        :returns configuration: configuration string
+        :rtype configuration: :obj:`str`
+        """
+        cnf = {}
+        cnf["connect_nan"] = self.__ui.connectnanCheckBox.isChecked()
+        cnf["cuts_number"] = self.__ui.cutSpinBox.value()
+        cnf["cuts_length"] = self.__settings.linecutlength
+        cnf["geometry"] = {
+            "centerx": self.__settings.centerx,
+            "centery": self.__settings.centery,
+        }
+        return json.dumps(cnf, cls=numpyEncoder)
+
+    @QtCore.pyqtSlot()
+    def _freezeplot(self):
+        """ freeze plot
+        """
+        self._clearplot()
+        nrplots = self.__nrplots
+        while nrplots > len(self.__freezed):
+            cr = self._mainwidget.onedbottomplot()
+            cr.setPen(_pg.mkColor(0.5))
+            self.__freezed.append(cr)
+
+        for i in range(nrplots):
+            dt = self.__curves[i].xData, self.__curves[i].yData
+            self.__freezed[i].setData(*dt)
+            self.__freezed[i].show()
+            self.__freezed[i].setVisible(True)
+        for i in range(nrplots, len(self.__freezed)):
+            self.__freezed[i].hide()
+            self.__freezed[i].setVisible(True)
+
+    @QtCore.pyqtSlot(float, float)
+    def _updateCenter(self, xdata, ydata):
+        if self._mainwidget.rangeWindowEnabled():
+            txdata, tydata = self._mainwidget.scaledxy(
+                xdata, ydata, useraxes=False)
+            if txdata is not None:
+                xdata = txdata
+                ydata = tydata
+        # print("CORD", xdata, ydata)
+        self.__settings.centerx = float(xdata)
+        self.__settings.centery = float(ydata)
+        coords = list(self._mainwidget.cutCoords())
+        # nrcut = min(len(coords), self.__ui.cutSpinBox.value())
+        nrcut = len(coords)
+        for ic in range(nrcut):
+            coords[ic][2] += xdata - coords[ic][0]
+            coords[ic][3] += ydata - coords[ic][1]
+            coords[ic][0] = xdata
+            coords[ic][1] = ydata
+        self._mainwidget.updateCuts(nrcut, coords)
+        self._plotCuts()
+        self._mainwidget.writeAttribute("BeamCenterX", float(xdata))
+        self._mainwidget.writeAttribute("BeamCenterY", float(ydata))
+        self._message()
+
+    @QtCore.pyqtSlot()
+    def _clearplot(self):
+        """ clear plot
+        """
+        for cr in self.__freezed:
+            cr.setVisible(False)
+
+    @QtCore.pyqtSlot()
+    def _resetCuts(self):
+        self._updateCuts(self.__ui.cutSpinBox.value())
+
+    @QtCore.pyqtSlot(int)
+    def _updateLength(self, length):
+        """ update linecut length
+
+        :param cid: cut id
+        :type cid: :obj:`int`
+        """
+        if self.__connectnan:
+            self.__connectnan = True
+        else:
+            self.__connectnan = False
+        self.__settings.linecutlength = length
+        self._resetCuts()
+
+    @QtCore.pyqtSlot(int)
+    def _updateCuts(self, cid):
+        """ update Cuts
+
+        :param cid: cut id
+        :type cid: :obj:`int`
+        """
+        if cid is None:
+            cid = self.__ui.cutSpinBox.value()
+        if self.__connectnan:
+            self.__connectnan = True
+        else:
+            self.__connectnan = False
+        coords = list(self._mainwidget.cutCoords())
+        if coords and coords[0]:
+            cx, cy = (coords[0][0], coords[0][1])
+        else:
+            cx, cy = (self.__settings.centerx, self.__settings.centery)
+
+        nrcut = self.__ui.cutSpinBox.value()
+        ncoords = []
+        for ic in range(nrcut):
+            alpha = 2 * math.pi * ic / nrcut
+            ncoords.append(
+                [cx, cy,
+                 cx + math.sin(alpha) * self.__settings.linecutlength,
+                 cy + math.cos(alpha) * self.__settings.linecutlength,
+                 0.00001])
+        self._mainwidget.updateCuts(nrcut, ncoords)
+        self._plotCuts()
+
+    def afterplot(self):
+        """ command after plot
+        """
+        self._plotCuts()
+
+    def activate(self):
+        """ activates tool widget
+        """
+        if not self.__curves:
+            self.__curves.append(self._mainwidget.onedbottomplot(True))
+            self.__nrplots = 1
+        for curve in self.__curves:
+            curve.show()
+            curve.setVisible(True)
+        self._updateConnectNaN(self.__connectnan)
+        self.__ui.lengthSpinBox.setValue(
+            int(self.__settings.linecutlength))
+        self._updateCenter(
+            self.__settings.centerx, self.__settings.centery)
+        self._plotCuts()
+        self._mainwidget.bottomplotShowMenu(True, True)
+
+    def deactivate(self):
+        """ activates tool widget
+        """
+        self._mainwidget.bottomplotShowMenu()
+        for curve in self.__curves:
+            curve.hide()
+            curve.setVisible(False)
+            self._mainwidget.removebottomplot(curve)
+        self.__curves = []
+        for freezed in self.__freezed:
+            freezed.hide()
+            freezed.setVisible(False)
+            self._mainwidget.removebottomplot(freezed)
+        self.__freezed = []
+
+    @QtCore.pyqtSlot(int)
+    def _updateAllCuts(self, value):
+        """ updates X row status
+
+        :param value: if True or not 0 x-cooridnates taken from the first row
+        :param value: :obj:`int` or  :obj:`bool`
+        """
+        self.__allcuts = value
+        self._updateCuts(self.__ui.cutSpinBox.value())
+
+    @QtCore.pyqtSlot(int)
+    def _updateConnectNaN(self, value):
+        """ updates connect nan checkbox
+
+        :param value: if True connect nan values
+        :param value: :obj:`int` or  :obj:`bool`
+        """
+        self.__connectnan = value
+        self._updateCuts(self.__ui.cutSpinBox.value())
+
+    @QtCore.pyqtSlot(int)
+    def _updateCentering(self, value):
+        """ updates centering checkbox
+
+        :param value: if True connect nan values
+        :param value: :obj:`int` or  :obj:`bool`
+        """
+        self.__centering = value
+        self.parameters.cutonclick = not bool(value)
+        self._mainwidget.updateinfowidgets(self.parameters)
+
+    @QtCore.pyqtSlot(int)
+    def _setXCoords(self, xindex):
+        """ sets x-coodinates for 1d plot
+
+        :param xindex: 1d x-coorindate index,
+        :type xindex: :obj:`int`
+        """
+        self.__xindex = xindex
+        self._plotCuts()
+
+    @QtCore.pyqtSlot()
+    def _plotCuts(self):
+        """ plots the current 1d Cut
+        """
+        if self.__allcuts:
+            self._plotAllCuts()
+        else:
+            self._plotCut()
+
+    def _plotAllCuts(self):
+        """ plot all 1d Cuts
+        """
+
+        if self._mainwidget.currentTool() == self.name:
+            if self.__settings.sendresults or self.__settings.showuserplot:
+                xl = []
+                yl = []
+            nrplots = self.__ui.cutSpinBox.value()
+            if self.__nrplots != nrplots:
+                while nrplots > len(self.__curves):
+                    self.__curves.append(self._mainwidget.onedbottomplot())
+                for i in range(nrplots):
+                    self.__curves[i].show()
+                for i in range(nrplots, len(self.__curves)):
+                    self.__curves[i].hide()
+                self.__nrplots = nrplots
+                if nrplots:
+                    for i, cr in enumerate(self.__curves):
+                        if i < nrplots:
+                            cr.setPen(_pg.hsvColor(i/float(nrplots)))
+            coords = list(self._mainwidget.cutCoords())
+            rws = self._mainwidget.rangeWindowScale()
+            for i in range(nrplots):
+                dt = self._mainwidget.cutData(i)
+                if dt is not None:
+                    if self.__settings.nanmask:
+                        if dt.dtype.kind == 'f' and np.isnan(dt.min()) \
+                                and self.__connectnan:
+                            dt = np.nan_to_num(dt)
+                    if self.__xindex:
+                        if i < len(coords):
+                            crds = coords[i]
+                        else:
+                            crds = [0, 0, 1, 1, 0.00001]
+                        if self.__xindex == 2:
+                            dx = np.linspace(crds[1], crds[3], len(dt))
+                        else:
+                            dx = np.linspace(crds[0], crds[2], len(dt))
+                        if self.__connectnan:
+                            self.__curves[i].setData(x=dx, y=dt)
+                        else:
+                            self.__curves[i].setData(
+                                x=dx, y=dt, connect="finite")
+                        if self.__settings.sendresults or \
+                                self.__settings.showuserplot:
+                            xl.append([float(e) for e in dx])
+                            yl.append([float(e) for e in dt])
+                    else:
+                        if rws > 1.0:
+                            dx = np.linspace(0, len(dt - 1) * rws, len(dt))
+                            if self.__connectnan:
+                                self.__curves[i].setData(x=dx, y=dt)
+                            else:
+                                self.__curves[i].setData(
+                                    x=dx, y=dt, connect="finite")
+                            if self.__settings.sendresults \
+                                    or self.__settings.showuserplot:
+                                xl.append([float(e) for e in dx])
+                                yl.append([float(e) for e in dt])
+                        else:
+                            if self.__connectnan:
+                                self.__curves[i].setData(y=dt)
+                            else:
+                                self.__curves[i].setData(
+                                    y=dt, connect="finite")
+                            if self.__settings.sendresults \
+                                    or self.__settings.showuserplot:
+                                xl.append(list(range(len(dt))))
+                                yl.append([float(e) for e in dt])
+
+                    self.__curves[i].setVisible(True)
+                else:
+                    self.__curves[i].setVisible(False)
+            if self.__settings.sendresults or self.__settings.showuserplot:
+                self.__sendresults(xl, yl)
+
+    def _plotCut(self):
+        """ plot the current 1d Cut
+        """
+        if self.__nrplots > 1:
+            for i in range(1, len(self.__curves)):
+                self.__curves[i].setVisible(False)
+                self.__curves[i].hide()
+            self.__nrplots = 1
+        if self._mainwidget.currentTool() == self.name:
+            if self.__settings.sendresults or self.__settings.showuserplot:
+                xl = []
+                yl = []
+            dt = self._mainwidget.cutData()
+            self.__curves[0].setPen(_pg.mkColor('r'))
+            if dt is not None:
+                if self.__settings.nanmask:
+                    if dt.dtype.kind == 'f' and np.isnan(dt.min()) \
+                            and self.__connectnan:
+                        dt = np.nan_to_num(dt)
+                if self.__xindex:
+                    crds = [0, 0, 1, 1, 0.00001]
+                    if self._mainwidget.currentCut() > -1:
+                        crds = self._mainwidget.cutCoords()[
+                            self._mainwidget.currentCut()]
+                    if self.__xindex == 2:
+                        dx = np.linspace(crds[1], crds[3], len(dt))
+                    else:
+                        dx = np.linspace(crds[0], crds[2], len(dt))
+                    if self.__connectnan:
+                        self.__curves[0].setData(x=dx, y=dt)
+                    else:
+                        self.__curves[0].setData(x=dx, y=dt, connect="finite")
+                    if self.__settings.sendresults or \
+                            self.__settings.showuserplot:
+                        xl.append([float(e) for e in dx])
+                        yl.append([float(e) for e in dt])
+                else:
+                    rws = self._mainwidget.rangeWindowScale()
+                    if rws > 1.0:
+                        dx = np.linspace(0, len(dt - 1) * rws, len(dt))
+                        if self.__connectnan:
+                            self.__curves[0].setData(x=dx, y=dt)
+                        else:
+                            self.__curves[0].setData(
+                                x=dx, y=dt, connect="finite")
+                        if self.__settings.sendresults or \
+                                self.__settings.showuserplot:
+                            xl.append([float(e) for e in dx])
+                            yl.append([float(e) for e in dt])
+                    else:
+                        if self.__connectnan:
+                            self.__curves[0].setData(y=dt)
+                        else:
+                            self.__curves[0].setData(y=dt, connect="finite")
+                        if self.__settings.sendresults \
+                                or self.__settings.showuserplot:
+                            xl.append(list(range(len(dt))))
+                            yl.append([float(e) for e in dt])
+                self.__curves[0].setVisible(True)
+            else:
+                self.__curves[0].setVisible(False)
+            if self.__settings.sendresults or self.__settings.showuserplot:
+                self.__sendresults(xl, yl)
+
+    def __sendresults(self, xl, yl):
+        """ send results to LavueController
+
+        :param xl:  list of x's for each diffractogram
+        :type xl: :obj:`list` < :obj:`list` <float>>
+        :param yl:  list of values for each diffractogram
+        :type yl: :obj:`list` < :obj:`list` <float>>
+        """
+        results = {"tool": self.alias}
+        npl = len(xl)
+        results["imagename"] = self._mainwidget.imageName()
+        results["timestamp"] = time.time()
+        results["nrlinecuts"] = len(xl)
+        for i in range(npl):
+            results["linecut_%s" % (i + 1)] = [xl[i], yl[i]]
+        results["linecutlength"] = self.__settinges.linecutlength
+        if self.__settings.sendresults:
+            self._mainwidget.writeAttribute(
+                "ToolResults", json.dumps(results, cls=numpyEncoder))
+        self._mainwidget.plotUserFunction(results)
+
+    @QtCore.pyqtSlot(int)
+    def _setCutsNumber(self, cid):
+        """sets a number of cuts
+
+        :param cid: number of cuts
+        :type cid: :obj:`int`
+        """
+        self.__ui.cutSpinBox.setValue(cid)
+
+    @QtCore.pyqtSlot()
+    def _message(self):
+        """ provides cut message
+        """
+        _, _, intensity, x, y = self._mainwidget.currentIntensity()
+        if isinstance(intensity, float) and np.isnan(intensity):
+            intensity = 0
+        ilabel = self._mainwidget.scalingLabel()
+        if self._mainwidget.currentCut() > -1:
+            crds = self._mainwidget.cutCoords()[
+                self._mainwidget.currentCut()]
+            crds = "[[%.2f, %.2f], [%.2f, %.2f], width=%.2f]" % tuple(crds)
+        else:
+            crds = "[[0, 0], [0, 0], width=0]"
+        if isinstance(intensity, np.ndarray) and \
+           intensity.size <= 3:
+            itn = [0 if (isinstance(it, float) and np.isnan(it))
+                   else float(it) for it in intensity]
+            if len(itn) >= 3:
+                message = "%s, x = %.2f, y = %.2f, " \
+                    "%s = (%.2f, %.2f, %.2f)" % (
+                        crds, x, y, ilabel,
+                        itn[0], itn[1], itn[2])
+        else:
+            message = "%s, x = %.2f, y = %.2f, %s = %.2f" % (
+                crds, x, y, ilabel, intensity)
+        self._mainwidget.setDisplayedText(message)
 
 
 class TwoDFitToolWidget(ToolBaseWidget):
