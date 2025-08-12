@@ -1,21 +1,17 @@
 
+<!DOCTYPE html>
 
-<!doctype html>
-
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>lavuelib.motorWatchThread &#8212; LaVue  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=ffd7f65b" />
     
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -24,7 +20,7 @@
     <script src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -95,7 +91,9 @@
 
 
 <span class="c1"># subclass for threading</span>
-<div class="viewcode-block" id="MotorWatchThread"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.motorWatchThread.MotorWatchThread">[docs]</a><span class="k">class</span> <span class="nc">MotorWatchThread</span><span class="p">(</span><span class="n">OmniQThread</span><span class="p">):</span>
+<div class="viewcode-block" id="MotorWatchThread">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.motorWatchThread.MotorWatchThread">[docs]</a>
+<span class="k">class</span> <span class="nc">MotorWatchThread</span><span class="p">(</span><span class="n">OmniQThread</span><span class="p">):</span>
 
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) signal with motor status</span>
     <span class="n">motorStatusSignal</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
@@ -151,7 +149,9 @@
                 <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="MotorWatchThread.isWatching"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.motorWatchThread.MotorWatchThread.isWatching">[docs]</a>    <span class="k">def</span> <span class="nf">isWatching</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MotorWatchThread.isWatching">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.motorWatchThread.MotorWatchThread.isWatching">[docs]</a>
+    <span class="k">def</span> <span class="nf">isWatching</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; is datasource source connected</span>
 
 <span class="sd">        :returns: if datasource source connected</span>
@@ -159,16 +159,23 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span></div>
 
+
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="MotorWatchThread.stop"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.motorWatchThread.MotorWatchThread.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MotorWatchThread.stop">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.motorWatchThread.MotorWatchThread.stop">[docs]</a>
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; stops loop</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span> <span class="o">=</span> <span class="kc">False</span></div>
+</div>
+
 
 
 <span class="c1"># subclass for threading</span>
-<div class="viewcode-block" id="AttributeWatchThread"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.motorWatchThread.AttributeWatchThread">[docs]</a><span class="k">class</span> <span class="nc">AttributeWatchThread</span><span class="p">(</span><span class="n">OmniQThread</span><span class="p">):</span>
+<div class="viewcode-block" id="AttributeWatchThread">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.motorWatchThread.AttributeWatchThread">[docs]</a>
+<span class="k">class</span> <span class="nc">AttributeWatchThread</span><span class="p">(</span><span class="n">OmniQThread</span><span class="p">):</span>
 
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) signal with attribute values</span>
     <span class="n">attrValuesSignal</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
@@ -215,7 +222,9 @@
                 <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__refreshtime</span><span class="p">)</span>
 
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="AttributeWatchThread.isWatching"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.motorWatchThread.AttributeWatchThread.isWatching">[docs]</a>    <span class="k">def</span> <span class="nf">isWatching</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AttributeWatchThread.isWatching">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.motorWatchThread.AttributeWatchThread.isWatching">[docs]</a>
+    <span class="k">def</span> <span class="nf">isWatching</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; is datasource source connected</span>
 
 <span class="sd">        :returns: if datasource source connected</span>
@@ -223,12 +232,17 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span></div>
 
+
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="AttributeWatchThread.stop"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.motorWatchThread.AttributeWatchThread.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AttributeWatchThread.stop">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.motorWatchThread.AttributeWatchThread.stop">[docs]</a>
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; stops loop</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span> <span class="o">=</span> <span class="kc">False</span></div>
+</div>
+
         <span class="c1"># logger.debug(&quot;STOP LOOP %s&quot; % (self.__loop))</span>
 </pre></div>
 
@@ -236,9 +250,9 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -246,7 +260,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><p>
   <h3 class='versions'>Versions</h3>
   <p>
@@ -298,7 +312,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -313,10 +327,10 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+    &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>

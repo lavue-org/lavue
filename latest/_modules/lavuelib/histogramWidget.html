@@ -1,21 +1,17 @@
 
+<!DOCTYPE html>
 
-<!doctype html>
-
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>lavuelib.histogramWidget &#8212; LaVue  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=ffd7f65b" />
     
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -24,7 +20,7 @@
     <script src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -134,7 +130,9 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;lavue&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="HistogramHLUTWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.histogramWidget.HistogramHLUTWidget">[docs]</a><span class="k">class</span> <span class="nc">HistogramHLUTWidget</span><span class="p">(</span><span class="n">_pg</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">GraphicsView</span><span class="o">.</span><span class="n">GraphicsView</span><span class="p">):</span>
+<div class="viewcode-block" id="HistogramHLUTWidget">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.histogramWidget.HistogramHLUTWidget">[docs]</a>
+<span class="k">class</span> <span class="nc">HistogramHLUTWidget</span><span class="p">(</span><span class="n">_pg</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">GraphicsView</span><span class="o">.</span><span class="n">GraphicsView</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Horizontal HistogramWidget &quot;&quot;&quot;</span>
 
@@ -166,10 +164,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">setMinimumWidth</span><span class="p">(</span><span class="mi">95</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setMinimumHeight</span><span class="p">(</span><span class="mi">95</span><span class="p">)</span>
 
-<div class="viewcode-block" id="HistogramHLUTWidget.sizeHint"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.histogramWidget.HistogramHLUTWidget.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HistogramHLUTWidget.sizeHint">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.histogramWidget.HistogramHLUTWidget.sizeHint">[docs]</a>
+    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets size hint</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QSize</span><span class="p">(</span><span class="mi">115</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span></div>
+
 
     <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; gets attribute of HistogramHLUTItem</span>
@@ -180,7 +181,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
 
-<div class="viewcode-block" id="HistogramHLUTWidget.setAutoFactor"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.histogramWidget.HistogramHLUTWidget.setAutoFactor">[docs]</a>    <span class="k">def</span> <span class="nf">setAutoFactor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">):</span>
+<div class="viewcode-block" id="HistogramHLUTWidget.setAutoFactor">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.histogramWidget.HistogramHLUTWidget.setAutoFactor">[docs]</a>
+    <span class="k">def</span> <span class="nf">setAutoFactor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets auto level factor</span>
 
 <span class="sd">        :param factor: auto level factor of maximal peak</span>
@@ -188,7 +191,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">autolevelfactor</span> <span class="o">=</span> <span class="n">factor</span></div>
 
-<div class="viewcode-block" id="HistogramHLUTWidget.setBins"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.histogramWidget.HistogramHLUTWidget.setBins">[docs]</a>    <span class="k">def</span> <span class="nf">setBins</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bins</span><span class="p">):</span>
+
+<div class="viewcode-block" id="HistogramHLUTWidget.setBins">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.histogramWidget.HistogramHLUTWidget.setBins">[docs]</a>
+    <span class="k">def</span> <span class="nf">setBins</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bins</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets bins edges algorithm for histogram</span>
 
 <span class="sd">        :param channel: bins edges algorithm for histogram</span>
@@ -196,13 +202,18 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">setBins</span><span class="p">(</span><span class="n">bins</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="HistogramHLUTWidget.setStep"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.histogramWidget.HistogramHLUTWidget.setStep">[docs]</a>    <span class="k">def</span> <span class="nf">setStep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+
+<div class="viewcode-block" id="HistogramHLUTWidget.setStep">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.histogramWidget.HistogramHLUTWidget.setStep">[docs]</a>
+    <span class="k">def</span> <span class="nf">setStep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets image step data for algorithm of histogram</span>
 
 <span class="sd">        :param channel: image step data for algorithm of histogram</span>
 <span class="sd">        :type channel: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">setStep</span><span class="p">(</span><span class="n">step</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">setStep</span><span class="p">(</span><span class="n">step</span><span class="p">)</span></div>
+</div>
+
 
 
 <span class="k">class</span> <span class="nc">GradientEditorItemWS</span><span class="p">(</span>
@@ -866,9 +877,9 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -876,7 +887,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><p>
   <h3 class='versions'>Versions</h3>
   <p>
@@ -928,7 +939,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -943,10 +954,10 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+    &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>
