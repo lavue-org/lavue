@@ -1,21 +1,17 @@
 
+<!DOCTYPE html>
 
-<!doctype html>
-
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>lavuelib.plugins.gaussianfit &#8212; LaVue  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css?v=ffd7f65b" />
     
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -24,7 +20,7 @@
     <script src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -72,7 +68,9 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="GaussianFit"><a class="viewcode-back" href="../../../develop/lavuelib/lavuelib.plugins.html#lavuelib.plugins.gaussianfit.GaussianFit">[docs]</a><span class="k">class</span> <span class="nc">GaussianFit</span><span class="p">:</span>
+<div class="viewcode-block" id="GaussianFit">
+<a class="viewcode-back" href="../../../develop/lavuelib/lavuelib.plugins.html#lavuelib.plugins.gaussianfit.GaussianFit">[docs]</a>
+<span class="k">class</span> <span class="nc">GaussianFit</span><span class="p">:</span>
 
     <span class="c1">#: (:obj:`list` &lt;:obj:`float`&gt;) initial parameters</span>
     <span class="n">initial_parameters</span> <span class="o">=</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
@@ -82,7 +80,9 @@
     <span class="n">parameters_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Amp&quot;</span><span class="p">,</span> <span class="s2">&quot;x_0&quot;</span><span class="p">,</span> <span class="s2">&quot;y_0&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma_x&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma_y&quot;</span><span class="p">,</span>
                         <span class="s2">&quot;offset (optional)&quot;</span><span class="p">,</span> <span class="s2">&quot;theta (optional)&quot;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="GaussianFit.function"><a class="viewcode-back" href="../../../develop/lavuelib/lavuelib.plugins.html#lavuelib.plugins.gaussianfit.GaussianFit.function">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="GaussianFit.function">
+<a class="viewcode-back" href="../../../develop/lavuelib/lavuelib.plugins.html#lavuelib.plugins.gaussianfit.GaussianFit.function">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">function</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">sigma_x</span><span class="p">,</span> <span class="n">sigma_y</span><span class="p">,</span>
                  <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;2d guasian function</span>
@@ -120,7 +120,10 @@
               <span class="o">+</span> <span class="n">c</span> <span class="o">*</span> <span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">y0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)))</span> <span class="o">+</span> <span class="n">offset</span>
         <span class="k">return</span> <span class="n">g</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="GaussianFit.generator"><a class="viewcode-back" href="../../../develop/lavuelib/lavuelib.plugins.html#lavuelib.plugins.gaussianfit.GaussianFit.generator">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="GaussianFit.generator">
+<a class="viewcode-back" href="../../../develop/lavuelib/lavuelib.plugins.html#lavuelib.plugins.gaussianfit.GaussianFit.generator">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">generator</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dts</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;2d guasian parameter generator</span>
 
@@ -143,16 +146,18 @@
         <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dts</span><span class="p">),</span> <span class="n">mean_x</span><span class="p">,</span> <span class="n">mean_y</span><span class="p">,</span> <span class="n">sigma_x</span><span class="p">,</span> <span class="n">sigma_y</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">length</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">length</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
             <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="p">[:</span><span class="n">length</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">res</span></div></div>
+        <span class="k">return</span> <span class="n">res</span></div>
+</div>
+
 </pre></div>
 
             <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
@@ -160,7 +165,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><p>
   <h3 class='versions'>Versions</h3>
   <p>
@@ -168,6 +173,7 @@
       <li><a class="reference external" href="../../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../../index/../../v3.5.3/index.html">v3.5.3</a></li>
       <li><a class="reference external" href="../../../index/../../v3.5.1/index.html">v3.5.1</a></li>
       <li><a class="reference external" href="../../../index/../../v3.4.1/index.html">v3.4.1</a></li>
       <li><a class="reference external" href="../../../index/../../v3.3.1/index.html">v3.3.1</a></li>
@@ -212,7 +218,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -227,10 +233,10 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+    &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>

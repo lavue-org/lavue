@@ -1,21 +1,17 @@
 
+<!DOCTYPE html>
 
-<!doctype html>
-
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>lavuelib.sourceTabWidget &#8212; LaVue  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=ffd7f65b" />
     
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -24,7 +20,7 @@
     <script src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -96,7 +92,9 @@
                  <span class="s2">&quot;ui&quot;</span><span class="p">,</span> <span class="s2">&quot;SourceForm.ui&quot;</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="SourceForm"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm">[docs]</a><span class="k">class</span> <span class="nc">SourceForm</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="SourceForm">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm">[docs]</a>
+<span class="k">class</span> <span class="nc">SourceForm</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; source form &quot;&quot;&quot;</span>
 
@@ -178,7 +176,9 @@
             <span class="n">icon</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QIcon</span><span class="o">.</span><span class="n">fromTheme</span><span class="p">(</span><span class="s2">&quot;video-display&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pushButton</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">icon</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SourceForm.init"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.init">[docs]</a>    <span class="nd">@debugmethod</span>
+<div class="viewcode-block" id="SourceForm.init">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.init">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; initialize widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -186,7 +186,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">onSourceChanged</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">onSourceChanged</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SourceForm.disconnectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.disconnectWidget">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.disconnectWidget">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.disconnectWidget">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">disconnectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; disconnect widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -204,7 +207,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentSource</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__currentSource</span><span class="o">.</span><span class="n">disconnectWidget</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SourceForm.connectWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.connectWidget">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.connectWidget">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.connectWidget">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">connectWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; connect widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -212,7 +218,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentSource</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__currentSource</span><span class="o">.</span><span class="n">connectWidget</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SourceForm.currentDataSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.currentDataSource">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.currentDataSource">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.currentDataSource">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">currentDataSource</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; current data source</span>
 
@@ -222,7 +231,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentSource</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentSource</span><span class="o">.</span><span class="n">datasource</span></div>
 
-<div class="viewcode-block" id="SourceForm.currentDataSourceName"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.currentDataSourceName">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.currentDataSourceName">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.currentDataSourceName">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">currentDataSourceName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; current data source name</span>
 
@@ -231,7 +243,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentSource</span><span class="o">.</span><span class="n">name</span></div>
 
-<div class="viewcode-block" id="SourceForm.currentDataSourceAlias"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.currentDataSourceAlias">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.currentDataSourceAlias">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.currentDataSourceAlias">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">currentDataSourceAlias</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; current data source name</span>
 
@@ -240,7 +255,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentSource</span><span class="o">.</span><span class="n">alias</span></div>
 
-<div class="viewcode-block" id="SourceForm.gridLayout"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.gridLayout">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.gridLayout">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.gridLayout">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">gridLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provide grid layout</span>
 
@@ -249,7 +267,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">formGridLayout</span></div>
 
-<div class="viewcode-block" id="SourceForm.pushButtonEnabled"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.pushButtonEnabled">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.pushButtonEnabled">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.pushButtonEnabled">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">pushButtonEnabled</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provide status of push button</span>
 
@@ -258,7 +279,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pushButton</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SourceForm.removeCommonWidgets"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.removeCommonWidgets">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.removeCommonWidgets">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.removeCommonWidgets">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">removeCommonWidgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; remove common widgets</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -269,7 +293,10 @@
         <span class="n">layout</span><span class="o">.</span><span class="n">removeWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">translationLineEdit</span><span class="p">)</span>
         <span class="n">layout</span><span class="o">.</span><span class="n">removeWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pushButton</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceForm.addCommonWidgets"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.addCommonWidgets">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.addCommonWidgets">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.addCommonWidgets">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">addCommonWidgets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sln</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; add common widgets after given row in the grid layout</span>
 
@@ -291,7 +318,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">emitTranslationChanged</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">sourceTypeComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceForm.showItem"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.showItem">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.showItem">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.showItem">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">showItem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trans</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; show items of the widget</span>
 
@@ -305,7 +335,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">translationLineEdit</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">translationLabel</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SourceForm.addWidgets"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.addWidgets">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.addWidgets">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.addWidgets">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">addWidgets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">st</span><span class="p">,</span> <span class="n">expertmode</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; add widgets</span>
 
@@ -330,7 +363,10 @@
         <span class="n">swg</span><span class="o">.</span><span class="n">updateComboBox</span><span class="p">()</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__subwidgets</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceForm.sourceStatus"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.sourceStatus">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.sourceStatus">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.sourceStatus">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">sourceStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; source status</span>
 
@@ -339,7 +375,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">sourceTypeComboBox</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="SourceForm.updateLayout"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.updateLayout">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.updateLayout">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.updateLayout">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">updateLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update source layout</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -359,7 +398,10 @@
         <span class="k">if</span> <span class="n">mst</span><span class="p">:</span>
             <span class="n">mst</span><span class="o">.</span><span class="n">updateButton</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SourceForm.updateSourceComboBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.updateSourceComboBox">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.updateSourceComboBox">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.updateSourceComboBox">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">updateSourceComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourcenames</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set source by changing combobox</span>
 
@@ -392,7 +434,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">sourceTypeComboBox</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
            <span class="bp">self</span><span class="o">.</span><span class="n">onSourceChanged</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceForm.setSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.setSource">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.setSource">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.setSource">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disconnect</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set source with the given name</span>
 
@@ -431,7 +476,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">updateMetaData</span><span class="p">(</span><span class="n">disconnect</span><span class="o">=</span><span class="n">disconnect</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">emitSourceChanged</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SourceForm.label"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.label">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.label">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.label">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; return a label of the current detector</span>
 
@@ -440,7 +488,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentSource</span><span class="o">.</span><span class="n">label</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SourceForm.updateMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.updateMetaData">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.updateMetaData">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.updateMetaData">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update source input parameters</span>
 
@@ -450,7 +501,10 @@
         <span class="k">for</span> <span class="n">wg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcewidgets</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">wg</span><span class="o">.</span><span class="n">updateMetaData</span><span class="p">(</span><span class="o">**</span><span class="n">kargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceForm.setSourceComboBoxByName"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.setSourceComboBoxByName">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.setSourceComboBoxByName">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.setSourceComboBoxByName">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setSourceComboBoxByName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set source by changing combobox by name</span>
 
@@ -461,12 +515,16 @@
         <span class="k">if</span> <span class="n">index</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">sourceTypeComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">index</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceForm.emitSourceChanged"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.emitSourceChanged">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.emitSourceChanged">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.emitSourceChanged">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">emitSourceChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; emits sourceChanged signal</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">sourceTypeComboBox</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sourceChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">status</span><span class="p">)</span></div>
+
 
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
@@ -509,7 +567,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sourceStateChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourceid</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SourceForm.updateButton"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.updateButton">[docs]</a>    <span class="nd">@debugmethod</span>
+<div class="viewcode-block" id="SourceForm.updateButton">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.updateButton">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">updateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update slot for source button</span>
@@ -519,7 +579,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pushButton</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">status</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceForm.isConnected"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.isConnected">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.isConnected">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.isConnected">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">isConnected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; is datasource source connected</span>
 
@@ -528,14 +591,20 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connected</span></div>
 
-<div class="viewcode-block" id="SourceForm.toggleServerConnection"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.toggleServerConnection">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.toggleServerConnection">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.toggleServerConnection">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">toggleServerConnection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; toggles server connection</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pushButtonClicked</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SourceForm.emitTranslationChanged"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.emitTranslationChanged">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.emitTranslationChanged">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.emitTranslationChanged">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">emitTranslationChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trans</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; emit translationChanged</span>
@@ -545,7 +614,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">translationChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">trans</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourceid</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceForm.emitButtonEnabled"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.emitButtonEnabled">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.emitButtonEnabled">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.emitButtonEnabled">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">emitButtonEnabled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; emit buttonEnabled</span>
@@ -555,7 +627,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">buttonEnabled</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourceid</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceForm.setErrorStatus"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.setErrorStatus">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.setErrorStatus">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.setErrorStatus">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setErrorStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set error status</span>
 
@@ -575,7 +650,10 @@
                 <span class="s2">&quot;background-color: green;&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__errorstatus</span> <span class="o">=</span> <span class="n">status</span></div>
 
-<div class="viewcode-block" id="SourceForm.connectSuccess"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.connectSuccess">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.connectSuccess">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.connectSuccess">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">connectSuccess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set connection status on and display connection status</span>
 
@@ -605,7 +683,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentSource</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__currentSource</span><span class="o">.</span><span class="n">connectWidget</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SourceForm.onSourceChanged"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.onSourceChanged">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.onSourceChanged">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.onSourceChanged">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">onSourceChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update current source widgets</span>
@@ -618,7 +699,10 @@
                 <span class="n">name</span> <span class="o">=</span> <span class="n">us</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setSource</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceForm.connectFailure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.connectFailure">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.connectFailure">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.connectFailure">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">connectFailure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set connection status off and display connection status</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -634,9 +718,12 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pushButton</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">icon</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentSource</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__currentSource</span><span class="o">.</span><span class="n">disconnectWidget</span><span class="p">()</span></div>
+
         <span class="c1"># self.pushButton.setText(&quot;Retry connect&quot;)</span>
 
-<div class="viewcode-block" id="SourceForm.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.configure">[docs]</a>    <span class="nd">@debugmethod</span>
+<div class="viewcode-block" id="SourceForm.configure">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.configure">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
 
@@ -647,7 +734,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentSource</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__currentSource</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceForm.setTranslation"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.setTranslation">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.setTranslation">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.setTranslation">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setTranslation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trans</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; stores translation of the given source</span>
 
@@ -656,7 +746,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">translationLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">trans</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceForm.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.configuration">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.configuration">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.configuration">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
 
@@ -666,15 +759,22 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentSource</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentSource</span><span class="o">.</span><span class="n">configuration</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SourceForm.start"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.start">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceForm.start">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceForm.start">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; starts viewing if pushButton enable</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">pushButton</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">toggleServerConnection</span><span class="p">()</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">toggleServerConnection</span><span class="p">()</span></div>
+</div>
 
 
-<div class="viewcode-block" id="SourceTabWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget">[docs]</a><span class="k">class</span> <span class="nc">SourceTabWidget</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTabWidget</span><span class="p">):</span>
+
+<div class="viewcode-block" id="SourceTabWidget">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget">[docs]</a>
+<span class="k">class</span> <span class="nc">SourceTabWidget</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTabWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; image source selection</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -756,7 +856,9 @@
         <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">:</span>
             <span class="n">st</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
 
-<div class="viewcode-block" id="SourceTabWidget.addTab"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.addTab">[docs]</a>    <span class="nd">@debugmethod</span>
+<div class="viewcode-block" id="SourceTabWidget.addTab">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.addTab">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">addTab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; add tab widget</span>
 
@@ -776,7 +878,10 @@
         <span class="n">cb</span><span class="o">.</span><span class="n">stateChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
             <span class="k">lambda</span> <span class="n">state</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__updateCheckBoxState</span><span class="p">(</span><span class="n">cb</span><span class="p">,</span> <span class="n">state</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.removeTab"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.removeTab">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.removeTab">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.removeTab">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">removeTab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; remove tab widget</span>
 
@@ -788,7 +893,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__tabcheckboxstates</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
         <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTabWidget</span><span class="o">.</span><span class="n">removeTab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.isChecked"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.isChecked">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.isChecked">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.isChecked">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">isChecked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; check if tab is active</span>
 
@@ -800,7 +908,10 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tabBar</span><span class="p">()</span><span class="o">.</span><span class="n">tabButton</span><span class="p">(</span>
             <span class="n">sid</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTabBar</span><span class="o">.</span><span class="n">RightSide</span><span class="p">)</span><span class="o">.</span><span class="n">state</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.setCheckState"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.setCheckState">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.setCheckState">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.setCheckState">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setCheckState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set check status</span>
 
@@ -811,6 +922,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tabBar</span><span class="p">()</span><span class="o">.</span><span class="n">tabButton</span><span class="p">(</span>
             <span class="n">sid</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTabBar</span><span class="o">.</span><span class="n">RightSide</span><span class="p">)</span><span class="o">.</span><span class="n">setCheckState</span><span class="p">(</span><span class="n">state</span><span class="p">)</span></div>
+
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">__updateCheckBoxState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cb</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
@@ -830,7 +942,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">toggleServerConnection</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">toggleServerConnection</span><span class="p">()</span>
 
-<div class="viewcode-block" id="SourceTabWidget.tabCheckBoxStates"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.tabCheckBoxStates">[docs]</a>    <span class="nd">@debugmethod</span>
+<div class="viewcode-block" id="SourceTabWidget.tabCheckBoxStates">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.tabCheckBoxStates">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">tabCheckBoxStates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides checkbox states</span>
 
@@ -839,7 +953,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tabcheckboxstates</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.currentDataSources"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.currentDataSources">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.currentDataSources">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.currentDataSources">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">currentDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; current data source</span>
 
@@ -849,7 +966,10 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">st</span><span class="o">.</span><span class="n">currentDataSource</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">()]</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.currentDataSourceNames"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.currentDataSourceNames">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.currentDataSourceNames">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.currentDataSourceNames">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">currentDataSourceNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; current data source name</span>
 
@@ -859,7 +979,10 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">st</span><span class="o">.</span><span class="n">currentDataSourceName</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">()]</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.currentDataSourceAlias"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.currentDataSourceAlias">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.currentDataSourceAlias">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.currentDataSourceAlias">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">currentDataSourceAlias</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; current data source name alias</span>
 
@@ -868,6 +991,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">st</span><span class="o">.</span><span class="n">currentDataSourceAlias</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">()]</span></div>
+
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">__addSourceWidgets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -897,7 +1021,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wg</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__buttonstatus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SourceTabWidget.setNumberOfSources"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.setNumberOfSources">[docs]</a>    <span class="nd">@debugmethod</span>
+<div class="viewcode-block" id="SourceTabWidget.setNumberOfSources">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.setNumberOfSources">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setNumberOfSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nrsources</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set a number of image sources</span>
 
@@ -934,7 +1060,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">showItem</span><span class="p">(</span><span class="n">nrsources</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">emitSourceChanged</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.setSourceComboBoxByName"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.setSourceComboBoxByName">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.setSourceComboBoxByName">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.setSourceComboBoxByName">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setSourceComboBoxByName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set source by changing combobox by name</span>
 
@@ -946,7 +1075,10 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">sid</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">[</span><span class="n">sid</span><span class="p">]</span><span class="o">.</span><span class="n">setSourceComboBoxByName</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.updateSourceComboBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.updateSourceComboBox">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.updateSourceComboBox">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.updateSourceComboBox">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">updateSourceComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourcenames</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set source by changing combobox</span>
 
@@ -962,19 +1094,26 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">st</span><span class="o">.</span><span class="n">updateSourceComboBox</span><span class="p">(</span><span class="n">sourcenames</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.onSourceChanged"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.onSourceChanged">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.onSourceChanged">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.onSourceChanged">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">onSourceChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update current source widgets</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__setSource</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ui</span><span class="o">.</span><span class="n">sourceTypeComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()))</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.updateLayout"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.updateLayout">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.updateLayout">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.updateLayout">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">updateLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update source layout</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">:</span>
             <span class="n">st</span><span class="o">.</span><span class="n">updateLayout</span><span class="p">()</span></div>
+
 
     <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">__setSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disconnect</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -988,7 +1127,9 @@
         <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">:</span>
             <span class="n">st</span><span class="o">.</span><span class="n">setSource</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">disconnect</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SourceTabWidget.emitSourceChanged"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.emitSourceChanged">[docs]</a>    <span class="nd">@debugmethod</span>
+<div class="viewcode-block" id="SourceTabWidget.emitSourceChanged">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.emitSourceChanged">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">emitSourceChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; emits sourceChanged signal</span>
@@ -998,6 +1139,7 @@
              <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">()],</span>
             <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sourceChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">status</span><span class="p">)</span></div>
+
 
     <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
@@ -1063,7 +1205,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">translationChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">trans</span><span class="p">,</span> <span class="n">sid</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SourceTabWidget.updateButton"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.updateButton">[docs]</a>    <span class="nd">@debugmethod</span>
+<div class="viewcode-block" id="SourceTabWidget.updateButton">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.updateButton">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">updateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">sid</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update slot for image source</span>
@@ -1081,7 +1225,10 @@
         <span class="n">fstatus</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">lstatus</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">lstatus</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">updateButton</span><span class="p">(</span><span class="n">fstatus</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.updateMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.updateMetaData">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.updateMetaData">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.updateMetaData">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update source input parameters</span>
 
@@ -1091,7 +1238,10 @@
         <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">:</span>
             <span class="n">st</span><span class="o">.</span><span class="n">updateMetaData</span><span class="p">(</span><span class="o">**</span><span class="n">kargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.updateSourceMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.updateSourceMetaData">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.updateSourceMetaData">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.updateSourceMetaData">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">updateSourceMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update source input parameters</span>
 
@@ -1103,7 +1253,10 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">sid</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">[</span><span class="n">sid</span><span class="p">]</span><span class="o">.</span><span class="n">updateMetaData</span><span class="p">(</span><span class="o">**</span><span class="n">kargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.isConnected"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.isConnected">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.isConnected">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.isConnected">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">isConnected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; is datasource source connected</span>
 
@@ -1112,7 +1265,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connected</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.toggleServerConnection"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.toggleServerConnection">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.toggleServerConnection">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.toggleServerConnection">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">toggleServerConnection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; toggles server connection</span>
@@ -1133,7 +1289,10 @@
                 <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sourceConnected</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">status</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.setErrorStatus"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.setErrorStatus">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.setErrorStatus">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.setErrorStatus">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setErrorStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set error status</span>
 
@@ -1144,7 +1303,10 @@
             <span class="n">st</span><span class="o">.</span><span class="n">setErrorStatus</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__errorstatus</span> <span class="o">=</span> <span class="n">status</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.connectSuccess"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.connectSuccess">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.connectSuccess">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.connectSuccess">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">connectSuccess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set connection status on and display connection status</span>
 
@@ -1155,7 +1317,10 @@
         <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">:</span>
             <span class="n">st</span><span class="o">.</span><span class="n">connectSuccess</span><span class="p">(</span><span class="n">port</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.connectFailure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.connectFailure">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.connectFailure">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.connectFailure">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">connectFailure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set connection status off and display connection status</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1164,7 +1329,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">sourceStateChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
             <span class="n">st</span><span class="o">.</span><span class="n">connectFailure</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.configure">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.configure">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.configure">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current image source</span>
 
@@ -1177,7 +1345,10 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">sid</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">[</span><span class="n">sid</span><span class="p">]</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.configuration">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.configuration">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.configuration">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current image source</span>
 
@@ -1187,7 +1358,10 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">st</span><span class="o">.</span><span class="n">configuration</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
                 <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">()]</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.setTranslation"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.setTranslation">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.setTranslation">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.setTranslation">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">setTranslation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trans</span><span class="p">,</span> <span class="n">sid</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; stores translation of the given source</span>
 
@@ -1199,7 +1373,10 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">sid</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">[</span><span class="n">sid</span><span class="p">]</span><span class="o">.</span><span class="n">setTranslation</span><span class="p">(</span><span class="n">trans</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.showItem"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.showItem">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.showItem">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.showItem">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">showItem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trans</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; show items of the widget</span>
 
@@ -1214,21 +1391,26 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">cb</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SourceTabWidget.start"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.start">[docs]</a>    <span class="nd">@debugmethod</span>
+
+<div class="viewcode-block" id="SourceTabWidget.start">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.sourceTabWidget.SourceTabWidget.start">[docs]</a>
+    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; starts viewing if pushButton enable</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourcetabs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pushButtonEnabled</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">toggleServerConnection</span><span class="p">()</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">toggleServerConnection</span><span class="p">()</span></div>
+</div>
+
 </pre></div>
 
             <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -1236,7 +1418,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><p>
   <h3 class='versions'>Versions</h3>
   <p>
@@ -1244,6 +1426,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v3.5.3/index.html">v3.5.3</a></li>
       <li><a class="reference external" href="../../index/../../v3.5.1/index.html">v3.5.1</a></li>
       <li><a class="reference external" href="../../index/../../v3.4.1/index.html">v3.4.1</a></li>
       <li><a class="reference external" href="../../index/../../v3.3.1/index.html">v3.3.1</a></li>
@@ -1288,7 +1471,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -1303,10 +1486,10 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+    &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>
