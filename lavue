@@ -82,16 +82,6 @@ def main():
     """ the main function
     """
 
-    if "GNOME_DESKTOP_SESSION_ID" not in os.environ:
-        os.environ["GNOME_DESKTOP_SESSION_ID"] = "qtconfig"
-    if os.path.isdir("/usr/lib/kde4/plugins/") and \
-       "QT_PLUGIN_PATH" not in os.environ:
-        os.environ["QT_PLUGIN_PATH"] = "/usr/lib/kde4/plugins/"
-
-    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_X11InitThreads)
-    QtCore.QResource.registerResource(
-        os.path.join(lavuelib.__path__[0], "qrc", "resources.rcc"))
-
     parser = argparse.ArgumentParser(
         description='2d detector live image viewer',
         formatter_class=RawTextHelpFormatter)
@@ -308,6 +298,24 @@ def main():
     if options.version:
         print(lavuelib.__version__)
         sys.exit(0)
+
+    if "GNOME_DESKTOP_SESSION_ID" not in os.environ:
+        os.environ["GNOME_DESKTOP_SESSION_ID"] = "qtconfig"
+    if (not options.style or not options.stylesheet) and \
+            "QT_QPA_PLATFORMTHEME" not in os.environ:
+        if os.path.isfile("/usr/lib/x86_64-linux-gnu/qt5/plugins/styles/libqt5ct-style.so"):
+            os.environ["QT_QPA_PLATFORMTHEME"] = "qt5ct"
+        elif os.path.isfile("/usr/lib/x86_64-linux-gnu/libqgnomeplatform.so"):
+            os.environ["QT_QPA_PLATFORMTHEME"] = "gnome"
+    if os.path.isdir("/usr/lib/kde4/plugins/") and \
+       "QT_PLUGIN_PATH" not in os.environ:
+        os.environ["QT_PLUGIN_PATH"] = "/usr/lib/kde4/plugins/"
+
+    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_X11InitThreads)
+    QtCore.QResource.registerResource(
+        os.path.join(lavuelib.__path__[0], "qrc", "resources.rcc"))
+
+
 
     logging.basicConfig(
         format="%(levelname)s: %(message)s")
