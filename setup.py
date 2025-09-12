@@ -224,7 +224,6 @@ SETUPDATA = dict(
         'Intended Audience :: Science/Research',
         'Topic :: Scientific/Engineering :: Physics',
         'Topic :: Software Development :: Libraries :: Python Modules',
-        'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
@@ -245,7 +244,7 @@ SETUPDATA = dict(
     scripts=(get_scripts(GUISCRIPTS) + SCRIPTS),
     zip_safe=False,
     setup_requires=pytest_runner,
-    tests_require=['pytest'],
+    # tests_require=['pytest'],
     cmdclass={
         "build_py": toolBuild,
         "clean": toolClean,

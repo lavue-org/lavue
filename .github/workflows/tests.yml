@@ -70,7 +70,7 @@ jobs:
         run: .ci/run.sh 3 httpsource
 
       - name: Append documentation for the latest release version
-        if: github.ref == 'refs/heads/develop' &&  matrix.os == 'debian12'
+        if: github.ref == 'refs/heads/develop' &&  matrix.os == 'debian13'
         run: |
              docker  exec ndts /bin/bash -c "cp doc/index.html doc/_config.yml build"
              docker  exec ndts /bin/bash -c "mkdir -p ./build/doc_html && cp -r doc_html/* ./build/doc_html/"
@@ -84,13 +84,13 @@ jobs:
              docker  exec --user root ndts /bin/bash -c "rm -rf build test lavuelib  dist  lavue.egg-info testresult.txt"
 
       - name: Extract the code version from the branch name
-        if: startsWith(github.ref, 'refs/heads/docs_') && matrix.os == 'debian12'
+        if: startsWith(github.ref, 'refs/heads/docs_') && matrix.os == 'debian13'
         shell: bash
         run: echo "##[set-output name=docver;]$(echo ${GITHUB_REF#refs/heads/docs_})"
         id: extract_docver
 
       - name: Append documentation for the extracted release version
-        if: startsWith(github.ref, 'refs/heads/docs_') &&  matrix.os == 'debian12'
+        if: startsWith(github.ref, 'refs/heads/docs_') &&  matrix.os == 'debian13'
         run: |
              echo Version: ${{ steps.extract_docver.outputs.docver }}
              docker  exec ndts /bin/bash -c "mkdir -p ./build/doc_html && cp -r doc_html/* ./build/doc_html/"
@@ -104,7 +104,7 @@ jobs:
              docker  exec --user root ndts /bin/bash -c "rm -rf build test lavuelib  dist  lavue.egg-info  testresult.txt"
 
       - name: Deploy documentation
-        if: (github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/docs_'))  &&  matrix.os == 'debian12'
+        if: (github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/docs_'))  &&  matrix.os == 'debian13'
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self
