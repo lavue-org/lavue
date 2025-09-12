@@ -303,10 +303,10 @@ def main():
         os.environ["GNOME_DESKTOP_SESSION_ID"] = "qtconfig"
     if (not options.style or not options.stylesheet) and \
             "QT_QPA_PLATFORMTHEME" not in os.environ:
-        if os.path.isfile("/usr/lib/x86_64-linux-gnu/qt5/plugins/styles/libqt5ct-style.so"):
-            os.environ["QT_QPA_PLATFORMTHEME"] = "qt5ct"
-        elif os.path.isfile("/usr/lib/x86_64-linux-gnu/libqgnomeplatform.so"):
+        if os.path.isfile("/usr/lib/x86_64-linux-gnu/libqgnomeplatform.so"):
             os.environ["QT_QPA_PLATFORMTHEME"] = "gnome"
+        elif os.path.isfile("/usr/lib/x86_64-linux-gnu/qt5/plugins/styles/libqt5ct-style.so"):
+            os.environ["QT_QPA_PLATFORMTHEME"] = "qt5ct"
     if os.path.isdir("/usr/lib/kde4/plugins/") and \
        "QT_PLUGIN_PATH" not in os.environ:
         os.environ["QT_PLUGIN_PATH"] = "/usr/lib/kde4/plugins/"
