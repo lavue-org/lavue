@@ -1,21 +1,17 @@
 
+<!DOCTYPE html>
 
-<!doctype html>
-
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>lavuelib.settings &#8212; LaVue  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=ffd7f65b" />
     
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -24,7 +20,7 @@
     <script src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -93,7 +89,9 @@
     <span class="n">PYFAI</span> <span class="o">=</span> <span class="kc">False</span>
 
 
-<div class="viewcode-block" id="Settings"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings">[docs]</a><span class="k">class</span> <span class="nc">Settings</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Settings">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings">[docs]</a>
+<span class="k">class</span> <span class="nc">Settings</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; lavue configuration settings &quot;&quot;&quot;</span>
 
@@ -380,7 +378,9 @@
         <span class="c1">#: (:class:`pyqtgraph.QtCore.QMutex`) settings mutex</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutex</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Settings.setCustomGradients"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.setCustomGradients">[docs]</a>    <span class="k">def</span> <span class="nf">setCustomGradients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gradients</span><span class="p">):</span>
+<div class="viewcode-block" id="Settings.setCustomGradients">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.setCustomGradients">[docs]</a>
+    <span class="k">def</span> <span class="nf">setCustomGradients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gradients</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets custom gradients</span>
 
 <span class="sd">        :param gradients: custom gradients</span>
@@ -389,7 +389,10 @@
         <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__customgradients</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">gradients</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Settings.customGradients"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.customGradients">[docs]</a>    <span class="k">def</span> <span class="nf">customGradients</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Settings.customGradients">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.customGradients">[docs]</a>
+    <span class="k">def</span> <span class="nf">customGradients</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets source display parameters</span>
 
 <span class="sd">        :returns: custom gradients</span>
@@ -401,7 +404,10 @@
             <span class="n">gradients</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__customgradients</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">gradients</span></div>
 
-<div class="viewcode-block" id="Settings.setSourceDisplay"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.setSourceDisplay">[docs]</a>    <span class="k">def</span> <span class="nf">setSourceDisplay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Settings.setSourceDisplay">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.setSourceDisplay">[docs]</a>
+    <span class="k">def</span> <span class="nf">setSourceDisplay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets source display parameters</span>
 
 <span class="sd">        :param source: source name</span>
@@ -413,7 +419,10 @@
             <span class="k">if</span> <span class="n">source</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__sourcedisplay</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">source</span><span class="p">)]</span> <span class="o">=</span> <span class="n">values</span></div>
 
-<div class="viewcode-block" id="Settings.sourceDisplay"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.sourceDisplay">[docs]</a>    <span class="k">def</span> <span class="nf">sourceDisplay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Settings.sourceDisplay">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.sourceDisplay">[docs]</a>
+    <span class="k">def</span> <span class="nf">sourceDisplay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; gets source display parameters</span>
 
 <span class="sd">        :param source: source name</span>
@@ -435,7 +444,10 @@
                         <span class="n">values</span><span class="p">[</span><span class="s1">&#39;autofactor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="k">return</span> <span class="n">values</span></div>
 
-<div class="viewcode-block" id="Settings.load"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Settings.load">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.load">[docs]</a>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; load settings</span>
 
 <span class="sd">        :param settings: QSettings object</span>
@@ -1021,7 +1033,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">updateAISettings</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">status</span></div>
 
-<div class="viewcode-block" id="Settings.updateAISettings"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.updateAISettings">[docs]</a>    <span class="k">def</span> <span class="nf">updateAISettings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Settings.updateAISettings">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.updateAISettings">[docs]</a>
+    <span class="k">def</span> <span class="nf">updateAISettings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update AI settings</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">PYFAI</span><span class="p">:</span>
@@ -1056,7 +1071,10 @@
                                          <span class="n">aif</span><span class="p">[</span><span class="s2">&quot;tilt&quot;</span><span class="p">],</span>
                                          <span class="n">aif</span><span class="p">[</span><span class="s2">&quot;tiltPlanRotation&quot;</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Settings.store"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.store">[docs]</a>    <span class="k">def</span> <span class="nf">store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Settings.store">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.store">[docs]</a>
+    <span class="k">def</span> <span class="nf">store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Stores settings in QSettings object</span>
 
 <span class="sd">        :param settings: QSettings object</span>
@@ -1407,7 +1425,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__storeDisplayParams</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__storeCustomGradients</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Settings.length2ev"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.length2ev">[docs]</a>    <span class="k">def</span> <span class="nf">length2ev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Settings.length2ev">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.length2ev">[docs]</a>
+    <span class="k">def</span> <span class="nf">length2ev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converts length to energy  in eV</span>
 
 <span class="sd">        :param length: length as value in A or tuple with units</span>
@@ -1447,7 +1468,10 @@
                     <span class="n">energy</span> <span class="o">=</span> <span class="n">hc</span> <span class="o">*</span> <span class="mi">10000</span> <span class="o">/</span> <span class="n">length</span>
         <span class="k">return</span> <span class="n">energy</span></div>
 
-<div class="viewcode-block" id="Settings.energy2m"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.energy2m">[docs]</a>    <span class="k">def</span> <span class="nf">energy2m</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">energy</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Settings.energy2m">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.energy2m">[docs]</a>
+    <span class="k">def</span> <span class="nf">energy2m</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">energy</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converts energy to m</span>
 
 <span class="sd">        :param energy: energy as value in eV or tuple with units</span>
@@ -1477,7 +1501,10 @@
                 <span class="n">length</span> <span class="o">=</span> <span class="n">hc</span> <span class="o">*</span> <span class="mf">1e-6</span> <span class="o">/</span> <span class="n">energy</span>
         <span class="k">return</span> <span class="n">length</span></div>
 
-<div class="viewcode-block" id="Settings.distance2mm"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.distance2mm">[docs]</a>    <span class="k">def</span> <span class="nf">distance2mm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Settings.distance2mm">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.distance2mm">[docs]</a>
+    <span class="k">def</span> <span class="nf">distance2mm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converts distance to mm units</span>
 
 <span class="sd">        :param distance: distance as value in m or tuple with units</span>
@@ -1509,7 +1536,10 @@
                 <span class="n">res</span> <span class="o">=</span> <span class="n">distance</span> <span class="o">*</span> <span class="mf">1e+3</span>
         <span class="k">return</span> <span class="n">res</span></div>
 
-<div class="viewcode-block" id="Settings.distance2m"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.distance2m">[docs]</a>    <span class="k">def</span> <span class="nf">distance2m</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Settings.distance2m">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.distance2m">[docs]</a>
+    <span class="k">def</span> <span class="nf">distance2m</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converts distance to m units</span>
 
 <span class="sd">        :param distance: distance as value in m or tuple with units</span>
@@ -1541,7 +1571,10 @@
                 <span class="n">res</span> <span class="o">=</span> <span class="n">distance</span> <span class="o">*</span> <span class="mf">1e+3</span>
         <span class="k">return</span> <span class="n">res</span></div>
 
-<div class="viewcode-block" id="Settings.distance2um"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.distance2um">[docs]</a>    <span class="k">def</span> <span class="nf">distance2um</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Settings.distance2um">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.distance2um">[docs]</a>
+    <span class="k">def</span> <span class="nf">distance2um</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converts distance to um units</span>
 
 <span class="sd">        :param distance: distance as value in m or tuple with units</span>
@@ -1573,7 +1606,10 @@
                 <span class="n">res</span> <span class="o">=</span> <span class="n">distance</span> <span class="o">*</span> <span class="mf">1e+6</span>
         <span class="k">return</span> <span class="n">res</span></div>
 
-<div class="viewcode-block" id="Settings.distance2pixels"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.distance2pixels">[docs]</a>    <span class="k">def</span> <span class="nf">distance2pixels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">psize</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Settings.distance2pixels">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.distance2pixels">[docs]</a>
+    <span class="k">def</span> <span class="nf">distance2pixels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">psize</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converts distance to pixels</span>
 
 <span class="sd">        :param distance: distance as value in pixels or tuple with units</span>
@@ -1607,7 +1643,10 @@
                 <span class="n">res</span> <span class="o">=</span> <span class="n">distance</span>
         <span class="k">return</span> <span class="n">res</span></div>
 
-<div class="viewcode-block" id="Settings.pixelsize2um"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.pixelsize2um">[docs]</a>    <span class="k">def</span> <span class="nf">pixelsize2um</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psize</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Settings.pixelsize2um">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.pixelsize2um">[docs]</a>
+    <span class="k">def</span> <span class="nf">pixelsize2um</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psize</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converts pixel size to um units</span>
 
 <span class="sd">        :param psize: pixelsize as value in m or tuple with units</span>
@@ -1639,7 +1678,10 @@
                     <span class="n">resy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance2um</span><span class="p">([</span><span class="n">py</span><span class="p">,</span> <span class="n">uy</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">resx</span><span class="p">,</span> <span class="n">resy</span></div>
 
-<div class="viewcode-block" id="Settings.xyposition2pixels"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.xyposition2pixels">[docs]</a>    <span class="k">def</span> <span class="nf">xyposition2pixels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xypos</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Settings.xyposition2pixels">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.xyposition2pixels">[docs]</a>
+    <span class="k">def</span> <span class="nf">xyposition2pixels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xypos</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; converts xy position to pixel units</span>
 
 <span class="sd">        :param xypos: xy-position a tuple value or tuple with units</span>
@@ -1672,7 +1714,10 @@
                     <span class="n">resy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance2pixels</span><span class="p">([</span><span class="n">py</span><span class="p">,</span> <span class="n">uy</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixelsizey</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">resx</span><span class="p">,</span> <span class="n">resy</span></div>
 
-<div class="viewcode-block" id="Settings.updateDetectorParameters"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.updateDetectorParameters">[docs]</a>    <span class="k">def</span> <span class="nf">updateDetectorParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Settings.updateDetectorParameters">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.updateDetectorParameters">[docs]</a>
+    <span class="k">def</span> <span class="nf">updateDetectorParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update physical parameters</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1699,7 +1744,10 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">centerx</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">aif</span><span class="p">[</span><span class="s2">&quot;centerX&quot;</span><span class="p">])</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">centery</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">aif</span><span class="p">[</span><span class="s2">&quot;centerY&quot;</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Settings.updateMetaData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.updateMetaData">[docs]</a>    <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Settings.updateMetaData">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings.updateMetaData">[docs]</a>
+    <span class="k">def</span> <span class="nf">updateMetaData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update physical parameters</span>
 
 <span class="sd">        :param kargs:  physical parameter dictionary</span>
@@ -1772,6 +1820,7 @@
             <span class="n">cy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance2pixels</span><span class="p">(</span><span class="n">kargs</span><span class="p">[</span><span class="s2">&quot;beam_center_y&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixelsizey</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">cy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">centery</span> <span class="o">=</span> <span class="n">cy</span></div>
+
 
     <span class="k">def</span> <span class="nf">__storeCustomGradients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Stores custom color gradients settings in QSettings object</span>
@@ -1854,15 +1903,16 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">__sourcedisplay</span><span class="p">[</span><span class="n">source</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">qstval</span><span class="p">)</span>
                 <span class="k">finally</span><span class="p">:</span>
                     <span class="n">settings</span><span class="o">.</span><span class="n">endGroup</span><span class="p">()</span></div>
+
 </pre></div>
 
             <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -1870,13 +1920,13 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -1891,10 +1941,10 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+    &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>
