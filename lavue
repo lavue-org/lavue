@@ -309,7 +309,7 @@ def main():
                 os.path.isdir(os.path.join(os.path.expanduser("~"),
                                            ".config", "qt5ct")):
             os.environ["QT_QPA_PLATFORMTHEME"] = "qt5ct"
-        if os.path.isfile("/usr/lib/x86_64-linux-gnu/libqgnomeplatform.so"):
+        elif os.path.isfile("/usr/lib/x86_64-linux-gnu/libqgnomeplatform.so"):
             os.environ["QT_QPA_PLATFORMTHEME"] = "gnome"
     if os.path.isdir("/usr/lib/kde4/plugins/") and \
        "QT_PLUGIN_PATH" not in os.environ:
