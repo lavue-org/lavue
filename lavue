@@ -60,9 +60,9 @@ def _intHandler(signum, frame):
     """
     dialog.close()
     try:
-        app = pyqtgraph.QtWidgets.QApplication.quit()
+        pyqtgraph.QtWidgets.QApplication.quit()
     except Exception:
-        app = QtGui.QApplication.quit()
+        QtGui.QApplication.quit()
     # print("quit")
 
 
@@ -303,10 +303,14 @@ def main():
         os.environ["GNOME_DESKTOP_SESSION_ID"] = "qtconfig"
     if (not options.style or not options.stylesheet) and \
             "QT_QPA_PLATFORMTHEME" not in os.environ:
+        if os.path.isfile(
+                "/usr/lib/x86_64-linux-gnu/qt5/plugins/styles/"
+                "libqt5ct-style.so") and \
+                os.path.isdir(os.path.join(os.path.expanduser("~"),
+                                           ".config", "qt5ct")):
+            os.environ["QT_QPA_PLATFORMTHEME"] = "qt5ct"
         if os.path.isfile("/usr/lib/x86_64-linux-gnu/libqgnomeplatform.so"):
             os.environ["QT_QPA_PLATFORMTHEME"] = "gnome"
-        elif os.path.isfile("/usr/lib/x86_64-linux-gnu/qt5/plugins/styles/libqt5ct-style.so"):
-            os.environ["QT_QPA_PLATFORMTHEME"] = "qt5ct"
     if os.path.isdir("/usr/lib/kde4/plugins/") and \
        "QT_PLUGIN_PATH" not in os.environ:
         os.environ["QT_PLUGIN_PATH"] = "/usr/lib/kde4/plugins/"
@@ -314,8 +318,6 @@ def main():
     QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_X11InitThreads)
     QtCore.QResource.registerResource(
         os.path.join(lavuelib.__path__[0], "qrc", "resources.rcc"))
-
-
 
     logging.basicConfig(
         format="%(levelname)s: %(message)s")
