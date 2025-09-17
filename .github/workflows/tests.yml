@@ -115,5 +115,7 @@ jobs:
 
 
       - name: Stop the docker
-        run: docker container stop ndts
+        run: |
+             docker exec  --user root build  /bin/bash -c "chown -R 1001 . "
+             docker container stop build
 
