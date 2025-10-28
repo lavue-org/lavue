@@ -23,7 +23,7 @@ The ``setup.py`` script may need: ``setuptools``  ``sphinx``  ``numpy``  ``pytes
 Debian packages
 """""""""""""""
 
-Debian `trixie`, `bookworm`, `bullseye`, or Ubuntu  `plucky`, `noble`, `jammy`,  packages can be found in the HDRI repository.
+Debian `trixie`, `bookworm`, `bullseye`, or Ubuntu  `questing`, `noble`, `jammy`,  packages can be found in the HDRI repository.
 
 To install the debian packages, add the PGP repository key
 
@@ -43,7 +43,7 @@ and
 
 .. code-block:: console
 
-   $ wget http://repos.pni-hdri.de/trixie-pni-hdri.list
+   $ wget http://repos.pni-hdri.de/trixie-pni-hdri.sources
 
 or
 
