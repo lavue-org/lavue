@@ -30,6 +30,9 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 
+import tracemalloc
+tracemalloc.start()
+
 import time
 import socket
 import warnings
@@ -48,6 +51,7 @@ import argparse
 import ntpath
 import logging
 import scipy.ndimage
+
 
 try:
     from pyqtgraph import QtWidgets
@@ -424,6 +428,7 @@ class LiveViewer(QtWidgets.QDialog):
                 QtCore.QSettings.UserScope,
                 options.configpath
             )
+        self.__snap = None
         #: (:obj:`str`) instance name
         self.__instance = options.instance
         #: (:obj:`bool`) histogram should be updated
@@ -3060,6 +3065,15 @@ class LiveViewer(QtWidgets.QDialog):
                 self.__updatehisto = False
         finally:
             self.__ploting = False
+            snap2 = tracemalloc.take_snapshot()
+            if self.__snap is not None:
+                top_stats = snap2.compare_to(self.__snap, 'lineno')
+                print("[ Top 10 differences ]")
+                for stat in top_stats[:10]:
+                    print(stat)
+            else:
+                self.__snap = snap2
+
 
     @debugmethod
     @QtCore.pyqtSlot()
