@@ -59,7 +59,7 @@ from . import motorWatchThread
 from . import edDictDialog
 from . import edListDialog
 from . import commandThread
-from .sardanaUtils import debugmethod, numpyEncoder
+from .sardanaUtils import debugmethod, numpyEncoder, debugfunc
 
 try:
     try:
@@ -160,6 +160,12 @@ __all__ = [
 ]
 
 logger = logging.getLogger("lavue")
+
+
+@debugfunc
+def processEvents():
+    """ process Qt events """
+    # QtCore.QCoreApplication.processEvents()
 
 
 class Converters(object):
@@ -1202,7 +1208,7 @@ class ParametersToolWidget(ToolBaseWidget):
         self.__attrWatcher.attrValuesSignal.connect(self._showValues)
         self.__attrWatcher.start()
         while not self.__attrWatcher.isWatching():
-            QtCore.QCoreApplication.processEvents()
+            processEvents()
             time.sleep(0.1)
 
     def __updateWidgets(self):
@@ -4742,7 +4748,7 @@ class DiffractogramToolWidget(ToolBaseWidget):
         :param did: diffractogram id
         :type did: :obj:`int`
         """
-        QtCore.QCoreApplication.processEvents()
+        processEvents()
         self.updateRangeTip()
         self.__updateBufferCombobox(did)
         # self.__nrplots = self.__ui.diffSpinBox.value()
@@ -6583,7 +6589,7 @@ class MaximaToolWidget(ToolBaseWidget):
         if len(maxidxs) and idx < 0:
             idx = 0
 
-        QtCore.QCoreApplication.processEvents()
+        processEvents()
         trans = self._mainwidget.transformations()[0]
         if trans:
             comboitems = ["%s: %s at (%s, %s)" % (i + 1, vl[2], vl[1], vl[0])
