@@ -102,7 +102,7 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">edDictDialog</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">edListDialog</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">commandThread</span>
-<span class="kn">from</span> <span class="nn">.sardanaUtils</span> <span class="kn">import</span> <span class="n">debugmethod</span><span class="p">,</span> <span class="n">numpyEncoder</span>
+<span class="kn">from</span> <span class="nn">.sardanaUtils</span> <span class="kn">import</span> <span class="n">debugmethod</span><span class="p">,</span> <span class="n">numpyEncoder</span><span class="p">,</span> <span class="n">debugfunc</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
@@ -203,6 +203,26 @@
 <span class="p">]</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;lavue&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@debugfunc</span>
+<span class="k">def</span> <span class="nf">processEvents</span><span class="p">(</span><span class="n">events</span><span class="o">=</span><span class="s2">&quot;internal&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; process Qt events</span>
+
+<span class="sd">    :param events: processed events i.e. internal, all, none</span>
+<span class="sd">    :param events: :obj:`str`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">events</span> <span class="o">==</span> <span class="s2">&quot;internal&quot;</span><span class="p">:</span>
+            <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">processEvents</span><span class="p">(</span>
+                <span class="n">QtCore</span><span class="o">.</span><span class="n">QEventLoop</span><span class="o">.</span><span class="n">ProcessEventsFlag</span><span class="o">.</span><span class="n">ExcludeSocketNotifiers</span> <span class="o">|</span>
+                <span class="n">QtCore</span><span class="o">.</span><span class="n">QEventLoop</span><span class="o">.</span><span class="n">ProcessEventsFlag</span><span class="o">.</span><span class="n">ExcludeUserInputEvents</span><span class="p">,</span>
+                <span class="mi">100</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">events</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+            <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">processEvents</span><span class="p">(</span>
+                <span class="n">QtCore</span><span class="o">.</span><span class="n">QEventLoop</span><span class="o">.</span><span class="n">ProcessEventsFlag</span><span class="o">.</span><span class="n">AllEvents</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 
 
 <span class="k">class</span> <span class="nc">Converters</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -1279,7 +1299,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__attrWatcher</span><span class="o">.</span><span class="n">attrValuesSignal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_showValues</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__attrWatcher</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
         <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__attrWatcher</span><span class="o">.</span><span class="n">isWatching</span><span class="p">():</span>
-            <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">processEvents</span><span class="p">()</span>
+            <span class="n">processEvents</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">triggeredevents</span><span class="p">)</span>
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span></div>
 
 
@@ -4970,7 +4990,7 @@
 <span class="sd">        :param did: diffractogram id</span>
 <span class="sd">        :type did: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">processEvents</span><span class="p">()</span>
+        <span class="n">processEvents</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">triggeredevents</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">updateRangeTip</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateBufferCombobox</span><span class="p">(</span><span class="n">did</span><span class="p">)</span>
         <span class="c1"># self.__nrplots = self.__ui.diffSpinBox.value()</span>
@@ -4978,10 +4998,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_plotDiff</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setColors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">roiscolors</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="c1"># self.__updateregion()</span>
-        <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">processEvents</span><span class="p">()</span>
+        <span class="n">processEvents</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">triggeredevents</span><span class="p">)</span>
         <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__regions</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nrplots</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
-        <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">processEvents</span><span class="p">()</span>
+        <span class="n">processEvents</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">triggeredevents</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateRegionsAndPlot</span><span class="p">()</span>
 
     <span class="c1"># @debugmethod</span>
@@ -6853,7 +6873,7 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">maxidxs</span><span class="p">)</span> <span class="ow">and</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">processEvents</span><span class="p">()</span>
+        <span class="n">processEvents</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">triggeredevents</span><span class="p">)</span>
         <span class="n">trans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">transformations</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">trans</span><span class="p">:</span>
             <span class="n">comboitems</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2"> at (</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vl</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">vl</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -9125,6 +9145,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v3.6.0/index.html">v3.6.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.5.4/index.html">v3.5.4</a></li>
       <li><a class="reference external" href="../../index/../../v3.5.3/index.html">v3.5.3</a></li>
       <li><a class="reference external" href="../../index/../../v3.4.1/index.html">v3.4.1</a></li>
