@@ -82,6 +82,34 @@ def debugmethod(method):
         return method
 
 
+def debugfunc(func):
+    """ debug wrapper for methods
+    :param func: any func
+    :type func: :class:`any`
+    :returns: wrapped func
+    :rtype: :class:`any`
+    """
+    if logger.getEffectiveLevel() >= 10:
+        @functools.wraps(func)
+        def decfunc(*args, **kwargs):
+            name = "%s.%s" % (
+                func.__module__,
+                func.__name__
+            )
+            if args:
+                margs = " with %s " % str(args)
+            else:
+                margs = ""
+            logger.debug("%s: excecuted %s" % (name, margs))
+            ret = func(*args, **kwargs)
+            logger.debug("%s: returns %s" % (
+                name, str(ret) if ret is not None else ''))
+            return ret
+        return decfunc
+    else:
+        return func
+
+
 class numpyEncoder(json.JSONEncoder):
     """ numpy json encoder with list
     """

@@ -261,6 +261,7 @@ if os.getenv("LAVUE_HIDE_VERSIONS") != 'TRUE':
 
 html_context = {
     "docs_versions" : [
+        "v3.6.0",
         "v3.5.4", "v3.5.3",
         "v3.4.1",
         "v3.3.1",
@@ -484,14 +485,17 @@ intersphinx_mapping = {
     'python': ('https://docs.python.org/3/',  None),
     'scipy': ('https://scipy.github.io/devdocs',  None),
     'numpy': ('https://numpy.org/doc/stable/',  None),
-    'pytango': ('http://pytango.readthedocs.io/en/stable',  None),
+    # 'pytango': ('http://pytango.readthedocs.io/en/stable',  None),
+    'pytango': ('https://tango-controls.readthedocs.io/projects/pytango/en/stable',  None),
     'pninexus': ('https://pni-libraries.github.io/python-pninexus/stable',  None),
     'h5py': ('https://docs.h5py.org/en/stable',  None),
     'pyqtgraph': ('https://pyqtgraph.readthedocs.io/en/latest',  None),
     'pyzmq': ('https://pyzmq.readthedocs.io/en/stable',  None),
     # 'requests': ('https://docs.python-requests.org/en/master',  None),
-    'requests': ('https://requests.readthedocs.io/en/master',  None),
-    'pyqt': ('https://doc.qt.io/qtforpython/',  None),
+    #'requests': ('https://requests.readthedocs.io/en/master',  None),
+    'requests': ('https://requests.readthedocs.io/en/latest',  None),
+    # 'pyqt': ('https://doc.qt.io/qtforpython/',  None),
+    'pyqt': ('https://doc.qt.io/qtforpython-6/',  None),
     # 'silx': ('https://www.silx.org/doc/fabio/latest/',  None),
     'pillow': ('https://pillow.readthedocs.io/en/stable/',  None),
     # '': ('https://pyfai.readthedocs.io/en/master/',  None),

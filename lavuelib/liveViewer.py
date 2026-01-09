@@ -78,7 +78,7 @@ from . import filters
 from . import rangeWindowGroupBox
 from . import filtersGroupBox
 from . import helpForm
-from .sardanaUtils import debugmethod, numpyEncoder
+from .sardanaUtils import debugmethod, numpyEncoder, debugfunc
 
 try:
     from . import controllerClient
@@ -137,6 +137,26 @@ def setLoggerLevel(logger, level):
     _logginglevel = level if level in levels else "warning"
     dlevel = levels.get(level, logging.WARNING)
     logger.setLevel(dlevel)
+
+
+@debugfunc
+def processEvents(events="internal"):
+    """ process Qt events
+
+    :param events: processed events i.e. internal, all, none
+    :param events: :obj:`str`
+    """
+    try:
+        if events == "internal":
+            QtCore.QCoreApplication.processEvents(
+                QtCore.QEventLoop.ProcessEventsFlag.ExcludeSocketNotifiers |
+                QtCore.QEventLoop.ProcessEventsFlag.ExcludeUserInputEvents,
+                100)
+        elif events == "all":
+            QtCore.QCoreApplication.processEvents(
+                QtCore.QEventLoop.ProcessEventsFlag.AllEvents, 100)
+    except Exception as e:
+        logger.warning(str(e))
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -1508,7 +1528,7 @@ class LiveViewer(QtWidgets.QDialog):
         if sourcechanged:
             self.__updateSource()
 
-        QtCore.QCoreApplication.processEvents()
+        processEvents(self.__settings.triggeredevents)
         if hasattr(options, "configuration") and \
            options.configuration is not None:
             cnfs = str(options.configuration).split(";")
@@ -1518,7 +1538,7 @@ class LiveViewer(QtWidgets.QDialog):
         if sourcechanged:
             self._setSourceConfiguration()
 
-        QtCore.QCoreApplication.processEvents()
+        processEvents(self.__settings.triggeredevents)
 
         if hasattr(options, "offset") and options.offset is not None:
             offs = str(options.offset).split(";")
@@ -1684,7 +1704,7 @@ class LiveViewer(QtWidgets.QDialog):
                 self.__scalingwg.changeView(True)
             self.__scalingwg.setScaling(str(options.scaling))
 
-        QtCore.QCoreApplication.processEvents()
+        processEvents(self.__settings.triggeredevents)
         if hasattr(options, "gradient") and options.gradient is not None:
             if not self.__settings.showlevels:
                 self.__settings.showslevels = True
@@ -1756,7 +1776,7 @@ class LiveViewer(QtWidgets.QDialog):
             self.__tangoclient = None
             self.setLavueState({"tangodevice": ""})
 
-        QtCore.QCoreApplication.processEvents()
+        processEvents(self.__settings.triggeredevents)
         if hasattr(options, "viewrange") and options.viewrange is not None:
             self.__imagewg.setViewRange(str(options.viewrange))
         self.__sourcewg.updateLayout()
@@ -2615,7 +2635,7 @@ class LiveViewer(QtWidgets.QDialog):
             oldsize = self.__settings.nrsources
             if self.__sourcewg.isConnected():
                 self.__sourcewg.toggleServerConnection()
-                QtCore.QCoreApplication.processEvents()
+                processEvents(self.__settings.triggeredevents)
                 time.sleep(1)
             self.__setNumberOfSources(dialog.nrsources)
             self.__settings.nrsources = dialog.nrsources
@@ -2791,7 +2811,7 @@ class LiveViewer(QtWidgets.QDialog):
         self._setSourceConfiguration()
         self.__settings.nrsources = nrsources
         self.__sourcewg.updateLayout()
-        QtCore.QCoreApplication.processEvents()
+        processEvents(self.__settings.triggeredevents)
 
     # @debugmethod
     def __mergeDetServers(self, detserverdict, detserverlist):
@@ -3499,7 +3519,7 @@ class LiveViewer(QtWidgets.QDialog):
         self.__lasttime = self.__currenttime
 
         self._plot()
-        QtCore.QCoreApplication.processEvents()
+        processEvents(self.__settings.triggeredevents)
 
         if len(self.__dataFetchers) > 1:
             tm = self.__dataFetchers[0].getTimeStamp()
