@@ -163,9 +163,23 @@ logger = logging.getLogger("lavue")
 
 
 @debugfunc
-def processEvents():
-    """ process Qt events """
-    # QtCore.QCoreApplication.processEvents()
+def processEvents(events="internal"):
+    """ process Qt events
+
+    :param events: processed events i.e. internal, all, none
+    :param events: :obj:`str`
+    """
+    try:
+        if events == "internal":
+            QtCore.QCoreApplication.processEvents(
+                QtCore.QEventLoop.ProcessEventsFlag.ExcludeSocketNotifiers |
+                QtCore.QEventLoop.ProcessEventsFlag.ExcludeUserInputEvents,
+                100)
+        elif events == "all":
+            QtCore.QCoreApplication.processEvents(
+                QtCore.QEventLoop.ProcessEventsFlag.AllEvents, 100)
+    except Exception as e:
+        logger.warning(str(e))
 
 
 class Converters(object):
@@ -1208,7 +1222,7 @@ class ParametersToolWidget(ToolBaseWidget):
         self.__attrWatcher.attrValuesSignal.connect(self._showValues)
         self.__attrWatcher.start()
         while not self.__attrWatcher.isWatching():
-            processEvents()
+            processEvents(self.__settings.triggeredevents)
             time.sleep(0.1)
 
     def __updateWidgets(self):
@@ -4748,7 +4762,7 @@ class DiffractogramToolWidget(ToolBaseWidget):
         :param did: diffractogram id
         :type did: :obj:`int`
         """
-        processEvents()
+        processEvents(self.__settings.triggeredevents)
         self.updateRangeTip()
         self.__updateBufferCombobox(did)
         # self.__nrplots = self.__ui.diffSpinBox.value()
@@ -4756,10 +4770,10 @@ class DiffractogramToolWidget(ToolBaseWidget):
         self._plotDiff()
         self.setColors(self.__settings.roiscolors, True)
         # self.__updateregion()
-        QtCore.QCoreApplication.processEvents()
+        processEvents(self.__settings.triggeredevents)
         while len(self.__regions) > self.__nrplots:
             self.regions.pop()
-        QtCore.QCoreApplication.processEvents()
+        processEvents(self.__settings.triggeredevents)
         self._updateRegionsAndPlot()
 
     # @debugmethod
@@ -6589,7 +6603,7 @@ class MaximaToolWidget(ToolBaseWidget):
         if len(maxidxs) and idx < 0:
             idx = 0
 
-        processEvents()
+        processEvents(self.__settings.triggeredevents)
         trans = self._mainwidget.transformations()[0]
         if trans:
             comboitems = ["%s: %s at (%s, %s)" % (i + 1, vl[2], vl[1], vl[0])

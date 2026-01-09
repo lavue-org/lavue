@@ -241,6 +241,9 @@ class Settings(object):
         #: (:obj:`str`) float type for pixel intensity
         self.floattype = "float"
 
+        #: (:obj:`str`) triggered events
+        self.triggeredevents = "internal"
+
         #: (:obj:`str`) json list with overflow color
         self.overflowcolor = "[255, 255, 255]"
 
@@ -422,6 +425,11 @@ class Settings(object):
             self.floattype = qstval.lower()
         else:
             self.floattype = "float"
+        qstval = str(settings.value("Configuration/TriggeredEvents", type=str))
+        if qstval.lower() in ["internal", "all", "none"]:
+            self.triggeredevents = qstval.lower()
+        else:
+            self.triggeredevents = "internal"
         qstval = str(settings.value(
             "Configuration/ShowSubtraction", type=str))
         if qstval.lower() == "false":
@@ -1108,6 +1116,9 @@ class Settings(object):
         settings.setValue(
             "Configuration/FloatType",
             self.floattype)
+        settings.setValue(
+            "Configuration/TriggeredEvents",
+            self.triggeredevents)
         settings.setValue(
             "Configuration/HidraDataPort",
             self.hidraport)
