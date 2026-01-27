@@ -996,9 +996,11 @@ class Settings(object):
             with QtCore.QMutexLocker(self.aimutex):
                 if wvln and detdistance and pixel1 and pixel2:
                     try:
-                        from pyFAI.integrator.azimuthal import AzimuthalIntegrator
+                        from pyFAI.integrator.azimuthal \
+                            import AzimuthalIntegrator
                     except Exception:
-                        from pyFAI.azimuthalIntegrator import AzimuthalIntegrator
+                        from pyFAI.azimuthalIntegrator \
+                            import AzimuthalIntegrator
                     self.ai = AzimuthalIntegrator(
                         dist=detdistance,
                         poni1=self.detponi1,
