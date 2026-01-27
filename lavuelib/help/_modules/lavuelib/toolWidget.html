@@ -1,17 +1,21 @@
 
-<!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<!doctype html>
+
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>lavuelib.toolWidget &#8212; LaVue  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=ffd7f65b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
-    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -20,7 +24,7 @@
     <script src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -382,9 +386,7 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="IntensityToolWidget">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.IntensityToolWidget">[docs]</a>
-<span class="k">class</span> <span class="nc">IntensityToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="IntensityToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.IntensityToolWidget">[docs]</a><span class="k">class</span> <span class="nc">IntensityToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; intensity tool widget</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -489,18 +491,13 @@
                     <span class="n">intensity</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
-<div class="viewcode-block" id="IntensityToolWidget.afterplot">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.IntensityToolWidget.afterplot">[docs]</a>
-    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="IntensityToolWidget.afterplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.IntensityToolWidget.afterplot">[docs]</a>    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; command after plot</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sendresults</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showuserplot</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__sendresults</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="IntensityToolWidget.configure">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.IntensityToolWidget.configure">[docs]</a>
-    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<div class="viewcode-block" id="IntensityToolWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.IntensityToolWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current tool</span>
 
 <span class="sd">        :param configuration: configuration string</span>
@@ -516,10 +513,7 @@
             <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">par</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">for</span> <span class="n">par</span> <span class="ow">in</span> <span class="n">pars</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateTicks</span><span class="p">(</span><span class="n">cnf</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="IntensityToolWidget.configuration">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.IntensityToolWidget.configuration">[docs]</a>
-    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="IntensityToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.IntensityToolWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current tool</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
@@ -533,7 +527,6 @@
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;position&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">]</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">xsc</span><span class="p">,</span> <span class="n">ysc</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
-
 
     <span class="k">def</span> <span class="nf">__sendresults</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; send results to LavueController</span>
@@ -563,10 +556,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">plotUserFunction</span><span class="p">(</span><span class="n">results</span><span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="MotorsToolWidget">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MotorsToolWidget">[docs]</a>
-<span class="k">class</span> <span class="nc">MotorsToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="MotorsToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MotorsToolWidget">[docs]</a><span class="k">class</span> <span class="nc">MotorsToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; motors tool widget</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -639,9 +629,7 @@
         <span class="p">]</span>
 
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="MotorsToolWidget.configure">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MotorsToolWidget.configure">[docs]</a>
-    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<div class="viewcode-block" id="MotorsToolWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MotorsToolWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current tool</span>
 
 <span class="sd">        :param configuration: configuration string</span>
@@ -701,11 +689,8 @@
                     <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">movePushButton</span><span class="o">.</span><span class="n">text</span><span class="p">())</span> <span class="o">==</span> <span class="s2">&quot;Stop&quot;</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">_moveStopMotors</span><span class="p">()</span></div>
 
-
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="MotorsToolWidget.configuration">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MotorsToolWidget.configuration">[docs]</a>
-    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MotorsToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MotorsToolWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current tool</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
@@ -737,16 +722,12 @@
 
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="MotorsToolWidget.activate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MotorsToolWidget.activate">[docs]</a>
-    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MotorsToolWidget.activate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MotorsToolWidget.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xfinal</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__yfinal</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updatePositionMark</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__xfinal</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__yfinal</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
-
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_updateFinal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">):</span>
@@ -1101,7 +1082,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 
-
 <span class="k">class</span> <span class="nc">WD</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Enum with Parameter Widget positions</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1111,9 +1091,7 @@
     <span class="n">button</span> <span class="o">=</span> <span class="mi">3</span>
 
 
-<div class="viewcode-block" id="ParametersToolWidget">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ParametersToolWidget">[docs]</a>
-<span class="k">class</span> <span class="nc">ParametersToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="ParametersToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ParametersToolWidget">[docs]</a><span class="k">class</span> <span class="nc">ParametersToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; motors tool widget</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1">#: (:obj:`str`) tool name</span>
@@ -1179,9 +1157,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__applymapper</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QSignalMapper</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__applymapper</span><span class="o">.</span><span class="n">mapped</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_applypars</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ParametersToolWidget.configure">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ParametersToolWidget.configure">[docs]</a>
-    <span class="nd">@debugmethod</span>
+<div class="viewcode-block" id="ParametersToolWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ParametersToolWidget.configure">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current tool</span>
 
@@ -1198,10 +1174,7 @@
                         <span class="nb">str</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">))</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__updateParams</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="ParametersToolWidget.configuration">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ParametersToolWidget.configuration">[docs]</a>
-    <span class="nd">@debugmethod</span>
+<div class="viewcode-block" id="ParametersToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ParametersToolWidget.configuration">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current tool</span>
 
@@ -1214,7 +1187,6 @@
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
-
 
     <span class="k">def</span> <span class="nf">_applypars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; apply the parameter with the given widget id</span>
@@ -1258,9 +1230,7 @@
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 
-<div class="viewcode-block" id="ParametersToolWidget.activate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ParametersToolWidget.activate">[docs]</a>
-    <span class="nd">@debugmethod</span>
+<div class="viewcode-block" id="ParametersToolWidget.activate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ParametersToolWidget.activate">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1301,7 +1271,6 @@
         <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__attrWatcher</span><span class="o">.</span><span class="n">isWatching</span><span class="p">():</span>
             <span class="n">processEvents</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">triggeredevents</span><span class="p">)</span>
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span></div>
-
 
     <span class="k">def</span> <span class="nf">__updateWidgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; add widgets</span>
@@ -1354,9 +1323,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__widgets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">WD</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">vl</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__widgets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">WD</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">vl</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ParametersToolWidget.deactivate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ParametersToolWidget.deactivate">[docs]</a>
-    <span class="nd">@debugmethod</span>
+<div class="viewcode-block" id="ParametersToolWidget.deactivate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ParametersToolWidget.deactivate">[docs]</a>    <span class="nd">@debugmethod</span>
     <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1372,7 +1339,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__aproxies</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__detparams</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__avalues</span> <span class="o">=</span> <span class="p">[]</span></div>
-
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_showValues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
@@ -1453,10 +1419,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="MeshToolWidget">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MeshToolWidget">[docs]</a>
-<span class="k">class</span> <span class="nc">MeshToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="MeshToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MeshToolWidget">[docs]</a><span class="k">class</span> <span class="nc">MeshToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; mesh tool widget</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) roi info Changed signal</span>
@@ -1530,9 +1493,7 @@
         <span class="p">]</span>
 
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="MeshToolWidget.configure">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MeshToolWidget.configure">[docs]</a>
-    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<div class="viewcode-block" id="MeshToolWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MeshToolWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current tool</span>
 
 <span class="sd">        :param configuration: configuration string</span>
@@ -1592,11 +1553,8 @@
                     <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">scanPushButton</span><span class="o">.</span><span class="n">text</span><span class="p">())</span> <span class="o">==</span> <span class="s2">&quot;Stop&quot;</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">_scanStopMotors</span><span class="p">()</span></div>
 
-
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="MeshToolWidget.configuration">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MeshToolWidget.configuration">[docs]</a>
-    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MeshToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MeshToolWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current tool</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
@@ -1619,27 +1577,18 @@
 
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="MeshToolWidget.activate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MeshToolWidget.activate">[docs]</a>
-    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MeshToolWidget.activate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MeshToolWidget.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">changeMeshRegion</span><span class="p">()</span></div>
-
         <span class="c1"># self._mainwidget.updateROIs(1)</span>
 
-<div class="viewcode-block" id="MeshToolWidget.deactivate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MeshToolWidget.deactivate">[docs]</a>
-    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MeshToolWidget.deactivate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MeshToolWidget.deactivate">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; deactivates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">meshCoordsChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="MeshToolWidget.updateROIDisplayText">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MeshToolWidget.updateROIDisplayText">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+<div class="viewcode-block" id="MeshToolWidget.updateROIDisplayText"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MeshToolWidget.updateROIDisplayText">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">updateROIDisplayText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">currentroi</span><span class="p">,</span> <span class="n">roiVal</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; updates ROI display text</span>
 
@@ -1657,7 +1606,6 @@
         <span class="n">roilabel</span> <span class="o">=</span> <span class="s2">&quot;roi [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">currentroi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">roiInfoChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">roilabel</span><span class="p">,</span> <span class="n">roiVal</span><span class="p">))</span></div>
-
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_scanStopMotors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1885,10 +1833,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="ROIToolWidget">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget">[docs]</a>
-<span class="k">class</span> <span class="nc">ROIToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="ROIToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget">[docs]</a><span class="k">class</span> <span class="nc">ROIToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; roi tool widget</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) apply ROI pressed signal</span>
@@ -1969,9 +1914,7 @@
         <span class="p">]</span>
 
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="ROIToolWidget.configure">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.configure">[docs]</a>
-    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<div class="viewcode-block" id="ROIToolWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current tool</span>
 
 <span class="sd">        :param configuration: configuration string</span>
@@ -2012,11 +1955,8 @@
                 <span class="k">if</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;fetch&quot;</span><span class="p">]:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_emitFetchROIPressed</span><span class="p">()</span></div>
 
-
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="ROIToolWidget.configuration">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.configuration">[docs]</a>
-    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ROIToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current tool</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
@@ -2028,7 +1968,6 @@
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_coords&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roiCoords</span><span class="p">()</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rois_types&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roiTypes</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
-
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_setROIShape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xindex</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -2046,9 +1985,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setCurrentROIType</span><span class="p">(</span><span class="s2">&quot;rectangle&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ROIToolWidget.activate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.activate">[docs]</a>
-    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ROIToolWidget.activate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setROIShape</span><span class="p">()</span>
@@ -2057,7 +1994,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__aliases</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">(</span><span class="s2">&quot;ExpChannelList&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">updateROILineEdit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roilabels</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateCompleter</span><span class="p">()</span></div>
-
         <span class="c1"># self.updateROIButton(</span>
         <span class="c1">#     self.__settings.sardana or bool(self.__settings.analysisdevice))</span>
 
@@ -2083,13 +2019,10 @@
         <span class="n">completer</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QCompleter</span><span class="p">(</span><span class="n">hints</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">labelROILineEdit</span><span class="o">.</span><span class="n">setCompleter</span><span class="p">(</span><span class="n">completer</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ROIToolWidget.deactivate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.deactivate">[docs]</a>
-    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ROIToolWidget.deactivate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.deactivate">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; deactivates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roiCoordsChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
-
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_writeDetectorROIs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2163,9 +2096,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__updateCompleter</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__textlength</span> <span class="o">=</span> <span class="n">currentlength</span>
 
-<div class="viewcode-block" id="ROIToolWidget.updateROILineEdit">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.updateROILineEdit">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+<div class="viewcode-block" id="ROIToolWidget.updateROILineEdit"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.updateROILineEdit">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">updateROILineEdit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; updates ROI line edit text</span>
 
@@ -2177,23 +2108,17 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">labelROILineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_updateApplyButton</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="ROIToolWidget.updateROIButton">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.updateROIButton">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+<div class="viewcode-block" id="ROIToolWidget.updateROIButton"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.updateROIButton">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">updateROIButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enabled</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; enables/disables ROI buttons</span>
 
 <span class="sd">        :param enable: buttons enabled</span>
 <span class="sd">        :type enable: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
-
         <span class="c1"># self.__ui.applyROIPushButton.setEnabled(enabled)</span>
         <span class="c1"># self.__ui.fetchROIPushButton.setEnabled(enabled)</span>
 
-<div class="viewcode-block" id="ROIToolWidget.updateApplyTips">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.updateApplyTips">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<div class="viewcode-block" id="ROIToolWidget.updateApplyTips"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.updateApplyTips">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">updateApplyTips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rid</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; updates apply tips</span>
 
@@ -2209,10 +2134,7 @@
                 <span class="s2">&quot;add ROI aliases to the Door environment &quot;</span>
                 <span class="s2">&quot;as well as to Active MntGrp&quot;</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="ROIToolWidget.updateROIDisplayText">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.updateROIDisplayText">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+<div class="viewcode-block" id="ROIToolWidget.updateROIDisplayText"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.updateROIDisplayText">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">updateROIDisplayText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">currentroi</span><span class="p">,</span> <span class="n">roiVal</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; updates ROI display text</span>
 
@@ -2243,24 +2165,17 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">roiInfoChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">roilabel</span><span class="p">,</span> <span class="n">roiVal</span><span class="p">))</span></div>
 
-
-<div class="viewcode-block" id="ROIToolWidget.setROIsNumber">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.setROIsNumber">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<div class="viewcode-block" id="ROIToolWidget.setROIsNumber"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ROIToolWidget.setROIsNumber">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">setROIsNumber</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rid</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;sets a number of rois</span>
 
 <span class="sd">        :param rid: number of rois</span>
 <span class="sd">        :type rid: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">roiSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">rid</span><span class="p">)</span></div>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">roiSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">rid</span><span class="p">)</span></div></div>
 
 
-
-<div class="viewcode-block" id="LineCutToolWidget">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.LineCutToolWidget">[docs]</a>
-<span class="k">class</span> <span class="nc">LineCutToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="LineCutToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.LineCutToolWidget">[docs]</a><span class="k">class</span> <span class="nc">LineCutToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; line-cut tool widget</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -2331,9 +2246,7 @@
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">clearBottomPlotClicked</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clearplot</span><span class="p">],</span>
         <span class="p">]</span>
 
-<div class="viewcode-block" id="LineCutToolWidget.configure">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.LineCutToolWidget.configure">[docs]</a>
-    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<div class="viewcode-block" id="LineCutToolWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.LineCutToolWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current tool</span>
 
 <span class="sd">        :param configuration: configuration string</span>
@@ -2361,10 +2274,7 @@
                     <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">xcoordsComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="LineCutToolWidget.configuration">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.LineCutToolWidget.configuration">[docs]</a>
-    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LineCutToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.LineCutToolWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current tool</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
@@ -2377,7 +2287,6 @@
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;connect_nan&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">connectnanCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;cuts_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">cutSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
-
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_freezeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2424,17 +2333,12 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateCuts</span><span class="p">(</span><span class="n">cid</span><span class="p">)</span>
 
-<div class="viewcode-block" id="LineCutToolWidget.afterplot">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.LineCutToolWidget.afterplot">[docs]</a>
-    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LineCutToolWidget.afterplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.LineCutToolWidget.afterplot">[docs]</a>    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; command after plot</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_plotCuts</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="LineCutToolWidget.activate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.LineCutToolWidget.activate">[docs]</a>
-    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LineCutToolWidget.activate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.LineCutToolWidget.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">:</span>
@@ -2448,10 +2352,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_plotCuts</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">bottomplotShowMenu</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="LineCutToolWidget.deactivate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.LineCutToolWidget.deactivate">[docs]</a>
-    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LineCutToolWidget.deactivate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.LineCutToolWidget.deactivate">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">bottomplotShowMenu</span><span class="p">()</span>
@@ -2465,7 +2366,6 @@
             <span class="n">freezed</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">removebottomplot</span><span class="p">(</span><span class="n">freezed</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span> <span class="o">=</span> <span class="p">[]</span></div>
-
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_updateAllCuts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
@@ -2706,10 +2606,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="ProjectionToolWidget">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ProjectionToolWidget">[docs]</a>
-<span class="k">class</span> <span class="nc">ProjectionToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="ProjectionToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ProjectionToolWidget">[docs]</a><span class="k">class</span> <span class="nc">ProjectionToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Projections tool widget</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -2777,9 +2674,7 @@
         <span class="p">]</span>
 
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="ProjectionToolWidget.configure">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ProjectionToolWidget.configure">[docs]</a>
-    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<div class="viewcode-block" id="ProjectionToolWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ProjectionToolWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current tool</span>
 
 <span class="sd">        :param configuration: configuration string</span>
@@ -2800,11 +2695,8 @@
             <span class="k">if</span> <span class="s2">&quot;columns&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">columnsliceLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">])</span></div>
 
-
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="ProjectionToolWidget.configuration">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ProjectionToolWidget.configuration">[docs]</a>
-    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ProjectionToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ProjectionToolWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current tool</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
@@ -2816,7 +2708,6 @@
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;rows&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">rowsliceLineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">columnsliceLineEdit</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
-
 
     <span class="k">def</span> <span class="nf">__updateslice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ds</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; create slices from the text</span>
@@ -2941,17 +2832,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__funindex</span> <span class="o">=</span> <span class="n">findex</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_plotCurves</span><span class="p">()</span>
 
-<div class="viewcode-block" id="ProjectionToolWidget.afterplot">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ProjectionToolWidget.afterplot">[docs]</a>
-    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ProjectionToolWidget.afterplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ProjectionToolWidget.afterplot">[docs]</a>    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; command after plot</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_plotCurves</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="ProjectionToolWidget.activate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ProjectionToolWidget.activate">[docs]</a>
-    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ProjectionToolWidget.activate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ProjectionToolWidget.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bottomplot</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2967,10 +2853,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateSlices</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_plotCurves</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="ProjectionToolWidget.deactivate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ProjectionToolWidget.deactivate">[docs]</a>
-    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ProjectionToolWidget.deactivate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.ProjectionToolWidget.deactivate">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bottomplot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -2983,7 +2866,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__rightplot</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">removerightplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__rightplot</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__rightplot</span> <span class="o">=</span> <span class="kc">None</span></div>
-
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_plotCurves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -3142,10 +3024,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="OneDToolWidget">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.OneDToolWidget">[docs]</a>
-<span class="k">class</span> <span class="nc">OneDToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="OneDToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.OneDToolWidget">[docs]</a><span class="k">class</span> <span class="nc">OneDToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; 1d plot tool widget</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -3213,9 +3092,7 @@
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">mouseImagePositionChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_message</span><span class="p">]</span>
         <span class="p">]</span>
 
-<div class="viewcode-block" id="OneDToolWidget.configure">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.OneDToolWidget.configure">[docs]</a>
-    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<div class="viewcode-block" id="OneDToolWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.OneDToolWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current tool</span>
 
 <span class="sd">        :param configuration: configuration string</span>
@@ -3245,12 +3122,9 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">bottomplotStretch</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                     <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
-
                     <span class="c1"># print(str(e))</span>
 
-<div class="viewcode-block" id="OneDToolWidget.configuration">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.OneDToolWidget.configuration">[docs]</a>
-    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OneDToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.OneDToolWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current tool</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
@@ -3267,18 +3141,12 @@
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__labels</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="OneDToolWidget.afterplot">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.OneDToolWidget.afterplot">[docs]</a>
-    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OneDToolWidget.afterplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.OneDToolWidget.afterplot">[docs]</a>    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; command after plot</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_plotCurves</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="OneDToolWidget.beforeplot">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.OneDToolWidget.beforeplot">[docs]</a>
-    <span class="k">def</span> <span class="nf">beforeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">rawarray</span><span class="p">):</span>
+<div class="viewcode-block" id="OneDToolWidget.beforeplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.OneDToolWidget.beforeplot">[docs]</a>    <span class="k">def</span> <span class="nf">beforeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">rawarray</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; command  before plot</span>
 
 <span class="sd">        :param array: 2d image array</span>
@@ -3309,20 +3177,14 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">newrow</span><span class="p">])</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer</span><span class="p">),</span> <span class="n">rawarray</span></div>
 
-
-<div class="viewcode-block" id="OneDToolWidget.activate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.OneDToolWidget.activate">[docs]</a>
-    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OneDToolWidget.activate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.OneDToolWidget.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">sizeLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffersize</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateRows</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">onedshowlegend</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="OneDToolWidget.deactivate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.OneDToolWidget.deactivate">[docs]</a>
-    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OneDToolWidget.deactivate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.OneDToolWidget.deactivate">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">cr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">:</span>
@@ -3332,7 +3194,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nrplots</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">onedshowlegend</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
-
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_setLabels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -3607,10 +3468,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="AngleQToolWidget">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.AngleQToolWidget">[docs]</a>
-<span class="k">class</span> <span class="nc">AngleQToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="AngleQToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.AngleQToolWidget">[docs]</a><span class="k">class</span> <span class="nc">AngleQToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; angle/q tool widget</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -3732,9 +3590,7 @@
         <span class="p">]</span>
 
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="AngleQToolWidget.configure">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.AngleQToolWidget.configure">[docs]</a>
-    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<div class="viewcode-block" id="AngleQToolWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.AngleQToolWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current tool</span>
 
 <span class="sd">        :param configuration: configuration string</span>
@@ -3771,11 +3627,8 @@
                     <span class="c1"># print(str(e))</span>
                     <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
 
-
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="AngleQToolWidget.configuration">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.AngleQToolWidget.configuration">[docs]</a>
-    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AngleQToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.AngleQToolWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current tool</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
@@ -3802,11 +3655,8 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
 
-
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="AngleQToolWidget.activate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.AngleQToolWidget.activate">[docs]</a>
-    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AngleQToolWidget.activate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.AngleQToolWidget.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__oldlocked</span> <span class="o">=</span> <span class="kc">None</span>
@@ -3815,20 +3665,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateCenter</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centerx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centery</span><span class="p">)</span></div>
 
-
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="AngleQToolWidget.deactivate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.AngleQToolWidget.deactivate">[docs]</a>
-    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AngleQToolWidget.deactivate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.AngleQToolWidget.deactivate">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; deactivates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setPlotIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
-
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="AngleQToolWidget.beforeplot">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.AngleQToolWidget.beforeplot">[docs]</a>
-    <span class="k">def</span> <span class="nf">beforeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">rawarray</span><span class="p">):</span>
+<div class="viewcode-block" id="AngleQToolWidget.beforeplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.AngleQToolWidget.beforeplot">[docs]</a>    <span class="k">def</span> <span class="nf">beforeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">rawarray</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; command  before plot</span>
 
 <span class="sd">        :param array: 2d image array</span>
@@ -3844,7 +3688,6 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">tdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__plotPolarImage</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">tdata</span><span class="p">,</span> <span class="n">tdata</span></div>
-
 
     <span class="k">def</span> <span class="nf">__havexychanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radial</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; if xy changed</span>
@@ -4483,9 +4326,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitReplotImage</span><span class="p">()</span>
 
-<div class="viewcode-block" id="AngleQToolWidget.updateGeometryTip">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.AngleQToolWidget.updateGeometryTip">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+<div class="viewcode-block" id="AngleQToolWidget.updateGeometryTip"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.AngleQToolWidget.updateGeometryTip">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateGeometryTip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update geometry tips</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -4500,10 +4341,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolLabel</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span>
             <span class="s2">&quot;coordinate info display for the mouse pointer</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">message</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="AngleQToolWidget.updateRangeTip">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.AngleQToolWidget.updateRangeTip">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+<div class="viewcode-block" id="AngleQToolWidget.updateRangeTip"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.AngleQToolWidget.updateRangeTip">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateRangeTip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update geometry tips</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -4520,14 +4358,10 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__radqstart</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__radqstart</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__radqend</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__radqend</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;qmax&quot;</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__radqsize</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__radqsize</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;max&quot;</span><span class="p">)</span>
-        <span class="p">)</span></div>
-</div>
+        <span class="p">)</span></div></div>
 
 
-
-<div class="viewcode-block" id="DiffractogramToolWidget">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget">[docs]</a>
-<span class="k">class</span> <span class="nc">DiffractogramToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="DiffractogramToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget">[docs]</a><span class="k">class</span> <span class="nc">DiffractogramToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; diffractogram tool widget</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -4681,9 +4515,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_showBuffer</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="DiffractogramToolWidget.configure">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.configure">[docs]</a>
-    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<div class="viewcode-block" id="DiffractogramToolWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current tool</span>
 
 <span class="sd">        :param configuration: configuration string</span>
@@ -4759,11 +4591,8 @@
                 <span class="k">elif</span> <span class="ow">not</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;collect&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__accumulate</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_startStopAccu</span><span class="p">()</span></div>
 
-
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="DiffractogramToolWidget.configuration">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.configuration">[docs]</a>
-    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DiffractogramToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current tool</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
@@ -4794,7 +4623,6 @@
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;main_plot&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">mainplotComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
-
 
     <span class="c1"># @debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
@@ -4868,9 +4696,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">()</span>
 
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="DiffractogramToolWidget.setColors">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.setColors">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+<div class="viewcode-block" id="DiffractogramToolWidget.setColors"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.setColors">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">setColors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets colors</span>
 
@@ -4901,11 +4727,8 @@
                     <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defpen</span>
                 <span class="n">cr</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">_pg</span><span class="o">.</span><span class="n">mkPen</span><span class="p">(</span><span class="n">clr</span><span class="p">))</span></div>
 
-
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="DiffractogramToolWidget.runProgress">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.runProgress">[docs]</a>
-    <span class="k">def</span> <span class="nf">runProgress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commands</span><span class="p">,</span> <span class="n">onclose</span><span class="o">=</span><span class="s2">&quot;_closeReset&quot;</span><span class="p">,</span>
+<div class="viewcode-block" id="DiffractogramToolWidget.runProgress"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.runProgress">[docs]</a>    <span class="k">def</span> <span class="nf">runProgress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commands</span><span class="p">,</span> <span class="n">onclose</span><span class="o">=</span><span class="s2">&quot;_closeReset&quot;</span><span class="p">,</span>
                     <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Updating diffractogram ranges ...&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; starts progress thread with the given commands</span>
 
@@ -4936,11 +4759,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__commandthread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__progress</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
-
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="DiffractogramToolWidget.waitForThread">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.waitForThread">[docs]</a>
-    <span class="k">def</span> <span class="nf">waitForThread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DiffractogramToolWidget.waitForThread"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.waitForThread">[docs]</a>    <span class="k">def</span> <span class="nf">waitForThread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; waits for running thread</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;waiting for Thread&quot;</span><span class="p">)</span>
@@ -4950,7 +4770,6 @@
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;waiting for Thread ENDED&quot;</span><span class="p">)</span></div>
-
 
     <span class="c1"># @debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
@@ -5027,17 +4846,12 @@
         <span class="c1">#     changed = True</span>
 
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="DiffractogramToolWidget.afterplot">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.afterplot">[docs]</a>
-    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DiffractogramToolWidget.afterplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.afterplot">[docs]</a>    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; command after plot</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
-
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="DiffractogramToolWidget.activate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.activate">[docs]</a>
-    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DiffractogramToolWidget.activate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__oldlocked</span> <span class="o">=</span> <span class="kc">None</span>
@@ -5066,7 +4880,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">mainplotComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setPlotIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
-
     <span class="c1"># @debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_nextPlotDiff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -5086,9 +4899,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">()</span>
 
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="DiffractogramToolWidget.deactivate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.deactivate">[docs]</a>
-    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DiffractogramToolWidget.deactivate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.deactivate">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; deactivates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">waitForThread</span><span class="p">()</span>
@@ -5103,7 +4914,6 @@
             <span class="n">freezed</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">removebottomplot</span><span class="p">(</span><span class="n">freezed</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span> <span class="o">=</span> <span class="p">[]</span></div>
-
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">_plotDiffWithBuffering</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -5151,9 +4961,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__resetscale</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="DiffractogramToolWidget.beforeplot">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.beforeplot">[docs]</a>
-    <span class="k">def</span> <span class="nf">beforeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">rawarray</span><span class="p">):</span>
+<div class="viewcode-block" id="DiffractogramToolWidget.beforeplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.beforeplot">[docs]</a>    <span class="k">def</span> <span class="nf">beforeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">rawarray</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; command  before plot</span>
 
 <span class="sd">        :param array: 2d image array</span>
@@ -5175,7 +4983,6 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__resetscale</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="c1"># np.empty(shape=(int(self.__settings.diffnpt), 0))</span>
             <span class="k">return</span> <span class="p">(</span><span class="n">diffdata</span><span class="p">,</span> <span class="n">diffdata</span><span class="p">)</span></div>
-
 
     <span class="c1"># @debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
@@ -5451,16 +5258,13 @@
         <span class="k">return</span> <span class="n">tips</span>
 
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="DiffractogramToolWidget.updateGeometryTip">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.updateGeometryTip">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+<div class="viewcode-block" id="DiffractogramToolWidget.updateGeometryTip"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.updateGeometryTip">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateGeometryTip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update geometry tips</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tipmessage</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">calibrationPushButton</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span>
             <span class="s2">&quot;Input physical parameters</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">message</span><span class="p">)</span></div>
-
 
     <span class="c1"># @debugmethod</span>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
@@ -5961,9 +5765,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">runProgress</span><span class="p">([</span><span class="s2">&quot;findregions&quot;</span><span class="p">],</span> <span class="s2">&quot;_updateRegionsAndPlot&quot;</span><span class="p">)</span>
 
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="DiffractogramToolWidget.findregions">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.findregions">[docs]</a>
-    <span class="k">def</span> <span class="nf">findregions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DiffractogramToolWidget.findregions"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.findregions">[docs]</a>    <span class="k">def</span> <span class="nf">findregions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; find regions lists</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nrplots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">diffSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
@@ -5996,7 +5798,6 @@
                         <span class="c1"># print(str(e2))</span>
                         <span class="c1"># regions.append([])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__regions</span> <span class="o">=</span> <span class="n">regions</span></div>
-
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">_updateRegionsAndPlot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -6605,9 +6406,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitReplotImage</span><span class="p">()</span>
 
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="DiffractogramToolWidget.updateRangeTip">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.updateRangeTip">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+<div class="viewcode-block" id="DiffractogramToolWidget.updateRangeTip"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.DiffractogramToolWidget.updateRangeTip">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateRangeTip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update geometry tips</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -6636,14 +6435,10 @@
                     <span class="k">else</span> <span class="s2">&quot;360&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nrplots</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">rangePushButton</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">rangePushButton</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div></div>
 
 
-
-<div class="viewcode-block" id="MaximaToolWidget">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MaximaToolWidget">[docs]</a>
-<span class="k">class</span> <span class="nc">MaximaToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="MaximaToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MaximaToolWidget">[docs]</a><span class="k">class</span> <span class="nc">MaximaToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; maxima tool widget</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -6723,9 +6518,7 @@
         <span class="p">]</span>
 
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="MaximaToolWidget.configure">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MaximaToolWidget.configure">[docs]</a>
-    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<div class="viewcode-block" id="MaximaToolWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MaximaToolWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current tool</span>
 
 <span class="sd">        :param configuration: configuration string</span>
@@ -6762,11 +6555,8 @@
                     <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
                     <span class="n">cmx</span> <span class="o">=</span> <span class="mi">0</span></div>
 
-
     <span class="c1"># @debugmethod</span>
-<div class="viewcode-block" id="MaximaToolWidget.configuration">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MaximaToolWidget.configuration">[docs]</a>
-    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MaximaToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MaximaToolWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current tool</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
@@ -6787,34 +6577,22 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="MaximaToolWidget.activate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MaximaToolWidget.activate">[docs]</a>
-    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MaximaToolWidget.activate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MaximaToolWidget.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">updateGeometryTip</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateCenter</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centerx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centery</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="MaximaToolWidget.deactivate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MaximaToolWidget.deactivate">[docs]</a>
-    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MaximaToolWidget.deactivate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MaximaToolWidget.deactivate">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; deactivates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
-
-<div class="viewcode-block" id="MaximaToolWidget.afterplot">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MaximaToolWidget.afterplot">[docs]</a>
-    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MaximaToolWidget.afterplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MaximaToolWidget.afterplot">[docs]</a>    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; command after plot</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
-
-<div class="viewcode-block" id="MaximaToolWidget.beforeplot">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MaximaToolWidget.beforeplot">[docs]</a>
-    <span class="k">def</span> <span class="nf">beforeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">rawarray</span><span class="p">):</span>
+<div class="viewcode-block" id="MaximaToolWidget.beforeplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MaximaToolWidget.beforeplot">[docs]</a>    <span class="k">def</span> <span class="nf">beforeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">rawarray</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; command  before plot</span>
 
 <span class="sd">        :param array: 2d image array</span>
@@ -6856,7 +6634,6 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__updatemaxima</span><span class="p">([])</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setMaximaPos</span><span class="p">([])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__reploting</span> <span class="o">=</span> <span class="kc">False</span></div>
-
 
     <span class="c1"># @debugmethod</span>
     <span class="k">def</span> <span class="nf">__updatemaxima</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxidxs</span><span class="p">):</span>
@@ -7155,9 +6932,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__gspaceindex</span> <span class="o">=</span> <span class="n">gindex</span>
 
-<div class="viewcode-block" id="MaximaToolWidget.updateGeometryTip">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MaximaToolWidget.updateGeometryTip">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+<div class="viewcode-block" id="MaximaToolWidget.updateGeometryTip"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.MaximaToolWidget.updateGeometryTip">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateGeometryTip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update geometry tips</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -7168,14 +6943,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">angleqPushButton</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span>
             <span class="s2">&quot;Input physical parameters</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">message</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">angleqComboBox</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span>
-            <span class="s2">&quot;Select the display space</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">message</span><span class="p">)</span></div>
-</div>
+            <span class="s2">&quot;Select the display space</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">message</span><span class="p">)</span></div></div>
 
 
-
-<div class="viewcode-block" id="QROIProjToolWidget">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget">[docs]</a>
-<span class="k">class</span> <span class="nc">QROIProjToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="QROIProjToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget">[docs]</a><span class="k">class</span> <span class="nc">QROIProjToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; angle/q +roi + projections tool widget</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -7294,9 +7065,7 @@
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scalesChanged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updateColumns</span><span class="p">],</span>
         <span class="p">]</span>
 
-<div class="viewcode-block" id="QROIProjToolWidget.configure">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.configure">[docs]</a>
-    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<div class="viewcode-block" id="QROIProjToolWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current tool</span>
 
 <span class="sd">        :param configuration: configuration string</span>
@@ -7363,10 +7132,7 @@
             <span class="k">if</span> <span class="s2">&quot;columns&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">columnsliceLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">])</span></div>
 
-
-<div class="viewcode-block" id="QROIProjToolWidget.configuration">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.configuration">[docs]</a>
-    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="QROIProjToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current tool</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
@@ -7393,7 +7159,6 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
 
-
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_setROIShape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xindex</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets roi shape index</span>
@@ -7410,9 +7175,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setCurrentROIType</span><span class="p">(</span><span class="s2">&quot;rectangle&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="QROIProjToolWidget.activate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.activate">[docs]</a>
-    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="QROIProjToolWidget.activate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">updateGeometryTip</span><span class="p">()</span>
@@ -7440,10 +7203,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_updateSlices</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_plotCurves</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="QROIProjToolWidget.deactivate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.deactivate">[docs]</a>
-    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="QROIProjToolWidget.deactivate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.deactivate">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; deactivates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">roiCoordsChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
@@ -7458,7 +7218,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__rightplot</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">removerightplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__rightplot</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__rightplot</span> <span class="o">=</span> <span class="kc">None</span></div>
-
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_writeDetectorROIs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -7590,13 +7349,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__funindex</span> <span class="o">=</span> <span class="n">findex</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_plotCurves</span><span class="p">()</span>
 
-<div class="viewcode-block" id="QROIProjToolWidget.afterplot">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.afterplot">[docs]</a>
-    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="QROIProjToolWidget.afterplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.afterplot">[docs]</a>    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; command after plot</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_plotCurves</span><span class="p">()</span></div>
-
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_plotCurves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -7834,9 +7590,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__updateCompleter</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__textlength</span> <span class="o">=</span> <span class="n">currentlength</span>
 
-<div class="viewcode-block" id="QROIProjToolWidget.updateROILineEdit">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.updateROILineEdit">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+<div class="viewcode-block" id="QROIProjToolWidget.updateROILineEdit"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.updateROILineEdit">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">updateROILineEdit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; updates ROI line edit text</span>
 
@@ -7847,23 +7601,17 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">labelROILineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_updateApplyButton</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="QROIProjToolWidget.updateROIButton">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.updateROIButton">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+<div class="viewcode-block" id="QROIProjToolWidget.updateROIButton"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.updateROIButton">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">updateROIButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enabled</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; enables/disables ROI buttons</span>
 
 <span class="sd">        :param enable: buttons enabled</span>
 <span class="sd">        :type enable: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
-
         <span class="c1"># self.__ui.applyROIPushButton.setEnabled(enabled)</span>
         <span class="c1"># self.__ui.fetchROIPushButton.setEnabled(enabled)</span>
 
-<div class="viewcode-block" id="QROIProjToolWidget.updateApplyTips">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.updateApplyTips">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<div class="viewcode-block" id="QROIProjToolWidget.updateApplyTips"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.updateApplyTips">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">updateApplyTips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rid</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; updates apply tips</span>
 
@@ -7879,10 +7627,7 @@
                 <span class="s2">&quot;add ROI aliases to the Door environment &quot;</span>
                 <span class="s2">&quot;as well as to Active MntGrp&quot;</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="QROIProjToolWidget.updateROIDisplayText">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.updateROIDisplayText">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+<div class="viewcode-block" id="QROIProjToolWidget.updateROIDisplayText"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.updateROIDisplayText">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">updateROIDisplayText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">currentroi</span><span class="p">,</span> <span class="n">roiVal</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; updates ROI display text</span>
 
@@ -7914,10 +7659,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">roiinfoLineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
                 <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">roilabel</span><span class="p">,</span> <span class="n">roiVal</span><span class="p">))</span></div>
 
-
-<div class="viewcode-block" id="QROIProjToolWidget.setROIsNumber">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.setROIsNumber">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<div class="viewcode-block" id="QROIProjToolWidget.setROIsNumber"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.setROIsNumber">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">setROIsNumber</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rid</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;sets a number of rois</span>
 
@@ -7925,7 +7667,6 @@
 <span class="sd">        :type rid: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">roiSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">rid</span><span class="p">)</span></div>
-
         <span class="c1"># self._mainwidget.writeDetectorROIsAttribute()</span>
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
@@ -8150,9 +7891,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__gspaceindex</span> <span class="o">=</span> <span class="n">gindex</span>
 
-<div class="viewcode-block" id="QROIProjToolWidget.updateGeometryTip">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.updateGeometryTip">[docs]</a>
-    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+<div class="viewcode-block" id="QROIProjToolWidget.updateGeometryTip"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.QROIProjToolWidget.updateGeometryTip">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">updateGeometryTip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; update geometry tips</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -8165,14 +7904,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">angleqComboBox</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span>
             <span class="s2">&quot;Select the display space</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">message</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolLabel</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span>
-            <span class="s2">&quot;coordinate info display for the mouse pointer</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">message</span><span class="p">)</span></div>
-</div>
+            <span class="s2">&quot;coordinate info display for the mouse pointer</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">message</span><span class="p">)</span></div></div>
 
 
-
-<div class="viewcode-block" id="CenterCheckToolWidget">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget">[docs]</a>
-<span class="k">class</span> <span class="nc">CenterCheckToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="CenterCheckToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget">[docs]</a><span class="k">class</span> <span class="nc">CenterCheckToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; line-cut tool widget</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -8271,9 +8006,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centerx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centery</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">()</span>
 
-<div class="viewcode-block" id="CenterCheckToolWidget.configure">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget.configure">[docs]</a>
-    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<div class="viewcode-block" id="CenterCheckToolWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current tool</span>
 
 <span class="sd">        :param configuration: configuration string</span>
@@ -8305,10 +8038,7 @@
                     <span class="c1"># print(str(e))</span>
                     <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
 
-
-<div class="viewcode-block" id="CenterCheckToolWidget.configuration">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget.configuration">[docs]</a>
-    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CenterCheckToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current tool</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
@@ -8323,7 +8053,6 @@
             <span class="s2">&quot;centery&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">centery</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
-
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_freezeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -8426,17 +8155,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">updateCuts</span><span class="p">(</span><span class="n">nrcut</span><span class="p">,</span> <span class="n">ncoords</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_plotCuts</span><span class="p">()</span>
 
-<div class="viewcode-block" id="CenterCheckToolWidget.afterplot">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget.afterplot">[docs]</a>
-    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CenterCheckToolWidget.afterplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget.afterplot">[docs]</a>    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; command after plot</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_plotCuts</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="CenterCheckToolWidget.activate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget.activate">[docs]</a>
-    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CenterCheckToolWidget.activate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__curves</span><span class="p">:</span>
@@ -8453,10 +8177,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_plotCuts</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">bottomplotShowMenu</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="CenterCheckToolWidget.deactivate">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget.deactivate">[docs]</a>
-    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CenterCheckToolWidget.deactivate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.CenterCheckToolWidget.deactivate">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; activates tool widget</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">bottomplotShowMenu</span><span class="p">()</span>
@@ -8470,7 +8191,6 @@
             <span class="n">freezed</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">removebottomplot</span><span class="p">(</span><span class="n">freezed</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__freezed</span> <span class="o">=</span> <span class="p">[]</span></div>
-
 
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_updateAllCuts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
@@ -8722,10 +8442,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="TwoDFitToolWidget">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.TwoDFitToolWidget">[docs]</a>
-<span class="k">class</span> <span class="nc">TwoDFitToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="TwoDFitToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.TwoDFitToolWidget">[docs]</a><span class="k">class</span> <span class="nc">TwoDFitToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; two dimension fit tool widget</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -8850,9 +8567,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_fit</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">()</span>
 
-<div class="viewcode-block" id="TwoDFitToolWidget.beforeplot">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.TwoDFitToolWidget.beforeplot">[docs]</a>
-    <span class="k">def</span> <span class="nf">beforeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">rawarray</span><span class="p">):</span>
+<div class="viewcode-block" id="TwoDFitToolWidget.beforeplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.TwoDFitToolWidget.beforeplot">[docs]</a>    <span class="k">def</span> <span class="nf">beforeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">rawarray</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; command  before plot</span>
 
 <span class="sd">        :param array: 2d image array</span>
@@ -8872,7 +8587,6 @@
                                <span class="s2">&quot;with respect the refresh time. &quot;</span>
                                <span class="s2">&quot;Initial parameters or fitting function &quot;</span>
                                <span class="s2">&quot;do not match to the image data&quot;</span><span class="p">)</span></div>
-
 
     <span class="k">def</span> <span class="nf">_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; command  before plot</span>
@@ -9020,16 +8734,11 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">sendresults</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">showuserplot</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__sendresults</span><span class="p">()</span>
 
-<div class="viewcode-block" id="TwoDFitToolWidget.afterplot">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.TwoDFitToolWidget.afterplot">[docs]</a>
-    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TwoDFitToolWidget.afterplot"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.TwoDFitToolWidget.afterplot">[docs]</a>    <span class="k">def</span> <span class="nf">afterplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; command after plot</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
-
-<div class="viewcode-block" id="TwoDFitToolWidget.configure">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.TwoDFitToolWidget.configure">[docs]</a>
-    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<div class="viewcode-block" id="TwoDFitToolWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.TwoDFitToolWidget.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set configuration for the current tool</span>
 
 <span class="sd">        :param configuration: configuration string</span>
@@ -9059,10 +8768,7 @@
                     <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">nextPushButton</span><span class="o">.</span><span class="n">text</span><span class="p">())</span> <span class="o">==</span> <span class="s2">&quot;Next&quot;</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">_nextParams</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="TwoDFitToolWidget.configuration">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.TwoDFitToolWidget.configuration">[docs]</a>
-    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TwoDFitToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.TwoDFitToolWidget.configuration">[docs]</a>    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides configuration for the current tool</span>
 
 <span class="sd">        :returns configuration: configuration string</span>
@@ -9073,7 +8779,6 @@
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;parameters_mode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parametersmode</span>
         <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;fit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fitparams</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
-
 
     <span class="k">def</span> <span class="nf">__sendresults</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; send results to LavueController</span>
@@ -9108,7 +8813,6 @@
             <span class="n">xindex</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__modestexts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">xindex</span> <span class="k">else</span> <span class="mi">0</span><span class="p">]</span></div>
 
 
-
 <span class="c1">#: ( :obj:`dict` &lt; :obj:`str`, any &gt; ) tool widget properties</span>
 <span class="n">twproperties</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">nm</span> <span class="ow">in</span> <span class="n">__all__</span><span class="p">:</span>
@@ -9127,9 +8831,9 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -9137,13 +8841,13 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -9158,10 +8862,10 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>
