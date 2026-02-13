@@ -166,11 +166,11 @@ logger = logging.getLogger("lavue")
 def processEvents(events="internal"):
     """ process Qt events
 
-    :param events: processed events i.e. internal, all, none
+    :param events: processed events i.e. internal, some, all, none
     :param events: :obj:`str`
     """
     try:
-        if events == "internal":
+        if events == "some":
             QtCore.QCoreApplication.processEvents(
                 QtCore.QEventLoop.ProcessEventsFlag.ExcludeSocketNotifiers |
                 QtCore.QEventLoop.ProcessEventsFlag.ExcludeUserInputEvents,

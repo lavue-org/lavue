@@ -426,7 +426,7 @@ class Settings(object):
         else:
             self.floattype = "float"
         qstval = str(settings.value("Configuration/TriggeredEvents", type=str))
-        if qstval.lower() in ["internal", "all", "none"]:
+        if qstval.lower() in ["internal", "some", "all", "none"]:
             self.triggeredevents = qstval.lower()
         else:
             self.triggeredevents = "internal"

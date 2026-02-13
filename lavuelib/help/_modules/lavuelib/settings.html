@@ -473,7 +473,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">floattype</span> <span class="o">=</span> <span class="s2">&quot;float&quot;</span>
         <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/TriggeredEvents&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;internal&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;internal&quot;</span><span class="p">,</span> <span class="s2">&quot;some&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">triggeredevents</span> <span class="o">=</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">triggeredevents</span> <span class="o">=</span> <span class="s2">&quot;internal&quot;</span>
@@ -1043,9 +1043,11 @@
             <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aimutex</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">wvln</span> <span class="ow">and</span> <span class="n">detdistance</span> <span class="ow">and</span> <span class="n">pixel1</span> <span class="ow">and</span> <span class="n">pixel2</span><span class="p">:</span>
                     <span class="k">try</span><span class="p">:</span>
-                        <span class="kn">from</span> <span class="nn">pyFAI.integrator.azimuthal</span> <span class="kn">import</span> <span class="n">AzimuthalIntegrator</span>
+                        <span class="kn">from</span> <span class="nn">pyFAI.integrator.azimuthal</span> \
+                            <span class="kn">import</span> <span class="nn">AzimuthalIntegrator</span>
                     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                        <span class="kn">from</span> <span class="nn">pyFAI.azimuthalIntegrator</span> <span class="kn">import</span> <span class="n">AzimuthalIntegrator</span>
+                        <span class="kn">from</span> <span class="nn">pyFAI.azimuthalIntegrator</span> \
+                            <span class="kn">import</span> <span class="nn">AzimuthalIntegrator</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">ai</span> <span class="o">=</span> <span class="n">AzimuthalIntegrator</span><span class="p">(</span>
                         <span class="n">dist</span><span class="o">=</span><span class="n">detdistance</span><span class="p">,</span>
                         <span class="n">poni1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">detponi1</span><span class="p">,</span>
