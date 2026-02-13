@@ -190,11 +190,11 @@
 <span class="k">def</span> <span class="nf">processEvents</span><span class="p">(</span><span class="n">events</span><span class="o">=</span><span class="s2">&quot;internal&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; process Qt events</span>
 
-<span class="sd">    :param events: processed events i.e. internal, all, none</span>
+<span class="sd">    :param events: processed events i.e. internal, some, all, none</span>
 <span class="sd">    :param events: :obj:`str`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">events</span> <span class="o">==</span> <span class="s2">&quot;internal&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">events</span> <span class="o">==</span> <span class="s2">&quot;some&quot;</span><span class="p">:</span>
             <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">processEvents</span><span class="p">(</span>
                 <span class="n">QtCore</span><span class="o">.</span><span class="n">QEventLoop</span><span class="o">.</span><span class="n">ProcessEventsFlag</span><span class="o">.</span><span class="n">ExcludeSocketNotifiers</span> <span class="o">|</span>
                 <span class="n">QtCore</span><span class="o">.</span><span class="n">QEventLoop</span><span class="o">.</span><span class="n">ProcessEventsFlag</span><span class="o">.</span><span class="n">ExcludeUserInputEvents</span><span class="p">,</span>
