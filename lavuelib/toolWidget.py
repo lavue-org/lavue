@@ -140,6 +140,10 @@ _centercheckformclass, _centercheckbaseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  "ui", "CenterCheckToolWidget.ui"))
 
+_limaccdsformclass, _limaccdsbaseclass = uic.loadUiType(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                 "ui", "LimaCCDsToolWidget.ui"))
+
 
 __all__ = [
     'IntensityToolWidget',
@@ -156,6 +160,7 @@ __all__ = [
     'CenterCheckToolWidget',
     'TwoDFitToolWidget',
     'QROIProjToolWidget',
+    'LimaCCDsToolWidget',
     'twproperties',
 ]
 
@@ -8764,6 +8769,679 @@ class TwoDFitToolWidget(ToolBaseWidget):
             xindex = self.__ui.modeComboBox.currentIndex()
         self.__parametersmode = self.__modestexts[
             xindex if len(self.__modestexts) > xindex else 0]
+
+
+class LimaCCDsToolWidget(ToolBaseWidget):
+    """LimaCCDs video control tool widget"""
+
+    #: (:obj:`str`) tool name
+    name = "LimaCCDs"
+    #: (:obj:`str`) tool name alias
+    alias = "limaccds"
+    #: (:obj:`tuple` <:obj:`str`>) capitalized required packages
+    requires = ("TANGO",)
+
+    #: (:obj:`list` <:obj:`str`>) scalar video attributes
+    _scalarattrs = [
+        "video_exposure",
+        "video_gain",
+    ]
+
+    #: (:obj:`str`) ROI spectrum attribute name
+    _roiattr = "video_roi"
+
+    #: (:obj:`list` <:obj:`str`>) short ROI field labels
+    _roilabels = ["SX:", "SY:", "LX:", "LY:"]
+
+    #: (:obj:`int`) total grid column count
+    _gridcols = 14
+
+    def __init__(self, parent=None):
+        """constructor
+
+        :param parent: parent object
+        :type parent: :class:`pyqtgraph.QtCore.QObject`
+        """
+        ToolBaseWidget.__init__(self, parent)
+
+        #: (:class:`lavuelib.settings.Settings`)
+        #:     configuration settings
+        self.__settings = self._mainwidget.settings()
+
+        #: (:obj:`str`) LimaCCDs device name
+        self.__devicename = ""
+        #: (:obj:`bool`) video_live is running
+        self.__videolive = False
+        #: (:class:`tango.DeviceProxy`)
+        #:     LimaCCDs device proxy
+        self.__deviceproxy = None
+        #: (:obj:`list` <:obj:`str`>)
+        #:     supported scalar attribute names
+        self.__supportedscalars = []
+        #: (:obj:`bool`) video_roi is supported
+        self.__roienabled = False
+        #: (:obj:`list` <:class:`tango.AttributeProxy`>)
+        #:     attribute proxies for scalars
+        self.__aproxies = []
+        #: (:class:`tango.AttributeProxy`)
+        #:     attribute proxy for video_roi
+        self.__roiaproxy = None
+        #: (:class:`lavuelib.motorWatchThread.\
+        #:     AttributeWatchThread`)
+        #:     attribute watcher
+        self.__attrWatcher = None
+        #: (:obj:`list` <:obj:`list`
+        #:     <:class:`pyqtgraph.QtCore.QObject`> >)
+        #:     parameter widgets (start btn + scalar rows)
+        self.__widgets = []
+        #: (:obj:`list` <:obj:`list`
+        #:     <:class:`pyqtgraph.QtCore.QObject`> >)
+        #:     ROI widgets [label, readle, writele] x4
+        self.__roiwidgets = []
+        #: (:class:`pyqtgraph.QtWidgets.QPushButton`)
+        #:     apply ROI button
+        self.__roiapplybtn = None
+        #: (:class:`pyqtgraph.QtWidgets.QPushButton`)
+        #:     restore ROI button
+        self.__roirestorebtn = None
+
+        #: (:class:`Ui_LimaCCDsToolWidget')
+        #:     ui_toolwidget object from qtdesigner
+        self.__ui = _limaccdsformclass()
+        self.__ui.setupUi(self)
+
+        self.parameters.infolineedit = ""
+        self.parameters.infotips = \
+            "coordinate info display" \
+            " for the mouse pointer"
+
+        #: (:obj:`list` < [:class:`pyqtgraph.\
+        #:     QtCore.pyqtSignal`, :obj:`str`] >)
+        #: list of [signal, slot] object to connect
+        self.signal2slot = [
+            [self.__ui.setupPushButton.clicked,
+             self._setDevice],
+            [self._mainwidget.mouseImagePositionChanged,
+             self._message],
+        ]
+
+    @debugmethod
+    def configure(self, configuration):
+        """set configuration for the current tool
+
+        :param configuration: configuration string
+        :type configuration: :obj:`str`
+        """
+        if configuration:
+            cnf = json.loads(configuration)
+            if "limaccds_device" in cnf.keys():
+                devname = cnf["limaccds_device"]
+                if devname \
+                        and devname != self.__devicename:
+                    self.__devicename = str(devname)
+                    self.__updateDevice()
+
+    @debugmethod
+    def configuration(self):
+        """provides configuration for the current tool
+
+        :returns configuration: configuration string
+        :rtype configuration: :obj:`str`
+        """
+        cnf = {}
+        cnf["limaccds_device"] = self.__devicename
+        return json.dumps(cnf, cls=numpyEncoder)
+
+    def _extractDeviceName(self):
+        """extract device name from source config
+
+        :returns: device name or empty string
+        :rtype: :obj:`str`
+        """
+        srcconf = \
+            self._mainwidget.sourceConfiguration()
+        for cfg in srcconf:
+            cfg = str(cfg).strip()
+            parts = cfg.rsplit("/", 1)
+            if len(parts) == 2:
+                devname = parts[0]
+                return devname
+        return ""
+
+    def _checkCompat(self):
+        """check device compatibility
+
+        :returns: True if the device is compatible
+        :rtype: :obj:`bool`
+        """
+        allowed_modes = ["Y8", "Y16"]
+        name = self._extractDeviceName()
+        try:
+            dp = tango.DeviceProxy(name)
+            mode = dp.video_mode
+            if mode in allowed_modes:
+                return True
+        except Exception as e:
+            logger.warning(
+                "Could not check compatibility: %s"
+                % str(e))
+        return False
+
+    def __setWidgetsEnabled(self, enabled):
+        """enable or disable all dynamic widgets
+
+        :param enabled: enable state
+        :type enabled: :obj:`bool`
+        """
+        for wds in self.__widgets:
+            for w in wds:
+                w.setEnabled(enabled)
+        for wds in self.__roiwidgets:
+            for w in wds:
+                w.setEnabled(enabled)
+        if self.__roiapplybtn is not None:
+            self.__roiapplybtn.setEnabled(enabled)
+        if self.__roirestorebtn is not None:
+            self.__roirestorebtn.setEnabled(enabled)
+        n = "" if not enabled else self.__devicename
+        self.__ui.deviceLineEdit.setText(n)
+
+    def __probeAttributes(self):
+        """probe which video attributes exist
+
+        :returns: tuple of (scalar names, roi enabled)
+        :rtype: :obj:`tuple` <:obj:`list` <:obj:`str`>,
+            :obj:`bool`>
+        """
+        scalars = []
+        roien = False
+        if self.__deviceproxy is None:
+            return scalars, roien
+        try:
+            attrlist = [
+                a.name.lower()
+                for a in
+                self.__deviceproxy.attribute_list_query()
+            ]
+        except Exception as e:
+            logger.warning(str(e))
+            attrlist = []
+        for attr in self._scalarattrs:
+            if attr.lower() in attrlist:
+                scalars.append(attr)
+        if self._roiattr.lower() in attrlist:
+            roien = True
+        return scalars, roien
+
+    def __createWidgets(self):
+        """create dynamic parameter widgets"""
+        layout = self.__ui.parGridLayout
+        gc = self._gridcols
+        row = 0
+
+        # Start/Stop button
+        startbtn = QtWidgets.QPushButton(
+            "Start", parent=self._mainwidget)
+        startbtn.setToolTip(
+            "Start/Stop video live mode")
+        startbtn.clicked.connect(
+            self._toggleVideoLive)
+        layout.addWidget(startbtn, row, 0, 1, gc)
+        self.__widgets.append([startbtn])
+        row += 1
+
+        # scalar parameter rows
+        for attr in self.__supportedscalars:
+            label = QtWidgets.QLabel(
+                "%s:" % attr,
+                parent=self._mainwidget)
+            readle = QtWidgets.QLineEdit(
+                parent=self._mainwidget)
+            readle.setReadOnly(True)
+            readle.setStyleSheet(
+                "color: black;"
+                " background-color: #90EE90;")
+            readle.setAlignment(
+                QtCore.Qt.AlignCenter)
+            writele = QtWidgets.QLineEdit(
+                parent=self._mainwidget)
+            writele.setAlignment(
+                QtCore.Qt.AlignRight)
+            applybtn = QtWidgets.QPushButton(
+                "Apply", parent=self._mainwidget)
+            applybtn.setToolTip(
+                "Write the new value of %s" % attr)
+            tip = "%s/%s" % (
+                self.__devicename, attr)
+            label.setToolTip(tip)
+            readle.setToolTip(tip)
+            writele.setToolTip(tip)
+            layout.addWidget(label, row, 0)
+            layout.addWidget(readle, row, 1)
+            layout.addWidget(writele, row, 2)
+            layout.addWidget(
+                applybtn, row, 3, 1, gc - 3)
+            self.__widgets.append(
+                [label, readle, writele, applybtn])
+            row += 1
+
+        # connect apply buttons
+        for i in range(len(self.__supportedscalars)):
+            wds = self.__widgets[i + 1]
+            wds[3].clicked.connect(
+                lambda checked, idx=i:
+                self._applypar(idx))
+
+        # ROI section (single row)
+        if self.__roienabled:
+            self.__createRoiWidgets(layout, row)
+
+        # initial read of video_live
+        try:
+            vl = self.__deviceproxy.read_attribute(
+                "video_live").value
+            self.__videolive = bool(vl)
+        except Exception as e:
+            logger.warning(str(e))
+            self.__videolive = False
+        self._updateStartButton()
+
+    def __createRoiWidgets(self, layout, row):
+        """create ROI widgets in a single row
+
+        Layout (1 row, 14 columns):
+          [SX:][r][w] [SY:][r][w] [LX:][r][w]
+          [LY:][r][w] [Apply][Restore]
+
+        :param layout: grid layout to add widgets to
+        :type layout: :class:`QtWidgets.QGridLayout`
+        :param row: row index
+        :type row: :obj:`int`
+        """
+        roitip = "%s/%s" % (
+            self.__devicename, self._roiattr)
+
+        # 4 field triplets at col offsets 0,3,6,9
+        for i, lb in enumerate(self._roilabels):
+            coff = i * 3
+            label = QtWidgets.QLabel(
+                lb, parent=self._mainwidget)
+            readle = QtWidgets.QLineEdit(
+                parent=self._mainwidget)
+            readle.setReadOnly(True)
+            readle.setStyleSheet(
+                "color: black;"
+                " background-color: #90EE90;")
+            readle.setAlignment(
+                QtCore.Qt.AlignCenter)
+            writele = QtWidgets.QLineEdit(
+                parent=self._mainwidget)
+            writele.setAlignment(
+                QtCore.Qt.AlignRight)
+            label.setToolTip(roitip)
+            readle.setToolTip(roitip)
+            writele.setToolTip(roitip)
+            layout.addWidget(label, row, coff)
+            layout.addWidget(
+                readle, row, coff + 1)
+            layout.addWidget(
+                writele, row, coff + 2)
+            self.__roiwidgets.append(
+                [label, readle, writele])
+
+        # Apply ROI button at col 12
+        self.__roiapplybtn = QtWidgets.QPushButton(
+            "Apply ROI", parent=self._mainwidget)
+        self.__roiapplybtn.setToolTip(
+            "Write ROI values to %s" % roitip)
+        self.__roiapplybtn.clicked.connect(
+            self._applyRoi)
+        layout.addWidget(
+            self.__roiapplybtn, row, 12)
+
+        # Restore ROI button at col 13
+        self.__roirestorebtn = QtWidgets.QPushButton(
+            "Restore", parent=self._mainwidget)
+        self.__roirestorebtn.setToolTip(
+            "Reset ROI to full detector size"
+            " using image_max_dim")
+        self.__roirestorebtn.clicked.connect(
+            self._restoreRoi)
+        layout.addWidget(
+            self.__roirestorebtn, row, 13)
+
+    def _updateStartButton(self):
+        """update start/stop button text"""
+        if self.__widgets:
+            btn = self.__widgets[0][0]
+            if self.__videolive:
+                btn.setText("Stop")
+            else:
+                btn.setText("Start")
+
+    def __clearWidgets(self):
+        """remove all dynamic widgets"""
+        layout = self.__ui.parGridLayout
+        for wds in self.__widgets:
+            for w in wds:
+                w.hide()
+                layout.removeWidget(w)
+        self.__widgets = []
+        for wds in self.__roiwidgets:
+            for w in wds:
+                w.hide()
+                layout.removeWidget(w)
+        self.__roiwidgets = []
+        if self.__roiapplybtn is not None:
+            self.__roiapplybtn.hide()
+            layout.removeWidget(self.__roiapplybtn)
+            self.__roiapplybtn = None
+        if self.__roirestorebtn is not None:
+            self.__roirestorebtn.hide()
+            layout.removeWidget(
+                self.__roirestorebtn)
+            self.__roirestorebtn = None
+
+    @debugmethod
+    def activate(self):
+        """activates tool widget"""
+        self.deactivate()
+        if not self.__devicename:
+            devname = self._extractDeviceName()
+            if devname:
+                self.__devicename = devname
+        self.__ui.deviceLineEdit.setText(
+            self.__devicename)
+        if not self.__devicename:
+            return
+        try:
+            self.__deviceproxy = tango.DeviceProxy(
+                self.__devicename)
+        except Exception as e:
+            logger.warning(str(e))
+            self.__deviceproxy = None
+            return
+        self.__supportedscalars, self.__roienabled = \
+            self.__probeAttributes()
+        self.__createWidgets()
+
+        # check device compatibility
+        if not self._checkCompat():
+            self.__setWidgetsEnabled(False)
+            return
+
+        # set up attribute proxies for polling
+        self.__aproxies = []
+        for attr in self.__supportedscalars:
+            try:
+                ap = tango.AttributeProxy(
+                    "%s/%s" % (
+                        self.__devicename, attr))
+                self.__aproxies.append(ap)
+            except Exception as e:
+                logger.warning(str(e))
+                self.__aproxies.append(None)
+
+        # set up ROI attribute proxy
+        self.__roiaproxy = None
+        if self.__roienabled:
+            try:
+                self.__roiaproxy = \
+                    tango.AttributeProxy(
+                        "%s/%s" % (
+                            self.__devicename,
+                            self._roiattr))
+            except Exception as e:
+                logger.warning(str(e))
+
+        allproxies = [
+            ap for ap in self.__aproxies
+            if ap is not None]
+        if self.__roiaproxy is not None:
+            allproxies.append(self.__roiaproxy)
+        if allproxies:
+            self.__attrWatcher = \
+                motorWatchThread.AttributeWatchThread(
+                    allproxies,
+                    self.__settings.toolpollinginterval
+                )
+            self.__attrWatcher.attrValuesSignal\
+                .connect(self._showValues)
+            self.__attrWatcher.start()
+            while not self.__attrWatcher.isWatching():
+                processEvents(
+                    self.__settings.triggeredevents)
+                time.sleep(0.1)
+
+    @debugmethod
+    def deactivate(self):
+        """deactivates tool widget"""
+        if self.__attrWatcher:
+            self.__attrWatcher.attrValuesSignal\
+                .disconnect(self._showValues)
+            logger.debug(
+                "STOPING %s"
+                % str(self.__attrWatcher))
+            self.__attrWatcher.stop()
+            logger.debug(
+                "WAITING  for %s"
+                % str(self.__attrWatcher))
+            self.__attrWatcher.wait()
+            logger.debug(
+                "REMOVING  for %s"
+                % str(self.__attrWatcher))
+            self.__attrWatcher = None
+        self.__clearWidgets()
+        self.__aproxies = []
+        self.__roiaproxy = None
+        self.__supportedscalars = []
+        self.__roienabled = False
+        self.__deviceproxy = None
+
+    @QtCore.pyqtSlot(str)
+    def _showValues(self, values):
+        """update read-only fields from watcher
+
+        :param values: JSON array of attribute values
+        :type values: :obj:`str`
+        """
+        vls = json.loads(values)
+        vidx = 0
+        # scalar attributes
+        for i, attr in enumerate(
+                self.__supportedscalars):
+            if self.__aproxies[i] is not None:
+                if vidx < len(vls):
+                    vl = str(vls[vidx])
+                    # widget index is i+1
+                    # (0 is start btn)
+                    self.__widgets[i + 1][1].setText(
+                        vl)
+                    self.__widgets[i + 1][1]\
+                        .setToolTip(vl)
+                vidx += 1
+        # ROI attribute (last in allproxies)
+        if self.__roienabled \
+                and self.__roiaproxy is not None:
+            if vidx < len(vls):
+                roival = vls[vidx]
+                if isinstance(roival, list) \
+                        and len(roival) >= 4:
+                    for j in range(4):
+                        self.__roiwidgets[j][1]\
+                            .setText(str(roival[j]))
+                        self.__roiwidgets[j][1]\
+                            .setToolTip(
+                                str(roival[j]))
+
+    @QtCore.pyqtSlot()
+    def _toggleVideoLive(self):
+        """toggle video_live attribute"""
+        if self.__deviceproxy is None:
+            return
+        try:
+            newval = not self.__videolive
+            self.__deviceproxy.write_attribute(
+                "video_live", newval)
+            self.__videolive = newval
+        except Exception as e:
+            logger.warning(str(e))
+        self._updateStartButton()
+
+    def _applypar(self, idx):
+        """apply the scalar parameter at given index
+
+        :param idx: index in __supportedscalars
+        :type idx: :obj:`int`
+        """
+        if self.__deviceproxy is None:
+            return
+        attr = self.__supportedscalars[idx]
+        # widget index is idx+1 (0 is start btn)
+        wds = self.__widgets[idx + 1]
+        txt = str(wds[2].text() or "")
+        try:
+            vl = float(txt)
+            if vl == int(vl):
+                vl = int(vl)
+        except ValueError:
+            vl = txt
+        try:
+            self.__deviceproxy.write_attribute(
+                attr, vl)
+        except Exception as e:
+            logger.warning(str(e))
+
+    @QtCore.pyqtSlot()
+    def _applyRoi(self):
+        """apply ROI values as spectrum attribute"""
+        if self.__deviceproxy is None:
+            return
+        roivals = []
+        for j in range(4):
+            txt = str(
+                self.__roiwidgets[j][2].text()
+                or "")
+            try:
+                roivals.append(int(txt))
+            except ValueError:
+                logger.warning(
+                    "Invalid ROI value: %s" % txt)
+                return
+        try:
+            arr = np.array(roivals, dtype=np.int32)
+            self.__deviceproxy.write_attribute(
+                self._roiattr, arr)
+        except Exception as e:
+            logger.warning(str(e))
+
+    @QtCore.pyqtSlot()
+    def _restoreRoi(self):
+        """restore ROI to full detector size
+
+        Reads image_max_dim from the device and
+        writes video_roi as [0, 0, max_w, max_h].
+        """
+        if self.__deviceproxy is None:
+            return
+        try:
+            maxdim = \
+                self.__deviceproxy.read_attribute(
+                    "image_max_dim").value
+            if hasattr(maxdim, "tolist"):
+                maxdim = maxdim.tolist()
+            if not isinstance(maxdim, list) \
+                    or len(maxdim) < 2:
+                logger.warning(
+                    "Unexpected image_max_dim: %s"
+                    % str(maxdim))
+                return
+            roivals = [0, 0,
+                       int(maxdim[0]),
+                       int(maxdim[1])]
+            arr = np.array(roivals, dtype=np.int32)
+            self.__deviceproxy.write_attribute(
+                self._roiattr, arr)
+        except Exception as e:
+            logger.warning(str(e))
+
+    @QtCore.pyqtSlot()
+    def _setDevice(self):
+        """launches device name input dialog
+
+        :returns: apply status
+        :rtype: :obj:`bool`
+        """
+        text, ok = QtWidgets.QInputDialog.getText(
+            self,
+            "LimaCCDs Device",
+            "Enter LimaCCDs Tango device name:",
+            QtWidgets.QLineEdit.Normal,
+            self.__devicename,
+        )
+        if ok and str(text).strip():
+            newname = str(text).strip()
+            if newname != self.__devicename:
+                self.__devicename = newname
+                self.__updateDevice()
+                return True
+        return False
+
+    def __updateDevice(self):
+        """re-activate with new device name"""
+        self.deactivate()
+        self.activate()
+        self._mainwidget.emitTCC()
+
+    @QtCore.pyqtSlot()
+    def _message(self):
+        """provides intensity message"""
+        _, _, intensity, x, y = \
+            self._mainwidget.currentIntensity()
+        if isinstance(intensity, float) \
+                and np.isnan(intensity):
+            intensity = 0
+        if isinstance(intensity, np.ndarray):
+            intensity = np.nansum(
+                [
+                    0 if (isinstance(it, float)
+                          and np.isnan(it))
+                    else it
+                    for it in intensity
+                ]
+            )
+        ilabel = self._mainwidget.scalingLabel()
+        txdata, tydata = \
+            self._mainwidget.scaledxy(x, y)
+        xunits, yunits = \
+            self._mainwidget.axesunits()
+        if txdata is not None:
+            message = \
+                "x = %f%s, y = %f%s," \
+                " %s = %.2f" % (
+                    txdata,
+                    (" %s" % xunits)
+                    if xunits else "",
+                    tydata,
+                    (" %s" % yunits)
+                    if yunits else "",
+                    ilabel,
+                    intensity,
+                )
+        else:
+            message = \
+                "x = %f%s, y = %f%s," \
+                " %s = %.2f" % (
+                    x,
+                    (" %s" % xunits)
+                    if xunits else "",
+                    y,
+                    (" %s" % yunits)
+                    if yunits else "",
+                    ilabel,
+                    intensity,
+                )
+        self._mainwidget.setDisplayedText(message)
 
 
 #: ( :obj:`dict` < :obj:`str`, any > ) tool widget properties

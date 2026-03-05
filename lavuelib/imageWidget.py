@@ -182,6 +182,8 @@ class ImageWidget(QtWidgets.QWidget):
         self.__overflowvalue = None
         #: (:obj:`str`) image name
         self.__imagename = None
+        #: (:obj:`list` < :obj:`str` >) source configuration strings
+        self.__sourceconfiguration = []
 
         #: ( ( :obj:`bool`, :obj:`bool`,:obj:`bool`) )
         #        selected (transpose, leftright-flip, updown-flip )
@@ -798,6 +800,22 @@ class ImageWidget(QtWidgets.QWidget):
              :class:`lavuelib.controllerClient.ControllerClient`
         """
         self.__tangoclient = tangoclient
+
+    def setSourceConfiguration(self, configuration):
+        """ sets source configuration
+
+        :param configuration: source configuration strings
+        :type configuration: :obj:`list` < :obj:`str` >
+        """
+        self.__sourceconfiguration = configuration or []
+
+    def sourceConfiguration(self):
+        """ provides source configuration
+
+        :returns: source configuration strings
+        :rtype: :obj:`list` < :obj:`str` >
+        """
+        return self.__sourceconfiguration
 
     def __connectsplitters(self):
         """ connects splitters  signals
