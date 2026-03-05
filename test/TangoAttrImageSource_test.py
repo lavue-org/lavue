@@ -30,7 +30,11 @@ import binascii
 import time
 import logging
 import json
+import base64
+from io import BytesIO
 import numpy as np
+import PIL
+import PIL.Image
 
 import argparse
 import lavuelib
@@ -2142,6 +2146,117 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         self.assertEqual(tw2.shape, (4, 3, 2))
         self.assertEqual(ad.shape(), [4, 3, 2])
         self.assertTrue(np.allclose(dw2, tw2))
+
+    @staticmethod
+    def _make_bvdata_payload(
+            width=4, height=3,
+            timestamp=1234567890.0, framenb=42,
+            X=1.5, Y=2.5, I=100.0, maxI=255.0,
+            roi_top_x=0.0, roi_top_y=0.0,
+            fwhm_x=1.1, fwhm_y=2.2):
+        """ builds a (format_string, packed_binary) tuple for BVdecorder """
+        # create a small RGB JPEG in memory
+        pixels = np.arange(width * height * 3, dtype=np.uint8).reshape(
+            (height, width, 3))
+        buf = BytesIO()
+        PIL.Image.fromarray(pixels, 'RGB').save(buf, format='JPEG')
+        jpeg_b64 = base64.b64encode(buf.getvalue())
+
+        prof_x = b'\x01\x02\x03\x04\x05'
+        prof_y = b'\x06\x07\x08\x09\x0a'
+
+        fmt = 'd I d d d d d d d d d d 5s 5s %ds' % len(jpeg_b64)
+        packed = struct.pack(
+            fmt, timestamp, framenb, X, Y, I, maxI,
+            roi_top_x, roi_top_y, float(width), float(height),
+            fwhm_x, fwhm_y, prof_x, prof_y, jpeg_b64)
+        return fmt, packed, pixels, prof_x, prof_y
+
+    def test_BV_DATA_decoder(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        fmt, packed, pixels, _, _ = self._make_bvdata_payload()
+        dec = lavuelib.imageSource.BVdecorder()
+
+        self.assertEqual(dec.name, "LIMA_BV_DATA")
+        # before load
+        self.assertIsNone(dec.decode())
+        self.assertIsNone(dec.shape())
+
+        dec.load((fmt, packed))
+        self.assertEqual(dec.dtype, 'uint8')
+        self.assertEqual(dec.shape(), [2, 4.0])
+
+        result = dec.decode()
+        self.assertIsNotNone(result)
+        self.assertEqual(result.dtype, np.uint8)
+        # JPEG is lossy so just check shape matches the source image
+        self.assertEqual(result.shape[0], pixels.shape[0])
+        self.assertEqual(result.shape[1], pixels.shape[1])
+
+    def test_BV_DATA_decoder_metadata(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        fmt, packed, _, prof_x, prof_y = self._make_bvdata_payload(
+            timestamp=11.0, framenb=7, X=3.0, Y=4.0,
+            I=50.0, maxI=200.0)
+        dec = lavuelib.imageSource.BVdecorder()
+        dec.load((fmt, packed))
+
+        meta = json.loads(dec.getMetadata())
+
+        self.assertNotIn('jpegData', meta)
+        self.assertAlmostEqual(meta['timestamp'], 11.0)
+        self.assertEqual(meta['framenb'], 7)
+        self.assertAlmostEqual(meta['X'], 3.0)
+        self.assertAlmostEqual(meta['Y'], 4.0)
+        self.assertAlmostEqual(meta['I'], 50.0)
+        self.assertAlmostEqual(meta['maxI'], 200.0)
+        self.assertAlmostEqual(meta['fwhm_x'], 1.1)
+        self.assertAlmostEqual(meta['fwhm_y'], 2.2)
+
+        # prof_x/prof_y should be base64-encoded strings
+        self.assertEqual(
+            base64.b64decode(meta['prof_x']), prof_x)
+        self.assertEqual(
+            base64.b64decode(meta['prof_y']), prof_y)
+
+    def test_BV_DATA_decoder_no_data(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        dec = lavuelib.imageSource.BVdecorder()
+        self.assertIsNone(dec.decode())
+        self.assertIsNone(dec.shape())
+        self.assertEqual(dec.dtype, None)
+
+    def test_BV_DATA_decoder_reload(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        dec = lavuelib.imageSource.BVdecorder()
+
+        # first load: 4x3 image
+        fmt1, packed1, _, _, _ = self._make_bvdata_payload(
+            width=4, height=3, framenb=1)
+        dec.load((fmt1, packed1))
+        result1 = dec.decode()
+        self.assertEqual(result1.shape[0], 3)
+        self.assertEqual(result1.shape[1], 4)
+
+        # second load: 6x5 image — cache must be invalidated
+        fmt2, packed2, _, _, _ = self._make_bvdata_payload(
+            width=6, height=5, framenb=2)
+        dec.load((fmt2, packed2))
+        result2 = dec.decode()
+        self.assertEqual(result2.shape[0], 5)
+        self.assertEqual(result2.shape[1], 6)
+
+        # verify metadata updated too
+        meta = json.loads(dec.getMetadata())
+        self.assertEqual(meta['framenb'], 2)
 
 
 if __name__ == '__main__':
