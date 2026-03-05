@@ -36,6 +36,8 @@ import glob
 from . import dataFetchThread
 from .sardanaUtils import debugmethod, numpyEncoder
 
+import base64
+
 try:
     import requests
     #: (:obj:`bool`) requests imported
@@ -1090,6 +1092,103 @@ class DATAARRAYdecoder(object):
         return self.__value
 
 
+class BVdecorder(object):
+
+    """"BVdata Lima decoder
+    """
+
+    @debugmethod
+    def __init__(self):
+        #: (:obj:`str`) decoder name
+        self.name = "LIMA_BV_DATA"
+        self.format = None
+        self.dtype = None
+
+        self.__value = None
+        self.__data = None
+        self.__header = {}
+
+        self.__fixedHeaderSize = None
+
+    @debugmethod
+    def load(self, data):
+        """  loads encoded data
+
+        :param data: encoded data
+        :type data: [:obj:`str`, :obj:`str`]
+        """
+        logger.debug(
+            "lavuelib.imageSource.BVdecorder.load:  %s" % str(data[0]))
+        self.__data = data
+        self.format = data[0]
+        # Unpack only the fixed header portion
+        self._loadHeader(data[1])
+        self.__value = None
+
+    @debugmethod
+    def _loadHeader(self, headerData):
+        """ loads the image header
+
+        :param headerData: buffer with header data
+        :type headerData: :obj:`str`
+        """
+        hdr = struct.unpack(self.format, headerData)
+        self.__header = {}
+        self.__header['timestamp']          = hdr[0]
+        self.__header['framenb']            = hdr[1]
+        self.__header['X']                  = hdr[2]
+        self.__header['Y']                  = hdr[3]
+        self.__header['I']                  = hdr[4]
+        self.__header['maxI']               = hdr[5]
+        self.__header['roi_top_x']          = hdr[6]
+        self.__header['roi_top_y']          = hdr[7]
+        self.__header['roi_size_getWidth']  = hdr[8]
+        self.__header['roi_size_getHeight'] = hdr[9]
+        self.__header['fwhm_x']             = hdr[10]
+        self.__header['fwhm_y']             = hdr[11]
+        self.__header['prof_x']             = hdr[12]
+        self.__header['prof_y']             = hdr[13]
+        self.__header['jpegData']           = hdr[14]
+
+
+        # Since JPEG images are RGB with 8 bits per channel,
+        # we set the dtype here.
+        self.dtype = 'uint8'
+
+    @debugmethod
+    def decode(self):
+        """ provides the decoded data
+
+        :returns: the decoded data if data was loaded
+        :rtype: :class:`numpy.ndarray`
+        """
+        if not self.__header or not self.__data:
+            return
+        if self.__value is None:
+            decoded = base64.b64decode(self.__header['jpegData'])
+            image = PIL.Image.open(BytesIO(decoded))
+            self.__value = np.transpose(image, (0, 1, 2))
+        return self.__value
+
+    def shape(self):
+        """ provides the data shape
+
+        :returns: the data shape if data was loaded
+        :rtype: :obj:`list` <:obj:`int` >
+        """
+        if self.__header:
+            #ab
+            return [2,self.__header['roi_size_getWidth']]
+
+    def getMetadata(self):
+        meta = self.__header.copy()
+        meta.pop('jpegData', None)
+        for key in ['prof_x', 'prof_y']:
+            if key in meta and isinstance(meta[key], bytes):
+                meta[key] = base64.b64encode(meta[key]).decode('utf-8')
+        return json.dumps(meta)
+
+
 class TangoAttrSource(BaseSource):
 
     """ image source as IMAGE Tango attribute
@@ -1112,6 +1211,7 @@ class TangoAttrSource(BaseSource):
             "LIMA_VIDEO_IMAGE": VDEOdecoder(),
             "VIDEO_IMAGE": VDEOdecoder(),
             "DATA_ARRAY": DATAARRAYdecoder(),
+            "BV_DATA": BVdecorder()
         }
         #: (:dict: <:obj:`str`, :obj:`str`>)
         #:      dictionary of tango decorders
@@ -1180,13 +1280,20 @@ class TangoAttrSource(BaseSource):
                     return (np.transpose(data),
                             '%s  (%s)' % (
                                 self._configuration, str(attr.time)), "")
+                elif avalue[0] is not None and attr.name == 'bvdata':
+                    dec = self.__decoders['BV_DATA']
+                    dec.load(avalue)
+                    shape = dec.shape()
+                    if shape is None or shape[0] <= 0 or shape[1] <= 0:
+                        return None, None, None
+                    return (dec.decode().T,
+                            '%s  (%s)' % (
+                                self._configuration, str(attr.time)),
+                            dec.getMetadata())
                 else:
                     dec = self.__decoders[avalue[0]]
                     dec.load(avalue)
-                    if dec.frameNumber() is not None:
-                        fnumber = dec.frameNumber()
-                    else:
-                        fnumber = ""
+                    fnumber = dec.frameNumber() or ""
                     shape = dec.shape()
                     if shape is None or shape[0] <= 0 or shape[1] <= 0:
                         return None, None, None
@@ -1357,7 +1464,8 @@ class TangoEventsSource(BaseSource):
         self.__decoders = {
             "LIMA_VIDEO_IMAGE": VDEOdecoder(),
             "VIDEO_IMAGE": VDEOdecoder(),
-            "DATA_ARRAY": DATAARRAYdecoder()
+            "DATA_ARRAY": DATAARRAYdecoder(),
+            'BV_DATA': BVdecorder()
         }
         #: (:dict: <:obj:`str`, :obj:`str`>)
         #:      dictionary of tango decorders
@@ -1411,14 +1519,21 @@ class TangoEventsSource(BaseSource):
                                     self._configuration,
                                     str(self.attr.time)),
                                 "")
+                    elif avalue[0] is not None and self.attr.name == 'bvdata':
+                        dec = self.__decoders['BV_DATA']
+                        dec.load(avalue)
+                        shape = dec.shape()
+                        if shape is None or shape[0] <= 0 or shape[1] <= 0:
+                            return None, None, None
+                        return (dec.decode().T,
+                                '%s  (%s)' % (
+                                    self._configuration, str(self.attr.time)),
+                                dec.getMetadata())
                     else:
                         dec = self.__decoders[avalue[0]]
                         dec.load(avalue)
+                        fnumber = dec.frameNumber() or ""
                         shape = dec.shape()
-                        if dec.frameNumber() is not None:
-                            fnumber = dec.frameNumber()
-                        else:
-                            fnumber = ""
                         if shape is None or shape[0] <= 0 or shape[1] <= 0:
                             return None, None, None
                         return (dec.decode().T,
