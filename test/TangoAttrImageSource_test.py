@@ -2151,7 +2151,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
     def _make_bvdata_payload(
             width=4, height=3,
             timestamp=1234567890.0, framenb=42,
-            X=1.5, Y=2.5, I=100.0, maxI=255.0,
+            X=1.5, Y=2.5, intensity=100.0, maxI=255.0,
             roi_top_x=0.0, roi_top_y=0.0,
             fwhm_x=1.1, fwhm_y=2.2):
         """ builds a (format_string, packed_binary) tuple for BVdecorder """
@@ -2167,7 +2167,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
 
         fmt = 'd I d d d d d d d d d d 5s 5s %ds' % len(jpeg_b64)
         packed = struct.pack(
-            fmt, timestamp, framenb, X, Y, I, maxI,
+            fmt, timestamp, framenb, X, Y, intensity, maxI,
             roi_top_x, roi_top_y, float(width), float(height),
             fwhm_x, fwhm_y, prof_x, prof_y, jpeg_b64)
         return fmt, packed, pixels, prof_x, prof_y
@@ -2201,7 +2201,7 @@ class TangoAttrImageSourceTest(unittest.TestCase):
 
         fmt, packed, _, prof_x, prof_y = self._make_bvdata_payload(
             timestamp=11.0, framenb=7, X=3.0, Y=4.0,
-            I=50.0, maxI=200.0)
+            intensity=50.0, maxI=200.0)
         dec = lavuelib.imageSource.BVdecorder()
         dec.load((fmt, packed))
 

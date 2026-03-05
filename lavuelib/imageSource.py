@@ -1134,22 +1134,21 @@ class BVdecorder(object):
         """
         hdr = struct.unpack(self.format, headerData)
         self.__header = {}
-        self.__header['timestamp']          = hdr[0]
-        self.__header['framenb']            = hdr[1]
-        self.__header['X']                  = hdr[2]
-        self.__header['Y']                  = hdr[3]
-        self.__header['I']                  = hdr[4]
-        self.__header['maxI']               = hdr[5]
-        self.__header['roi_top_x']          = hdr[6]
-        self.__header['roi_top_y']          = hdr[7]
-        self.__header['roi_size_getWidth']  = hdr[8]
+        self.__header['timestamp'] = hdr[0]
+        self.__header['framenb'] = hdr[1]
+        self.__header['X'] = hdr[2]
+        self.__header['Y'] = hdr[3]
+        self.__header['I'] = hdr[4]
+        self.__header['maxI'] = hdr[5]
+        self.__header['roi_top_x'] = hdr[6]
+        self.__header['roi_top_y'] = hdr[7]
+        self.__header['roi_size_getWidth'] = hdr[8]
         self.__header['roi_size_getHeight'] = hdr[9]
-        self.__header['fwhm_x']             = hdr[10]
-        self.__header['fwhm_y']             = hdr[11]
-        self.__header['prof_x']             = hdr[12]
-        self.__header['prof_y']             = hdr[13]
-        self.__header['jpegData']           = hdr[14]
-
+        self.__header['fwhm_x'] = hdr[10]
+        self.__header['fwhm_y'] = hdr[11]
+        self.__header['prof_x'] = hdr[12]
+        self.__header['prof_y'] = hdr[13]
+        self.__header['jpegData'] = hdr[14]
 
         # Since JPEG images are RGB with 8 bits per channel,
         # we set the dtype here.
@@ -1177,8 +1176,7 @@ class BVdecorder(object):
         :rtype: :obj:`list` <:obj:`int` >
         """
         if self.__header:
-            #ab
-            return [2,self.__header['roi_size_getWidth']]
+            return [2, self.__header['roi_size_getWidth']]
 
     def getMetadata(self):
         meta = self.__header.copy()
