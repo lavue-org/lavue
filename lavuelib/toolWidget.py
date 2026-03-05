@@ -9345,20 +9345,7 @@ class LimaCCDsToolWidget(ToolBaseWidget):
         if self.__deviceproxy is None:
             return
         try:
-            maxdim = \
-                self.__deviceproxy.read_attribute(
-                    "image_max_dim").value
-            if hasattr(maxdim, "tolist"):
-                maxdim = maxdim.tolist()
-            if not isinstance(maxdim, list) \
-                    or len(maxdim) < 2:
-                logger.warning(
-                    "Unexpected image_max_dim: %s"
-                    % str(maxdim))
-                return
-            roivals = [0, 0,
-                       int(maxdim[0]),
-                       int(maxdim[1])]
+            roivals = [0, 0, 0, 0]
             arr = np.array(roivals, dtype=np.int32)
             self.__deviceproxy.write_attribute(
                 self._roiattr, arr)
