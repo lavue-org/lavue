@@ -83,6 +83,8 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">dataFetchThread</span>
 <span class="kn">from</span> <span class="nn">.sardanaUtils</span> <span class="kn">import</span> <span class="n">debugmethod</span><span class="p">,</span> <span class="n">numpyEncoder</span>
 
+<span class="kn">import</span> <span class="nn">base64</span>
+
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">requests</span>
     <span class="c1">#: (:obj:`bool`) requests imported</span>
@@ -1137,6 +1139,101 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__value</span></div></div>
 
 
+<div class="viewcode-block" id="BVdecorder"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.BVdecorder">[docs]</a><span class="k">class</span> <span class="nc">BVdecorder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;&quot;BVdata Lima decoder</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@debugmethod</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#: (:obj:`str`) decoder name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;LIMA_BV_DATA&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__value</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__fixedHeaderSize</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="BVdecorder.load"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.BVdecorder.load">[docs]</a>    <span class="nd">@debugmethod</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;  loads encoded data</span>
+
+<span class="sd">        :param data: encoded data</span>
+<span class="sd">        :type data: [:obj:`str`, :obj:`str`]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s2">&quot;lavuelib.imageSource.BVdecorder.load:  </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># Unpack only the fixed header portion</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loadHeader</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__value</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="nd">@debugmethod</span>
+    <span class="k">def</span> <span class="nf">_loadHeader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">headerData</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; loads the image header</span>
+
+<span class="sd">        :param headerData: buffer with header data</span>
+<span class="sd">        :type headerData: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hdr</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">headerData</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;framenb&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;Y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;I&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;maxI&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;roi_top_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;roi_top_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;roi_size_getWidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;roi_size_getHeight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;fwhm_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;fwhm_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;prof_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;prof_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;jpegData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span>
+
+        <span class="c1"># Since JPEG images are RGB with 8 bits per channel,</span>
+        <span class="c1"># we set the dtype here.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint8&#39;</span>
+
+<div class="viewcode-block" id="BVdecorder.decode"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.BVdecorder.decode">[docs]</a>    <span class="nd">@debugmethod</span>
+    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the decoded data</span>
+
+<span class="sd">        :returns: the decoded data if data was loaded</span>
+<span class="sd">        :rtype: :class:`numpy.ndarray`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__header</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">decoded</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;jpegData&#39;</span><span class="p">])</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">decoded</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__value</span></div>
+
+<div class="viewcode-block" id="BVdecorder.shape"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.BVdecorder.shape">[docs]</a>    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the data shape</span>
+
+<span class="sd">        :returns: the data shape if data was loaded</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`int` &gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="p">[</span><span class="s1">&#39;roi_size_getWidth&#39;</span><span class="p">]]</span></div>
+
+<div class="viewcode-block" id="BVdecorder.getMetadata"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.BVdecorder.getMetadata">[docs]</a>    <span class="k">def</span> <span class="nf">getMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__header</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;jpegData&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;prof_x&#39;</span><span class="p">,</span> <span class="s1">&#39;prof_y&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">meta</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">bytes</span><span class="p">):</span>
+                <span class="n">meta</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="n">key</span><span class="p">])</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span></div></div>
+
+
 <div class="viewcode-block" id="TangoAttrSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageSource.TangoAttrSource">[docs]</a><span class="k">class</span> <span class="nc">TangoAttrSource</span><span class="p">(</span><span class="n">BaseSource</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; image source as IMAGE Tango attribute</span>
@@ -1159,6 +1256,7 @@
             <span class="s2">&quot;LIMA_VIDEO_IMAGE&quot;</span><span class="p">:</span> <span class="n">VDEOdecoder</span><span class="p">(),</span>
             <span class="s2">&quot;VIDEO_IMAGE&quot;</span><span class="p">:</span> <span class="n">VDEOdecoder</span><span class="p">(),</span>
             <span class="s2">&quot;DATA_ARRAY&quot;</span><span class="p">:</span> <span class="n">DATAARRAYdecoder</span><span class="p">(),</span>
+            <span class="s2">&quot;BV_DATA&quot;</span><span class="p">:</span> <span class="n">BVdecorder</span><span class="p">()</span>
         <span class="p">}</span>
         <span class="c1">#: (:dict: &lt;:obj:`str`, :obj:`str`&gt;)</span>
         <span class="c1">#:      dictionary of tango decorders</span>
@@ -1227,13 +1325,20 @@
                     <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
                             <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">  (</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="p">(</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">_configuration</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">attr</span><span class="o">.</span><span class="n">time</span><span class="p">)),</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">avalue</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">attr</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;bvdata&#39;</span><span class="p">:</span>
+                    <span class="n">dec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__decoders</span><span class="p">[</span><span class="s1">&#39;BV_DATA&#39;</span><span class="p">]</span>
+                    <span class="n">dec</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">avalue</span><span class="p">)</span>
+                    <span class="n">shape</span> <span class="o">=</span> <span class="n">dec</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">shape</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+                    <span class="k">return</span> <span class="p">(</span><span class="n">dec</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                            <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">  (</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">_configuration</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">attr</span><span class="o">.</span><span class="n">time</span><span class="p">)),</span>
+                            <span class="n">dec</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">())</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">dec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__decoders</span><span class="p">[</span><span class="n">avalue</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
                     <span class="n">dec</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">avalue</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">dec</span><span class="o">.</span><span class="n">frameNumber</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">fnumber</span> <span class="o">=</span> <span class="n">dec</span><span class="o">.</span><span class="n">frameNumber</span><span class="p">()</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">fnumber</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                    <span class="n">fnumber</span> <span class="o">=</span> <span class="n">dec</span><span class="o">.</span><span class="n">frameNumber</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
                     <span class="n">shape</span> <span class="o">=</span> <span class="n">dec</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
                     <span class="k">if</span> <span class="n">shape</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
                         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
@@ -1404,7 +1509,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__decoders</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;LIMA_VIDEO_IMAGE&quot;</span><span class="p">:</span> <span class="n">VDEOdecoder</span><span class="p">(),</span>
             <span class="s2">&quot;VIDEO_IMAGE&quot;</span><span class="p">:</span> <span class="n">VDEOdecoder</span><span class="p">(),</span>
-            <span class="s2">&quot;DATA_ARRAY&quot;</span><span class="p">:</span> <span class="n">DATAARRAYdecoder</span><span class="p">()</span>
+            <span class="s2">&quot;DATA_ARRAY&quot;</span><span class="p">:</span> <span class="n">DATAARRAYdecoder</span><span class="p">(),</span>
+            <span class="s1">&#39;BV_DATA&#39;</span><span class="p">:</span> <span class="n">BVdecorder</span><span class="p">()</span>
         <span class="p">}</span>
         <span class="c1">#: (:dict: &lt;:obj:`str`, :obj:`str`&gt;)</span>
         <span class="c1">#:      dictionary of tango decorders</span>
@@ -1458,14 +1564,21 @@
                                     <span class="bp">self</span><span class="o">.</span><span class="n">_configuration</span><span class="p">,</span>
                                     <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attr</span><span class="o">.</span><span class="n">time</span><span class="p">)),</span>
                                 <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">avalue</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">attr</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;bvdata&#39;</span><span class="p">:</span>
+                        <span class="n">dec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__decoders</span><span class="p">[</span><span class="s1">&#39;BV_DATA&#39;</span><span class="p">]</span>
+                        <span class="n">dec</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">avalue</span><span class="p">)</span>
+                        <span class="n">shape</span> <span class="o">=</span> <span class="n">dec</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">shape</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+                        <span class="k">return</span> <span class="p">(</span><span class="n">dec</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                                <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">  (</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">_configuration</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attr</span><span class="o">.</span><span class="n">time</span><span class="p">)),</span>
+                                <span class="n">dec</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">())</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">dec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__decoders</span><span class="p">[</span><span class="n">avalue</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
                         <span class="n">dec</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">avalue</span><span class="p">)</span>
+                        <span class="n">fnumber</span> <span class="o">=</span> <span class="n">dec</span><span class="o">.</span><span class="n">frameNumber</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
                         <span class="n">shape</span> <span class="o">=</span> <span class="n">dec</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
-                        <span class="k">if</span> <span class="n">dec</span><span class="o">.</span><span class="n">frameNumber</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="n">fnumber</span> <span class="o">=</span> <span class="n">dec</span><span class="o">.</span><span class="n">frameNumber</span><span class="p">()</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">fnumber</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
                         <span class="k">if</span> <span class="n">shape</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
                             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
                         <span class="k">return</span> <span class="p">(</span><span class="n">dec</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
