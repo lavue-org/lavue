@@ -8914,7 +8914,7 @@ class LimaCCDsToolWidget(ToolBaseWidget):
         :returns: True if the device is compatible
         :rtype: :obj:`bool`
         """
-        allowed_modes = ["Y8", "Y16"]
+        allowed_modes = ["Y8", "Y16", "RGB24"]
         name = self._extractDeviceName()
         try:
             dp = tango.DeviceProxy(name)
@@ -8968,6 +8968,15 @@ class LimaCCDsToolWidget(ToolBaseWidget):
             attrlist = []
         for attr in self._scalarattrs:
             if attr.lower() in attrlist:
+                # lima atts always exist, they throw exception when
+                # writting if not supported
+                try:
+                    ap = tango.AttributeProxy(attr)
+                    v = ap.read().value
+                    ap.write(v)
+                except Exception as _:
+                    logger.warning(f"{attr} lima attribute is not supported by the camera")
+                    continue
                 scalars.append(attr)
         if self._roiattr.lower() in attrlist:
             roien = True
