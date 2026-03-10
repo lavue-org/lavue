@@ -8971,11 +8971,10 @@ class LimaCCDsToolWidget(ToolBaseWidget):
                 # lima atts always exist, they throw exception when
                 # writting if not supported
                 try:
-                    ap = tango.AttributeProxy(attr)
-                    v = ap.read().value
-                    ap.write(v)
-                except Exception as _:
-                    logger.warning(f"{attr} lima attribute is not supported by the camera")
+                    v = self.__deviceproxy.read_attribute(attr).value
+                    self.__deviceproxy.write_attribute(attr, v)
+                except Exception as e:
+                    logger.warning(f"{attr} lima attribute is not supported by the camera: {e}")
                     continue
                 scalars.append(attr)
         if self._roiattr.lower() in attrlist:
