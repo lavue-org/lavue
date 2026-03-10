@@ -9289,9 +9289,14 @@ class LimaCCDsToolWidget(ToolBaseWidget):
             return
         try:
             newval = not self.__videolive
+            if newval: # start camera
+                self.__deviceproxy.write_attribute("saving_mode", "MANUAL")
+                self.__deviceproxy.write_attribute("acq_trigger_mode", "INTERNAL_TRIGGER")
+                self.__deviceproxy.write_attribute("acq_nb_frames", 0)
             self.__deviceproxy.write_attribute(
                 "video_live", newval)
             self.__videolive = newval
+
         except Exception as e:
             logger.warning(str(e))
         self._updateStartButton()
