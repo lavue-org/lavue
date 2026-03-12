@@ -8859,8 +8859,6 @@ class LimaCCDsToolWidget(ToolBaseWidget):
         #:     QtCore.pyqtSignal`, :obj:`str`] >)
         #: list of [signal, slot] object to connect
         self.signal2slot = [
-            [self.__ui.setupPushButton.clicked,
-             self._setDevice],
             [self._mainwidget.mouseImagePositionChanged,
              self._message],
         ]
@@ -8943,8 +8941,6 @@ class LimaCCDsToolWidget(ToolBaseWidget):
             self.__roiapplybtn.setEnabled(enabled)
         if self.__roirestorebtn is not None:
             self.__roirestorebtn.setEnabled(enabled)
-        n = "" if not enabled else self.__devicename
-        self.__ui.deviceLineEdit.setText(n)
 
     def __probeAttributes(self):
         """probe which video attributes exist
@@ -9158,8 +9154,6 @@ class LimaCCDsToolWidget(ToolBaseWidget):
             devname = self._extractDeviceName()
             if devname:
                 self.__devicename = devname
-        self.__ui.deviceLineEdit.setText(
-            self.__devicename)
         if not self.__devicename:
             return
         try:
@@ -9364,28 +9358,6 @@ class LimaCCDsToolWidget(ToolBaseWidget):
                 self._roiattr, arr)
         except Exception as e:
             logger.warning(str(e))
-
-    @QtCore.pyqtSlot()
-    def _setDevice(self):
-        """launches device name input dialog
-
-        :returns: apply status
-        :rtype: :obj:`bool`
-        """
-        text, ok = QtWidgets.QInputDialog.getText(
-            self,
-            "LimaCCDs Device",
-            "Enter LimaCCDs Tango device name:",
-            QtWidgets.QLineEdit.Normal,
-            self.__devicename,
-        )
-        if ok and str(text).strip():
-            newname = str(text).strip()
-            if newname != self.__devicename:
-                self.__devicename = newname
-                self.__updateDevice()
-                return True
-        return False
 
     def __updateDevice(self):
         """re-activate with new device name"""
