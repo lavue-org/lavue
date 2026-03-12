@@ -8970,7 +8970,10 @@ class LimaCCDsToolWidget(ToolBaseWidget):
                     v = self.__deviceproxy.read_attribute(attr).value
                     self.__deviceproxy.write_attribute(attr, v)
                 except Exception as e:
-                    logger.warning(f"{attr} lima attribute is not supported by the camera: {e}")
+                    logger.warning(
+                        f"{attr} lima attribute not supported by camera:",
+                        e
+                    )
                     continue
                 scalars.append(attr)
         if self._roiattr.lower() in attrlist:
@@ -9283,9 +9286,11 @@ class LimaCCDsToolWidget(ToolBaseWidget):
             return
         try:
             newval = not self.__videolive
-            if newval: # start camera
+            if newval:  # start camera
                 self.__deviceproxy.write_attribute("saving_mode", "MANUAL")
-                self.__deviceproxy.write_attribute("acq_trigger_mode", "INTERNAL_TRIGGER")
+                self.__deviceproxy.write_attribute(
+                    "acq_trigger_mode", "INTERNAL_TRIGGER"
+                )
                 self.__deviceproxy.write_attribute("acq_nb_frames", 0)
             self.__deviceproxy.write_attribute(
                 "video_live", newval)
