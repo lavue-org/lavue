@@ -8909,15 +8909,13 @@ class LimaCCDsToolWidget(ToolBaseWidget):
     def _checkCompat(self):
         """check device compatibility
 
-        :returns: True if the device is compatible
+        :returns: True if the device is of class LimaCCDs
         :rtype: :obj:`bool`
         """
-        allowed_modes = ["Y8", "Y16", "RGB24"]
         name = self._extractDeviceName()
         try:
             dp = tango.DeviceProxy(name)
-            mode = dp.video_mode
-            if mode in allowed_modes:
+            if dp.info().dev_class == "LimaCCDs":
                 return True
         except Exception as e:
             logger.warning(
