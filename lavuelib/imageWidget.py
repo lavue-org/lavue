@@ -89,6 +89,8 @@ class ImageWidget(QtWidgets.QWidget):
     imagePlotted = QtCore.pyqtSignal()
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) replot image signal
     replotImage = QtCore.pyqtSignal(bool)
+    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) Image source changed signal
+    imageSourceChanged = QtCore.pyqtSignal()
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) sardana enabled signal
     sardanaEnabled = QtCore.pyqtSignal(bool)
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) aspect locked toggled signal
@@ -808,6 +810,7 @@ class ImageWidget(QtWidgets.QWidget):
         :type configuration: :obj:`list` < :obj:`str` >
         """
         self.__sourceconfiguration = configuration or []
+        self.imageSourceChanged.emit()
 
     def sourceConfiguration(self):
         """ provides source configuration

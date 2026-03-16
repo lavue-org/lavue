@@ -8796,6 +8796,7 @@ class LimaCCDsToolWidget(ToolBaseWidget):
     #: (:obj:`int`) total grid column count
     _gridcols = 14
 
+
     def __init__(self, parent=None):
         """constructor
 
@@ -8861,6 +8862,8 @@ class LimaCCDsToolWidget(ToolBaseWidget):
         self.signal2slot = [
             [self._mainwidget.mouseImagePositionChanged,
              self._message],
+            [self._mainwidget.imageSourceChanged,
+             self.__updateDevice],
         ]
 
     @debugmethod
