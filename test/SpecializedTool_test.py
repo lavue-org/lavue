@@ -66,8 +66,10 @@ except Exception:
 
 try:
     from .TestImageServerSetUp import TestImageServerSetUp
+    from .TestImageServerSetUp import LimaCCDsTestServerSetUp
 except Exception:
     from TestImageServerSetUp import TestImageServerSetUp
+    from TestImageServerSetUp import LimaCCDsTestServerSetUp
 
 try:
     try:
@@ -759,6 +761,244 @@ class SpecializedToolTest(unittest.TestCase):
         tc1 = json.loads(ls["toolconfig"])
         tc2 = json.loads(dls["toolconfig"])
         self.compareStates(tc1, tc2)
+
+    def test_limaccds_tool(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        self.__lcsu.proxy.Init()
+        self.__lavuestate = None
+
+        options = argparse.Namespace(
+            mode='expert',
+            source='tangoattr',
+            configuration='test/limaccdstestserver/00/LastImage',
+            instance='tgtest',
+            tool='limaccds',
+            toolconfig='{"limaccds_device": "test/limaccdstestserver/00"}',
+            transformation='flip-up-down',
+            log='debug',
+            scaling='log',
+            levels='m20,20',
+            gradient='thermal',
+            tangodevice='test/lavuecontroller/00'
+        )
+        logging.basicConfig(
+            format="%(levelname)s: %(message)s")
+        logger = logging.getLogger("lavue")
+        lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+        dialog = lavuelib.liveViewer.MainWindow(options=options)
+        dialog.show()
+
+        qtck = QtChecker(app, dialog, True,
+                         withitem=EnsureOmniThread)
+        qtck.setChecks([
+            CmdCheck(
+                "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+            ExtCmdCheck(self, "getLavueState")
+        ])
+
+        status = qtck.executeChecksAndClose()
+
+        self.assertEqual(status, 0)
+        qtck.compareResults(self, [False, None])
+
+        ls = json.loads(self.__lavuestate)
+        dls = dict(self.__defaultls)
+        dls.update(dict(
+            mode='expert',
+            source='tangoattr',
+            configuration='test/limaccdstestserver/00/LastImage',
+            instance='tgtest',
+            tool='limaccds',
+            toolconfig='{"limaccds_device": "test/limaccdstestserver/00"}',
+            transformation='flip-up-down',
+            log='debug',
+            scaling='log',
+            levels='-20.0,20.0',
+            gradient='thermal',
+            tangodevice='test/lavuecontroller/00',
+            autofactor=None
+        ))
+        self.compareStates(
+            ls, dls,
+            ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+        tc1 = json.loads(ls["toolconfig"])
+        tc2 = json.loads(dls["toolconfig"])
+        self.compareStates(tc1, tc2)
+
+    def test_limaccds_tool_active(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        lisu = LimaCCDsTestServerSetUp()
+        try:
+            lisu.setUp()
+
+            self.__lcsu.proxy.Init()
+            self.__lavuestate = None
+            filepath = "%s/%s" % (os.path.abspath(path), "test/images")
+            filename = "%05d.tif" % 2
+            imagefile = os.path.join(filepath, filename)
+            options = argparse.Namespace(
+                mode='expert',
+                source='tangoattr',
+                configuration='test/limaccdstestserver/00/LastImage',
+                instance='tgtest',
+                tool='roi',
+                transformation='flip-up-down',
+                log='debug',
+                imagefile=imagefile,
+                scaling='log',
+                levels='m20,20',
+                gradient='thermal',
+                tangodevice='test/lavuecontroller/00'
+            )
+            logging.basicConfig(
+                format="%(levelname)s: %(message)s")
+            logger = logging.getLogger("lavue")
+            lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+            dialog = lavuelib.liveViewer.MainWindow(options=options)
+            dialog.show()
+
+            cnf = {}
+            cnf["tool"] = "limaccds"
+            cnf["toolconfig"] = \
+                '{"limaccds_device": "test/limaccdstestserver/00"}'
+            lavuestate1 = json.dumps(cnf)
+
+            qtck1 = QtChecker(app, dialog, True, sleep=100,
+                              withitem=EnsureOmniThread)
+            qtck2 = QtChecker(app, dialog, True, sleep=100,
+                              withitem=EnsureOmniThread)
+            qtck3 = QtChecker(app, dialog, True, sleep=100,
+                              withitem=EnsureOmniThread)
+            qtck1.setChecks([
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+                ExtCmdCheck(self, "setLavueStatePar", [lavuestate1])
+            ])
+            qtck2.setChecks([
+                ExtCmdCheck(self, "getLavueStatePar"),
+            ])
+            qtck3.setChecks([])
+
+            qtck1.executeChecks(delay=6000)
+            qtck2.executeChecks(delay=12000)
+            status = qtck3.executeChecksAndClose(delay=18000)
+
+            self.assertEqual(status, 0)
+            qtck1.compareResults(self, [False, None])
+
+            res2 = qtck2.results()
+            ls = json.loads(res2[0])
+            self.assertEqual(ls["tool"], "limaccds")
+            tc1 = json.loads(ls["toolconfig"])
+            self.assertEqual(
+                tc1["limaccds_device"], "test/limaccdstestserver/00")
+            self.assertIn(
+                "test/limaccdstestserver/00",
+                ls["configuration"])
+
+        finally:
+            lisu.tearDown()
+
+    def test_limaccds_tool_source_change(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        lisu = LimaCCDsTestServerSetUp()
+        try:
+            lisu.setUp()
+
+            self.__lcsu.proxy.Init()
+            self.__lavuestate = None
+            filepath = "%s/%s" % (os.path.abspath(path), "test/images")
+            filename = "%05d.tif" % 2
+            imagefile = os.path.join(filepath, filename)
+            options = argparse.Namespace(
+                mode='expert',
+                source='tangoattr',
+                configuration='test/limaccdstestserver/00/LastImage',
+                instance='tgtest',
+                tool='roi',
+                transformation='flip-up-down',
+                log='debug',
+                imagefile=imagefile,
+                scaling='log',
+                levels='m20,20',
+                gradient='thermal',
+                tangodevice='test/lavuecontroller/00'
+            )
+            logging.basicConfig(
+                format="%(levelname)s: %(message)s")
+            logger = logging.getLogger("lavue")
+            lavuelib.liveViewer.setLoggerLevel(logger, options.log)
+            dialog = lavuelib.liveViewer.MainWindow(options=options)
+            dialog.show()
+
+            # connect + activate limaccds tool so source config is live
+            cnf1 = {}
+            cnf1["start"] = True
+            cnf1["tool"] = "limaccds"
+            lavuestate1 = json.dumps(cnf1)
+
+            # while connected, change source to second LimaCCDs instance (01)
+            # running=True triggers disconnect→reconnect→_setSourceConfiguration
+            cnf2 = {}
+            cnf2["configuration"] = \
+                "test/limaccdstestserver/01/LastImage"
+            lavuestate2 = json.dumps(cnf2)
+
+            qtck1 = QtChecker(app, dialog, True, sleep=100,
+                              withitem=EnsureOmniThread)
+            qtck2 = QtChecker(app, dialog, True, sleep=100,
+                              withitem=EnsureOmniThread)
+            qtck3 = QtChecker(app, dialog, True, sleep=100,
+                              withitem=EnsureOmniThread)
+            qtck4 = QtChecker(app, dialog, True, sleep=100,
+                              withitem=EnsureOmniThread)
+            qtck1.setChecks([
+                CmdCheck(
+                    "_MainWindow__lavue._LiveViewer__sourcewg.isConnected"),
+                ExtCmdCheck(self, "setLavueStatePar", [lavuestate1])
+            ])
+            qtck2.setChecks([
+                ExtCmdCheck(self, "getLavueStatePar"),
+                ExtCmdCheck(self, "setLavueStatePar", [lavuestate2])
+            ])
+            qtck3.setChecks([
+                ExtCmdCheck(self, "getLavueStatePar"),
+            ])
+            qtck4.setChecks([])
+
+            qtck1.executeChecks(delay=6000)
+            qtck2.executeChecks(delay=12000)
+            qtck3.executeChecks(delay=18000)
+            status = qtck4.executeChecksAndClose(delay=24000)
+
+            self.assertEqual(status, 0)
+            qtck1.compareResults(self, [False, None])
+
+            # after round 1: connected, device auto-detected as 00
+            res2 = qtck2.results()
+            ls2 = json.loads(res2[0])
+            self.assertEqual(ls2["tool"], "limaccds")
+            tc2 = json.loads(ls2["toolconfig"])
+            self.assertEqual(
+                tc2["limaccds_device"], "test/limaccdstestserver/00")
+
+            # after round 2: source changed to 01 while connected —
+            # imageSourceChanged fires → __updateDevice → device must follow
+            res3 = qtck3.results()
+            ls3 = json.loads(res3[0])
+            self.assertEqual(ls3["tool"], "limaccds")
+            tc3 = json.loads(ls3["toolconfig"])
+            self.assertEqual(
+                tc3["limaccds_device"], "test/limaccdstestserver/01")
+
+        finally:
+            lisu.tearDown()
 
 
 if __name__ == '__main__':
