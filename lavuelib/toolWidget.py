@@ -8796,7 +8796,6 @@ class LimaCCDsToolWidget(ToolBaseWidget):
     #: (:obj:`int`) total grid column count
     _gridcols = 14
 
-
     def __init__(self, parent=None):
         """constructor
 

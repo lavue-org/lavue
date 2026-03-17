@@ -944,7 +944,8 @@ class SpecializedToolTest(unittest.TestCase):
             lavuestate1 = json.dumps(cnf1)
 
             # while connected, change source to second LimaCCDs instance (01)
-            # running=True triggers disconnect→reconnect→_setSourceConfiguration
+            # running=True
+            # triggers disconnect->reconnect->_setSourceConfiguration
             cnf2 = {}
             cnf2["configuration"] = \
                 "test/limaccdstestserver/01/LastImage"
