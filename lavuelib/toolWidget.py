@@ -9368,6 +9368,7 @@ class LimaCCDsToolWidget(ToolBaseWidget):
     def __updateDevice(self):
         """re-activate with new device name"""
         self.deactivate()
+        self.__devicename = ""
         self.activate()
         self._mainwidget.emitTCC()
 
