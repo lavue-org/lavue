@@ -187,6 +187,10 @@
     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span>
                  <span class="s2">&quot;ui&quot;</span><span class="p">,</span> <span class="s2">&quot;CenterCheckToolWidget.ui&quot;</span><span class="p">))</span>
 
+<span class="n">_limaccdsformclass</span><span class="p">,</span> <span class="n">_limaccdsbaseclass</span> <span class="o">=</span> <span class="n">uic</span><span class="o">.</span><span class="n">loadUiType</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span>
+                 <span class="s2">&quot;ui&quot;</span><span class="p">,</span> <span class="s2">&quot;LimaCCDsToolWidget.ui&quot;</span><span class="p">))</span>
+
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;IntensityToolWidget&#39;</span><span class="p">,</span>
@@ -203,6 +207,7 @@
     <span class="s1">&#39;CenterCheckToolWidget&#39;</span><span class="p">,</span>
     <span class="s1">&#39;TwoDFitToolWidget&#39;</span><span class="p">,</span>
     <span class="s1">&#39;QROIProjToolWidget&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;LimaCCDsToolWidget&#39;</span><span class="p">,</span>
     <span class="s1">&#39;twproperties&#39;</span><span class="p">,</span>
 <span class="p">]</span>
 
@@ -8811,6 +8816,657 @@
             <span class="n">xindex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">modeComboBox</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__parametersmode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__modestexts</span><span class="p">[</span>
             <span class="n">xindex</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__modestexts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">xindex</span> <span class="k">else</span> <span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="LimaCCDsToolWidget"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.LimaCCDsToolWidget">[docs]</a><span class="k">class</span> <span class="nc">LimaCCDsToolWidget</span><span class="p">(</span><span class="n">ToolBaseWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;LimaCCDs video control tool widget&quot;&quot;&quot;</span>
+
+    <span class="c1">#: (:obj:`str`) tool name</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;LimaCCDs&quot;</span>
+    <span class="c1">#: (:obj:`str`) tool name alias</span>
+    <span class="n">alias</span> <span class="o">=</span> <span class="s2">&quot;limaccds&quot;</span>
+    <span class="c1">#: (:obj:`tuple` &lt;:obj:`str`&gt;) capitalized required packages</span>
+    <span class="n">requires</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;TANGO&quot;</span><span class="p">,)</span>
+
+    <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) scalar video attributes</span>
+    <span class="n">_scalarattrs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;video_exposure&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;video_gain&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="c1">#: (:obj:`str`) ROI spectrum attribute name</span>
+    <span class="n">_roiattr</span> <span class="o">=</span> <span class="s2">&quot;video_roi&quot;</span>
+
+    <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) short ROI field labels</span>
+    <span class="n">_roilabels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SX:&quot;</span><span class="p">,</span> <span class="s2">&quot;SY:&quot;</span><span class="p">,</span> <span class="s2">&quot;LX:&quot;</span><span class="p">,</span> <span class="s2">&quot;LY:&quot;</span><span class="p">]</span>
+
+    <span class="c1">#: (:obj:`int`) total grid column count</span>
+    <span class="n">_gridcols</span> <span class="o">=</span> <span class="mi">14</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;constructor</span>
+
+<span class="sd">        :param parent: parent object</span>
+<span class="sd">        :type parent: :class:`pyqtgraph.QtCore.QObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ToolBaseWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+
+        <span class="c1">#: (:class:`lavuelib.settings.Settings`)</span>
+        <span class="c1">#:     configuration settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">settings</span><span class="p">()</span>
+
+        <span class="c1">#: (:obj:`str`) LimaCCDs device name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__devicename</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1">#: (:obj:`bool`) video_live is running</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__videolive</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:class:`tango.DeviceProxy`)</span>
+        <span class="c1">#:     LimaCCDs device proxy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;)</span>
+        <span class="c1">#:     supported scalar attribute names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__supportedscalars</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">#: (:obj:`bool`) video_roi is supported</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roienabled</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`list` &lt;:class:`tango.AttributeProxy`&gt;)</span>
+        <span class="c1">#:     attribute proxies for scalars</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__aproxies</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">#: (:class:`tango.AttributeProxy`)</span>
+        <span class="c1">#:     attribute proxy for video_roi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roiaproxy</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:class:`lavuelib.motorWatchThread.\</span>
+        <span class="c1">#:     AttributeWatchThread`)</span>
+        <span class="c1">#:     attribute watcher</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__attrWatcher</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj:`list`</span>
+        <span class="c1">#:     &lt;:class:`pyqtgraph.QtCore.QObject`&gt; &gt;)</span>
+        <span class="c1">#:     parameter widgets (start btn + scalar rows)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__widgets</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj:`list`</span>
+        <span class="c1">#:     &lt;:class:`pyqtgraph.QtCore.QObject`&gt; &gt;)</span>
+        <span class="c1">#:     ROI widgets [label, readle, writele] x4</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roiwidgets</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">#: (:class:`pyqtgraph.QtWidgets.QPushButton`)</span>
+        <span class="c1">#:     apply ROI button</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roiapplybtn</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:class:`pyqtgraph.QtWidgets.QPushButton`)</span>
+        <span class="c1">#:     restore ROI button</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roirestorebtn</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1">#: (:class:`Ui_LimaCCDsToolWidget&#39;)</span>
+        <span class="c1">#:     ui_toolwidget object from qtdesigner</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span> <span class="o">=</span> <span class="n">_limaccdsformclass</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">infolineedit</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">infotips</span> <span class="o">=</span> \
+            <span class="s2">&quot;coordinate info display&quot;</span> \
+            <span class="s2">&quot; for the mouse pointer&quot;</span>
+
+        <span class="c1">#: (:obj:`list` &lt; [:class:`pyqtgraph.\</span>
+        <span class="c1">#:     QtCore.pyqtSignal`, :obj:`str`] &gt;)</span>
+        <span class="c1">#: list of [signal, slot] object to connect</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal2slot</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">mouseImagePositionChanged</span><span class="p">,</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">_message</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">imageSourceChanged</span><span class="p">,</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">__updateDevice</span><span class="p">],</span>
+        <span class="p">]</span>
+
+<div class="viewcode-block" id="LimaCCDsToolWidget.configure"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.LimaCCDsToolWidget.configure">[docs]</a>    <span class="nd">@debugmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;set configuration for the current tool</span>
+
+<span class="sd">        :param configuration: configuration string</span>
+<span class="sd">        :type configuration: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">configuration</span><span class="p">:</span>
+            <span class="n">cnf</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;limaccds_device&quot;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">devname</span> <span class="o">=</span> <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;limaccds_device&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">devname</span> \
+                        <span class="ow">and</span> <span class="n">devname</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__devicename</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__devicename</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">devname</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__updateDevice</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="LimaCCDsToolWidget.configuration"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.LimaCCDsToolWidget.configuration">[docs]</a>    <span class="nd">@debugmethod</span>
+    <span class="k">def</span> <span class="nf">configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;provides configuration for the current tool</span>
+
+<span class="sd">        :returns configuration: configuration string</span>
+<span class="sd">        :rtype configuration: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cnf</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">cnf</span><span class="p">[</span><span class="s2">&quot;limaccds_device&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__devicename</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">numpyEncoder</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_extractDeviceName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;extract device name from source config</span>
+
+<span class="sd">        :returns: device name or empty string</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">srcconf</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">sourceConfiguration</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">cfg</span> <span class="ow">in</span> <span class="n">srcconf</span><span class="p">:</span>
+            <span class="n">cfg</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">parts</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">devname</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">return</span> <span class="n">devname</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_checkCompat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;check device compatibility</span>
+
+<span class="sd">        :returns: True if the device is of class LimaCCDs</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extractDeviceName</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">dp</span> <span class="o">=</span> <span class="n">tango</span><span class="o">.</span><span class="n">DeviceProxy</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dp</span><span class="o">.</span><span class="n">info</span><span class="p">()</span><span class="o">.</span><span class="n">dev_class</span> <span class="o">==</span> <span class="s2">&quot;LimaCCDs&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Could not check compatibility: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">__setWidgetsEnabled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enabled</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;enable or disable all dynamic widgets</span>
+
+<span class="sd">        :param enabled: enable state</span>
+<span class="sd">        :type enabled: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">wds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__widgets</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wds</span><span class="p">:</span>
+                <span class="n">w</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">enabled</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">wds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roiwidgets</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wds</span><span class="p">:</span>
+                <span class="n">w</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">enabled</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roiapplybtn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__roiapplybtn</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">enabled</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roirestorebtn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__roirestorebtn</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">enabled</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__probeAttributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;probe which video attributes exist</span>
+
+<span class="sd">        :returns: tuple of (scalar names, roi enabled)</span>
+<span class="sd">        :rtype: :obj:`tuple` &lt;:obj:`list` &lt;:obj:`str`&gt;,</span>
+<span class="sd">            :obj:`bool`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scalars</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">roien</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">scalars</span><span class="p">,</span> <span class="n">roien</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">attrlist</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">a</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span><span class="o">.</span><span class="n">attribute_list_query</span><span class="p">()</span>
+            <span class="p">]</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="n">attrlist</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scalarattrs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">attr</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">attrlist</span><span class="p">:</span>
+                <span class="c1"># lima atts always exist, they throw exception when</span>
+                <span class="c1"># writting if not supported</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span><span class="o">.</span><span class="n">read_attribute</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span><span class="o">.</span><span class="n">write_attribute</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2"> lima attribute not supported by camera:&quot;</span><span class="p">,</span>
+                        <span class="n">e</span>
+                    <span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="n">scalars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roiattr</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">attrlist</span><span class="p">:</span>
+            <span class="n">roien</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">scalars</span><span class="p">,</span> <span class="n">roien</span>
+
+    <span class="k">def</span> <span class="nf">__createWidgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;create dynamic parameter widgets&quot;&quot;&quot;</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">parGridLayout</span>
+        <span class="n">gc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gridcols</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Start/Stop button</span>
+        <span class="n">startbtn</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span>
+            <span class="s2">&quot;Start&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="p">)</span>
+        <span class="n">startbtn</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span>
+            <span class="s2">&quot;Start/Stop video live mode&quot;</span><span class="p">)</span>
+        <span class="n">startbtn</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_toggleVideoLive</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">startbtn</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__widgets</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">startbtn</span><span class="p">])</span>
+        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># scalar parameter rows</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__supportedscalars</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="n">attr</span><span class="p">,</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="p">)</span>
+            <span class="n">readle</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLineEdit</span><span class="p">(</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="p">)</span>
+            <span class="n">readle</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">readle</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                <span class="s2">&quot;color: black;&quot;</span>
+                <span class="s2">&quot; background-color: #90EE90;&quot;</span><span class="p">)</span>
+            <span class="n">readle</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span>
+                <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+            <span class="n">writele</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLineEdit</span><span class="p">(</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="p">)</span>
+            <span class="n">writele</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span>
+                <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+            <span class="n">applybtn</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span>
+                <span class="s2">&quot;Apply&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="p">)</span>
+            <span class="n">applybtn</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span>
+                <span class="s2">&quot;Write the new value of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">attr</span><span class="p">)</span>
+            <span class="n">tip</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__devicename</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+            <span class="n">label</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">tip</span><span class="p">)</span>
+            <span class="n">readle</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">tip</span><span class="p">)</span>
+            <span class="n">writele</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">tip</span><span class="p">)</span>
+            <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">readle</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">writele</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span>
+                <span class="n">applybtn</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gc</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__widgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">label</span><span class="p">,</span> <span class="n">readle</span><span class="p">,</span> <span class="n">writele</span><span class="p">,</span> <span class="n">applybtn</span><span class="p">])</span>
+            <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># connect apply buttons</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__supportedscalars</span><span class="p">)):</span>
+            <span class="n">wds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__widgets</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">wds</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">checked</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="n">i</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_applypar</span><span class="p">(</span><span class="n">idx</span><span class="p">))</span>
+
+        <span class="c1"># ROI section (single row)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roienabled</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__createRoiWidgets</span><span class="p">(</span><span class="n">layout</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span>
+
+        <span class="c1"># initial read of video_live</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">vl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span><span class="o">.</span><span class="n">read_attribute</span><span class="p">(</span>
+                <span class="s2">&quot;video_live&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__videolive</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">vl</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__videolive</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updateStartButton</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__createRoiWidgets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layout</span><span class="p">,</span> <span class="n">row</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;create ROI widgets in a single row</span>
+
+<span class="sd">        Layout (1 row, 14 columns):</span>
+<span class="sd">          [SX:][r][w] [SY:][r][w] [LX:][r][w]</span>
+<span class="sd">          [LY:][r][w] [Apply][Restore]</span>
+
+<span class="sd">        :param layout: grid layout to add widgets to</span>
+<span class="sd">        :type layout: :class:`QtWidgets.QGridLayout`</span>
+<span class="sd">        :param row: row index</span>
+<span class="sd">        :type row: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">roitip</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__devicename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_roiattr</span><span class="p">)</span>
+
+        <span class="c1"># 4 field triplets at col offsets 0,3,6,9</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">lb</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_roilabels</span><span class="p">):</span>
+            <span class="n">coff</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">3</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLabel</span><span class="p">(</span>
+                <span class="n">lb</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="p">)</span>
+            <span class="n">readle</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLineEdit</span><span class="p">(</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="p">)</span>
+            <span class="n">readle</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">readle</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                <span class="s2">&quot;color: black;&quot;</span>
+                <span class="s2">&quot; background-color: #90EE90;&quot;</span><span class="p">)</span>
+            <span class="n">readle</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span>
+                <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+            <span class="n">writele</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QLineEdit</span><span class="p">(</span>
+                <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="p">)</span>
+            <span class="n">writele</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span>
+                <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+            <span class="n">label</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">roitip</span><span class="p">)</span>
+            <span class="n">readle</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">roitip</span><span class="p">)</span>
+            <span class="n">writele</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">roitip</span><span class="p">)</span>
+            <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">coff</span><span class="p">)</span>
+            <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span>
+                <span class="n">readle</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">coff</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span>
+                <span class="n">writele</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">coff</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__roiwidgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">label</span><span class="p">,</span> <span class="n">readle</span><span class="p">,</span> <span class="n">writele</span><span class="p">])</span>
+
+        <span class="c1"># Apply ROI button at col 12</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roiapplybtn</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span>
+            <span class="s2">&quot;Apply ROI&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roiapplybtn</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span>
+            <span class="s2">&quot;Write ROI values to </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">roitip</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roiapplybtn</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_applyRoi</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__roiapplybtn</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+
+        <span class="c1"># Restore ROI button at col 13</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roirestorebtn</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span>
+            <span class="s2">&quot;Restore&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roirestorebtn</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span>
+            <span class="s2">&quot;Reset ROI to full detector size&quot;</span>
+            <span class="s2">&quot; using image_max_dim&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roirestorebtn</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_restoreRoi</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__roirestorebtn</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_updateStartButton</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;update start/stop button text&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__widgets</span><span class="p">:</span>
+            <span class="n">btn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__widgets</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__videolive</span><span class="p">:</span>
+                <span class="n">btn</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Stop&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">btn</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Start&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__clearWidgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;remove all dynamic widgets&quot;&quot;&quot;</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">parGridLayout</span>
+        <span class="k">for</span> <span class="n">wds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__widgets</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wds</span><span class="p">:</span>
+                <span class="n">w</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+                <span class="n">layout</span><span class="o">.</span><span class="n">removeWidget</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__widgets</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">wds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roiwidgets</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wds</span><span class="p">:</span>
+                <span class="n">w</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+                <span class="n">layout</span><span class="o">.</span><span class="n">removeWidget</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roiwidgets</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roiapplybtn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__roiapplybtn</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+            <span class="n">layout</span><span class="o">.</span><span class="n">removeWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__roiapplybtn</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__roiapplybtn</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roirestorebtn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__roirestorebtn</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+            <span class="n">layout</span><span class="o">.</span><span class="n">removeWidget</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__roirestorebtn</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__roirestorebtn</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="LimaCCDsToolWidget.activate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.LimaCCDsToolWidget.activate">[docs]</a>    <span class="nd">@debugmethod</span>
+    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;activates tool widget&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deactivate</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__devicename</span><span class="p">:</span>
+            <span class="n">devname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extractDeviceName</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">devname</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__devicename</span> <span class="o">=</span> <span class="n">devname</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__devicename</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span> <span class="o">=</span> <span class="n">tango</span><span class="o">.</span><span class="n">DeviceProxy</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__devicename</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__supportedscalars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roienabled</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">__probeAttributes</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__createWidgets</span><span class="p">()</span>
+
+        <span class="c1"># check device compatibility</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_checkCompat</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__setWidgetsEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># set up attribute proxies for polling</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__aproxies</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__supportedscalars</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">ap</span> <span class="o">=</span> <span class="n">tango</span><span class="o">.</span><span class="n">AttributeProxy</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__devicename</span><span class="p">,</span> <span class="n">attr</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__aproxies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ap</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__aproxies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># set up ROI attribute proxy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roiaproxy</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roienabled</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__roiaproxy</span> <span class="o">=</span> \
+                    <span class="n">tango</span><span class="o">.</span><span class="n">AttributeProxy</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__devicename</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_roiattr</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+        <span class="n">allproxies</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">ap</span> <span class="k">for</span> <span class="n">ap</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__aproxies</span>
+            <span class="k">if</span> <span class="n">ap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roiaproxy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">allproxies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__roiaproxy</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">allproxies</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__attrWatcher</span> <span class="o">=</span> \
+                <span class="n">motorWatchThread</span><span class="o">.</span><span class="n">AttributeWatchThread</span><span class="p">(</span>
+                    <span class="n">allproxies</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">toolpollinginterval</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__attrWatcher</span><span class="o">.</span><span class="n">attrValuesSignal</span>\
+                <span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_showValues</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__attrWatcher</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__attrWatcher</span><span class="o">.</span><span class="n">isWatching</span><span class="p">():</span>
+                <span class="n">processEvents</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">triggeredevents</span><span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LimaCCDsToolWidget.deactivate"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.toolWidget.LimaCCDsToolWidget.deactivate">[docs]</a>    <span class="nd">@debugmethod</span>
+    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;deactivates tool widget&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__attrWatcher</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__attrWatcher</span><span class="o">.</span><span class="n">attrValuesSignal</span>\
+                <span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_showValues</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;STOPING </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__attrWatcher</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__attrWatcher</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;WAITING  for </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__attrWatcher</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__attrWatcher</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;REMOVING  for </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__attrWatcher</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__attrWatcher</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__clearWidgets</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__aproxies</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roiaproxy</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__supportedscalars</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roienabled</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_showValues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;update read-only fields from watcher</span>
+
+<span class="sd">        :param values: JSON array of attribute values</span>
+<span class="sd">        :type values: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vls</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+        <span class="n">vidx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># scalar attributes</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">attr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__supportedscalars</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__aproxies</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">vidx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">vls</span><span class="p">):</span>
+                    <span class="n">vl</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">vls</span><span class="p">[</span><span class="n">vidx</span><span class="p">])</span>
+                    <span class="c1"># widget index is i+1</span>
+                    <span class="c1"># (0 is start btn)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__widgets</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+                        <span class="n">vl</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__widgets</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>\
+                        <span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">vl</span><span class="p">)</span>
+                <span class="n">vidx</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># ROI attribute (last in allproxies)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roienabled</span> \
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roiaproxy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">vidx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">vls</span><span class="p">):</span>
+                <span class="n">roival</span> <span class="o">=</span> <span class="n">vls</span><span class="p">[</span><span class="n">vidx</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">roival</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> \
+                        <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">roival</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__roiwidgets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>\
+                            <span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">roival</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__roiwidgets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>\
+                            <span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span>
+                                <span class="nb">str</span><span class="p">(</span><span class="n">roival</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_toggleVideoLive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;toggle video_live attribute&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">newval</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__videolive</span>
+            <span class="k">if</span> <span class="n">newval</span><span class="p">:</span>  <span class="c1"># start camera</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span><span class="o">.</span><span class="n">write_attribute</span><span class="p">(</span><span class="s2">&quot;saving_mode&quot;</span><span class="p">,</span> <span class="s2">&quot;MANUAL&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span><span class="o">.</span><span class="n">write_attribute</span><span class="p">(</span>
+                    <span class="s2">&quot;acq_trigger_mode&quot;</span><span class="p">,</span> <span class="s2">&quot;INTERNAL_TRIGGER&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span><span class="o">.</span><span class="n">write_attribute</span><span class="p">(</span><span class="s2">&quot;acq_nb_frames&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span><span class="o">.</span><span class="n">write_attribute</span><span class="p">(</span>
+                <span class="s2">&quot;video_live&quot;</span><span class="p">,</span> <span class="n">newval</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__videolive</span> <span class="o">=</span> <span class="n">newval</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updateStartButton</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_applypar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;apply the scalar parameter at given index</span>
+
+<span class="sd">        :param idx: index in __supportedscalars</span>
+<span class="sd">        :type idx: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__supportedscalars</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="c1"># widget index is idx+1 (0 is start btn)</span>
+        <span class="n">wds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__widgets</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">wds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">vl</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">vl</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">vl</span><span class="p">):</span>
+                <span class="n">vl</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">vl</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">vl</span> <span class="o">=</span> <span class="n">txt</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span><span class="o">.</span><span class="n">write_attribute</span><span class="p">(</span>
+                <span class="n">attr</span><span class="p">,</span> <span class="n">vl</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_applyRoi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;apply ROI values as spectrum attribute&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">roivals</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+            <span class="n">txt</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__roiwidgets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+                <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">roivals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">txt</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s2">&quot;Invalid ROI value: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">txt</span><span class="p">)</span>
+                <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">roivals</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span><span class="o">.</span><span class="n">write_attribute</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_roiattr</span><span class="p">,</span> <span class="n">arr</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_restoreRoi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;restore ROI to full detector size</span>
+
+<span class="sd">        Reads image_max_dim from the device and</span>
+<span class="sd">        writes video_roi as [0, 0, max_w, max_h].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">roivals</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">roivals</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__deviceproxy</span><span class="o">.</span><span class="n">write_attribute</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_roiattr</span><span class="p">,</span> <span class="n">arr</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__updateDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;re-activate with new device name&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deactivate</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__devicename</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">emitTCC</span><span class="p">()</span>
+
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_message</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;provides intensity message&quot;&quot;&quot;</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">intensity</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">currentIntensity</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> \
+                <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">intensity</span><span class="p">):</span>
+            <span class="n">intensity</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+                          <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">it</span><span class="p">))</span>
+                    <span class="k">else</span> <span class="n">it</span>
+                    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">intensity</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="n">ilabel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scalingLabel</span><span class="p">()</span>
+        <span class="n">txdata</span><span class="p">,</span> <span class="n">tydata</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">scaledxy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">xunits</span><span class="p">,</span> <span class="n">yunits</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">axesunits</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">txdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> \
+                <span class="s2">&quot;x = </span><span class="si">%f%s</span><span class="s2">, y = </span><span class="si">%f%s</span><span class="s2">,&quot;</span> \
+                <span class="s2">&quot; </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">txdata</span><span class="p">,</span>
+                    <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">xunits</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">xunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">tydata</span><span class="p">,</span>
+                    <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">yunits</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">yunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">ilabel</span><span class="p">,</span>
+                    <span class="n">intensity</span><span class="p">,</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> \
+                <span class="s2">&quot;x = </span><span class="si">%f%s</span><span class="s2">, y = </span><span class="si">%f%s</span><span class="s2">,&quot;</span> \
+                <span class="s2">&quot; </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">x</span><span class="p">,</span>
+                    <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">xunits</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">xunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">y</span><span class="p">,</span>
+                    <span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">yunits</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">yunits</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">ilabel</span><span class="p">,</span>
+                    <span class="n">intensity</span><span class="p">,</span>
+                <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mainwidget</span><span class="o">.</span><span class="n">setDisplayedText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 
 <span class="c1">#: ( :obj:`dict` &lt; :obj:`str`, any &gt; ) tool widget properties</span>
