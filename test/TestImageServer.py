@@ -242,10 +242,96 @@ class TestImageServerClass(tango.DeviceClass):
     }
 
 
+class LimaCCDsTestServer(tango.LatestDeviceImpl):
+
+    def __init__(self, cl, name):
+        tango.LatestDeviceImpl.__init__(self, cl, name)
+        LimaCCDsTestServer.init_device(self)
+
+    def init_device(self):
+        self.set_state(tango.DevState.ON)
+        self.get_device_properties(self.get_device_class())
+        self.attr_video_exposure_read = 0.1
+        self.attr_video_gain_read = 1.0
+        self.attr_video_live_read = False
+        self.attr_video_roi_read = [0, 0, 512, 256]
+        self.attr_image_max_dim_read = [512, 256]
+        self.attr_LastImage_read = [
+            [i + 100 * j for i in range(512)] for j in range(256)]
+
+    def read_video_exposure(self, attr):
+        attr.set_value(self.attr_video_exposure_read)
+
+    def write_video_exposure(self, attr):
+        self.attr_video_exposure_read = attr.get_write_value()
+
+    def read_video_gain(self, attr):
+        attr.set_value(self.attr_video_gain_read)
+
+    def write_video_gain(self, attr):
+        self.attr_video_gain_read = attr.get_write_value()
+
+    def read_video_live(self, attr):
+        attr.set_value(self.attr_video_live_read)
+
+    def write_video_live(self, attr):
+        self.attr_video_live_read = attr.get_write_value()
+
+    def read_video_roi(self, attr):
+        attr.set_value(self.attr_video_roi_read)
+
+    def write_video_roi(self, attr):
+        self.attr_video_roi_read = list(attr.get_write_value())
+
+    def read_image_max_dim(self, attr):
+        attr.set_value(self.attr_image_max_dim_read)
+
+    def read_LastImage(self, attr):
+        attr.set_value(self.attr_LastImage_read)
+
+
+class LimaCCDsTestServerClass(tango.DeviceClass):
+
+    cmd_list = {}
+
+    attr_list = {
+        'video_exposure':
+        [[tango.DevDouble,
+          tango.SCALAR,
+          tango.READ_WRITE]],
+        'video_gain':
+        [[tango.DevDouble,
+          tango.SCALAR,
+          tango.READ_WRITE]],
+        'video_live':
+        [[tango.DevBoolean,
+          tango.SCALAR,
+          tango.READ_WRITE]],
+        'video_roi':
+        [[tango.DevLong,
+          tango.SPECTRUM,
+          tango.READ_WRITE, 4]],
+        'image_max_dim':
+        [[tango.DevLong,
+          tango.SPECTRUM,
+          tango.READ, 2]],
+        'LastImage':
+        [[tango.DevLong,
+          tango.IMAGE,
+          tango.READ, 4096, 4096]],
+    }
+
+    def __init__(self, name):
+        tango.DeviceClass.__init__(self, name)
+        self.set_type("LimaCCDsTestServer")
+
+
 def main():
     try:
         py = tango.Util(sys.argv)
         py.add_class(TestImageServerClass, TestImageServer, 'TestImageServer')
+        py.add_class(
+            LimaCCDsTestServerClass, LimaCCDsTestServer, 'LimaCCDs')
 
         U = tango.Util.instance()
         U.server_init()

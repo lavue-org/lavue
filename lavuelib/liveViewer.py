@@ -2870,6 +2870,8 @@ class LiveViewer(QtWidgets.QDialog):
                 self.__datasources[i].setConfiguration(sourceConfiguration[i])
         self.setLavueState(
             {"configuration": ";".join(self.__sourceconfiguration or "")})
+        self.__imagewg.setSourceConfiguration(
+            self.__sourceconfiguration)
 
     @debugmethod
     def _switchSourceDisplay(self, label):

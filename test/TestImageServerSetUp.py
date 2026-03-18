@@ -149,6 +149,105 @@ class TestImageServerSetUp(object):
             pipe.close()
 
 
+class LimaCCDsTestServerSetUp(object):
+    """Sets up two LimaCCDs mock devices at
+    test/limaccdstestserver/00 and test/limaccdstestserver/01
+    served by a single TestImageServer process instance LCS1."""
+
+    def __init__(self, instance="LCS1"):
+        self.instance = instance
+        self._psub = None
+        self.proxies = {}
+        self._devices = [
+            "test/limaccdstestserver/00",
+            "test/limaccdstestserver/01",
+        ]
+        self._devinfos = []
+        for dv in self._devices:
+            di = tango.DbDevInfo()
+            di._class = "LimaCCDs"
+            di.server = "TestImageServer/%s" % instance
+            di.name = dv
+            self._devinfos.append(di)
+
+    def setUp(self):
+        print("\nsetting up LimaCCDs mock servers...")
+        db = tango.Database()
+        for di in self._devinfos:
+            db.add_device(di)
+            db.add_server(di.server, di)
+
+        path = os.path.dirname(os.path.abspath(TestImageServer.__file__))
+        if os.path.isfile("%s/TestImageServer.py" % path):
+            if sys.version_info > (3,):
+                self._psub = subprocess.call(
+                    "cd %s; python3 ./TestImageServer.py %s &" %
+                    (path, self.instance), stdout=None,
+                    stderr=None, shell=True)
+            else:
+                self._psub = subprocess.call(
+                    "cd %s; python ./TestImageServer.py %s &" %
+                    (path, self.instance), stdout=None,
+                    stderr=None, shell=True)
+            sys.stdout.write("waiting for LimaCCDs mock servers ")
+
+        db = tango.Database()
+        for dvname in self._devices:
+            found = False
+            cnt = 0
+            while not found and cnt < 1000:
+                try:
+                    sys.stdout.write(".")
+                    sys.stdout.flush()
+                    exl = db.get_device_exported(dvname)
+                    if dvname not in exl.value_string:
+                        time.sleep(0.01)
+                        cnt += 1
+                        continue
+                    proxy = tango.DeviceProxy(dvname)
+                    proxy.set_source(tango.DevSource.DEV)
+                    time.sleep(0.01)
+                    if proxy.state() == tango.DevState.ON:
+                        self.proxies[dvname] = proxy
+                        found = True
+                except Exception:
+                    found = False
+                cnt += 1
+        print("")
+
+    def tearDown(self):
+        print("tearing down LimaCCDs mock servers...")
+        db = tango.Database()
+        db.delete_server(self._devinfos[0].server)
+        if sys.version_info > (3,):
+            with subprocess.Popen(
+                    "ps -ef | grep 'TestImageServer.py %s' | grep -v grep" %
+                    self.instance,
+                    stdout=subprocess.PIPE, shell=True) as proc:
+                pipe = proc.stdout
+                res = str(pipe.read(), "utf8").split("\n")
+                for r in res:
+                    sr = r.split()
+                    if len(sr) > 2:
+                        subprocess.call(
+                            "kill -9 %s" % sr[1], stderr=subprocess.PIPE,
+                            shell=True)
+                pipe.close()
+        else:
+            pipe = subprocess.Popen(
+                "ps -ef | grep 'TestImageServer.py %s' | grep -v grep" %
+                self.instance,
+                stdout=subprocess.PIPE, shell=True).stdout
+            res = str(pipe.read()).split("\n")
+            for r in res:
+                sr = r.split()
+                if len(sr) > 2:
+                    subprocess.call(
+                        "kill -9 %s" % sr[1], stderr=subprocess.PIPE,
+                        shell=True)
+            pipe.close()
+
+
 if __name__ == "__main__":
     simps = TestImageServerSetUp()
     simps.setUp()

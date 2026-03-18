@@ -89,6 +89,8 @@ class ImageWidget(QtWidgets.QWidget):
     imagePlotted = QtCore.pyqtSignal()
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) replot image signal
     replotImage = QtCore.pyqtSignal(bool)
+    #: (:class:`pyqtgraph.QtCore.pyqtSignal`) Image source changed signal
+    imageSourceChanged = QtCore.pyqtSignal()
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) sardana enabled signal
     sardanaEnabled = QtCore.pyqtSignal(bool)
     #: (:class:`pyqtgraph.QtCore.pyqtSignal`) aspect locked toggled signal
@@ -182,6 +184,8 @@ class ImageWidget(QtWidgets.QWidget):
         self.__overflowvalue = None
         #: (:obj:`str`) image name
         self.__imagename = None
+        #: (:obj:`list` < :obj:`str` >) source configuration strings
+        self.__sourceconfiguration = []
 
         #: ( ( :obj:`bool`, :obj:`bool`,:obj:`bool`) )
         #        selected (transpose, leftright-flip, updown-flip )
@@ -798,6 +802,23 @@ class ImageWidget(QtWidgets.QWidget):
              :class:`lavuelib.controllerClient.ControllerClient`
         """
         self.__tangoclient = tangoclient
+
+    def setSourceConfiguration(self, configuration):
+        """ sets source configuration
+
+        :param configuration: source configuration strings
+        :type configuration: :obj:`list` < :obj:`str` >
+        """
+        self.__sourceconfiguration = configuration or []
+        self.imageSourceChanged.emit()
+
+    def sourceConfiguration(self):
+        """ provides source configuration
+
+        :returns: source configuration strings
+        :rtype: :obj:`list` < :obj:`str` >
+        """
+        return self.__sourceconfiguration
 
     def __connectsplitters(self):
         """ connects splitters  signals
