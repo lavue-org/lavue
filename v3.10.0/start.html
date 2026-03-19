@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Start the Viewer &#8212; LaVue  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=ffd7f65b" />
+    
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="GUI User Guide" href="gui/index.html" />
+    <link rel="prev" title="Installation" href="installation.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gui/index.html" title="GUI User Guide"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LaVue  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Start the Viewer</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="start-the-viewer">
+<h1>Start the Viewer<a class="headerlink" href="#start-the-viewer" title="Link to this heading">¶</a></h1>
+<p>To start LaVue</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>lavue
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>lavue3
+</pre></div>
+</div>
+<p>for python 3 version (for older debian/ubuntu releases).</p>
+<section id="start-the-viewer-in-the-expert-mode">
+<h2>Start the Viewer in the expert mode<a class="headerlink" href="#start-the-viewer-in-the-expert-mode" title="Link to this heading">¶</a></h2>
+<p>Changing LaVue settings is available in the expert mode, i.e.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>lavue<span class="w"> </span>-m<span class="w"> </span>expert
+</pre></div>
+</div>
+<p>under an additional button: Configuration.</p>
+</section>
+<section id="launching-options">
+<h2>Launching options<a class="headerlink" href="#launching-options" title="Link to this heading">¶</a></h2>
+<p>To get all possible command-line parameters</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>lavue<span class="w"> </span>-h
+
+<span class="go">usage: lavue [-h] [-v] [-m MODE] [-y STYLE] [-e STYLESHEET] [-j INSTANCE]</span>
+<span class="go">             [-f IMAGEFILE] [-s SOURCE] [-c CONFIGURATION] [-z] [-o MBUFFER]</span>
+<span class="go">             [--channel CHANNEL] [-b BKGFILE] [-k MASKFILE] [-p MASKHIGHVALUE]</span>
+<span class="go">             [-t TRANSFORMATION] [-i SCALING] [-l LEVELS] [-q AUTOFACTOR]</span>
+<span class="go">             [-g GRADIENT] [-r VIEWRANGE] [-x] [-u TOOL] [-a TANGODEVICE]</span>
+<span class="go">             [-d DOORDEVICE] [-n ANALYSISDEVICE]</span>
+
+<span class="go">2d detector live image viewer</span>
+
+<span class="go">optional arguments:</span>
+<span class="go">  -h, --help            show this help message and exit</span>
+<span class="go">  -v, --version         program version</span>
+<span class="go">  -m MODE, --mode MODE  interface mode, i.e. user, expert</span>
+<span class="go">  -y STYLE, --style STYLE</span>
+<span class="go">                        Qt style</span>
+<span class="go">  -e STYLESHEET, --stylesheet STYLESHEET</span>
+<span class="go">                        Qt stylesheet</span>
+<span class="go">  -j INSTANCE, --instance INSTANCE</span>
+<span class="go">                        LaVue instance with separate configuration</span>
+<span class="go">  -ns, --no-space-instance</span>
+<span class="go">                        the configuration file name without a space character</span>
+<span class="go">                          (in the future major release it will become the default one)</span>
+<span class="go">  --organization ORGANIZATION</span>
+<span class="go">                        Organization name</span>
+<span class="go">  --domain DOMAIN</span>
+<span class="go">                        Organization domain name</span>
+<span class="go">  --configuration-path CONFIGPATH</span>
+<span class="go">                        Base configuration path</span>
+<span class="go">  -f IMAGEFILE, --image-file IMAGEFILE</span>
+<span class="go">                        image file name to show, e.g. /tmp/myfile2.nxs://entry/data/pilatus,,-1</span>
+<span class="go">  -s SOURCE, --source SOURCE</span>
+<span class="go">                        image source, i.e. hidra, http, tangoattr,</span>
+<span class="go">                            tangoevents, tangofile, doocsprop, tineprop,</span>
+<span class="go">                            epicspv, zmq, asapo, nxsfile, test</span>
+<span class="go">                        multiple-source names is separated by semicolon &#39;;&#39;</span>
+<span class="go">  -c CONFIGURATION, --configuration CONFIGURATION</span>
+<span class="go">                        configuration strings for the image source separated by comma, e.g.</span>
+<span class="go">                          hidra -&gt; &#39;-c haspilatus300k.desy.de&#39;</span>
+<span class="go">                          http -&gt; &#39;-c haso228eiger/1.5.0&#39;</span>
+<span class="go">                          tangoattr -&gt; &#39;-c sys/tg_test/1/double_image_ro&#39;</span>
+<span class="go">                          tangoevents -&gt; &#39;-c sys/lamccds/1/video_last_image&#39;</span>
+<span class="go">                          tangofile -&gt; &#39;-c p00/plt/1/LastImageTaken,p00/plt/1/LastImagePath&#39;</span>
+<span class="go">                          zmq -&gt; &#39;-c haso228:5535,topic&#39;</span>
+<span class="go">                          doocsprop -&gt; &#39;-c TTF2.FEL/BLFW2.CAM/BL0M1.CAM/IMAGE_EXT&#39;</span>
+<span class="go">                          nxsfile -&gt; &#39;-c /tmp/myfile.nxs://entry/data/pilatus&#39;</span>
+<span class="go">                                  or &#39;-c /tmp/myfile2.nxs://entry/data/pilatus,0,34&#39;</span>
+<span class="go">                          tineprop -&gt; &#39;-c /HASYLAB/P00_LM00/Output/Frame&#39;</span>
+<span class="go">                          asapo -&gt; &#39;-c pilatus,substream2&#39;</span>
+<span class="go">                          epicspv -&gt; &#39;-c &#39;00SIM0:cam1:,[640,480]&#39;</span>
+<span class="go">                       configuration for multiple-sources is separated by semicolon &#39;;&#39;</span>
+<span class="go">  --offset OFFSET relative offset x,y[,TRANSFORMATION]</span>
+<span class="go">                        where x,y are position of the first pixel for a particular image source</span>
+<span class="go">                        while optional TRANSFORMATION can be:</span>
+<span class="go">                          flip-up-down, flipud, fud, flip-left-right, fliplr, flr, transpose, t,</span>
+<span class="go">                          rot90, r90, rot180, r180, r270, rot270, rot180+transpose, rot180t or r180t</span>
+<span class="go">                        offset for multiple-sources is separated by semicolon &#39;;&#39;</span>
+<span class="go">                        e.g.</span>
+<span class="go">                           ;200,300;,54;121,3</span>
+<span class="go">                           200,300;100,</span>
+<span class="go">                           200,300;100,200,t</span>
+<span class="go">                           ;200,300,r45;,52;11,3,r180t</span>
+<span class="go">  -w RANGEWINDOW, --range-window RANGEWINDOW</span>
+<span class="go">                        range window slices, i.e. x1:x2,y1:y2 , e.g. -w 10:500,20:200</span>
+<span class="go">                          where &#39;m&#39; is &#39;-&#39;</span>
+<span class="go">  --ds-factor DSFACTOR integer down-sampling factor</span>
+<span class="go">  --ds-reduction DSREDUCTION</span>
+<span class="go">                        down-sampling reduction function, i.e. &#39;max&#39;, &#39;min&#39;, &#39;mean&#39; or &#39;sum&#39;</span>
+<span class="go">  -z, --filters apply image filters</span>
+<span class="go">  -o MBUFFER, --memory-buffer MBUFFER</span>
+<span class="go">                     size of memory buffer in frames</span>
+<span class="go">  --channel CHANNEL</span>
+<span class="go">                     default channel number or &#39;sum&#39;, &#39;mean&#39;, &#39;rgb&#39; or RGB channels separated by comma e.g.&#39;0,1,3&#39;</span>
+<span class="go">  -b BKGFILE, --bkg-file BKGFILE</span>
+<span class="go">                        background file-name to load</span>
+<span class="go">  --bkg-scale BKGSCALE background scaling factor</span>
+<span class="go">  --bright-field-file BRIGHTFIELDFILE</span>
+<span class="go">                        bright field file-name to load</span>
+<span class="go">  --bright-field-scale BRIGHTFIELDSCALE</span>
+<span class="go">                     bright field scaling factor</span>
+<span class="go">  -k MASKFILE, --mask-file MASKFILE</span>
+<span class="go">                     mask file-name to load</span>
+<span class="go">  -p MASKHIGHVALUE, --mask-high-value MASKHIGHVALUE</span>
+<span class="go">                        highest pixel value to show</span>
+<span class="go">  -t TRANSFORMATION, --transformation TRANSFORMATION</span>
+<span class="go">                        image transformation, i.e.</span>
+<span class="go">                          flip-up-down, flip-left-right, transpose,</span>
+<span class="go">                          rot90, rot180, rot270, rot180+transpose</span>
+<span class="go">  --overflow OVERFLOWVALUE</span>
+<span class="go">                        above the overflow value all pixels are shown in a special color defined in the configuration</span>
+<span class="go">  -i SCALING, --scaling SCALING</span>
+<span class="go">                        intensity scaling, i.e. sqrt, linear, log</span>
+<span class="go">  -l LEVELS, --levels LEVELS</span>
+<span class="go">                        intensity display levels e.g. -l m20,20</span>
+<span class="go">                          where &#39;m&#39; is &#39;-&#39;</span>
+<span class="go">                        the RGB channel levels can be added separated by &#39;;&#39; e.g.</span>
+<span class="go">                          -l &#39;0,40;1,35;0,30;2,45;green&#39;</span>
+<span class="go">                              where 0,40 are the main intensity dispay levels</span>
+<span class="go">                                    1,35 are the red channel intensity dispay levels</span>
+<span class="go">                                    0,30 are the green channel intensity dispay levels</span>
+<span class="go">                                    2,45 are the blue channel intensity dispay levels</span>
+<span class="go">                                       and the green channel level widgets are selected</span>
+<span class="go">  -q AUTOFACTOR, --factor AUTOFACTOR</span>
+<span class="go">                        factor of the highest pick for automatic levels in %, e.g. -q 0.5</span>
+<span class="go">  -g GRADIENT, --gradient GRADIENT</span>
+<span class="go">                        color gradient, i.e. grey, highcontrast, thermal, flame,</span>
+<span class="go">                          bipolar, spectrum, spectrumclip, greyclip, reversegrey, cyclic,</span>
+<span class="go">                          yellowy, inverted</span>
+<span class="go">                        the multi channel color gradients can be added separated by &#39;;&#39; e.g.  -g &#39;thermal;flame&#39;</span>
+<span class="go">  -r VIEWRANGE, --range VIEWRANGE</span>
+<span class="go">                        viewbox range, i.e. xmin,ymin,xsize,ysize , e.g. -r 5.6,m60.7,543.2,444.11</span>
+<span class="go">                            where &#39;m&#39; is &#39;-&#39;</span>
+<span class="go">  -x, --start           connect the image source</span>
+<span class="go">  -u TOOL, --tool TOOL  utility tool, i.e. intensity, roi, movemotors, meshscan, maxima,</span>
+<span class="go">                          linecut, projections, 1d-plot, angle/q, q+roi+proj, parameters, diffractogram, twodfit, centercheck</span>
+<span class="go">  --tool-configuration TOOLCONFIG</span>
+<span class="go">                          JSON dictionary with tool configuration, e.g. {&quot;rows_to_plot&quot;:&quot;0,1&quot;,&quot;buffer_size&quot;:512}</span>
+<span class="go">  -a TANGODEVICE, --tango-device TANGODEVICE</span>
+<span class="go">                        tango device of LavueController to communicated with clients during the run</span>
+<span class="go">  -d DOORDEVICE, --door DOORDEVICE</span>
+<span class="go">                        door device to communicated with sardana during the run</span>
+<span class="go">  -n ANALYSISDEVICE, --analysis-device ANALYSISDEVICE</span>
+<span class="go">                        tango analysis device of LambdaOnlineAnalysis to communicate with analysis clients during the run</span>
+<span class="go">  --log LOG logging level, i.e. debug, info, warning, error, critical</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Start the Viewer</a><ul>
+<li><a class="reference internal" href="#start-the-viewer-in-the-expert-mode">Start the Viewer in the expert mode</a></li>
+<li><a class="reference internal" href="#launching-options">Launching options</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="installation.html"
+                          title="previous chapter">Installation</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="gui/index.html"
+                          title="next chapter">GUI User Guide</a></p>
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="index/../../v3.10.0/index.html">v3.10.0</a></li>
+      <li><a class="reference external" href="index/../../v3.9.0/index.html">v3.9.0</a></li>
+      <li><a class="reference external" href="index/../../v3.8.0/index.html">v3.8.0</a></li>
+      <li><a class="reference external" href="index/../../v3.7.0/index.html">v3.7.0</a></li>
+      <li><a class="reference external" href="index/../../v3.6.0/index.html">v3.6.0</a></li>
+      <li><a class="reference external" href="index/../../v3.5.4/index.html">v3.5.4</a></li>
+      <li><a class="reference external" href="index/../../v3.5.3/index.html">v3.5.3</a></li>
+      <li><a class="reference external" href="index/../../v3.4.1/index.html">v3.4.1</a></li>
+      <li><a class="reference external" href="index/../../v3.3.1/index.html">v3.3.1</a></li>
+      <li><a class="reference external" href="index/../../v3.2.0/index.html">v3.2.0</a></li>
+      <li><a class="reference external" href="index/../../v3.1.0/index.html">v3.1.0</a></li>
+      <li><a class="reference external" href="index/../../v3.0.0/index.html">v3.0.0</a></li>
+      <li><a class="reference external" href="index/../../v2.99.1/index.html">v2.99.1</a></li>
+      <li><a class="reference external" href="index/../../v2.99.0/index.html">v2.99.0</a></li>
+      <li><a class="reference external" href="index/../../v2.98.2/index.html">v2.98.2</a></li>
+      <li><a class="reference external" href="index/../../v2.97.0/index.html">v2.97.0</a></li>
+      <li><a class="reference external" href="index/../../v2.96.0/index.html">v2.96.0</a></li>
+      <li><a class="reference external" href="index/../../v2.95.0/index.html">v2.95.0</a></li>
+      <li><a class="reference external" href="index/../../v2.94.2/index.html">v2.94.2</a></li>
+      <li><a class="reference external" href="index/../../v2.93.1/index.html">v2.93.1</a></li>
+      <li><a class="reference external" href="index/../../v2.92.2/index.html">v2.92.2</a></li>
+      <li><a class="reference external" href="index/../../v2.91.1/index.html">v2.91.1</a></li>
+      <li><a class="reference external" href="index/../../v2.90.2/index.html">v2.90.2</a></li>
+      <li><a class="reference external" href="index/../../v2.89.3/index.html">v2.89.3</a></li>
+      <li><a class="reference external" href="index/../../v2.88.0/index.html">v2.88.0</a></li>
+      <li><a class="reference external" href="index/../../v2.87.0/index.html">v2.87.0</a></li>
+      <li><a class="reference external" href="index/../../v2.86.1/index.html">v2.86.1</a></li>
+      <li><a class="reference external" href="index/../../v2.85.1/index.html">v2.85.1</a></li>
+      <li><a class="reference external" href="index/../../v2.84.0/index.html">v2.84.0</a></li>
+      <li><a class="reference external" href="index/../../v2.83.4/index.html">v2.83.4</a></li>
+      <li><a class="reference external" href="index/../../v2.82.0/index.html">v2.82.0</a></li>
+      <li><a class="reference external" href="index/../../v2.81.0/index.html">v2.81.0</a></li>
+      <li><a class="reference external" href="index/../../v2.80.1/index.html">v2.80.1</a></li>
+      <li><a class="reference external" href="index/../../v2.79.0/index.html">v2.79.0</a></li>
+      <li><a class="reference external" href="index/../../v2.78.0/index.html">v2.78.0</a></li>
+      <li><a class="reference external" href="index/../../v2.77.0/index.html">v2.77.0</a></li>
+      <li><a class="reference external" href="index/../../v2.76.1/index.html">v2.76.1</a></li>
+      <li><a class="reference external" href="index/../../v2.75.3/index.html">v2.75.3</a></li>
+      <li><a class="reference external" href="index/../../v2.74.0/index.html">v2.74.0</a></li>
+      <li><a class="reference external" href="index/../../v2.73.0/index.html">v2.73.0</a></li>
+      <li><a class="reference external" href="index/../../v2.72.0/index.html">v2.72.0</a></li>
+      <li><a class="reference external" href="index/../../v2.71.1/index.html">v2.71.1</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gui/index.html" title="GUI User Guide"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LaVue  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Start the Viewer</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+
+GNU GENERAL PUBLIC LICENSE, version 2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>
