@@ -134,6 +134,8 @@
     <span class="n">imagePlotted</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) replot image signal</span>
     <span class="n">replotImage</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) Image source changed signal</span>
+    <span class="n">imageSourceChanged</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) sardana enabled signal</span>
     <span class="n">sardanaEnabled</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) aspect locked toggled signal</span>
@@ -227,6 +229,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__overflowvalue</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1">#: (:obj:`str`) image name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imagename</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`list` &lt; :obj:`str` &gt;) source configuration strings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sourceconfiguration</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1">#: ( ( :obj:`bool`, :obj:`bool`,:obj:`bool`) )</span>
         <span class="c1">#        selected (transpose, leftright-flip, updown-flip )</span>
@@ -875,6 +879,29 @@
 <span class="sd">             :class:`lavuelib.controllerClient.ControllerClient`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__tangoclient</span> <span class="o">=</span> <span class="n">tangoclient</span></div>
+
+
+<div class="viewcode-block" id="ImageWidget.setSourceConfiguration">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.setSourceConfiguration">[docs]</a>
+    <span class="k">def</span> <span class="nf">setSourceConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; sets source configuration</span>
+
+<span class="sd">        :param configuration: source configuration strings</span>
+<span class="sd">        :type configuration: :obj:`list` &lt; :obj:`str` &gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sourceconfiguration</span> <span class="o">=</span> <span class="n">configuration</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imageSourceChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ImageWidget.sourceConfiguration">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.imageWidget.ImageWidget.sourceConfiguration">[docs]</a>
+    <span class="k">def</span> <span class="nf">sourceConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides source configuration</span>
+
+<span class="sd">        :returns: source configuration strings</span>
+<span class="sd">        :rtype: :obj:`list` &lt; :obj:`str` &gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sourceconfiguration</span></div>
 
 
     <span class="k">def</span> <span class="nf">__connectsplitters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -3444,6 +3471,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v3.10.0/index.html">v3.10.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.9.0/index.html">v3.9.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.8.0/index.html">v3.8.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.7.0/index.html">v3.7.0</a></li>

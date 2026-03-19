@@ -9676,6 +9676,12 @@ an image file name and its directory</p>
 <dd><p>(<code class="xref py py-class docutils literal notranslate"><span class="pre">pyqtgraph.QtCore.pyqtSignal</span></code>) image plotted signal</p>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lavuelib.imageWidget.ImageWidget.imageSourceChanged">
+<span class="sig-name descname"><span class="pre">imageSourceChanged</span></span><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.imageSourceChanged" title="Link to this definition">¶</a></dt>
+<dd><p>(<code class="xref py py-class docutils literal notranslate"><span class="pre">pyqtgraph.QtCore.pyqtSignal</span></code>) Image source changed signal</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="lavuelib.imageWidget.ImageWidget.levelMode">
 <span class="sig-name descname"><span class="pre">levelMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.levelMode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.levelMode" title="Link to this definition">¶</a></dt>
@@ -10524,6 +10530,17 @@ mouse image position changed signal</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="lavuelib.imageWidget.ImageWidget.setSourceConfiguration">
+<span class="sig-name descname"><span class="pre">setSourceConfiguration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.setSourceConfiguration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.setSourceConfiguration" title="Link to this definition">¶</a></dt>
+<dd><p>sets source configuration</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a> &gt;) – source configuration strings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="lavuelib.imageWidget.ImageWidget.setStatsWOScaling">
 <span class="sig-name descname"><span class="pre">setStatsWOScaling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.setStatsWOScaling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.setStatsWOScaling" title="Link to this definition">¶</a></dt>
 <dd><p>sets statistics without scaling flag</p>
@@ -10682,6 +10699,20 @@ mouse image position changed signal</p>
 <dt class="sig sig-object py" id="lavuelib.imageWidget.ImageWidget.showTool">
 <span class="sig-name descname"><span class="pre">showTool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.showTool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.showTool" title="Link to this definition">¶</a></dt>
 <dd><p>shows the current tool</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lavuelib.imageWidget.ImageWidget.sourceConfiguration">
+<span class="sig-name descname"><span class="pre">sourceConfiguration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/imageWidget.html#ImageWidget.sourceConfiguration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.imageWidget.ImageWidget.sourceConfiguration" title="Link to this definition">¶</a></dt>
+<dd><p>provides source configuration</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>source configuration strings</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a> &gt;</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -17044,6 +17075,84 @@ list of [signal, slot] object to connect</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="lavuelib.toolWidget.LimaCCDsToolWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lavuelib.toolWidget.</span></span><span class="sig-name descname"><span class="pre">LimaCCDsToolWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/toolWidget.html#LimaCCDsToolWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.toolWidget.LimaCCDsToolWidget" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ToolBaseWidget</span></code></p>
+<p>LimaCCDs video control tool widget</p>
+<p>constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>parent</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pyqtgraph.QtCore.QObject</span></code>) – parent object</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="lavuelib.toolWidget.LimaCCDsToolWidget.activate">
+<span class="sig-name descname"><span class="pre">activate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/toolWidget.html#LimaCCDsToolWidget.activate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.toolWidget.LimaCCDsToolWidget.activate" title="Link to this definition">¶</a></dt>
+<dd><p>activates tool widget</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lavuelib.toolWidget.LimaCCDsToolWidget.alias">
+<span class="sig-name descname"><span class="pre">alias</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'limaccds'</span></em><a class="headerlink" href="#lavuelib.toolWidget.LimaCCDsToolWidget.alias" title="Link to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) tool name alias</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lavuelib.toolWidget.LimaCCDsToolWidget.configuration">
+<span class="sig-name descname"><span class="pre">configuration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/toolWidget.html#LimaCCDsToolWidget.configuration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.toolWidget.LimaCCDsToolWidget.configuration" title="Link to this definition">¶</a></dt>
+<dd><p>provides configuration for the current tool</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns configuration<span class="colon">:</span></dt>
+<dd class="field-odd"><p>configuration string</p>
+</dd>
+<dt class="field-even">Rtype configuration<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lavuelib.toolWidget.LimaCCDsToolWidget.configure">
+<span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/toolWidget.html#LimaCCDsToolWidget.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.toolWidget.LimaCCDsToolWidget.configure" title="Link to this definition">¶</a></dt>
+<dd><p>set configuration for the current tool</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – configuration string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lavuelib.toolWidget.LimaCCDsToolWidget.deactivate">
+<span class="sig-name descname"><span class="pre">deactivate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/toolWidget.html#LimaCCDsToolWidget.deactivate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.toolWidget.LimaCCDsToolWidget.deactivate" title="Link to this definition">¶</a></dt>
+<dd><p>deactivates tool widget</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lavuelib.toolWidget.LimaCCDsToolWidget.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'LimaCCDs'</span></em><a class="headerlink" href="#lavuelib.toolWidget.LimaCCDsToolWidget.name" title="Link to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) tool name</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lavuelib.toolWidget.LimaCCDsToolWidget.requires">
+<span class="sig-name descname"><span class="pre">requires</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('TANGO',)</span></em><a class="headerlink" href="#lavuelib.toolWidget.LimaCCDsToolWidget.requires" title="Link to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;) capitalized required packages</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lavuelib.toolWidget.LimaCCDsToolWidget.signal2slot">
+<span class="sig-name descname"><span class="pre">signal2slot</span></span><a class="headerlink" href="#lavuelib.toolWidget.LimaCCDsToolWidget.signal2slot" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt; [:class:<a href="#id1"><span class="problematic" id="id2">`</span></a>pyqtgraph.</dt><dd><p>QtCore.pyqtSignal`, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>] &gt;)</p>
+</dd>
+</dl>
+<p>list of [signal, slot] object to connect</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="lavuelib.toolWidget.LineCutToolWidget">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lavuelib.toolWidget.</span></span><span class="sig-name descname"><span class="pre">LineCutToolWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/lavuelib/toolWidget.html#LineCutToolWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lavuelib.toolWidget.LineCutToolWidget" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ToolBaseWidget</span></code></p>
@@ -18066,7 +18175,7 @@ list of [signal, slot] object to connect</p>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="lavuelib.toolWidget.twproperties">
-<span class="sig-prename descclassname"><span class="pre">lavuelib.toolWidget.</span></span><span class="sig-name descname"><span class="pre">twproperties</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[{'alias':</span> <span class="pre">'intensity',</span> <span class="pre">'name':</span> <span class="pre">'Intensity',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'IntensityToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'roi',</span> <span class="pre">'name':</span> <span class="pre">'ROI',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'ROIToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'linecut',</span> <span class="pre">'name':</span> <span class="pre">'LineCut',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'LineCutToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'angle/q',</span> <span class="pre">'name':</span> <span class="pre">'Angle/Q',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'AngleQToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'movemotors',</span> <span class="pre">'name':</span> <span class="pre">'MoveMotors',</span> <span class="pre">'requires':</span> <span class="pre">('TANGO',),</span> <span class="pre">'widget':</span> <span class="pre">'MotorsToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'meshscan',</span> <span class="pre">'name':</span> <span class="pre">'MeshScan',</span> <span class="pre">'requires':</span> <span class="pre">('TANGO',),</span> <span class="pre">'widget':</span> <span class="pre">'MeshToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'1d-plot',</span> <span class="pre">'name':</span> <span class="pre">'1d-Plot',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'OneDToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'projections',</span> <span class="pre">'name':</span> <span class="pre">'Projections',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'ProjectionToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'maxima',</span> <span class="pre">'name':</span> <span class="pre">'Maxima',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'MaximaToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'parameters',</span> <span class="pre">'name':</span> <span class="pre">'Parameters',</span> <span class="pre">'requires':</span> <span class="pre">('TANGO',),</span> <span class="pre">'widget':</span> <span class="pre">'ParametersToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'diffractogram',</span> <span class="pre">'name':</span> <span class="pre">'Diffractogram',</span> <span class="pre">'requires':</span> <span class="pre">('PYFAI',),</span> <span class="pre">'widget':</span> <span class="pre">'DiffractogramToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'centercheck',</span> <span class="pre">'name':</span> <span class="pre">'CenterCheck',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'CenterCheckToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'twodfit',</span> <span class="pre">'name':</span> <span class="pre">'TwoDFit',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'TwoDFitToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'q+roi+proj',</span> <span class="pre">'name':</span> <span class="pre">'Q+ROI+Proj',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'QROIProjToolWidget'}]</span></em><a class="headerlink" href="#lavuelib.toolWidget.twproperties" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">lavuelib.toolWidget.</span></span><span class="sig-name descname"><span class="pre">twproperties</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[{'alias':</span> <span class="pre">'intensity',</span> <span class="pre">'name':</span> <span class="pre">'Intensity',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'IntensityToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'roi',</span> <span class="pre">'name':</span> <span class="pre">'ROI',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'ROIToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'linecut',</span> <span class="pre">'name':</span> <span class="pre">'LineCut',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'LineCutToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'angle/q',</span> <span class="pre">'name':</span> <span class="pre">'Angle/Q',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'AngleQToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'movemotors',</span> <span class="pre">'name':</span> <span class="pre">'MoveMotors',</span> <span class="pre">'requires':</span> <span class="pre">('TANGO',),</span> <span class="pre">'widget':</span> <span class="pre">'MotorsToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'meshscan',</span> <span class="pre">'name':</span> <span class="pre">'MeshScan',</span> <span class="pre">'requires':</span> <span class="pre">('TANGO',),</span> <span class="pre">'widget':</span> <span class="pre">'MeshToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'1d-plot',</span> <span class="pre">'name':</span> <span class="pre">'1d-Plot',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'OneDToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'projections',</span> <span class="pre">'name':</span> <span class="pre">'Projections',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'ProjectionToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'maxima',</span> <span class="pre">'name':</span> <span class="pre">'Maxima',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'MaximaToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'parameters',</span> <span class="pre">'name':</span> <span class="pre">'Parameters',</span> <span class="pre">'requires':</span> <span class="pre">('TANGO',),</span> <span class="pre">'widget':</span> <span class="pre">'ParametersToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'diffractogram',</span> <span class="pre">'name':</span> <span class="pre">'Diffractogram',</span> <span class="pre">'requires':</span> <span class="pre">('PYFAI',),</span> <span class="pre">'widget':</span> <span class="pre">'DiffractogramToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'centercheck',</span> <span class="pre">'name':</span> <span class="pre">'CenterCheck',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'CenterCheckToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'twodfit',</span> <span class="pre">'name':</span> <span class="pre">'TwoDFit',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'TwoDFitToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'q+roi+proj',</span> <span class="pre">'name':</span> <span class="pre">'Q+ROI+Proj',</span> <span class="pre">'requires':</span> <span class="pre">(),</span> <span class="pre">'widget':</span> <span class="pre">'QROIProjToolWidget'},</span> <span class="pre">{'alias':</span> <span class="pre">'limaccds',</span> <span class="pre">'name':</span> <span class="pre">'LimaCCDs',</span> <span class="pre">'requires':</span> <span class="pre">('TANGO',),</span> <span class="pre">'widget':</span> <span class="pre">'LimaCCDsToolWidget'}]</span></em><a class="headerlink" href="#lavuelib.toolWidget.twproperties" title="Link to this definition">¶</a></dt>
 <dd><p>( <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, any &gt; ) tool widget properties</p>
 </dd></dl>
 
@@ -19311,6 +19420,7 @@ list of [signal, slot] object to connect</p>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.image"><code class="docutils literal notranslate"><span class="pre">ImageWidget.image()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.imageName"><code class="docutils literal notranslate"><span class="pre">ImageWidget.imageName()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.imagePlotted"><code class="docutils literal notranslate"><span class="pre">ImageWidget.imagePlotted</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.imageSourceChanged"><code class="docutils literal notranslate"><span class="pre">ImageWidget.imageSourceChanged</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.levelMode"><code class="docutils literal notranslate"><span class="pre">ImageWidget.levelMode()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.maskIndices"><code class="docutils literal notranslate"><span class="pre">ImageWidget.maskIndices()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.maskValue"><code class="docutils literal notranslate"><span class="pre">ImageWidget.maskValue()</span></code></a></li>
@@ -19382,6 +19492,7 @@ list of [signal, slot] object to connect</p>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.setOverflowValueIndices"><code class="docutils literal notranslate"><span class="pre">ImageWidget.setOverflowValueIndices()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.setSardanaUtils"><code class="docutils literal notranslate"><span class="pre">ImageWidget.setSardanaUtils()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.setScalingType"><code class="docutils literal notranslate"><span class="pre">ImageWidget.setScalingType()</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.setSourceConfiguration"><code class="docutils literal notranslate"><span class="pre">ImageWidget.setSourceConfiguration()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.setStatsWOScaling"><code class="docutils literal notranslate"><span class="pre">ImageWidget.setStatsWOScaling()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.setTangoClient"><code class="docutils literal notranslate"><span class="pre">ImageWidget.setTangoClient()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.setTicks"><code class="docutils literal notranslate"><span class="pre">ImageWidget.setTicks()</span></code></a></li>
@@ -19396,6 +19507,7 @@ list of [signal, slot] object to connect</p>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.showCurrentTool"><code class="docutils literal notranslate"><span class="pre">ImageWidget.showCurrentTool()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.showDoorError"><code class="docutils literal notranslate"><span class="pre">ImageWidget.showDoorError()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.showTool"><code class="docutils literal notranslate"><span class="pre">ImageWidget.showTool()</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.sourceConfiguration"><code class="docutils literal notranslate"><span class="pre">ImageWidget.sourceConfiguration()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.stopSignal"><code class="docutils literal notranslate"><span class="pre">ImageWidget.stopSignal</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.tool"><code class="docutils literal notranslate"><span class="pre">ImageWidget.tool()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.imageWidget.ImageWidget.toolConfiguration"><code class="docutils literal notranslate"><span class="pre">ImageWidget.toolConfiguration()</span></code></a></li>
@@ -20207,6 +20319,17 @@ list of [signal, slot] object to connect</p>
 <li><a class="reference internal" href="#lavuelib.toolWidget.IntensityToolWidget.signal2slot"><code class="docutils literal notranslate"><span class="pre">IntensityToolWidget.signal2slot</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#lavuelib.toolWidget.LimaCCDsToolWidget"><code class="docutils literal notranslate"><span class="pre">LimaCCDsToolWidget</span></code></a><ul>
+<li><a class="reference internal" href="#lavuelib.toolWidget.LimaCCDsToolWidget.activate"><code class="docutils literal notranslate"><span class="pre">LimaCCDsToolWidget.activate()</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.toolWidget.LimaCCDsToolWidget.alias"><code class="docutils literal notranslate"><span class="pre">LimaCCDsToolWidget.alias</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.toolWidget.LimaCCDsToolWidget.configuration"><code class="docutils literal notranslate"><span class="pre">LimaCCDsToolWidget.configuration()</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.toolWidget.LimaCCDsToolWidget.configure"><code class="docutils literal notranslate"><span class="pre">LimaCCDsToolWidget.configure()</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.toolWidget.LimaCCDsToolWidget.deactivate"><code class="docutils literal notranslate"><span class="pre">LimaCCDsToolWidget.deactivate()</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.toolWidget.LimaCCDsToolWidget.name"><code class="docutils literal notranslate"><span class="pre">LimaCCDsToolWidget.name</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.toolWidget.LimaCCDsToolWidget.requires"><code class="docutils literal notranslate"><span class="pre">LimaCCDsToolWidget.requires</span></code></a></li>
+<li><a class="reference internal" href="#lavuelib.toolWidget.LimaCCDsToolWidget.signal2slot"><code class="docutils literal notranslate"><span class="pre">LimaCCDsToolWidget.signal2slot</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#lavuelib.toolWidget.LineCutToolWidget"><code class="docutils literal notranslate"><span class="pre">LineCutToolWidget</span></code></a><ul>
 <li><a class="reference internal" href="#lavuelib.toolWidget.LineCutToolWidget.activate"><code class="docutils literal notranslate"><span class="pre">LineCutToolWidget.activate()</span></code></a></li>
 <li><a class="reference internal" href="#lavuelib.toolWidget.LineCutToolWidget.afterplot"><code class="docutils literal notranslate"><span class="pre">LineCutToolWidget.afterplot()</span></code></a></li>
@@ -20390,6 +20513,7 @@ list of [signal, slot] object to connect</p>
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v3.10.0/index.html">v3.10.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.9.0/index.html">v3.9.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.8.0/index.html">v3.8.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.7.0/index.html">v3.7.0</a></li>
