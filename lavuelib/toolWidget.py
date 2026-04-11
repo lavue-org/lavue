@@ -8855,8 +8855,7 @@ class LimaCCDsToolWidget(ToolBaseWidget):
             "coordinate info display" \
             " for the mouse pointer"
 
-        #: (:obj:`list` < [:class:`pyqtgraph.\
-        #:     QtCore.pyqtSignal`, :obj:`str`] >)
+        #: (:obj:`list` < [:class:`pyqtgraph.QtCore.pyqtSignal`, :obj:`str`] >)
         #: list of [signal, slot] object to connect
         self.signal2slot = [
             [self._mainwidget.mouseImagePositionChanged,

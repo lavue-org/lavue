@@ -2348,6 +2348,7 @@ class LiveViewer(QtWidgets.QDialog):
         cnfdlg.maxmbuffersize = self.__settings.maxmbuffersize
         cnfdlg.gradientcolors = self.__settings.gradientcolors
         cnfdlg.floattype = self.__settings.floattype
+        cnfdlg.triggeredevents = self.__settings.triggeredevents
         cnfdlg.secstream = self.__settings.secstream
         cnfdlg.zmqcolon = self.__settings.zmqcolon
         cnfdlg.zeromask = self.__settings.zeromask
@@ -2432,6 +2433,9 @@ class LiveViewer(QtWidgets.QDialog):
         self.__settings.typedrois = dialog.typedrois
         self.__settings.imagechannels = dialog.imagechannels
         self.__settings.floattype = dialog.floattype
+        self.__settings.triggeredevents = dialog.triggeredevents
+        self.__settings.triggeredevents_current \
+            = dialog.triggeredevents
         self.__settings.crosshairlocker = dialog.crosshairlocker
 
         if self.__settings.showsub != dialog.showsub:
