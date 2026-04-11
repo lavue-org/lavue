@@ -175,12 +175,12 @@ def processEvents(events="internal"):
     :param events: :obj:`str`
     """
     try:
-        if events == "some":
+        if events in ["some", "internal"]:
             QtCore.QCoreApplication.processEvents(
                 QtCore.QEventLoop.ProcessEventsFlag.ExcludeSocketNotifiers |
                 QtCore.QEventLoop.ProcessEventsFlag.ExcludeUserInputEvents,
                 100)
-        elif events == "all":
+        if events == "all":
             QtCore.QCoreApplication.processEvents(
                 QtCore.QEventLoop.ProcessEventsFlag.AllEvents, 100)
     except Exception as e:
@@ -1227,7 +1227,7 @@ class ParametersToolWidget(ToolBaseWidget):
         self.__attrWatcher.attrValuesSignal.connect(self._showValues)
         self.__attrWatcher.start()
         while not self.__attrWatcher.isWatching():
-            processEvents(self.__settings.triggeredevents)
+            processEvents(self.__settings.triggeredevents_current)
             time.sleep(0.1)
 
     def __updateWidgets(self):
@@ -4767,7 +4767,7 @@ class DiffractogramToolWidget(ToolBaseWidget):
         :param did: diffractogram id
         :type did: :obj:`int`
         """
-        processEvents(self.__settings.triggeredevents)
+        processEvents(self.__settings.triggeredevents_current)
         self.updateRangeTip()
         self.__updateBufferCombobox(did)
         # self.__nrplots = self.__ui.diffSpinBox.value()
@@ -4775,10 +4775,10 @@ class DiffractogramToolWidget(ToolBaseWidget):
         self._plotDiff()
         self.setColors(self.__settings.roiscolors, True)
         # self.__updateregion()
-        processEvents(self.__settings.triggeredevents)
+        processEvents(self.__settings.triggeredevents_current)
         while len(self.__regions) > self.__nrplots:
             self.regions.pop()
-        processEvents(self.__settings.triggeredevents)
+        processEvents(self.__settings.triggeredevents_current)
         self._updateRegionsAndPlot()
 
     # @debugmethod
@@ -6608,7 +6608,7 @@ class MaximaToolWidget(ToolBaseWidget):
         if len(maxidxs) and idx < 0:
             idx = 0
 
-        processEvents(self.__settings.triggeredevents)
+        processEvents(self.__settings.triggeredevents_current)
         trans = self._mainwidget.transformations()[0]
         if trans:
             comboitems = ["%s: %s at (%s, %s)" % (i + 1, vl[2], vl[1], vl[0])
@@ -9215,7 +9215,7 @@ class LimaCCDsToolWidget(ToolBaseWidget):
             self.__attrWatcher.start()
             while not self.__attrWatcher.isWatching():
                 processEvents(
-                    self.__settings.triggeredevents)
+                    self.__settings.triggeredevents_current)
                 time.sleep(0.1)
 
     @debugmethod

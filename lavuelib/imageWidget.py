@@ -50,6 +50,7 @@ from . import memoExportDialog
 from . import sardanaUtils
 from . import filters
 from .sardanaUtils import debugmethod, numpyEncoder
+from .toolWidget import processEvents
 
 # _VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(".") \
 #     if _pg.__version__ else ("0", "9", "0")
@@ -1147,7 +1148,9 @@ class ImageWidget(QtWidgets.QWidget):
     def showCurrentTool(self):
         """ shows the current tool
         """
+        processEvents(self.__settings.triggeredevents_current)
         with QtCore.QMutexLocker(self.__mutex):
+            self.__settings.triggeredevents_current = "none"
             text = self.__ui.toolComboBox.currentText()
             stwg = None
             self.__ui.toolComboBox.show()
@@ -1164,6 +1167,9 @@ class ImageWidget(QtWidgets.QWidget):
 
             self.__connecttool()
             self.currentToolChanged.emit(text)
+        self.__settings.triggeredevents_current \
+            = self.__settings.triggeredevents
+        processEvents(self.__settings.triggeredevents_current)
 
     # @debugmethod
     def showTool(self, text):

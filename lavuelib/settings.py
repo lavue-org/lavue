@@ -243,6 +243,8 @@ class Settings(object):
 
         #: (:obj:`str`) triggered events
         self.triggeredevents = "internal"
+        #: (:obj:`str`) current triggered events
+        self.triggeredevents_current = "internal"
 
         #: (:obj:`str`) json list with overflow color
         self.overflowcolor = "[255, 255, 255]"
@@ -428,8 +430,10 @@ class Settings(object):
         qstval = str(settings.value("Configuration/TriggeredEvents", type=str))
         if qstval.lower() in ["internal", "some", "all", "none"]:
             self.triggeredevents = qstval.lower()
+            self.triggeredevents_current = qstval.lower()
         else:
             self.triggeredevents = "internal"
+            self.triggeredevents_current = "internal"
         qstval = str(settings.value(
             "Configuration/ShowSubtraction", type=str))
         if qstval.lower() == "false":
