@@ -295,6 +295,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">maxmbuffersize</span> <span class="o">=</span> <span class="s2">&quot;1000&quot;</span>
         <span class="c1">#: (:obj:`str`) float type for pixel intensity</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">floattype</span> <span class="o">=</span> <span class="s2">&quot;float&quot;</span>
+        <span class="c1">#: (:obj:`str`) triggered events</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">triggeredevents</span> <span class="o">=</span> <span class="s2">&quot;internal&quot;</span>
         <span class="c1">#: (:obj:`bool`) show color distribution histogram widget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">showhisto</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1">#: (:obj:`bool`) show color distribution additional histogram widget</span>
@@ -620,6 +622,13 @@
         <span class="k">if</span> <span class="n">fid</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">fid</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">floatComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">fid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">triggeredevents</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="s2">&quot;internal&quot;</span><span class="p">,</span> <span class="s2">&quot;some&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">floattype</span> <span class="o">=</span> <span class="s2">&quot;internal&quot;</span>
+        <span class="n">fid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">triggeredeventsComboBox</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">triggeredevents</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fid</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">fid</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">triggeredeventsComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">fid</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">urlsLineEdit</span><span class="o">.</span><span class="n">installEventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__objtitles</span><span class="p">[</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">urlsLineEdit</span><span class="p">)]</span> <span class="o">=</span> \
@@ -1075,6 +1084,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">refreshtime</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">rateDoubleSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">autorefreshtime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">enlargeCheckBox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">floattype</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">floatComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">triggeredevents</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">triggeredeventsComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolrefreshtime</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolrefreshtimeDoubleSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolpollinginterval</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
@@ -1336,6 +1347,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v3.11.0/index.html">v3.11.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.10.0/index.html">v3.10.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.9.0/index.html">v3.9.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.8.0/index.html">v3.8.0</a></li>
