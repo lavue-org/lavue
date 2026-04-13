@@ -288,6 +288,8 @@
 
         <span class="c1">#: (:obj:`str`) triggered events</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">triggeredevents</span> <span class="o">=</span> <span class="s2">&quot;internal&quot;</span>
+        <span class="c1">#: (:obj:`str`) current triggered events</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">triggeredevents_current</span> <span class="o">=</span> <span class="s2">&quot;internal&quot;</span>
 
         <span class="c1">#: (:obj:`str`) json list with overflow color</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">overflowcolor</span> <span class="o">=</span> <span class="s2">&quot;[255, 255, 255]&quot;</span>
@@ -487,8 +489,10 @@
         <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Configuration/TriggeredEvents&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;internal&quot;</span><span class="p">,</span> <span class="s2">&quot;some&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">triggeredevents</span> <span class="o">=</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">triggeredevents_current</span> <span class="o">=</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">triggeredevents</span> <span class="o">=</span> <span class="s2">&quot;internal&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">triggeredevents_current</span> <span class="o">=</span> <span class="s2">&quot;internal&quot;</span>
         <span class="n">qstval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
             <span class="s2">&quot;Configuration/ShowSubtraction&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">qstval</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;false&quot;</span><span class="p">:</span>
@@ -1944,6 +1948,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v3.11.0/index.html">v3.11.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.10.0/index.html">v3.10.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.9.0/index.html">v3.9.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.8.0/index.html">v3.8.0</a></li>

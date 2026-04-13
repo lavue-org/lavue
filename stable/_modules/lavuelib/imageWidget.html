@@ -93,6 +93,7 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">sardanaUtils</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">filters</span>
 <span class="kn">from</span> <span class="nn">.sardanaUtils</span> <span class="kn">import</span> <span class="n">debugmethod</span><span class="p">,</span> <span class="n">numpyEncoder</span>
+<span class="kn">from</span> <span class="nn">.toolWidget</span> <span class="kn">import</span> <span class="n">processEvents</span>
 
 <span class="c1"># _VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(&quot;.&quot;) \</span>
 <span class="c1">#     if _pg.__version__ else (&quot;0&quot;, &quot;9&quot;, &quot;0&quot;)</span>
@@ -1296,7 +1297,9 @@
     <span class="k">def</span> <span class="nf">showCurrentTool</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; shows the current tool</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">processEvents</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">triggeredevents_current</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">triggeredevents_current</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
             <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
             <span class="n">stwg</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">toolComboBox</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1312,7 +1315,10 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">updateinfowidgets</span><span class="p">(</span><span class="n">stwg</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">__connecttool</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">currentToolChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">currentToolChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">triggeredevents_current</span> \
+            <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">triggeredevents</span>
+        <span class="n">processEvents</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">triggeredevents_current</span><span class="p">)</span></div>
 
 
     <span class="c1"># @debugmethod</span>
@@ -3471,6 +3477,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v3.11.0/index.html">v3.11.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.10.0/index.html">v3.10.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.9.0/index.html">v3.9.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.8.0/index.html">v3.8.0</a></li>
