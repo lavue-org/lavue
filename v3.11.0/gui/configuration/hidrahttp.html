@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Hidra/HTTP/ZMQ/ASAPO/NeXus Image Source Settings &#8212; LaVue  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=ffd7f65b" />
+    
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Tango/DOOCS/Tine/Epics Image Source Settings" href="tangodoocs.html" />
+    <link rel="prev" title="Layout Settings" href="layout.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tangodoocs.html" title="Tango/DOOCS/Tine/Epics Image Source Settings"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="layout.html" title="Layout Settings"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >GUI User Guide</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Configuration</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Hidra/HTTP/ZMQ/ASAPO/NeXus Image Source Settings</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="hidra-http-zmq-asapo-nexus-image-source-settings">
+<h1>Hidra/HTTP/ZMQ/ASAPO/NeXus Image Source Settings<a class="headerlink" href="#hidra-http-zmq-asapo-nexus-image-source-settings" title="Link to this heading">¶</a></h1>
+<p>The third tab of the configuration dialog contains <strong>Image Sources</strong> configuration.
+It allows for the user to adjust image sources and their dialogs.</p>
+<figure class="align-default">
+<img alt="../../_images/lavue_config_isources.png" src="../../_images/lavue_config_isources.png" />
+</figure>
+<p><strong>Hidra</strong></p>
+<ul class="simple">
+<li><p><strong>Detector servers:</strong>  possible hidra detector hosts separated by spaces</p></li>
+<li><p><strong>Data port:</strong> hidra data port or ports separated by spaces (for the multi image source mode). The default port gap in the multi image source mode is 200. Each instance of lavue on the same host should use a different data port.</p></li>
+<li><p><strong>Use default detector servers:</strong> add default detector server names from the DESY pool</p></li>
+</ul>
+<p><strong>HTTP response</strong></p>
+<ul class="simple">
+<li><p><strong>URLs:</strong> <a class="reference external" href="https://www.json.org/json-en.html">JSON</a> dictionary assigning labels to HTTP urls</p></li>
+</ul>
+<p><strong>ZMQ Stream</strong></p>
+<ul class="simple">
+<li><p><strong>Servers and Ports:</strong> <a class="reference external" href="https://www.json.org/json-en.html">JSON</a> dictionary assigning labels to server and port of ZMQ stream</p></li>
+<li><p><strong>Automatic datasources:</strong> selects possible datasources from ZMQ stream metadata</p></li>
+<li><p><strong>Datasources:</strong> defines possible datasources, i.e. ZMQ topics, separated by spaces</p></li>
+<li><p><strong>Colon conf. separator:</strong> use “:” character to separate topic and HWM in the ZMQ configuration string i.e.  host:port[:topic[:HWM]]  ZMQ configuration syntax instead of host:port[/topic[/HWM]]</p></li>
+</ul>
+<p><strong>ASAPO</strong></p>
+<ul class="simple">
+<li><p><strong>Server:</strong> ASAPO servers, i.e. host:port</p></li>
+<li><p><strong>Token:</strong> token to asapo servers</p></li>
+<li><p><strong>Beamtime:</strong> a name of beamtime used by asapo</p></li>
+<li><p><strong>Datasources:</strong> defines possible datasource names which are separated by spaces</p></li>
+<li><p><strong>Source Path:</strong> a path to ASAPO files, e.g. /asap3/petra.gpfs/{beamline}/{year}/data/{beamtime_id}</p></li>
+<li><p><strong>Metadata File:</strong>  Beamtime Metadata files, default “/gpfs/current/beamtime-metadata-*.json”</p></li>
+</ul>
+<p><strong>Nexus File</strong></p>
+<ul class="simple">
+<li><p><strong>Keep the file open:</strong> does not close the nexus file after reading the field frame</p></li>
+<li><p><strong>Start from the last image:</strong> displays only the last image frame</p></li>
+</ul>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="layout.html"
+                          title="previous chapter">Layout Settings</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="tangodoocs.html"
+                          title="next chapter">Tango/DOOCS/Tine/Epics Image Source Settings</a></p>
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v3.11.0/index.html">v3.11.0</a></li>
+      <li><a class="reference external" href="../../index/../../v3.10.0/index.html">v3.10.0</a></li>
+      <li><a class="reference external" href="../../index/../../v3.9.0/index.html">v3.9.0</a></li>
+      <li><a class="reference external" href="../../index/../../v3.8.0/index.html">v3.8.0</a></li>
+      <li><a class="reference external" href="../../index/../../v3.7.0/index.html">v3.7.0</a></li>
+      <li><a class="reference external" href="../../index/../../v3.6.0/index.html">v3.6.0</a></li>
+      <li><a class="reference external" href="../../index/../../v3.5.4/index.html">v3.5.4</a></li>
+      <li><a class="reference external" href="../../index/../../v3.5.3/index.html">v3.5.3</a></li>
+      <li><a class="reference external" href="../../index/../../v3.4.1/index.html">v3.4.1</a></li>
+      <li><a class="reference external" href="../../index/../../v3.3.1/index.html">v3.3.1</a></li>
+      <li><a class="reference external" href="../../index/../../v3.2.0/index.html">v3.2.0</a></li>
+      <li><a class="reference external" href="../../index/../../v3.1.0/index.html">v3.1.0</a></li>
+      <li><a class="reference external" href="../../index/../../v3.0.0/index.html">v3.0.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.99.1/index.html">v2.99.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.99.0/index.html">v2.99.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.98.2/index.html">v2.98.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.97.0/index.html">v2.97.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.96.0/index.html">v2.96.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.95.0/index.html">v2.95.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.94.2/index.html">v2.94.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.93.1/index.html">v2.93.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.92.2/index.html">v2.92.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.91.1/index.html">v2.91.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.90.2/index.html">v2.90.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.89.3/index.html">v2.89.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.88.0/index.html">v2.88.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.87.0/index.html">v2.87.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.86.1/index.html">v2.86.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.85.1/index.html">v2.85.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.84.0/index.html">v2.84.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.4/index.html">v2.83.4</a></li>
+      <li><a class="reference external" href="../../index/../../v2.82.0/index.html">v2.82.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.81.0/index.html">v2.81.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.80.1/index.html">v2.80.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.79.0/index.html">v2.79.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.75.3/index.html">v2.75.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.74.0/index.html">v2.74.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.73.0/index.html">v2.73.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.72.0/index.html">v2.72.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.71.1/index.html">v2.71.1</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tangodoocs.html" title="Tango/DOOCS/Tine/Epics Image Source Settings"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="layout.html" title="Layout Settings"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >GUI User Guide</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Configuration</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Hidra/HTTP/ZMQ/ASAPO/NeXus Image Source Settings</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+
+GNU GENERAL PUBLIC LICENSE, version 2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>
