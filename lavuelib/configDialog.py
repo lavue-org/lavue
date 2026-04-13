@@ -238,6 +238,8 @@ class ConfigDialog(QtWidgets.QDialog):
         self.maxmbuffersize = "1000"
         #: (:obj:`str`) float type for pixel intensity
         self.floattype = "float"
+        #: (:obj:`str`) triggered events
+        self.triggeredevents = "internal"
         #: (:obj:`bool`) show color distribution histogram widget
         self.showhisto = True
         #: (:obj:`bool`) show color distribution additional histogram widget
@@ -558,6 +560,13 @@ class ConfigDialog(QtWidgets.QDialog):
         if fid < 0:
             fid = 0
         self.__ui.floatComboBox.setCurrentIndex(fid)
+
+        if self.triggeredevents not in ["none", "internal", "some", "all"]:
+            self.floattype = "internal"
+        fid = self.__ui.triggeredeventsComboBox.findText(self.triggeredevents)
+        if fid < 0:
+            fid = 0
+        self.__ui.triggeredeventsComboBox.setCurrentIndex(fid)
 
         self.__ui.urlsLineEdit.installEventFilter(self)
         self.__objtitles[repr(self.__ui.urlsLineEdit)] = \
@@ -1010,6 +1019,8 @@ class ConfigDialog(QtWidgets.QDialog):
         self.refreshtime = float(self.__ui.rateDoubleSpinBox.value())
         self.autorefreshtime = self.__ui.enlargeCheckBox.isChecked()
         self.floattype = str(self.__ui.floatComboBox.currentText())
+        self.triggeredevents = str(
+            self.__ui.triggeredeventsComboBox.currentText())
         self.toolrefreshtime = float(
             self.__ui.toolrefreshtimeDoubleSpinBox.value())
         self.toolpollinginterval = float(

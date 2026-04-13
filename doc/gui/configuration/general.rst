@@ -40,6 +40,7 @@ The first tab of the configuration dialog contains **General Settings**. It is d
 *    **Auto Down-Sample:** turns on auto-down-sampling mode of pyqtgraph
 *    **Float type for intensity:**  type to which intensity is converted if it is changed to float type
 *    **Accelerate memory buffer sum:** speeds up calculation of an image sum for the memory buffer tool
+*    **Triggered events:** selects how many qt events is processed by lavue explicitly
 *    **Image channels with gradient colors:** use gradient color maps to display pixel intensities in the RGB-channel  mode
 *    **Ranges and ROIs Colors:** allows to defined colors of Ranges or ROIs selection frames. Colors are used cyclically
 
