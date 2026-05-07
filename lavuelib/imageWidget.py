@@ -1148,7 +1148,7 @@ class ImageWidget(QtWidgets.QWidget):
     def showCurrentTool(self):
         """ shows the current tool
         """
-        processEvents(self.__settings.triggeredevents_current)
+        # processEvents(self.__settings.triggeredevents_current)
         with QtCore.QMutexLocker(self.__mutex):
             self.__settings.triggeredevents_current = "none"
             text = self.__ui.toolComboBox.currentText()
@@ -1169,7 +1169,7 @@ class ImageWidget(QtWidgets.QWidget):
             self.currentToolChanged.emit(text)
         self.__settings.triggeredevents_current \
             = self.__settings.triggeredevents
-        processEvents(self.__settings.triggeredevents_current)
+        # processEvents(self.__settings.triggeredevents_current)
 
     # @debugmethod
     def showTool(self, text):
