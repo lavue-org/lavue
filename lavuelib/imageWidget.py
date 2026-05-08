@@ -50,7 +50,7 @@ from . import memoExportDialog
 from . import sardanaUtils
 from . import filters
 from .sardanaUtils import debugmethod, numpyEncoder
-from .toolWidget import processEvents
+# from .toolWidget import processEvents
 
 # _VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(".") \
 #     if _pg.__version__ else ("0", "9", "0")
