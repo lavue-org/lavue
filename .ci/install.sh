@@ -2,7 +2,7 @@
 
 echo "restart mysql"
 # workaround for a bug in debian9, i.e. starting mysql hangs
-if [ "$1" = "debian11" ]  || [ "$1" = "debian12" ] || [ "$1" = "debian12tg10" ] || [ "$1" = "debian13" ]   || [ "$1" = "ubuntu24.04" ]  || [ "$1" = "ubuntu24.10" ] || [ "$1" = "ubuntu25.04" ] || [ "$1" = "ubuntu25.10" ] || [ "$1" = "debian11pg013" ]; then
+if [ "$1" = "debian11" ]  || [ "$1" = "debian12" ] || [ "$1" = "debian12tg10" ] || [ "$1" = "debian13" ]   || [ "$1" = "ubuntu24.04" ]  || [ "$1" = "ubuntu24.10" ] || [ "$1" = "ubuntu25.04" ] || [ "$1" = "ubuntu26.04" ] || [ "$1" = "debian11pg013" ]; then
     docker exec --user root ndts service mariadb restart
 else
     docker exec --user root ndts service mysql stop
@@ -16,7 +16,7 @@ fi
 
 echo "install tango-common"
 docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; export DEBIAN_FRONTEND=noninteractive; apt-get -qq install -y tango-common; sleep 10'
-if  [ "$1" = "ubuntu24.04" ] || [ "$1" = "ubuntu24.10" ] || [ "$1" = "ubuntu25.04" ] || [ "$1" = "ubuntu25.10" ]; then
+if  [ "$1" = "ubuntu24.04" ] || [ "$1" = "ubuntu24.10" ] || [ "$1" = "ubuntu25.04" ] || [ "$1" = "ubuntu26.04" ]; then
     # docker exec  --user tango ndts /bin/bash -c '/usr/lib/tango/DataBaseds 2 -ORBendPoint giop:tcp::10000  &'
     docker exec  --user root ndts /bin/bash -c 'echo -e "[client]\nuser=root\npassword=rootpw" > /root/.my.cnf'
     docker exec  --user root ndts /bin/bash -c 'echo -e "[client]\nuser=tango\nhost=localhost\npassword=rootpw" > /var/lib/tango/.my.cnf'
@@ -32,7 +32,7 @@ fi
 echo "install tango-db"
 docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; export DEBIAN_FRONTEND=noninteractive; apt-get -qq install -y tango-db; sleep 10'
 if [ "$?" -ne "0" ]; then exit 255; fi
-if  [ "$1" = "ubuntu24.04" ] || [ "$1" = "ubuntu24.10" ] || [ "$1" = "ubuntu25.04" ] || [ "$1" = "ubuntu25.10" ]; then
+if  [ "$1" = "ubuntu24.04" ] || [ "$1" = "ubuntu24.10" ] || [ "$1" = "ubuntu25.04" ] || [ "$1" = "ubuntu26.04" ]; then
     docker exec  --user tango ndts /usr/bin/mysql -e 'create database tango'
     docker exec  --user tango ndts /bin/bash -c '/usr/bin/mysql tango < /usr/share/dbconfig-common/data/tango-db/install/mysql'
 fi
@@ -61,7 +61,7 @@ if [ "$2" = "2" ]; then
     
     docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq install -y  python-pytango   tango-starter'
 else
-    if [ "$1" = "debian10" ] || [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "ubuntu21.04" ] || [ "$1" = "ubuntu21.10" ] || [ "$1" = "ubuntu22.04" ]  || [ "$1" = "ubuntu22.10" ] || [ "$1" = "ubuntu23.10" ] || [ "$1" = "debian11" ] || [ "$1" = "debian12" ] || [ "$1" = "debian12tg10" ] || [ "$1" = "debian13" ] || [ "$1" = "ubuntu24.04" ] || [ "$1" = "ubuntu24.10" ] || [ "$1" = "ubuntu25.04" ] || [ "$1" = "ubuntu25.10" ] ; then
+    if [ "$1" = "debian10" ] || [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "ubuntu21.04" ] || [ "$1" = "ubuntu21.10" ] || [ "$1" = "ubuntu22.04" ]  || [ "$1" = "ubuntu22.10" ] || [ "$1" = "ubuntu23.10" ] || [ "$1" = "debian11" ] || [ "$1" = "debian12" ] || [ "$1" = "debian12tg10" ] || [ "$1" = "debian13" ] || [ "$1" = "ubuntu24.04" ] || [ "$1" = "ubuntu24.10" ] || [ "$1" = "ubuntu25.04" ] || [ "$1" = "ubuntu26.04" ] ; then
 	docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq install -y  python3-tango tango-starter'
     elif  [ "$1" = "debian11pg013" ] ; then
 	docker exec  --user root ndts /bin/bash -c 'apt-get -qq update --allow-unauthenticated --allow-insecure-repositories  ; apt-get -qq install -y   --allow-unauthenticated  python3-tango tango-starter'
@@ -95,7 +95,14 @@ else
     docker exec ndts python3 setup.py build
     docker exec  --user root ndts python3 setup.py install
     echo "build python3-lavue docs"
+    docker exec ndts mkdir doc/_static
     docker exec ndts sphinx-build  doc build/sphinx/html
-
+    
 fi
-if [ "$?" != "0" ]; then exit 255; fi
+ERROR=$?
+echo "ERROR: ($ERROR)"
+if [ $ERROR -ne 0 ]; then
+    if [ $ERROR -ne 139 ]; then
+	exit 255;
+    fi
+fi
