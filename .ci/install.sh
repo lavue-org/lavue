@@ -101,4 +101,5 @@ else
 fi
 ERROR=$?
 echo "ERROR: "$?
+if [ "$ERROR" -ne "0" ]; then exit 255; fi
 # if [ "$ERROR" != "0" ]; then exit 255; fi
