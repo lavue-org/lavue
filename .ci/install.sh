@@ -95,6 +95,7 @@ else
     docker exec ndts python3 setup.py build
     docker exec  --user root ndts python3 setup.py install
     echo "build python3-lavue docs"
+    docker exec ndts mkdir doc/_static
     docker exec ndts sphinx-build  doc build/sphinx/html
 
 fi
