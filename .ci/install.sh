@@ -102,5 +102,7 @@ fi
 ERROR=$?
 echo "ERROR: ($ERROR)"
 if [ $ERROR -ne 0 ]; then
-    exit 255;
+    if [ $ERROR -ne 139 ]; then
+	exit 255;
+    fi
 fi
