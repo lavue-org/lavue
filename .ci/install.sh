@@ -97,6 +97,8 @@ else
     echo "build python3-lavue docs"
     docker exec ndts mkdir doc/_static
     docker exec ndts sphinx-build  doc build/sphinx/html
-
+    
 fi
-if [ "$?" != "0" ]; then exit 255; fi
+ERROR=$?
+echo "ERROR: "$?
+if [ "$ERROR" != "0" ]; then exit 255; fi
