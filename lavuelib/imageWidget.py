@@ -142,7 +142,7 @@ class ImageWidget(QtWidgets.QWidget):
         self.__toolwidgets = {}
 
         #: (:class:`pyqtgraph.QtCore.QMutex`) mutex lock for CB
-        self.__mutex = QtCore.QMutex()
+        self.__mutex = QtCore.QMutex(QtCore.QMutex.RecursionMode.Recursive)
 
         #: (:class:`lavuelib.settings.Settings`) settings
         self.__settings = settings
@@ -1166,7 +1166,7 @@ class ImageWidget(QtWidgets.QWidget):
                 self.updateinfowidgets(stwg.parameters)
 
             self.__connecttool()
-            self.currentToolChanged.emit(text)
+        self.currentToolChanged.emit(text)
         self.__settings.triggeredevents_current \
             = self.__settings.triggeredevents
         # processEvents(self.__settings.triggeredevents_current)
