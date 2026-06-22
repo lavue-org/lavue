@@ -10,9 +10,9 @@ RUN sed -i 's|http://archive|http://de.archive|g' /etc/apt/sources.list
 # add the HDRI repository
 RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get -qq install -y software-properties-common curl wget
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-RUN curl --retry 10 -s https://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
+RUN curl --retry 10 -s http://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
 RUN chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
-RUN add-apt-repository "deb https://repos.pni-hdri.de/apt/ubuntu mantic main" -y
+RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/ubuntu mantic main" -y
 
 # install packages
 RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get -qq dist-upgrade
