@@ -4,11 +4,11 @@ MAINTAINER DESY, Jan Kotanski <jankotan@gmail.com>
 
 RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get -qq install -y software-properties-common curl wget
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-RUN curl --retry 10 -s https://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
+RUN curl --retry 10 -s http://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
 RUN chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
-# RUN wget --retry-connrefused https://repos.pni-hdri.de/debian_repo.pub.gpg
+# RUN wget --retry-connrefused http://repos.pni-hdri.de/debian_repo.pub.gpg
 # RUN apt-key add debian_repo.pub.gpg
-RUN add-apt-repository "deb https://repos.pni-hdri.de/apt/debian hirsute main" -y
+RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian hirsute main" -y
 RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get -qq dist-upgrade
 RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y mysql-client mysql-client python3-h5py python3-sphinx apt-utils debconf-utils net-tools  omniidl libomniorb4-dev libcos4-dev libzmq3-dev python3-distutils python3-pninexus python3-pyqt5 python3-pyqt5.qtsvg python3-qtchecker  python3-pyfai qtbase5-dev qt5-qmake qtbase5-dev-tools qtchooser python3-requests
 # RUN export DEBIAN_FRONTEND=noninteractive && apt-get -qq install -y  python3-pni
