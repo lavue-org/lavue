@@ -1,17 +1,21 @@
 
-<!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<!doctype html>
+
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>lavuelib.rangeWindowGroupBox &#8212; LaVue  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=ffd7f65b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
     
-    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -20,7 +24,7 @@
     <script src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -86,9 +90,7 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;lavue&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="RangeWindowGroupBox">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.rangeWindowGroupBox.RangeWindowGroupBox">[docs]</a>
-<span class="k">class</span> <span class="nc">RangeWindowGroupBox</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
+<div class="viewcode-block" id="RangeWindowGroupBox"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.rangeWindowGroupBox.RangeWindowGroupBox">[docs]</a><span class="k">class</span> <span class="nc">RangeWindowGroupBox</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Select how an image should be transformed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -138,9 +140,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">factorChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
 
-<div class="viewcode-block" id="RangeWindowGroupBox.function">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.rangeWindowGroupBox.RangeWindowGroupBox.function">[docs]</a>
-    <span class="k">def</span> <span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RangeWindowGroupBox.function"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.rangeWindowGroupBox.RangeWindowGroupBox.function">[docs]</a>    <span class="k">def</span> <span class="nf">function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the reduction function name, i.e. max, min, mean, sum</span>
 
 <span class="sd">        :returns:  function name</span>
@@ -148,10 +148,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">functionComboBox</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span></div>
 
-
-<div class="viewcode-block" id="RangeWindowGroupBox.setFunction">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.rangeWindowGroupBox.RangeWindowGroupBox.setFunction">[docs]</a>
-    <span class="k">def</span> <span class="nf">setFunction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="RangeWindowGroupBox.setFunction"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.rangeWindowGroupBox.RangeWindowGroupBox.setFunction">[docs]</a>    <span class="k">def</span> <span class="nf">setFunction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets the reduction function</span>
 
 <span class="sd">        :param name:  function name, i.e. max, min, mean, sum</span>
@@ -168,10 +165,7 @@
                     <span class="s2">&quot;RangeWindowGroupBox.setFunction: &quot;</span>
                     <span class="s2">&quot;Error in setFunction for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RangeWindowGroupBox.factor">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.rangeWindowGroupBox.RangeWindowGroupBox.factor">[docs]</a>
-    <span class="k">def</span> <span class="nf">factor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RangeWindowGroupBox.factor"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.rangeWindowGroupBox.RangeWindowGroupBox.factor">[docs]</a>    <span class="k">def</span> <span class="nf">factor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the current resize factor</span>
 
 <span class="sd">        :returns: resize factor</span>
@@ -179,10 +173,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">factorSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span></div>
 
-
-<div class="viewcode-block" id="RangeWindowGroupBox.setFactor">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.rangeWindowGroupBox.RangeWindowGroupBox.setFactor">[docs]</a>
-    <span class="k">def</span> <span class="nf">setFactor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">):</span>
+<div class="viewcode-block" id="RangeWindowGroupBox.setFactor"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.rangeWindowGroupBox.RangeWindowGroupBox.setFactor">[docs]</a>    <span class="k">def</span> <span class="nf">setFactor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the current resize factor</span>
 
 <span class="sd">        :param factor: resize factor</span>
@@ -193,10 +184,7 @@
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">factorSpinBox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RangeWindowGroupBox.rangeWindow">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.rangeWindowGroupBox.RangeWindowGroupBox.rangeWindow">[docs]</a>
-    <span class="k">def</span> <span class="nf">rangeWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RangeWindowGroupBox.rangeWindow"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.rangeWindowGroupBox.RangeWindowGroupBox.rangeWindow">[docs]</a>    <span class="k">def</span> <span class="nf">rangeWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the range window</span>
 
 <span class="sd">        :returns: x1, y1, x2, y2 of range window bounds</span>
@@ -221,10 +209,7 @@
 
         <span class="k">return</span> <span class="p">[</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">]</span></div>
 
-
-<div class="viewcode-block" id="RangeWindowGroupBox.setRangeWindow">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.rangeWindowGroupBox.RangeWindowGroupBox.setRangeWindow">[docs]</a>
-    <span class="k">def</span> <span class="nf">setRangeWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">):</span>
+<div class="viewcode-block" id="RangeWindowGroupBox.setRangeWindow"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.rangeWindowGroupBox.RangeWindowGroupBox.setRangeWindow">[docs]</a>    <span class="k">def</span> <span class="nf">setRangeWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides the range window</span>
 
 <span class="sd">        :param bounds: range window bounds: x1:x2,y1:y2</span>
@@ -257,10 +242,7 @@
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__ui</span><span class="o">.</span><span class="n">y2LineEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RangeWindowGroupBox.changeView">
-<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.rangeWindowGroupBox.RangeWindowGroupBox.changeView">[docs]</a>
-    <span class="k">def</span> <span class="nf">changeView</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">showrangeWindow</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="RangeWindowGroupBox.changeView"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.rangeWindowGroupBox.RangeWindowGroupBox.changeView">[docs]</a>    <span class="k">def</span> <span class="nf">changeView</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">showrangeWindow</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; show or hide widgets</span>
 
 <span class="sd">        :param showrangeWindow: widget shown</span>
@@ -270,18 +252,16 @@
             <span class="k">if</span> <span class="n">showrangeWindow</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span></div>
-</div>
-
+                <span class="bp">self</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span></div></div>
 </pre></div>
 
             <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -289,13 +269,13 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -310,10 +290,10 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>
