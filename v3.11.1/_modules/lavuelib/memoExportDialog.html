@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lavuelib.memoExportDialog &#8212; LaVue  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=ffd7f65b" />
+    
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lavuelib.memoExportDialog</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for lavuelib.memoExportDialog</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (C) 2017  DESY, Christoph Rosemann, Notkestr. 85, D-22607 Hamburg</span>
+<span class="c1">#</span>
+<span class="c1"># lavue is an image viewing program for photon science imaging detectors.</span>
+<span class="c1"># Its usual application is as a live viewer using hidra as data source.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is free software; you can redistribute it and/or</span>
+<span class="c1"># modify it under the terms of the GNU General Public License</span>
+<span class="c1"># as published by the Free Software Foundation in  version 2</span>
+<span class="c1"># of the License.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with this program; if not, write to the Free Software</span>
+<span class="c1"># Foundation, Inc., 51 Franklin Street, Fifth Floor,</span>
+<span class="c1"># Boston, MA  02110-1301, USA.</span>
+<span class="c1">#</span>
+<span class="c1"># Authors:</span>
+<span class="c1">#     Christoph Rosemann &lt;christoph.rosemann@desy.de&gt;</span>
+<span class="c1">#     Jan Kotanski &lt;jan.kotanski@desy.de&gt;</span>
+<span class="c1">#</span>
+
+<span class="sd">&quot;&quot;&quot; image display widget &quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pyqtgraph</span> <span class="k">as</span> <span class="nn">_pg</span>
+<span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtCore</span>
+<span class="kn">import</span> <span class="nn">types</span>
+<span class="kn">from</span> <span class="nn">pyqtgraph.GraphicsScene</span> <span class="kn">import</span> <span class="n">exportDialog</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtWidgets</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtGui</span> <span class="k">as</span> <span class="n">QtWidgets</span>
+
+
+<div class="viewcode-block" id="MemoPlotWidget">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoExportDialog.MemoPlotWidget">[docs]</a>
+<span class="k">class</span> <span class="nc">MemoPlotWidget</span><span class="p">(</span><span class="n">_pg</span><span class="o">.</span><span class="n">PlotWidget</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Plot Widget with improved Export Dialog</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) freeze clicked signal</span>
+    <span class="n">freezeClicked</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) clear clicked signal</span>
+    <span class="n">clearClicked</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+    <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) reset clicked signal</span>
+    <span class="n">resetClicked</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="n">_pg</span><span class="o">.</span><span class="n">PlotWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="n">background</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">)</span>
+        <span class="n">sc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="p">()</span>
+        <span class="n">sc</span><span class="o">.</span><span class="n">contextMenu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">showExportDialog</span><span class="p">)</span>
+        <span class="n">sc</span><span class="o">.</span><span class="n">showExportDialog</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span>
+            <span class="n">GraphicsScene_showExportDialog</span><span class="p">,</span> <span class="n">sc</span><span class="p">)</span>
+        <span class="n">sc</span><span class="o">.</span><span class="n">contextMenu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">showExportDialog</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__menu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">vb</span><span class="o">.</span><span class="n">menu</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__separator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__menu</span><span class="o">.</span><span class="n">addSeparator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__freezeaction</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span>
+            <span class="s2">&quot;Freeze&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__menu</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__freezeaction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__freezeaction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_freeze</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__clearaction</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span>
+            <span class="s2">&quot;Clear&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__menu</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__clearaction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__clearaction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_clear</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__resetaction</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QAction</span><span class="p">(</span>
+            <span class="s2">&quot;Reset&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__menu</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__resetaction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__resetaction</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reset</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showMenu</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_freeze</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; emits freezeClicked signal</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">freezeClicked</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; emits clearClicked signal</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clearClicked</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; emits resetClicked signal</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resetClicked</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+
+<div class="viewcode-block" id="MemoPlotWidget.showMenu">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoExportDialog.MemoPlotWidget.showMenu">[docs]</a>
+    <span class="k">def</span> <span class="nf">showMenu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freeze</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reset</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; shows freeze or/and clear action in the menu</span>
+
+<span class="sd">        :param freeze: freeze show status</span>
+<span class="sd">        :type freeze: :obj:`bool`</span>
+<span class="sd">        :param clear: clear show status</span>
+<span class="sd">        :type clear: :obj:`bool`</span>
+<span class="sd">        :param reset: reset show status</span>
+<span class="sd">        :type reset: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__freezeaction</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">freeze</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__clearaction</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">clear</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__resetaction</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__separator</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">freeze</span> <span class="ow">or</span> <span class="n">clear</span> <span class="ow">or</span> <span class="n">reset</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="MemoExportDialog">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoExportDialog.MemoExportDialog">[docs]</a>
+<span class="k">class</span> <span class="nc">MemoExportDialog</span><span class="p">(</span><span class="n">exportDialog</span><span class="o">.</span><span class="n">ExportDialog</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; ExportDialog with bookkeeping  parameters &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">):</span>
+        <span class="n">exportDialog</span><span class="o">.</span><span class="n">ExportDialog</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dctparams</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="MemoExportDialog.exportFormatChanged">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoExportDialog.MemoExportDialog.exportFormatChanged">[docs]</a>
+    <span class="k">def</span> <span class="nf">exportFormatChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">prev</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">currentExporter</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">paramTree</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;expClass&quot;</span><span class="p">):</span>
+            <span class="n">expClass</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">expClass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">expClass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exporterClasses</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="p">())]</span>
+        <span class="n">exp</span> <span class="o">=</span> <span class="n">expClass</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">itemTree</span><span class="o">.</span><span class="n">currentItem</span><span class="p">()</span><span class="o">.</span><span class="n">gitem</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">prev</span><span class="p">:</span>
+            <span class="n">oldtext</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">prev</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dctparams</span><span class="p">[</span><span class="n">oldtext</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">currentExporter</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
+        <span class="n">newtext</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">newtext</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dctparams</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dctparams</span><span class="p">[</span><span class="n">newtext</span><span class="p">]</span>
+            <span class="n">exp</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">exp</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dctparams</span><span class="p">[</span><span class="n">newtext</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span>
+
+        <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">paramTree</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">paramTree</span><span class="o">.</span><span class="n">setParameters</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">currentExporter</span> <span class="o">=</span> <span class="n">exp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">copyBtn</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">allowCopy</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="GraphicsScene_showExportDialog">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.memoExportDialog.GraphicsScene_showExportDialog">[docs]</a>
+<span class="k">def</span> <span class="nf">GraphicsScene_showExportDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; dynamic replacement of GraphicsScene.showExportDialog</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exportDialog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exportDialog</span> <span class="o">=</span> <span class="n">MemoExportDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">exportDialog</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">contextMenuItem</span><span class="p">)</span></div>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="../../index/../../v3.11.1/index.html">v3.11.1</a></li>
+      <li><a class="reference external" href="../../index/../../v3.11.0/index.html">v3.11.0</a></li>
+      <li><a class="reference external" href="../../index/../../v3.10.0/index.html">v3.10.0</a></li>
+      <li><a class="reference external" href="../../index/../../v3.9.0/index.html">v3.9.0</a></li>
+      <li><a class="reference external" href="../../index/../../v3.8.0/index.html">v3.8.0</a></li>
+      <li><a class="reference external" href="../../index/../../v3.7.0/index.html">v3.7.0</a></li>
+      <li><a class="reference external" href="../../index/../../v3.6.0/index.html">v3.6.0</a></li>
+      <li><a class="reference external" href="../../index/../../v3.5.4/index.html">v3.5.4</a></li>
+      <li><a class="reference external" href="../../index/../../v3.5.3/index.html">v3.5.3</a></li>
+      <li><a class="reference external" href="../../index/../../v3.4.1/index.html">v3.4.1</a></li>
+      <li><a class="reference external" href="../../index/../../v3.3.1/index.html">v3.3.1</a></li>
+      <li><a class="reference external" href="../../index/../../v3.2.0/index.html">v3.2.0</a></li>
+      <li><a class="reference external" href="../../index/../../v3.1.0/index.html">v3.1.0</a></li>
+      <li><a class="reference external" href="../../index/../../v3.0.0/index.html">v3.0.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.99.1/index.html">v2.99.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.99.0/index.html">v2.99.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.98.2/index.html">v2.98.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.97.0/index.html">v2.97.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.96.0/index.html">v2.96.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.95.0/index.html">v2.95.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.94.2/index.html">v2.94.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.93.1/index.html">v2.93.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.92.2/index.html">v2.92.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.91.1/index.html">v2.91.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.90.2/index.html">v2.90.2</a></li>
+      <li><a class="reference external" href="../../index/../../v2.89.3/index.html">v2.89.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.88.0/index.html">v2.88.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.87.0/index.html">v2.87.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.86.1/index.html">v2.86.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.85.1/index.html">v2.85.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.84.0/index.html">v2.84.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.83.4/index.html">v2.83.4</a></li>
+      <li><a class="reference external" href="../../index/../../v2.82.0/index.html">v2.82.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.81.0/index.html">v2.81.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.80.1/index.html">v2.80.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.79.0/index.html">v2.79.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.78.0/index.html">v2.78.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.77.0/index.html">v2.77.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.76.1/index.html">v2.76.1</a></li>
+      <li><a class="reference external" href="../../index/../../v2.75.3/index.html">v2.75.3</a></li>
+      <li><a class="reference external" href="../../index/../../v2.74.0/index.html">v2.74.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.73.0/index.html">v2.73.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.72.0/index.html">v2.72.0</a></li>
+      <li><a class="reference external" href="../../index/../../v2.71.1/index.html">v2.71.1</a></li>
+      
+    </ul>
+  </p>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lavuelib.memoExportDialog</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+
+GNU GENERAL PUBLIC LICENSE, version 2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>
