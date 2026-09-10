@@ -74,20 +74,14 @@ class ControllerSetUp(object):
         self.new_device_info_controller.name = self.device
         self.proxy = None
 
-        if PY3:
-            if os.path.isfile("../LavueController"):
-                self._startserver = \
-                    "cd ..; python3 ./LavueController %s &" % self.instance
-            else:
-                self._startserver = \
-                    "python3 LavueController %s &" % self.instance
+        if os.path.isfile("../LavueController"):
+            self._startserver = \
+                "cd ..; %s ./LavueController %s &" % (
+                    sys.executable, self.instance)
         else:
-            if os.path.isfile("../LavueController"):
-                self._startserver = \
-                    "cd ..; python2 ./LavueController %s &" % self.instance
-            else:
-                self._startserver = \
-                    "python2 LavueController %s &" % self.instance
+            self._startserver = \
+                "%s LavueController %s &" % (
+                    sys.executable, self.instance)
         self._grepserver = \
             "ps -ef | grep 'LavueController %s' | grep -v grep" % \
             self.instance
