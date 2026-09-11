@@ -1,22 +1,30 @@
 FROM debian:bullseye
-
 # MAINTAINER DESY, Jan Kotanski <jankotan@gmail.com>
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN sed -i 's/deb.debian.org/archive.debian.org/g' /etc/apt/sources.list
+RUN sed -i 's/security.debian.org/archive.debian.org/g' /etc/apt/sources.list
+RUN sed -i '/security/d' /etc/apt/sources.list
+
+
 # RUN /bin/bash -c 'echo "deb http://ftp.de.debian.org/debian bullseye main" > /etc/apt/sources.list.d/debian_de.list'
 
 # add the HDRI repository
-RUN  apt-get -qq update && apt-get install -y base-passwd apt-utils dialog -y
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-RUN apt-get -qq update && apt-get -qq install -y libterm-readline-gnu-perl software-properties-common coreutils gnupg2 procps curl apt-transport-https gnupg2 ca-certificates wget
+RUN  rm -rf /var/lib/apt/lists/*
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* && apt-get update && apt-get install -y perl-base=5.32.1-4+deb11u3 perl --reinstall   --allow-downgrades
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* && apt-get update && apt-get install -f -y software-properties-common coreutils procps curl gpg gpgv gpg-agent apt-transport-https ca-certificates && rm -rf /var/lib/apt/lists/*
+
 RUN curl --retry 10 -s http://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
 RUN chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
 RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian bullseye main" -y
 
 # install packages
 RUN apt-get update && apt-get  -y  dist-upgrade
-RUN apt-get -qq update && apt-get -qq install -y default-mysql-client  python3-h5py  python3-mysqldb python3-sphinx  apt-utils debconf-utils net-tools  omniidl libomniorb4-dev libcos4-dev libomnithread4-dev libzmq3-dev python3-pyqt5 python3-pyqt5.qtsvg python3-qtchecker python3-pyfai  qtchooser python3-requests python3-pninexus xvfb  libxcb1 libx11-xcb1 libxcb-keysyms1 libxcb-image0 libxcb-icccm4 libxcb-render-util0 xkb-data liblog4j1.2-java pyqt5-dev-tools git python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy python3-pyqt5.qtwebkit
+RUN apt-get -qq update && apt-get  install -f -y default-mysql-client  python3-h5py  python3-mysqldb python3-sphinx  apt-utils debconf-utils net-tools  omniidl libomniorb4-2 libcos4-2 libomnithread4 libzmq5 python3-pyqt5 python3-pyqt5.qtsvg python3-qtchecker python3-pyfai  qtchooser python3-requests python3-pninexus xvfb  libxcb1 libx11-xcb1 libxcb-keysyms1 libxcb-image0 libxcb-icccm4 libxcb-render-util0 xkb-data liblog4j1.2-java pyqt5-dev-tools  python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy python3-pyqt5.qtwebkit
+# git
 
 # set db configuration
 RUN useradd -ms /bin/bash tango
