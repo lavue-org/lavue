@@ -20,6 +20,7 @@ RUN apt-get clean && \
         procps \
 	curl \
 	gpg \
+	gpg-agent \
         apt-transport-https \
         ca-certificates && \
     rm -rf /var/lib/apt/lists/*
