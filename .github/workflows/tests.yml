@@ -21,7 +21,7 @@ jobs:
       - name: Run flake8
         run: flake8 .
 
-  python3_tests:
+  dpkg_tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -120,3 +120,59 @@ jobs:
              docker exec  --user root ndts  /bin/bash -c "chown -R 1001 . "
              docker container stop ndts
 
+  pixi_tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [debian13, ubuntu26.04]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v2
+      - name: Update bash files
+        run: |
+          chmod +x .ci/run_pixi.sh
+          chmod +x .ci/install_tango.sh
+      - name: Build the docker
+        env:
+          OSYS: ${{ matrix.os }}
+        run: docker build -t ndts .ci/${OSYS}_pixi
+      - name: Run the docker
+        run: docker run  --name  ndts -d -it -v `pwd`:/home/tango  ndts
+      - name: Install tango
+        env:
+          OSYS: ${{ matrix.os }}
+        run: .ci/install_tango.sh ${OSYS}
+      - name: Run pixi
+        run: .ci/install_pixi.sh
+
+      - name: run basic tests
+        run: .ci/run_pixi.sh basic
+
+      - name: run basic2 tests
+        run: .ci/run_pixi.sh basic2
+
+      - name: run basic3 tests
+        run: .ci/run_pixi.sh basic3
+
+      - name: run general tool tests
+        run: .ci/run_pixi.sh generaltools
+
+      - name: run specialized tool tests
+        run: .ci/run_pixi.sh specializedtools
+
+      - name: run diffractogram tests
+        run: .ci/run_pixi.sh diffractogram
+
+      - name: run tangosource tests
+        run: .ci/run_pixi.sh tangosource
+
+      - name: run tangofilesource tests
+        run: .ci/run_pixi.sh tangofilesource
+
+      - name: run httpsource tests
+        run: .ci/run_pixi.sh httpsource
+
+      - name: Stop the docker
+        run: |
+             docker exec  --user root ndts  /bin/bash -c "chown -R 1001 /home/tango "
+             docker container stop ndts
