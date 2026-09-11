@@ -1,5 +1,5 @@
 FROM debian:bullseye
-
+11;rgb:ffff/ffff/ffff
 # MAINTAINER DESY, Jan Kotanski <jankotan@gmail.com>
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -17,6 +17,8 @@ RUN cat /etc/apt/sources.list
 # add the HDRI repository
 RUN  rm -rf /var/lib/apt/lists/*
 
+RUN apt-get purge perl-base perl -y
+
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get update && \
@@ -31,7 +33,6 @@ RUN apt-get clean && \
 
 # libterm-readline-gnu-perl
 RUN apt-get install gpgv
-RUN apt-get purge perl-base perl
 RUN apt-get update && apt-get install -y perl
 # RUN  apt-get -qq update && apt-get install -y base-passwd apt-utils dialog -y
 # RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
