@@ -21,7 +21,7 @@ RUN apt-get clean && \
 	curl \
 	gpg \
 	gpg-agent \
-	gnupg \
+	gnupg2 \
         apt-transport-https \
         ca-certificates && \
     rm -rf /var/lib/apt/lists/*
