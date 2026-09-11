@@ -1,5 +1,4 @@
 FROM debian:bullseye
-11;rgb:ffff/ffff/ffff
 # MAINTAINER DESY, Jan Kotanski <jankotan@gmail.com>
 
 ENV DEBIAN_FRONTEND=noninteractive
