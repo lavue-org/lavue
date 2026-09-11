@@ -18,12 +18,12 @@ RUN apt-get clean && \
     apt-get update && \
     apt-get install -f -y software-properties-common coreutils \
         procps \
-	gnupg2 \
 	curl \
         apt-transport-https \
         ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
+#	gnupg2 \
 #  
 # libterm-readline-gnu-perl
 # RUN  apt-get -qq update && apt-get install -y base-passwd apt-utils dialog -y
