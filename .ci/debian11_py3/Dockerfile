@@ -19,6 +19,7 @@ RUN apt-get clean && \
     apt-get install -f -y software-properties-common coreutils \
         procps \
 	curl \
+	gpg \
         apt-transport-https \
         ca-certificates && \
     rm -rf /var/lib/apt/lists/*
