@@ -4,8 +4,12 @@ FROM debian:bullseye
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/sources.list
-RUN sed -i 's|deb http://archive.debian.org/debian-security|# deb http://archive.debian.org/debian-security|g' /etc/apt/sources.list
+RUN sed -i 's/deb.debian.org/archive.debian.org/g' /etc/apt/sources.list \
+    && sed -i 's/security.debian.org/archive.debian.org/g' /etc/apt/sources.list \
+    && sed -i '/security/d' /etc/apt/sources.list
+
+# RUN sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/sources.list
+# RUN sed -i 's|deb http://archive.debian.org/debian-security|# deb http://archive.debian.org/debian-security|g' /etc/apt/sources.list
 RUN cat /etc/apt/sources.list
 
 # RUN /bin/bash -c 'echo "deb http://ftp.de.debian.org/debian bullseye main" > /etc/apt/sources.list.d/debian_de.list'
