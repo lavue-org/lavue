@@ -16,7 +16,7 @@ RUN cat /etc/apt/sources.list
 # add the HDRI repository
 RUN  rm -rf /var/lib/apt/lists/*
 
-RUN apt-get purge perl-base perl -y --allow-remove-essential
+RUN apt-get purge perl-base -y --allow-remove-essential
 
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
