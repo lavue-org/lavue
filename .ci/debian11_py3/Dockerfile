@@ -31,6 +31,7 @@ RUN apt-get clean && \
 
 # libterm-readline-gnu-perl
 RUN apt-get install gpgv
+RUN apt-get purge perl-base perl
 RUN apt-get update && apt-get install -y perl
 # RUN  apt-get -qq update && apt-get install -y base-passwd apt-utils dialog -y
 # RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
