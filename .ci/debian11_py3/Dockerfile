@@ -26,7 +26,7 @@ RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # libterm-readline-gnu-perl
-RUN apt-get install gnupg2
+RUN apt-get install gpgv
 # RUN  apt-get -qq update && apt-get install -y base-passwd apt-utils dialog -y
 # RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 # RUN apt-get  update && apt-get install -y libterm-readline-gnu-perl software-properties-common coreutils gnupg2 procps curl apt-transport-https  ca-certificates curl
