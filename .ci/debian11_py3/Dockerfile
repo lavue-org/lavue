@@ -10,25 +10,12 @@ RUN cat /etc/apt/sources.list
 
 # RUN /bin/bash -c 'echo "deb http://ftp.de.debian.org/debian bullseye main" > /etc/apt/sources.list.d/debian_de.list'
 
-# # add the HDRI repository
-# RUN  apt-get -qq update && apt-get install -y base-passwd apt-utils dialog -y
-# RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-# RUN apt-get -qq update && apt-get -qq install -y libterm-readline-gnu-perl software-properties-common coreutils gnupg2 procps curl apt-transport-https gnupg2 ca-certificates curl
+# add the HDRI repository
+RUN  rm -rf /var/lib/apt/lists/*
+RUN  apt-get -qq update && apt-get install -y base-passwd apt-utils dialog -y
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+RUN apt-get  update && apt-get install -y libterm-readline-gnu-perl software-properties-common coreutils gnupg2 procps curl apt-transport-https  ca-certificates curl
 
-
-RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends \
-    apt-transport-https \
-    apt-utils \
-    base-passwd \
-    ca-certificates \
-    coreutils \
-    curl \
-    dialog \
-    gnupg2 \
-    libterm-readline-gnu-perl \
-    procps \
-    software-properties-common \
-    && rm -rf /var/lib/apt/lists/*
 
 RUN curl --retry 10 -s http://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
 RUN chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
