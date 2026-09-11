@@ -19,7 +19,7 @@ RUN  rm -rf /var/lib/apt/lists/*
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get update
-RUN apt-get install perl-base --reinstall
+RUN apt-get install perl-base=5.32.1-4+deb11u3 --reinstall
 
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
