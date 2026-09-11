@@ -19,7 +19,7 @@ RUN  rm -rf /var/lib/apt/lists/*
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get update
-RUN apt-get install -y perl-base=5.32.1-4+deb11u3 --reinstall 
+RUN apt-get install -y perl-base=5.32.1-4+deb11u3 perl --reinstall   --allow-downgrades
 
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
