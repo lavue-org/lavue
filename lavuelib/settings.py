@@ -1666,16 +1666,23 @@ class Settings(object):
         if PYFAI:
             with QtCore.QMutexLocker(self.aimutex):
                 aic = self.ai.get_config()
-                self.pixelsizex = self.distance2um(
-                    (self.ai.get_pixel2(), "m"))
-                self.pixelsizey = self.distance2um(
-                    (self.ai.get_pixel1(), "m"))
             self.detponi1 = aic["poni1"]
             self.detponi2 = aic["poni2"]
             self.detrot1 = aic["rot1"]
             self.detrot2 = aic["rot2"]
             self.detrot3 = aic["rot3"]
-            self.detsplinefile = self.ai.splineFile
+            if PYFAI > 2025:
+                self.detsplinefile = self.ai.splinefile
+                self.pixelsizey = self.distance2um(
+                    (self.ai.pixel1, "m"))
+                self.pixelsizex = self.distance2um(
+                    (self.ai.pixel2, "m"))
+            else:
+                self.detsplinefile = self.ai.splineFile
+                self.pixelsizey = self.distance2um(
+                    (self.ai.get_pixel1(), "m"))
+                self.pixelsizex = self.distance2um(
+                    (self.ai.get_pixel2(), "m"))
             self.detname = aic["detector"]
             self.detdistance = self.distance2mm(
                 (aic["dist"], "m"))
