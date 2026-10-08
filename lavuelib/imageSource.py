@@ -32,7 +32,6 @@ import struct
 import logging
 import os
 import glob
-import numpy as np
 
 from . import dataFetchThread
 from .sardanaUtils import debugmethod, numpyEncoder
@@ -2308,7 +2307,7 @@ class ASAPOSource(BaseSource):
             nameext = ""
             if self.__lastname:
                 _, nameext = os.path.splitext(self.__lastname)
-            if nameext in [".nxs", ".h5", ".nx", ".ndf", ".hdf",".hdf5"]:
+            if nameext in [".nxs", ".h5", ".nx", ".ndf", ".hdf", ".hdf5"]:
                 try:
                     handler = imageFileHandler.NexusFieldHandler()
                     handler.frombuffer(data[:], self.__lastname)
@@ -2385,8 +2384,8 @@ class ASAPOSource(BaseSource):
                     return None, None, None
                 return np.transpose(img), imagename, mdata
             elif type(data).__name__ == "ndarray" and \
-                 "meta" in metadata.keys() and \
-                 "shape" in metadata["meta"].keys():
+                    "meta" in metadata.keys() and \
+                    "shape" in metadata["meta"].keys():
                 dtype = str(data.dtype)
                 if "dtype" in metadata["meta"].keys():
                     dtype = metadata["meta"]["dtype"]
