@@ -2307,7 +2307,7 @@ class ASAPOSource(BaseSource):
             nameext = ""
             if self.__lastname:
                 _, nameext = os.path.splitext(self.__lastname)
-            if nameext in [".nxs", ".h5", "nx", "ndf", "hdf"]:
+            if nameext in [".nxs", ".h5", ".nx", ".ndf", ".hdf", ".hdf5"]:
                 try:
                     handler = imageFileHandler.NexusFieldHandler()
                     handler.frombuffer(data[:], self.__lastname)
@@ -2383,6 +2383,15 @@ class ASAPOSource(BaseSource):
                         return "", "", jsubmeta
                     return None, None, None
                 return np.transpose(img), imagename, mdata
+            elif type(data).__name__ == "ndarray" and \
+                    "meta" in metadata.keys() and \
+                    "shape" in metadata["meta"].keys():
+                dtype = str(data.dtype)
+                if "dtype" in metadata["meta"].keys():
+                    dtype = metadata["meta"]["dtype"]
+                shape = metadata["meta"]["shape"]
+                img = np.frombuffer(data, dtype=dtype).reshape(shape)
+                return np.transpose(img), imagename, None
             else:
                 # elif data[:2] in ["II\x2A\x00", "MM\x00\x2A"]:
                 # print("[tif source module]::metadata", metadata["name"])
@@ -2589,7 +2598,7 @@ class HiDRASource(BaseSource):
             if filename:
                 _, nameext = os.path.splitext(filename)
             if scheme in ["h5file"] or \
-               nameext in [".nxs", ".h5", "nx", "ndf", "hdf"]:
+               nameext in [".nxs", ".h5", ".nx", ".ndf", ".hdf", ".hdf5"]:
                 try:
                     nexus_path = None
                     if scheme in ["h5file"]:
