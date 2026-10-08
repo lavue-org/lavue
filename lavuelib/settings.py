@@ -40,10 +40,11 @@ if sys.version_info > (3,):
 try:
     import pyFAI
     #: (:obj:`bool`) pyFAI imported
-    PYFAI = pyFAI.version_info.major
+    PYFAI = (pyFAI.version_info.major
+             + pyFAI.version_info.minor * 0.01)
 except ImportError:
     #: (:obj:`bool`) pyFAI imported
-    PYFAI = 0
+    PYFAI = 0.0
 
 
 class Settings(object):
@@ -1005,7 +1006,7 @@ class Settings(object):
                     except Exception:
                         from pyFAI.azimuthalIntegrator \
                             import AzimuthalIntegrator
-                    if PYFAI > 2025:
+                    if PYFAI > 2025.09:
                         self.ai = AzimuthalIntegrator(
                             dist=detdistance,
                             poni1=self.detponi1,
@@ -1671,7 +1672,7 @@ class Settings(object):
             self.detrot1 = aic["rot1"]
             self.detrot2 = aic["rot2"]
             self.detrot3 = aic["rot3"]
-            if PYFAI > 2025:
+            if PYFAI > 2025.09:
                 self.detsplinefile = self.ai.splinefile
                 self.pixelsizey = self.distance2um(
                     (self.ai.pixel1, "m"))

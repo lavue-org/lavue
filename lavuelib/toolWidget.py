@@ -75,10 +75,11 @@ except ImportError:
 try:
     import pyFAI
     #: (:obj:`bool`) pyFAI imported
-    PYFAI = pyFAI.version_info.major
+    PYFAI = (pyFAI.version_info.major
+             + pyFAI.version_info.minor * 0.01)
 except ImportError:
     #: (:obj:`bool`) pyFAI imported
-    PYFAI = 0
+    PYFAI = 0.0
 
 if sys.version_info > (3,):
     long = int
@@ -5824,7 +5825,7 @@ class DiffractogramToolWidget(ToolBaseWidget):
             else:
                 shape = [1000., 1000.]
             with QtCore.QMutexLocker(self.__settings.aimutex):
-                if PYFAI > 2025:
+                if PYFAI > 2025.09:
                     cha = self.__settings.ai.center_array(
                         shape, unit="chi_rad")
                     tta = self.__settings.ai.center_array(
