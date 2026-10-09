@@ -71,6 +71,7 @@
 
 <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtGui</span>
 <span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">zlib</span>
 <span class="kn">import</span> <span class="nn">struct</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -207,6 +208,13 @@
 <span class="n">globalmutex</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutex</span><span class="p">()</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;lavue&quot;</span><span class="p">)</span>
+
+
+<span class="n">FILTER_NONE</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">FILTER_DEFLATE</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">FILTER_LZ4</span> <span class="o">=</span> <span class="mi">32004</span>
+<span class="n">FILTER_BITSHUFFLE</span> <span class="o">=</span> <span class="mi">32008</span>
+
 
 <span class="c1">#: (:obj:`bool`) PyTango bug #213 flag related to EncodedAttributes in python3</span>
 <span class="n">PYTG_BUG_213</span> <span class="o">=</span> <span class="kc">False</span>
@@ -2626,7 +2634,44 @@
                 <span class="k">if</span> <span class="s2">&quot;dtype&quot;</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                     <span class="n">dtype</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">][</span><span class="s2">&quot;dtype&quot;</span><span class="p">]</span>
                 <span class="n">shape</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">][</span><span class="s2">&quot;shape&quot;</span><span class="p">]</span>
-                <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+                <span class="n">fmt</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_data_format&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">img</span><span class="p">),</span> <span class="n">imagename</span><span class="p">,</span> <span class="kc">None</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="n">fmt</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span>
+                <span class="n">array</span> <span class="o">=</span> <span class="n">fmt</span><span class="p">[</span><span class="s2">&quot;array&quot;</span><span class="p">]</span>
+                <span class="n">ndtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="si">%s%s%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="s2">&quot;byteorder&quot;</span><span class="p">]),</span>
+                                <span class="nb">chr</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]),</span>
+                                <span class="n">array</span><span class="p">[</span><span class="s2">&quot;itemsize&quot;</span><span class="p">]))</span>
+                <span class="n">shape</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="s2">&quot;shape&quot;</span><span class="p">])</span>
+                <span class="n">compression</span> <span class="o">=</span> <span class="n">fmt</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;compression&quot;</span><span class="p">,</span> <span class="n">FILTER_NONE</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">compression</span> <span class="o">==</span> <span class="n">FILTER_NONE</span><span class="p">:</span>
+                    <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ndtype</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">compression</span> <span class="o">==</span> <span class="n">FILTER_DEFLATE</span><span class="p">:</span>
+                    <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">zlib</span><span class="o">.</span><span class="n">decompress</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+                                        <span class="n">dtype</span><span class="o">=</span><span class="n">ndtype</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">field_name</span> <span class="o">=</span> <span class="s2">&quot;chunk&quot;</span>
+                    <span class="n">options</span> <span class="o">=</span> <span class="n">fmt</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;compression_opts&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                        <span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+                        <span class="n">options</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">op</span><span class="p">)</span> <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)]</span>
+                        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                            <span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="n">op</span> <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)]</span>
+                    <span class="n">handler</span> <span class="o">=</span> <span class="n">imageFileHandler</span><span class="o">.</span><span class="n">NexusFieldHandler</span><span class="p">()</span>
+                    <span class="n">handler</span><span class="o">.</span><span class="n">fromchunk</span><span class="p">(</span><span class="n">data</span><span class="p">[:],</span> <span class="n">filterid</span><span class="o">=</span><span class="n">compression</span><span class="p">,</span>
+                                      <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+                                      <span class="n">fname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__lastname</span><span class="p">,</span>
+                                      <span class="n">name</span><span class="o">=</span><span class="n">field_name</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span>
+                                      <span class="n">dtype</span><span class="o">=</span><span class="n">ndtype</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+                    <span class="n">node</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
+                    <span class="n">img</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">getImage</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">img</span><span class="p">),</span> <span class="n">imagename</span><span class="p">,</span> <span class="kc">None</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># elif data[:2] in [&quot;II\x2A\x00&quot;, &quot;MM\x00\x2A&quot;]:</span>

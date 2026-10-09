@@ -142,6 +142,28 @@
 
 
 
+<div class="viewcode-block" id="memory_file">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.memory_file">[docs]</a>
+<span class="k">def</span> <span class="nf">memory_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; create a new file</span>
+
+<span class="sd">    :param filename: file name</span>
+<span class="sd">    :type filename: :obj:`str`</span>
+<span class="sd">    :returns: file object</span>
+<span class="sd">    :rtype: :class:`FTFile`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;writer&#39;</span> <span class="ow">in</span> <span class="n">pars</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">wr</span> <span class="o">=</span> <span class="n">pars</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;writer&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">writerlock</span><span class="p">:</span>
+            <span class="n">wr</span> <span class="o">=</span> <span class="n">writer</span>
+    <span class="n">fl</span> <span class="o">=</span> <span class="n">wr</span><span class="o">.</span><span class="n">memory_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fl</span><span class="p">,</span> <span class="s2">&quot;writer&quot;</span><span class="p">):</span>
+        <span class="n">fl</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">wr</span>
+    <span class="k">return</span> <span class="n">fl</span></div>
+
+
+
 <div class="viewcode-block" id="load_file">
 <a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.load_file">[docs]</a>
 <span class="k">def</span> <span class="nf">load_file</span><span class="p">(</span><span class="n">membuffer</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">):</span>
@@ -1051,6 +1073,30 @@
 
 <span class="sd">        :param o: h5 object</span>
 <span class="sd">        :type o: :obj:`any`</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="FTField.write_chunk">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTField.write_chunk">[docs]</a>
+    <span class="k">def</span> <span class="nf">write_chunk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; write the field chunk value</span>
+
+<span class="sd">        :param o: h5 object</span>
+<span class="sd">        :type o: :obj:`any`</span>
+<span class="sd">        :param offset: chunk offset</span>
+<span class="sd">        :type offset: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="FTField.read_chunk">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.filewriter.FTField.read_chunk">[docs]</a>
+    <span class="k">def</span> <span class="nf">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; read the field chunk value</span>
+
+<span class="sd">        :param offset: chunk offset</span>
+<span class="sd">        :type offset: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">        :returns: h5 object</span>
+<span class="sd">        :rtype: :obj:`any`</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
 
