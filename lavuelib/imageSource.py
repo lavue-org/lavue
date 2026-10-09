@@ -2418,15 +2418,24 @@ class ASAPOSource(BaseSource):
                                         dtype=ndtype).reshape(shape)
                 else:
                     field_name = "chunk"
-                    compression_opts = fmt.get("compression_opts")
+                    options = fmt.get("compression_opts")
+                    if isinstance(options, int):
+                        options = [options]
+                    elif isinstance(options, tuple):
+                        options = list(options)
+                    elif isinstance(options, str):
+                        try:
+                            options = [int(op) for op in options.split(",")]
+                        except Exception:
+                            options = [op for op in options.split(",")]
                     handler = imageFileHandler.NexusFieldHandler()
                     handler.fromchunk(data[:], filterid=compression,
-                                      options=compression_opts,
+                                      options=options,
                                       fname=self.__lastname,
                                       name=field_name, shape=shape,
                                       dtype=ndtype.type.__name__)
                     node = handler.getNode(field_name)
-                    img = handler.getImage(node)
+                    img = handler.getImage(node, frame=None)
                 return np.transpose(img), imagename, None
             else:
                 # elif data[:2] in ["II\x2A\x00", "MM\x00\x2A"]:

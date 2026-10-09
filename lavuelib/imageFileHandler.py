@@ -173,7 +173,8 @@ class NexusFieldHandler(object):
 
         self.__root = self.__fl.root()
         if type(membuffer).__name__ == "ndarray":
-            npdata = np.array(membuffer[:], dtype="uint8")
+            npdata = np.array(membuffer[:])
+            # npdata = np.array(membuffer[:], dtype="uint8")
         else:
             if hasattr(membuffer, "getbuffer"):
                 membuffer = membuffer.getbuffer()
@@ -186,8 +187,7 @@ class NexusFieldHandler(object):
         dfilter = wrmodule.data_filter(filterid=filterid, options=options)
         cfield = self.__root.create_field(name, dtype, shape, chunk=shape,
                                           dfilter=dfilter)
-        cfield.write_chunk([0] * len(shape), npdata)
-        # cfield.id.write_direct_chunk((0,) * len(shape), npdata.tobytes())
+        cfield.write_chunk(npdata, [0] * len(shape))
 
     def frombuffer(self, membuffer, fname=None, writer=None):
         """ constructor
