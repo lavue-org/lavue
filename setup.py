@@ -26,7 +26,6 @@
 
 """ setup.py for setting Lavue"""
 
-import codecs
 import os
 import sys
 from setuptools import setup, find_packages
@@ -47,9 +46,8 @@ def read(fname):
     :param fname: readme file name
     :type fname: :obj:`str`
     """
-    with codecs.open(os.path.join('.', fname), encoding='utf-8') as f:
-        long_description = f.read()
-    return long_description
+    with open(os.path.join(os.path.dirname(__file__), fname)) as fl:
+        return fl.read()
 
 # from sphinx.setup_command import BuildDoc
 

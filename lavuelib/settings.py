@@ -38,12 +38,13 @@ if sys.version_info > (3,):
     unicode = str
 
 try:
-    __import__("pyFAI")
+    import pyFAI
     #: (:obj:`bool`) pyFAI imported
-    PYFAI = True
+    PYFAI = (pyFAI.version_info.major
+             + pyFAI.version_info.minor * 0.01)
 except ImportError:
     #: (:obj:`bool`) pyFAI imported
-    PYFAI = False
+    PYFAI = 0.0
 
 
 class Settings(object):
@@ -1005,18 +1006,32 @@ class Settings(object):
                     except Exception:
                         from pyFAI.azimuthalIntegrator \
                             import AzimuthalIntegrator
-                    self.ai = AzimuthalIntegrator(
-                        dist=detdistance,
-                        poni1=self.detponi1,
-                        poni2=self.detponi2,
-                        rot1=self.detrot1,
-                        rot2=self.detrot2,
-                        rot3=self.detrot3,
-                        pixel1=pixel1,
-                        pixel2=pixel2,
-                        splineFile=splineFile,
-                        detector=detector,
-                        wavelength=wvln)
+                    if PYFAI > 2025.09:
+                        self.ai = AzimuthalIntegrator(
+                            dist=detdistance,
+                            poni1=self.detponi1,
+                            poni2=self.detponi2,
+                            rot1=self.detrot1,
+                            rot2=self.detrot2,
+                            rot3=self.detrot3,
+                            pixel1=pixel1,
+                            pixel2=pixel2,
+                            splinefile=splineFile,
+                            detector=detector,
+                            wavelength=wvln)
+                    else:
+                        self.ai = AzimuthalIntegrator(
+                            dist=detdistance,
+                            poni1=self.detponi1,
+                            poni2=self.detponi2,
+                            rot1=self.detrot1,
+                            rot2=self.detrot2,
+                            rot3=self.detrot3,
+                            pixel1=pixel1,
+                            pixel2=pixel2,
+                            splineFile=splineFile,
+                            detector=detector,
+                            wavelength=wvln)
                     if not self.detponi1 and not self.detponi2 \
                        and self.centerx and self.centery:
                         aif = self.ai.getFit2D()
@@ -1652,16 +1667,23 @@ class Settings(object):
         if PYFAI:
             with QtCore.QMutexLocker(self.aimutex):
                 aic = self.ai.get_config()
-                self.pixelsizex = self.distance2um(
-                    (self.ai.get_pixel2(), "m"))
-                self.pixelsizey = self.distance2um(
-                    (self.ai.get_pixel1(), "m"))
             self.detponi1 = aic["poni1"]
             self.detponi2 = aic["poni2"]
             self.detrot1 = aic["rot1"]
             self.detrot2 = aic["rot2"]
             self.detrot3 = aic["rot3"]
-            self.detsplinefile = self.ai.splineFile
+            if PYFAI > 2025.09:
+                self.detsplinefile = self.ai.splinefile
+                self.pixelsizey = self.distance2um(
+                    (self.ai.pixel1, "m"))
+                self.pixelsizex = self.distance2um(
+                    (self.ai.pixel2, "m"))
+            else:
+                self.detsplinefile = self.ai.splineFile
+                self.pixelsizey = self.distance2um(
+                    (self.ai.get_pixel1(), "m"))
+                self.pixelsizex = self.distance2um(
+                    (self.ai.get_pixel2(), "m"))
             self.detname = aic["detector"]
             self.detdistance = self.distance2mm(
                 (aic["dist"], "m"))
