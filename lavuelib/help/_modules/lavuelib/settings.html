@@ -85,12 +85,13 @@
     <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="nb">__import__</span><span class="p">(</span><span class="s2">&quot;pyFAI&quot;</span><span class="p">)</span>
+    <span class="kn">import</span> <span class="nn">pyFAI</span>
     <span class="c1">#: (:obj:`bool`) pyFAI imported</span>
-    <span class="n">PYFAI</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">PYFAI</span> <span class="o">=</span> <span class="p">(</span><span class="n">pyFAI</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span>
+             <span class="o">+</span> <span class="n">pyFAI</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">minor</span> <span class="o">*</span> <span class="mf">0.01</span><span class="p">)</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="c1">#: (:obj:`bool`) pyFAI imported</span>
-    <span class="n">PYFAI</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">PYFAI</span> <span class="o">=</span> <span class="mf">0.0</span>
 
 
 <div class="viewcode-block" id="Settings"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.settings.Settings">[docs]</a><span class="k">class</span> <span class="nc">Settings</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -1052,18 +1053,32 @@
                     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                         <span class="kn">from</span> <span class="nn">pyFAI.azimuthalIntegrator</span> \
                             <span class="kn">import</span> <span class="nn">AzimuthalIntegrator</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">ai</span> <span class="o">=</span> <span class="n">AzimuthalIntegrator</span><span class="p">(</span>
-                        <span class="n">dist</span><span class="o">=</span><span class="n">detdistance</span><span class="p">,</span>
-                        <span class="n">poni1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">detponi1</span><span class="p">,</span>
-                        <span class="n">poni2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">detponi2</span><span class="p">,</span>
-                        <span class="n">rot1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">detrot1</span><span class="p">,</span>
-                        <span class="n">rot2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">detrot2</span><span class="p">,</span>
-                        <span class="n">rot3</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">detrot3</span><span class="p">,</span>
-                        <span class="n">pixel1</span><span class="o">=</span><span class="n">pixel1</span><span class="p">,</span>
-                        <span class="n">pixel2</span><span class="o">=</span><span class="n">pixel2</span><span class="p">,</span>
-                        <span class="n">splineFile</span><span class="o">=</span><span class="n">splineFile</span><span class="p">,</span>
-                        <span class="n">detector</span><span class="o">=</span><span class="n">detector</span><span class="p">,</span>
-                        <span class="n">wavelength</span><span class="o">=</span><span class="n">wvln</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">PYFAI</span> <span class="o">&gt;</span> <span class="mf">2025.09</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">ai</span> <span class="o">=</span> <span class="n">AzimuthalIntegrator</span><span class="p">(</span>
+                            <span class="n">dist</span><span class="o">=</span><span class="n">detdistance</span><span class="p">,</span>
+                            <span class="n">poni1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">detponi1</span><span class="p">,</span>
+                            <span class="n">poni2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">detponi2</span><span class="p">,</span>
+                            <span class="n">rot1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">detrot1</span><span class="p">,</span>
+                            <span class="n">rot2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">detrot2</span><span class="p">,</span>
+                            <span class="n">rot3</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">detrot3</span><span class="p">,</span>
+                            <span class="n">pixel1</span><span class="o">=</span><span class="n">pixel1</span><span class="p">,</span>
+                            <span class="n">pixel2</span><span class="o">=</span><span class="n">pixel2</span><span class="p">,</span>
+                            <span class="n">splinefile</span><span class="o">=</span><span class="n">splineFile</span><span class="p">,</span>
+                            <span class="n">detector</span><span class="o">=</span><span class="n">detector</span><span class="p">,</span>
+                            <span class="n">wavelength</span><span class="o">=</span><span class="n">wvln</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">ai</span> <span class="o">=</span> <span class="n">AzimuthalIntegrator</span><span class="p">(</span>
+                            <span class="n">dist</span><span class="o">=</span><span class="n">detdistance</span><span class="p">,</span>
+                            <span class="n">poni1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">detponi1</span><span class="p">,</span>
+                            <span class="n">poni2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">detponi2</span><span class="p">,</span>
+                            <span class="n">rot1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">detrot1</span><span class="p">,</span>
+                            <span class="n">rot2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">detrot2</span><span class="p">,</span>
+                            <span class="n">rot3</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">detrot3</span><span class="p">,</span>
+                            <span class="n">pixel1</span><span class="o">=</span><span class="n">pixel1</span><span class="p">,</span>
+                            <span class="n">pixel2</span><span class="o">=</span><span class="n">pixel2</span><span class="p">,</span>
+                            <span class="n">splineFile</span><span class="o">=</span><span class="n">splineFile</span><span class="p">,</span>
+                            <span class="n">detector</span><span class="o">=</span><span class="n">detector</span><span class="p">,</span>
+                            <span class="n">wavelength</span><span class="o">=</span><span class="n">wvln</span><span class="p">)</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">detponi1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">detponi2</span> \
                        <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">centerx</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">centery</span><span class="p">:</span>
                         <span class="n">aif</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">getFit2D</span><span class="p">()</span>
@@ -1699,16 +1714,23 @@
         <span class="k">if</span> <span class="n">PYFAI</span><span class="p">:</span>
             <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aimutex</span><span class="p">):</span>
                 <span class="n">aic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">pixelsizex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance2um</span><span class="p">(</span>
-                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">get_pixel2</span><span class="p">(),</span> <span class="s2">&quot;m&quot;</span><span class="p">))</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">pixelsizey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance2um</span><span class="p">(</span>
-                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">get_pixel1</span><span class="p">(),</span> <span class="s2">&quot;m&quot;</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">detponi1</span> <span class="o">=</span> <span class="n">aic</span><span class="p">[</span><span class="s2">&quot;poni1&quot;</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">detponi2</span> <span class="o">=</span> <span class="n">aic</span><span class="p">[</span><span class="s2">&quot;poni2&quot;</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">detrot1</span> <span class="o">=</span> <span class="n">aic</span><span class="p">[</span><span class="s2">&quot;rot1&quot;</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">detrot2</span> <span class="o">=</span> <span class="n">aic</span><span class="p">[</span><span class="s2">&quot;rot2&quot;</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">detrot3</span> <span class="o">=</span> <span class="n">aic</span><span class="p">[</span><span class="s2">&quot;rot3&quot;</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">detsplinefile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">splineFile</span>
+            <span class="k">if</span> <span class="n">PYFAI</span> <span class="o">&gt;</span> <span class="mf">2025.09</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">detsplinefile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">splinefile</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pixelsizey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance2um</span><span class="p">(</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">pixel1</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pixelsizex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance2um</span><span class="p">(</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">pixel2</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">detsplinefile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">splineFile</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pixelsizey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance2um</span><span class="p">(</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">get_pixel1</span><span class="p">(),</span> <span class="s2">&quot;m&quot;</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pixelsizex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance2um</span><span class="p">(</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">get_pixel2</span><span class="p">(),</span> <span class="s2">&quot;m&quot;</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">detname</span> <span class="o">=</span> <span class="n">aic</span><span class="p">[</span><span class="s2">&quot;detector&quot;</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">detdistance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance2mm</span><span class="p">(</span>
                 <span class="p">(</span><span class="n">aic</span><span class="p">[</span><span class="s2">&quot;dist&quot;</span><span class="p">],</span> <span class="s2">&quot;m&quot;</span><span class="p">))</span>

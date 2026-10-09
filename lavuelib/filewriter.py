@@ -93,6 +93,25 @@ def create_file(filename, overwrite=False, **pars):
     return fl
 
 
+def memory_file(filename, **pars):
+    """ create a new file
+
+    :param filename: file name
+    :type filename: :obj:`str`
+    :returns: file object
+    :rtype: :class:`FTFile`
+    """
+    if 'writer' in pars.keys():
+        wr = pars.pop('writer')
+    else:
+        with writerlock:
+            wr = writer
+    fl = wr.memory_file(filename, **pars)
+    if hasattr(fl, "writer"):
+        fl.writer = wr
+    return fl
+
+
 def load_file(membuffer, filename=None, readonly=False, **pars):
     """ load a file from memory byte buffer
 
@@ -887,6 +906,24 @@ class FTField(FTObject):
 
         :param o: h5 object
         :type o: :obj:`any`
+        """
+
+    def write_chunk(self, o, offset):
+        """ write the field chunk value
+
+        :param o: h5 object
+        :type o: :obj:`any`
+        :param offset: chunk offset
+        :type offset: :obj:`list` < :obj:`int` >
+        """
+
+    def read_chunk(self, offset):
+        """ read the field chunk value
+
+        :param offset: chunk offset
+        :type offset: :obj:`list` < :obj:`int` >
+        :returns: h5 object
+        :rtype: :obj:`any`
         """
 
     def __setitem__(self, t, o):

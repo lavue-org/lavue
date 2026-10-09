@@ -359,6 +359,25 @@ def create_file(filename, overwrite=False, **pars):
     return H5PYFile(fl, filename)
 
 
+def memory_file(filename, **pars):
+    """ create a new file
+
+    :param filename: file name
+    :type filename: :obj:`str`
+    :param pars: parameters
+    :type pars: :obj:`dict` < :obj:`str`, :obj:`str`>
+    :returns: file object
+    :rtype: :class:`H5PYFile`
+    """
+    try:
+        fl = h5py.File(filename, "w", driver="core", backing_store=False,
+                       **pars)
+    except Exception as e:
+        print("MemoryDriver not available %s" % str(e))
+        fl = h5py.File(filename, "w", **pars)
+    return H5PYFile(fl, filename)
+
+
 def link(target, parent, name):
     """ create link
 
@@ -989,6 +1008,26 @@ class H5PYField(filewriter.FTField):
         :type o: :obj:`any`
         """
         self._h5object[...] = o
+
+    def write_chunk(self, o, offset):
+        """ write the field chunk value
+
+        :param o: h5 object
+        :type o: :obj:`any`
+        :param offset: chunk offset
+        :type offset: :obj:`list` < :obj:`int` >
+        """
+        self._h5object.id.write_direct_chunk(tuple(offset), o.tobytes())
+
+    def read_chunk(self, offset):
+        """ read the field chunk value
+
+        :param offset: chunk offset
+        :type offset: :obj:`list` < :obj:`int` >
+        :returns: h5 object
+        :rtype: :obj:`any`
+        """
+        return self._h5object.id.read_direct_chunk(offset)[1]
 
     def __setitem__(self, t, o):
         """ set value
