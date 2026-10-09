@@ -406,6 +406,25 @@
     <span class="k">return</span> <span class="n">H5PYFile</span><span class="p">(</span><span class="n">fl</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="memory_file"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.memory_file">[docs]</a><span class="k">def</span> <span class="nf">memory_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; create a new file</span>
+
+<span class="sd">    :param filename: file name</span>
+<span class="sd">    :type filename: :obj:`str`</span>
+<span class="sd">    :param pars: parameters</span>
+<span class="sd">    :type pars: :obj:`dict` &lt; :obj:`str`, :obj:`str`&gt;</span>
+<span class="sd">    :returns: file object</span>
+<span class="sd">    :rtype: :class:`H5PYFile`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">fl</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;core&quot;</span><span class="p">,</span> <span class="n">backing_store</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="o">**</span><span class="n">pars</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MemoryDriver not available </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="n">fl</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">pars</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">H5PYFile</span><span class="p">(</span><span class="n">fl</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="link"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.link">[docs]</a><span class="k">def</span> <span class="nf">link</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; create link</span>
 
@@ -1036,6 +1055,26 @@
 <span class="sd">        :type o: :obj:`any`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">o</span></div>
+
+<div class="viewcode-block" id="H5PYField.write_chunk"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYField.write_chunk">[docs]</a>    <span class="k">def</span> <span class="nf">write_chunk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; write the field chunk value</span>
+
+<span class="sd">        :param o: h5 object</span>
+<span class="sd">        :type o: :obj:`any`</span>
+<span class="sd">        :param offset: chunk offset</span>
+<span class="sd">        :type offset: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">id</span><span class="o">.</span><span class="n">write_direct_chunk</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">offset</span><span class="p">),</span> <span class="n">o</span><span class="o">.</span><span class="n">tobytes</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="H5PYField.read_chunk"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.h5pywriter.H5PYField.read_chunk">[docs]</a>    <span class="k">def</span> <span class="nf">read_chunk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; read the field chunk value</span>
+
+<span class="sd">        :param offset: chunk offset</span>
+<span class="sd">        :type offset: :obj:`list` &lt; :obj:`int` &gt;</span>
+<span class="sd">        :returns: h5 object</span>
+<span class="sd">        :rtype: :obj:`any`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5object</span><span class="o">.</span><span class="n">id</span><span class="o">.</span><span class="n">read_direct_chunk</span><span class="p">(</span><span class="n">offset</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span></div>
 
     <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set value</span>
