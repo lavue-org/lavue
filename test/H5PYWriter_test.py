@@ -31,6 +31,7 @@ import string
 import h5py
 import time
 import io
+import numpy as np
 
 import lavuelib.filewriter as FileWriter
 import lavuelib.h5pywriter as H5PYWriter
@@ -307,6 +308,49 @@ class H5PYWriterTest(unittest.TestCase):
 
         finally:
             os.remove(self._fname)
+
+    # default createfile test
+    # \brief It tests default settings
+    def test_default_memory_file(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        self._fname = '%s/%s%s.h5' % (os.getcwd(),
+                                      self.__class__.__name__, fun)
+        cdata = np.array(
+            [24184, 49677, 4609, 12288, 49156, 6832,
+             65478, 44127, 151, 40580, 42322, 55254, 14696, 2563, 16640
+             ],
+            dtype="uint16")
+        sdata = np.array(
+            [[x & 0xff, ((x >> 8) & 0xff)] for x in cdata]).flatten()
+        data = np.array(
+            [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8],
+            dtype="uint16")
+
+        fl = H5PYWriter.memory_file(self._fname)
+        f = fl.root()
+        self.assertEqual(0, len(f.attributes))
+        npdata = np.array(cdata[:])
+        filterid = 1
+        options = [2]
+        shape = [17]
+        dtype = "uint16"
+        name = "mychunk"
+        dfilter = H5PYWriter.data_filter(filterid=filterid, options=options)
+        cfield = f.create_field(name, dtype, shape, chunk=shape,
+                                dfilter=dfilter)
+        cfield.write_chunk(npdata, [0])
+
+        tfield = f.open(name)
+        rdata = tfield.read()
+        crdata = tfield.read_chunk([0])
+        self.assertEqual(list(data), list(rdata))
+        self.assertEqual(list(sdata), list(crdata))
+
+        tfield.close()
+        cfield.close()
+        f.close()
+        fl.close()
 
     # default createfile test
     # \brief It tests default settings
