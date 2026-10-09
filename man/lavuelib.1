@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "LAVUELIB" "1" "Mar 18, 2026" "3.10" "LaVue"
+.TH "LAVUELIB" "1" "Oct 09, 2026" "" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .sp
@@ -1767,6 +1767,8 @@ The first tab of the configuration dialog contains \fBGeneral Settings\fP\&. It 
 \fBFloat type for intensity:\fP  type to which intensity is converted if it is changed to float type
 .IP \(bu 2
 \fBAccelerate memory buffer sum:\fP speeds up calculation of an image sum for the memory buffer tool
+.IP \(bu 2
+\fBTriggered events:\fP selects how many qt events is processed by lavue explicitly
 .IP \(bu 2
 \fBImage channels with gradient colors:\fP use gradient color maps to display pixel intensities in the RGB\-channel  mode
 .IP \(bu 2
@@ -3528,7 +3530,7 @@ thread contructor
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.commandThread.logger  =  <Logger lavuelib.commandThread (INFO)>
+.B lavuelib.commandThread.logger  =  <Logger lavuelib.commandThread (WARNING)>
 (\fI\%logging.Logger\fP) logger object
 .UNINDENT
 .SS lavuelib.configDialog module
@@ -3955,6 +3957,11 @@ status flag
 .TP
 .B toolwidgets
 (\fI\%str\fP)  json list with tool widget names
+.UNINDENT
+.INDENT 7.0
+.TP
+.B triggeredevents
+(\fI\%str\fP) triggered events
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -5773,7 +5780,7 @@ creates widget GUI
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.edDictDialog.logger  =  <Logger lavue (INFO)>
+.B lavuelib.edDictDialog.logger  =  <Logger lavue (WARNING)>
 (\fI\%logging.Logger\fP) logger object
 .UNINDENT
 .SS lavuelib.edListDialog module
@@ -5825,7 +5832,7 @@ creates widget GUI
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.edListDialog.logger  =  <Logger lavue (INFO)>
+.B lavuelib.edListDialog.logger  =  <Logger lavue (WARNING)>
 (\fI\%logging.Logger\fP) logger object
 .UNINDENT
 .SS lavuelib.filewriter module
@@ -6159,6 +6166,22 @@ h5 object
 .UNINDENT
 .INDENT 7.0
 .TP
+.B read_chunk(offset)
+read the field chunk value
+.INDENT 7.0
+.TP
+.B Parameters
+\fBoffset\fP (\fI\%list\fP < \fI\%int\fP >) \-\- chunk offset
+.TP
+.B Returns
+h5 object
+.TP
+.B Return type
+\fI\%any\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B refresh()
 refresh the field
 .INDENT 7.0
@@ -6209,6 +6232,21 @@ write the field value
 .TP
 .B Parameters
 \fBo\fP (\fI\%any\fP) \-\- h5 object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B write_chunk(o, offset)
+write the field chunk value
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBo\fP (\fI\%any\fP) \-\- h5 object
+.IP \(bu 2
+\fBoffset\fP (\fI\%list\fP < \fI\%int\fP >) \-\- chunk offset
+.UNINDENT
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -6859,6 +6897,22 @@ file objects
 .TP
 .B Return type
 \fBH5PYFile\fP or \fBH5CppFile\fP
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B lavuelib.filewriter.memory_file(filename, **pars)
+create a new file
+.INDENT 7.0
+.TP
+.B Parameters
+\fBfilename\fP (\fI\%str\fP) \-\- file name
+.TP
+.B Returns
+file object
+.TP
+.B Return type
+\fI\%FTFile\fP
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -7572,6 +7626,22 @@ h5 object
 .UNINDENT
 .INDENT 7.0
 .TP
+.B read_chunk(offset)
+read the field chunk value
+.INDENT 7.0
+.TP
+.B Parameters
+\fBoffset\fP (\fI\%list\fP < \fI\%int\fP >) \-\- chunk offset
+.TP
+.B Returns
+h5 object
+.TP
+.B Return type
+\fI\%any\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B refresh()
 refresh the field
 .INDENT 7.0
@@ -7622,6 +7692,21 @@ write the field value
 .TP
 .B Parameters
 \fBo\fP (\fI\%any\fP) \-\- h5 object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B write_chunk(o, offset)
+write the field chunk value
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBo\fP (\fI\%any\fP) \-\- h5 object
+.IP \(bu 2
+\fBoffset\fP (\fI\%list\fP < \fI\%int\fP >) \-\- chunk offset
+.UNINDENT
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -8326,6 +8411,27 @@ file object
 .UNINDENT
 .INDENT 0.0
 .TP
+.B lavuelib.h5cppwriter.memory_file(filename, libver=None)
+create a new file
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBfilename\fP (\fI\%str\fP) \-\- file name
+.IP \(bu 2
+\fBlibver\fP (\fI\%str\fP) \-\- library version: \(aqlastest\(aq or \(aqearliest\(aq
+.UNINDENT
+.TP
+.B Returns
+file object
+.TP
+.B Return type
+\fI\%H5CppFile\fP
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
 .B lavuelib.h5cppwriter.nptype(dtype)
 converts to numpy types
 .INDENT 7.0
@@ -8787,6 +8893,22 @@ h5 object
 .UNINDENT
 .INDENT 7.0
 .TP
+.B read_chunk(offset)
+read the field chunk value
+.INDENT 7.0
+.TP
+.B Parameters
+\fBoffset\fP (\fI\%list\fP < \fI\%int\fP >) \-\- chunk offset
+.TP
+.B Returns
+h5 object
+.TP
+.B Return type
+\fI\%any\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B refresh()
 refresh the field
 .INDENT 7.0
@@ -8837,6 +8959,21 @@ write the field value
 .TP
 .B Parameters
 \fBo\fP (\fI\%any\fP) \-\- h5 object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B write_chunk(o, offset)
+write the field chunk value
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBo\fP (\fI\%any\fP) \-\- h5 object
+.IP \(bu 2
+\fBoffset\fP (\fI\%list\fP < \fI\%int\fP >) \-\- chunk offset
+.UNINDENT
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -9529,6 +9666,27 @@ load a file from memory byte buffer
 \fBfilename\fP (\fI\%str\fP) \-\- file name
 .IP \(bu 2
 \fBreadonly\fP (\fI\%bool\fP) \-\- readonly flag
+.IP \(bu 2
+\fBpars\fP (\fI\%dict\fP < \fI\%str\fP, \fI\%str\fP>) \-\- parameters
+.UNINDENT
+.TP
+.B Returns
+file object
+.TP
+.B Return type
+\fI\%H5PYFile\fP
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B lavuelib.h5pywriter.memory_file(filename, **pars)
+create a new file
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBfilename\fP (\fI\%str\fP) \-\- file name
 .IP \(bu 2
 \fBpars\fP (\fI\%dict\fP < \fI\%str\fP, \fI\%str\fP>) \-\- parameters
 .UNINDENT
@@ -10798,6 +10956,23 @@ dictionary of the field names and the field objects
 .INDENT 7.0
 .TP
 .B frombuffer(membuffer, fname=None, writer=None)
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBmembuffer\fP (\fI\%bytes\fP or \fI\%io.BytesIO\fP) \-\- memory buffer
+.IP \(bu 2
+\fBfname\fP (\fI\%str\fP) \-\- file name
+.IP \(bu 2
+\fBwriter\fP (\fI\%str\fP) \-\- h5 writer module: \(dqh5py\(dq or \(dqh5py\(dq
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B fromchunk(membuffer, filterid, options, fname=None, name=\(aqchunk\(aq, shape=None, dtype=None, writer=None)
 constructor
 .INDENT 7.0
 .TP
@@ -14409,21 +14584,6 @@ a list: [name, rawdata, metadata, x, y, sx, sy, tr]
 .UNINDENT
 .INDENT 0.0
 .TP
-.B lavuelib.liveViewer.processEvents(events=\(aqinternal\(aq)
-process Qt events
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBevents\fP \-\- processed events i.e. internal, some, all, none
-.IP \(bu 2
-\fBevents\fP \-\- \fI\%str\fP
-.UNINDENT
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.TP
 .B lavuelib.liveViewer.setLoggerLevel(logger, level)
 .UNINDENT
 .SS lavuelib.maskWidget module
@@ -15993,7 +16153,7 @@ sets scaling from string
 live viewer image display base it on a qt dialog
 .INDENT 0.0
 .TP
-.B lavuelib.settings.PYFAI  =  True
+.B lavuelib.settings.PYFAI  =  2025.03
 (\fI\%bool\fP) pyFAI imported
 .UNINDENT
 .INDENT 0.0
@@ -16701,6 +16861,11 @@ Stores settings in QSettings object
 .TP
 .B triggeredevents
 (\fI\%str\fP) triggered events
+.UNINDENT
+.INDENT 7.0
+.TP
+.B triggeredevents_current
+(\fI\%str\fP) current triggered events
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -19758,16 +19923,7 @@ deactivates tool widget
 .INDENT 7.0
 .TP
 .B signal2slot
-.INDENT 7.0
-.TP
-.B (\fI\%list\fP < [:class:
-.nf
-\(ga
-.fi
-pyqtgraph.
-QtCore.pyqtSignal\(ga, \fI\%str\fP] >)
-.UNINDENT
-.sp
+(\fI\%list\fP < [\fBpyqtgraph.QtCore.pyqtSignal\fP, \fI\%str\fP] >)
 list of [signal, slot] object to connect
 .UNINDENT
 .UNINDENT

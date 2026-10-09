@@ -4,12 +4,14 @@ export LAVUE_HIDE_VERSIONS=TRUE
 rm -rf build/sphinx/html/
 mkdir -p doc/_static
 sphinx-build  doc build/sphinx/html -b html
+sphinx-build  doc build/sphinx/man -b man
 # python3 setup.py build_sphinx
 unset LAVUE_HIDE_VERSIONS
 
 cp -r build/sphinx/html/* lavuelib/help
 rm lavuelib/help/objects.inv
 
+cp -r build/sphinx/man/* man
 
 # python3 setup.py build --executable '/usr/bin/env python3'
 # python3 setup.py sdist
