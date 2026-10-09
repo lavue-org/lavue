@@ -28,6 +28,7 @@
 
 from pyqtgraph import QtCore, QtGui
 import json
+import zlib
 import struct
 import logging
 import os
@@ -164,6 +165,13 @@ else:
 globalmutex = QtCore.QMutex()
 
 logger = logging.getLogger("lavue")
+
+
+FILTER_NONE = 0
+FILTER_DEFLATE = 1
+FILTER_LZ4 = 32004
+FILTER_BITSHUFFLE = 32008
+
 
 #: (:obj:`bool`) PyTango bug #213 flag related to EncodedAttributes in python3
 PYTG_BUG_213 = False
@@ -2390,7 +2398,35 @@ class ASAPOSource(BaseSource):
                 if "dtype" in metadata["meta"].keys():
                     dtype = metadata["meta"]["dtype"]
                 shape = metadata["meta"]["shape"]
-                img = np.frombuffer(data, dtype=dtype).reshape(shape)
+                fmt = metadata["meta"].get("_data_format", None)
+                if fmt is not None:
+                    img = np.frombuffer(data, dtype=dtype).reshape(shape)
+                    return np.transpose(img), imagename, None
+                if isinstance(fmt, str):
+                    fmt = json.loads(fmt)
+                array = fmt["array"]
+                ndtype = np.dtype(
+                    "%s%s%d" % (chr(array["byteorder"]),
+                                chr(array["datatype"]),
+                                array["itemsize"]))
+                shape = tuple(array["shape"])
+                compression = fmt.get("compression", FILTER_NONE)
+                if compression == FILTER_NONE:
+                    img = np.frombuffer(data, dtype=ndtype).reshape(shape)
+                elif compression == FILTER_DEFLATE:
+                    img = np.frombuffer(zlib.decompress(data),
+                                        dtype=ndtype).reshape(shape)
+                else:
+                    field_name = "chunk"
+                    compression_opts = fmt.get("compression_opts")
+                    handler = imageFileHandler.NexusFieldHandler()
+                    handler.fromchunk(data[:], filterid=compression,
+                                      options=compression_opts,
+                                      fname=self.__lastname,
+                                      name=field_name, shape=shape,
+                                      dtype=ndtype.type.__name__)
+                    node = handler.getNode(field_name)
+                    img = handler.getImage(node)
                 return np.transpose(img), imagename, None
             else:
                 # elif data[:2] in ["II\x2A\x00", "MM\x00\x2A"]:

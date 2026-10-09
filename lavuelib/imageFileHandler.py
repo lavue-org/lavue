@@ -129,6 +129,66 @@ class NexusFieldHandler(object):
 
             self.__root = self.__fl.root()
 
+    def fromchunk(self, membuffer, filterid, options, fname=None, name="chunk",
+                  shape=None, dtype=None, writer=None):
+        """ constructor
+
+        :param membuffer: memory buffer
+        :type membuffer: :obj:`bytes` or :obj:`io.BytesIO`
+        :param fname: file name
+        :type fname: :obj:`str`
+        :param writer: h5 writer module: "h5py" or "h5py"
+        :type writer: :obj:`str`
+        """
+        if fname is not None:
+            self.__fname = fname
+
+        if not writer:
+            if "h5cpp" in WRITERS.keys() and \
+               WRITERS["h5cpp"].is_image_file_supported():
+                writer = "h5cpp"
+            elif "h5py" in WRITERS.keys() and \
+                 WRITERS["h5py"].is_image_file_supported():
+                writer = "h5py"
+            elif "h5cpp" in WRITERS.keys():
+                writer = "h5cpp"
+            else:
+                writer = "h5py"
+        if writer not in WRITERS.keys():
+            raise Exception("Writer '%s' cannot be opened" % writer)
+        wrmodule = WRITERS[writer.lower()]
+        try:
+            self.__fl = filewriter.memory_file(
+                fname=self.__fname, writer=wrmodule,
+                libver='latest',
+                swmr=(True if writer in ["h5py", "h5cpp"] else False)
+            )
+        except Exception:
+            try:
+                self.__fl = filewriter.memory_file(
+                    fname, writer=wrmodule)
+            except Exception:
+                raise Exception(
+                    "File '%s' cannot be loaded \n" % (self.__fname))
+
+        self.__root = self.__fl.root()
+        if type(membuffer).__name__ == "ndarray":
+            npdata = np.array(membuffer[:], dtype="uint8")
+        else:
+            if hasattr(membuffer, "getbuffer"):
+                membuffer = membuffer.getbuffer()
+            elif hasattr(membuffer, "getvalue"):
+                membuffer = membuffer.getvalue()
+            try:
+                npdata = np.frombuffer(membuffer[:], dtype=np.uint8)
+            except Exception:
+                npdata = np.fromstring(membuffer[:], dtype=np.uint8)
+        dfilter = wrmodule.data_filter(filterid=filterid, options=options)
+        cfield = self.__root.create_field(name, dtype, shape, chunk=shape,
+                                          dfilter=dfilter)
+        cfield.write_chunk([0] * len(shape), npdata)
+        # cfield.id.write_direct_chunk((0,) * len(shape), npdata.tobytes())
+
     def frombuffer(self, membuffer, fname=None, writer=None):
         """ constructor
 

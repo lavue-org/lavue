@@ -447,6 +447,33 @@ def create_file(filename, overwrite=False, libver=None, swmr=None):
     return H5CppFile(fl, filename)
 
 
+def memory_file(filename, libver=None):
+    """ create a new file
+
+    :param filename: file name
+    :type filename: :obj:`str`
+    :param libver: library version: 'lastest' or 'earliest'
+    :type libver: :obj:`str`
+    :returns: file object
+    :rtype: :class:`H5CppFile`
+    """
+    fcpl = h5cpp.property.FileCreationList()
+    fapl = h5cpp.property.FileAccessList()
+
+    try:
+        mdrv = h5cpp.file.MemoryDriver()
+        mdrv(fapl)
+    except Exception as e:
+        print("MemoryDriver not available %s" % str(e))
+    flag = h5cpp.file.AccessFlags.TRUNCATE
+    if libver is None or libver == 'lastest':
+        fapl.library_version_bounds(
+            h5cpp.property.LibVersion.LATEST,
+            h5cpp.property.LibVersion.LATEST)
+    fl = h5cpp.file.create(filename, flag, fcpl, fapl)
+    return H5CppFile(fl, filename)
+
+
 def link(target, parent, name):
     """ create link
 
@@ -1134,6 +1161,29 @@ class H5CppField(filewriter.FTField):
         :type o: :obj:`any`
         """
         self._h5object.write(o)
+
+    def write_chunk(self, o, offset):
+        """ write the field chunk value
+
+        :param o: h5 object
+        :type o: :obj:`any`
+        :param offset: chunk offset
+        :type offset: :obj:`list` < :obj:`int` >
+        """
+        self._h5object.write_chunk(o, list(offset))
+
+    def read_chunk(self, offset):
+        """ read the field chunk value
+
+        :param offset: chunk offset
+        :type offset: :obj:`list` < :obj:`int` >
+        :returns: h5 object
+        :rtype: :obj:`any`
+        """
+        cdim = self._h5object.chunk_storage_size(offset)
+        value = np.zeros(shape=[cdim], dtype="uint8")
+        self._h5object.read_chunk(value, list(offset))
+        return value
 
     def __setitem__(self, t, o):
         """ set value
