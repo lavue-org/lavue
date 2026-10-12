@@ -2321,7 +2321,7 @@ class ASAPOSource(BaseSource):
             if isinstance(fmt, str):
                 fmt = json.loads(fmt)
             if hasattr(fmt, "get"):
-                data_format = fmt.get("_data_format", None)
+                data_format = fmt.get("data_format", None)
 
             # print("data", str(data)[:10])
             nameext = ""
