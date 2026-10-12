@@ -2547,11 +2547,24 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">meta</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;meta&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">fmt</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">data_format</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="s2">&quot;get&quot;</span><span class="p">):</span>
+                <span class="n">fmt</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_data_format&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">fmt</span> <span class="o">=</span> <span class="n">fmt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">fmt</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="s2">&quot;get&quot;</span><span class="p">):</span>
+                <span class="n">data_format</span> <span class="o">=</span> <span class="n">fmt</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data_format&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
             <span class="c1"># print(&quot;data&quot;, str(data)[:10])</span>
             <span class="n">nameext</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lastname</span><span class="p">:</span>
                 <span class="n">_</span><span class="p">,</span> <span class="n">nameext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__lastname</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">nameext</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.nxs&quot;</span><span class="p">,</span> <span class="s2">&quot;.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;.nx&quot;</span><span class="p">,</span> <span class="s2">&quot;.ndf&quot;</span><span class="p">,</span> <span class="s2">&quot;.hdf&quot;</span><span class="p">,</span> <span class="s2">&quot;.hdf5&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">data_format</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;hdf5_chunk&quot;</span><span class="p">]</span> <span class="ow">and</span> \
+                    <span class="n">nameext</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.nxs&quot;</span><span class="p">,</span> <span class="s2">&quot;.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;.nx&quot;</span><span class="p">,</span> <span class="s2">&quot;.ndf&quot;</span><span class="p">,</span> <span class="s2">&quot;.hdf&quot;</span><span class="p">,</span> <span class="s2">&quot;.hdf5&quot;</span><span class="p">]:</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">handler</span> <span class="o">=</span> <span class="n">imageFileHandler</span><span class="o">.</span><span class="n">NexusFieldHandler</span><span class="p">()</span>
                     <span class="n">handler</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">data</span><span class="p">[:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lastname</span><span class="p">)</span>
@@ -2634,12 +2647,10 @@
                 <span class="k">if</span> <span class="s2">&quot;dtype&quot;</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                     <span class="n">dtype</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">][</span><span class="s2">&quot;dtype&quot;</span><span class="p">]</span>
                 <span class="n">shape</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">][</span><span class="s2">&quot;shape&quot;</span><span class="p">]</span>
-                <span class="n">fmt</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_data_format&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="c1"># fmt = metadata[&quot;meta&quot;].get(&quot;_data_format&quot;, None)</span>
                 <span class="k">if</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
                     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">img</span><span class="p">),</span> <span class="n">imagename</span><span class="p">,</span> <span class="kc">None</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                    <span class="n">fmt</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span>
                 <span class="n">array</span> <span class="o">=</span> <span class="n">fmt</span><span class="p">[</span><span class="s2">&quot;array&quot;</span><span class="p">]</span>
                 <span class="n">ndtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span>
                     <span class="s2">&quot;</span><span class="si">%s%s%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="s2">&quot;byteorder&quot;</span><span class="p">]),</span>
@@ -3314,25 +3325,22 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v3.14.0/index.html">v3.14.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.13.1/index.html">v3.13.1</a></li>
-      <li><a class="reference external" href="../../index/../../v3.13.0/index.html">v3.13.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.12.0/index.html">v3.12.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.11.1/index.html">v3.11.1</a></li>
-      <li><a class="reference external" href="../../index/../../v3.11.0/index.html">v3.11.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.10.0/index.html">v3.10.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.9.0/index.html">v3.9.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.8.0/index.html">v3.8.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.7.0/index.html">v3.7.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.6.0/index.html">v3.6.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.5.4/index.html">v3.5.4</a></li>
-      <li><a class="reference external" href="../../index/../../v3.5.3/index.html">v3.5.3</a></li>
       <li><a class="reference external" href="../../index/../../v3.4.1/index.html">v3.4.1</a></li>
       <li><a class="reference external" href="../../index/../../v3.3.1/index.html">v3.3.1</a></li>
       <li><a class="reference external" href="../../index/../../v3.2.0/index.html">v3.2.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.1.0/index.html">v3.1.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.0.0/index.html">v3.0.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.99.1/index.html">v2.99.1</a></li>
-      <li><a class="reference external" href="../../index/../../v2.99.0/index.html">v2.99.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.98.2/index.html">v2.98.2</a></li>
       <li><a class="reference external" href="../../index/../../v2.97.0/index.html">v2.97.0</a></li>
       <li><a class="reference external" href="../../index/../../v2.96.0/index.html">v2.96.0</a></li>
