@@ -2311,11 +2311,24 @@ class ASAPOSource(BaseSource):
             logger.warning(str(e))
 
         if metadata is not None and data is not None:
+            meta = metadata.get("meta", None)
+            fmt = None
+            data_format = None
+            if hasattr(meta, "get"):
+                fmt = meta.get("_data_format", None)
+            if isinstance(fmt, list):
+                fmt = fmt[0]
+            if isinstance(fmt, str):
+                fmt = json.loads(fmt)
+            if hasattr(fmt, "get"):
+                data_format = fmt.get("data_format", None)
+
             # print("data", str(data)[:10])
             nameext = ""
             if self.__lastname:
                 _, nameext = os.path.splitext(self.__lastname)
-            if nameext in [".nxs", ".h5", ".nx", ".ndf", ".hdf", ".hdf5"]:
+            if data_format not in ["hdf5_chunk"] and \
+                    nameext in [".nxs", ".h5", ".nx", ".ndf", ".hdf", ".hdf5"]:
                 try:
                     handler = imageFileHandler.NexusFieldHandler()
                     handler.frombuffer(data[:], self.__lastname)
@@ -2398,12 +2411,10 @@ class ASAPOSource(BaseSource):
                 if "dtype" in metadata["meta"].keys():
                     dtype = metadata["meta"]["dtype"]
                 shape = metadata["meta"]["shape"]
-                fmt = metadata["meta"].get("_data_format", None)
+                # fmt = metadata["meta"].get("_data_format", None)
                 if fmt is None:
                     img = np.frombuffer(data, dtype=dtype).reshape(shape)
                     return np.transpose(img), imagename, None
-                if isinstance(fmt, str):
-                    fmt = json.loads(fmt)
                 array = fmt["array"]
                 ndtype = np.dtype(
                     "%s%s%d" % (chr(array["byteorder"]),
