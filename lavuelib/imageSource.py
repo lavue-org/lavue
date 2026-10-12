@@ -2399,7 +2399,7 @@ class ASAPOSource(BaseSource):
                     dtype = metadata["meta"]["dtype"]
                 shape = metadata["meta"]["shape"]
                 fmt = metadata["meta"].get("_data_format", None)
-                if fmt is not None:
+                if fmt is None:
                     img = np.frombuffer(data, dtype=dtype).reshape(shape)
                     return np.transpose(img), imagename, None
                 if isinstance(fmt, str):
