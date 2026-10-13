@@ -94,7 +94,7 @@ else
     echo "install python3-lavue"
     # docker exec ndts python3 setup.py build
     # docker exec ndts python3 -m pip build
-
+    docker exec ndts mkdir build
     # docker exec  --user root ndts python3 setup.py install
     if [ "$1" = "ubuntu22.04" ] || [ "$1" = "debian11" ] ; then
         docker exec --user root ndts python3 -m pip install . -vv  --no-deps --no-build-isolation
