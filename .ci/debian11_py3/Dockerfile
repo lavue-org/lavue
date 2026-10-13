@@ -23,7 +23,7 @@ RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian bullseye main" -
 
 # install packages
 RUN apt-get update && apt-get  -y  dist-upgrade
-RUN apt-get -qq update && apt-get  install -f -y default-mysql-client  python3-h5py  python3-mysqldb python3-sphinx  apt-utils debconf-utils net-tools  omniidl libomniorb4-2 libcos4-2 libomnithread4 libzmq5 python3-pyqt5 python3-pyqt5.qtsvg python3-qtchecker python3-pyfai  qtchooser python3-requests python3-pninexus xvfb  libxcb1 libx11-xcb1 libxcb-keysyms1 libxcb-image0 libxcb-icccm4 libxcb-render-util0 xkb-data liblog4j1.2-java pyqt5-dev-tools  python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy python3-pyqt5.qtwebkit
+RUN apt-get -qq update && apt-get  install -f -y default-mysql-client  python3-h5py  python3-mysqldb python3-sphinx  apt-utils debconf-utils net-tools  omniidl libomniorb4-2 libcos4-2 libomnithread4 libzmq5 python3-pyqt5 python3-pyqt5.qtsvg python3-qtchecker python3-pyfai  qtchooser python3-requests python3-pninexus xvfb  libxcb1 libx11-xcb1 libxcb-keysyms1 libxcb-image0 libxcb-icccm4 libxcb-render-util0 xkb-data liblog4j1.2-java pyqt5-dev-tools  python3-tz python3-pyqtgraph python3-setuptools python3-zmq python3-scipy python3-pyqt5.qtwebkit python3-pip python3-pip-whl python3-build
 # git
 
 # set db configuration
