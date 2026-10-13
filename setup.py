@@ -37,7 +37,6 @@ from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 
 
-
 try:
     from sphinx.setup_command import BuildDoc
 except Exception:
