@@ -92,8 +92,16 @@ if [ "$2" = "2" ]; then
 
 else
     echo "install python3-lavue"
-    docker exec ndts python3 setup.py build
-    docker exec  --user root ndts python3 setup.py install
+    # docker exec ndts python3 setup.py build
+    # docker exec ndts python3 -m pip build
+
+    # docker exec  --user root ndts python3 setup.py install
+    if [ "$1" = "ubuntu22.04" ] ; then
+        docker exec --user root ndts python3 -m pip install . -vv  --no-deps --no-build-isolation
+    else
+        docker exec --user root ndts python3 -m pip install . -vv  --no-deps --no-build-isolation  --break-system-packages --root-user-action=ignore
+    fi
+
     echo "build python3-lavue docs"
     docker exec ndts mkdir doc/_static
     docker exec ndts sphinx-build  doc build/sphinx/html
