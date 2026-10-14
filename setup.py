@@ -33,11 +33,22 @@ from setuptools.command.build_py import build_py
 from distutils.command.clean import clean
 from distutils.util import get_platform
 import shutil
+from importlib.util import module_from_spec, spec_from_file_location
+from pathlib import Path
+
 
 try:
     from sphinx.setup_command import BuildDoc
 except Exception:
     BuildDoc = None
+
+
+def get_version():
+    path = Path(__file__).parent / "lavuelib" / "release.py"
+    spec = spec_from_file_location("release", path.as_posix())
+    module = module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def read(fname):
@@ -57,9 +68,9 @@ NAME = 'lavuelib'
 #: (:obj:`str`) project name
 project = 'LaVue'
 #: (:obj:`module`) package name
-lavuepackage = __import__(NAME)
+# lavuepackage = __import__(NAME)
 #: (:obj:`str`) full release version
-release = lavuepackage.__version__
+release = get_version().__version__
 #: (:obj:`str`) package version
 version = ".".join(release.split(".")[:2])
 
@@ -223,16 +234,12 @@ SETUPDATA = dict(
         'Topic :: Scientific/Engineering :: Physics',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3.12',
         'Programming Language :: Python :: 3.13',
+        'Programming Language :: Python :: 3.14',
+        'Programming Language :: Python :: 3.15',
     ],
     keywords='live viewer photon science detector',
     packages=find_packages(exclude=['test']),
