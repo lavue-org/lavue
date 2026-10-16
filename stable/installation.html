@@ -6,11 +6,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Installation &#8212; LaVue  documentation</title>
+    <title>Installation &#8212; LaVue 3.16.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=ffd7f65b" />
     
-    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/documentation_options.js?v=075e253b"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/bizstyle.js"></script>
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="index.html" title="Live Image Viewer"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">LaVue  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LaVue 3.16.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Installation</a></li> 
       </ul>
     </div>  
@@ -56,7 +56,7 @@
 <h2>From sources<a class="headerlink" href="#from-sources" title="Link to this heading">¶</a></h2>
 <p>Download the latest LaVue version from <a class="reference external" href="https://github.com/lavue-org/lavue">https://github.com/lavue-org/lavue</a></p>
 <p>Extract sources and run</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>setup.py<span class="w"> </span>install
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>.<span class="w"> </span>-vv<span class="w"> </span>--no-deps<span class="w"> </span>--no-build-isolation
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> script may need: <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>  <code class="docutils literal notranslate"><span class="pre">sphinx</span></code>  <code class="docutils literal notranslate"><span class="pre">numpy</span></code>  <code class="docutils literal notranslate"><span class="pre">pytest</span></code> python packages as well as <code class="docutils literal notranslate"><span class="pre">qtbase5-dev-tools</span></code> or <code class="docutils literal notranslate"><span class="pre">libqt4-dev-bin</span></code>.</p>
@@ -103,8 +103,17 @@
 </div>
 <p>for python 3 version (for older debian/ubuntu releases).</p>
 </section>
-<section id="from-pip">
-<h2>From pip<a class="headerlink" href="#from-pip" title="Link to this heading">¶</a></h2>
+<section id="from-conda-or-pip">
+<h2>From conda or pip<a class="headerlink" href="#from-conda-or-pip" title="Link to this heading">¶</a></h2>
+<p>The code can be installed in your conda environment by</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>myenv<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.13
+<span class="gp">$ </span>conda<span class="w"> </span>activate<span class="w"> </span>myenv
+<span class="gp">$ </span>conda<span class="w"> </span>config<span class="w"> </span>--add<span class="w"> </span>channels<span class="w"> </span>conda-forge
+<span class="gp">$ </span>conda<span class="w"> </span>config<span class="w"> </span>--set<span class="w"> </span>channel_priority<span class="w"> </span>strict
+
+<span class="gp">$ </span>conda<span class="w"> </span>install<span class="w"> </span>lavue
+</pre></div>
+</div>
 <p>To install it from pip you need to install pyqt5 in advance, e.g.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>myvenv
 <span class="gp">$ </span>.<span class="w"> </span>myvenv/bin/activate
@@ -144,7 +153,7 @@
 <li><a class="reference internal" href="#">Installation</a><ul>
 <li><a class="reference internal" href="#from-sources">From sources</a></li>
 <li><a class="reference internal" href="#debian-packages">Debian packages</a></li>
-<li><a class="reference internal" href="#from-pip">From pip</a></li>
+<li><a class="reference internal" href="#from-conda-or-pip">From conda or pip</a></li>
 </ul>
 </li>
 </ul>
@@ -176,6 +185,7 @@
       <li><a class="reference external" href="index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="index/../../v3.16.0/index.html">v3.16.0</a></li>
       <li><a class="reference external" href="index/../../v3.15.0/index.html">v3.15.0</a></li>
       <li><a class="reference external" href="index/../../v3.14.0/index.html">v3.14.0</a></li>
       <li><a class="reference external" href="index/../../v3.13.1/index.html">v3.13.1</a></li>
@@ -244,7 +254,7 @@
         <li class="right" >
           <a href="index.html" title="Live Image Viewer"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">LaVue  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LaVue 3.16.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Installation</a></li> 
       </ul>
     </div>
