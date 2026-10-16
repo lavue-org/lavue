@@ -1,21 +1,17 @@
 
+<!DOCTYPE html>
 
-<!doctype html>
-
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>lavuelib.dataFetchThread &#8212; LaVue  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=ffd7f65b" />
     
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -24,7 +20,7 @@
     <script src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -89,7 +85,9 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;lavue&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="ExchangeList"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.ExchangeList">[docs]</a><span class="k">class</span> <span class="nc">ExchangeList</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="ExchangeList">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.ExchangeList">[docs]</a>
+<span class="k">class</span> <span class="nc">ExchangeList</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;  subclass for data caching &quot;&quot;&quot;</span>
 
@@ -102,7 +100,9 @@
         <span class="c1">#: (:obj:`pyqtgraph.QtCore.QMutex`) mutex lock</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutex</span><span class="p">()</span>
 
-<div class="viewcode-block" id="ExchangeList.addData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.ExchangeList.addData">[docs]</a>    <span class="k">def</span> <span class="nf">addData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="ExchangeList.addData">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.ExchangeList.addData">[docs]</a>
+    <span class="k">def</span> <span class="nf">addData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; write data into exchange object</span>
 
 <span class="sd">        :param name: image name</span>
@@ -117,7 +117,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__elist</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__elist</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span></div>
 
-<div class="viewcode-block" id="ExchangeList.readData"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.ExchangeList.readData">[docs]</a>    <span class="k">def</span> <span class="nf">readData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ExchangeList.readData">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.ExchangeList.readData">[docs]</a>
+    <span class="k">def</span> <span class="nf">readData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; read data from exchange object</span>
 
 <span class="sd">        :returns: tuple of exchange object (name, data, metadata)</span>
@@ -125,11 +128,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
             <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__elist</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__elist</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__elist</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span></div></div>
+        <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span></div>
+</div>
+
 
 
 <span class="c1"># subclass for threading</span>
-<div class="viewcode-block" id="DataFetchThread"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread">[docs]</a><span class="k">class</span> <span class="nc">DataFetchThread</span><span class="p">(</span><span class="n">OmniQThread</span><span class="p">):</span>
+<div class="viewcode-block" id="DataFetchThread">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread">[docs]</a>
+<span class="k">class</span> <span class="nc">DataFetchThread</span><span class="p">(</span><span class="n">OmniQThread</span><span class="p">):</span>
 
     <span class="c1">#: (:class:`pyqtgraph.QtCore.pyqtSignal`) new data name signal</span>
     <span class="n">newDataNameFetched</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">pyqtSignal</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
@@ -233,7 +240,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__dt</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tm2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.</span>
             <span class="c1"># print(&quot;END&quot;, self.__tid, self.__dt)</span>
 
-<div class="viewcode-block" id="DataFetchThread.changeStatus"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.changeStatus">[docs]</a>    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+<div class="viewcode-block" id="DataFetchThread.changeStatus">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.changeStatus">[docs]</a>
+    <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">changeStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; change connection status</span>
 
@@ -243,7 +252,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__isConnected</span> <span class="o">=</span> <span class="n">status</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ready</span> <span class="o">=</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="DataFetchThread.setTimeStamp"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.setTimeStamp">[docs]</a>    <span class="k">def</span> <span class="nf">setTimeStamp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmstamp</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DataFetchThread.setTimeStamp">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.setTimeStamp">[docs]</a>
+    <span class="k">def</span> <span class="nf">setTimeStamp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmstamp</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; set time stamp</span>
 
 <span class="sd">        :param tmstamp: set timestamp</span>
@@ -252,7 +264,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span> <span class="o">=</span> <span class="n">tmstamp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dt</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tm2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span><span class="o">+</span><span class="mf">0.0010</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.</span></div>
 
-<div class="viewcode-block" id="DataFetchThread.getTimeStamp"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.getTimeStamp">[docs]</a>    <span class="k">def</span> <span class="nf">getTimeStamp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DataFetchThread.getTimeStamp">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.getTimeStamp">[docs]</a>
+    <span class="k">def</span> <span class="nf">getTimeStamp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; get time stamp</span>
 
 <span class="sd">        :returns: time stamp</span>
@@ -260,7 +275,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tm</span></div>
 
-<div class="viewcode-block" id="DataFetchThread.setDataSource"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.setDataSource">[docs]</a>    <span class="k">def</span> <span class="nf">setDataSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasource</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DataFetchThread.setDataSource">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.setDataSource">[docs]</a>
+    <span class="k">def</span> <span class="nf">setDataSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasource</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; sets datasource</span>
 <span class="sd">        :param datasource: datasource object</span>
 <span class="sd">        :type datasource: :class:`lavuelib.imageSource.BaseSource`</span>
@@ -268,39 +286,53 @@
         <span class="k">with</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutexLocker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mutex</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__datasource</span> <span class="o">=</span> <span class="n">datasource</span></div>
 
-<div class="viewcode-block" id="DataFetchThread.ready"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.ready">[docs]</a>    <span class="k">def</span> <span class="nf">ready</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DataFetchThread.ready">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.ready">[docs]</a>
+    <span class="k">def</span> <span class="nf">ready</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; continue acquisition</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ready</span> <span class="o">=</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="DataFetchThread.fetching"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.fetching">[docs]</a>    <span class="k">def</span> <span class="nf">fetching</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DataFetchThread.fetching">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.fetching">[docs]</a>
+    <span class="k">def</span> <span class="nf">fetching</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; provides read flag</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ready</span></div>
 
-<div class="viewcode-block" id="DataFetchThread.stop"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DataFetchThread.stop">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.stop">[docs]</a>
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; stop the thread</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__isConnected</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ready</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="DataFetchThread.isFetching"><a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.isFetching">[docs]</a>    <span class="k">def</span> <span class="nf">isFetching</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DataFetchThread.isFetching">
+<a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.dataFetchThread.DataFetchThread.isFetching">[docs]</a>
+    <span class="k">def</span> <span class="nf">isFetching</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; is datasource source connected</span>
 
 <span class="sd">        :returns: if datasource source connected</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__loop</span></div>
+</div>
+
 </pre></div>
 
             <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -308,13 +340,13 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -329,10 +361,10 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
+    &#169; Copyright 2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;, Christoph Rosemann &lt;christoph.rosemann@desy.de&gt; 
 
 GNU GENERAL PUBLIC LICENSE, version 2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>
