@@ -16,7 +16,7 @@ Extract sources and run
 
 .. code-block:: console
 
-   $ python setup.py install
+   $ python -m pip install . -vv --no-deps --no-build-isolation
 
 The ``setup.py`` script may need: ``setuptools``  ``sphinx``  ``numpy``  ``pytest`` python packages as well as ``qtbase5-dev-tools`` or ``libqt4-dev-bin``.
 
@@ -81,8 +81,20 @@ or
 
 for python 3 version (for older debian/ubuntu releases).
 
-From pip
-""""""""
+From conda or pip
+"""""""""""""""""
+
+The code can be installed in your conda environment by
+
+.. code-block:: console
+
+   $ conda create -n myenv python=3.13
+   $ conda activate myenv
+   $ conda config --add channels conda-forge
+   $ conda config --set channel_priority strict
+
+   $ conda install lavue
+
 
 To install it from pip you need to install pyqt5 in advance, e.g.
 
