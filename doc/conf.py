@@ -1,5 +1,5 @@
 # -*- Coding: utf-8 -*-
-11;rgb:ffff/ffff/ffff#
+#
 # lavuelib documentation build configuration file, created by
 # sphinx-quickstart on Thu Jan 25 15:05:39 2018.
 #
