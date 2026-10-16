@@ -28,7 +28,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "LAVUELIB" "1" "Oct 13, 2026" "" "LaVue"
+.TH "LAVUELIB" "1" "Oct 16, 2026" "" "LaVue"
 .SH NAME
 lavuelib \- lavuelib Documentation
 .sp
@@ -56,7 +56,7 @@ Extract sources and run
 .INDENT 3.5
 .sp
 .EX
-$ python setup.py install
+$ python \-m pip install . \-vv \-\-no\-deps \-\-no\-build\-isolation
 .EE
 .UNINDENT
 .UNINDENT
@@ -153,7 +153,22 @@ $ apt\-get install lavue\-controller3
 .UNINDENT
 .sp
 for python 3 version (for older debian/ubuntu releases).
-.SS From pip
+.SS From conda or pip
+.sp
+The code can be installed in your conda environment by
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+$ conda create \-n myenv python=3.13
+$ conda activate myenv
+$ conda config \-\-add channels conda\-forge
+$ conda config \-\-set channel_priority strict
+
+$ conda install lavue
+.EE
+.UNINDENT
+.UNINDENT
 .sp
 To install it from pip you need to install pyqt5 in advance, e.g.
 .INDENT 0.0
@@ -265,7 +280,7 @@ optional arguments:
                         Qt stylesheet
   \-j INSTANCE, \-\-instance INSTANCE
                         LaVue instance with separate configuration
-  \-ns, \-\-no\-space\-instance
+  \-\-ns, \-\-no\-space\-instance
                         the configuration file name without a space character
                           (in the future major release it will become the default one)
   \-\-organization ORGANIZATION
