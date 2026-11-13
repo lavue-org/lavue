@@ -65,7 +65,7 @@ To install the debian packages, add the PGP repository key
 .. code-block:: console
 
    $ sudo su
-   $ curl -s https://docs.desy.de/pni-hdri/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
+   $ curl -s https://repos.desy.de/pni-hdri/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
    $ chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
 
 and then download the corresponding source list, e.g.
@@ -78,25 +78,25 @@ and
 
 .. code-block:: console
 
-   $ wget https://docs.desy.de/pni-hdri/trixie-pni-hdri.sources
+   $ wget https://repos.desy.de/pni-hdri/trixie-pni-hdri.sources
 
 or
 
 .. code-block:: console
 
-   $ wget https://docs.desy.de/pni-hdri/bookworm-pni-hdri.list
+   $ wget https://repos.desy.de/pni-hdri/bookworm-pni-hdri.list
 
 or
 
 .. code-block:: console
 
-   $ wget https://docs.desy.de/pni-hdri/noble-pni-hdri.list
+   $ wget https://repos.desy.de/pni-hdri/noble-pni-hdri.list
 
 or
 
 .. code-block:: console
 
-   $ wget https://docs.desy.de/pni-hdri/jammy-pni-hdri.list
+   $ wget https://repos.desy.de/pni-hdri/jammy-pni-hdri.list
 
 respectively.
 

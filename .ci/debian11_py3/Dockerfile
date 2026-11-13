@@ -17,9 +17,9 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* && apt-get update && apt-get in
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* && apt-get update && apt-get install -f -y software-properties-common coreutils procps curl gpg gpgv gpg-agent apt-transport-https ca-certificates && rm -rf /var/lib/apt/lists/*
 
-RUN curl --retry 10 -s https://docs.desy.de/pni-hdri/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
+RUN curl --retry 10 -s https://repos.desy.de/pni-hdri/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
 RUN chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
-RUN add-apt-repository "deb https://docs.desy.de/pni-hdri/apt/debian bullseye main" -y
+RUN add-apt-repository "deb https://repos.desy.de/pni-hdri/apt/debian bullseye main" -y
 
 # install packages
 RUN apt-get update && apt-get  -y  dist-upgrade
