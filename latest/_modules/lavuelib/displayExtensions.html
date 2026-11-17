@@ -732,11 +732,15 @@
 <div class="viewcode-block" id="ROIExtension.changeROIRegion">
 <a class="viewcode-back" href="../../develop/lavuelib/lavuelib.html#lavuelib.displayExtensions.ROIExtension.changeROIRegion">[docs]</a>
     <span class="nd">@QtCore</span><span class="o">.</span><span class="n">pyqtSlot</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">changeROIRegion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; changes the current roi region</span>
+    <span class="k">def</span> <span class="nf">changeROIRegion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; changes the given roi region</span>
+
+<span class="sd">        :param rid: roi id; if unset, use the current roi</span>
+<span class="sd">        :type rid: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">rid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__current</span>
+            <span class="k">if</span> <span class="n">rid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">rid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__current</span>
             <span class="n">roi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getROI</span><span class="p">(</span><span class="n">rid</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">roi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">roitype</span> <span class="o">=</span> <span class="s2">&quot;rectangle&quot;</span>
