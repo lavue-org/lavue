@@ -619,11 +619,15 @@ class ROIExtension(DisplayExtension):
                 for rid in range(len(self.__coords))]
 
     @QtCore.pyqtSlot(int)
-    def changeROIRegion(self, _=None):
-        """ changes the current roi region
+    def changeROIRegion(self, rid=None):
+        """ changes the given roi region
+
+        :param rid: roi id; if unset, use the current roi
+        :type rid: :obj:`int`
         """
         try:
-            rid = self.__current
+            if rid is None:
+                rid = self.__current
             roi = self._getROI(rid)
             if roi is not None:
                 roitype = "rectangle"
