@@ -257,13 +257,13 @@ if os.getenv("LAVUE_HIDE_VERSIONS") != 'TRUE':
 # built documents.
 #
 # The short X.Y version.
-version = '3.16.0'
+version = '3.16.1'
 # The full version, including alpha/beta/rc tags.
-release = '3.16.0'
+release = '3.16.1'
     
 html_context = {
     "docs_versions" : [
-        "v3.16.0",
+        "v3.16.1", "v3.16.0",
         "v3.15.0",
         "v3.14.0",
         "v3.13.1",  #  "v3.13.0",
