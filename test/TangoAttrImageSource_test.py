@@ -425,6 +425,9 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readencodedimage(self):
         fun = sys._getframe().f_code.co_name
@@ -560,6 +563,9 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readspectra(self):
         fun = sys._getframe().f_code.co_name
@@ -700,6 +706,9 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readspectra_color(self):
         fun = sys._getframe().f_code.co_name
@@ -861,6 +870,9 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readimage_color(self):
         fun = sys._getframe().f_code.co_name
@@ -1040,6 +1052,9 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readimage_colorgradients(self):
         fun = sys._getframe().f_code.co_name
@@ -1221,6 +1236,9 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readimage_maxima_results(self):
         fun = sys._getframe().f_code.co_name
@@ -1399,6 +1417,9 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readimage_colorchannels(self):
         fun = sys._getframe().f_code.co_name
@@ -1555,6 +1576,9 @@ class TangoAttrImageSourceTest(unittest.TestCase):
                 "%s:" % i))
         self.assertEqual(res5[0], [])
         self.assertTrue(res5[1].shape, (512, 768, 3))
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readimage_colorchannels_mbuffer(self):
         fun = sys._getframe().f_code.co_name
@@ -1694,6 +1718,9 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readimage_sum(self):
         fun = sys._getframe().f_code.co_name
@@ -1869,6 +1896,9 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readchangeeventimage(self):
         fun = sys._getframe().f_code.co_name
@@ -1995,6 +2025,9 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readreadyeventimage(self):
         fun = sys._getframe().f_code.co_name
@@ -2124,6 +2157,9 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_DATA_ARRAY_decoder(self):
         fun = sys._getframe().f_code.co_name

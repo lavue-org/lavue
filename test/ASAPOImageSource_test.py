@@ -322,6 +322,9 @@ class ASAPOImageSourceTest(unittest.TestCase):
         self.assertTrue(iid > 11000)
         self.assertTrue(iid < 12000)
         self.assertEqual(fnames[0].strip(), "00002.tif")
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readimage_stream(self):
         fun = sys._getframe().f_code.co_name
@@ -465,6 +468,9 @@ class ASAPOImageSourceTest(unittest.TestCase):
         self.assertTrue(iid > 24000)
         self.assertTrue(iid < 25000)
         self.assertEqual(fnames[0].strip(), "00002.tif")
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readimage_newstream(self):
         fun = sys._getframe().f_code.co_name
@@ -611,6 +617,9 @@ class ASAPOImageSourceTest(unittest.TestCase):
         self.assertTrue(iid > 25000)
         self.assertTrue(iid < 26000)
         self.assertEqual(fnames[0].strip(), "00002.tif")
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readimage_autostream(self):
         fun = sys._getframe().f_code.co_name
@@ -754,6 +763,9 @@ class ASAPOImageSourceTest(unittest.TestCase):
         self.assertTrue(iid > 15000)
         self.assertTrue(iid < 16000)
         self.assertEqual(fnames[0].strip(), "00002.tif")
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readimage_cbfdefault(self):
         fun = sys._getframe().f_code.co_name
@@ -890,6 +902,9 @@ class ASAPOImageSourceTest(unittest.TestCase):
         me = json.loads(lmeta)
         # self.assertEqual(sorted(meta.keys()), sorted(me.keys()))
         self.compareDict(me, meta)
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readimage_cbfdefault_32bits(self):
         fun = sys._getframe().f_code.co_name
@@ -1007,6 +1022,9 @@ class ASAPOImageSourceTest(unittest.TestCase):
         self.assertTrue(iid > 11000)
         self.assertTrue(iid < 12000)
         self.assertEqual(fnames[0].strip(), "scan05c_3.cbf")
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
 
 if __name__ == '__main__':

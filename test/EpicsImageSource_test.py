@@ -255,6 +255,9 @@ class EpicsImageSourceTest(unittest.TestCase):
             print(lastimage)
         self.assertTrue(np.allclose(res3[0], lastimage))
         self.assertTrue(np.allclose(res3[1], lastimage))
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
 
 if __name__ == '__main__':

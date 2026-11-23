@@ -315,6 +315,9 @@ class NXSFileImageSourceTest(unittest.TestCase):
                 print(lastimage)
             self.assertTrue(np.allclose(res3[0], lastimage))
             self.assertTrue(np.allclose(res3[1], lastimage))
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
 
         finally:
             self.closedetfile()
@@ -449,6 +452,9 @@ class NXSFileImageSourceTest(unittest.TestCase):
                 print(lastimage)
             self.assertTrue(np.allclose(res3[0], lastimage))
             self.assertTrue(np.allclose(res3[1], lastimage))
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
 
         finally:
             self.closedetfile()
@@ -588,6 +594,9 @@ class NXSFileImageSourceTest(unittest.TestCase):
                 print(lastimage2)
             self.assertTrue(np.allclose(res3[0], lastimage2))
             self.assertTrue(np.allclose(res3[1], lastimage2))
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
 
         finally:
             self.closedetfile()
@@ -742,6 +751,9 @@ class NXSFileImageSourceTest(unittest.TestCase):
                 print(lastimage)
             self.assertTrue(np.allclose(res3[0], lastimage))
             self.assertTrue(np.allclose(res3[1], lastimage))
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
 
         finally:
             self.closedetfile()

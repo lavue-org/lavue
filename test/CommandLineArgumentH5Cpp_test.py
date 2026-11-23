@@ -284,6 +284,9 @@ class CommandLineArgumentH5CppTest(unittest.TestCase):
             res1 = qtck1.results()
             self.assertTrue(np.allclose(res1[13], lastimage))
             self.assertTrue(np.allclose(res1[14], lastimage))
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
 
         finally:
             self.closedetfile()
@@ -447,6 +450,9 @@ class CommandLineArgumentH5CppTest(unittest.TestCase):
                 print(lastimage2)
             self.assertTrue(np.allclose(res3[0], lastimage2))
             self.assertTrue(np.allclose(res3[1], lastimage2))
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
 
         finally:
             self.closedetfile()
@@ -592,6 +598,9 @@ class CommandLineArgumentH5CppTest(unittest.TestCase):
             imagesum.fill(55)
             self.assertTrue(np.allclose(res2[0], imagesum))
             self.assertTrue(np.allclose(res2[1], imagesum))
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
         finally:
             os.remove(self._fname)
 
@@ -736,6 +745,9 @@ class CommandLineArgumentH5CppTest(unittest.TestCase):
             imagesum.fill(55)
             self.assertTrue(np.allclose(res2[0], imagesum))
             self.assertTrue(np.allclose(res2[1], imagesum))
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
         finally:
             os.remove(self._fname)
 
@@ -879,6 +891,9 @@ class CommandLineArgumentH5CppTest(unittest.TestCase):
             imagesum.fill(10)
             self.assertTrue(np.allclose(res2[0], imagesum))
             self.assertTrue(np.allclose(res2[1], imagesum))
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
         finally:
             os.remove(self._fname)
 

@@ -585,6 +585,9 @@ class SpecializedToolTest(unittest.TestCase):
             tc2 = json.loads(cnf11["toolconfig"])
             self.compareStates(tc1, tc2, ['geometry'])
             self.compareStates(tc1['geometry'], tc2['geometry'])
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
 
         finally:
             tisu.tearDown()
@@ -692,6 +695,9 @@ class SpecializedToolTest(unittest.TestCase):
             tc1 = json.loads(ls["toolconfig"])
             tc2 = json.loads(dls["toolconfig"])
             self.compareStates(tc1, tc2)
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
 
         finally:
             tisu.tearDown()
@@ -761,6 +767,9 @@ class SpecializedToolTest(unittest.TestCase):
         tc1 = json.loads(ls["toolconfig"])
         tc2 = json.loads(dls["toolconfig"])
         self.compareStates(tc1, tc2)
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_limaccds_tool(self):
         fun = sys._getframe().f_code.co_name
@@ -826,6 +835,9 @@ class SpecializedToolTest(unittest.TestCase):
         tc1 = json.loads(ls["toolconfig"])
         tc2 = json.loads(dls["toolconfig"])
         self.compareStates(tc1, tc2)
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_limaccds_tool_active(self):
         fun = sys._getframe().f_code.co_name
@@ -899,6 +911,9 @@ class SpecializedToolTest(unittest.TestCase):
             self.assertIn(
                 "test/limaccdstestserver/00",
                 ls["configuration"])
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
 
         finally:
             lisu.tearDown()
@@ -997,6 +1012,9 @@ class SpecializedToolTest(unittest.TestCase):
             tc3 = json.loads(ls3["toolconfig"])
             self.assertEqual(
                 tc3["limaccds_device"], "test/limaccdstestserver/01")
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
 
         finally:
             lisu.tearDown()

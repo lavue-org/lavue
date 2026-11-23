@@ -321,6 +321,9 @@ class DiffractogramToolTest(unittest.TestCase):
         # print(tc1)
         # print(tc2)
         self.compareStates(tc1, tc2)
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_tango_diff2(self):
         fun = sys._getframe().f_code.co_name
@@ -434,6 +437,9 @@ class DiffractogramToolTest(unittest.TestCase):
         # print(tc1)
         # print(tc2)
         self.compareStates(tc1, tc2)
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_geometry(self):
         fun = sys._getframe().f_code.co_name
@@ -553,6 +559,9 @@ class DiffractogramToolTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
 
 if __name__ == '__main__':

@@ -281,6 +281,9 @@ class HidraImageSourceTest(unittest.TestCase):
             print(lastimage)
         self.assertTrue(np.allclose(res3[0], lastimage))
         self.assertTrue(np.allclose(res3[1], lastimage))
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readimage_fromstart_cbf(self):
         fun = sys._getframe().f_code.co_name
@@ -369,6 +372,9 @@ class HidraImageSourceTest(unittest.TestCase):
             print(lastimage)
         self.assertTrue(np.allclose(res2[0], lastimage))
         self.assertTrue(np.allclose(res2[1], lastimage))
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readimage_multi_fromstart(self):
         fun = sys._getframe().f_code.co_name
@@ -491,6 +497,9 @@ class HidraImageSourceTest(unittest.TestCase):
             print(lastimage)
         self.assertTrue(np.allclose(res3[0], lastimage))
         self.assertTrue(np.allclose(res3[1], lastimage))
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readimage_multi_hidraports(self):
         fun = sys._getframe().f_code.co_name
@@ -618,6 +627,9 @@ class HidraImageSourceTest(unittest.TestCase):
 
         self.assertTrue(np.allclose(res3[0], lastimage))
         self.assertTrue(np.allclose(res3[1], lastimage))
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
 
 if __name__ == '__main__':

@@ -565,6 +565,9 @@ class TangoFileImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readtangofilehttpimage(self):
         fun = sys._getframe().f_code.co_name
@@ -716,6 +719,9 @@ class TangoFileImageSourceTest(unittest.TestCase):
             self.compareStates(
                 ls, dls,
                 ['viewrange', '__timestamp__', 'doordevice'])
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
         finally:
             self.stophttpserver()
 
@@ -850,6 +856,9 @@ class TangoFileImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readtangofile_urlimage_h5file(self):
         fun = sys._getframe().f_code.co_name
@@ -1007,6 +1016,9 @@ class TangoFileImageSourceTest(unittest.TestCase):
             ))
             self.compareStates(ls, dls,
                                ['viewrange', '__timestamp__', 'doordevice'])
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
 
         finally:
             self.closedetfile()
