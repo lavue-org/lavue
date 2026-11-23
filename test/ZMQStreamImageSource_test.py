@@ -526,6 +526,9 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readpickleimage(self):
         fun = sys._getframe().f_code.co_name
@@ -663,6 +666,9 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_autozmqtopics(self):
         fun = sys._getframe().f_code.co_name
@@ -894,6 +900,9 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_autotwozmqtopics(self):
         fun = sys._getframe().f_code.co_name
@@ -1131,6 +1140,9 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_autotwozmqtopics_colon(self):
         fun = sys._getframe().f_code.co_name
@@ -1369,6 +1381,9 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readjsonimage_colon(self):
         fun = sys._getframe().f_code.co_name
@@ -1516,6 +1531,9 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_readpickleimage_colon(self):
         fun = sys._getframe().f_code.co_name
@@ -1661,6 +1679,9 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_autozmqtopics_colon(self):
         fun = sys._getframe().f_code.co_name
@@ -1893,6 +1914,9 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
 
 if __name__ == '__main__':

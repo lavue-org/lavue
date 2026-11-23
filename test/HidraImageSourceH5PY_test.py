@@ -325,6 +325,9 @@ class HidraImageSourceH5PYTest(unittest.TestCase):
             self.assertEqual(
                 fnames[0].strip(),
                 "HidraImageSourceH5PYTesttest_readnxsfile_default.nxs")
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
 
         finally:
             if os.path.isfile(self._fname):

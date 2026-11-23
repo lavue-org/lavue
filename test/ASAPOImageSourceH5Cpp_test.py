@@ -346,6 +346,9 @@ class ASAPOImageSourceH5CppTest(unittest.TestCase):
             self.assertEqual(
                 fnames[0].strip(),
                 "ASAPOImageSourceH5CppTesttest_readnxsfile_default.nxs")
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
 
         finally:
             if os.path.isfile(self._fname):
@@ -470,6 +473,9 @@ class ASAPOImageSourceH5CppTest(unittest.TestCase):
                 fnames[0].strip(),
                 "ASAPOImageSourceH5CppTesttest_readnxsfile_"
                 "default_beamtime.nxs")
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
 
         finally:
             if os.path.isfile(self._fname):
@@ -594,6 +600,9 @@ class ASAPOImageSourceH5CppTest(unittest.TestCase):
             self.assertEqual(
                 fnames[0].strip(),
                 "ASAPOImageSourceH5CppTesttest_readnxsfile_nexuspath.nxs")
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
 
         finally:
             if os.path.isfile(self._fname):
@@ -720,6 +729,9 @@ class ASAPOImageSourceH5CppTest(unittest.TestCase):
                 fnames[0].strip(),
                 "ASAPOImageSourceH5CppTesttest_readnxsfile_"
                 "nexusdatasetframe.nxs")
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
 
         finally:
             if os.path.isfile(self._fname):

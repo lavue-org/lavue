@@ -246,6 +246,9 @@ class GeneralToolTest(unittest.TestCase):
         qtck.compareResults(self, [False, None])
 
         self.compareStates(json.loads(self.__lavuestate))
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_start(self):
         fun = sys._getframe().f_code.co_name
@@ -287,6 +290,9 @@ class GeneralToolTest(unittest.TestCase):
         dls.update({"connected": True, "source": "test"})
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_tango_corrections(self):
         fun = sys._getframe().f_code.co_name
@@ -498,6 +504,9 @@ class GeneralToolTest(unittest.TestCase):
         self.compareStates(
             ls, dls,
             ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_tango_corrections_scale(self):
         fun = sys._getframe().f_code.co_name
@@ -725,6 +734,9 @@ class GeneralToolTest(unittest.TestCase):
         self.compareStates(
             ls, dls,
             ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_tango_maskfile(self):
         fun = sys._getframe().f_code.co_name
@@ -879,6 +891,9 @@ class GeneralToolTest(unittest.TestCase):
         self.compareStates(
             ls, dls,
             ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_tango_maskfile_nan(self):
         fun = sys._getframe().f_code.co_name
@@ -1032,6 +1047,9 @@ class GeneralToolTest(unittest.TestCase):
         self.compareStates(
             ls, dls,
             ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_tango_negmaskhighvalue(self):
         fun = sys._getframe().f_code.co_name
@@ -1187,6 +1205,9 @@ class GeneralToolTest(unittest.TestCase):
         self.compareStates(
             ls, dls,
             ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_tango_maskhighvalue(self):
         fun = sys._getframe().f_code.co_name
@@ -1340,6 +1361,9 @@ class GeneralToolTest(unittest.TestCase):
         self.compareStates(
             ls, dls,
             ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_tango_maskhighvalue_overflow_color(self):
         fun = sys._getframe().f_code.co_name
@@ -1492,6 +1516,9 @@ class GeneralToolTest(unittest.TestCase):
         self.compareStates(
             ls, dls,
             ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_tango_maskhighvalue_nan(self):
         fun = sys._getframe().f_code.co_name
@@ -1645,6 +1672,9 @@ class GeneralToolTest(unittest.TestCase):
         self.compareStates(
             ls, dls,
             ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_tango_trans(self):
         fun = sys._getframe().f_code.co_name
@@ -1895,6 +1925,9 @@ class GeneralToolTest(unittest.TestCase):
         self.compareStates(
             ls, dls,
             ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_tango_displayparams(self):
         fun = sys._getframe().f_code.co_name
@@ -2016,6 +2049,9 @@ class GeneralToolTest(unittest.TestCase):
         self.compareStates(
             ls, dls,
             ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_tango_displayparams_auto(self):
         fun = sys._getframe().f_code.co_name
@@ -2137,6 +2173,9 @@ class GeneralToolTest(unittest.TestCase):
         self.compareStates(
             ls, dls,
             ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_tango_trans_keeporigin(self):
         fun = sys._getframe().f_code.co_name
@@ -2387,6 +2426,9 @@ class GeneralToolTest(unittest.TestCase):
         self.compareStates(
             ls, dls,
             ['viewrange', '__timestamp__', 'doordevice', 'toolconfig'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_multi(self):
         fun = sys._getframe().f_code.co_name
@@ -2456,6 +2498,9 @@ class GeneralToolTest(unittest.TestCase):
         ))
         self.compareStates(ls, dls,
                            ['viewrange', '__timestamp__', 'doordevice'])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_mbuffer(self):
         fun = sys._getframe().f_code.co_name
@@ -2540,6 +2585,9 @@ class GeneralToolTest(unittest.TestCase):
         tc1 = json.loads(ls["toolconfig"])
         tc2 = json.loads(dls["toolconfig"])
         self.compareStates(tc1, tc2)
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
 
 if __name__ == '__main__':

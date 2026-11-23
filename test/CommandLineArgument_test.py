@@ -128,6 +128,9 @@ class CommandLineArgumentTest(unittest.TestCase):
 
         self.assertEqual(status, 0)
         qtck.compareResults(self, [False])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_start(self):
         fun = sys._getframe().f_code.co_name
@@ -175,6 +178,9 @@ class CommandLineArgumentTest(unittest.TestCase):
         self.assertEqual(status, 0)
         qtck.compareResults(
             self, [True, None, False, None, True, None, False])
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
     def test_filters(self):
         fun = sys._getframe().f_code.co_name
@@ -240,6 +246,9 @@ class CommandLineArgumentTest(unittest.TestCase):
                 self.assertEqual(iname, '__random_%s__' % (i + 1))
                 self.assertEqual(image.shape, (512, 256))
                 self.assertEqual(str(image.dtype), "int64")
+            dialog.close()
+            dialog.deleteLater()
+            app.processEvents()
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
@@ -349,6 +358,9 @@ class CommandLineArgumentTest(unittest.TestCase):
                 0.25
             ]
         )
+        dialog.close()
+        dialog.deleteLater()
+        app.processEvents()
 
 
 if __name__ == '__main__':
