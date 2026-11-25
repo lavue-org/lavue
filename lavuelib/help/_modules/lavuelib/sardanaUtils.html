@@ -5,11 +5,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.sardanaUtils &#8212; LaVue 3.16.1 documentation</title>
+    <title>lavuelib.sardanaUtils &#8212; LaVue 3.17.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=ffd7f65b" />
     
-    <script src="../../_static/documentation_options.js?v=a326a122"></script>
+    <script src="../../_static/documentation_options.js?v=768b6f62"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/bizstyle.js"></script>
@@ -29,7 +29,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.16.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.17.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.sardanaUtils</a></li> 
       </ul>
@@ -71,7 +71,6 @@
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -87,13 +86,8 @@
     <span class="c1">#: (:obj:`bool`) tango imported</span>
     <span class="n">TANGO</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-    <span class="n">basestring</span> <span class="o">=</span> <span class="nb">str</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;lavue&quot;</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-    <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
 
 
 <div class="viewcode-block" id="debugmethod">
@@ -303,10 +297,7 @@
 <span class="sd">        :returns: loaded bytestring</span>
 <span class="sd">        :rtype: :obj:`any`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-            <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">bytestr</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin1&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">bytestr</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">bytestr</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin1&#39;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SardanaUtils.getScanEnv">
@@ -384,8 +375,6 @@
             <span class="n">pk</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">msp</span><span class="o">.</span><span class="n">Environment</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;pickle&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-                <span class="k">raise</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
                 <span class="n">newvalue</span> <span class="o">=</span> <span class="p">{}</span>
                 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">vl</span> <span class="ow">in</span> <span class="n">dc</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -393,12 +382,12 @@
                         <span class="n">nvl</span> <span class="o">=</span> <span class="p">{}</span>
                         <span class="k">for</span> <span class="n">ky</span><span class="p">,</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">vl</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                             <span class="n">nvl</span><span class="p">[</span><span class="nb">bytes</span><span class="p">(</span><span class="n">ky</span><span class="p">,</span> <span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
-                                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ky</span><span class="p">,</span> <span class="n">unicode</span><span class="p">)</span> <span class="k">else</span> <span class="n">ky</span><span class="p">]</span> <span class="o">=</span> <span class="n">it</span>
+                                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ky</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">ky</span><span class="p">]</span> <span class="o">=</span> <span class="n">it</span>
                         <span class="n">newvalue</span><span class="p">[</span><span class="nb">bytes</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
-                                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">unicode</span><span class="p">)</span> <span class="k">else</span> <span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">nvl</span>
+                                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">nvl</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">newvalue</span><span class="p">[</span><span class="nb">bytes</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
-                                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">unicode</span><span class="p">)</span> <span class="k">else</span> <span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">vl</span>
+                                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">vl</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">newvalue</span> <span class="o">=</span> <span class="n">dc</span>
             <span class="n">pk</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">newvalue</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -500,7 +489,7 @@
 <span class="sd">        :returns: string object</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">toString</span><span class="p">(</span><span class="n">el</span><span class="p">)</span> <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">]</span>
@@ -627,7 +616,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.16.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.17.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.sardanaUtils</a></li> 
       </ul>

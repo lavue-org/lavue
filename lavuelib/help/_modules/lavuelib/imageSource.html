@@ -5,11 +5,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.imageSource &#8212; LaVue 3.16.1 documentation</title>
+    <title>lavuelib.imageSource &#8212; LaVue 3.17.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=ffd7f65b" />
     
-    <script src="../../_static/documentation_options.js?v=a326a122"></script>
+    <script src="../../_static/documentation_options.js?v=768b6f62"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/bizstyle.js"></script>
@@ -29,7 +29,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.16.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.17.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageSource</a></li> 
       </ul>
@@ -198,11 +198,7 @@
 <span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">imageFileHandler</span>
 
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-    <span class="n">buffer</span> <span class="o">=</span> <span class="nb">memoryview</span>
-    <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">bytes</span> <span class="o">=</span> <span class="nb">str</span>
+<span class="n">buffer</span> <span class="o">=</span> <span class="nb">memoryview</span>
 
 
 <span class="n">globalmutex</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QMutex</span><span class="p">()</span>
@@ -218,20 +214,19 @@
 
 <span class="c1">#: (:obj:`bool`) PyTango bug #213 flag related to EncodedAttributes in python3</span>
 <span class="n">PYTG_BUG_213</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">PYTGMAJOR</span><span class="p">,</span> <span class="n">PYTGMINOR</span><span class="p">,</span> <span class="n">PYTGPATCH</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
-            <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">tango</span><span class="o">.</span><span class="n">__version__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]))</span>
-        <span class="k">if</span> <span class="n">PYTGMAJOR</span> <span class="o">&lt;=</span> <span class="mi">9</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">PYTGMAJOR</span> <span class="o">==</span> <span class="mi">9</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">PYTGMINOR</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-                    <span class="n">PYTG_BUG_213</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="k">elif</span> <span class="n">PYTGMINOR</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">PYTGPATCH</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">:</span>
-                    <span class="n">PYTG_BUG_213</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">else</span><span class="p">:</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">PYTGMAJOR</span><span class="p">,</span> <span class="n">PYTGMINOR</span><span class="p">,</span> <span class="n">PYTGPATCH</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+        <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">tango</span><span class="o">.</span><span class="n">__version__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]))</span>
+    <span class="k">if</span> <span class="n">PYTGMAJOR</span> <span class="o">&lt;=</span> <span class="mi">9</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">PYTGMAJOR</span> <span class="o">==</span> <span class="mi">9</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">PYTGMINOR</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
                 <span class="n">PYTG_BUG_213</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-        <span class="k">pass</span>
+            <span class="k">elif</span> <span class="n">PYTGMINOR</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">PYTGPATCH</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">PYTG_BUG_213</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">PYTG_BUG_213</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="k">pass</span>
 
 
 <div class="viewcode-block" id="getLevel">
@@ -273,10 +268,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">x</span>
-    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-        <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;utf8&quot;</span><span class="p">)</span></div>
 
 
 
@@ -323,10 +315,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">x</span>
-    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;utf8&quot;</span><span class="p">)</span></div>
 
 
 
@@ -1415,15 +1404,12 @@
                     <span class="n">attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__aproxy</span><span class="o">.</span><span class="n">read</span><span class="p">(</span>
                         <span class="n">extract_as</span><span class="o">=</span><span class="n">tango</span><span class="o">.</span><span class="n">ExtractAs</span><span class="o">.</span><span class="n">ByteArray</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-                    <span class="n">attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__aproxy</span><span class="o">.</span><span class="n">read</span><span class="p">(</span>
-                        <span class="n">extract_as</span><span class="o">=</span><span class="n">tango</span><span class="o">.</span><span class="n">ExtractAs</span><span class="o">.</span><span class="n">ByteArray</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">attr</span><span class="o">.</span><span class="n">type</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;DevEncoded&quot;</span><span class="p">:</span>
-                        <span class="n">attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__aproxy</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__bytearray</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="k">else</span><span class="p">:</span>
+                <span class="n">attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__aproxy</span><span class="o">.</span><span class="n">read</span><span class="p">(</span>
+                    <span class="n">extract_as</span><span class="o">=</span><span class="n">tango</span><span class="o">.</span><span class="n">ExtractAs</span><span class="o">.</span><span class="n">ByteArray</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">attr</span><span class="o">.</span><span class="n">type</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;DevEncoded&quot;</span><span class="p">:</span>
                     <span class="n">attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__aproxy</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__bytearray</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">attr</span><span class="o">.</span><span class="n">type</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;DevEncoded&quot;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">PYTG_BUG_213</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
@@ -3332,7 +3318,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.16.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.17.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.imageSource</a></li> 
       </ul>
