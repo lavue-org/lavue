@@ -26,7 +26,6 @@
 
 import math
 import os
-import sys
 import numpy as np
 from pninexus import h5cpp
 
@@ -59,13 +58,6 @@ def nptype(dtype):
     return dtype
 
 
-if sys.version_info > (3,):
-    unicode = str
-    long = int
-else:
-    bytes = str
-
-
 def _tostr(text):
     """ converts text  to str type
 
@@ -76,10 +68,8 @@ def _tostr(text):
     """
     if isinstance(text, str):
         return text
-    elif sys.version_info > (3,):
-        return str(text, "utf8")
     else:
-        return str(text)
+        return str(text, "utf8")
 
 
 def unlimited_selection(sel, shape):
@@ -198,12 +188,12 @@ def _slice2selection(t, shape):
                 offset=(start,),
                 count=int(math.ceil((stop - start) / float(t.step))),
                 stride=(t.step,))
-    elif isinstance(t, (int, long)) and shape and len(shape) > 1:
+    elif isinstance(t, (int, int)) and shape and len(shape) > 1:
         offset = [0] * len(shape)
         offset[0] = t
         return h5cpp.dataspace.Hyperslab(
             offset=tuple(offset), block=tuple(shape))
-    elif isinstance(t, (int, long)):
+    elif isinstance(t, (int, int)):
         return h5cpp.dataspace.Hyperslab(
             offset=(t,), block=(1,))
     elif isinstance(t, (list, tuple)):
@@ -214,7 +204,7 @@ def _slice2selection(t, shape):
         it = -1
         for tit, tel in enumerate(t):
             it += 1
-            if isinstance(tel, (int, long)):
+            if isinstance(tel, (int, int)):
                 if tel < 0:
                     offset.append(shape[it] + tel)
                 else:
@@ -433,16 +423,16 @@ def create_file(filename, overwrite=False, libver=None, swmr=None):
     rt = fl.root()
     attrs = rt.attributes
     attrs.create("file_time", pTh["unicode"]).write(
-        unicode(H5CppFile.currenttime()))
+        str(H5CppFile.currenttime()))
     hdf5ver = u""
     if hasattr(h5cpp, "current_library_version"):
         hdf5ver = h5cpp.current_library_version()
     attrs.create("HDF5_Version", pTh["unicode"]).write(hdf5ver)
     attrs.create("NX_class", pTh["unicode"]).write(u"NXroot")
     # attrs.create("NeXus_version", pTh["unicode"]).write(u"4.3.0")
-    attrs.create("file_name", pTh["unicode"]).write(unicode(filename))
+    attrs.create("file_name", pTh["unicode"]).write(str(filename))
     attrs.create("file_update_time", pTh["unicode"]).write(
-        unicode(H5CppFile.currenttime()))
+        str(H5CppFile.currenttime()))
     rt.close()
     return H5CppFile(fl, filename)
 
@@ -824,7 +814,7 @@ class H5CppGroup(filewriter.FTGroup):
         gr = h5cpp.node.Group(self._h5object, n)
         if nxclass is not None:
             gr.attributes.create(
-                "NX_class", pTh["unicode"]).write(unicode(nxclass))
+                "NX_class", pTh["unicode"]).write(str(nxclass))
         return H5CppGroup(gr, self)
 
     def create_virtual_field(self, name, layout, fillvalue=0):
@@ -1769,7 +1759,7 @@ class H5CppAttribute(filewriter.FTAttribute):
            (hasattr(o, "__len__") and t == slice(0, len(o), None)):
             if self.dtype in ['string', b'string']:
                 if isinstance(o, str):
-                    self._h5object.write(unicode(o))
+                    self._h5object.write(str(o))
                 else:
                     dtype = npunicode
                     self._h5object.write(np.array(o, dtype=dtype))
@@ -1810,8 +1800,8 @@ class H5CppAttribute(filewriter.FTAttribute):
                 var = var.astype(dtype)
             self._h5object.write(var)
         else:
-            if isinstance(o, str) or isinstance(o, unicode):
-                self._h5object.write(unicode(o))
+            if isinstance(o, str) or isinstance(o, str):
+                self._h5object.write(str(o))
             else:
                 self._h5object.write(np.array(o, dtype=self.dtype))
 

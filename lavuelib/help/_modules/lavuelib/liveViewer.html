@@ -5,11 +5,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.liveViewer &#8212; LaVue 3.16.1 documentation</title>
+    <title>lavuelib.liveViewer &#8212; LaVue 3.17.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=ffd7f65b" />
     
-    <script src="../../_static/documentation_options.js?v=a326a122"></script>
+    <script src="../../_static/documentation_options.js?v=768b6f62"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/bizstyle.js"></script>
@@ -29,7 +29,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.16.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.17.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.liveViewer</a></li> 
       </ul>
@@ -86,7 +86,6 @@
 <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtGui</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">zmq</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">ntpath</span>
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -146,9 +145,6 @@
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;lavue&quot;</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-    <span class="n">basestring</span> <span class="o">=</span> <span class="nb">str</span>
-    <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
 
 <span class="nb">__import__</span><span class="p">(</span><span class="s2">&quot;lavuelib.imageNexusExporter&quot;</span><span class="p">)</span>
 
@@ -2665,7 +2661,7 @@
                 <span class="k">if</span> <span class="n">dialog</span><span class="o">.</span><span class="n">secautoport</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">secsockopt</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;tcp://*:*&quot;</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">secsocket</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">secsockopt</span><span class="p">)</span>
-                    <span class="n">dialog</span><span class="o">.</span><span class="n">secport</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span>
+                    <span class="n">dialog</span><span class="o">.</span><span class="n">secport</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__settings</span><span class="o">.</span><span class="n">secsocket</span><span class="o">.</span><span class="n">getsockopt</span><span class="p">(</span>
                             <span class="n">zmq</span><span class="o">.</span><span class="n">LAST_ENDPOINT</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -3549,7 +3545,7 @@
         <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__metadata</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">str</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
             <span class="n">imagename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metadata</span> <span class="o">=</span> <span class="n">name</span><span class="p">,</span> <span class="n">metadata</span>
             <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">imagename</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">and</span> \
-               <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rawimage</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+               <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rawimage</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">rawimage</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">rawimage</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__imagename</span> <span class="o">=</span> <span class="n">imagename</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__rawimage</span> <span class="o">=</span> <span class="n">rawimage</span>
@@ -3580,7 +3576,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__imagename</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__imagename</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__imagename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metadata</span> \
                     <span class="o">=</span> <span class="n">name</span><span class="p">,</span> <span class="n">metadata</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rawimage</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rawimage</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">rawimage</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">rawimage</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__rawimage</span> <span class="o">=</span> <span class="n">rawimage</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
@@ -4752,7 +4748,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.16.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.17.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.liveViewer</a></li> 
       </ul>

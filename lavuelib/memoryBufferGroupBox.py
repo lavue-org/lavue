@@ -25,7 +25,6 @@
 """ Memory Buffer widget """
 
 import numpy as np
-import sys
 from .qtuic import uic
 from pyqtgraph import QtCore
 import os
@@ -35,10 +34,6 @@ try:
 except Exception:
     from pyqtgraph import QtGui as QtWidgets
 
-if sys.version_info > (3,):
-    unicode = str
-else:
-    bytes = str
 
 _formclass, _baseclass = uic.loadUiType(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),

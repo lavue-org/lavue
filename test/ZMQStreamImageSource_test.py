@@ -58,9 +58,6 @@ app = None
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
-if sys.version_info > (3,):
-    long = int
-    unicode = str
 
 try:
     try:
@@ -93,7 +90,6 @@ path = os.path.join(os.path.dirname(__file__), os.pardir)
 sys.path.insert(0, os.path.abspath(path))
 
 #: python3 running
-PY3 = (sys.version_info > (3,))
 
 
 def tostr(x):
@@ -106,10 +102,7 @@ def tostr(x):
     """
     if isinstance(x, str):
         return x
-    if sys.version_info > (3,):
-        return str(x, "utf8")
-    else:
-        return str(x)
+    return str(x, "utf8")
 
 
 # test fixture
@@ -131,9 +124,9 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
         self.__lavuestate = None
 
         try:
-            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = int(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed = long(time.time() * 256)
+            self.__seed = int(time.time() * 256)
 #        self.__seed = 332115341842367128541506422124286219441
         self.__rnd = random.Random(self.__seed)
         home = os.path.expanduser("~")
@@ -372,7 +365,7 @@ class ZMQStreamImageSourceTest(unittest.TestCase):
                     try:
                         conn = b"tcp://*:*"
                         self.__socket.bind(conn)
-                        port = unicode(self.__socket.getsockopt(
+                        port = str(self.__socket.getsockopt(
                             zmq.LAST_ENDPOINT)).split(":")[-1]
                         if port.endswith("'"):
                             port = port[:-1]

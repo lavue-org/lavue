@@ -54,8 +54,6 @@ app = None
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
-if sys.version_info > (3,):
-    long = int
 
 try:
     from .LavueControllerSetUp import ControllerSetUp
@@ -94,7 +92,6 @@ path = os.path.join(os.path.dirname(__file__), os.pardir)
 sys.path.insert(0, os.path.abspath(path))
 
 #: python3 running
-PY3 = (sys.version_info > (3,))
 
 
 # test fixture
@@ -116,9 +113,9 @@ class SpecializedToolTest(unittest.TestCase):
         self.__lavuestate = None
 
         try:
-            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = int(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed = long(time.time() * 256)
+            self.__seed = int(time.time() * 256)
 #        self.__seed = 332115341842367128541506422124286219441
         self.__rnd = random.Random(self.__seed)
         home = os.path.expanduser("~")

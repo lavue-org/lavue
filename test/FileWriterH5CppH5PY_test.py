@@ -41,9 +41,6 @@ from pninexus import h5cpp
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
-if sys.version_info > (3,):
-    long = int
-
 
 class testwriter(object):
     def __init__(self):
@@ -173,9 +170,9 @@ class FileWriterH5CppH5PYTest(unittest.TestCase):
         unittest.TestCase.__init__(self, methodName)
 
         try:
-            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = int(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed = long(time.time() * 256)
+            self.__seed = int(time.time() * 256)
 #        self.__seed =241361343400098333007607831038323262554
 
         self.__rnd = random.Random(self.__seed)

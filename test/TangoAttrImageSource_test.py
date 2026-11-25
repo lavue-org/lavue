@@ -70,8 +70,6 @@ app = None
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
-if sys.version_info > (3,):
-    long = int
 
 try:
     try:
@@ -107,24 +105,22 @@ path = os.path.join(os.path.dirname(__file__), os.pardir)
 sys.path.insert(0, os.path.abspath(path))
 
 #: python3 running
-PY3 = (sys.version_info > (3,))
 
 #: (:obj:`bool`) PyTango bug #213 flag related to EncodedAttributes in python3
 PYTG_BUG_213 = False
-if sys.version_info > (3,):
-    try:
-        PYTGMAJOR, PYTGMINOR, PYTGPATCH = list(
-            map(int, tango.__version__.split(".")[:3]))
-        if PYTGMAJOR <= 9:
-            if PYTGMAJOR == 9:
-                if PYTGMINOR < 2:
-                    PYTG_BUG_213 = True
-                elif PYTGMINOR == 2 and PYTGPATCH <= 4:
-                    PYTG_BUG_213 = True
-            else:
+try:
+    PYTGMAJOR, PYTGMINOR, PYTGPATCH = list(
+        map(int, tango.__version__.split(".")[:3]))
+    if PYTGMAJOR <= 9:
+        if PYTGMAJOR == 9:
+            if PYTGMINOR < 2:
                 PYTG_BUG_213 = True
-    except Exception:
-        pass
+            elif PYTGMINOR == 2 and PYTGPATCH <= 4:
+                PYTG_BUG_213 = True
+        else:
+            PYTG_BUG_213 = True
+except Exception:
+    pass
 
 
 _VMAJOR, _VMINOR, _VPATCH = _pg.__version__.split(".")[:3] \
@@ -156,9 +152,9 @@ class TangoAttrImageSourceTest(unittest.TestCase):
         self.__lavuestate = None
 
         try:
-            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = int(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed = long(time.time() * 256)
+            self.__seed = int(time.time() * 256)
 #        self.__seed = 332115341842367128541506422124286219441
         self.__rnd = random.Random(self.__seed)
         home = os.path.expanduser("~")

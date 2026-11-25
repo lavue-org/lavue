@@ -38,9 +38,6 @@ import lavuelib.h5cppwriter as H5CppWriter
 from pninexus import h5cpp
 # from pninexus import nexus
 
-if sys.version_info > (3,):
-    long = int
-    unicode = str
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
@@ -88,9 +85,9 @@ class H5CppWriterTest(unittest.TestCase):
         unittest.TestCase.__init__(self, methodName)
 
         try:
-            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = int(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed = long(time.time() * 256)
+            self.__seed = int(time.time() * 256)
         # self.__seed =241361343400098333007607831038323262554
 
         self.__rnd = random.Random(self.__seed)
@@ -361,14 +358,14 @@ class H5CppWriterTest(unittest.TestCase):
             rt = fl.root()
             attrs = rt.attributes
             attrs.create("file_time", "string").write(
-                unicode(H5CppWriter.H5CppFile.currenttime()))
+                str(H5CppWriter.H5CppFile.currenttime()))
             attrs.create("HDF5_Version", "string").write(u"")
             attrs.create("NX_class", "string").write(u"NXroot")
             # attrs.create("NeXus_version", "string").write(u"4.3.0")
             attrs.create("file_name", "string").write(
-                unicode(self._fname))
+                str(self._fname))
             attrs.create("file_update_time", "string").write(
-                unicode(H5CppWriter.H5CppFile.currenttime()))
+                str(H5CppWriter.H5CppFile.currenttime()))
             self.assertTrue(
                 isinstance(fl, FileWriter.FTFile))
 

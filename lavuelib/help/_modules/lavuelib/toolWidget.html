@@ -5,11 +5,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.toolWidget &#8212; LaVue 3.16.1 documentation</title>
+    <title>lavuelib.toolWidget &#8212; LaVue 3.17.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=ffd7f65b" />
     
-    <script src="../../_static/documentation_options.js?v=a326a122"></script>
+    <script src="../../_static/documentation_options.js?v=768b6f62"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/bizstyle.js"></script>
@@ -29,7 +29,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.16.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.17.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.toolWidget</a></li> 
       </ul>
@@ -74,7 +74,6 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.optimize</span>
@@ -123,9 +122,6 @@
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="c1">#: (:obj:`bool`) pyFAI imported</span>
     <span class="n">PYFAI</span> <span class="o">=</span> <span class="mf">0.0</span>
-
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-    <span class="n">long</span> <span class="o">=</span> <span class="nb">int</span>
 
 
 <span class="n">_intensityformclass</span><span class="p">,</span> <span class="n">_intensitybaseclass</span> <span class="o">=</span> <span class="n">uic</span><span class="o">.</span><span class="n">loadUiType</span><span class="p">(</span>
@@ -1132,9 +1128,9 @@
     <span class="c1">#: (:obj:`dict` &lt;:obj:`str` , :obj:`type` or :obj:`types.MethodType` &gt;) \</span>
     <span class="c1">#:      map of type : converting function</span>
     <span class="n">convert</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;float16&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">&quot;float32&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">&quot;float64&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-               <span class="s2">&quot;float&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">&quot;int64&quot;</span><span class="p">:</span> <span class="n">long</span><span class="p">,</span> <span class="s2">&quot;int32&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-               <span class="s2">&quot;int16&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;int8&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;uint64&quot;</span><span class="p">:</span> <span class="n">long</span><span class="p">,</span>
-               <span class="s2">&quot;uint32&quot;</span><span class="p">:</span> <span class="n">long</span><span class="p">,</span> <span class="s2">&quot;uint16&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+               <span class="s2">&quot;float&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">&quot;int64&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;int32&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+               <span class="s2">&quot;int16&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;int8&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;uint64&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+               <span class="s2">&quot;uint32&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;uint16&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                <span class="s2">&quot;uint8&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;uint&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                <span class="s2">&quot;bool&quot;</span><span class="p">:</span> <span class="n">Converters</span><span class="o">.</span><span class="n">toBool</span><span class="p">}</span>
 
@@ -9829,7 +9825,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.16.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.17.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.toolWidget</a></li> 
       </ul>

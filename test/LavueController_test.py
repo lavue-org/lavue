@@ -34,10 +34,7 @@ except ImportError:
     import PyTango as tango
 import numpy as np
 
-if sys.version_info > (3,):
-    import queue as Queue
-else:
-    import Queue
+import queue as Queue
 
 try:
     from .LavueControllerSetUp import ControllerSetUp, TangoCB
@@ -50,7 +47,6 @@ path = os.path.join(os.path.dirname(__file__), os.pardir)
 sys.path.insert(0, os.path.abspath(path))
 
 #: python3 running
-PY3 = (sys.version_info > (3,))
 
 
 # Device test case

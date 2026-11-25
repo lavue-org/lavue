@@ -57,17 +57,12 @@ docker exec  --user root ndts /bin/bash -c 'export DISPLAY=":99.0"; Xvfb :99 -sc
 if [ "$?" != "0" ]; then exit 255; fi
 
 echo "install tango-starter tango-test and pytango"
-if [ "$2" = "2" ]; then
-    
-    docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq install -y  python-pytango   tango-starter'
-else
-    if [ "$1" = "debian10" ] || [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "ubuntu21.04" ] || [ "$1" = "ubuntu21.10" ] || [ "$1" = "ubuntu22.04" ]  || [ "$1" = "ubuntu22.10" ] || [ "$1" = "ubuntu23.10" ] || [ "$1" = "debian11" ] || [ "$1" = "debian12" ] || [ "$1" = "debian12tg10" ] || [ "$1" = "debian13" ] || [ "$1" = "ubuntu24.04" ] || [ "$1" = "ubuntu24.10" ] || [ "$1" = "ubuntu25.04" ] || [ "$1" = "ubuntu26.04" ] ; then
+if [ "$1" = "debian10" ] || [ "$1" = "ubuntu20.04" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "ubuntu21.04" ] || [ "$1" = "ubuntu21.10" ] || [ "$1" = "ubuntu22.04" ]  || [ "$1" = "ubuntu22.10" ] || [ "$1" = "ubuntu23.10" ] || [ "$1" = "debian11" ] || [ "$1" = "debian12" ] || [ "$1" = "debian12tg10" ] || [ "$1" = "debian13" ] || [ "$1" = "ubuntu24.04" ] || [ "$1" = "ubuntu24.10" ] || [ "$1" = "ubuntu25.04" ] || [ "$1" = "ubuntu26.04" ] ; then
 	docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq install -y  python3-tango tango-starter'
-    elif  [ "$1" = "debian11pg013" ] ; then
+elif  [ "$1" = "debian11pg013" ] ; then
 	docker exec  --user root ndts /bin/bash -c 'apt-get -qq update --allow-unauthenticated --allow-insecure-repositories  ; apt-get -qq install -y   --allow-unauthenticated  python3-tango tango-starter'
-    else
+else
 	docker exec  --user root ndts /bin/bash -c 'apt-get -qq update; apt-get -qq install -y  python3-pytango tango-starter'
-    fi
 fi
 if [ "$?" != "0" ]; then exit 255; fi
 
@@ -83,30 +78,21 @@ else
 fi
 
 
-if [ "$2" = "2" ]; then
-    echo "install python-lavue"
-    docker exec ndts python setup.py build
-    docker exec  --user root ndts python setup.py install
-    echo "build python-lavue docs"
-    docker exec ndts python setup.py  build_sphinx
-
+echo "install python3-lavue"
+# docker exec ndts python3 setup.py build
+# docker exec ndts python3 -m pip build
+docker exec ndts mkdir build
+# docker exec  --user root ndts python3 setup.py install
+if [ "$1" = "ubuntu22.04" ] || [ "$1" = "debian11" ] ; then
+    docker exec --user root ndts python3 -m pip install . -vv  --no-deps --no-build-isolation
 else
-    echo "install python3-lavue"
-    # docker exec ndts python3 setup.py build
-    # docker exec ndts python3 -m pip build
-    docker exec ndts mkdir build
-    # docker exec  --user root ndts python3 setup.py install
-    if [ "$1" = "ubuntu22.04" ] || [ "$1" = "debian11" ] ; then
-        docker exec --user root ndts python3 -m pip install . -vv  --no-deps --no-build-isolation
-    else
-        docker exec --user root ndts python3 -m pip install . -vv  --no-deps --no-build-isolation  --break-system-packages --root-user-action=ignore
-    fi
-
-    echo "build python3-lavue docs"
-    docker exec ndts mkdir doc/_static
-    docker exec ndts sphinx-build  doc build/sphinx/html
-    
+    docker exec --user root ndts python3 -m pip install . -vv  --no-deps --no-build-isolation  --break-system-packages --root-user-action=ignore
 fi
+
+echo "build python3-lavue docs"
+docker exec ndts mkdir doc/_static
+docker exec ndts sphinx-build  doc build/sphinx/html
+
 ERROR=$?
 echo "ERROR: ($ERROR)"
 if [ $ERROR -ne 0 ]; then

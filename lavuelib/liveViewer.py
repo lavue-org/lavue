@@ -43,7 +43,6 @@ import pyqtgraph as _pg
 from pyqtgraph import QtCore, QtGui
 import os
 import zmq
-import sys
 import argparse
 import ntpath
 import logging
@@ -103,9 +102,6 @@ except Exception:
 
 logger = logging.getLogger("lavue")
 
-if sys.version_info > (3,):
-    basestring = str
-    unicode = str
 
 __import__("lavuelib.imageNexusExporter")
 
@@ -2578,7 +2574,7 @@ class LiveViewer(QtWidgets.QDialog):
                 if dialog.secautoport:
                     self.__settings.secsockopt = b"tcp://*:*"
                     self.__settings.secsocket.bind(self.__settings.secsockopt)
-                    dialog.secport = unicode(
+                    dialog.secport = str(
                         self.__settings.secsocket.getsockopt(
                             zmq.LAST_ENDPOINT)).split(":")[-1]
                 else:
@@ -3462,7 +3458,7 @@ class LiveViewer(QtWidgets.QDialog):
         if str(self.__metadata) != str(metadata) and str(metadata).strip():
             imagename, self.__metadata = name, metadata
             if str(imagename).strip() and \
-               not isinstance(rawimage, basestring):
+               not isinstance(rawimage, str):
                 if not hasattr(rawimage, "size") or rawimage.size != 0:
                     self.__imagename = imagename
                     self.__rawimage = rawimage
@@ -3493,7 +3489,7 @@ class LiveViewer(QtWidgets.QDialog):
             if self.__imagename is None or str(self.__imagename) != str(name):
                 self.__imagename, self.__metadata \
                     = name, metadata
-                if not isinstance(rawimage, basestring):
+                if not isinstance(rawimage, str):
                     if not hasattr(rawimage, "size") or rawimage.size != 0:
                         self.__rawimage = rawimage
         if not str(metadata).strip():

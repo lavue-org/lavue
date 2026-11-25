@@ -28,7 +28,6 @@
 import pickle
 import json
 import time
-import sys
 import logging
 import functools
 import numpy as np
@@ -44,13 +43,8 @@ except ImportError:
     #: (:obj:`bool`) tango imported
     TANGO = False
 
-if sys.version_info > (3,):
-    basestring = str
 
 logger = logging.getLogger("lavue")
-
-if sys.version_info > (3,):
-    unicode = str
 
 
 def debugmethod(method):
@@ -238,10 +232,7 @@ class SardanaUtils(object):
         :returns: loaded bytestring
         :rtype: :obj:`any`
         """
-        if sys.version_info > (3,):
-            return pickle.loads(bytestr, encoding='latin1')
-        else:
-            return pickle.loads(bytestr)
+        return pickle.loads(bytestr, encoding='latin1')
 
     @debugmethod
     def getScanEnv(self, door, params=None):
@@ -310,8 +301,6 @@ class SardanaUtils(object):
             pk = pickle.dumps(dc, protocol=2)
             msp.Environment = ['pickle', pk]
         except Exception:
-            if sys.version_info < (3,):
-                raise
             if isinstance(data, dict):
                 newvalue = {}
                 for key, vl in dc.items():
@@ -319,12 +308,12 @@ class SardanaUtils(object):
                         nvl = {}
                         for ky, it in vl.items():
                             nvl[bytes(ky, "utf8")
-                                if isinstance(ky, unicode) else ky] = it
+                                if isinstance(ky, str) else ky] = it
                         newvalue[bytes(key, "utf8")
-                                 if isinstance(key, unicode) else key] = nvl
+                                 if isinstance(key, str) else key] = nvl
                     else:
                         newvalue[bytes(key, "utf8")
-                                 if isinstance(key, unicode) else key] = vl
+                                 if isinstance(key, str) else key] = vl
             else:
                 newvalue = dc
             pk = pickle.dumps(newvalue, protocol=2)
@@ -414,7 +403,7 @@ class SardanaUtils(object):
         :returns: string object
         :rtype: :obj:`str`
         """
-        if isinstance(obj, basestring):
+        if isinstance(obj, str):
             return str(obj)
         elif isinstance(obj, list):
             return [cls.toString(el) for el in obj]

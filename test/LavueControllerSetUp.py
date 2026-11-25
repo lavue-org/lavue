@@ -40,7 +40,6 @@ path = os.path.join(os.path.dirname(__file__), os.pardir)
 sys.path.insert(0, os.path.abspath(path))
 
 #: python3 running
-PY3 = (sys.version_info > (3,))
 
 
 class TangoCB(object):
@@ -144,34 +143,20 @@ class ControllerSetUp(object):
                 print(str(e))
         db.delete_server(self.new_device_info_controller.server)
 
-        if PY3:
-            with subprocess.Popen(self._grepserver,
-                                  stdout=subprocess.PIPE,
-                                  shell=True) as proc:
-                try:
-                    outs, errs = proc.communicate(timeout=15)
-                except subprocess.TimeoutExpired:
-                    proc.kill()
-                    outs, errs = proc.communicate()
-                res = str(outs, "utf8").split("\n")
-                for r in res:
-                    sr = r.split()
-                    if len(sr) > 2:
-                        subprocess.call(
-                            "kill -9 %s" % sr[1], stderr=subprocess.PIPE,
-                            shell=True)
-        else:
-            pipe = subprocess.Popen(self._grepserver,
-                                    stdout=subprocess.PIPE,
-                                    shell=True).stdout
-
-            res = str(pipe.read()).split("\n")
+        with subprocess.Popen(self._grepserver,
+                              stdout=subprocess.PIPE,
+                              shell=True) as proc:
+            try:
+                outs, errs = proc.communicate(timeout=15)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                outs, errs = proc.communicate()
+            res = str(outs, "utf8").split("\n")
             for r in res:
                 sr = r.split()
                 if len(sr) > 2:
                     subprocess.call(
                         "kill -9 %s" % sr[1], stderr=subprocess.PIPE,
                         shell=True)
-            pipe.close()
 
         self.proxy = None
