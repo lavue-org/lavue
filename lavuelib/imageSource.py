@@ -155,11 +155,7 @@ import sys
 from io import BytesIO
 from . import imageFileHandler
 
-if sys.version_info > (3,):
-    buffer = memoryview
-    unicode = str
-else:
-    bytes = str
+buffer = memoryview
 
 
 globalmutex = QtCore.QMutex()
@@ -175,20 +171,19 @@ FILTER_BITSHUFFLE = 32008
 
 #: (:obj:`bool`) PyTango bug #213 flag related to EncodedAttributes in python3
 PYTG_BUG_213 = False
-if sys.version_info > (3,):
-    try:
-        PYTGMAJOR, PYTGMINOR, PYTGPATCH = list(
-            map(int, tango.__version__.split(".")[:3]))
-        if PYTGMAJOR <= 9:
-            if PYTGMAJOR == 9:
-                if PYTGMINOR < 2:
-                    PYTG_BUG_213 = True
-                elif PYTGMINOR == 2 and PYTGPATCH <= 4:
-                    PYTG_BUG_213 = True
-            else:
+try:
+    PYTGMAJOR, PYTGMINOR, PYTGPATCH = list(
+        map(int, tango.__version__.split(".")[:3]))
+    if PYTGMAJOR <= 9:
+        if PYTGMAJOR == 9:
+            if PYTGMINOR < 2:
                 PYTG_BUG_213 = True
-    except Exception:
-        pass
+            elif PYTGMINOR == 2 and PYTGPATCH <= 4:
+                PYTG_BUG_213 = True
+        else:
+            PYTG_BUG_213 = True
+except Exception:
+    pass
 
 
 def getLevel(elevel=None):
@@ -225,10 +220,7 @@ def tobytes(x):
     """
     if isinstance(x, bytes):
         return x
-    if sys.version_info > (3,):
-        return bytes(x, "utf8")
-    else:
-        return bytes(x)
+    return bytes(x, "utf8")
 
 
 def currenttime():
@@ -269,10 +261,7 @@ def tostr(x):
     """
     if isinstance(x, str):
         return x
-    if sys.version_info > (3,):
-        return str(x, "utf8")
-    else:
-        return str(x)
+    return str(x, "utf8")
 
 
 class BaseSource(object):
@@ -1248,15 +1237,12 @@ class TangoAttrSource(BaseSource):
                     attr = self.__aproxy.read(
                         extract_as=tango.ExtractAs.ByteArray)
             except Exception:
-                if sys.version_info > (3,):
-                    attr = self.__aproxy.read(
-                        extract_as=tango.ExtractAs.ByteArray)
-                    if str(attr.type) != "DevEncoded":
-                        attr = self.__aproxy.read()
-                    else:
-                        self.__bytearray = True
-                else:
+                attr = self.__aproxy.read(
+                    extract_as=tango.ExtractAs.ByteArray)
+                if str(attr.type) != "DevEncoded":
                     attr = self.__aproxy.read()
+                else:
+                    self.__bytearray = True
             if str(attr.type) == "DevEncoded":
                 if PYTG_BUG_213:
                     raise Exception(

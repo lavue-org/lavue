@@ -58,10 +58,6 @@ app = None
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
-if sys.version_info > (3,):
-    unicode = str
-    long = int
-
 
 # test fixture
 class CommandLineArgumentTest(unittest.TestCase):
@@ -77,9 +73,9 @@ class CommandLineArgumentTest(unittest.TestCase):
         app.setApplicationVersion(lavuelib.__version__)
 
         try:
-            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = int(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed = long(time.time() * 256)
+            self.__seed = int(time.time() * 256)
 #        self.__seed = 332115341842367128541506422124286219441
         self.__rnd = random.Random(self.__seed)
         self.__home = os.path.expanduser("~")

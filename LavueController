@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
 
@@ -49,10 +49,6 @@ import json
 __all__ = ["LavueController", "LavueControllerClass", "main"]
 
 __docformat__ = 'restructuredtext'
-
-
-if sys.version_info > (3,):
-    unicode = str
 
 
 def dummy_callback(*args, **kwargs):
@@ -266,7 +262,7 @@ class LavueController (tango.LatestDeviceImpl):
         data = attr.get_write_value()
         detcnf = json.loads(data)
         for key, value in detcnf.items():
-            if not isinstance(key, (str, unicode)):
+            if not isinstance(key, (str, str)):
                 raise Exception(
                     "state key %s is not a string" % str(key))
         if "__timestamp__" in detcnf.keys():
@@ -285,7 +281,7 @@ class LavueController (tango.LatestDeviceImpl):
         data = attr.get_write_value()
         detrois = json.loads(data)
         for det, rois in detrois.items():
-            if not isinstance(det, (str, unicode)):
+            if not isinstance(det, (str, str)):
                 raise Exception(
                     "ROI name %s is not a string" % str(det))
             if not isinstance(rois, (list)):
@@ -355,7 +351,7 @@ class LavueController (tango.LatestDeviceImpl):
         detrois = json.loads(data)
         for det, rois in detrois.items():
 
-            if not isinstance(det, (str, unicode)):
+            if not isinstance(det, (str, str)):
                 raise Exception(
                     "ROI name %s is not a string" % str(det))
             if not isinstance(rois, (list)):

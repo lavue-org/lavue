@@ -113,28 +113,13 @@ class TestImageServerSetUp(object):
         print("tearing down ...")
         db = tango.Database()
         db.delete_server(self.new_device_info.server)
-        if sys.version_info > (3,):
-            with subprocess.Popen(
-                    "ps -ef | grep 'TestImageServer.py %s' | grep -v grep" %
-                    self.instance,
-                    stdout=subprocess.PIPE, shell=True) as proc:
-
-                pipe = proc.stdout
-                res = str(pipe.read(), "utf8").split("\n")
-                for r in res:
-                    sr = r.split()
-                    if len(sr) > 2:
-                        subprocess.call(
-                            "kill -9 %s" % sr[1], stderr=subprocess.PIPE,
-                            shell=True)
-                pipe.close()
-        else:
-            pipe = subprocess.Popen(
+        with subprocess.Popen(
                 "ps -ef | grep 'TestImageServer.py %s' | grep -v grep" %
                 self.instance,
-                stdout=subprocess.PIPE, shell=True).stdout
+                stdout=subprocess.PIPE, shell=True) as proc:
 
-            res = str(pipe.read()).split("\n")
+            pipe = proc.stdout
+            res = str(pipe.read(), "utf8").split("\n")
             for r in res:
                 sr = r.split()
                 if len(sr) > 2:
@@ -174,16 +159,10 @@ class LimaCCDsTestServerSetUp(object):
 
         path = os.path.dirname(os.path.abspath(TestImageServer.__file__))
         if os.path.isfile("%s/TestImageServer.py" % path):
-            if sys.version_info > (3,):
-                self._psub = subprocess.call(
-                    "cd %s; python3 ./TestImageServer.py %s &" %
-                    (path, self.instance), stdout=None,
-                    stderr=None, shell=True)
-            else:
-                self._psub = subprocess.call(
-                    "cd %s; python ./TestImageServer.py %s &" %
-                    (path, self.instance), stdout=None,
-                    stderr=None, shell=True)
+            self._psub = subprocess.call(
+                "cd %s; python3 ./TestImageServer.py %s &" %
+                (path, self.instance), stdout=None,
+                stderr=None, shell=True)
             sys.stdout.write("waiting for LimaCCDs mock servers ")
 
         db = tango.Database()
@@ -214,26 +193,12 @@ class LimaCCDsTestServerSetUp(object):
         print("tearing down LimaCCDs mock servers...")
         db = tango.Database()
         db.delete_server(self._devinfos[0].server)
-        if sys.version_info > (3,):
-            with subprocess.Popen(
-                    "ps -ef | grep 'TestImageServer.py %s' | grep -v grep" %
-                    self.instance,
-                    stdout=subprocess.PIPE, shell=True) as proc:
-                pipe = proc.stdout
-                res = str(pipe.read(), "utf8").split("\n")
-                for r in res:
-                    sr = r.split()
-                    if len(sr) > 2:
-                        subprocess.call(
-                            "kill -9 %s" % sr[1], stderr=subprocess.PIPE,
-                            shell=True)
-                pipe.close()
-        else:
-            pipe = subprocess.Popen(
+        with subprocess.Popen(
                 "ps -ef | grep 'TestImageServer.py %s' | grep -v grep" %
                 self.instance,
-                stdout=subprocess.PIPE, shell=True).stdout
-            res = str(pipe.read()).split("\n")
+                stdout=subprocess.PIPE, shell=True) as proc:
+            pipe = proc.stdout
+            res = str(pipe.read(), "utf8").split("\n")
             for r in res:
                 sr = r.split()
                 if len(sr) > 2:

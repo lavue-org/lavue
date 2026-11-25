@@ -28,14 +28,11 @@
 
 
 import zmq
-import sys
 import json
 from pyqtgraph import QtCore
 
 from .sardanaUtils import numpyEncoder
 
-if sys.version_info > (3,):
-    unicode = str
 
 try:
     import pyFAI
@@ -622,7 +619,7 @@ class Settings(object):
                 if self.secautoport:
                     self.secsockopt = b"tcp://*:*"
                     self.secsocket.bind(self.secsockopt)
-                    self.secport = unicode(self.secsocket.getsockopt(
+                    self.secport = str(self.secsocket.getsockopt(
                         zmq.LAST_ENDPOINT)).split(":")[-1]
                     if self.secport.endswith("'"):
                         self.secport = self.secport[:-1]

@@ -29,7 +29,6 @@
 
 import struct
 import numpy as np
-import sys
 import os
 import json
 import logging
@@ -37,8 +36,6 @@ import logging
 from .sardanaUtils import numpyEncoder
 from . import filewriter
 
-if sys.version_info > (3,):
-    long = int
 
 try:
     import fabio
@@ -785,9 +782,9 @@ class CBFLoader(object):
         :returns: image data
         :rtype: :class:`numpy.ndarray`
         """
-        xdim = long(487)
+        xdim = int(487)
         ydim = 619
-        padding = long(4095)
+        padding = int(4095)
         n_out = xdim * ydim
 
         # simply assume content fits here

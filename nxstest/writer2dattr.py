@@ -3,8 +3,6 @@ import numpy as np
 import time
 import sys
 
-if sys.version_info > (3,):
-    unicode = str
 
 f = h5py.File("swmr.h5", 'w', libver='latest')
 
@@ -25,5 +23,5 @@ for i in range(50):
     time.sleep(1)
 dset.attrs.create("units", "mm")
 dset = f.create_dataset(
-    "endtime", shape=[1], chunks=None, dtype=h5py.special_dtype(vlen=unicode),
+    "endtime", shape=[1], chunks=None, dtype=h5py.special_dtype(vlen=str),
     maxshape=(None,), data=str(time.time))
