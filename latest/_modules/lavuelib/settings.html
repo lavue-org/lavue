@@ -5,11 +5,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lavuelib.settings &#8212; LaVue 3.16.1 documentation</title>
+    <title>lavuelib.settings &#8212; LaVue 3.17.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=ffd7f65b" />
     
-    <script src="../../_static/documentation_options.js?v=a326a122"></script>
+    <script src="../../_static/documentation_options.js?v=768b6f62"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/bizstyle.js"></script>
@@ -29,7 +29,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.16.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.17.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.settings</a></li> 
       </ul>
@@ -71,14 +71,11 @@
 
 
 <span class="kn">import</span> <span class="nn">zmq</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">QtCore</span>
 
 <span class="kn">from</span> <span class="nn">.sardanaUtils</span> <span class="kn">import</span> <span class="n">numpyEncoder</span>
 
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-    <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">pyFAI</span>
@@ -681,7 +678,7 @@
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">secautoport</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">secsockopt</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;tcp://*:*&quot;</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">secsocket</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">secsockopt</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">secport</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">secsocket</span><span class="o">.</span><span class="n">getsockopt</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">secport</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">secsocket</span><span class="o">.</span><span class="n">getsockopt</span><span class="p">(</span>
                         <span class="n">zmq</span><span class="o">.</span><span class="n">LAST_ENDPOINT</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">secport</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">):</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">secport</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">secport</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -1970,6 +1967,7 @@
       <li><a class="reference external" href="../../index/../../latest/index.html">v:latest</a></li>
       <li><a class="reference external" href="../../index/../../stable/index.html">v:stable</a></li>
       
+      <li><a class="reference external" href="../../index/../../v3.17.0/index.html">v3.17.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.16.1/index.html">v3.16.1</a></li>
       <li><a class="reference external" href="../../index/../../v3.16.0/index.html">v3.16.0</a></li>
       <li><a class="reference external" href="../../index/../../v3.15.0/index.html">v3.15.0</a></li>
@@ -2034,7 +2032,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.16.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">LaVue 3.17.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">lavuelib.settings</a></li> 
       </ul>
