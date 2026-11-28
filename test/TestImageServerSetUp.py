@@ -30,6 +30,13 @@ try:
     import tango
 except ImportError:
     import PyTango as tango
+
+try:
+    from TangoDbUtils import (
+        add_device, add_server, database, delete_server)
+except ImportError:
+    from .TangoDbUtils import (
+        add_device, add_server, database, delete_server)
 import time
 
 try:
@@ -67,10 +74,10 @@ class TestImageServerSetUp(object):
     # \brief Common set up of Tango Server
     def setUp(self):
         print("\nsetting up...")
-        db = tango.Database()
-        db.add_device(self.new_device_info)
-        db.add_server(
-            self.new_device_info.server, self.new_device_info)
+        db = database()
+        add_device(self.new_device_info, db)
+        add_server(
+            self.new_device_info.server, self.new_device_info, db)
         # db.put_device_property(
         #     self.new_device_info.name, self.device_prop)
         # db.put_class_property(
@@ -111,8 +118,7 @@ class TestImageServerSetUp(object):
     # \brief Common tear down oif Tango Server
     def tearDown(self):
         print("tearing down ...")
-        db = tango.Database()
-        db.delete_server(self.new_device_info.server)
+        delete_server(self.new_device_info.server)
         with subprocess.Popen(
                 "ps -ef | grep 'TestImageServer.py %s' | grep -v grep" %
                 self.instance,
@@ -152,10 +158,10 @@ class LimaCCDsTestServerSetUp(object):
 
     def setUp(self):
         print("\nsetting up LimaCCDs mock servers...")
-        db = tango.Database()
+        db = database()
         for di in self._devinfos:
-            db.add_device(di)
-            db.add_server(di.server, di)
+            add_device(di, db)
+            add_server(di.server, di, db)
 
         path = os.path.dirname(os.path.abspath(TestImageServer.__file__))
         if os.path.isfile("%s/TestImageServer.py" % path):
@@ -165,7 +171,7 @@ class LimaCCDsTestServerSetUp(object):
                 stderr=None, shell=True)
             sys.stdout.write("waiting for LimaCCDs mock servers ")
 
-        db = tango.Database()
+        db = database()
         for dvname in self._devices:
             found = False
             cnt = 0
@@ -191,8 +197,7 @@ class LimaCCDsTestServerSetUp(object):
 
     def tearDown(self):
         print("tearing down LimaCCDs mock servers...")
-        db = tango.Database()
-        db.delete_server(self._devinfos[0].server)
+        delete_server(self._devinfos[0].server)
         with subprocess.Popen(
                 "ps -ef | grep 'TestImageServer.py %s' | grep -v grep" %
                 self.instance,

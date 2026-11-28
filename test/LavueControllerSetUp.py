@@ -34,6 +34,13 @@ try:
 except ImportError:
     import PyTango as tango
 
+try:
+    from TangoDbUtils import (
+        add_device, add_server, database, delete_server)
+except ImportError:
+    from .TangoDbUtils import (
+        add_device, add_server, database, delete_server)
+
 
 # Path
 path = os.path.join(os.path.dirname(__file__), os.pardir)
@@ -93,14 +100,14 @@ class ControllerSetUp(object):
         while not db and ci < counts:
             ci += 1
             try:
-                db = tango.Database()
+                db = database()
             except Exception as e:
                 print(str(e))
 
-        db.add_device(self.new_device_info_controller)
-        db.add_server(
+        add_device(self.new_device_info_controller, db)
+        add_server(
             self.new_device_info_controller.server,
-            self.new_device_info_controller)
+            self.new_device_info_controller, db)
         self._psub = subprocess.call(
             self._startserver,
             stdout=None,
@@ -138,10 +145,10 @@ class ControllerSetUp(object):
         while not db and ci < counts:
             ci += 1
             try:
-                db = tango.Database()
+                db = database()
             except Exception as e:
                 print(str(e))
-        db.delete_server(self.new_device_info_controller.server)
+        delete_server(self.new_device_info_controller.server)
 
         with subprocess.Popen(self._grepserver,
                               stdout=subprocess.PIPE,
